@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+LinearLayout models the structure for the custom layout of the DialogDetailFragment
+class.
+-->
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/default_padding">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/detail_dialog_name"/>
+
+        <EditText
+            android:id="@+id/detail_dialog_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_name"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/detail_dialog_content"/>
+
+        <EditText
+            android:id="@+id/detail_dialog_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_content"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/detail_dialog_type"/>
+
+        <Spinner
+            android:id="@+id/detail_dialog_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown"/>
+
+        <CheckBox
+            android:id="@+id/detail_dialog_obfuscated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/detail_dialog_obfuscated"
+            style="@style/default_text"/>
+
+        <CheckBox
+            android:id="@+id/detail_dialog_encrypted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/detail_dialog_encrypted"
+            style="@style/default_text"/>
+
+        <CheckBox
+            android:id="@+id/detail_dialog_visible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/detail_dialog_visible"
+            android:checked="true"
+            style="@style/default_text"/>
+
+    </LinearLayout>
+
+</ScrollView>

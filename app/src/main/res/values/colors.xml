@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <!-- Primary Colors -->
+    <color name="primary">#1D7874</color>
+    <color name="primary_variant">#679289</color>
+    <color name="on_primary">#FFFFFF</color>
+
+    <color name="background">#FFFFFF</color>
+    <color name="background_variant">#EDEDED</color>
+    <color name="on_background">#000000</color>
+    <color name="on_background_variant">#636363</color>
+
+    <color name="red">#EE2E31</color>
+    <color name="green">#91EE2E</color>
+    <color name="yellow">#EE8B2E</color>
+
+    <!--<color name="teal_700">#071E22</color>
+    <color name="peach">#F4C095</color>
+    <color name="red">#EE2E31</color>-->
+
+</resources>

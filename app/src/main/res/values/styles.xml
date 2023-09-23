@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <!-- Style for the app bar -->
+    <style name="app_bar">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/app_bar_height</item>
+    </style>
+
+    <!-- Style for divider -->
+    <style name="divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/on_background_variant</item>
+        <item name="android:layout_marginTop">@dimen/default_margin</item>
+        <item name="android:layout_marginBottom">@dimen/default_margin</item>
+    </style>
+
+
+    <!-- Style for image buttons -->
+    <style name="image_button">
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+    <!-- Style for backgrounds -->
+    <style name="background">
+        <item name="android:background">@drawable/background</item>
+        <item name="android:padding">@dimen/default_padding</item>
+        <item name="android:layout_margin">@dimen/default_margin</item>
+    </style>
+
+
+    <!-- Style for text -->
+    <style name="default_text">
+        <item name="android:textSize">@dimen/default_text_size</item>
+        <item name="android:textColor">@color/on_background</item>
+    </style>
+
+    <!-- Style for headline text -->
+    <style name="variant_text" parent="default_text">
+        <item name="android:textSize">@dimen/default_text_size</item>
+        <item name="android:textColor">@color/on_background_variant</item>
+    </style>
+
+    <style name="highlight_text" parent="default_text">
+        <item name="android:textSize">@dimen/highlight_text_size</item>
+        <item name="android:layout_marginTop">@dimen/default_margin</item>
+        <item name="android:layout_marginStart">@dimen/default_margin</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Style for app bar text -->
+    <style name="app_bar_text" parent="default_text">
+        <item name="android:textSize">@dimen/app_bar_text_size</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+
+</resources>

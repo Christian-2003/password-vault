@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <!-- LinearLayout contains general info about the detail -->
+    <LinearLayout
+        android:id="@+id/entry_detail_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/entry_detail_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/placeholder_name"
+            style="@style/variant_text"/>
+
+        <TextView
+            android:id="@+id/entry_detail_item_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/placeholder_content"
+            style="@style/default_text"/>
+
+        <!-- The 'custom' content (if present) for the view is added programmatically here. -->
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <!-- ImageButton to show / obfuscate passwords -->
+        <ImageButton
+            android:id="@+id/entry_detail_show_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_show"
+            android:paddingStart="@dimen/default_padding"
+            style="@style/image_button"
+            app:layout_constraintEnd_toStartOf="@id/entry_detail_edit_button"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="gone"/>
+
+        <!-- ImageButton to edit detail. This is only needed when in 'editable' mode -->
+        <ImageButton
+            android:id="@+id/entry_detail_edit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_edit"
+            android:paddingStart="@dimen/default_padding"
+            style="@style/image_button"
+            app:layout_constraintEnd_toStartOf="@id/entry_detail_delete_button"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="gone"/>
+
+        <!-- ImageButton to delete the detail. This is only needed when in 'editable' mode -->
+        <ImageButton
+            android:id="@+id/entry_detail_delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_delete"
+            android:paddingStart="@dimen/default_padding"
+            style="@style/image_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+</LinearLayout>
