@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -23,7 +25,7 @@ import de.passwordvault.frontend.dialog.DialogCallbackListener;
  * Class implements an activity which can add (or edit) entries.
  *
  * @author  Christian-2003
- * @version 1.0.0
+ * @version 1.0.1
  */
 public class AddEntryActivity extends AppCompatActivity implements DialogCallbackListener {
 
@@ -71,7 +73,10 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
 
         //Add ClickListeners to close the activity:
         findViewById(R.id.add_entry_button_back).setOnClickListener(view -> AddEntryActivity.this.finish());
-        findViewById(R.id.add_entry_button_cancel).setOnClickListener(view -> AddEntryActivity.this.finish());
+        findViewById(R.id.add_entry_button_cancel).setOnClickListener(view -> {
+            setResult(RESULT_CANCELED, getIntent());
+            AddEntryActivity.this.finish();
+        });
 
         //Add ClickListener to add new detail:
         findViewById(R.id.add_entry_button_add_detail).setOnClickListener(view -> {
@@ -82,6 +87,7 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
         //Add ClickListener to save the edited entry:
         findViewById(R.id.add_entry_button_save).setOnClickListener(view -> {
             processUserInput();
+            setResult(RESULT_OK, getIntent());
             AddEntryActivity.this.finish();
         });
     }

@@ -16,7 +16,7 @@ import de.passwordvault.R;
  * {@linkplain DialogCallbackListener}!
  *
  * @author  Christian-2003
- * @version 1.0.0
+ * @version 1.0.1
  */
 public class ConfirmDeleteDialogFragment extends DialogFragment {
 
@@ -57,6 +57,7 @@ public class ConfirmDeleteDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
+        setRetainInstance(true);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         //Configure the title:

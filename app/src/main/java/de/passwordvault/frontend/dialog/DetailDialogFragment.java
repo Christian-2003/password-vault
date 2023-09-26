@@ -24,7 +24,7 @@ import de.passwordvault.backend.entry.Detail;
  * {@linkplain DialogCallbackListener}!
  *
  * @author  Christian-2003
- * @version 1.0.0
+ * @version 1.0.1
  */
 public class DetailDialogFragment extends DialogFragment {
 
@@ -71,6 +71,7 @@ public class DetailDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
+        setRetainInstance(true);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         //Configure the title:

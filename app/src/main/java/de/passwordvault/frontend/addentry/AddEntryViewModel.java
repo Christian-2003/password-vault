@@ -2,6 +2,7 @@ package de.passwordvault.frontend.addentry;
 
 import androidx.lifecycle.ViewModel;
 import de.passwordvault.backend.entry.Entry;
+import de.passwordvault.frontend.dialog.DetailDialogFragment;
 
 
 /**
@@ -9,12 +10,12 @@ import de.passwordvault.backend.entry.Entry;
  * relevant data that shall be persistent throughout activity changes.
  *
  * @author  Christian-2003
- * @version 1.0.0
+ * @version 1.0.1
  */
 public class AddEntryViewModel extends ViewModel {
 
     /**
-     * Stores the entry that is currently being created / edited.
+     * Attribute stores the entry that is currently being created / edited.
      */
     private Entry entry;
 

@@ -25,6 +25,8 @@ The application allows the user to create account entries which can store accoun
 ### Used Technologies
 The application was developed with Java through the Android Studio IDE. The project is build using Gradle.
 
+The version numbers for this project are determined based on the guidelines provided by [semver](https://semver.org/).
+
 <br>
 
 ***
@@ -59,7 +61,7 @@ If you click the floating action button "+", you can create a new account. Provi
 
 The detail should now be displayed. You can add as many details as you want.
 
-Click "Save" to save your account. Now your account should be displayed on the "Accounts"-page. If you click on the previously created account, you can view your account details. Id you click "Edit", you may edit your account.
+Click "Save" to save your account. Now your account should be displayed on the "Accounts"-page. If you click on the previously created account, you can view your account details. If you click "Edit", you may edit your account.
 
 <br>
 
@@ -71,7 +73,7 @@ Currently, I ([Christian-2003](https://github.com/Christian-2003)) am the only c
 
 ***
 ## License
-The project is licensed under the terms and conditions of the MIT license. View a copy of the license [here](https://github.com/Christian-2003/password-vault/blob/main/LICENSE.txt).
+The project is licensed under the terms and conditions of the MIT license. You can view a copy of the license [here](https://github.com/Christian-2003/password-vault/blob/master/LICENSE.txt).
 
 <br>
 
