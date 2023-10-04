@@ -1,3 +1,18 @@
+# 2.0.0 (2023-10-04)
+### Release Highlights
+Backwards-compatibility breaking changes to the handling of entries within the backend. All details about entries are now loaded from persistent memory when the application starts, to minimize the number of times files have to be accessed throughout the applications lifecycle.
+
+### Features
+* Removed `AbbreviatedEntries` class and moved it's contents into `Entry`.
+* Changed the `EntryHandle` class to no longer regard abbreviated entries.
+* Changes throughout the application code to meet the above mentioned changes.
+* Added client side encryption to `backup_rules` to encrypt user data when Android creates backups for app data.
+* Added `AES` and `EncryptionException` classes as well as `Encryptable` interface to provide encryption algorithms for further data security. These classes are currently unused and will be implemented into the code later.
+* Added `FileAccessor`, `FileReader`, `FileWriter` and `GenericSecurityException` classes to handle access to encrypted files. These classes are currently unused and will be implemented into the code later.
+* Added exceptions to `Entry` classes for better security.
+
+<br>
+
 # 1.0.1 (2023-09-23)
 ### Release Highlighs
 Added WISHLIST.md and VERSION.txt to project files. Bugfixes.

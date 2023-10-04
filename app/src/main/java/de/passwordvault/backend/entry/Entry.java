@@ -1,18 +1,73 @@
 package de.passwordvault.backend.entry;
 
+import androidx.annotation.NonNull;
+
+import org.jetbrains.annotations.Contract;
+
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Objects;
+import java.util.UUID;
 
 
 /**
- * Class models an extended entry which contains all detailed information about an entry. This
- * information is only loaded from memory on demand, as to speed up the applications response and
- * startup time.
+ * Class models an entry which contains all (login) information for any type of account.
  *
  * @author  Christian-2003
- * @version 1.0.0
+ * @version 2.0.0
  */
-public class Entry extends AbbreviatedEntry {
+public class Entry {
+
+    /**
+     * Static method generates a new {@link Entry} instance with basic attribute values, as defined
+     * with {@link #Entry()}.
+     *
+     * @return  New Entry instance.
+     */
+    @NonNull
+    @Contract(" -> new")
+    public static Entry getInstance() {
+        return new Entry();
+    }
+
+    /**
+     * Static method generates a new {@link Entry} instance with the passed UUID.
+     *
+     * @param uuid                  UUID for the returned Entry.
+     * @return                      New Entry instance with the passed UUID.
+     * @throws NullPointerException The passed UUID is {@code null}.
+     */
+    @NonNull
+    @Contract("null -> fail")
+    public static Entry getInstance(String uuid) {
+        if (uuid == null) {
+            throw new NullPointerException("Null is invalid UUID");
+        }
+        Entry entry = new Entry();
+        entry.setUuid(uuid);
+        return entry;
+    }
+
+
+    /**
+     * Attribute stores type 4 UUID of the entry.
+     */
+    protected String uuid;
+
+    /**
+     * Attribute stores name of the entry.
+     */
+    protected String name;
+
+    /**
+     * Attribute stores description of the entry.
+     */
+    protected String description;
+
+    /**
+     * Attribute stores whether the entry shall be visible.
+     */
+    protected boolean visible;
 
     /**
      * Attribute stores the date on which the entry was created.
@@ -34,7 +89,10 @@ public class Entry extends AbbreviatedEntry {
      * Constructor instantiates a new entry without any contents.
      */
     public Entry() {
-        super();
+        uuid = UUID.randomUUID().toString();
+        name = "";
+        description = "";
+        visible = true;
         created = Calendar.getInstance();
         changed = created;
         details = new ArrayList<>();
@@ -47,7 +105,10 @@ public class Entry extends AbbreviatedEntry {
      * @param entry Entry whose values shall be copied to this instance.
      */
     public Entry(Entry entry) {
-        super(entry);
+        this.uuid = entry.uuid;
+        this.name = entry.name;
+        this.description = entry.description;
+        this.visible = entry.visible;
         this.created = entry.created;
         this.changed = entry.changed;
         this.details = new ArrayList<>(entry.getDetails());
@@ -61,12 +122,47 @@ public class Entry extends AbbreviatedEntry {
      * @param description   Description for the entry.
      */
     public Entry(String uuid, String name, String description) {
-        super(uuid, name, description);
+        this.uuid = uuid;
+        this.name = name;
+        this.description = description;
+        visible = true;
         created = Calendar.getInstance();
         changed = created;
         details = new ArrayList<>();
     }
 
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
 
     public Calendar getCreated() {
         return created;
@@ -216,6 +312,33 @@ public class Entry extends AbbreviatedEntry {
      */
     public void notifyDataChange() {
         changed = Calendar.getInstance();
+    }
+
+
+    /**
+     * Method tests whether the UUID of the passed entry is identical to the UUID of this entry.
+     *
+     * @param obj   Entry whose UUID shall be compared to the UUID of this entry.
+     * @return      Whether both UUIDs are identical.
+     */
+    public boolean equals(Object obj) {
+        if (obj instanceof Entry) {
+            Entry entry = (Entry)obj;
+            if (entry.getUuid().equals(uuid)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * Generates a hash for this entry based on the UUID.
+     *
+     * @return  Generated hash for the entry.
+     */
+    public int hashCode() {
+        return Objects.hash(uuid);
     }
 
 

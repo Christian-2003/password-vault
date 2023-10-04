@@ -2,23 +2,19 @@ package de.passwordvault.frontend.main.entries;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.backend.Singleton;
-import de.passwordvault.backend.entry.AbbreviatedEntry;
 import de.passwordvault.backend.entry.Entry;
 import de.passwordvault.frontend.entry.EntryActivity;
 
@@ -28,7 +24,7 @@ import de.passwordvault.frontend.entry.EntryActivity;
  * within the {@linkplain de.passwordvault.frontend.main.MainActivity}.
  *
  * @author  Christian-2003
- * @version 1.0.1
+ * @version 2.0.0
  */
 public class EntriesFragment extends Fragment implements AdapterView.OnItemClickListener {
 
@@ -122,7 +118,7 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
      * instances.
      */
     private void populateListView() {
-        ArrayList<AbbreviatedEntry> entries = Singleton.ENTRIES.getVisibleAbbreviatedEntries();
+        ArrayList<Entry> entries = Singleton.ENTRIES.getVisibleEntries();
         ListView listView = inflated.findViewById(R.id.abbreviated_entries);
         ListAdapter listAdapter = new ListAdapter(entries, getContext());
         listView.setAdapter(listAdapter);

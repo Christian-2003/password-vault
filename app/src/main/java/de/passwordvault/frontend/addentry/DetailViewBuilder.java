@@ -5,10 +5,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import de.passwordvault.R;
 import de.passwordvault.backend.Singleton;
 import de.passwordvault.backend.analysis.PasswordSecurity;

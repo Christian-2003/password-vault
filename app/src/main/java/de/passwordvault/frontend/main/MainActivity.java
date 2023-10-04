@@ -7,12 +7,14 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.backend.Singleton;
-import de.passwordvault.backend.entry.AbbreviatedEntry;
+import de.passwordvault.backend.entry.Entry;
 import de.passwordvault.backend.entry.EntryHandle;
 import de.passwordvault.frontend.addentry.AddEntryActivity;
 
@@ -22,7 +24,7 @@ import de.passwordvault.frontend.addentry.AddEntryActivity;
  * point for the application and contains multiple fragments with different functionalities.
  *
  * @author  Christian-2003
- * @version 1.0.0
+ * @version 2.0.0
  */
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
 
@@ -46,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         //Create new EntryHandle if necessary:
         if (Singleton.ENTRIES == null) {
             Singleton.ENTRIES = new EntryHandle(getApplicationContext());
-            ArrayList<AbbreviatedEntry> entries = Singleton.ENTRIES.getAbbreviatedEntries();
         }
 
         //Add action listener to FAB:

@@ -3,15 +3,11 @@ package de.passwordvault.frontend.addentry;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
-
-import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import de.passwordvault.R;
 import de.passwordvault.backend.Singleton;
 import de.passwordvault.backend.entry.Detail;
