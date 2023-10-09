@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 
 
@@ -21,9 +22,9 @@ import java.util.HashMap;
  * Class models a handle which can manage {@link Entry} instances.
  *
  * @author  Christian-2003
- * @version 2.0.0
+ * @version 2.1.0
  */
-public class EntryHandle implements Serializable {
+public class EntryHandle {
 
     /**
      * Constant stores the name of the file in which the entries shall be stored.
@@ -42,10 +43,15 @@ public class EntryHandle implements Serializable {
     private final Gson gson;
 
     /**
-     * Attribute stores all {@linkplain Entry} instances that were previously loaded into memory.
+     * Attribute stores all {@link Entry}-instances that are passed to the frontend. These might be
+     * sorted.
      */
     private final ArrayList<Entry> entries;
 
+    /**
+     * Attribute stores all {@link Entry}-instances in the order in which they were loaded from memory.
+     */
+    private final ArrayList<Entry> initialEntries;
 
 
     /**
@@ -54,6 +60,7 @@ public class EntryHandle implements Serializable {
     public EntryHandle(Context context) {
         this.context = context;
         entries = new ArrayList<>();
+        initialEntries = new ArrayList<>();
         gson = new Gson();
         load();
     }
@@ -63,38 +70,35 @@ public class EntryHandle implements Serializable {
         return entries;
     }
 
+    /**
+     * Method sorts all entries lexicographically according to their name.
+     *
+     * @param reverseSorted Defines whether the entries shall be reverse-sorted.
+     * @see                 LexicographicComparator
+     * @see                 LexicographicComparator#compare(Entry, Entry)
+     */
+    public void sortByName(boolean reverseSorted) {
+        entries.sort(new LexicographicComparator(reverseSorted));
+    }
 
     /**
-     * Method returns all {@link Entry} instances that are visible (i.e. the method
-     * {@link Entry#isVisible()} returns {@code true} as an {@linkplain ArrayList}.
+     * Method sorts all entries lexicographically according to the date on which they were created.
      *
-     * @return  List of visible Entries.
+     * @param reverseSorted Defines whether the entries shall be reverse-sorted.
+     * @see                 TimeComparator
+     * @see                 TimeComparator#compare(Entry, Entry)
      */
-    public ArrayList<Entry> getVisibleEntries() {
-        ArrayList<Entry> visibleEntries = new ArrayList<>();
-        for (Entry entry : entries) {
-            if (entry.isVisible()) {
-                visibleEntries.add(entry);
-            }
-        }
-        return visibleEntries;
+    public void sortByTime(boolean reverseSorted) {
+        entries.sort(new TimeComparator(reverseSorted));
     }
 
 
     /**
-     * Method returns all {@link Entry} instances that are invisible (i.e. the method
-     * {@link Entry#isVisible()} returns {@code false} as an {@linkplain ArrayList}.
-     *
-     * @return  List of invisible Entries.
+     * Method removes all sortings from the handled entries.
      */
-    public ArrayList<Entry> getInvisibleEntries() {
-        ArrayList<Entry> invisibleEntries = new ArrayList<>();
-        for (Entry entry : entries) {
-            if (!entry.isVisible()) {
-                invisibleEntries.add(entry);
-            }
-        }
-        return invisibleEntries;
+    public void removeAllSortings() {
+        entries.clear();
+        entries.addAll(initialEntries);
     }
 
 
@@ -111,10 +115,11 @@ public class EntryHandle implements Serializable {
         if (entry == null) {
             throw new NullPointerException("Null is invalid entry");
         }
-        if (entries.contains(entry)) {
+        if (initialEntries.contains(entry)) {
             //Entry does already exist:
             return false;
         }
+        initialEntries.add(entry);
         entries.add(entry);
         return true;
     }
@@ -131,12 +136,12 @@ public class EntryHandle implements Serializable {
         if (uuid == null) {
             throw new NullPointerException("Null is invalid UUID");
         }
-        int index = entries.indexOf(Entry.getInstance(uuid));
-        if (!entries.contains(Entry.getInstance(uuid))) {
+        if (!initialEntries.contains(Entry.getInstance(uuid))) {
             //Entry does not exist:
             return false;
         }
-        entries.remove(Entry.getInstance(uuid)); //Remove entry with UUID.
+        initialEntries.remove(Entry.getInstance(uuid));
+        entries.remove(Entry.getInstance(uuid));
         return true;
     }
 
@@ -154,10 +159,11 @@ public class EntryHandle implements Serializable {
         if (entry == null) {
             throw new NullPointerException("Null is invalid entry");
         }
-        if (!entries.contains(entry)) {
+        if (!initialEntries.contains(entry)) {
             //Entry does not already exist:
             return add(entry);
         }
+        initialEntries.set(initialEntries.indexOf(entry), entry);
         entries.set(entries.indexOf(entry), entry);
         return true;
     }
@@ -191,7 +197,7 @@ public class EntryHandle implements Serializable {
     public boolean save() {
         boolean savedEverything = true;
         //Save abbreviated entries:
-        String json = gson.toJson(entries, new TypeToken<ArrayList<Entry>>(){}.getType());
+        String json = gson.toJson(initialEntries, new TypeToken<ArrayList<Entry>>(){}.getType());
         boolean result = writeToFile(FILE_NAME_ENTRIES, json);
         if (!result) {
             savedEverything = false;
@@ -225,7 +231,10 @@ public class EntryHandle implements Serializable {
     private void load() {
         String json = readFromFile(FILE_NAME_ENTRIES);
         if (json != null) {
-            entries.addAll(gson.fromJson(json, new TypeToken<ArrayList<Entry>>(){}.getType()));
+            initialEntries.clear();
+            entries.clear();
+            initialEntries.addAll(gson.fromJson(json, new TypeToken<ArrayList<Entry>>(){}.getType()));
+            entries.addAll(initialEntries);
         }
     }
 

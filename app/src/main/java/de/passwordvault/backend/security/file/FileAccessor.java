@@ -5,7 +5,7 @@ import android.security.keystore.KeyGenParameterSpec;
 import androidx.security.crypto.EncryptedFile;
 import androidx.security.crypto.MasterKeys;
 import java.io.File;
-import de.passwordvault.backend.security.GenericSecurityException;
+import de.passwordvault.backend.security.SecurityException;
 
 
 /**
@@ -42,15 +42,15 @@ public abstract class FileAccessor {
      * Method returns the main key alias for the encryption keys.
      *
      * @return                          Main key alias.
-     * @throws GenericSecurityException The main key alias could not be generated.
+     * @throws SecurityException The main key alias could not be generated.
      */
-    protected String getMainKeyAlias() throws GenericSecurityException {
+    protected String getMainKeyAlias() throws SecurityException {
         try {
             KeyGenParameterSpec keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC;
             return MasterKeys.getOrCreate(keyGenParameterSpec);
         }
         catch (Exception e) {
-            throw new GenericSecurityException(e.getMessage());
+            throw new SecurityException(e.getMessage());
         }
     }
 
@@ -62,9 +62,9 @@ public abstract class FileAccessor {
      * @param mainKeyAlias              Main key alias for the EncryptedFile.
      * @return                          Generated EncryptedFile.
      * @throws NullPointerException     One of the passed arguments is {@code null}.
-     * @throws GenericSecurityException The EncryptedFile could not be generated.
+     * @throws SecurityException The EncryptedFile could not be generated.
      */
-    protected EncryptedFile getEncryptedFile(String filename, String mainKeyAlias) throws NullPointerException, GenericSecurityException {
+    protected EncryptedFile getEncryptedFile(String filename, String mainKeyAlias) throws NullPointerException, SecurityException {
         if (filename == null) {
             throw new NullPointerException("Filename cannot be null");
         }
@@ -75,7 +75,7 @@ public abstract class FileAccessor {
             return new EncryptedFile.Builder(new File(context.getFilesDir(), filename), context, mainKeyAlias, EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB).build();
         }
         catch (Exception e) {
-            throw new GenericSecurityException(e.getMessage());
+            throw new SecurityException(e.getMessage());
         }
     }
 
@@ -87,9 +87,9 @@ public abstract class FileAccessor {
      * @param filename                  Name of the EncryptedFile to be returned.
      * @return                          Generated EncryptedFile.
      * @throws NullPointerException     The passed filename is {@code null}.
-     * @throws GenericSecurityException The EncryptedFile could not be generated.
+     * @throws SecurityException The EncryptedFile could not be generated.
      */
-    protected EncryptedFile getEncryptedFile(String filename) throws NullPointerException, GenericSecurityException {
+    protected EncryptedFile getEncryptedFile(String filename) throws NullPointerException, SecurityException {
         return getEncryptedFile(filename, getMainKeyAlias());
     }
 

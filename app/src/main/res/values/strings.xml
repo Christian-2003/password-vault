@@ -10,6 +10,13 @@
     <string name="bottom_navigation_entries">Accounts</string>
     <string name="bottom_navigation_settings">Settings</string>
 
+    <!-- Menu to sort entries list -->
+    <string name="sort_entries_not_sorted">Not Sorted</string>
+    <string name="sort_entries_name_ascending">Name: Ascending</string>
+    <string name="sort_entries_name_descending">Name: Descending</string>
+    <string name="sort_entries_created_ascending">Created: Ascending</string>
+    <string name="sort_entries_created_descending">Created: Descending</string>
+
     <!-- Entries fragment -->
     <string name="entries_list">Entries</string>
 

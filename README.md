@@ -27,6 +27,11 @@ The application was developed with Java through the Android Studio IDE. The proj
 
 The version numbers for this project are determined based on the guidelines provided by [semver](https://semver.org/).
 
+### Miscellaneous
+The project contains a [changelog](CHANGELOG.md) which documents all changes that were made to the application in between software versions.
+
+Furthermore, a [wishlist](WISHLIST.md) contains a list of all known bugs, all knwon uses of deprecated functionalities, as well as a list of features that shall be added in the future.
+
 <br>
 
 ***
@@ -67,7 +72,7 @@ Click "Save" to save your account. Now your account should be displayed on the "
 
 ***
 ## Contributors
-Currently, I ([Christian-2003](https://github.com/Christian-2003)) am the only contributor.
+Currently, I ([Christian-2003](https://github.com/Christian-2003)) am the only developer.
 
 <br>
 

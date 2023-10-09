@@ -1,9 +1,7 @@
 package de.passwordvault.backend.entry;
 
 import androidx.annotation.NonNull;
-
 import org.jetbrains.annotations.Contract;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;

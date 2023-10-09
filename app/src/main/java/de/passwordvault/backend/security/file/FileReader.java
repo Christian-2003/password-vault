@@ -5,7 +5,7 @@ import androidx.security.crypto.EncryptedFile;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import de.passwordvault.backend.security.GenericSecurityException;
+import de.passwordvault.backend.security.SecurityException;
 
 
 /**
@@ -34,10 +34,10 @@ public class FileReader extends FileAccessor {
      * @param file                      Name of the file to be read.
      * @return                          Content of the read file.
      * @throws NullPointerException     The specified file name is {@code null}.
-     * @throws GenericSecurityException The file could not be read due to encryption issues.
+     * @throws SecurityException        The file could not be read due to encryption issues.
      * @throws IOException              The file could not be read.
      */
-    public String read(String file) throws NullPointerException, GenericSecurityException, IOException {
+    public String read(String file) throws NullPointerException, SecurityException, IOException {
         StringBuilder fileContent = new StringBuilder();
 
         EncryptedFile encryptedFile = getEncryptedFile(file);
@@ -55,7 +55,7 @@ public class FileReader extends FileAccessor {
             throw e;
         }
         catch (Exception e) {
-            throw new GenericSecurityException(e.getMessage());
+            throw new SecurityException(e.getMessage());
         }
 
         return fileContent.toString();

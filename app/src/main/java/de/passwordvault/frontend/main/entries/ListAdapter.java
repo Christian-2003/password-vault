@@ -22,7 +22,6 @@ import de.passwordvault.backend.entry.Entry;
  * @author  Christian-2003
  * @version 2.0.0
  */
-// implements AdapterView.OnItemClickListener
 public class ListAdapter extends ArrayAdapter<Entry> {
 
     /**

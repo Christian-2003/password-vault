@@ -1,4 +1,5 @@
 # Known Bugs that need to be fixed
+This is a list of known bugs should be fixed.
 * When Entry is changed / deleted, changed / deleted entry is not shown in EntriesFragment
 * I don't quite know when exactly everything is saved to the filesystem. This should be fixed
 * Items in ListView in EntriesFragment do not occupy full width of container view
@@ -7,19 +8,19 @@
 
 ***
 # Features to Add
+This is a list of features that would be nice if added to the application.
 * Analysis for all passwords on home-screen
 * Automatically generated passwords
 * Templates for details and entries
 * Multi-Language-Support
 * Change language in settings
-* Change between ligh / dark mode in settings
+* Change between light / dark mode in settings
 * Add password manager to application
 * Biometric login for further security
 * Additional encryption for sensitive data
 * Export data
 * Google drive backup
 * Synchronization between devices
-* Sort entries by name or other meaningful categories
 * Search within entries
 * Changeable order of details within entry
 * Make URL-Detail be opened on click
@@ -36,7 +37,15 @@
 
 ***
 # Use of Deprecated Functionalities that Should be Replaced
+This is a list of API functionalities that were marked as _deprecated_ by the developer, that were used anyway.
 * Class `DetailDialogFragment` uses `setRetainInstance()`
 * Class `ConfirmDeleteDialogFragment` uses `setRetainInstance()`
-* Clas `EntryActivity` uses `startActivityForResult()`
-* Clas `EntriesFragment` uses `startActivityForResult()`
+* Class `EntryActivity` uses `startActivityForResult()`
+* Class `EntriesFragment` uses `startActivityForResult()`
+
+<br>
+
+***
+# Features implemented / fixed
+This is a list of everything that was listed anywhere above beforehand. Items can be moved here if they were fixed / implemented / ...
+* Sort entries by name or other meaningful categories

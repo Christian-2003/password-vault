@@ -5,7 +5,7 @@ import androidx.security.crypto.EncryptedFile;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import de.passwordvault.backend.security.GenericSecurityException;
+import de.passwordvault.backend.security.SecurityException;
 
 
 /**
@@ -33,10 +33,10 @@ public class FileWriter extends FileAccessor {
      * @param file                      Name of the file to be written to.
      * @param content                   Content to write to the file.
      * @throws NullPointerException     The specified file name is {@code null}.
-     * @throws GenericSecurityException The file could not be written to due to encryption issues.
+     * @throws SecurityException        The file could not be written to due to encryption issues.
      * @throws IOException              The file could not be written to.
      */
-    public void write(String file, String content) throws NullPointerException, GenericSecurityException, IOException {
+    public void write(String file, String content) throws NullPointerException, SecurityException, IOException {
         EncryptedFile encryptedFile = getEncryptedFile(file);
 
         try (OutputStream outputStream = encryptedFile.openFileOutput()) {
@@ -47,7 +47,7 @@ public class FileWriter extends FileAccessor {
             throw e;
         }
         catch (Exception e) {
-            throw new GenericSecurityException(e.getMessage());
+            throw new SecurityException(e.getMessage());
         }
     }
 

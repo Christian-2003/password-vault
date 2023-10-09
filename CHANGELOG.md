@@ -1,3 +1,16 @@
+# 2.1.0 (2023-10-09)
+### Release Highlights
+Entries can now be sorted according to some categories.
+
+### Features
+* Changed name of `GenericSecurityException` to `SecurityException`.
+* Removed implementation of `Serializable`-interface from class `Detail`, as nothing for serialization was implemented and there is no need to serialize instances.
+* Entries within the `EntriesFragment` can be sorted according to the following categories: "Not sorted", "Name: Ascending", "Name: Descending", "Created: Ascending" and "Created: Descending".
+* Implemented `GenericComparator<T>`-class, which implements `Comparator<T>`-interface to provide information on reverse sorting for subclasses.
+* Implemented `LexicographicComparator` and `TimeComparator` to sort `Entry`-instances according to the categories listed above.
+
+<br>
+
 # 2.0.0 (2023-10-04)
 ### Release Highlights
 Backwards-compatibility breaking changes to the handling of entries within the backend. All details about entries are now loaded from persistent memory when the application starts, to minimize the number of times files have to be accessed throughout the applications lifecycle.

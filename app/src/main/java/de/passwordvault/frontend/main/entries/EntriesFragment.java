@@ -3,15 +3,17 @@ package de.passwordvault.frontend.main.entries;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
-
+import android.widget.PopupMenu;
 import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.backend.Singleton;
@@ -24,9 +26,9 @@ import de.passwordvault.frontend.entry.EntryActivity;
  * within the {@linkplain de.passwordvault.frontend.main.MainActivity}.
  *
  * @author  Christian-2003
- * @version 2.0.0
+ * @version 2.1.0
  */
-public class EntriesFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class EntriesFragment extends Fragment implements AdapterView.OnItemClickListener, PopupMenu.OnMenuItemClickListener {
 
     /**
      * Attribute stores the inflated view for the fragment.
@@ -66,6 +68,14 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
         // Inflate the layout for this fragment
         inflated = inflater.inflate(R.layout.fragment_entries, container, false);
 
+        ImageButton sortButton = inflated.findViewById(R.id.entries_sort_button);
+        sortButton.setOnClickListener(view -> {
+            PopupMenu popup = new PopupMenu(EntriesFragment.this.getContext(), sortButton);
+            popup.getMenuInflater().inflate(R.menu.sort_entries_list, popup.getMenu());
+            popup.setOnMenuItemClickListener(EntriesFragment.this);
+            popup.show();
+        });
+
         populateListView();
 
         return inflated;
@@ -88,6 +98,40 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
             intent.putExtra("uuid", uuid);
             getActivity().startActivityForResult(intent, 1);
         }
+    }
+
+
+    /**
+     * Method is called whenever a menu item of the menu {@link R.menu#sort_entries_list} is clicked.
+     * This will sort the {@linkplain ListView} which displays all {@link Entry}-instances according
+     * to the clicked menu item.
+     *
+     * @param item  Item which was clicked.
+     * @return      Whether the click was successfully processed.
+     */
+    @Override
+    public boolean onMenuItemClick(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sort_entries_not_sorted:
+                Singleton.ENTRIES.removeAllSortings();
+                break;
+            case R.id.sort_entries_name_ascending:
+                Singleton.ENTRIES.sortByName(false);
+                break;
+            case R.id.sort_entries_name_descending:
+                Singleton.ENTRIES.sortByName(true);
+                break;
+            case R.id.sort_entries_created_ascending:
+                Singleton.ENTRIES.sortByTime(false);
+                break;
+            case R.id.sort_entries_created_descending:
+                Singleton.ENTRIES.sortByTime(true);
+                break;
+            default:
+                return false;
+        }
+        populateListView();
+        return true;
     }
 
 
@@ -118,10 +162,11 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
      * instances.
      */
     private void populateListView() {
-        ArrayList<Entry> entries = Singleton.ENTRIES.getVisibleEntries();
+        ArrayList<Entry> entries = Singleton.ENTRIES.getEntries();
         ListView listView = inflated.findViewById(R.id.abbreviated_entries);
         ListAdapter listAdapter = new ListAdapter(entries, getContext());
         listView.setAdapter(listAdapter);
+        listAdapter.notifyDataSetChanged();
         listView.setOnItemClickListener(this);
     }
 
