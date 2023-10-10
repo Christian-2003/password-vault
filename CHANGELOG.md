@@ -1,3 +1,16 @@
+<img src="docs/img/icon.png" height="150" align="right">
+
+# 2.2.0 (2023-10-10)
+### Release Highlights
+Major design overhaul: The Material Design 3 has been partially incorporated into the applications design. Furthermore, a custom icon for the application is introduced. When it comes to functionalities, the list of entries in can now be searched for any substring.
+
+### Features
+* List of `Entry`-instances in the `EntriesFragment` are now searchable. The algorithm searches a pattern (can be entered through a search bar) in the name and description of the entry.
+* Created App-icon.
+* Partial incorporation of Material Design 3.
+
+<br>
+
 # 2.1.0 (2023-10-09)
 ### Release Highlights
 Entries can now be sorted according to some categories.

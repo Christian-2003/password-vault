@@ -1,4 +1,10 @@
+<img src="docs/img/icon.png" height="150" align="right">
+
 # PasswordVault
+![GitHub](https://img.shields.io/github/license/Christian-2003/password-vault?color=red)
+![GitHub](https://img.shields.io/github/issues/Christian-2003/password-vault?color=purple)
+![GitHub](https://img.shields.io/github/repo-size/Christian-2003/password-vault?color=blue)
+
 The PasswordVault is an application for Android which allows the user to manage account data.
 
 <div align="center">

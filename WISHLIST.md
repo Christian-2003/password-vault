@@ -1,3 +1,5 @@
+<img src="docs/img/icon.png" height="150" align="right">
+
 # Known Bugs that need to be fixed
 This is a list of known bugs should be fixed.
 * When Entry is changed / deleted, changed / deleted entry is not shown in EntriesFragment
@@ -21,13 +23,11 @@ This is a list of features that would be nice if added to the application.
 * Export data
 * Google drive backup
 * Synchronization between devices
-* Search within entries
 * Changeable order of details within entry
 * Make URL-Detail be opened on click
 * Make click on E-Mail-Detail open email app to write to this email. This is useless (as the email should be owned by the user), but cool
 * Custom quality gates for password security score
 * Show UUID / Created / Changed on Details
-* Custom button style
 * Make Appbar in MainActivity collapsable (as it is in most apps from Samsung)
 * Swipe in MainActivity to scroll between fragments
 * License and Used Software in Settings
@@ -49,3 +49,5 @@ This is a list of API functionalities that were marked as _deprecated_ by the de
 # Features implemented / fixed
 This is a list of everything that was listed anywhere above beforehand. Items can be moved here if they were fixed / implemented / ...
 * Sort entries by name or other meaningful categories
+* Search within entries
+* Custom button style (Style not custom, but from Material Design 3)

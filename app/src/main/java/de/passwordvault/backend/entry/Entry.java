@@ -314,6 +314,21 @@ public class Entry {
 
 
     /**
+     * Method tests whether the passed argument is contained within the {@link #name} or
+     * {@link #description} of the {@link Entry}.
+     *
+     * @param s Substring to be tested if present anywhere in this entry.
+     * @return  Whether the passed string is contained within this instance.
+     */
+    public boolean matchesFilter(CharSequence s) {
+        if (name.toLowerCase().contains(s) || description.toLowerCase().contains(s)) {
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
      * Method tests whether the UUID of the passed entry is identical to the UUID of this entry.
      *
      * @param obj   Entry whose UUID shall be compared to the UUID of this entry.

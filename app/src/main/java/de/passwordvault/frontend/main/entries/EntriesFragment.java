@@ -1,20 +1,24 @@
 package de.passwordvault.frontend.main.entries;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.backend.Singleton;
 import de.passwordvault.backend.entry.Entry;
@@ -26,14 +30,24 @@ import de.passwordvault.frontend.entry.EntryActivity;
  * within the {@linkplain de.passwordvault.frontend.main.MainActivity}.
  *
  * @author  Christian-2003
- * @version 2.1.0
+ * @version 2.2.0
  */
 public class EntriesFragment extends Fragment implements AdapterView.OnItemClickListener, PopupMenu.OnMenuItemClickListener {
+
+    /**
+     * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} for this fragment.
+     */
+    private EntriesViewModel viewModel;
 
     /**
      * Attribute stores the inflated view for the fragment.
      */
     private View inflated;
+
+    /**
+     * Attribute stores the ListAdapter for the ListView.
+     */
+    private ListAdapter adapter;
 
 
     /**
@@ -52,6 +66,7 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel = new ViewModelProvider(requireActivity()).get(EntriesViewModel.class);
     }
 
 
@@ -68,12 +83,53 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
         // Inflate the layout for this fragment
         inflated = inflater.inflate(R.layout.fragment_entries, container, false);
 
+        adapter = new ListAdapter(Singleton.ENTRIES.getEntries(), getContext());
+
+        //Setup button to sort the entries:
         ImageButton sortButton = inflated.findViewById(R.id.entries_sort_button);
         sortButton.setOnClickListener(view -> {
             PopupMenu popup = new PopupMenu(EntriesFragment.this.getContext(), sortButton);
             popup.getMenuInflater().inflate(R.menu.sort_entries_list, popup.getMenu());
             popup.setOnMenuItemClickListener(EntriesFragment.this);
             popup.show();
+        });
+
+        //Setup button to show / hide search bar:
+        EditText searchBar = inflated.findViewById(R.id.entries_search_bar);
+        ImageButton searchButton = inflated.findViewById(R.id.entries_search_button);
+        searchButton.setOnClickListener(view -> {
+            if (viewModel.isSearchBarVisible()) {
+                viewModel.setSearchBarVisible(false);
+                searchBar.setVisibility(View.GONE);
+            }
+            else {
+                viewModel.setSearchBarVisible(true);
+                searchBar.setVisibility(View.VISIBLE);
+            }
+        });
+        if (viewModel.isSearchBarVisible()) {
+            searchBar.setVisibility(View.VISIBLE);
+        }
+        else {
+            searchBar.setVisibility(View.GONE);
+        }
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) {
+                //Do nothing...
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                ListAdapter adapter = (ListAdapter)((ListView)EntriesFragment.this.inflated.findViewById(R.id.abbreviated_entries)).getAdapter();
+                adapter.getFilter().filter(s);
+                populateListView();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //Do nothing...
+            }
         });
 
         populateListView();
@@ -109,6 +165,7 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
      * @param item  Item which was clicked.
      * @return      Whether the click was successfully processed.
      */
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onMenuItemClick(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -162,11 +219,9 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
      * instances.
      */
     private void populateListView() {
-        ArrayList<Entry> entries = Singleton.ENTRIES.getEntries();
         ListView listView = inflated.findViewById(R.id.abbreviated_entries);
-        ListAdapter listAdapter = new ListAdapter(entries, getContext());
-        listView.setAdapter(listAdapter);
-        listAdapter.notifyDataSetChanged();
+        listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         listView.setOnItemClickListener(this);
     }
 

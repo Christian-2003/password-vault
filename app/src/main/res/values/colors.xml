@@ -1,23 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
+    <color name="seed">#1D7874</color>
+    <color name="pv_theme_primary">#006A66</color>
+    <color name="pv_theme_onPrimary">#FFFFFF</color>
+    <color name="pv_theme_primaryContainer">#70F7F0</color>
+    <color name="pv_theme_onPrimaryContainer">#00201E</color>
+    <color name="pv_theme_secondary">#4A6361</color>
+    <color name="pv_theme_onSecondary">#FFFFFF</color>
+    <color name="pv_theme_secondaryContainer">#CCE8E5</color>
+    <color name="pv_theme_onSecondaryContainer">#051F1E</color>
+    <color name="pv_theme_tertiary">#49607B</color>
+    <color name="pv_theme_onTertiary">#FFFFFF</color>
+    <color name="pv_theme_tertiaryContainer">#D0E4FF</color>
+    <color name="pv_theme_onTertiaryContainer">#011D34</color>
+    <color name="pv_theme_error">#BA1A1A</color>
+    <color name="pv_theme_errorContainer">#FFDAD6</color>
+    <color name="pv_theme_onError">#FFFFFF</color>
+    <color name="pv_theme_onErrorContainer">#410002</color>
+    <color name="pv_theme_background">#FAFDFB</color>
+    <color name="pv_theme_onBackground">#191C1C</color>
+    <color name="pv_theme_surface">#FAFDFB</color>
+    <color name="pv_theme_onSurface">#191C1C</color>
+    <color name="pv_theme_surfaceVariant">#DAE5E3</color>
+    <color name="pv_theme_onSurfaceVariant">#3F4948</color>
+    <color name="pv_theme_outline">#6F7978</color>
+    <color name="pv_theme_inverseOnSurface">#EFF1F0</color>
+    <color name="pv_theme_inverseSurface">#2D3131</color>
+    <color name="pv_theme_inversePrimary">#4EDAD4</color>
+    <color name="pv_theme_shadow">#000000</color>
+    <color name="pv_theme_surfaceTint">#006A66</color>
+    <color name="pv_theme_outlineVariant">#BEC9C7</color>
+    <color name="pv_theme_scrim">#000000</color>
 
-    <!-- Primary Colors -->
-    <color name="primary">#1D7874</color>
-    <color name="primary_variant">#679289</color>
-    <color name="on_primary">#FFFFFF</color>
 
-    <color name="background">#FFFFFF</color>
-    <color name="background_variant">#EDEDED</color>
-    <color name="on_background">#000000</color>
-    <color name="on_background_variant">#636363</color>
+    <!-- The following colors are only present to preserve backwards compatibility! -->
+    <color name="primary">@color/pv_theme_primaryContainer</color>
+    <color name="primary_variant">@color/pv_theme_primary</color>
+    <color name="on_primary">@color/pv_theme_onPrimary</color>
+
+    <color name="background">@color/pv_theme_surface</color>
+    <color name="background_variant">@color/pv_theme_surfaceVariant</color>
+    <color name="on_background">@color/pv_theme_onSurface</color>
+    <color name="on_background_variant">@color/pv_theme_onSurfaceVariant</color>
 
     <color name="red">#EE2E31</color>
     <color name="green">#91EE2E</color>
     <color name="yellow">#EE8B2E</color>
-
-    <!--<color name="teal_700">#071E22</color>
-    <color name="peach">#F4C095</color>
-    <color name="red">#EE2E31</color>-->
-
 </resources>

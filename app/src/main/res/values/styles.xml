@@ -43,16 +43,16 @@
     <style name="variant_text" parent="default_text">
         <item name="android:textSize">@dimen/default_text_size</item>
         <item name="android:textColor">@color/on_background_variant</item>
-    </style>
+</style>
 
-    <style name="highlight_text" parent="default_text">
-        <item name="android:textSize">@dimen/highlight_text_size</item>
-        <item name="android:layout_marginTop">@dimen/default_margin</item>
-        <item name="android:layout_marginStart">@dimen/default_margin</item>
-        <item name="android:textStyle">bold</item>
-    </style>
+<style name="highlight_text" parent="default_text">
+    <item name="android:textSize">@dimen/highlight_text_size</item>
+    <item name="android:layout_marginTop">@dimen/default_margin</item>
+    <item name="android:layout_marginStart">@dimen/default_margin</item>
+    <item name="android:textStyle">bold</item>
+</style>
 
-    <!-- Style for app bar text -->
+<!-- Style for app bar text -->
     <style name="app_bar_text" parent="default_text">
         <item name="android:textSize">@dimen/app_bar_text_size</item>
         <item name="android:textStyle">bold</item>

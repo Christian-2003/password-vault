@@ -63,6 +63,7 @@
     <string name="hint_name">Enter name</string>
     <string name="hint_description">Enter description</string>
     <string name="hint_content">Enter content</string>
+    <string name="hint_search">Search...</string>
 
     <!-- Password / Passcode security -->
     <string name="password_security_estimate">Estimated password security</string>

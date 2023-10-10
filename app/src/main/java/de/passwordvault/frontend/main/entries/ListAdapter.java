@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,19 +23,43 @@ import de.passwordvault.backend.entry.Entry;
  * are displayed through a {@linkplain android.widget.ListView} within the {@linkplain EntriesFragment}.
  *
  * @author  Christian-2003
- * @version 2.0.0
+ * @version 2.2.0
  */
-public class ListAdapter extends ArrayAdapter<Entry> {
+public class ListAdapter extends BaseAdapter implements Filterable {
 
     /**
-     * Attribute stores the context for the adapter.
+     * Inner class models a {@link ViewHolder} for the generated {@linkplain View}-instances of
+     * the {@link ListAdapter}.
      */
-    private final Context context;
+    private static class ViewHolder {
+
+        /**
+         * Attribute stores the {@link TextView} to display the name.
+         */
+        public TextView name;
+
+        /**
+         * Attribute stores the {@link TextView} to display the description.
+         */
+        public TextView description;
+
+    }
+
 
     /**
-     * Stores the position of the list item that was last generated.
+     * Attribute stores the {@link Entry}-instances that shall be displayed by the {@link ListAdapter}.
      */
-    private int lastPosition;
+    private ArrayList<Entry> originalEntries;
+
+    /**
+     * Attribute stores the {@link Entry}-instances that are displayed by the {@link ListAdapter}.
+     */
+    private ArrayList<Entry> displayedEntries;
+
+    /**
+     * Attribute stores the layout inflater to create the views.
+     */
+    private final LayoutInflater inflater;
 
 
     /**
@@ -42,9 +69,44 @@ public class ListAdapter extends ArrayAdapter<Entry> {
      * @param context   Context for the adapter.
      */
     public ListAdapter(ArrayList<Entry> entries, Context context) {
-        super(context, R.layout.entries_list_item, entries);
-        this.context = context;
-        lastPosition = -1;
+        originalEntries = entries;
+        displayedEntries = entries;
+        inflater = LayoutInflater.from(context);
+    }
+
+
+    /**
+     * Method returns the number of displayed entries.
+     *
+     * @return  Number of displayed entries.
+     */
+    @Override
+    public int getCount() {
+        return displayedEntries.size();
+    }
+
+
+    /**
+     * Method returns the item at the specified position.
+     *
+     * @param position  Index of the item to be returned.
+     * @return          Item at the specified index.
+     */
+    @Override
+    public Object getItem(int position) {
+        return displayedEntries.get(position);
+    }
+
+
+    /**
+     * Method returns the ID of the item at the specified position.
+     *
+     * @param position  Position whose item ID shall be returned.
+     * @return          ID of the item at the specified ID.
+     */
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
 
@@ -58,16 +120,82 @@ public class ListAdapter extends ArrayAdapter<Entry> {
      */
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Entry entry = getItem(position);
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        convertView = inflater.inflate(R.layout.entries_list_item, parent, false);
-        ((TextView)convertView.findViewById(R.id.entries_list_item_name)).setText(entry.getName());
-        ((TextView)convertView.findViewById(R.id.entries_list_item_description)).setText(entry.getDescription());
-        Animation animation = AnimationUtils.loadAnimation(context, R.anim.entries_list_show_item);
-        convertView.startAnimation(animation);
-        lastPosition = position;
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        Entry entry = (Entry)getItem(position);
+        ViewHolder holder;
+        if (convertView == null) {
+            holder = new ViewHolder();
+            convertView = inflater.inflate(R.layout.entries_list_item, parent, false);
+            holder.name = convertView.findViewById(R.id.entries_list_item_name);
+            holder.description = convertView.findViewById(R.id.entries_list_item_description);
+            convertView.setTag(holder);
+        }
+        else {
+            holder = (ViewHolder)convertView.getTag();
+        }
+        holder.name.setText(entry.getName());
+        holder.description.setText(entry.getDescription());
+        //Animation animation = AnimationUtils.loadAnimation(context, R.anim.entries_list_show_item);
+        //convertView.startAnimation(animation);
         return convertView;
+    }
+
+
+    /**
+     * Method returns the {@link Filter} that is used with the {@link ListAdapter}.
+     *
+     * @return  Used filter.
+     */
+    @Override
+    public Filter getFilter() {
+        Filter filter = new Filter() {
+
+            /**
+             * Method filters the data according to the passed constraint.
+             *
+             * @param constraint    The constraint used to filter the data.
+             * @return              The result of the filtering operation.
+             */
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults results = new FilterResults();
+                ArrayList<Entry> filteredList = new ArrayList<>();
+                if (originalEntries == null) {
+                    originalEntries = new ArrayList<>(displayedEntries);
+                }
+                if (constraint == null || constraint.length() == 0) {
+                    //No filter applied: Set original values as result:
+                    results.count = originalEntries.size();
+                    results.values = originalEntries;
+                }
+                else {
+                    constraint = constraint.toString().toLowerCase();
+                    for (Entry entry : originalEntries) {
+                        if (entry.matchesFilter(constraint)) {
+                            filteredList.add(new Entry(entry));
+                        }
+                    }
+                    results.count = filteredList.size();
+                    results.values = filteredList;
+                }
+                return results;
+            }
+
+            /**
+             * Method applies the filter results to the {@link ListAdapter} and calls
+             * {@linkplain ListAdapter#notifyDataSetChanged()} to update the {@linkplain android.widget.ListView}.
+             *
+             * @param constraint    The constraint used to filter the data.
+             * @param results       The result of the filtering operation.
+             */
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                displayedEntries = (ArrayList<Entry>)results.values;
+                notifyDataSetChanged();
+            }
+
+        };
+        return filter;
     }
 
 }
