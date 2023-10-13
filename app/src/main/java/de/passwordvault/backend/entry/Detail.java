@@ -1,23 +1,18 @@
 package de.passwordvault.backend.entry;
 
 import android.content.Context;
-
 import androidx.annotation.NonNull;
-
-import com.google.gson.Gson;
 import java.util.Calendar;
 import java.util.Objects;
 import java.util.UUID;
 import de.passwordvault.R;
-import de.passwordvault.backend.security.encryption.Encryptable;
-import de.passwordvault.backend.security.encryption.EncryptionException;
 
 
 /**
  * Class models a detail which can contain all types of detailed information for an entry.
  *
  * @author  Christian-2003
- * @version 2.1.0
+ * @version 2.2.1
  */
 public class Detail {
 
@@ -262,71 +257,6 @@ public class Detail {
      */
     public int hashCode() {
         return Objects.hash(uuid);
-    }
-
-
-    /**
-     * Method converts this {@link #Detail} into a JSON string representation. If {@link #encrypted}
-     * is set to {@code true}, the {@link #name} and {@link #content} are encrypted using the
-     * passed encryption algorithm.
-     *
-     * @param algorithm             Algorithm with which to encrypt the data if necessary.
-     * @return                      JSON representation of this instance.
-     * @throws EncryptionException  The instance could not be encrypted.
-     * @throws NullPointerException If the passed algorithm is {@code null} and {@link #encrypted}
-     *                              is set to {@code true}.
-     */
-    public String toJson(Encryptable algorithm) throws EncryptionException, NullPointerException {
-        String decryptedContent = content;
-        String decryptedName = name;
-        if (encrypted) {
-            if (algorithm == null) {
-                throw new NullPointerException("Null is invalid encryption algorithm");
-            }
-            content = algorithm.encrypt(content);
-            name = algorithm.encrypt(name);
-        }
-
-        Gson gson = new Gson();
-        String json = gson.toJson(this, Detail.class);
-
-        content = decryptedContent;
-        name = decryptedName;
-
-        return json;
-    }
-
-
-    /**
-     * Method converts the passed JSON representation of a {@link Detail} (which can be generated
-     * through {@link #toJson(Encryptable)}) into a detail and stores it's attributes within this
-     * instance. If {@link #encrypted} is set to {@code true}, the {@link #name} and {@link #content}
-     * will be decrypted using the specified algorithm.
-     *
-     * @param json                      JSON to be converted into a detail.
-     * @param algorithm                 Algorithm with which to decrypt the data if necessary.
-     * @throws EncryptionException      The represented detail could not be decrypted.
-     * @throws IllegalArgumentException The passed JSON could not be parsed into a detail.
-     * @throws NullPointerException     The passed JSON is {@code null} OR the passed algorithm is
-     *                                  {@code null} while {@link #encrypted} is set to {@code true}.
-     */
-    public void fromJson(String json, Encryptable algorithm) throws EncryptionException, IllegalArgumentException, NullPointerException {
-        if (json == null) {
-            throw new NullPointerException("Null is invalid JSON");
-        }
-        Gson gson = new Gson();
-        Detail detail = gson.fromJson(json, Detail.class);
-        if (detail == null) {
-            throw new IllegalArgumentException("Json " + json + " is invalid");
-        }
-        copyAttributesFromDetail(detail);
-        if (encrypted) {
-            if (algorithm == null) {
-                throw new NullPointerException("Null is invalid encryption algorithm");
-            }
-            content = algorithm.decrypt(content);
-            name = algorithm.decrypt(name);
-        }
     }
 
 

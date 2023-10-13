@@ -84,4 +84,7 @@
     <string name="detail_password">Password</string>
     <string name="detail_url">URL</string>
 
+    <!-- Error messages that are sent to the user -->
+    <string name="error_cannot_show_entry">Cannot show entry.</string>
+
 </resources>

@@ -4,7 +4,8 @@
 This is a list of known bugs should be fixed.
 * When Entry is changed / deleted, changed / deleted entry is not shown in EntriesFragment
 * I don't quite know when exactly everything is saved to the filesystem. This should be fixed
-* Items in ListView in EntriesFragment do not occupy full width of container view
+* If detail's visibility is changed to "invisible", it is not shown with "Hidden Details" immediately after change. It is only shown after restarting `EntryActivity` with the same entry.
+
 
 <br>
 
@@ -32,6 +33,8 @@ This is a list of features that would be nice if added to the application.
 * Swipe in MainActivity to scroll between fragments
 * License and Used Software in Settings
 * Link to Github and Bug reports in settings
+* Make appearance and disappearance of search bar in `EntriesFragment` animated
+* Show current sorting in `EntriesFragment`
 
 <br>
 

@@ -1,5 +1,6 @@
 package de.passwordvault.frontend.main.entries;
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -14,11 +15,15 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.Toast;
+
 import de.passwordvault.R;
 import de.passwordvault.backend.Singleton;
 import de.passwordvault.backend.entry.Entry;
@@ -30,7 +35,7 @@ import de.passwordvault.frontend.entry.EntryActivity;
  * within the {@linkplain de.passwordvault.frontend.main.MainActivity}.
  *
  * @author  Christian-2003
- * @version 2.2.0
+ * @version 2.2.1
  */
 public class EntriesFragment extends Fragment implements AdapterView.OnItemClickListener, PopupMenu.OnMenuItemClickListener {
 
@@ -48,6 +53,11 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
      * Attribute stores the ListAdapter for the ListView.
      */
     private ListAdapter adapter;
+
+    /**
+     * Attribute stores the {@linkplain ListView} which displays the {@link Entry}-instances.
+     */
+    private ListView entriesListView;
 
 
     /**
@@ -84,6 +94,7 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
         inflated = inflater.inflate(R.layout.fragment_entries, container, false);
 
         adapter = new ListAdapter(Singleton.ENTRIES.getEntries(), getContext());
+        entriesListView = inflated.findViewById(R.id.abbreviated_entries);
 
         //Setup button to sort the entries:
         ImageButton sortButton = inflated.findViewById(R.id.entries_sort_button);
@@ -100,11 +111,16 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
         searchButton.setOnClickListener(view -> {
             if (viewModel.isSearchBarVisible()) {
                 viewModel.setSearchBarVisible(false);
-                searchBar.setVisibility(View.GONE);
+                searchBar.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_left));
+                searchBar.postDelayed(() -> searchBar.setVisibility(View.GONE), getResources().getInteger(R.integer.default_anim_duration));
             }
             else {
                 viewModel.setSearchBarVisible(true);
+                //ObjectAnimator moveAnim = ObjectAnimator.ofFloat(entriesListView, "translationY", searchBar.getHeight());
+                //moveAnim.setDuration(200);
+                //moveAnim.start();
                 searchBar.setVisibility(View.VISIBLE);
+                searchBar.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left));
             }
         });
         if (viewModel.isSearchBarVisible()) {
@@ -121,7 +137,7 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                ListAdapter adapter = (ListAdapter)((ListView)EntriesFragment.this.inflated.findViewById(R.id.abbreviated_entries)).getAdapter();
+                ListAdapter adapter = (ListAdapter)(entriesListView.getAdapter());
                 adapter.getFilter().filter(s);
                 populateListView();
             }
@@ -147,12 +163,18 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
      * @param id        The row ID of the item that was selected.
      */
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        String uuid = Singleton.ENTRIES.getUuidFromIndex((int)id);
-        if (uuid != null) {
-            Intent intent = new Intent(getActivity(), EntryActivity.class);
-            intent.putExtra("uuid", uuid);
-            getActivity().startActivityForResult(intent, 1);
+    public void onItemClick(@NonNull AdapterView<?> parent, View view, int position, long id) {
+        Object item = parent.getAdapter().getItem(position);
+        if (item instanceof Entry) {
+            String uuid = ((Entry)item).getUuid();
+            if (uuid != null) {
+                Intent intent = new Intent(getActivity(), EntryActivity.class);
+                intent.putExtra("uuid", uuid);
+                getActivity().startActivityForResult(intent, 1);
+            }
+        }
+        else {
+            Toast.makeText(getContext(), getString(R.string.error_cannot_show_entry), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -219,10 +241,9 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
      * instances.
      */
     private void populateListView() {
-        ListView listView = inflated.findViewById(R.id.abbreviated_entries);
-        listView.setAdapter(adapter);
+        entriesListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        listView.setOnItemClickListener(this);
+        entriesListView.setOnItemClickListener(this);
     }
 
 }

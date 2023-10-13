@@ -1,8 +1,8 @@
 package de.passwordvault.backend.entry;
 
 import android.content.Context;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -11,18 +11,17 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
+
+import de.passwordvault.backend.security.file.EncryptedFileReader;
+import de.passwordvault.backend.security.file.EncryptedFileWriter;
 
 
 /**
  * Class models a handle which can manage {@link Entry} instances.
  *
  * @author  Christian-2003
- * @version 2.1.0
+ * @version 2.2.1
  */
 public class EntryHandle {
 
@@ -231,10 +230,16 @@ public class EntryHandle {
     private void load() {
         String json = readFromFile(FILE_NAME_ENTRIES);
         if (json != null) {
-            initialEntries.clear();
-            entries.clear();
-            initialEntries.addAll(gson.fromJson(json, new TypeToken<ArrayList<Entry>>(){}.getType()));
-            entries.addAll(initialEntries);
+            try {
+                initialEntries.clear();
+                entries.clear();
+                initialEntries.addAll(gson.fromJson(json, new TypeToken<ArrayList<Entry>>() {
+                }.getType()));
+                entries.addAll(initialEntries);
+            }
+            catch (Exception e) {
+                Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -249,24 +254,13 @@ public class EntryHandle {
      * @return          Whether the file was successfully written or not.
      */
     private boolean writeToFile(String filename, String content) {
-        File file = new File(context.getFilesDir(), filename);
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            }
-            catch (IOException e) {
-                //Could not create new file:
-                return false;
-            }
+        EncryptedFileWriter writer = new EncryptedFileWriter(context);
+        try {
+            return writer.write(filename, content);
         }
-        try (FileOutputStream fos = context.openFileOutput(filename, Context.MODE_PRIVATE)) {
-            fos.write(content.getBytes());
-        }
-        catch (IOException e) {
-            //Could not write to file:
+        catch (Exception e) {
             return false;
         }
-        return true;
     }
 
 
@@ -279,22 +273,11 @@ public class EntryHandle {
      */
     @Nullable
     private String readFromFile(String filename) {
-        File file = new File(context.getFilesDir(), filename);
-        if (!file.exists()) {
-            //File does not exist:
-            return null;
+        EncryptedFileReader reader = new EncryptedFileReader(context);
+        try {
+            return reader.read(filename);
         }
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(context.openFileInput(filename)))) {
-            StringBuilder json = new StringBuilder();
-            String line = reader.readLine();
-            while (line != null) {
-                json.append(line);
-                line = reader.readLine();
-            }
-            return json.toString();
-        }
-        catch (IOException e) {
-            //Could not read the file:
+        catch (Exception e) {
             return null;
         }
     }

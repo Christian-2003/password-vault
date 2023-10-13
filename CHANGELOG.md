@@ -1,5 +1,20 @@
 <img src="docs/img/icon.png" height="150" align="right">
 
+# 2.2.1 (2023-10-13)
+### Release Highlights
+Major security overhaul: All entries are now being encrypted through an AES/GCM-Algorithm. The required key will be securely stored within the KeyStore.
+
+### Features
+* The entries in the `ListView` in `EntriesFragment` now fill entire horizontal width of the container.
+* Icons in bottom navigation bar are now outlined when not selected and filled when selected.
+* Fixed a bug where the correct entry was not opened after being selected within the `ListView` where a filter was used through the search bar.
+* Removed autocomplete from detail's content input to prevent sensitive user data (e.g. passwords) from being leaked to the autocorrect-software.
+* Switched positions of "Save" and "Cancel" buttons in `AddEntryActivity` to match order of "Save" and "Cancel" buttons of popup dialog windows.
+* Added slide in and slide out animations for search bar in `EntriesFragment`.
+* All entries are encrypted through an AES-algorithm.
+
+<br>
+
 # 2.2.0 (2023-10-10)
 ### Release Highlights
 Major design overhaul: The Material Design 3 has been partially incorporated into the applications design. Furthermore, a custom icon for the application is introduced. When it comes to functionalities, the list of entries in can now be searched for any substring.

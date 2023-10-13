@@ -1,10 +1,16 @@
 package de.passwordvault.backend.security.encryption;
 
-import java.security.NoSuchAlgorithmException;
+import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyProperties;
+import android.util.Log;
+import java.nio.charset.StandardCharsets;
+import java.security.KeyStore;
+import java.security.SecureRandom;
 import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
 
 
 /**
@@ -12,138 +18,107 @@ import javax.crypto.SecretKey;
  * This class can be used to encrypt and decrypt messages using the AES algorithm.
  *
  * @author  Christian-2003
- * @version 2.0.0
+ * @version 2.2.1
  */
-public class AES implements Encryptable {
+public class AES {
 
     /**
-     * Attribute stores the secret key that is used to encrypt / decrypt.
+     * Constant stores the provider for the key generation / retrieval.
      */
-    private SecretKey key;
-
+    private static final String PROVIDER = "AndroidKeyStore";
 
     /**
-     * Constructor constructs a new AES instance and generates a new {@linkplain SecretKey} for the
-     * encryption.
-     *
-     * @throws EncryptionException  A new key could not be generated.
+     * Constant stores the alias with which the {@linkplain SecretKey} is stored within the
+     * {@linkplain KeyStore}.
      */
-    public AES() throws EncryptionException {
-        generateKey();
-    }
+    private static final String KEY_ALIAS = "secret_key";
 
     /**
-     * Constructor constructs a new AES instance which encrypts and decrypts with the specified
-     * {@linkplain SecretKey}.
-     *
-     * @param key                   Key which shall be used for encryption and decryption.
-     * @throws EncryptionException  They passed key could not be used.
+     * Constant stores the tag with which messages shall be logged within the {@linkplain Log}.
      */
-    public AES(SecretKey key) throws EncryptionException {
-        setKey(key);
-    }
+    private static final String TAG = "Security";
 
 
     /**
-     * Method returns the key that is used for encryption.
+     * Method encrypts the passed plain text with the AES algorithm. The required
+     * {@linkplain SecretKey} is automatically retrieved from the {@linkplain KeyStore}. If no key
+     * exists, a new one is automatically generated.
      *
-     * @return  Key.
-     */
-    public SecretKey getKey() {
-        return key;
-    }
-
-    /**
-     * Method changes the key that is used for encryption.
-     *
-     * @param key                   New key.
-     * @throws EncryptionException  The key could not be changed.
-     */
-    public void setKey(SecretKey key) throws EncryptionException {
-        if (key == null) {
-            throw new EncryptionException("Null is an invalid key");
-        }
-        this.key = key;
-    }
-
-
-    /**
-     * Method encrypts the passed plain text through the respective encryption algorithm and returns
-     * the encrypted text.
-     *
-     * @param plainText             Text to be encrypted.
+     * @param plainText             Plain text that shall be encrypted.
      * @return                      Encrypted text.
      * @throws EncryptionException  The plain text could not be encrypted.
      */
     public String encrypt(String plainText) throws EncryptionException {
-        if (plainText == null) {
-            throw new EncryptionException("Null cannot be encrypted");
-        }
-        Cipher cipher;
-        byte[] encrypted;
         try {
-            cipher = getCipherInstance();
-            cipher.init(Cipher.ENCRYPT_MODE, key);
-            encrypted = cipher.doFinal(plainText.getBytes());
+            KeyStore keyStore = KeyStore.getInstance(PROVIDER);
+            keyStore.load(null);
+
+            if (!keyStore.containsAlias(KEY_ALIAS)) {
+                KeyGenerator keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, PROVIDER);
+                KeyGenParameterSpec spec = new KeyGenParameterSpec.Builder(KEY_ALIAS, KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT).setBlockModes(KeyProperties.BLOCK_MODE_GCM).setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE).build();
+                keyGenerator.init(spec);
+                keyGenerator.generateKey();
+                Log.i(TAG, "Generated new secret key");
+            }
+
+            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+            cipher.init(Cipher.ENCRYPT_MODE, getKey(), new SecureRandom());
+
+            byte[] data = cipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
+            byte[] iv = cipher.getIV();
+            byte[] encrypted = new byte[iv.length + data.length];
+            System.arraycopy(iv, 0, encrypted, 0, iv.length);
+            System.arraycopy(data, 0, encrypted, iv.length, data.length);
+
+            return Base64.getEncoder().encodeToString(encrypted);
         }
         catch (Exception e) {
+            Log.e(TAG, e.getMessage());
             throw new EncryptionException(e.getMessage());
         }
-        return Base64.getEncoder().encodeToString(encrypted);
     }
 
 
     /**
-     * Method decrypts the passed encrypted text through the respective decryption algorithm and
-     * returns the decrypted text.
+     * Method decrypts the specified encrypted text with the AES algorithm. The required
+     * {@linkplain SecretKey} is automatically retrieved from the {@linkplain KeyStore}. If no key
+     * exists, an exception will be thrown.
      *
-     * @param encryptedText         Text to be decrypted.
+     * @param encryptedText         Encrypted text that shall be decrypted.
      * @return                      Decrypted text.
      * @throws EncryptionException  The encrypted text could not be decrypted.
      */
     public String decrypt(String encryptedText) throws EncryptionException {
-        if (encryptedText == null) {
-            throw new EncryptionException("Null cannot be encrypted");
-        }
-        Cipher cipher;
-        byte[] encrypted;
         try {
-            cipher = getCipherInstance();
-            cipher.init(Cipher.DECRYPT_MODE, key);
-            encrypted = cipher.doFinal(encryptedText.getBytes());
+            byte[] encryptedBytes = Base64.getDecoder().decode(encryptedText);
+            byte[] iv = new byte[12];
+            System.arraycopy(encryptedBytes, 0, iv, 0, iv.length);
+
+            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+            cipher.init(Cipher.DECRYPT_MODE, getKey(), new GCMParameterSpec(128, iv));
+
+            byte[] decryptedBytes = cipher.doFinal(encryptedBytes, iv.length, encryptedBytes.length - iv.length);
+
+            return new String(decryptedBytes, StandardCharsets.UTF_8);
         }
         catch (Exception e) {
-            throw new EncryptionException(e.getMessage());
-        }
-        return Base64.getEncoder().encodeToString(encrypted);
-    }
-
-
-    /**
-     * Method initiates the generation of a new key.
-     *
-     * @throws EncryptionException  A new key could not be generated.
-     */
-    public void generateKey() throws EncryptionException {
-        try {
-            key = KeyGenerator.getInstance("AES").generateKey();
-        }
-        catch (NoSuchAlgorithmException e) {
+            Log.e(TAG, e.getMessage());
             throw new EncryptionException(e.getMessage());
         }
     }
 
 
     /**
-     * Method returns an instance of a {@linkplain Cipher} that is used to encrypt and decrypt
-     * messages.
+     * Method returns thw {@linkplain SecretKey} from the {@linkplain KeyStore}.
      *
-     * @return                      Cipher-instance for encryption / decryption.
-     * @throws EncryptionException  An instance could not be created.
+     * @return                      Secret key retrieved from the key store.
+     * @throws EncryptionException  The key could not be retrieved.
      */
-    private Cipher getCipherInstance() throws EncryptionException {
+    private SecretKey getKey() throws EncryptionException {
         try {
-            return Cipher.getInstance("AES/GCM/NoPadding");
+            KeyStore keyStore = KeyStore.getInstance(PROVIDER);
+            keyStore.load(null);
+            return (SecretKey) keyStore.getKey(KEY_ALIAS, null);
         }
         catch (Exception e) {
             throw new EncryptionException(e.getMessage());
