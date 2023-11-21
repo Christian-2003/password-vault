@@ -3,7 +3,9 @@
     <!-- Formats -->
     <string name="date_format">dd.MM.yyyy</string>
 
+    <!-- App information -->
     <string name="app_name">PasswordVault</string>
+    <string name="app_description">Store your account data safely on your device to access at any place and at all times.</string>
 
     <!-- Bottom navigation -->
     <string name="bottom_navigation_home">Home</string>
@@ -19,6 +21,11 @@
 
     <!-- Entries fragment -->
     <string name="entries_list">Entries</string>
+
+    <!-- Home Fragment -->
+    <string name="home">Home</string>
+    <string name="home_button_view_accounts">Show Accounts</string>
+    <string name="home_button_add_account">Add Account</string>
 
     <!-- Entry activity -->
     <string name="entry_name">Name</string>
@@ -60,9 +67,6 @@
     <string name="placeholder_content">Content</string>
 
     <!-- Input hints -->
-    <string name="hint_name">Enter name</string>
-    <string name="hint_description">Enter description</string>
-    <string name="hint_content">Enter content</string>
     <string name="hint_search">Search...</string>
 
     <!-- Password / Passcode security -->
@@ -86,5 +90,6 @@
 
     <!-- Error messages that are sent to the user -->
     <string name="error_cannot_show_entry">Cannot show entry.</string>
+    <string name="error_empty_input">This field cannot be empty.</string>
 
 </resources>

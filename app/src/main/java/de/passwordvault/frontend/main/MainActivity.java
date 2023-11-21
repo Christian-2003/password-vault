@@ -24,7 +24,7 @@ import de.passwordvault.frontend.addentry.AddEntryActivity;
  * point for the application and contains multiple fragments with different functionalities.
  *
  * @author  Christian-2003
- * @version 2.0.0
+ * @version 2.2.2
  */
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
 
@@ -70,7 +70,19 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
+        return switchToFragment(item.getItemId());
+    }
+
+
+    /**
+     * Method switches to the fragment of the passed id. This method is needed for fragments of this
+     * activity to change the displayed fragment.
+     *
+     * @param id    Id of the fragment to which to switch.
+     * @return      Whether the fragment was switched successfully.
+     */
+    public boolean switchToFragment(int id) {
+        switch (id) {
             case R.id.menu_home:
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, viewModel.getHomeFragment()).commit();
                 viewModel.setSelectedItem(R.id.menu_home);

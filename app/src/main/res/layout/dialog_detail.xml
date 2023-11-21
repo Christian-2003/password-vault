@@ -4,10 +4,10 @@
 LinearLayout models the structure for the custom layout of the DialogDetailFragment
 class.
 -->
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/default_padding">
 
     <LinearLayout
@@ -16,9 +16,10 @@ class.
         android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/detail_dialog_name_hint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_name">
+            android:hint="@string/detail_dialog_name">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/detail_dialog_name"
@@ -28,9 +29,10 @@ class.
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/detail_dialog_content_hint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_content">
+            android:hint="@string/detail_dialog_content">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/detail_dialog_content"

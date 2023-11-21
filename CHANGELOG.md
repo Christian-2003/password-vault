@@ -1,5 +1,17 @@
 <img src="docs/img/icon.png" height="150" align="right">
 
+# 2.2.2 (XXXX-XX-XX)
+### Release Highlights
+Added some quality of life changes, which includes a new hoem fragment for the application.
+
+### Features
+* Updated `EditText` in `AddEntryActivity` and `DetailDialogFragment` to match Material Design 3 standards.
+* Details can now only be added when both name and content is set, otherwise, an error message is shown.
+* Entry can now only be added when name is set, otherwise, an error message is shown.
+* Configured `HomeFragment`.
+
+<br>
+
 # 2.2.1 (2023-10-13)
 ### Release Highlights
 Major security overhaul: All entries are now being encrypted through an AES/GCM-Algorithm. The required key will be securely stored within the KeyStore.

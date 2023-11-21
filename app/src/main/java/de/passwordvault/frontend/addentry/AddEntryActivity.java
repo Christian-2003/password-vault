@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.android.material.textfield.TextInputLayout;
+
 import de.passwordvault.R;
 import de.passwordvault.backend.Singleton;
 import de.passwordvault.backend.entry.Detail;
@@ -82,7 +85,10 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
 
         //Add ClickListener to save the edited entry:
         findViewById(R.id.add_entry_button_save).setOnClickListener(view -> {
-            processUserInput();
+            if (!processUserInput()) {
+                //Some data was not entered:
+                return;
+            }
             setResult(RESULT_OK, getIntent());
             AddEntryActivity.this.finish();
         });
@@ -164,13 +170,29 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
     /**
      * Method processes the user input and saves the edited entry to {@linkplain Singleton#ENTRIES}.
      */
-    private void processUserInput() {
+    private boolean processUserInput() {
         String name = ((TextView)findViewById(R.id.add_entry_name)).getText().toString();
         String description = ((TextView)findViewById(R.id.add_entry_description)).getText().toString();
+
+        //Test whether all required data was entered:
+        boolean somethingNotEntered = false;
+        if (name == null || name.isEmpty()) {
+            ((TextInputLayout)findViewById(R.id.add_entry_name_hint)).setError(getResources().getString(R.string.error_empty_input));
+            somethingNotEntered = true;
+        }
+        else {
+            ((TextInputLayout)findViewById(R.id.add_entry_name_hint)).setErrorEnabled(false);
+        }
+        if (somethingNotEntered) {
+            return false;
+        }
+
+        //Change the edited entry:
         viewModel.getEntry().setName(name);
         viewModel.getEntry().setDescription(description);
         viewModel.getEntry().notifyDataChange();
         Singleton.ENTRIES.set(viewModel.getEntry());
+        return true;
     }
 
 }

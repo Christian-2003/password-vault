@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import de.passwordvault.R;
 import de.passwordvault.backend.entry.Detail;
@@ -40,6 +42,11 @@ public class DetailDialogFragment extends DialogFragment {
      * Attribute stores the callback listener which waits for this dialog to be closed.
      */
     private DialogCallbackListener callbackListener;
+
+    /**
+     * Attribute stores the view for the dialog.
+     */
+    private View view;
 
 
     /**
@@ -76,6 +83,7 @@ public class DetailDialogFragment extends DialogFragment {
         super.onCreateDialog(savedInstanceState);
         setRetainInstance(true);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        view = requireActivity().getLayoutInflater().inflate(R.layout.dialog_detail, null);
 
         //Configure the title:
         if (detail == null) {
@@ -87,30 +95,57 @@ public class DetailDialogFragment extends DialogFragment {
         }
 
         //Configure the layout:
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_detail, null);
         ((TextView)view.findViewById(R.id.detail_dialog_name)).setText(detail.getName());
         ((TextView)view.findViewById(R.id.detail_dialog_content)).setText(detail.getContent());
         ((CheckBox)view.findViewById(R.id.detail_dialog_obfuscated)).setChecked(detail.isObfuscated());
         ((CheckBox)view.findViewById(R.id.detail_dialog_visible)).setChecked(detail.isVisible());
-        ((AutoCompleteTextView)view.findViewById(R.id.detail_dialog_type)).setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, Detail.GET_TYPES(getContext())));
         if (detail.getType() != -1) {
             ((AutoCompleteTextView) view.findViewById(R.id.detail_dialog_type)).setText(Detail.GET_TYPES(DetailDialogFragment.this.getContext())[detail.getType()]);
         }
+        ((AutoCompleteTextView)view.findViewById(R.id.detail_dialog_type)).setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, Detail.GET_TYPES(getContext())));
         builder.setView(view);
 
-        //Configure buttons
+        //Add buttons:
         builder.setPositiveButton(R.string.button_save, (dialog, id) -> {
-            //Save button:
-            processUserInput(view);
-            callbackListener.onPositiveCallback(DetailDialogFragment.this);
+            //Action implemented in onStart()-method!
         });
         builder.setNegativeButton(R.string.button_cancel, (dialog, id) -> {
-            //Cancel button:
-            callbackListener.onNegativeCallback(DetailDialogFragment.this);
+            //Action implemented in onStart()-method!
         });
 
         return builder.create();
+    }
+
+
+    /**
+     * Method configures the ClickListeners of the dialog buttons whenever the dialog is started.
+     */
+    @Override
+    public void onStart() {
+        super.onStart();
+        AlertDialog dialog = (AlertDialog)getDialog();
+        if (dialog == null) {
+            //No dialog available:
+            return;
+        }
+
+        //Configure positive button:
+        Button positiveButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
+        positiveButton.setOnClickListener(view -> {
+            if (!processUserInput(DetailDialogFragment.this.view)) {
+                //Some necessary data was not entered:
+                return;
+            }
+            dismiss();
+            callbackListener.onPositiveCallback(DetailDialogFragment.this);
+        });
+
+        //Configure negative button:
+        Button negativeButton = dialog.getButton(Dialog.BUTTON_NEGATIVE);
+        negativeButton.setOnClickListener(view -> {
+            dismiss();
+            callbackListener.onNegativeCallback(DetailDialogFragment.this);
+        });
     }
 
 
@@ -134,19 +169,42 @@ public class DetailDialogFragment extends DialogFragment {
 
 
     /**
-     * Method processes the users input and applies it to the edited detail.
+     * Method processes the users input and applies it to the edited detail. If some user data is
+     * incorrect or missing, {@code false} is returned and the {@lnk Detail} will not be updated.
+     * Otherwise the detail will be updated and {@code true} will be returned.
      *
      * @param view  View from which the users input shall be retrieved.
+     * @return      Whether the user input was correct or not.
      */
-    private void processUserInput(View view) {
+    private boolean processUserInput(View view) {
         if (view == null) {
-            return;
+            return false;
         }
         String name = ((TextInputEditText)view.findViewById(R.id.detail_dialog_name)).getText().toString();
         String content = ((TextInputEditText)view.findViewById(R.id.detail_dialog_content)).getText().toString();
         int type = Detail.GET_TYPE_BY_NAME(((AutoCompleteTextView)view.findViewById(R.id.detail_dialog_type)).getText().toString(), getContext());
         boolean obfuscated = ((CheckBox)view.findViewById(R.id.detail_dialog_obfuscated)).isChecked();
         boolean visible = ((CheckBox)view.findViewById(R.id.detail_dialog_visible)).isChecked();
+        //Test whether everything was entered:
+        boolean somethingNotEntered = false;
+        if (name == null || name.isEmpty()) {
+            ((TextInputLayout)view.findViewById(R.id.detail_dialog_name_hint)).setError(getResources().getString(R.string.error_empty_input));
+            somethingNotEntered = true;
+        }
+        else {
+            ((TextInputLayout)view.findViewById(R.id.detail_dialog_name_hint)).setErrorEnabled(false);
+        }
+        if (content == null || content.isEmpty()) {
+            ((TextInputLayout)view.findViewById(R.id.detail_dialog_content_hint)).setError(getResources().getString(R.string.error_empty_input));
+            somethingNotEntered = true;
+        }
+        else {
+            ((TextInputLayout)view.findViewById(R.id.detail_dialog_content_hint)).setErrorEnabled(false);
+        }
+        if (somethingNotEntered) {
+            return false;
+        }
+
         //Test whether anything was changed:
         if (!detail.getName().equals(name) || !detail.getContent().equals(content) || detail.getType() != type || detail.isObfuscated() != obfuscated || detail.isVisible() != visible) {
             detail.notifyDataChange();
@@ -156,6 +214,7 @@ public class DetailDialogFragment extends DialogFragment {
             detail.setObfuscated(obfuscated);
             detail.setVisible(visible);
         }
+        return true;
     }
 
 }

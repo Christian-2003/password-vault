@@ -60,9 +60,10 @@
                     style="@style/background">
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/add_entry_name_hint"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_name">
+                        android:hint="@string/entry_name">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/add_entry_name"
@@ -72,9 +73,10 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/add_entry_description_hint"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_description">
+                        android:hint="@string/entry_description">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/add_entry_description"

@@ -42,11 +42,6 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
     private EntriesViewModel viewModel;
 
     /**
-     * Attribute stores the inflated view for the fragment.
-     */
-    private View inflated;
-
-    /**
      * Attribute stores the ListAdapter for the ListView.
      */
     private ListAdapter adapter;
@@ -87,8 +82,7 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        inflated = inflater.inflate(R.layout.fragment_entries, container, false);
+        View inflated = inflater.inflate(R.layout.fragment_entries, container, false);
 
         adapter = new ListAdapter(Singleton.ENTRIES.getEntries(), getContext());
         entriesListView = inflated.findViewById(R.id.abbreviated_entries);
@@ -113,9 +107,6 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
             }
             else {
                 viewModel.setSearchBarVisible(true);
-                //ObjectAnimator moveAnim = ObjectAnimator.ofFloat(entriesListView, "translationY", searchBar.getHeight());
-                //moveAnim.setDuration(200);
-                //moveAnim.start();
                 searchBar.setVisibility(View.VISIBLE);
                 searchBar.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left));
             }

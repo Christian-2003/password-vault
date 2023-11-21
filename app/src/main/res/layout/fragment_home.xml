@@ -7,10 +7,53 @@
     android:layout_height="match_parent"
     tools:context=".frontend.main.home.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Home" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="@dimen/default_margin">
+
+            <TextView
+                android:id="@+id/home_headline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/home"
+                style="@style/highlight_text"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            style="@style/background">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/app_description"
+                android:layout_marginBottom="@dimen/default_margin"
+                style="@style/default_text"/>
+
+            <Button
+                android:id="@+id/home_show_accounts_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/home_button_view_accounts"/>
+
+            <Button
+                android:id="@+id/home_add_account_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/home_button_add_account"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </FrameLayout>
