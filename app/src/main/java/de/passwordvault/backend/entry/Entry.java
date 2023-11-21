@@ -12,7 +12,7 @@ import java.util.UUID;
  * Class models an entry which contains all (login) information for any type of account.
  *
  * @author  Christian-2003
- * @version 2.0.0
+ * @version 2.2.2
  */
 public class Entry {
 
@@ -227,29 +227,25 @@ public class Entry {
      * Method adds the passed detail to the list of handled details. If a detail with the passed
      * detail's UUID already exists, nothing happens and {@code false} is returned.
      *
-     * @param detail    Detail to be added to the list of details.
-     * @return          Whether the detail was successfully added to the list of details.
+     * @param detail Detail to be added to the list of details.
      */
-    public boolean add(Detail detail) {
+    public void add(Detail detail) {
         if (containsUuid(detail.getUuid()) == -1) {
-            return details.add(detail);
+            details.add(detail);
         }
-        return false;
     }
 
     /**
      * Method removes the detail of the passed UUID from the list of details. If no detail with the
      * specified UUID exists, {@code null} is returned. Otherwise the removed detail is returned.
      *
-     * @param uuid  UUID whose detail shall be removed.
-     * @return      Removed detail.
+     * @param uuid UUID whose detail shall be removed.
      */
-    public Detail remove(String uuid) {
+    public void remove(String uuid) {
         int index = containsUuid(uuid);
         if (index != -1) {
-            return details.remove(index);
+            details.remove(index);
         }
-        return null;
     }
 
     /**
@@ -321,10 +317,7 @@ public class Entry {
      * @return  Whether the passed string is contained within this instance.
      */
     public boolean matchesFilter(CharSequence s) {
-        if (name.toLowerCase().contains(s) || description.toLowerCase().contains(s)) {
-            return true;
-        }
-        return false;
+        return name.toLowerCase().contains(s) || description.toLowerCase().contains(s);
     }
 
 
@@ -337,9 +330,7 @@ public class Entry {
     public boolean equals(Object obj) {
         if (obj instanceof Entry) {
             Entry entry = (Entry)obj;
-            if (entry.getUuid().equals(uuid)) {
-                return true;
-            }
+            return entry.getUuid().equals(uuid);
         }
         return false;
     }

@@ -1,6 +1,5 @@
 package de.passwordvault.frontend.main.entries;
 
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -15,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -23,7 +21,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
-
 import de.passwordvault.R;
 import de.passwordvault.backend.Singleton;
 import de.passwordvault.backend.entry.Entry;
@@ -35,7 +32,7 @@ import de.passwordvault.frontend.entry.EntryActivity;
  * within the {@linkplain de.passwordvault.frontend.main.MainActivity}.
  *
  * @author  Christian-2003
- * @version 2.2.1
+ * @version 2.2.2
  */
 public class EntriesFragment extends Fragment implements AdapterView.OnItemClickListener, PopupMenu.OnMenuItemClickListener {
 

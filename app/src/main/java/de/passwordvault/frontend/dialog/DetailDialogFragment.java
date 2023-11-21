@@ -7,13 +7,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
+import com.google.android.material.textfield.TextInputEditText;
+
 import de.passwordvault.R;
 import de.passwordvault.backend.entry.Detail;
 
@@ -24,7 +27,7 @@ import de.passwordvault.backend.entry.Detail;
  * {@linkplain DialogCallbackListener}!
  *
  * @author  Christian-2003
- * @version 1.0.1
+ * @version 2.2.2
  */
 public class DetailDialogFragment extends DialogFragment {
 
@@ -89,11 +92,10 @@ public class DetailDialogFragment extends DialogFragment {
         ((TextView)view.findViewById(R.id.detail_dialog_name)).setText(detail.getName());
         ((TextView)view.findViewById(R.id.detail_dialog_content)).setText(detail.getContent());
         ((CheckBox)view.findViewById(R.id.detail_dialog_obfuscated)).setChecked(detail.isObfuscated());
-        ((CheckBox)view.findViewById(R.id.detail_dialog_encrypted)).setChecked(detail.isEncrypted());
         ((CheckBox)view.findViewById(R.id.detail_dialog_visible)).setChecked(detail.isVisible());
-        ((Spinner)view.findViewById(R.id.detail_dialog_type)).setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, Detail.GET_TYPES(getContext())));
+        ((AutoCompleteTextView)view.findViewById(R.id.detail_dialog_type)).setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, Detail.GET_TYPES(getContext())));
         if (detail.getType() != -1) {
-            ((Spinner) view.findViewById(R.id.detail_dialog_type)).setSelection(detail.getType());
+            ((AutoCompleteTextView) view.findViewById(R.id.detail_dialog_type)).setText(Detail.GET_TYPES(DetailDialogFragment.this.getContext())[detail.getType()]);
         }
         builder.setView(view);
 
@@ -140,20 +142,18 @@ public class DetailDialogFragment extends DialogFragment {
         if (view == null) {
             return;
         }
-        String name = ((EditText)view.findViewById(R.id.detail_dialog_name)).getText().toString();
-        String content = ((EditText)view.findViewById(R.id.detail_dialog_content)).getText().toString();
-        int type = ((Spinner)view.findViewById(R.id.detail_dialog_type)).getSelectedItemPosition();
+        String name = ((TextInputEditText)view.findViewById(R.id.detail_dialog_name)).getText().toString();
+        String content = ((TextInputEditText)view.findViewById(R.id.detail_dialog_content)).getText().toString();
+        int type = Detail.GET_TYPE_BY_NAME(((AutoCompleteTextView)view.findViewById(R.id.detail_dialog_type)).getText().toString(), getContext());
         boolean obfuscated = ((CheckBox)view.findViewById(R.id.detail_dialog_obfuscated)).isChecked();
-        boolean encrypted = ((CheckBox)view.findViewById(R.id.detail_dialog_encrypted)).isChecked();
         boolean visible = ((CheckBox)view.findViewById(R.id.detail_dialog_visible)).isChecked();
         //Test whether anything was changed:
-        if (!detail.getName().equals(name) || !detail.getContent().equals(content) || detail.getType() != type || detail.isObfuscated() != obfuscated || detail.isEncrypted() != encrypted || detail.isVisible() != visible) {
+        if (!detail.getName().equals(name) || !detail.getContent().equals(content) || detail.getType() != type || detail.isObfuscated() != obfuscated || detail.isVisible() != visible) {
             detail.notifyDataChange();
             detail.setName(name);
             detail.setContent(content);
             detail.setType(type);
             detail.setObfuscated(obfuscated);
-            detail.setEncrypted(encrypted);
             detail.setVisible(visible);
         }
     }

@@ -59,29 +59,29 @@
                     android:orientation="vertical"
                     style="@style/background">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/entry_name"
-                        style="@style/variant_text"/>
-
-                    <EditText
-                        android:id="@+id/add_entry_name"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_name"/>
+                        android:hint="@string/hint_name">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/entry_description"
-                        style="@style/variant_text"/>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/add_entry_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
 
-                    <EditText
-                        android:id="@+id/add_entry_description"
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_description"/>
+                        android:hint="@string/hint_description">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/add_entry_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
 

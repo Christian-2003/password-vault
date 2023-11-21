@@ -12,7 +12,7 @@ import de.passwordvault.R;
  * Class models a detail which can contain all types of detailed information for an entry.
  *
  * @author  Christian-2003
- * @version 2.2.1
+ * @version 2.2.2
  */
 public class Detail {
 
@@ -294,6 +294,25 @@ public class Detail {
         types[TYPE_URL] = context.getString(R.string.detail_url);
 
         return types;
+    }
+
+
+    /**
+     * Method returns the type based on the passed type name. If no type with the passed display
+     * name exists, {@link #TYPE_UNDEFINED} is returned.
+     *
+     * @param typeName  Display name of the type to be returned.
+     * @param context   Context from which the display name was taken.
+     * @return          Type of the passed display name.
+     */
+    public static int GET_TYPE_BY_NAME(String typeName, Context context) {
+        String[] types = GET_TYPES(context);
+        for (int i = 0; i < types.length; i++) {
+            if (types[i].equals(typeName)) {
+                return i;
+            }
+        }
+        return TYPE_UNDEFINED;
     }
 
 
