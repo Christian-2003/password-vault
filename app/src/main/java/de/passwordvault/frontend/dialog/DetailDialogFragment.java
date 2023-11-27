@@ -163,7 +163,7 @@ public class DetailDialogFragment extends DialogFragment {
             callbackListener = (DialogCallbackListener)context;
         }
         catch (ClassCastException e) {
-            throw new ClassCastException(getActivity().toString() + " must implement DetailDialogCallbackListener");
+            throw new ClassCastException(getActivity().toString() + " must implement DialogCallbackListener");
         }
     }
 

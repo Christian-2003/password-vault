@@ -5,6 +5,6 @@
 
     <corners android:radius="@dimen/background_corner_radius"/>
 
-    <solid android:color="@color/background_variant"/>
+    <solid android:color="@color/pv_theme_surfaceVariant"/>
 
 </shape>

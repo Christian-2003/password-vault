@@ -1,4 +1,16 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        google()
+    }
+
+    dependencies {
+        //Dependency for oss-licenses-repository to automatically build activity to display all used licenses:
+        //See https://developers.google.com/android/guides/opensource?hl=en#java for further details
+        classpath 'com.google.android.gms:oss-licenses-plugin:0.10.6'
+    }
+}
+
 plugins {
     id 'com.android.application' version '7.3.1' apply false
     id 'com.android.library' version '7.3.1' apply false

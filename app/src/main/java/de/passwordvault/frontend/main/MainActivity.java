@@ -70,31 +70,56 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return switchToFragment(item.getItemId());
+        return switchToFragment(item.getItemId(), false);
     }
 
 
     /**
      * Method switches to the fragment of the passed id. This method is needed for fragments of this
-     * activity to change the displayed fragment.
+     * activity to change the displayed fragment. This will update the {@linkplain BottomNavigationView}
+     * to display the item that is switched to as "selected".
      *
      * @param id    Id of the fragment to which to switch.
      * @return      Whether the fragment was switched successfully.
      */
     public boolean switchToFragment(int id) {
+        return switchToFragment(id, true);
+    }
+
+
+    /**
+     * Method switches to the fragment of the passed id. This method is needed for fragments of this
+     * activity to change the displayed fragment. Pass {@code true} as argument {@code updateUi}
+     * if the {@link BottomNavigationView} shall be updated by this method. This is not required if
+     * the method is called when the user clicks on the respective item.
+     *
+     * @param id        Id of the fragment to which to switch.
+     * @param updateUi  Whether the UI shall be updated or not.
+     * @return          Whether the fragment was switched successfully.
+     */
+    private boolean switchToFragment(int id, boolean updateUi) {
         switch (id) {
             case R.id.menu_home:
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, viewModel.getHomeFragment()).commit();
                 viewModel.setSelectedItem(R.id.menu_home);
+                if (updateUi) {
+                    ((BottomNavigationView)findViewById(R.id.main_navigation)).setSelectedItemId(R.id.menu_home);
+                }
                 return true;
             case R.id.menu_entries:
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, viewModel.getEntriesFragment()).commit();
                 viewModel.setSelectedItem(R.id.menu_entries);
+                if (updateUi) {
+                    ((BottomNavigationView)findViewById(R.id.main_navigation)).setSelectedItemId(R.id.menu_entries);
+                }
                 return true;
 
             case R.id.menu_settings:
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, viewModel.getSettingsFragment()).commit();
                 viewModel.setSelectedItem(R.id.menu_settings);
+                if (updateUi) {
+                    ((BottomNavigationView)findViewById(R.id.main_navigation)).setSelectedItemId(R.id.menu_settings);
+                }
                 return true;
         }
         return false;

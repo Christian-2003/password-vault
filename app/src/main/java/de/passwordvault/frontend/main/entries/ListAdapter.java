@@ -4,8 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
@@ -135,8 +133,6 @@ public class ListAdapter extends BaseAdapter implements Filterable {
         }
         holder.name.setText(entry.getName());
         holder.description.setText(entry.getDescription());
-        //Animation animation = AnimationUtils.loadAnimation(context, R.anim.entries_list_show_item);
-        //convertView.startAnimation(animation);
         return convertView;
     }
 
@@ -148,7 +144,7 @@ public class ListAdapter extends BaseAdapter implements Filterable {
      */
     @Override
     public Filter getFilter() {
-        Filter filter = new Filter() {
+        return new Filter() {
 
             /**
              * Method filters the data according to the passed constraint.
@@ -190,12 +186,12 @@ public class ListAdapter extends BaseAdapter implements Filterable {
              */
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
+                //noinspection unchecked
                 displayedEntries = (ArrayList<Entry>)results.values;
                 notifyDataSetChanged();
             }
 
         };
-        return filter;
     }
 
 }

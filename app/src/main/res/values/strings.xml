@@ -22,10 +22,22 @@
     <!-- Entries fragment -->
     <string name="entries_list">Entries</string>
 
-    <!-- Home Fragment -->
+    <!-- Home fragment -->
     <string name="home">Home</string>
     <string name="home_button_view_accounts">Show Accounts</string>
     <string name="home_button_add_account">Add Account</string>
+
+    <!-- Settings -->
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_legal">Legal</string>
+    <string name="settings_ui_mode">UI Mode</string>
+    <string name="settings_ui_mode_light">Light Mode</string>
+    <string name="settings_ui_mode_dark">Dark Mode</string>
+    <string name="settings_ui_mode_system">System Default</string>
+    <string name="settings_license">License</string>
+    <string name="settings_license_notice">MIT License</string>
+    <string name="settings_used_software">Used Software</string>
+    <string name="settings_see_licenses">See Licenses</string>
 
     <!-- Entry activity -->
     <string name="entry_name">Name</string>
@@ -91,5 +103,9 @@
     <!-- Error messages that are sent to the user -->
     <string name="error_cannot_show_entry">Cannot show entry.</string>
     <string name="error_empty_input">This field cannot be empty.</string>
+
+    <!-- SharedPreferences -->
+    <string name="preferences_file">settings</string>
+    <string name="preferences_uimode">uimode</string>
 
 </resources>

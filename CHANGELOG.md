@@ -2,13 +2,14 @@
 
 # 2.2.2 (XXXX-XX-XX)
 ### Release Highlights
-Added some quality of life changes, which includes a new hoem fragment for the application.
+Added some quality of life changes, which includes a new home fragment for the application.
 
 ### Features
 * Updated `EditText` in `AddEntryActivity` and `DetailDialogFragment` to match Material Design 3 standards.
 * Details can now only be added when both name and content is set, otherwise, an error message is shown.
 * Entry can now only be added when name is set, otherwise, an error message is shown.
 * Configured `HomeFragment`.
+* Added license info for the application.
 
 <br>
 
