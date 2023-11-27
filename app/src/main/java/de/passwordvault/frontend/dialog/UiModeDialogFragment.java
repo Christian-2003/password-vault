@@ -2,17 +2,22 @@ package de.passwordvault.frontend.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioButton;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import de.passwordvault.R;
 
 
+/**
+ * Class implements a dialog window which allows the user to change the UI mode between "Light",
+ * "Dark" and "System Default".
+ *
+ * @author  Christian-2003
+ * @version 2.2.2
+ */
 public class UiModeDialogFragment extends DialogFragment {
 
     /**
@@ -30,13 +35,25 @@ public class UiModeDialogFragment extends DialogFragment {
      * Constructor instantiates a new {@link UiModeDialogFragment} which has the passed UI mode
      * selected.
      *
-     * @param uiMode    Currently selected UI mode.
+     * @param uiMode                Currently selected UI mode.
+     * @param context               Fragment which called this dialog.
+     * @throws NullPointerException The passed context is {@code null}.
+     * @throws ClassCastException   The passed context does not implement {@link DialogCallbackListener}.
      */
-    public UiModeDialogFragment(int uiMode) {
+    public UiModeDialogFragment(int uiMode, Fragment context) throws NullPointerException, ClassCastException {
+        if (context == null) {
+            throw new NullPointerException("Null is invalid context");
+        }
+        callbackListener = (DialogCallbackListener)context;
         this.uiMode = uiMode;
     }
 
 
+    /**
+     * Method returns the UI mode that was selected by the user within this dialog.
+     *
+     * @return  Selected UI mode.
+     */
     public int getUiMode() {
         return uiMode;
     }
@@ -64,26 +81,29 @@ public class UiModeDialogFragment extends DialogFragment {
         RadioButton systemMode = view.findViewById(R.id.dialog_settings_uimode_system);
         switch (uiMode) {
             case 1:
-                lightMode.setSelected(true);
+                lightMode.setChecked(true);
                 break;
             case 2:
-                darkMode.setSelected(true);
+                darkMode.setChecked(true);
                 break;
             default:
-                systemMode.setSelected(true);
+                systemMode.setChecked(true);
                 break;
         }
         lightMode.setOnClickListener(v -> {
             uiMode = 1;
             callbackListener.onPositiveCallback(UiModeDialogFragment.this);
+            dismiss();
         });
         darkMode.setOnClickListener(v -> {
             uiMode = 2;
             callbackListener.onPositiveCallback(UiModeDialogFragment.this);
+            dismiss();
         });
         systemMode.setOnClickListener(v -> {
             uiMode = 0;
             callbackListener.onPositiveCallback(UiModeDialogFragment.this);
+            dismiss();
         });
         builder.setView(view);
 
@@ -93,25 +113,6 @@ public class UiModeDialogFragment extends DialogFragment {
         });
 
         return builder.create();
-    }
-
-
-    /**
-     * Method is called whenever this dialog window is attached to an activity.
-     *
-     * @param context               Context to which the dialog window is attached.
-     * @throws ClassCastException   The activity which creates this dialog window does not implement
-     *                              {@linkplain DialogCallbackListener}-interface.
-     */
-    @Override
-    public void onAttach(@NonNull Context context) throws ClassCastException {
-        super.onAttach(context);
-        try {
-            callbackListener = (DialogCallbackListener)context;
-        }
-        catch (ClassCastException e) {
-            throw new ClassCastException(getActivity().toString() + " must implement DialogCallbackListener");
-        }
     }
 
 }

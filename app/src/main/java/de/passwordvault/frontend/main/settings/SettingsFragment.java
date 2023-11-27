@@ -1,5 +1,6 @@
 package de.passwordvault.frontend.main.settings;
 
+import android.app.UiModeManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +8,8 @@ import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +22,7 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import de.passwordvault.R;
 import de.passwordvault.frontend.dialog.DialogCallbackListener;
 import de.passwordvault.frontend.dialog.UiModeDialogFragment;
+import de.passwordvault.frontend.main.MainActivity;
 
 
 /**
@@ -49,6 +53,11 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
      * Attribute stores the inflated view of the fragment.
      */
     private View inflated;
+
+    /**
+     * Attribute stores the tag that is used for logs.
+     */
+    private static final String TAG = "Settings";
 
 
     /**
@@ -90,10 +99,9 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
 
         //Add click listeners:
         inflated.findViewById(R.id.settings_ui_mode_clickable).setOnClickListener(view -> {
-            //TODO: This does not work
-            UiModeDialogFragment dialog = new UiModeDialogFragment(viewModel.getUiMode());
+            UiModeDialogFragment dialog = new UiModeDialogFragment(viewModel.getUiMode(), SettingsFragment.this);
             dialog.setTargetFragment(SettingsFragment.this, 1);
-            dialog.show(getParentFragmentManager(), "");
+            dialog.show(getActivity().getSupportFragmentManager(), "");
         });
 
         inflated.findViewById(R.id.settings_used_software_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), OssLicensesMenuActivity.class)));
@@ -138,16 +146,19 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
             case 1:
                 //Switch to light mode:
                 ((TextView)inflated.findViewById(R.id.settings_ui_mode)).setText(getString(R.string.settings_ui_mode_light));
+                getActivity().setTheme(R.style.Theme_PasswordVault_Light);
+                Log.d(TAG, "Changed UI mode to: LIGHT MODE");
                 break;
             case 2:
                 //Switch to dark mode:
                 ((TextView)inflated.findViewById(R.id.settings_ui_mode)).setText(getString(R.string.settings_ui_mode_dark));
-
+                getActivity().setTheme(R.style.Theme_PasswordVault_Dark);
+                Log.d(TAG, "Changed UI mode to: DARK MODE");
                 break;
             default:
                 //Switch to system mode:
                 ((TextView)inflated.findViewById(R.id.settings_ui_mode)).setText(getString(R.string.settings_ui_mode_system));
-
+                Log.d(TAG, "Changed UI mode to: SYSTEM DEFAULT MODE");
                 break;
         }
     }
