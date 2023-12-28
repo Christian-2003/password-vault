@@ -23,6 +23,8 @@
     <!-- Style for image buttons -->
     <style name="image_button">
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:minWidth">@dimen/image_button_width</item>
+        <item name="android:minHeight">@dimen/image_button_height</item>
     </style>
 
     <!-- Style for backgrounds -->
@@ -60,6 +62,7 @@
     </style>
 
 
+    <!-- Style for the light theme of the application. App theme extends this style. -->
     <style name="Theme.PasswordVault.Light" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/pv_theme_primary</item>
         <item name="colorOnPrimary">@color/pv_theme_onPrimary</item>
@@ -89,6 +92,7 @@
         <item name="colorPrimaryInverse">@color/pv_theme_inversePrimary</item>
     </style>
 
+    <!-- Style for the dark theme of the application. App theme extends this style. -->
     <style name="Theme.PasswordVault.Dark" parent="Theme.Material3.Dark.NoActionBar">
         <item name="colorPrimary">@color/pv_theme_primary</item>
         <item name="colorOnPrimary">@color/pv_theme_onPrimary</item>

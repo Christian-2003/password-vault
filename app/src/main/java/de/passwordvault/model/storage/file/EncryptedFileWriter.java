@@ -1,0 +1,62 @@
+package de.passwordvault.model.storage.file;
+
+import android.content.Context;
+import android.util.Log;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import de.passwordvault.App;
+import de.passwordvault.model.storage.encryption.AES;
+import de.passwordvault.model.storage.encryption.EncryptionException;
+
+
+/**
+ * Class models a FileWriter which can write to an encrypted file.
+ *
+ * @author  Christian-2003
+ * @version 2.2.2
+ */
+public class EncryptedFileWriter {
+
+    /**
+     * Method writes the content to the specified file.
+     *
+     * @param filename                  Name of the file to be written to.
+     * @param content                   Content to write to the file.
+     * @throws NullPointerException     The specified file name is {@code null}.
+     * @throws EncryptionException      The file could not be written to due to encryption issues.
+     */
+    public boolean write(String filename, String content) throws NullPointerException, EncryptionException {
+        if (filename == null || filename.isEmpty()) {
+            throw new NullPointerException("Null is invalid filename");
+        }
+
+        //Setup AES encryption:
+        AES aes = new AES();
+
+        Log.d("Security", "Writing to file " + filename + ": " + content);
+        content = aes.encrypt(content);
+        Log.d("Security", "Encrypted to file " + filename + ": " + content);
+
+        //Write file:
+        File file = new File(App.getContext().getFilesDir(), filename);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            }
+            catch (IOException e) {
+                //Could not create new file:
+                return false;
+            }
+        }
+        try (FileOutputStream fos = App.getContext().openFileOutput(filename, Context.MODE_PRIVATE)) {
+            fos.write(content.getBytes());
+        }
+        catch (IOException e) {
+            //Could not write to file:
+            return false;
+        }
+        return true;
+    }
+
+}

@@ -11,17 +11,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PasswordVault"
+        android:name=".App"
         tools:targetApi="31">
         <activity
-            android:name=".frontend.addentry.AddEntryActivity"
+            android:name=".view.activities.AddEntryActivity"
             android:exported="true">
         </activity>
         <activity
-            android:name=".frontend.entry.EntryActivity"
+            android:name=".view.activities.EntryActivity"
             android:exported="true">
         </activity>
         <activity
-            android:name=".frontend.main.MainActivity"
+            android:name=".view.activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

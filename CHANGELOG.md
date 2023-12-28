@@ -1,8 +1,8 @@
 <img src="docs/img/icon.png" height="150" align="right">
 
-# 2.2.2 (XXXX-XX-XX)
+# 3.0.0 (2023-12-28)
 ### Release Highlights
-Added some quality of life changes, which includes a new home fragment for the application.
+Major overhaul of the data handling results in backwards-compatibility break. Added some quality of life changes, which includes a new home fragment for the application.
 
 ### Features
 * Updated `EditText` in `AddEntryActivity` and `DetailDialogFragment` to match Material Design 3 standards.
@@ -10,6 +10,12 @@ Added some quality of life changes, which includes a new home fragment for the a
 * Entry can now only be added when name is set, otherwise, an error message is shown.
 * Configured `HomeFragment`.
 * Added license info for the application.
+* Fixed Singleton-pattern for `EntryFragment`.
+* Added `Utils`-class for utility methods.
+* Added Data-Transfer-Objects for data transfer between primary- and secondary storage.
+* Entries and details are now stored in CSV format instead of JSON format
+* Added classes to build and parse CSV.
+* Added classes which will be used in the next updates to generate data backups.
 
 <br>
 

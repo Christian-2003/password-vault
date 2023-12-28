@@ -104,6 +104,20 @@
     <string name="error_cannot_show_entry">Cannot show entry.</string>
     <string name="error_empty_input">This field cannot be empty.</string>
 
+
+    <!--
+    ================================================================================================
+    ATTENTION:
+    Everything below is required to stay identical (no matter the language), as the strings below
+    are only required within the backend. Changing the value would break the backend.
+    Please do not change anything. Thanks.
+    ================================================================================================
+    -->
+
+    <!-- File names -->
+    <string name="entries_file">entries.csv</string>
+    <string name="details_file">details.csv</string>
+
     <!-- SharedPreferences -->
     <string name="preferences_file">settings</string>
     <string name="preferences_uimode">uimode</string>
