@@ -18,11 +18,11 @@
     <color name="pv_theme_errorContainer">#93000A</color>
     <color name="pv_theme_onError">#690005</color>
     <color name="pv_theme_onErrorContainer">#FFDAD6</color>
-    <color name="pv_theme_background">#191C1C</color>
+    <color name="pv_theme_background">#010101</color>
     <color name="pv_theme_onBackground">#E0E3E2</color>
-    <color name="pv_theme_surface">#191C1C</color>
+    <color name="pv_theme_surface">#010101</color>
     <color name="pv_theme_onSurface">#E0E3E2</color>
-    <color name="pv_theme_surfaceVariant">#3F4948</color>
+    <color name="pv_theme_surfaceVariant">#171719</color>
     <color name="pv_theme_onSurfaceVariant">#BEC9C7</color>
     <color name="pv_theme_outline">#889391</color>
     <color name="pv_theme_inverseOnSurface">#191C1C</color>

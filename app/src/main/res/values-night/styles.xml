@@ -4,8 +4,8 @@
 
     <!-- Style for the app bar -->
     <style name="app_bar">
-        <item name="android:background">?attr/colorPrimary</item>
-        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:background">@color/pv_theme_surface</item>
+        <item name="android:textColor">@color/pv_theme_onSurface</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/app_bar_height</item>
     </style>
@@ -28,7 +28,7 @@
         <item name="android:tint">@color/pv_theme_onSurfaceVariant</item>
     </style>
     <style name="image_button_app_bar" parent="image_button">
-        <item name="android:tint">@color/pv_theme_onPrimary</item>
+        <item name="android:tint">@color/pv_theme_onSurface</item>
     </style>
 
     <!-- Style for backgrounds -->
@@ -62,7 +62,7 @@
     <style name="app_bar_text" parent="default_text">
         <item name="android:textSize">@dimen/app_bar_text_size</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textColor">@color/pv_theme_onSurface</item>
     </style>
 
 </resources>

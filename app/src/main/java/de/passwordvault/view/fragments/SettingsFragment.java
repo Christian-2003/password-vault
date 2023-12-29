@@ -216,18 +216,19 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
             case 1:
                 //Switch to light mode:
                 ((TextView)inflated.findViewById(R.id.settings_ui_mode)).setText(getString(R.string.settings_ui_mode_light));
-                getActivity().setTheme(R.style.Theme_PasswordVault_Light);
+                //TODO: Change theme...
                 Log.d(TAG, "Changed UI mode to: LIGHT MODE");
                 break;
             case 2:
                 //Switch to dark mode:
                 ((TextView)inflated.findViewById(R.id.settings_ui_mode)).setText(getString(R.string.settings_ui_mode_dark));
-                getActivity().setTheme(R.style.Theme_PasswordVault_Dark);
+                //TODO: Change theme...
                 Log.d(TAG, "Changed UI mode to: DARK MODE");
                 break;
             default:
                 //Switch to system mode:
                 ((TextView)inflated.findViewById(R.id.settings_ui_mode)).setText(getString(R.string.settings_ui_mode_system));
+                //TODO: Change theme...
                 Log.d(TAG, "Changed UI mode to: SYSTEM DEFAULT MODE");
                 break;
         }

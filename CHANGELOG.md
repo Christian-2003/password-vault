@@ -10,6 +10,7 @@ Backups can now be created and restored (Backups will not be encrypted!). Furthe
 * Added `BackupException`-class which can be thrown when some error with backups occur.
 * Added `XmlException`-class which can be thrown when some error regarding the XML-structure of a backup occur.
 * Added support for German.
+* Changes in color scheme for app GUI.
 
 <br>
 

@@ -2,8 +2,33 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.PasswordVault" parent="Theme.PasswordVault.Dark">
-        <!-- Theme implemented as style! -->
+    <style name="Theme.PasswordVault" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/pv_theme_primary</item>
+        <item name="colorOnPrimary">@color/pv_theme_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/pv_theme_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/pv_theme_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/pv_theme_secondary</item>
+        <item name="colorOnSecondary">@color/pv_theme_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/pv_theme_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/pv_theme_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/pv_theme_tertiary</item>
+        <item name="colorOnTertiary">@color/pv_theme_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/pv_theme_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/pv_theme_onTertiaryContainer</item>
+        <item name="colorError">@color/pv_theme_error</item>
+        <item name="colorErrorContainer">@color/pv_theme_errorContainer</item>
+        <item name="colorOnError">@color/pv_theme_onError</item>
+        <item name="colorOnErrorContainer">@color/pv_theme_onErrorContainer</item>
+        <item name="android:colorBackground">@color/pv_theme_background</item>
+        <item name="colorOnBackground">@color/pv_theme_onBackground</item>
+        <item name="colorSurface">@color/pv_theme_surface</item>
+        <item name="colorOnSurface">@color/pv_theme_onSurface</item>
+        <item name="colorSurfaceVariant">@color/pv_theme_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/pv_theme_onSurfaceVariant</item>
+        <item name="colorOutline">@color/pv_theme_outline</item>
+        <item name="colorOnSurfaceInverse">@color/pv_theme_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/pv_theme_inverseSurface</item>
+        <item name="colorPrimaryInverse">@color/pv_theme_inversePrimary</item>
     </style>
 
 </resources>
