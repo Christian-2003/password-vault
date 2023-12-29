@@ -2,6 +2,8 @@ package de.passwordvault.model.entry;
 
 import android.util.Log;
 import java.util.ArrayList;
+import java.util.List;
+
 import de.passwordvault.model.storage.app.StorageManager;
 
 
@@ -11,7 +13,7 @@ import de.passwordvault.model.storage.app.StorageManager;
  * {@link #getInstance()}.
  *
  * @author  Christian-2003
- * @version 3.0.0
+ * @version 3.1.0
  */
 public class EntryHandle {
 
@@ -191,6 +193,20 @@ public class EntryHandle {
             return null;
         }
         return entries.get(index);
+    }
+
+
+    /**
+     * Method replaces all handled entries with the passed list of entries.
+     * This is meant to restore a backup.
+     *
+     * @param entries   New entries with which to replace the handled entries.
+     */
+    public void replaceAll(ArrayList<Entry> entries) {
+        initialEntries.clear();
+        this.entries.clear();
+        initialEntries.addAll(entries);
+        this.entries.addAll(initialEntries);
     }
 
 }

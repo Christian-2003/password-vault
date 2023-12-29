@@ -1,11 +1,12 @@
 <img src="docs/img/icon.png" height="150" align="right">
 
+> **Attention:** This document has been discarded in favor of GitHub [Issues](https://github.com/Christian-2003/password-vault/issues).
+
 # Known Bugs that need to be fixed
 This is a list of known bugs should be fixed.
 * When Entry is changed / deleted, changed / deleted entry is not shown in EntriesFragment
 * I don't quite know when exactly everything is saved to the filesystem. This should be fixed
 * If detail's visibility is changed to "invisible", it is not shown with "Hidden Details" immediately after change. It is only shown after restarting `EntryActivity` with the same entry.
-
 
 <br>
 

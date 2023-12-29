@@ -1,5 +1,17 @@
 <img src="docs/img/icon.png" height="150" align="right">
 
+# 3.1.0 (XXXX-XX-XX)
+### Release Highlights
+Backups can now be created and restored (Backups will not be encrypted!).
+
+### Features
+* Added `CreateXmlBackup`-class to backup the data to shared storage, which will not be wiped when the application is uninstalled.
+* Added `RestoreXmlBackup`-class to restore a backup from shared storage.
+* Added `BackupException`-class which can be thrown when some error with backups occur.
+* Added `XmlException`-class which can be thrown when some error regarding the XML-structure of a backup occur.
+
+<br>
+
 # 3.0.0 (2023-12-28)
 ### Release Highlights
 Major overhaul of the data handling results in backwards-compatibility break. Added some quality of life changes, which includes a new home fragment for the application.

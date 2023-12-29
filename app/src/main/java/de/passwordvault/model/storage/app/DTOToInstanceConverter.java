@@ -1,6 +1,5 @@
 package de.passwordvault.model.storage.app;
 
-import android.util.Log;
 import java.util.ArrayList;
 import de.passwordvault.model.detail.DetailDTO;
 import de.passwordvault.model.detail.Detail;
@@ -14,7 +13,7 @@ import de.passwordvault.model.entry.EntryHandle;
  * a list of handled {@link Entry}-instances and stores them within the {@link EntryHandle}.
  *
  * @author  Christian-2003
- * @version 3.0.0
+ * @version 3.1.0
  */
 public class DTOToInstanceConverter {
 
@@ -59,7 +58,6 @@ public class DTOToInstanceConverter {
         ArrayList<Entry> entries = new ArrayList<>();
         for (EntryDTO entryDTO : entryDTOs) {
             entries.add(entryDTO.getEntry());
-            Log.d("Converter", "Added " + entryDTO.getEntry());
         }
         for (DetailDTO detailDTO : detailDTOs) {
             for (Entry entry : entries) {
@@ -68,7 +66,6 @@ public class DTOToInstanceConverter {
                     break;
                 }
             }
-            Log.d("Converter", "Added " + detailDTO.getDetail());
         }
         return entries;
     }

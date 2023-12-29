@@ -85,7 +85,7 @@ public class StorageManager {
             return null;
         }
 
-        //Convert content into CSV instances:
+        //Convert content into DTO instances:
         ArrayList<EntryDTO> entryDTOs = new ArrayList<>();
         ArrayList<DetailDTO> detailDTOs = new ArrayList<>();
         if (entryCsv != null) {

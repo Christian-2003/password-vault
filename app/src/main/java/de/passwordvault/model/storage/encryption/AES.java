@@ -73,7 +73,6 @@ public class AES {
             return Base64.getEncoder().encodeToString(encrypted);
         }
         catch (Exception e) {
-            Log.e(TAG, e.getMessage());
             throw new EncryptionException(e.getMessage());
         }
     }
@@ -102,7 +101,6 @@ public class AES {
             return new String(decryptedBytes, StandardCharsets.UTF_8);
         }
         catch (Exception e) {
-            Log.e(TAG, e.getMessage());
             throw new EncryptionException(e.getMessage());
         }
     }

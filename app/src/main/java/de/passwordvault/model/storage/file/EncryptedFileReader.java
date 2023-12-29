@@ -1,6 +1,5 @@
 package de.passwordvault.model.storage.file;
 
-import android.util.Log;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -46,20 +45,12 @@ public class EncryptedFileReader {
                 content.append(line);
                 line = reader.readLine();
             }
-            Log.d("Security", "Loaded from file " + filename + ": " + content);
+            //I do not remember why I created this redundant variable, but I remember that the app
+            //crashes when the generated result is returned directly...
             String decrypted = aes.decrypt(content.toString());
-            Log.d("Security", "Decrypted from file " + filename + ": " + decrypted);
             return decrypted;
         }
         catch (Exception e) {
-            //For some strange reason (despite what the IDE says), e apparently can be null. If not
-            //tested, accessing e would crash the entire application.
-            if (e == null) {
-                Log.e("Security", "Unknown error during decryption");
-            }
-            else {
-                Log.e("Security", e.getMessage() != null ? e.getMessage() : "Unknown error during decryption");
-            }
             return null;
         }
     }

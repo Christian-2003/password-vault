@@ -29,11 +29,23 @@
 
     <!-- Settings -->
     <string name="settings_appearance">Appearance</string>
+    <string name="settings_backup">Backup</string>
     <string name="settings_legal">Legal</string>
     <string name="settings_ui_mode">UI Mode</string>
     <string name="settings_ui_mode_light">Light Mode</string>
     <string name="settings_ui_mode_dark">Dark Mode</string>
     <string name="settings_ui_mode_system">System Default</string>
+    <string name="settings_create_data_backup">Backup data</string>
+    <string name="settings_restore_data_backup">Restore backup</string>
+    <string name="settings_create_xml_backup">Create XML backup</string>
+    <string name="settings_restore_xml_backup">Restore XML backup</string>
+    <string name="settings_default_backup_name">pv_backup</string>
+    <string name="settings_backup_error">Could not create backup</string>
+    <string name="settings_backup_success">Successfully created backup</string>
+    <string name="settings_restoration_error">Could not restore backup</string>
+    <string name="settings_restoration_success">Successfully restored backup</string>
+    <string name="settings_xml_backup_info">Create a backup which will contain all stored account data. The created backup will not be erased when the application is uninstalled. However, the backed up data will NOT be encrypted.</string>
+    <string name="settings_xml_restoration_info">Restore a backup which contains unencrypted account data.</string>
     <string name="settings_license">License</string>
     <string name="settings_license_notice">MIT License</string>
     <string name="settings_used_software">Used Software</string>
@@ -70,16 +82,17 @@
     <string name="button_delete">Delete</string>
     <string name="button_save">Save</string>
     <string name="button_cancel">Cancel</string>
+    <string name="button_ok">Ok</string>
 
     <!-- Placeholder -->
     <string name="placeholder_name">Name</string>
     <string name="placeholder_description">Description</string>
-    <string name="placeholder_uuid">00000000-0000-0000-0000-000000000000</string>
-    <string name="placeholder_date">1970-01-01</string>
+    <string name="placeholder_uuid">00000000–0000–0000–0000–000000000000</string>
+    <string name="placeholder_date">1970–01–01</string>
     <string name="placeholder_content">Content</string>
 
     <!-- Input hints -->
-    <string name="hint_search">Search...</string>
+    <string name="hint_search">Search…</string>
 
     <!-- Password / Passcode security -->
     <string name="password_security_estimate">Estimated password security</string>
@@ -103,6 +116,29 @@
     <!-- Error messages that are sent to the user -->
     <string name="error_cannot_show_entry">Cannot show entry.</string>
     <string name="error_empty_input">This field cannot be empty.</string>
+
+    <!-- App License -->
+    <string name="app_license">MIT License
+
+Copyright © 2023 Christian-2003
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</string>
 
 
     <!--

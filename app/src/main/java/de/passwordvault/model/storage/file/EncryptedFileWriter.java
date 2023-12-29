@@ -1,7 +1,6 @@
 package de.passwordvault.model.storage.file;
 
 import android.content.Context;
-import android.util.Log;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,9 +33,7 @@ public class EncryptedFileWriter {
         //Setup AES encryption:
         AES aes = new AES();
 
-        Log.d("Security", "Writing to file " + filename + ": " + content);
         content = aes.encrypt(content);
-        Log.d("Security", "Encrypted to file " + filename + ": " + content);
 
         //Write file:
         File file = new File(App.getContext().getFilesDir(), filename);
