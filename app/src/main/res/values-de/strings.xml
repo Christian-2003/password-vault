@@ -1,0 +1,146 @@
+<resources>
+
+    <!-- Formats -->
+    <string name="date_format">dd.MM.yyyy</string>
+
+    <!-- App information -->
+    <string name="app_name">PasswordVault</string>
+    <string name="app_description">Speichere Kontodaten sicher auf deinem Gerät, damit diese jederzeit und überall abgreifbar sind.</string>
+
+    <!-- Bottom navigation -->
+    <string name="bottom_navigation_home">Start</string>
+    <string name="bottom_navigation_entries">Konten</string>
+    <string name="bottom_navigation_settings">Einstellungen</string>
+
+    <!-- Menu to sort entries list -->
+    <string name="sort_entries_not_sorted">Nicht Sortiert</string>
+    <string name="sort_entries_name_ascending">Name: Aufsteigend</string>
+    <string name="sort_entries_name_descending">Name: Absteigend</string>
+    <string name="sort_entries_created_ascending">Erstellt: Aufsteigend</string>
+    <string name="sort_entries_created_descending">Erstellt: Absteigend</string>
+
+    <!-- Entries fragment -->
+    <string name="entries_list">Einträge</string>
+
+    <!-- Home fragment -->
+    <string name="home">Start</string>
+    <string name="home_button_view_accounts">Konten anzeigen</string>
+    <string name="home_button_add_account">Konto hinzufügen</string>
+
+    <!-- Settings -->
+    <string name="settings_appearance">Ansicht</string>
+    <string name="settings_backup">Backup</string>
+    <string name="settings_legal">Rechtliches</string>
+    <string name="settings_ui_mode">Anzeigemodus</string>
+    <string name="settings_ui_mode_light">Heller Modus</string>
+    <string name="settings_ui_mode_dark">Dunkler Modus</string>
+    <string name="settings_ui_mode_system">Systemeinstellung</string>
+    <string name="settings_create_data_backup">Sicherung erstellen</string>
+    <string name="settings_restore_data_backup">Sicherung wiederherstellen</string>
+    <string name="settings_create_xml_backup">XML Backup erstellen</string>
+    <string name="settings_restore_xml_backup">XML Backup wiederherstellen</string>
+    <string name="settings_default_backup_name">pv_backup</string>
+    <string name="settings_backup_error">Backup konnte nicht erstellt werden</string>
+    <string name="settings_backup_success">Backup wurde erfolgreich erstellt</string>
+    <string name="settings_restoration_error">Backup konnte nicht wiederhergestellt werden</string>
+    <string name="settings_restoration_success">Backup wurde erfolgreich wiederhergestellt</string>
+    <string name="settings_xml_backup_info">Erstelle ein Backup welches alle gespeicherten Konten beinhaltet. Das erstellte Backup wird bei Deinstallation der Anwendung nicht gelöscht. Allerdings wird das Backup NICHT verschlüsselt.</string>
+    <string name="settings_xml_restoration_info">Stelle ein unverschlüsseltes Backup wieder her.</string>
+    <string name="settings_license">Lizenz</string>
+    <string name="settings_license_notice">MIT Lizenz</string>
+    <string name="settings_used_software">Verwendete Software</string>
+    <string name="settings_see_licenses">Lizenzen ansehen</string>
+
+    <!-- Entry activity -->
+    <string name="entry_name">Name</string>
+    <string name="entry_description">Beschreibung</string>
+    <string name="entry_uuid">UUID</string>
+    <string name="entry_created">Erstellt</string>
+    <string name="entry_changed">Geändert</string>
+    <string name="entry_general_info">Allgemein</string>
+    <string name="entry_details_info">Informationen</string>
+    <string name="entry_hidden_details_info">Versteckte Informationen</string>
+    <string name="entry_additional_info">Zusätzliches</string>
+
+    <!-- Detail dialog -->
+    <string name="detail_dialog_title_edit">Information bearbeiten</string>
+    <string name="detail_dialog_title_add">Information hinzufügen</string>
+    <string name="detail_dialog_name">Name</string>
+    <string name="detail_dialog_content">Beschreibung</string>
+    <string name="detail_dialog_type">Typ</string>
+    <string name="detail_dialog_obfuscated">Unkenntlich</string>
+    <string name="detail_dialog_encrypted">Verschlüsselt</string>
+    <string name="detail_dialog_visible">Sichtbar</string>
+
+    <!-- ConfirmDelete dialog -->
+    <string name="confirm_delete_dialog_confirm">Bestätige Löschung von</string>
+
+    <!-- Buttons -->
+    <string name="button_show_more">Mehr anzeigen</string>
+    <string name="button_show_less">Weniger anzeigen</string>
+    <string name="button_edit">Bearbeiten</string>
+    <string name="button_delete">Löschen</string>
+    <string name="button_save">Speichern</string>
+    <string name="button_cancel">Abbrechen</string>
+    <string name="button_ok">Okay</string>
+
+    <!-- Placeholder -->
+    <string name="placeholder_name">Name</string>
+    <string name="placeholder_description">Beschreibung</string>
+    <string name="placeholder_uuid">00000000–0000–0000–0000–000000000000</string>
+    <string name="placeholder_date">01.01.1970</string>
+    <string name="placeholder_content">Inhalt</string>
+
+    <!-- Input hints -->
+    <string name="hint_search">Suchen…</string>
+
+    <!-- Password / Passcode security -->
+    <string name="password_security_estimate">Geschätzte Passwortsicherheit</string>
+    <string name="password_5">Sehr sicher</string>
+    <string name="password_4">Sicher</string>
+    <string name="password_3">Mittel</string>
+    <string name="password_2">Akzeptabel</string>
+    <string name="password_1">Unsicher</string>
+    <string name="password_0">Sehr unsicher</string>
+
+    <!-- Detail type strings -->
+    <string name="detail_text">Text</string>
+    <string name="detail_number">Zahl</string>
+    <string name="detail_security_question">Sicherheitsfrage</string>
+    <string name="detail_address">Adresse</string>
+    <string name="detail_date">Datum</string>
+    <string name="detail_email">E-Mail Adresse</string>
+    <string name="detail_password">Passwort</string>
+    <string name="detail_url">URL</string>
+
+    <!-- Error messages that are sent to the user -->
+    <string name="error_cannot_show_entry">Eintrag kann nicht angezeigt werden.</string>
+    <string name="error_empty_input">Dieses Feld darf nicht leer sein.</string>
+
+    <!-- App License -->
+    <string name="app_license">Copyright © 2023 Christian-2003
+Jedem, der eine Kopie dieser Software und der zugehörigen Dokumentationsdateien (die „Software“) erhält, wird hiermit kostenlos die Erlaubnis erteilt, ohne Einschränkung mit der Software zu handeln, einschließlich und ohne Einschränkung der Rechte zur Nutzung, zum Kopieren, Ändern, Zusammenführen, Veröffentlichen, Verteilen, Unterlizenzieren und/oder Verkaufen von Kopien der Software, und Personen, denen die Software zur Verfügung gestellt wird, dies unter den folgenden Bedingungen zu gestatten:
+
+Der obige Urheberrechtshinweis und dieser Genehmigungshinweis müssen in allen Kopien oder wesentlichen Teilen der Software enthalten sein.
+
+DIE SOFTWARE WIRD OHNE MÄNGELGEWÄHR UND OHNE JEGLICHE AUSDRÜCKLICHE ODER STILLSCHWEIGENDE GEWÄHRLEISTUNG, EINSCHLIEẞLICH, ABER NICHT BESCHRÄNKT AUF DIE GEWÄHRLEISTUNG DER MARKTGÄNGIGKEIT, DER EIGNUNG FÜR EINEN BESTIMMTEN ZWECK UND DER NICHTVERLETZUNG VON RECHTEN DRITTER, ZUR VERFÜGUNG GESTELLT. DIE AUTOREN ODER URHEBERRECHTSINHABER SIND IN KEINEM FALL HAFTBAR FÜR ANSPRÜCHE, SCHÄDEN ODER ANDERE VERPFLICHTUNGEN, OB IN EINER VERTRAGS- ODER HAFTUNGSKLAGE, EINER UNERLAUBTEN HANDLUNG ODER ANDERWEITIG, DIE SICH AUS ODER IN VERBINDUNG MIT DER SOFTWARE ODER DER NUTZUNG ODER ANDEREN GESCHÄFTEN MIT DER SOFTWARE ERGEBEN.</string>
+
+
+    <!--
+    ================================================================================================
+    ATTENTION:
+    Everything below is required to stay identical (no matter the language), as the strings below
+    are only required within the backend. Changing the value would break the backend.
+    Please do not change anything. Thanks.
+    ================================================================================================
+    -->
+
+    <!-- File names -->
+    <string name="entries_file">entries.csv</string>
+    <string name="details_file">details.csv</string>
+
+    <!-- SharedPreferences -->
+    <string name="preferences_file">settings</string>
+    <string name="preferences_uimode">uimode</string>
+
+</resources>

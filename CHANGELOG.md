@@ -2,13 +2,14 @@
 
 # 3.1.0 (XXXX-XX-XX)
 ### Release Highlights
-Backups can now be created and restored (Backups will not be encrypted!).
+Backups can now be created and restored (Backups will not be encrypted!). Furthermore, German is now added as language for the application.
 
 ### Features
 * Added `CreateXmlBackup`-class to backup the data to shared storage, which will not be wiped when the application is uninstalled.
 * Added `RestoreXmlBackup`-class to restore a backup from shared storage.
 * Added `BackupException`-class which can be thrown when some error with backups occur.
 * Added `XmlException`-class which can be thrown when some error regarding the XML-structure of a backup occur.
+* Added support for German.
 
 <br>
 
