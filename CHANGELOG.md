@@ -11,6 +11,9 @@ Backups can now be created and restored (Backups will not be encrypted!). Furthe
 * Added `XmlException`-class which can be thrown when some error regarding the XML-structure of a backup occur.
 * Added support for German.
 * Changes in color scheme for app GUI.
+* Added `Observer<T>`- and `Observable<T>`-interfaces for Observer-pattern.
+* Added `EntryHandleObservable`-class to impleemnt observable for the `EntryHandle`.
+* Used Observer-pattern to fix a bug, where changes in entries were not updated in the `EntriesFragment`, which could result in a crash if the respective change was a deletion of an entry.
 
 <br>
 

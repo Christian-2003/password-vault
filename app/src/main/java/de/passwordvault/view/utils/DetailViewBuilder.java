@@ -6,9 +6,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.google.android.material.progressindicator.LinearProgressIndicator;
-
 import java.util.concurrent.atomic.AtomicBoolean;
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.PasswordSecurity;

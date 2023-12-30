@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
@@ -167,34 +168,39 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == PICK_XML_FILE_LOCATION && resultCode == Activity.RESULT_OK) {
-            //Create backup:
-            if (data != null) {
-                CreateXmlBackup backup = new CreateXmlBackup(data.getData());
-                try {
-                    backup.createBackup();
-                }
-                catch (BackupException e) {
-                    Toast.makeText(getContext(), getString(R.string.settings_backup_error), Toast.LENGTH_LONG).show();
-                    return;
-                }
-                Toast.makeText(getContext(), getString(R.string.settings_backup_success), Toast.LENGTH_SHORT).show();
-            }
+        if (resultCode != Activity.RESULT_OK) {
+            return;
         }
-        else if (requestCode == PICK_XML_BACKUP_LOCATION && resultCode == Activity.RESULT_OK) {
-            //Restore backup:
-            if (data != null) {
-                RestoreXmlBackup backup = new RestoreXmlBackup(data.getData());
-                try {
-                    backup.restoreBackup();
+        switch (requestCode) {
+            case PICK_XML_FILE_LOCATION:
+                //Create backup:
+                if (data != null) {
+                    CreateXmlBackup backup = new CreateXmlBackup(data.getData());
+                    try {
+                        backup.createBackup();
+                    }
+                    catch (BackupException e) {
+                        Toast.makeText(getContext(), getString(R.string.settings_backup_error), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    Toast.makeText(getContext(), getString(R.string.settings_backup_success), Toast.LENGTH_SHORT).show();
                 }
-                catch (BackupException | XmlException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                    return;
+                break;
+            case PICK_XML_BACKUP_LOCATION:
+                //Restore backup:
+                if (data != null) {
+                    RestoreXmlBackup backup = new RestoreXmlBackup(data.getData());
+                    try {
+                        backup.restoreBackup();
+                    }
+                    catch (BackupException | XmlException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    Toast.makeText(getContext(), getString(R.string.settings_restoration_success), Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(getContext(), getString(R.string.settings_restoration_success), Toast.LENGTH_SHORT).show();
-            }
+                break;
         }
     }
 

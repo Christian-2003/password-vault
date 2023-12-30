@@ -64,7 +64,7 @@ public class ListAdapter extends BaseAdapter implements Filterable {
     /**
      * Constructor instantiates a new ListAdapter with the specified arguments.
      *
-     * @param entries   AbbreviatedEntries to be displayed with the ListView.
+     * @param entries   Entries to be displayed with the ListView.
      * @param context   Context for the adapter.
      */
     public ListAdapter(ArrayList<Entry> entries, Context context) {

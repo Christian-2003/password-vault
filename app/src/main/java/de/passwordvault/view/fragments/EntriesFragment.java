@@ -1,11 +1,9 @@
 package de.passwordvault.view.fragments;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import android.text.Editable;
@@ -21,7 +19,10 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
+import java.util.ArrayList;
 import de.passwordvault.R;
+import de.passwordvault.model.Observable;
+import de.passwordvault.model.Observer;
 import de.passwordvault.model.entry.EntryHandle;
 import de.passwordvault.view.viewmodel.EntriesViewModel;
 import de.passwordvault.view.utils.ListAdapter;
@@ -35,9 +36,9 @@ import de.passwordvault.view.activities.MainActivity;
  * within the {@linkplain MainActivity}.
  *
  * @author  Christian-2003
- * @version 3.0.0
+ * @version 3.1.0
  */
-public class EntriesFragment extends Fragment implements AdapterView.OnItemClickListener, PopupMenu.OnMenuItemClickListener {
+public class EntriesFragment extends Fragment implements AdapterView.OnItemClickListener, PopupMenu.OnMenuItemClickListener, Observer<ArrayList<Entry>> {
 
     /**
      * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} for this fragment.
@@ -85,9 +86,10 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        EntryHandle.getInstance().addObserver(this);
         View inflated = inflater.inflate(R.layout.fragment_entries, container, false);
 
-        adapter = new ListAdapter(EntryHandle.getInstance().getEntries(), getContext());
+        adapter = new ListAdapter(EntryHandle.getInstance().getData(), getContext());
         entriesListView = inflated.findViewById(R.id.abbreviated_entries);
 
         //Setup button to sort the entries:
@@ -145,6 +147,12 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
     }
 
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EntryHandle.getInstance().removeObserver(this);
+    }
+
     /**
      * Method is called when an item within the {@linkplain android.widget.ListView} is selected.
      *
@@ -156,12 +164,12 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
     @Override
     public void onItemClick(@NonNull AdapterView<?> parent, View view, int position, long id) {
         Object item = parent.getAdapter().getItem(position);
-        if (item instanceof Entry) {
+        if (item != null && item instanceof Entry) {
             String uuid = ((Entry)item).getUuid();
             if (uuid != null) {
                 Intent intent = new Intent(getActivity(), EntryActivity.class);
                 intent.putExtra("uuid", uuid);
-                getActivity().startActivityForResult(intent, 1);
+                getActivity().startActivity(intent);
             }
         }
         else {
@@ -206,24 +214,19 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
 
 
     /**
-     * Method is called whenever any {@linkplain android.app.Activity} that was started by this
-     * Fragment through {@linkplain #startActivityForResult(Intent, int, Bundle)} has finished.
-     * This is done to redraw this Fragment with an edited / updated {@linkplain Entry}-list.
+     * Method informs the {@link Observer} that the observed data has been changed. The passed
+     * {@link Observable} references the object which is being observed.
      *
-     * @param requestCode   Code that was requested from the started Activity.
-     * @param resultCode    Result code from the started Activity.
-     * @param data          Supplied data.
+     * @param o                     Observed instance whose data was changed.
+     * @throws NullPointerException The passed Observable is {@code null}.
      */
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != Activity.RESULT_OK) {
-            return;
+    public void update(Observable<ArrayList<Entry>> o) throws NullPointerException {
+        if (o == null) {
+            throw new NullPointerException("Null is invalid Observable");
         }
-        if (requestCode == 1) {
-            //Update ListView:
-            populateListView();
-        }
+        adapter = new ListAdapter(o.getData(), getContext());
+        populateListView();
     }
 
 

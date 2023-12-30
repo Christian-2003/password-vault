@@ -15,14 +15,9 @@ import java.util.UUID;
 public class Detail {
 
     /**
-     * Attribute stores type 4 UUID of the detail.
+     * Attribute stores the date on which the detail was changed the last time.
      */
-    private String uuid;
-
-    /**
-     * Attribute stores name of the detail.
-     */
-    private String name;
+    private Calendar changed;
 
     /**
      * Attribute stores content of the detail.
@@ -35,9 +30,15 @@ public class Detail {
     private Calendar created;
 
     /**
-     * Attribute stores the date on which the detail was changed the last time.
+     * Attribute stores name of the detail.
      */
-    private Calendar changed;
+    private String name;
+
+    /**
+     * Attribute stores whether the details content shall be obfuscated when displayed. This might
+     * be used to display passwords as '******' instead of 'abc123'.
+     */
+    private boolean obfuscated;
 
     /**
      * Attribute stores the type of the detail.
@@ -47,20 +48,14 @@ public class Detail {
     private DetailType type;
 
     /**
+     * Attribute stores type 4 UUID of the detail.
+     */
+    private String uuid;
+
+    /**
      * Attribute stores whether the detail shall be visible by default.
      */
     private boolean visible;
-
-    /**
-     * Attribute stores whether the details content shall be obfuscated when displayed. This might
-     * be used to display passwords as '******' instead of 'abc123'.
-     */
-    private boolean obfuscated;
-
-    /**
-     * Attribute stores whether the detail shall be encrypted when stored on persistent memory.
-     */
-    private boolean encrypted;
 
 
     /**
@@ -75,7 +70,6 @@ public class Detail {
         type = DetailType.UNDEFINED;
         visible = true;
         obfuscated = false;
-        encrypted = false;
     }
 
     /**
@@ -110,80 +104,162 @@ public class Detail {
         this.type = type;
         visible = true;
         obfuscated = false;
-        encrypted = false;
     }
 
 
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Calendar getCreated() {
-        return created;
-    }
-
-    public void setCreated(Calendar created) {
-        this.created = created;
-    }
-
+    /**
+     * Method returns the most recent date on which the detail was changed.
+     *
+     * @return  Most recent date on which the detail was changed.
+     */
     public Calendar getChanged() {
         return changed;
     }
 
-    public void setChanged(Calendar changed) {
+    /**
+     * Method changes the most recent date on which the detail was changed.
+     *
+     * @param changed               New most recent date on which the detail was changed.
+     * @throws NullPointerException The passed argument is {@code null}.
+     */
+    public void setChanged(Calendar changed) throws NullPointerException {
+        if (changed == null) {
+            throw new NullPointerException("Null is invalid date");
+        }
         this.changed = changed;
     }
 
-    public DetailType getType() {
-        return type;
+    /**
+     * Method returns the content of the detail.
+     *
+     * @return  Content of the detail.
+     */
+    public String getContent() {
+        return content;
     }
 
-    public void setType(DetailType type) {
-        this.type = type;
+    /**
+     * Method changes the content of the detail to the passed argument.
+     *
+     * @param content               New content for the detail.
+     * @throws NullPointerException The passed argument is {@code null}.
+     */
+    public void setContent(String content) throws NullPointerException {
+        if (content == null) {
+            throw new NullPointerException("Null is invalid content");
+        }
+        this.content = content;
     }
 
-    public boolean isVisible() {
-        return visible;
+    /**
+     * Method returns the date on which the detail was created.
+     *
+     * @return  Date on which the detail was created.
+     */
+    public Calendar getCreated() {
+        return created;
     }
 
-    public void setVisible(boolean visible) {
-        this.visible = visible;
+    /**
+     * Method changes the date on which the detail was created.
+     *
+     * @param created               Date on which the detail was created.
+     * @throws NullPointerException The passed argument is {@code null}.
+     */
+    public void setCreated(Calendar created) throws NullPointerException {
+        if (created == null) {
+            throw new NullPointerException("Null is invalid date");
+        }
+        this.created = created;
     }
 
+    /**
+     * Method returns the name of the detail.
+     *
+     * @return  Name of the detail.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Method changes the name of the detail to the passed argument.
+     *
+     * @param name                  New name for the detail.
+     * @throws NullPointerException The passed argument is {@code null}.
+     */
+    public void setName(String name) throws NullPointerException {
+        if (name == null) {
+            throw new NullPointerException("Null is invalid name");
+        }
+        this.name = name;
+    }
+
+    /**
+     * Method returns whether the detail is obfuscated ot not.
+     *
+     * @return  Whether the detail is obfuscated or not.
+     */
     public boolean isObfuscated() {
         return obfuscated;
     }
 
+    /**
+     * Method changes whether the detail is obfuscated or not.
+     *
+     * @param obfuscated    Whether the detail shall be obfuscated or not.
+     */
     public void setObfuscated(boolean obfuscated) {
         this.obfuscated = obfuscated;
     }
 
-    public boolean isEncrypted() {
-        return encrypted;
+    /**
+     * Method returns the type of the detail.
+     *
+     * @return  Type of the detail.
+     */
+    public DetailType getType() {
+        return type;
     }
 
-    public void setEncrypted(boolean encrypted) {
-        this.encrypted = encrypted;
+    /**
+     * Method changes the type of the detail.
+     *
+     * @param type                  New type for the detail.
+     * @throws NullPointerException The passed argument is {@code null}.
+     */
+    public void setType(DetailType type) throws NullPointerException {
+        if (type == null) {
+            throw new NullPointerException("Null is invalid type");
+        }
+        this.type = type;
+    }
+
+    /**
+     * Method returns the UUID of the detail.
+     *
+     * @return  UUID of the detail.
+     */
+    public String getUuid() {
+        return uuid;
+    }
+
+    /**
+     * Method returns whether the detail is visible or not.
+     *
+     * @return  Whether the detail is visible or not.
+     */
+    public boolean isVisible() {
+        return visible;
+    }
+
+    /**
+     * Method changes whether the detail is visible or not.
+     *
+     * @param visible   Whether the detail shall be visible or not.
+     */
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 
 
@@ -196,12 +272,11 @@ public class Detail {
     public boolean equals(Object obj) {
         if (obj instanceof Detail) {
             Detail detail = (Detail)obj;
-            if (detail.getUuid().equals(uuid)) {
-                return true;
-            }
+            return detail.getUuid().equals(uuid);
         }
         return false;
     }
+
 
     /**
      * Generates a hash for this detail based on the UUID.
@@ -223,12 +298,29 @@ public class Detail {
 
 
     /**
+     * Method copies all attributes from the passed {@link Detail} to this instance.
+     *
+     * @param detail    Detail whose attributes shall be copied to this instance.
+     */
+    private void copyAttributesFromDetail(@NonNull Detail detail) {
+        this.uuid = detail.getUuid();
+        this.name = detail.getName();
+        this.content = detail.getContent();
+        this.created = detail.getCreated();
+        this.changed = detail.getChanged();
+        this.type = detail.getType();
+        this.visible = detail.isVisible();
+        this.obfuscated = detail.isObfuscated();
+    }
+
+
+    /**
      * Static method returns a {@linkplain String} array which contains a String representation
      * for the available types.
      *
      * @return          String-array containing the String representations for the Detail types.
      */
-    public static String[] GET_TYPES() {
+    public static String[] getTypes() {
         DetailType[] types = DetailType.values();
         String[] names = new String[types.length - 1]; //Ignore last DetailType, since this is DetailType.UNDEFINED.
         for (int i = 0; i < names.length; i++) {
@@ -244,31 +336,13 @@ public class Detail {
      * @param typeName  Display name of the type to be returned.
      * @return          Type of the passed display name.
      */
-    public static DetailType GET_TYPE_BY_NAME(String typeName) {
+    public static DetailType getTypeByName(String typeName) {
         for (DetailType type : DetailType.values()) {
             if (type.getDisplayName().equals(typeName)) {
                 return type;
             }
         }
         return DetailType.UNDEFINED;
-    }
-
-
-    /**
-     * Method copies all attributes from the passed {@link Detail} to this instance.
-     *
-     * @param detail    Detail whose attributes shall be copied to this instance.
-     */
-    private void copyAttributesFromDetail(@NonNull Detail detail) {
-        this.uuid = detail.getUuid();
-        this.name = detail.getName();
-        this.content = detail.getContent();
-        this.created = detail.getCreated();
-        this.changed = detail.getChanged();
-        this.type = detail.getType();
-        this.visible = detail.isVisible();
-        this.obfuscated = detail.isObfuscated();
-        this.encrypted = detail.isEncrypted();
     }
 
 }
