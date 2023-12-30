@@ -14,4 +14,6 @@
     <dimen name="image_button_width">48dp</dimen>
     <dimen name="image_button_height">48dp</dimen>
 
+    <dimen name="progress_bar_thickness">9dp</dimen>
+
 </resources>

@@ -4,7 +4,11 @@ import android.content.Context;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.google.android.material.progressindicator.LinearProgressIndicator;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.PasswordSecurity;
@@ -16,7 +20,7 @@ import de.passwordvault.model.detail.Detail;
  * The generated view is based on {@link R.layout#view_detail_wrapper}.
  *
  * @author  Christian-2003
- * @version 3.0.0
+ * @version 3.1.0
  */
 public class DetailViewBuilder {
 
@@ -118,46 +122,20 @@ public class DetailViewBuilder {
     private void inflatePasswordView() {
         content = View.inflate(context, R.layout.view_detail_password, null);
         int securityScore = PasswordSecurity.PERFORM_SECURITY_ANALYSIS(detail.getContent());
-        switch (securityScore) {
-            case 5:
-                content.findViewById(R.id.entry_detail_password_security_5).setVisibility(View.VISIBLE);
-            case 4:
-                content.findViewById(R.id.entry_detail_password_security_4).setVisibility(View.VISIBLE);
-            case 3:
-                content.findViewById(R.id.entry_detail_password_security_3).setVisibility(View.VISIBLE);
-            case 2:
-                content.findViewById(R.id.entry_detail_password_security_2).setVisibility(View.VISIBLE);
-            case 1:
-                content.findViewById(R.id.entry_detail_password_security_1).setVisibility(View.VISIBLE);
-            case 0:
-                content.findViewById(R.id.entry_detail_password_security_0).setVisibility(View.VISIBLE);
-        }
+        ProgressBar passwordSecurity = (ProgressBar)content.findViewById(R.id.entry_detail_password_security);
+        passwordSecurity.setMax(PasswordSecurity.MAX_SECURITY_SCORE);
+        passwordSecurity.setProgress(securityScore);
         TextView securityRatingView = content.findViewById(R.id.entry_detail_password_security_rating);
-        switch (securityScore) {
-            case 0:
-                securityRatingView.setText(context.getString(R.string.password_0));
-                securityRatingView.setTextColor(context.getColor(R.color.red));
-                break;
-            case 1:
-                securityRatingView.setText(context.getString(R.string.password_1));
-                securityRatingView.setTextColor(context.getColor(R.color.red));
-                break;
-            case 2:
-                securityRatingView.setText(context.getString(R.string.password_2));
-                securityRatingView.setTextColor(context.getColor(R.color.yellow));
-                break;
-            case 3:
-                securityRatingView.setText(context.getString(R.string.password_3));
-                securityRatingView.setTextColor(context.getColor(R.color.yellow));
-                break;
-            case 4:
-                securityRatingView.setText(context.getString(R.string.password_4));
-                securityRatingView.setTextColor(context.getColor(R.color.green));
-                break;
-            case 5:
-                securityRatingView.setText(context.getString(R.string.password_5));
-                securityRatingView.setTextColor(context.getColor(R.color.green));
-                break;
+        String securityRating = securityScore + "/" + PasswordSecurity.MAX_SECURITY_SCORE;
+        securityRatingView.setText(securityRating);
+        if (securityScore == 0 || securityScore == 1) {
+            securityRatingView.setTextColor(context.getColor(R.color.red));
+        }
+        else if (securityScore == 2 || securityScore == 3) {
+            securityRatingView.setTextColor(context.getColor(R.color.yellow));
+        }
+        else if (securityScore == 4 || securityScore == 5) {
+            securityRatingView.setTextColor(context.getColor(R.color.green));
         }
     }
 

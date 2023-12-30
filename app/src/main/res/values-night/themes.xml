@@ -29,6 +29,7 @@
         <item name="colorOnSurfaceInverse">@color/pv_theme_inverseOnSurface</item>
         <item name="colorSurfaceInverse">@color/pv_theme_inverseSurface</item>
         <item name="colorPrimaryInverse">@color/pv_theme_inversePrimary</item>
+        <item name="android:statusBarColor">@color/pv_theme_surface</item>
     </style>
 
 </resources>

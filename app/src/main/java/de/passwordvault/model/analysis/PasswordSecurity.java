@@ -10,6 +10,12 @@ package de.passwordvault.model.analysis;
 public class PasswordSecurity {
 
     /**
+     * Field stores the maximum security score that any password can achieve.
+     */
+    public static final int MAX_SECURITY_SCORE = 5;
+
+
+    /**
      * Constant stores all special characters that are regarded when checking a password for special
      * characters as a quality gate.
      */

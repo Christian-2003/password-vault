@@ -19,13 +19,13 @@
     <color name="pv_theme_onError">#FFFFFF</color>
     <color name="pv_theme_onErrorContainer">#410002</color>
     <color name="pv_theme_background">#F6F6F8</color>
-    <color name="pv_theme_onBackground">#191C1C</color>
+    <color name="pv_theme_onBackground">#010101</color>
     <color name="pv_theme_surface">#F6F6F8</color>
-    <color name="pv_theme_onSurface">#191C1C</color>
+    <color name="pv_theme_onSurface">#010101</color>
     <color name="pv_theme_surfaceVariant">#FCFCFE</color>
-    <color name="pv_theme_onSurfaceVariant">#3F4948</color>
+    <color name="pv_theme_onSurfaceVariant">#8D8C91</color>
     <color name="pv_theme_outline">#6F7978</color>
-    <color name="pv_theme_inverseOnSurface">#EFF1F0</color>
+    <color name="pv_theme_inverseOnSurface">#F2F2F2</color>
     <color name="pv_theme_inverseSurface">#2D3131</color>
     <color name="pv_theme_inversePrimary">#4EDAD4</color>
     <color name="pv_theme_shadow">#000000</color>
@@ -44,7 +44,7 @@
     <color name="on_background">@color/pv_theme_onSurface</color>
     <color name="on_background_variant">@color/pv_theme_onSurfaceVariant</color>
 
-    <color name="red">#EE2E31</color>
-    <color name="green">#91EE2E</color>
-    <color name="yellow">#EE8B2E</color>
+    <color name="red">#FB5F2E</color>
+    <color name="green">#03D58A</color>
+    <color name="yellow">#F0C430</color>
 </resources>

@@ -90,18 +90,13 @@
     <string name="placeholder_uuid">00000000–0000–0000–0000–000000000000</string>
     <string name="placeholder_date">01.01.1970</string>
     <string name="placeholder_content">Inhalt</string>
+    <string name="placeholder_security_score">0/0</string>
 
     <!-- Input hints -->
     <string name="hint_search">Suchen…</string>
 
     <!-- Password / Passcode security -->
-    <string name="password_security_estimate">Geschätzte Passwortsicherheit</string>
-    <string name="password_5">Sehr sicher</string>
-    <string name="password_4">Sicher</string>
-    <string name="password_3">Mittel</string>
-    <string name="password_2">Akzeptabel</string>
-    <string name="password_1">Unsicher</string>
-    <string name="password_0">Sehr unsicher</string>
+    <string name="password_security_score">Passwortsicherheit:</string>
 
     <!-- Detail type strings -->
     <string name="detail_text">Text</string>

@@ -88,6 +88,7 @@ public class DetailDialogFragment extends DialogFragment {
         //Configure the title:
         if (detail == null) {
             builder.setTitle(R.string.detail_dialog_title_add);
+            ((AutoCompleteTextView)view.findViewById(R.id.detail_dialog_type)).setText(DetailType.TEXT.getDisplayName());
             detail = new Detail();
         }
         else {
@@ -100,7 +101,7 @@ public class DetailDialogFragment extends DialogFragment {
         ((CheckBox)view.findViewById(R.id.detail_dialog_obfuscated)).setChecked(detail.isObfuscated());
         ((CheckBox)view.findViewById(R.id.detail_dialog_visible)).setChecked(detail.isVisible());
         if (detail.getType() != DetailType.UNDEFINED) {
-            ((AutoCompleteTextView) view.findViewById(R.id.detail_dialog_type)).setText(Detail.GET_TYPES()[detail.getType().ordinal()]);
+            ((AutoCompleteTextView)view.findViewById(R.id.detail_dialog_type)).setText(Detail.GET_TYPES()[detail.getType().ordinal()]);
         }
         ((AutoCompleteTextView)view.findViewById(R.id.detail_dialog_type)).setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, Detail.GET_TYPES()));
         builder.setView(view);
