@@ -1,8 +1,8 @@
 <img src="docs/img/icon.png" height="150" align="right">
 
-# 3.1.0 (XXXX-XX-XX)
+# 3.1.0 (2023-12-31)
 ### Release Highlights
-Backups can now be created and restored (Backups will not be encrypted!). Furthermore, German is now added as language for the application.
+Account data can now be exported into readable HTML-format. Furthermore, account data can be backed up and restored, although backups will not be encrypted. Furthermore, some changes to the GUI were made and German was added as language to the application.
 
 ### Features
 * Added `CreateXmlBackup`-class to backup the data to shared storage, which will not be wiped when the application is uninstalled.
@@ -18,6 +18,8 @@ Backups can now be created and restored (Backups will not be encrypted!). Furthe
 * Small QoL-changes
 * Animated password-security-score.
 * Additions on SettingsFragment.
+* Added `ExportToHtml`-class to export account data to readable HTML format.
+* Added `ExportException`-class which can be thrown when errors regarding an export were encountered.
 
 <br>
 

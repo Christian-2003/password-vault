@@ -30,6 +30,7 @@
     <!-- Settings -->
     <string name="settings_appearance">Appearance</string>
     <string name="settings_backup">Backup</string>
+    <string name="settings_export">Export</string>
     <string name="settings_about">About</string>
     <string name="settings_ui_mode">UI Mode</string>
     <string name="settings_ui_mode_light">Light Mode</string>
@@ -46,6 +47,12 @@
     <string name="settings_restoration_success">Successfully restored backup</string>
     <string name="settings_xml_backup_info">Create a backup which will contain all stored account data. The created backup will not be erased when the application is uninstalled. However, the backed up data will NOT be encrypted.</string>
     <string name="settings_xml_restoration_info">Restore a backup which contains unencrypted account data.</string>
+    <string name="settings_export_html">Export to HTML</string>
+    <string name="settings_export_html_info">Export your data into a readable HTML format. Please note that any exported data is NOT encrypted.</string>
+    <string name="settings_export_html_readable">Export to readable HTML format</string>
+    <string name="settings_default_export_name">account_data.html</string>
+    <string name="settings_export_error">Could not export data</string>
+    <string name="settings_export_success">Successfully exported data</string>
     <string name="settings_license">License</string>
     <string name="settings_license_notice">MIT License</string>
     <string name="settings_used_software">Used Software</string>
@@ -143,6 +150,100 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.</string>
+
+    <!-- HTML export -->
+    <string name="html_export_document_title">Exported Data</string>
+    <string name="html_export_dom" translatable="false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;PasswordVault&lt;/title&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;style&gt;
+        :root {
+            --background-color: #F6F6F8;
+            --container-color: #FCFCFE;
+            --content-color: #F2F2F2;
+            --primary-text-color: #010101;
+            --secondary-text-color: #8D8C91;
+            --default-margin: 5px;
+            --default-padding: 10px;
+            --container-corner-radius: 20px;
+            --text-size: 18px;
+            --header-size: 21px;
+            --app-bar-text-size: 26px;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            background-color: var(--background-color);
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--primary-text-color);
+        }
+        #main-container {
+            width: max(50vw, 500px);
+        }
+        .container {
+            background-color: var(--container-color);
+            border-radius: var(--container-corner-radius);
+            padding: var(--default-padding);
+        }
+        .container p {
+            color: var(--primary-text-color);
+            margin: var(--default-margin) 0px var(--default-margin) 0px;
+        }
+        .detail-container {
+            background-color: var(--content-color);
+            border-radius: var(--container-corner-radius);
+            padding: var(--default-padding);
+            margin-top: var(--default-margin);
+            margin-bottom: var(--default-margin);
+        }
+        .detail-container:last-child {
+            margin-bottom: 0px;
+        }
+        .detail-container p {
+            color: var(--secondary-text-color);
+            margin: 0px 0px var(--default-margin) 0px;
+            padding: 0px;
+        }
+        .detail-container p + p {
+            color: var(--primary-text-color);
+            margin: 0px;
+        }
+        p {
+            font-size: var(--text-size);
+        }
+        h1 {
+            font-size: var(--app-bar-text-size);
+        }
+        h2 {
+            font-size: var(--header-size);
+            margin: var(--default-padding) 0px var(--default-margin) 0px;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div id="main-container"&gt;
+        &lt;h1&gt;{document_title}&lt;/h1&gt;
+        {entries}
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+    </string>
+    <string name="html_export_entry_container" translatable="false">
+&lt;h2&gt;{name}&lt;/h1&gt;
+    &lt;div class="container"&gt;
+    &lt;p&gt;{description}&lt;/p&gt;
+    {details}
+&lt;/div&gt;
+    </string>
+    <string name="html_export_detail_container" translatable="false">
+&lt;div class="detail-container"&gt;
+    &lt;p class="name"&gt;{name}&lt;/p&gt;
+    &lt;p class="content"&gt;{content}&lt;/p&gt;
+&lt;/div&gt;
+    </string>
 
 
     <!--

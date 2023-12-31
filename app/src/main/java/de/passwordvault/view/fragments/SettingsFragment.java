@@ -25,6 +25,8 @@ import de.passwordvault.model.storage.backup.BackupException;
 import de.passwordvault.model.storage.backup.CreateXmlBackup;
 import de.passwordvault.model.storage.backup.RestoreXmlBackup;
 import de.passwordvault.model.storage.backup.XmlException;
+import de.passwordvault.model.storage.export.ExportException;
+import de.passwordvault.model.storage.export.ExportToHtml;
 import de.passwordvault.view.utils.DialogCallbackListener;
 import de.passwordvault.view.viewmodel.SettingsViewModel;
 import de.passwordvault.view.activities.MainActivity;
@@ -46,9 +48,14 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
     private static final int PICK_XML_FILE_LOCATION = 2;
 
     /**
-     * Field stores the request coe to pick a location for the XML backup file to be restored.
+     * Field stores the request code to pick a location for the XML backup file to be restored.
      */
     private static final int PICK_XML_BACKUP_LOCATION = 3;
+
+    /**
+     * Field stores the request code to pick a location for an HTML export file.
+     */
+    private static final int PICK_HTML_EXPORT_LOCATION = 4;
 
 
     /**
@@ -129,6 +136,8 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         inflated.findViewById(R.id.settings_open_source_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_github_link)));
         inflated.findViewById(R.id.settings_bug_report_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_github_issues_link)));
         inflated.findViewById(R.id.settings_update_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_github_releases_link)));
+        inflated.findViewById(R.id.settings_html_export_clickable).setOnClickListener(view -> createHtmlExport());
+        inflated.findViewById(R.id.settings_html_export_info).setOnClickListener(view -> showInfoDialog(R.string.settings_export_html, R.string.settings_export_html_info));
 
         return inflated;
     }
@@ -199,10 +208,25 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
                     }
                     catch (BackupException | XmlException e) {
                         e.printStackTrace();
-                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), getString(R.string.settings_restoration_error), Toast.LENGTH_LONG).show();
                         return;
                     }
                     Toast.makeText(getContext(), getString(R.string.settings_restoration_success), Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case PICK_HTML_EXPORT_LOCATION:
+                //Create HTML backup:
+                if (data != null) {
+                    ExportToHtml export = new ExportToHtml(data.getData());
+                    try {
+                        export.export();
+                    }
+                    catch (ExportException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getContext(), getString(R.string.settings_export_error), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    Toast.makeText(getContext(), getString(R.string.settings_export_success), Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -264,6 +288,18 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("application/*");
         startActivityForResult(intent, PICK_XML_BACKUP_LOCATION);
+    }
+
+
+    /**
+     * Method creates an XML backup for the application.
+     */
+    private void createHtmlExport() {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/*");
+        intent.putExtra(Intent.EXTRA_TITLE, getString(R.string.settings_default_export_name));
+        startActivityForResult(intent, PICK_HTML_EXPORT_LOCATION);
     }
 
 

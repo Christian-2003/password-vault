@@ -30,6 +30,7 @@
     <string name="settings_appearance">Ansicht</string>
     <string name="settings_backup">Backup</string>
     <string name="settings_about">Über</string>
+    <string name="settings_export">Exportieren</string>
     <string name="settings_ui_mode">Anzeigemodus</string>
     <string name="settings_ui_mode_light">Heller Modus</string>
     <string name="settings_ui_mode_dark">Dunkler Modus</string>
@@ -45,6 +46,12 @@
     <string name="settings_restoration_success">Backup wurde erfolgreich wiederhergestellt</string>
     <string name="settings_xml_backup_info">Erstelle ein Backup welches alle gespeicherten Konten beinhaltet. Das erstellte Backup wird bei Deinstallation der Anwendung nicht gelöscht. Allerdings wird das Backup NICHT verschlüsselt.</string>
     <string name="settings_xml_restoration_info">Stelle ein unverschlüsseltes Backup wieder her.</string>
+    <string name="settings_export_html">In HTML exportieren</string>
+    <string name="settings_export_html_info">Exportiere deine Daten in ein lesbares HTML-Format. Bitte beachten Sie, dass sämtliche exportierte Daten nicht verschlüsselt werden.</string>
+    <string name="settings_export_html_readable">In lesbares HTML-Format exportieren</string>
+    <string name="settings_default_export_name">kontodaten.html</string>
+    <string name="settings_export_error">Daten konnten nicht exportiert werden</string>
+    <string name="settings_export_success">Daten wurden erfolgreich exportiert</string>
     <string name="settings_license">Lizenz</string>
     <string name="settings_license_notice">MIT Lizenz</string>
     <string name="settings_used_software">Verwendete Software</string>
@@ -124,5 +131,8 @@ Jedem, der eine Kopie dieser Software und der zugehörigen Dokumentationsdateien
 Der obige Urheberrechtshinweis und dieser Genehmigungshinweis müssen in allen Kopien oder wesentlichen Teilen der Software enthalten sein.
 
 DIE SOFTWARE WIRD OHNE MÄNGELGEWÄHR UND OHNE JEGLICHE AUSDRÜCKLICHE ODER STILLSCHWEIGENDE GEWÄHRLEISTUNG, EINSCHLIEẞLICH, ABER NICHT BESCHRÄNKT AUF DIE GEWÄHRLEISTUNG DER MARKTGÄNGIGKEIT, DER EIGNUNG FÜR EINEN BESTIMMTEN ZWECK UND DER NICHTVERLETZUNG VON RECHTEN DRITTER, ZUR VERFÜGUNG GESTELLT. DIE AUTOREN ODER URHEBERRECHTSINHABER SIND IN KEINEM FALL HAFTBAR FÜR ANSPRÜCHE, SCHÄDEN ODER ANDERE VERPFLICHTUNGEN, OB IN EINER VERTRAGS- ODER HAFTUNGSKLAGE, EINER UNERLAUBTEN HANDLUNG ODER ANDERWEITIG, DIE SICH AUS ODER IN VERBINDUNG MIT DER SOFTWARE ODER DER NUTZUNG ODER ANDEREN GESCHÄFTEN MIT DER SOFTWARE ERGEBEN.</string>
+
+    <!-- HTML export -->
+    <string name="html_export_document_title">Exportierte Daten</string>
 
 </resources>
