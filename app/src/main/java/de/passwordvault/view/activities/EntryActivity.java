@@ -176,7 +176,7 @@ public class EntryActivity extends AppCompatActivity implements DialogCallbackLi
         detailsContainer.removeAllViews();
         for (int i = 0; i < details.size(); i++) {
             Detail detail = details.get(i);
-            DetailViewBuilder viewBuilder = new DetailViewBuilder(EntryActivity.this, detail);
+            DetailViewBuilder viewBuilder = new DetailViewBuilder(EntryActivity.this, detail, true);
             View created = viewBuilder.inflate();
             detailsContainer.addView(created);
             if (i < details.size() - 1) {

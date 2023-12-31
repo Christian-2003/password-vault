@@ -26,7 +26,7 @@ import de.passwordvault.view.utils.DialogCallbackListener;
  * Class implements an activity which can add (or edit) entries.
  *
  * @author  Christian-2003
- * @version 1.0.1
+ * @version 3.1.0
  */
 public class AddEntryActivity extends AppCompatActivity implements DialogCallbackListener {
 

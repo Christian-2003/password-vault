@@ -1,5 +1,6 @@
 package de.passwordvault.view.utils;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.view.View;
 import android.widget.ImageButton;
@@ -41,6 +42,11 @@ public class DetailViewBuilder {
      */
     private Detail detail;
 
+    /**
+     * Attribute stores whether the detail shall be animated when inflated.
+     */
+    private boolean animate;
+
 
     /**
      * Constructor instantiates a new DetailViewBuilder.
@@ -55,6 +61,24 @@ public class DetailViewBuilder {
         }
         this.context = context;
         this.detail = detail;
+        animate = false;
+    }
+
+    /**
+     * Constructor instantiates a new DetailViewBuilder.
+     *
+     * @param context   Context in which the view shall be generated.
+     * @param detail    Detail whose view shall be generated.
+     * @param animate   Whether the inflated view shall be animated.
+     */
+    public DetailViewBuilder(Context context, Detail detail, boolean animate) {
+        if (context == null || detail == null) {
+            //Cannot build any view:
+            return;
+        }
+        this.context = context;
+        this.detail = detail;
+        this.animate = animate;
     }
 
 
@@ -119,9 +143,19 @@ public class DetailViewBuilder {
     private void inflatePasswordView() {
         content = View.inflate(context, R.layout.view_detail_password, null);
         int securityScore = PasswordSecurity.PERFORM_SECURITY_ANALYSIS(detail.getContent());
+
         ProgressBar passwordSecurity = (ProgressBar)content.findViewById(R.id.entry_detail_password_security);
-        passwordSecurity.setMax(PasswordSecurity.MAX_SECURITY_SCORE);
-        passwordSecurity.setProgress(securityScore);
+        passwordSecurity.setMax(PasswordSecurity.MAX_SECURITY_SCORE * 1000);
+        if (animate) {
+            ValueAnimator animator = ValueAnimator.ofInt(0, securityScore * 1000);
+            animator.setDuration(context.getResources().getInteger(R.integer.default_anim_duration) * 5L);
+            animator.addUpdateListener(animation -> passwordSecurity.setProgress((int) animation.getAnimatedValue()));
+            animator.start();
+        }
+        else {
+            passwordSecurity.setProgress(securityScore * 1000);
+        }
+
         TextView securityRatingView = content.findViewById(R.id.entry_detail_password_security_rating);
         String securityRating = securityScore + "/" + PasswordSecurity.MAX_SECURITY_SCORE;
         securityRatingView.setText(securityRating);

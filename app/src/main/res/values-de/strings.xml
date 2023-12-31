@@ -4,7 +4,6 @@
     <string name="date_format">dd.MM.yyyy</string>
 
     <!-- App information -->
-    <string name="app_name">PasswordVault</string>
     <string name="app_description">Speichere Kontodaten sicher auf deinem Gerät, damit diese jederzeit und überall abgreifbar sind.</string>
 
     <!-- Bottom navigation -->
@@ -30,13 +29,13 @@
     <!-- Settings -->
     <string name="settings_appearance">Ansicht</string>
     <string name="settings_backup">Backup</string>
-    <string name="settings_legal">Rechtliches</string>
+    <string name="settings_about">Über</string>
     <string name="settings_ui_mode">Anzeigemodus</string>
     <string name="settings_ui_mode_light">Heller Modus</string>
     <string name="settings_ui_mode_dark">Dunkler Modus</string>
     <string name="settings_ui_mode_system">Systemeinstellung</string>
-    <string name="settings_create_data_backup">Sicherung erstellen</string>
-    <string name="settings_restore_data_backup">Sicherung wiederherstellen</string>
+    <string name="settings_create_data_backup">Backup erstellen</string>
+    <string name="settings_restore_data_backup">Backup wiederherstellen</string>
     <string name="settings_create_xml_backup">XML Backup erstellen</string>
     <string name="settings_restore_xml_backup">XML Backup wiederherstellen</string>
     <string name="settings_default_backup_name">pv_backup</string>
@@ -50,6 +49,12 @@
     <string name="settings_license_notice">MIT Lizenz</string>
     <string name="settings_used_software">Verwendete Software</string>
     <string name="settings_see_licenses">Lizenzen ansehen</string>
+    <string name="settings_open_source">Open Source</string>
+    <string name="settings_open_github">GitHub-Repository öffnen</string>
+    <string name="settings_bug_report">Fehler Melden</string>
+    <string name="settings_open_github_issues">Fehler auf GitHub melden</string>
+    <string name="settings_update">Software aktualisieren</string>
+    <string name="settings_open_github_releases">Neue Version herunterladen</string>
 
     <!-- Entry activity -->
     <string name="entry_name">Name</string>
@@ -119,23 +124,5 @@ Jedem, der eine Kopie dieser Software und der zugehörigen Dokumentationsdateien
 Der obige Urheberrechtshinweis und dieser Genehmigungshinweis müssen in allen Kopien oder wesentlichen Teilen der Software enthalten sein.
 
 DIE SOFTWARE WIRD OHNE MÄNGELGEWÄHR UND OHNE JEGLICHE AUSDRÜCKLICHE ODER STILLSCHWEIGENDE GEWÄHRLEISTUNG, EINSCHLIEẞLICH, ABER NICHT BESCHRÄNKT AUF DIE GEWÄHRLEISTUNG DER MARKTGÄNGIGKEIT, DER EIGNUNG FÜR EINEN BESTIMMTEN ZWECK UND DER NICHTVERLETZUNG VON RECHTEN DRITTER, ZUR VERFÜGUNG GESTELLT. DIE AUTOREN ODER URHEBERRECHTSINHABER SIND IN KEINEM FALL HAFTBAR FÜR ANSPRÜCHE, SCHÄDEN ODER ANDERE VERPFLICHTUNGEN, OB IN EINER VERTRAGS- ODER HAFTUNGSKLAGE, EINER UNERLAUBTEN HANDLUNG ODER ANDERWEITIG, DIE SICH AUS ODER IN VERBINDUNG MIT DER SOFTWARE ODER DER NUTZUNG ODER ANDEREN GESCHÄFTEN MIT DER SOFTWARE ERGEBEN.</string>
-
-
-    <!--
-    ================================================================================================
-    ATTENTION:
-    Everything below is required to stay identical (no matter the language), as the strings below
-    are only required within the backend. Changing the value would break the backend.
-    Please do not change anything. Thanks.
-    ================================================================================================
-    -->
-
-    <!-- File names -->
-    <string name="entries_file">entries.csv</string>
-    <string name="details_file">details.csv</string>
-
-    <!-- SharedPreferences -->
-    <string name="preferences_file">settings</string>
-    <string name="preferences_uimode">uimode</string>
 
 </resources>

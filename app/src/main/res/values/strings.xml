@@ -4,7 +4,7 @@
     <string name="date_format">MM/dd/yyyy</string>
 
     <!-- App information -->
-    <string name="app_name">PasswordVault</string>
+    <string name="app_name" translatable="false">PasswordVault</string>
     <string name="app_description">Store your account data safely on your device to access at any place and at all times.</string>
 
     <!-- Bottom navigation -->
@@ -30,7 +30,7 @@
     <!-- Settings -->
     <string name="settings_appearance">Appearance</string>
     <string name="settings_backup">Backup</string>
-    <string name="settings_legal">Legal</string>
+    <string name="settings_about">About</string>
     <string name="settings_ui_mode">UI Mode</string>
     <string name="settings_ui_mode_light">Light Mode</string>
     <string name="settings_ui_mode_dark">Dark Mode</string>
@@ -50,6 +50,15 @@
     <string name="settings_license_notice">MIT License</string>
     <string name="settings_used_software">Used Software</string>
     <string name="settings_see_licenses">See Licenses</string>
+    <string name="settings_open_source">Open Source</string>
+    <string name="settings_open_github">Open GitHub repository</string>
+    <string name="settings_github_link" translatable="false">https://github.com/Christian-2003/password-vault</string>
+    <string name="settings_bug_report">Report Bugs</string>
+    <string name="settings_open_github_issues">Report Bug on GitHub</string>
+    <string name="settings_github_issues_link" translatable="false">https://github.com/Christian-2003/password-vault/issues</string>
+    <string name="settings_update">Software Update</string>
+    <string name="settings_open_github_releases">Download newest release</string>
+    <string name="settings_github_releases_link" translatable="false">https://github.com/Christian-2003/password-vault/releases/latest</string>
 
     <!-- Entry activity -->
     <string name="entry_name">Name</string>
@@ -146,11 +155,11 @@ SOFTWARE.</string>
     -->
 
     <!-- File names -->
-    <string name="entries_file">entries.csv</string>
-    <string name="details_file">details.csv</string>
+    <string name="entries_file" translatable="false">entries.csv</string>
+    <string name="details_file" translatable="false">details.csv</string>
 
     <!-- SharedPreferences -->
-    <string name="preferences_file">settings</string>
-    <string name="preferences_uimode">uimode</string>
+    <string name="preferences_file" translatable="false">settings</string>
+    <string name="preferences_uimode" translatable="false">uimode</string>
 
 </resources>

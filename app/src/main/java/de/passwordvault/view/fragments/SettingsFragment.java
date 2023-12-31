@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
@@ -125,6 +126,9 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         inflated.findViewById(R.id.settings_xml_data_restoration_info).setOnClickListener(view -> showInfoDialog(R.string.settings_restore_data_backup, R.string.settings_xml_restoration_info));
         inflated.findViewById(R.id.settings_used_software_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), OssLicensesMenuActivity.class)));
         inflated.findViewById(R.id.settings_license_clickable).setOnClickListener(view -> showInfoDialog(R.string.settings_license_notice, R.string.app_license));
+        inflated.findViewById(R.id.settings_open_source_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_github_link)));
+        inflated.findViewById(R.id.settings_bug_report_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_github_issues_link)));
+        inflated.findViewById(R.id.settings_update_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_github_releases_link)));
 
         return inflated;
     }
@@ -275,6 +279,17 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         dialog.setMessage(getString(messageId));
         dialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.button_ok), (dialogInterface, i) -> dialogInterface.dismiss());
         dialog.show();
+    }
+
+
+    /**
+     * Method opens the specified URL in the browser.
+     *
+     * @param url   URL to be opened.
+     */
+    private void openUrl(String url) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(browserIntent);
     }
 
 }

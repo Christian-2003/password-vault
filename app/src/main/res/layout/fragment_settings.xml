@@ -180,7 +180,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_legal"
+                android:text="@string/settings_about"
                 style="@style/highlight_text"/>
 
         </LinearLayout>
@@ -236,6 +236,84 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_see_licenses"
+                    style="@style/variant_text"/>
+
+            </LinearLayout>
+
+            <View
+                style="@style/divider"/>
+
+            <LinearLayout
+                android:id="@+id/settings_open_source_clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_open_source"
+                    style="@style/default_text"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_open_github"
+                    style="@style/variant_text"/>
+
+            </LinearLayout>
+
+            <View
+                style="@style/divider"/>
+
+            <LinearLayout
+                android:id="@+id/settings_bug_report_clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_bug_report"
+                    style="@style/default_text"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_open_github_issues"
+                    style="@style/variant_text"/>
+
+            </LinearLayout>
+
+            <View
+                style="@style/divider"/>
+
+            <LinearLayout
+                android:id="@+id/settings_update_clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_update"
+                    style="@style/default_text"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_open_github_releases"
                     style="@style/variant_text"/>
 
             </LinearLayout>

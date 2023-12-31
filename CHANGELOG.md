@@ -15,6 +15,9 @@ Backups can now be created and restored (Backups will not be encrypted!). Furthe
 * Added `EntryHandleObservable`-class to impleemnt observable for the `EntryHandle`.
 * Used Observer-pattern to fix a bug, where changes in entries were not updated in the `EntriesFragment`, which could result in a crash if the respective change was a deletion of an entry.
 * Fixed a bug where a detail was not shown with the hidden details after it'S visibility was changed.
+* Small QoL-changes
+* Animated password-security-score.
+* Additions on SettingsFragment.
 
 <br>
 
