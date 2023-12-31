@@ -14,6 +14,7 @@ Backups can now be created and restored (Backups will not be encrypted!). Furthe
 * Added `Observer<T>`- and `Observable<T>`-interfaces for Observer-pattern.
 * Added `EntryHandleObservable`-class to impleemnt observable for the `EntryHandle`.
 * Used Observer-pattern to fix a bug, where changes in entries were not updated in the `EntriesFragment`, which could result in a crash if the respective change was a deletion of an entry.
+* Fixed a bug where a detail was not shown with the hidden details after it'S visibility was changed.
 
 <br>
 

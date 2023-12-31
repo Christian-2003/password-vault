@@ -49,4 +49,5 @@ public class EntryViewModel extends ViewModel {
     public void setExtendedInfoShown(boolean extendedInfoShown) {
         this.extendedInfoShown = extendedInfoShown;
     }
+
 }

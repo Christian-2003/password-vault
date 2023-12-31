@@ -28,7 +28,7 @@ import java.util.ArrayList;
  * {@linkplain de.passwordvault.model.entry.Entry}.
  *
  * @author  Christian-2003
- * @version 1.0.1
+ * @version 3.1.0
  */
 public class EntryActivity extends AppCompatActivity implements DialogCallbackListener {
 
@@ -145,7 +145,6 @@ public class EntryActivity extends AppCompatActivity implements DialogCallbackLi
         ((TextView)findViewById(R.id.entry_changed)).setText(Utils.formatDate(entry.getChanged(), dateFormat));
 
         //Add details:
-        ArrayList<Detail> details = entry.getVisibleDetails();
         populateDetailsContainer(entry.getVisibleDetails(), R.id.entry_details_container);
         populateDetailsContainer(entry.getInvisibleDetails(), R.id.entry_hidden_details_container);
 
@@ -183,6 +182,14 @@ public class EntryActivity extends AppCompatActivity implements DialogCallbackLi
             if (i < details.size() - 1) {
                 View.inflate(EntryActivity.this, R.layout.divider_horizontal, detailsContainer);
             }
+        }
+
+        detailsContainer.setVisibility(View.VISIBLE);
+        if (containerId == R.id.entry_hidden_details_container) {
+            findViewById(R.id.entry_hidden_details_container_title).setVisibility(View.VISIBLE);
+        }
+        else if (containerId == R.id.entry_details_container) {
+            findViewById(R.id.entry_details_container_title).setVisibility(View.VISIBLE);
         }
     }
 
