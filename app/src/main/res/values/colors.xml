@@ -32,6 +32,7 @@
     <color name="pv_theme_surfaceTint">#006A66</color>
     <color name="pv_theme_outlineVariant">#BEC9C7</color>
     <color name="pv_theme_scrim">#000000</color>
+    <color name="pv_theme_popup_surface">#FCFCFE</color>
 
 
     <!-- The following colors are only present to preserve backwards compatibility! -->

@@ -38,6 +38,11 @@
         <item name="android:layout_margin">@dimen/default_margin</item>
     </style>
 
+    <!-- Style for popup menus -->
+    <style name="popup_menu" parent="@android:style/Widget.PopupMenu">
+        <item name="android:backgroundTint">@color/pv_theme_popup_surface</item>
+    </style>
+
 
     <!-- Style for text -->
     <style name="default_text">

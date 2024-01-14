@@ -31,18 +31,21 @@
     <string name="settings_backup">Backup</string>
     <string name="settings_about">Über</string>
     <string name="settings_export">Exportieren</string>
-    <string name="settings_ui_mode">Anzeigemodus</string>
-    <string name="settings_ui_mode_light">Heller Modus</string>
-    <string name="settings_ui_mode_dark">Dunkler Modus</string>
-    <string name="settings_ui_mode_system">Systemeinstellung</string>
     <string name="settings_create_data_backup">Backup erstellen</string>
     <string name="settings_restore_data_backup">Backup wiederherstellen</string>
     <string name="settings_create_xml_backup">XML Backup erstellen</string>
     <string name="settings_restore_xml_backup">XML Backup wiederherstellen</string>
-    <string name="settings_default_backup_name">pv_backup</string>
+    <string name="settings_default_backup_name">pv_backup.txt</string>
+    <string name="settings_enter_password">Passwort</string>
+    <string name="settings_confirm_password">Passwort wiederholen</string>
+    <string name="settings_optional_info">(optional)</string>
+    <string name="settings_backup_password_info">Bitte merken Sie sich das Password, da es zur Wiederherstellung des Backups benötigt wird. Wenn Sie kein Passwort eingeben, wird das Backup nicht verschlüsselt werden.</string>
+    <string name="settings_backup_restore_with_password_info">Das Backup ist mit einem Password verschlüsselt. Ohne das Password kann das Backup nicht wiederhergestellt werden.</string>
     <string name="settings_backup_error">Backup konnte nicht erstellt werden</string>
     <string name="settings_backup_success">Backup wurde erfolgreich erstellt</string>
     <string name="settings_restoration_error">Backup konnte nicht wiederhergestellt werden</string>
+    <string name="settings_restoration_xml_error">Backup-Datei korrupt</string>
+    <string name="settings_restoration_encryption_error">Falsches Passwort</string>
     <string name="settings_restoration_success">Backup wurde erfolgreich wiederhergestellt</string>
     <string name="settings_xml_backup_info">Erstelle ein Backup welches alle gespeicherten Konten beinhaltet. Das erstellte Backup wird bei Deinstallation der Anwendung nicht gelöscht. Allerdings wird das Backup NICHT verschlüsselt.</string>
     <string name="settings_xml_restoration_info">Stelle ein unverschlüsseltes Backup wieder her.</string>
@@ -106,6 +109,11 @@
 
     <!-- Input hints -->
     <string name="hint_search">Suchen…</string>
+    <string name="hint_password">Passwort</string>
+    <string name="hint_confirm_password">Passwort wiederholen</string>
+    <string name="hint_filename">Dateiname</string>
+    <string name="hint_directory">Ordner</string>
+    <string name="hint_optional">(Optional)</string>
 
     <!-- Password / Passcode security -->
     <string name="password_security_score">Passwortsicherheit:</string>
@@ -123,6 +131,7 @@
     <!-- Error messages that are sent to the user -->
     <string name="error_cannot_show_entry">Eintrag kann nicht angezeigt werden.</string>
     <string name="error_empty_input">Dieses Feld darf nicht leer sein.</string>
+    <string name="error_passwords_not_matching">Passwörter stimmen nicht überein.</string>
 
     <!-- App License -->
     <string name="app_license">Copyright © 2023 Christian-2003

@@ -1,24 +1,17 @@
 package de.passwordvault.view.activities;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-
-import java.lang.reflect.AccessibleObject;
-
 import de.passwordvault.R;
 import de.passwordvault.model.storage.app.StorageManager;
-import de.passwordvault.view.viewmodel.MainViewModel;
-import de.passwordvault.model.entry.EntryHandle;
+import de.passwordvault.viewmodel.activities.MainViewModel;
 
 
 /**
@@ -26,7 +19,7 @@ import de.passwordvault.model.entry.EntryHandle;
  * point for the application and contains multiple fragments with different functionalities.
  *
  * @author  Christian-2003
- * @version 3.0.0
+ * @version 3.2.0
  */
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
 

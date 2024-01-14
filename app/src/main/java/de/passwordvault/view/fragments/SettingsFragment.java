@@ -2,35 +2,32 @@ package de.passwordvault.view.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
+import java.io.Serializable;
+import java.util.Objects;
+
 import de.passwordvault.R;
 import de.passwordvault.model.storage.backup.BackupException;
-import de.passwordvault.model.storage.backup.CreateXmlBackup;
-import de.passwordvault.model.storage.backup.RestoreXmlBackup;
-import de.passwordvault.model.storage.backup.XmlException;
-import de.passwordvault.model.storage.export.ExportException;
-import de.passwordvault.model.storage.export.ExportToHtml;
+import de.passwordvault.model.storage.backup.XmlBackupRestorer;
+import de.passwordvault.view.dialogs.CreateBackupDialog;
+import de.passwordvault.view.dialogs.RestoreBackupDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
-import de.passwordvault.view.viewmodel.SettingsViewModel;
+import de.passwordvault.viewmodel.fragments.SettingsViewModel;
 import de.passwordvault.view.activities.MainActivity;
-import de.passwordvault.view.dialogs.UiModeDialogFragment;
 
 
 /**
@@ -38,50 +35,33 @@ import de.passwordvault.view.dialogs.UiModeDialogFragment;
  * {@linkplain MainActivity}.
  *
  * @author  Christian-2003
- * @version 3.1.0
+ * @version 3.2.0
  */
-public class SettingsFragment extends Fragment implements DialogCallbackListener {
+public class SettingsFragment extends Fragment implements DialogCallbackListener, Serializable {
 
     /**
-     * Field stores the request code to pick a location for the XML file for a backup.
+     * Field stores the request code for when the user selects the directory into which an XML backup
+     * shall be created.
      */
-    private static final int PICK_XML_FILE_LOCATION = 2;
+    private static final int SELECT_DIRECTORY_TO_CREATE_BACKUP = 2;
 
     /**
-     * Field stores the request code to pick a location for the XML backup file to be restored.
+     * Field stores the request code for when the user selects a file from which an XML backup shall
+     * be restored.
      */
-    private static final int PICK_XML_BACKUP_LOCATION = 3;
+    private static final int SELECT_FILE_TO_RESTORE_BACKUP = 3;
 
     /**
-     * Field stores the request code to pick a location for an HTML export file.
+     * Field stores the request code for when the user selects a file into which an HTML export shall
+     * be saved.
      */
-    private static final int PICK_HTML_EXPORT_LOCATION = 4;
+    private static final int SELECT_FILE_TO_EXPORT_TO_HTML = 4;
 
 
     /**
      * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} for this fragment.
      */
     private SettingsViewModel viewModel;
-
-    /**
-     * Attribute stores the {@linkplain SharedPreferences} that are used to store all settings.
-     */
-    private SharedPreferences preferences;
-
-    /**
-     * Attribute stores the {@linkplain SharedPreferences.Editor} which is used to edit settings.
-     */
-    private SharedPreferences.Editor preferencesEditor;
-
-    /**
-     * Attribute stores the inflated view of the fragment.
-     */
-    private View inflated;
-
-    /**
-     * Attribute stores the tag that is used for logs.
-     */
-    private static final String TAG = "Settings";
 
 
     /**
@@ -101,8 +81,6 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(requireActivity()).get(SettingsViewModel.class);
-        preferences = getContext().getSharedPreferences(getString(R.string.preferences_file), Context.MODE_PRIVATE);
-        preferencesEditor = preferences.edit();
     }
 
 
@@ -116,54 +94,21 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        inflated = inflater.inflate(R.layout.fragment_settings, container, false);
+        View inflated = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        //Update all settings:
-        updateUiMode(preferences.getInt(getString(R.string.preferences_uimode), 0));
-
-        //Add click listeners:
-        inflated.findViewById(R.id.settings_ui_mode_clickable).setOnClickListener(view -> {
-            UiModeDialogFragment dialog = new UiModeDialogFragment(viewModel.getUiMode(), SettingsFragment.this);
-            dialog.setTargetFragment(SettingsFragment.this, 1);
-            dialog.show(getActivity().getSupportFragmentManager(), "");
-        });
-        inflated.findViewById(R.id.settings_xml_data_backup_clickable).setOnClickListener(view -> createXmlBackup());
+        inflated.findViewById(R.id.settings_xml_data_backup_clickable).setOnClickListener(view -> selectDirectory(SELECT_DIRECTORY_TO_CREATE_BACKUP));
         inflated.findViewById(R.id.settings_xml_data_backup_info).setOnClickListener(view -> showInfoDialog(R.string.settings_create_data_backup, R.string.settings_xml_backup_info));
-        inflated.findViewById(R.id.settings_xml_data_restoration_clickable).setOnClickListener(view -> restoreXmlBackup());
+        inflated.findViewById(R.id.settings_xml_data_restoration_clickable).setOnClickListener(view -> selectFile(SELECT_FILE_TO_RESTORE_BACKUP, "text/plain"));
         inflated.findViewById(R.id.settings_xml_data_restoration_info).setOnClickListener(view -> showInfoDialog(R.string.settings_restore_data_backup, R.string.settings_xml_restoration_info));
         inflated.findViewById(R.id.settings_used_software_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), OssLicensesMenuActivity.class)));
         inflated.findViewById(R.id.settings_license_clickable).setOnClickListener(view -> showInfoDialog(R.string.settings_license_notice, R.string.app_license));
         inflated.findViewById(R.id.settings_open_source_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_github_link)));
         inflated.findViewById(R.id.settings_bug_report_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_github_issues_link)));
         inflated.findViewById(R.id.settings_update_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_github_releases_link)));
-        inflated.findViewById(R.id.settings_html_export_clickable).setOnClickListener(view -> createHtmlExport());
+        inflated.findViewById(R.id.settings_html_export_clickable).setOnClickListener(view -> createFile(SELECT_FILE_TO_EXPORT_TO_HTML, "text/html", getString(R.string.settings_default_export_name)));
         inflated.findViewById(R.id.settings_html_export_info).setOnClickListener(view -> showInfoDialog(R.string.settings_export_html, R.string.settings_export_html_info));
 
         return inflated;
-    }
-
-
-    /**
-     * Method is called whenever the {@linkplain DialogFragment} is closed through the
-     * 'positive' button (i.e. the SAVE button).
-     *
-     * @param obj    Dialog which called the method.
-     */
-    public void onPositiveCallback(DialogFragment obj) {
-        if (obj instanceof UiModeDialogFragment) {
-            UiModeDialogFragment dialog = (UiModeDialogFragment)obj;
-            updateUiMode(dialog.getUiMode());
-        }
-    }
-
-    /**
-     * Method is called whenever the {@linkplain DialogFragment} is closed through the
-     * 'negative' button (i.e. the CANCEL button).
-     *
-     * @param obj    Dialog which called the method.
-     */
-    public void onNegativeCallback(DialogFragment obj) {
-        //Do nothing...
     }
 
 
@@ -181,125 +126,123 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (resultCode != Activity.RESULT_OK) {
+        if (resultCode != Activity.RESULT_OK || data == null) {
             return;
         }
         switch (requestCode) {
-            case PICK_XML_FILE_LOCATION:
+            case SELECT_DIRECTORY_TO_CREATE_BACKUP:
                 //Create backup:
-                if (data != null) {
-                    CreateXmlBackup backup = new CreateXmlBackup(data.getData());
-                    try {
-                        backup.createBackup();
-                    }
-                    catch (BackupException e) {
-                        Toast.makeText(getContext(), getString(R.string.settings_backup_error), Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    Toast.makeText(getContext(), getString(R.string.settings_backup_success), Toast.LENGTH_SHORT).show();
-                }
+                CreateBackupDialog backupDialog = new CreateBackupDialog();
+                Bundle backupArgs = new Bundle();
+                backupArgs.putString(CreateBackupDialog.KEY_DIRECTORY, Objects.requireNonNull(data.getData()).toString());
+                backupArgs.putSerializable(CreateBackupDialog.KEY_CALLBACK_LISTENER, this);
+                backupDialog.setArguments(backupArgs);
+                backupDialog.show(requireActivity().getSupportFragmentManager(), "");
                 break;
-            case PICK_XML_BACKUP_LOCATION:
+            case SELECT_FILE_TO_RESTORE_BACKUP:
                 //Restore backup:
-                if (data != null) {
-                    RestoreXmlBackup backup = new RestoreXmlBackup(data.getData());
-                    try {
-                        backup.restoreBackup();
-                    }
-                    catch (BackupException | XmlException e) {
-                        e.printStackTrace();
-                        Toast.makeText(getContext(), getString(R.string.settings_restoration_error), Toast.LENGTH_LONG).show();
+                try {
+                    if (!XmlBackupRestorer.isBackupEncrypted(data.getData())) {
+                        //Backup not encrypted:
+                        viewModel.restoreXmlBackup(data.getData(), null, getContext());
                         return;
                     }
-                    Toast.makeText(getContext(), getString(R.string.settings_restoration_success), Toast.LENGTH_SHORT).show();
+                    //Backup encrypted:
+                    RestoreBackupDialog restoreDialog = new RestoreBackupDialog();
+                    Bundle restoreArgs = new Bundle();
+                    restoreArgs.putString(RestoreBackupDialog.KEY_FILE, Objects.requireNonNull(data.getData()).toString());
+                    restoreArgs.putSerializable(RestoreBackupDialog.KEY_CALLBACK_LISTENER, this);
+                    restoreDialog.setArguments(restoreArgs);
+                    restoreDialog.show(requireActivity().getSupportFragmentManager(), "");
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d("BACKUP", e.getMessage());
                 }
                 break;
-            case PICK_HTML_EXPORT_LOCATION:
-                //Create HTML backup:
-                if (data != null) {
-                    ExportToHtml export = new ExportToHtml(data.getData());
-                    try {
-                        export.export();
-                    }
-                    catch (ExportException e) {
-                        e.printStackTrace();
-                        Toast.makeText(getContext(), getString(R.string.settings_export_error), Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    Toast.makeText(getContext(), getString(R.string.settings_export_success), Toast.LENGTH_SHORT).show();
-                }
+            case SELECT_FILE_TO_EXPORT_TO_HTML:
+                //Export to HTML:
+                viewModel.exportToHtml(data.getData(), getContext());
                 break;
         }
     }
 
 
     /**
-     * Method updates the UI mode of the application.
+     * Method is called whenever a positive dialog callback is initiated.
      *
-     * @param uiMode    UI mode to which the app shall be changed.
+     * @param fragment  Dialog which called the method.
      */
-    private void updateUiMode(int uiMode) {
-        if (viewModel.getUiMode() == uiMode) {
-            //UI mode was not changed:
-            return;
+    @Override
+    public void onPositiveCallback(DialogFragment fragment) {
+        if (fragment instanceof CreateBackupDialog) {
+            CreateBackupDialog dialog = (CreateBackupDialog)fragment;
+            try {
+                viewModel.createXmlBackup(dialog.getDirectory(), dialog.getFilename(), dialog.getPassword());
+            }
+            catch (BackupException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), getString(R.string.settings_backup_error), Toast.LENGTH_LONG).show();
+                return;
+            }
+            Toast.makeText(getContext(), getString(R.string.settings_backup_success), Toast.LENGTH_SHORT).show();
         }
-        viewModel.setUiMode(uiMode);
-        preferencesEditor.putInt(getString(R.string.preferences_uimode), uiMode);
-        preferencesEditor.apply();
-        switch (viewModel.getUiMode()) {
-            case 1:
-                //Switch to light mode:
-                ((TextView)inflated.findViewById(R.id.settings_ui_mode)).setText(getString(R.string.settings_ui_mode_light));
-                //TODO: Change theme...
-                Log.d(TAG, "Changed UI mode to: LIGHT MODE");
-                break;
-            case 2:
-                //Switch to dark mode:
-                ((TextView)inflated.findViewById(R.id.settings_ui_mode)).setText(getString(R.string.settings_ui_mode_dark));
-                //TODO: Change theme...
-                Log.d(TAG, "Changed UI mode to: DARK MODE");
-                break;
-            default:
-                //Switch to system mode:
-                ((TextView)inflated.findViewById(R.id.settings_ui_mode)).setText(getString(R.string.settings_ui_mode_system));
-                //TODO: Change theme...
-                Log.d(TAG, "Changed UI mode to: SYSTEM DEFAULT MODE");
-                break;
+        else if (fragment instanceof RestoreBackupDialog) {
+            RestoreBackupDialog dialog = (RestoreBackupDialog)fragment;
+            viewModel.restoreXmlBackup(dialog.getFile(), dialog.getPassword(), getContext());
         }
     }
 
 
     /**
-     * Method creates an XML backup for the application.
+     * Method is called whenever a negative dialog callback is initiated.
+     *
+     * @param fragment  Dialog which called the method.
      */
-    private void createXmlBackup() {
-        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("application/*");
-        intent.putExtra(Intent.EXTRA_TITLE, getString(R.string.settings_default_backup_name));
-        startActivityForResult(intent, PICK_XML_FILE_LOCATION);
+    @Override
+    public void onNegativeCallback(DialogFragment fragment) {
+
     }
 
+
     /**
-     * Method restores an XML backup for the application.
+     * Method opens the device's default file explorer to select a directory.
+     *
+     * @param requestCode   Request code to be used when choosing a directory.
      */
-    private void restoreXmlBackup() {
+    private void selectDirectory(int requestCode) {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        startActivityForResult(intent, SELECT_DIRECTORY_TO_CREATE_BACKUP);
+    }
+
+
+    /**
+     * Method opens the device's default file explorer to select a file.
+     *
+     * @param requestCode   Request code to be used when choosing a file.
+     * @param mimeType      MimeType of the file to be selected.
+     */
+    private void selectFile(int requestCode, String mimeType) {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("application/*");
-        startActivityForResult(intent, PICK_XML_BACKUP_LOCATION);
+        intent.setType(mimeType);
+        startActivityForResult(intent, requestCode);
     }
 
-
     /**
-     * Method creates an XML backup for the application.
+     * Method opens the device's default file explorer to create a file.
+     *
+     * @param requestCode   Request code to be used when creating a file.
+     * @param mimeType      MimeType of the file to be created.
      */
-    private void createHtmlExport() {
+    private void createFile(int requestCode, String mimeType, String fileName) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("application/*");
-        intent.putExtra(Intent.EXTRA_TITLE, getString(R.string.settings_default_export_name));
-        startActivityForResult(intent, PICK_HTML_EXPORT_LOCATION);
+        intent.setType(mimeType);
+        if (fileName != null) {
+            intent.putExtra(Intent.EXTRA_TITLE, fileName);
+        }
+        startActivityForResult(intent, requestCode);
     }
 
 

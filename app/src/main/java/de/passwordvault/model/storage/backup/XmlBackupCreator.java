@@ -2,7 +2,12 @@ package de.passwordvault.model.storage.backup;
 
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
+import android.util.Log;
+
+import androidx.documentfile.provider.DocumentFile;
+
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -13,37 +18,42 @@ import de.passwordvault.App;
 import de.passwordvault.model.detail.DetailDTO;
 import de.passwordvault.model.entry.EntryDTO;
 import de.passwordvault.model.storage.app.InstanceToDTOConverter;
+import de.passwordvault.model.storage.encryption.EncryptionException;
 
 
 /**
  * Class implements a functionality which creates an XML backup to the shared storage of the user's
- * Android device. The created backup will not be encrypted!
+ * Android device.
  *
  * @author  Christian-2003
- * @version 3.1.0
+ * @version 3.2.0
  */
-public class CreateXmlBackup extends XmlBackupConfiguration {
+public class XmlBackupCreator extends XmlBackupConfiguration {
 
     /**
-     * Attribute stores the URI to a file to which the backup shall be created.
+     * Attribute stores the name of the file into which the backup shall be saved.
      */
-    private final Uri uri;
+    private final String filename;
 
 
     /**
-     * Constructor instantiates a new {@link CreateXmlBackup} instance which can create a manual
-     * disk backup of all data through the method {@link #createBackup()}.
-     * The backup will be saved to the file of the passed URI. Please make sure that the application
-     * has access (and permission) to write to that file, before calling.
+     * Constructor instantiates a new {@link XmlBackupCreator}-instance. Please make sure that
+     * the application has access (and permission) to the directory specified in the provided URI
+     * before calling. If the provided {@code encryptionKeySeed} is not {@code null}, the backup is
+     * considered to be encrypted. Otherwise, it is not encrypted.
      *
      * @param uri                   URI of the file to which the backup shall be created.
+     * @param filename              Name of the file into which the backup is stored.
+     * @param encryptionSeed        Seed for the key with which to encrypt the backup. Pass {@code null}
+     *                              if the backup shall not be encrypted.
      * @throws NullPointerException The passed URI is {@code null}.
      */
-    public CreateXmlBackup(Uri uri) throws NullPointerException {
-        if (uri == null) {
-            throw new NullPointerException("Null is invalid URI");
+    public XmlBackupCreator(Uri uri, String filename, String encryptionSeed) throws NullPointerException {
+        super(uri, encryptionSeed);
+        if (filename == null) {
+            throw new NullPointerException("Null is invalid filename");
         }
-        this.uri = uri;
+        this.filename = filename;
     }
 
 
@@ -51,11 +61,17 @@ public class CreateXmlBackup extends XmlBackupConfiguration {
      * Method saves all entries to the external storage in JSON-format.
      * <b>IMPORTANT: In doing so, all encryption will be lost. The data can then be accessed by
      * everyone!</b>
+     *
+     * @throws BackupException  The backup could not be created.
      */
     public void createBackup() throws BackupException {
+        DocumentFile directory = DocumentFile.fromTreeUri(App.getContext(), uri);
+        DocumentFile file = directory.createFile("text/plain", filename);
+        Uri fileUri = file.getUri();
+
         ParcelFileDescriptor xml;
         try {
-            xml = App.getContext().getContentResolver().openFileDescriptor(uri, "w");
+            xml = App.getContext().getContentResolver().openFileDescriptor(fileUri, "w");
         }
         catch (FileNotFoundException e) {
             throw new BackupException(e.getMessage());
@@ -70,7 +86,7 @@ public class CreateXmlBackup extends XmlBackupConfiguration {
             writer.close();
             xml.close();
         }
-        catch (IOException e) {
+        catch (IOException | EncryptionException e) {
             throw new BackupException(e.getMessage());
         }
     }
@@ -79,10 +95,11 @@ public class CreateXmlBackup extends XmlBackupConfiguration {
     /**
      * Method generates the XML which shall be stored to the file.
      *
-     * @param writer        Writer to the file to which the XML shall be written.
-     * @throws IOException  The XML could not be written to the file.
+     * @param writer                Writer to the file to which the XML shall be written.
+     * @throws IOException          The XML could not be written to the file.
+     * @throws EncryptionException  The backup could not be encrypted.
      */
-    private void createXML(BufferedWriter writer) throws IOException {
+    private void createXML(BufferedWriter writer) throws IOException, EncryptionException {
         InstanceToDTOConverter converter = new InstanceToDTOConverter();
         converter.generateDTOs();
         ArrayList<EntryDTO> entryDTOs = converter.getEntryDTOs();
@@ -91,19 +108,33 @@ public class CreateXmlBackup extends XmlBackupConfiguration {
         writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 
         insertTag(writer, TAG_PASSWORD_VAULT, 0, false, true);
+
+        //Add encryption-related data:
+        if (encryptionAlgorithm != null) {
+            insertTag(writer, TAG_ENCRYPTION, 4, false, true);
+            //Do not put newLine with next tag to prevent 'Illegal base64 character'-exception when decrypting the checksum!
+            insertTag(writer, TAG_ENCRYPTION_CHECKSUM, 8, false, false);
+            writer.write(encrypt(encryptionKeySeed));
+            //Use indentation=0 for next tag to put tag right behind checksum!
+            insertTag(writer, TAG_ENCRYPTION_CHECKSUM, 0, true, true);
+            insertTag(writer, TAG_ENCRYPTION, 4, true, true);
+        }
+
         insertTag(writer, TAG_DATA, 4, false, true);
         insertTag(writer, TAG_ENTRIES, 8, false, true);
 
+        //Add all (optionally encrypted) entries:
         for (int i = 0; i < entryDTOs.size(); i++) {
-            writer.write(entryDTOs.get(i).getCsv());
+            writer.write(encrypt(entryDTOs.get(i).getCsv()));
             writer.write("\n");
         }
 
         insertTag(writer, TAG_ENTRIES, 8, true, true);
         insertTag(writer, TAG_DETAILS, 8, false, true);
 
+        //Add all (optionally encrypted) details:
         for (int i = 0; i < detailDTOs.size(); i++) {
-            writer.write(detailDTOs.get(i).getCsv());
+            writer.write(encrypt(detailDTOs.get(i).getCsv()));
             writer.write("\n");
         }
 
@@ -139,6 +170,23 @@ public class CreateXmlBackup extends XmlBackupConfiguration {
         if (newLine) {
             writer.write("\n");
         }
+    }
+
+
+    /**
+     * Method encrypts the specified string using {@link #encryptionAlgorithm}. If the backup shall
+     * not be encrypted (i.e. {@code encryptionAlgorithm == null}), the passed argument is returned.
+     *
+     * @param data                  Data to be encrypted.
+     * @return                      Encrypted data (Or passed argument if backup shall not be
+     *                              encrypted).
+     * @throws EncryptionException  The data could not be encrypted.
+     */
+    private String encrypt(String data) throws EncryptionException {
+        if (encryptionAlgorithm != null) {
+            return encryptionAlgorithm.encrypt(data);
+        }
+        return data;
     }
 
 }

@@ -1,16 +1,20 @@
 package de.passwordvault.model.storage.encryption;
 
+import android.os.Message;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.util.Log;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 
 /**
@@ -18,7 +22,7 @@ import javax.crypto.spec.GCMParameterSpec;
  * This class can be used to encrypt and decrypt messages using the AES algorithm.
  *
  * @author  Christian-2003
- * @version 2.2.1
+ * @version 3.2.0
  */
 public class AES {
 
@@ -37,6 +41,53 @@ public class AES {
      * Constant stores the tag with which messages shall be logged within the {@linkplain Log}.
      */
     private static final String TAG = "Security";
+
+
+    /**
+     * Attribute stores a key that was generated from a seed (provided by the user). If this key
+     * is provided ({@code userProvidedKey != null}), this key shall be used for encryption and
+     * decryption instead of the keys that are retrieved from the {@linkplain KeyStore}.
+     */
+    private final SecretKey userProvidedKey;
+
+
+    /**
+     * Constructor instantiates a new {@link AES}-instance which can encrypt and decrypt provided
+     * data.
+     * The key which is used for encryption / decryption is retrieved from the device's KeyStore. If
+     * no key is present, a new key will be generated.
+     */
+    public AES() {
+        userProvidedKey = null;
+    }
+
+    /**
+     * Constructor instantiates a new {@link AES}-instance which can encrypt and decrypt provided
+     * data.
+     * The key which is used for encryption / decryption is generated from the passed seed. Pass
+     * {@code null} if a key from the device's KeyStore shall be used instead.
+     *
+     * @param seed  Seed from which to generate a key. If this is {@code null}, a key retrieved from
+     *              the KeyStore will be used instead.
+     */
+    public AES(String seed) {
+        if (seed == null) {
+            userProvidedKey = null;
+            return;
+        }
+        //Hash the passed seed:
+        MessageDigest md;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        }
+        catch (NoSuchAlgorithmException e) {
+            userProvidedKey = null;
+            return;
+        }
+        byte[] hash = md.digest(seed.getBytes(StandardCharsets.UTF_8));
+        userProvidedKey = new SecretKeySpec(hash, 0, 16, "AES/GCM/NoPadding");
+        Log.d("AES", "Generated new UserProvidedKey=" + Base64.getEncoder().encodeToString(userProvidedKey.getEncoded()));
+    }
 
 
     /**
@@ -107,12 +158,17 @@ public class AES {
 
 
     /**
-     * Method returns thw {@linkplain SecretKey} from the {@linkplain KeyStore}.
+     * Method returns the {@linkplain SecretKey} that shall be used for encryption and decryption.
+     * This is either the {@link #userProvidedKey} or a key retrieved from the {@linkplain KeyStore}.
      *
-     * @return                      Secret key retrieved from the key store.
-     * @throws EncryptionException  The key could not be retrieved.
+     * @return                      Secret key retrieved that shall be used for encryption / decryption.
+     * @throws EncryptionException  The key could not be retrieved from the KeyStore.
      */
     private SecretKey getKey() throws EncryptionException {
+        if (userProvidedKey != null) {
+            //Use key that was generated through a seed for encryption / decryption:
+            return userProvidedKey;
+        }
         try {
             KeyStore keyStore = KeyStore.getInstance(PROVIDER);
             keyStore.load(null);

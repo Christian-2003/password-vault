@@ -8,7 +8,7 @@ import de.passwordvault.R;
 import de.passwordvault.model.entry.EntryHandle;
 import de.passwordvault.view.utils.DetailViewBuilder;
 import de.passwordvault.view.utils.Utils;
-import de.passwordvault.view.viewmodel.EntryViewModel;
+import de.passwordvault.viewmodel.activities.EntryViewModel;
 import de.passwordvault.model.detail.Detail;
 import de.passwordvault.model.entry.Entry;
 import de.passwordvault.view.dialogs.ConfirmDeleteDialogFragment;
@@ -28,7 +28,7 @@ import java.util.ArrayList;
  * {@linkplain de.passwordvault.model.entry.Entry}.
  *
  * @author  Christian-2003
- * @version 3.1.0
+ * @version 3.2.0
  */
 public class EntryActivity extends AppCompatActivity implements DialogCallbackListener {
 

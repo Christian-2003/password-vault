@@ -13,10 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-
 import de.passwordvault.R;
 import de.passwordvault.model.detail.DetailType;
 import de.passwordvault.view.utils.DialogCallbackListener;
@@ -29,7 +27,7 @@ import de.passwordvault.model.detail.Detail;
  * {@linkplain DialogCallbackListener}!
  *
  * @author  Christian-2003
- * @version 3.0.0
+ * @version 3.2.0
  */
 public class DetailDialogFragment extends DialogFragment {
 

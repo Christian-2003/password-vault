@@ -8,12 +8,10 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.google.android.material.textfield.TextInputLayout;
-
 import de.passwordvault.R;
 import de.passwordvault.model.entry.EntryHandle;
-import de.passwordvault.view.viewmodel.AddEntryViewModel;
+import de.passwordvault.viewmodel.activities.AddEntryViewModel;
 import de.passwordvault.view.utils.DetailViewBuilder;
 import de.passwordvault.model.detail.Detail;
 import de.passwordvault.model.entry.Entry;
@@ -26,7 +24,7 @@ import de.passwordvault.view.utils.DialogCallbackListener;
  * Class implements an activity which can add (or edit) entries.
  *
  * @author  Christian-2003
- * @version 3.1.0
+ * @version 3.2.0
  */
 public class AddEntryActivity extends AppCompatActivity implements DialogCallbackListener {
 

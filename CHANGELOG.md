@@ -1,5 +1,20 @@
 <img src="docs/img/icon.png" height="150" align="right">
 
+# 3.2.0 (XXXX-XX-XX)
+### Release Highlights
+Backups can now be encrypted through a password.
+
+### Featrues
+* Removed setting to change UI mode, since this did not work.
+* Cryptographic keys for AES can now be generated with a seed.
+* Refactored location for all ViewModels.
+* Added dialogs `CreateBackupDialog` and `RestoreBackupDialog` to create and restore backups.
+* Changes to backup generation and backup restoration.
+* Backups can now be encrypted using a password.
+* Label of `DetailType` is now loaded from resources whenever it is accessed in order for the label to be dynamically changed when device's language changes while the app is running.
+
+<br>
+
 # 3.1.0 (2023-12-31)
 ### Release Highlights
 Account data can now be exported into readable HTML-format. Furthermore, account data can be backed up and restored, although backups will not be encrypted. Furthermore, some changes to the GUI were made and German was added as language to the application.

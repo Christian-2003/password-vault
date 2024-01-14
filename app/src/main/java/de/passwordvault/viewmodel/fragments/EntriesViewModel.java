@@ -1,7 +1,8 @@
-package de.passwordvault.view.viewmodel;
+package de.passwordvault.viewmodel.fragments;
 
 import androidx.lifecycle.ViewModel;
 
+import de.passwordvault.R;
 import de.passwordvault.view.fragments.EntriesFragment;
 
 
@@ -19,6 +20,11 @@ public class EntriesViewModel extends ViewModel {
      */
     private boolean searchBarVisible;
 
+    /**
+     * Attribute stores the item number of the selected sorting.
+     */
+    private int selectedEntrySorting;
+
 
     /**
      * Constructor instantiates a new {@link EntriesViewModel} with default values for all
@@ -26,6 +32,7 @@ public class EntriesViewModel extends ViewModel {
      */
     public EntriesViewModel() {
         searchBarVisible = false;
+        selectedEntrySorting = R.id.sort_entries_not_sorted;
     }
 
 
@@ -35,6 +42,17 @@ public class EntriesViewModel extends ViewModel {
 
     public void setSearchBarVisible(boolean searchBarVisible) {
         this.searchBarVisible = searchBarVisible;
+    }
+
+    public int getSelectedEntrySorting() {
+        return selectedEntrySorting;
+    }
+
+    public void setSelectedEntrySorting(int selectedEntrySorting) throws IllegalArgumentException {
+        if (selectedEntrySorting < 0) {
+            throw new IllegalArgumentException(selectedEntrySorting + " is illegal, since index must be greater than 0");
+        }
+        this.selectedEntrySorting = selectedEntrySorting;
     }
 
 }

@@ -32,18 +32,21 @@
     <string name="settings_backup">Backup</string>
     <string name="settings_export">Export</string>
     <string name="settings_about">About</string>
-    <string name="settings_ui_mode">UI Mode</string>
-    <string name="settings_ui_mode_light">Light Mode</string>
-    <string name="settings_ui_mode_dark">Dark Mode</string>
-    <string name="settings_ui_mode_system">System Default</string>
     <string name="settings_create_data_backup">Backup data</string>
     <string name="settings_restore_data_backup">Restore backup</string>
     <string name="settings_create_xml_backup">Create XML backup</string>
     <string name="settings_restore_xml_backup">Restore XML backup</string>
-    <string name="settings_default_backup_name">pv_backup</string>
+    <string name="settings_default_backup_name">pv_backup.txt</string>
+    <string name="settings_enter_password">Password</string>
+    <string name="settings_confirm_password">Confirm password</string>
+    <string name="settings_optional_info">(Optional)</string>
+    <string name="settings_backup_password_info">Please remember the password, as it is needed when the backup shall be restored. If you do not enter a password, the backup will be unencrypted.</string>
+    <string name="settings_backup_restore_with_password_info">The backup is encrypted through a password. Without the password, the backup cannot be restored.</string>
     <string name="settings_backup_error">Could not create backup</string>
     <string name="settings_backup_success">Successfully created backup</string>
     <string name="settings_restoration_error">Could not restore backup</string>
+    <string name="settings_restoration_xml_error">Backup file corrupt</string>
+    <string name="settings_restoration_encryption_error">Invalid password</string>
     <string name="settings_restoration_success">Successfully restored backup</string>
     <string name="settings_xml_backup_info">Create a backup which will contain all stored account data. The created backup will not be erased when the application is uninstalled. However, the backed up data will NOT be encrypted.</string>
     <string name="settings_xml_restoration_info">Restore a backup which contains unencrypted account data.</string>
@@ -110,6 +113,11 @@
 
     <!-- Input hints -->
     <string name="hint_search">Search…</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_confirm_password">Confirm password</string>
+    <string name="hint_filename">Filename</string>
+    <string name="hint_directory">Directory</string>
+    <string name="hint_optional">(Optional)</string>
 
     <!-- Password / Passcode security -->
     <string name="password_security_score">Security Score:</string>
@@ -127,6 +135,7 @@
     <!-- Error messages that are sent to the user -->
     <string name="error_cannot_show_entry">Cannot show entry.</string>
     <string name="error_empty_input">This field cannot be empty.</string>
+    <string name="error_passwords_not_matching">Passwords are not identical.</string>
 
     <!-- App License -->
     <string name="app_license">MIT License

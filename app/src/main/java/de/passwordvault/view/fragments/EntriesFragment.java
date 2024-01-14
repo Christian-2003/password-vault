@@ -1,6 +1,7 @@
 package de.passwordvault.view.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,11 +22,12 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 import java.util.ArrayList;
+
 import de.passwordvault.R;
 import de.passwordvault.model.Observable;
 import de.passwordvault.model.Observer;
 import de.passwordvault.model.entry.EntryHandle;
-import de.passwordvault.view.viewmodel.EntriesViewModel;
+import de.passwordvault.viewmodel.fragments.EntriesViewModel;
 import de.passwordvault.view.utils.ListAdapter;
 import de.passwordvault.model.entry.Entry;
 import de.passwordvault.view.activities.EntryActivity;
@@ -36,7 +39,7 @@ import de.passwordvault.view.activities.MainActivity;
  * within the {@linkplain MainActivity}.
  *
  * @author  Christian-2003
- * @version 3.1.0
+ * @version 3.2.0
  */
 public class EntriesFragment extends Fragment implements AdapterView.OnItemClickListener, PopupMenu.OnMenuItemClickListener, Observer<ArrayList<Entry>> {
 
@@ -95,7 +98,8 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
         //Setup button to sort the entries:
         ImageButton sortButton = inflated.findViewById(R.id.entries_sort_button);
         sortButton.setOnClickListener(view -> {
-            PopupMenu popup = new PopupMenu(EntriesFragment.this.getContext(), sortButton);
+            Context wrapper = new ContextThemeWrapper(EntriesFragment.this.getContext(), R.style.popup_menu);
+            PopupMenu popup = new PopupMenu(wrapper, sortButton);
             popup.getMenuInflater().inflate(R.menu.sort_entries_list, popup.getMenu());
             popup.setOnMenuItemClickListener(EntriesFragment.this);
             popup.show();
@@ -153,6 +157,7 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
         EntryHandle.getInstance().removeObserver(this);
     }
 
+
     /**
      * Method is called when an item within the {@linkplain android.widget.ListView} is selected.
      *
@@ -208,6 +213,7 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
             default:
                 return false;
         }
+        viewModel.setSelectedEntrySorting(item.getItemId());
         populateListView();
         return true;
     }

@@ -1,4 +1,4 @@
-package de.passwordvault.view.viewmodel;
+package de.passwordvault.viewmodel.activities;
 
 import androidx.lifecycle.ViewModel;
 import de.passwordvault.model.entry.Entry;

@@ -6,11 +6,11 @@ import de.passwordvault.R;
 
 /**
  * Enum contains fields to specify the type of a {@link Detail}-instance. Each type contains a
- * {@link #displayName}, which stores the display name for the detail (This display name is loaded
+ * {@link #getDisplayName()}, which stores the display name for the detail (This display name is loaded
  * from the resources of the application and might therefore be different for different locales).
  *
  * @author  Christian-2003
- * @version 3.0.0
+ * @version 3.2.0
  */
 public enum DetailType {
 
@@ -65,7 +65,7 @@ public enum DetailType {
     /**
      * Attribute stores the resource string of the display name.
      */
-    private final String displayName;
+    private final int displayNameId;
 
     /**
      * Attribute stores an id for the detail type. This is needed for when a {@link Detail} is saved
@@ -83,12 +83,7 @@ public enum DetailType {
      * @param persistentId  Id for persistent storage of the type.
      */
     DetailType(int displayNameId, byte persistentId) {
-        if (displayNameId >= 0) {
-            displayName = App.getContext().getString(displayNameId);
-        }
-        else {
-            displayName = "";
-        }
+        this.displayNameId = displayNameId;
         this.persistentId = persistentId;
     }
 
@@ -100,7 +95,10 @@ public enum DetailType {
      * @return  Display name of the field.
      */
     public String getDisplayName() {
-        return displayName;
+        if (displayNameId >= 0) {
+            return App.getContext().getString(displayNameId);
+        }
+        return "";
     }
 
     /**
