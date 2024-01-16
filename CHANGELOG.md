@@ -12,6 +12,7 @@ Backups can now be encrypted through a password.
 * Changes to backup generation and backup restoration.
 * Backups can now be encrypted using a password.
 * Label of `DetailType` is now loaded from resources whenever it is accessed in order for the label to be dynamically changed when device's language changes while the app is running.
+* Dialogs are no longer retained through the deprecated `DialogFragment.setRetainInstance(true)`-method. Instead, dialogs use a ViewModel to retain their state.
 
 <br>
 

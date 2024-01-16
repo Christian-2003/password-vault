@@ -1,6 +1,7 @@
 package de.passwordvault.model.detail;
 
 import androidx.annotation.NonNull;
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Objects;
 import java.util.UUID;
@@ -10,9 +11,9 @@ import java.util.UUID;
  * Class models a detail which can contain all types of detailed information for an entry.
  *
  * @author  Christian-2003
- * @version 3.0.0
+ * @version 3.2.0
  */
-public class Detail {
+public class Detail implements Serializable {
 
     /**
      * Attribute stores the date on which the detail was changed the last time.

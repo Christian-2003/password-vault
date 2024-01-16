@@ -10,18 +10,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import java.io.Serializable;
 import java.util.Objects;
-
 import de.passwordvault.R;
-import de.passwordvault.model.storage.backup.BackupException;
 import de.passwordvault.model.storage.backup.XmlBackupRestorer;
 import de.passwordvault.view.dialogs.CreateBackupDialog;
 import de.passwordvault.view.dialogs.RestoreBackupDialog;
@@ -177,15 +173,7 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
     public void onPositiveCallback(DialogFragment fragment) {
         if (fragment instanceof CreateBackupDialog) {
             CreateBackupDialog dialog = (CreateBackupDialog)fragment;
-            try {
-                viewModel.createXmlBackup(dialog.getDirectory(), dialog.getFilename(), dialog.getPassword());
-            }
-            catch (BackupException e) {
-                e.printStackTrace();
-                Toast.makeText(getContext(), getString(R.string.settings_backup_error), Toast.LENGTH_LONG).show();
-                return;
-            }
-            Toast.makeText(getContext(), getString(R.string.settings_backup_success), Toast.LENGTH_SHORT).show();
+            viewModel.createXmlBackup(dialog.getDirectory(), dialog.getFilename(), dialog.getPassword(), getContext());
         }
         else if (fragment instanceof RestoreBackupDialog) {
             RestoreBackupDialog dialog = (RestoreBackupDialog)fragment;

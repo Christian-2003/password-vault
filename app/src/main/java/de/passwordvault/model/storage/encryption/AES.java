@@ -1,9 +1,7 @@
 package de.passwordvault.model.storage.encryption;
 
-import android.os.Message;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
-import android.util.Log;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.security.MessageDigest;
@@ -36,11 +34,6 @@ public class AES {
      * {@linkplain KeyStore}.
      */
     private static final String KEY_ALIAS = "secret_key";
-
-    /**
-     * Constant stores the tag with which messages shall be logged within the {@linkplain Log}.
-     */
-    private static final String TAG = "Security";
 
 
     /**
@@ -86,7 +79,6 @@ public class AES {
         }
         byte[] hash = md.digest(seed.getBytes(StandardCharsets.UTF_8));
         userProvidedKey = new SecretKeySpec(hash, 0, 16, "AES/GCM/NoPadding");
-        Log.d("AES", "Generated new UserProvidedKey=" + Base64.getEncoder().encodeToString(userProvidedKey.getEncoded()));
     }
 
 
@@ -109,7 +101,6 @@ public class AES {
                 KeyGenParameterSpec spec = new KeyGenParameterSpec.Builder(KEY_ALIAS, KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT).setBlockModes(KeyProperties.BLOCK_MODE_GCM).setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE).build();
                 keyGenerator.init(spec);
                 keyGenerator.generateKey();
-                Log.i(TAG, "Generated new secret key");
             }
 
             Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");

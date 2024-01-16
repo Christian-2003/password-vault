@@ -11,7 +11,7 @@ import de.passwordvault.view.utils.Utils;
 import de.passwordvault.viewmodel.activities.EntryViewModel;
 import de.passwordvault.model.detail.Detail;
 import de.passwordvault.model.entry.Entry;
-import de.passwordvault.view.dialogs.ConfirmDeleteDialogFragment;
+import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
@@ -30,7 +31,7 @@ import java.util.ArrayList;
  * @author  Christian-2003
  * @version 3.2.0
  */
-public class EntryActivity extends AppCompatActivity implements DialogCallbackListener {
+public class EntryActivity extends AppCompatActivity implements DialogCallbackListener, Serializable {
 
     /**
      * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} for the EntryActivity.
@@ -124,7 +125,11 @@ public class EntryActivity extends AppCompatActivity implements DialogCallbackLi
 
         //Add ClickListener to delete the entry:
         findViewById(R.id.entry_button_delete).setOnClickListener(view -> {
-            ConfirmDeleteDialogFragment dialog = new ConfirmDeleteDialogFragment(viewModel.getEntry().getName());
+            ConfirmDeleteDialog dialog = new ConfirmDeleteDialog();
+            Bundle dialogArgs = new Bundle();
+            dialogArgs.putString(ConfirmDeleteDialog.KEY_OBJECT, viewModel.getEntry().getName());
+            dialogArgs.putSerializable(ConfirmDeleteDialog.KEY_CALLBACK_LISTENER, EntryActivity.this);
+            dialog.setArguments(dialogArgs);
             dialog.show(getSupportFragmentManager(), null);
         });
 

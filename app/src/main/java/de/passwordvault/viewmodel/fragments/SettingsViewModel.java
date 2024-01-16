@@ -31,15 +31,27 @@ public class SettingsViewModel extends ViewModel {
      * @param directory             Directory, into which the backup shall be saved.
      * @param filename              Name of the file for the backup (e.g. 'backup.xml').
      * @param password              Password as seed for encryption key generation.
-     * @throws NullPointerException The passed URI is {@code null}.
-     * @throws BackupException      The backup could not be created.
+     * @param context               Context needed to display error messages.
+     * @throws NullPointerException The passed directory, filename or context is {@code null}.
      */
-    public void createXmlBackup(Uri directory, String filename, String password) throws NullPointerException, BackupException {
+    public void createXmlBackup(Uri directory, String filename, String password, Context context) throws NullPointerException {
         if (directory == null) {
             throw new NullPointerException("Null is invalid URI");
         }
+        if (context == null) {
+            throw new NullPointerException("Null is invalid context");
+        }
+        if (filename == null) {
+            throw new NullPointerException("Null is invalid filename");
+        }
         XmlBackupCreator xmlBackupCreator = new XmlBackupCreator(directory, filename, password);
-        xmlBackupCreator.createBackup();
+        try {
+            xmlBackupCreator.createBackup();
+        }
+        catch (BackupException e) {
+            Toast.makeText(context, context.getString(R.string.settings_backup_error), Toast.LENGTH_LONG).show();
+        }
+        Toast.makeText(context, context.getString(R.string.settings_backup_success), Toast.LENGTH_SHORT).show();
     }
 
 

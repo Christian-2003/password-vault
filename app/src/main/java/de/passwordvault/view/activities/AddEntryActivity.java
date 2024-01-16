@@ -9,14 +9,17 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.io.Serializable;
+
 import de.passwordvault.R;
 import de.passwordvault.model.entry.EntryHandle;
 import de.passwordvault.viewmodel.activities.AddEntryViewModel;
 import de.passwordvault.view.utils.DetailViewBuilder;
 import de.passwordvault.model.detail.Detail;
 import de.passwordvault.model.entry.Entry;
-import de.passwordvault.view.dialogs.ConfirmDeleteDetailDialogFragment;
-import de.passwordvault.view.dialogs.DetailDialogFragment;
+import de.passwordvault.view.dialogs.ConfirmDeleteDetailDialog;
+import de.passwordvault.view.dialogs.DetailDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
 
 
@@ -26,7 +29,7 @@ import de.passwordvault.view.utils.DialogCallbackListener;
  * @author  Christian-2003
  * @version 3.2.0
  */
-public class AddEntryActivity extends AppCompatActivity implements DialogCallbackListener {
+public class AddEntryActivity extends AppCompatActivity implements DialogCallbackListener, Serializable {
 
     /**
      * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} of this activity.
@@ -79,7 +82,11 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
 
         //Add ClickListener to add new detail:
         findViewById(R.id.add_entry_button_add_detail).setOnClickListener(view -> {
-            DetailDialogFragment dialog = new DetailDialogFragment(null);
+
+            DetailDialog dialog = new DetailDialog();
+            Bundle dialogArgs = new Bundle();
+            dialogArgs.putSerializable(DetailDialog.KEY_CALLBACK_LISTENER, AddEntryActivity.this);
+            dialog.setArguments(dialogArgs);
             dialog.show(getSupportFragmentManager(), "");
         });
 
@@ -108,13 +115,21 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
         ImageButton deleteButton = created.findViewById(R.id.entry_detail_delete_button);
         deleteButton.setVisibility(View.VISIBLE);
         deleteButton.setOnClickListener(view -> {
-            ConfirmDeleteDetailDialogFragment dialog = new ConfirmDeleteDetailDialogFragment(detail);
+            ConfirmDeleteDetailDialog dialog = new ConfirmDeleteDetailDialog();
+            Bundle dialogArgs = new Bundle();
+            dialogArgs.putSerializable(ConfirmDeleteDetailDialog.KEY_CALLBACK_LISTENER, AddEntryActivity.this);
+            dialogArgs.putSerializable(ConfirmDeleteDetailDialog.KEY_DETAIL, detail);
+            dialog.setArguments(dialogArgs);
             dialog.show(getSupportFragmentManager(), null);
         });
         ImageButton editButton = created.findViewById(R.id.entry_detail_edit_button);
         editButton.setVisibility(View.VISIBLE);
         editButton.setOnClickListener(view -> {
-            DetailDialogFragment dialog = new DetailDialogFragment(detail);
+            DetailDialog dialog = new DetailDialog();
+            Bundle dialogArgs = new Bundle();
+            dialogArgs.putSerializable(DetailDialog.KEY_CALLBACK_LISTENER, AddEntryActivity.this);
+            dialogArgs.putSerializable(DetailDialog.KEY_DETAIL, detail);
+            dialog.setArguments(dialogArgs);
             dialog.show(getSupportFragmentManager(), "");
         });
 
@@ -130,9 +145,9 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
      * @param dialog    Dialog which called the method.
      */
     public void onPositiveCallback(DialogFragment dialog) {
-        if (dialog instanceof DetailDialogFragment) {
+        if (dialog instanceof DetailDialog) {
             //New detail shall be added:
-            DetailDialogFragment detailDialog = (DetailDialogFragment)dialog;
+            DetailDialog detailDialog = (DetailDialog)dialog;
             Detail edited = detailDialog.getDetail();
             Entry entry = viewModel.getEntry();
             if (viewModel.getEntry().contains(edited.getUuid())) {
@@ -143,8 +158,8 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
             }
             viewModel.setEntry(entry);
         }
-        else if (dialog instanceof ConfirmDeleteDetailDialogFragment) {
-            ConfirmDeleteDetailDialogFragment deleteDialog = (ConfirmDeleteDetailDialogFragment)dialog;
+        else if (dialog instanceof ConfirmDeleteDetailDialog) {
+            ConfirmDeleteDetailDialog deleteDialog = (ConfirmDeleteDetailDialog)dialog;
             Entry entry = viewModel.getEntry();
             entry.remove(deleteDialog.getUuid());
             viewModel.setEntry(entry);
