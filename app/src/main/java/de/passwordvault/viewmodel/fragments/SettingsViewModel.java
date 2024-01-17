@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.widget.Toast;
 import androidx.lifecycle.ViewModel;
 import de.passwordvault.R;
+import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.storage.backup.BackupException;
 import de.passwordvault.model.storage.backup.XmlBackupCreator;
 import de.passwordvault.model.storage.backup.XmlBackupRestorer;
@@ -23,7 +24,7 @@ import de.passwordvault.view.fragments.SettingsFragment;
  * @version 3.2.0
  */
 public class SettingsViewModel extends ViewModel {
-
+    
     /**
      * Method creates an XML backup of the application data. The created backup will be encrypted if
      * the passed password is not {@code null}.
@@ -49,9 +50,9 @@ public class SettingsViewModel extends ViewModel {
             xmlBackupCreator.createBackup();
         }
         catch (BackupException e) {
-            Toast.makeText(context, context.getString(R.string.settings_backup_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.settings_security_backup_error), Toast.LENGTH_LONG).show();
         }
-        Toast.makeText(context, context.getString(R.string.settings_backup_success), Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, context.getString(R.string.settings_security_backup_success), Toast.LENGTH_SHORT).show();
     }
 
 
@@ -98,19 +99,19 @@ public class SettingsViewModel extends ViewModel {
         }
         catch (BackupException e) {
             e.printStackTrace();
-            Toast.makeText(context, context.getString(R.string.settings_restoration_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.settings_security_restore_error), Toast.LENGTH_LONG).show();
             return;
         }
         catch (XmlException e) {
             e.printStackTrace();
-            Toast.makeText(context, context.getString(R.string.settings_restoration_xml_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.settings_security_restore_error_xml), Toast.LENGTH_LONG).show();
             return;
         }
         catch (EncryptionException e) {
-            Toast.makeText(context, context.getString(R.string.settings_restoration_encryption_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.settings_security_restore_error_encryption), Toast.LENGTH_LONG).show();
             return;
         }
-        Toast.makeText(context, context.getString(R.string.settings_restoration_success), Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, context.getString(R.string.settings_security_restore_success), Toast.LENGTH_SHORT).show();
     }
 
 }

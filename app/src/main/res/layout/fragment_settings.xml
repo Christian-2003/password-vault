@@ -12,7 +12,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Backup-related settings -->
+
+
+        <!-- Security-related settings -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,7 +24,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_backup"
+                android:text="@string/settings_security"
                 style="@style/highlight_text"/>
 
         </LinearLayout>
@@ -39,7 +41,110 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:id="@+id/settings_xml_data_backup_clickable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_security_login"
+                        style="@style/default_text"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_security_login_info"
+                        style="@style/variant_text"/>
+
+                </LinearLayout>
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/settings_security_login_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
+
+            <View
+                style="@style/divider"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_security_biometrics"
+                        style="@style/default_text"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_security_biometrics_info"
+                        style="@style/variant_text"/>
+
+                </LinearLayout>
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/settings_security_biometrics_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
+
+            <View
+                style="@style/divider"/>
+
+            <LinearLayout
+                android:id="@+id/settings_security_password_clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_security_password"
+                    style="@style/default_text"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_security_password_info"
+                    style="@style/variant_text"/>
+
+            </LinearLayout>
+
+            <View
+                style="@style/divider"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/settings_security_backup_clickable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -51,19 +156,19 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/settings_create_data_backup"
+                        android:text="@string/settings_security_backup"
                         style="@style/default_text"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/settings_create_xml_backup"
+                        android:text="@string/settings_security_backup_info"
                         style="@style/variant_text"/>
 
                 </LinearLayout>
 
                 <ImageButton
-                    android:id="@+id/settings_xml_data_backup_info"
+                    android:id="@+id/settings_security_backup_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_info"
@@ -83,7 +188,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:id="@+id/settings_xml_data_restoration_clickable"
+                    android:id="@+id/settings_security_restore"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -95,19 +200,19 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/settings_restore_data_backup"
+                        android:text="@string/settings_security_restore"
                         style="@style/default_text"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/settings_restore_xml_backup"
+                        android:text="@string/settings_security_restore_info"
                         style="@style/variant_text"/>
 
                 </LinearLayout>
 
                 <ImageButton
-                    android:id="@+id/settings_xml_data_restoration_info"
+                    android:id="@+id/settings_security_restore_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_info"
@@ -167,7 +272,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/settings_export_html_readable"
+                        android:text="@string/settings_export_html_info"
                         style="@style/variant_text"/>
 
                 </LinearLayout>
@@ -221,13 +326,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/settings_license"
+                    android:text="@string/settings_about_license"
                     style="@style/default_text"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/settings_license_notice"
+                    android:text="@string/settings_about_license_info"
                     style="@style/variant_text"/>
 
             </LinearLayout>
@@ -247,13 +352,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/settings_used_software"
+                    android:text="@string/settings_about_dependencies"
                     style="@style/default_text"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/settings_see_licenses"
+                    android:text="@string/settings_about_dependencies_info"
                     style="@style/variant_text"/>
 
             </LinearLayout>
@@ -273,13 +378,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/settings_open_source"
+                    android:text="@string/settings_about_github"
                     style="@style/default_text"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/settings_open_github"
+                    android:text="@string/settings_about_github_info"
                     style="@style/variant_text"/>
 
             </LinearLayout>
@@ -299,13 +404,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/settings_bug_report"
+                    android:text="@string/settings_about_bug"
                     style="@style/default_text"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/settings_open_github_issues"
+                    android:text="@string/settings_about_bug_info"
                     style="@style/variant_text"/>
 
             </LinearLayout>
@@ -325,13 +430,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/settings_update"
+                    android:text="@string/settings_about_update"
                     style="@style/default_text"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/settings_open_github_releases"
+                    android:text="@string/settings_about_update_info"
                     style="@style/variant_text"/>
 
             </LinearLayout>

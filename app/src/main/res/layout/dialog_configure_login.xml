@@ -2,7 +2,6 @@
 
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/default_padding">
@@ -13,26 +12,31 @@
         android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/dialog_restore_password_hint"
+            android:id="@+id/dialog_configure_login_password_hint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_password">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/dialog_restore_password"
+                android:id="@+id/dialog_configure_login_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:autofillHints="false"/>
-
+                android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dialog_configure_login_confirm_hint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/settings_security_restore_password_info"
-            style="@style/variant_text"
-            android:layout_marginTop="@dimen/default_margin"/>
+            android:hint="@string/hint_confirm_password">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/dialog_configure_login_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 

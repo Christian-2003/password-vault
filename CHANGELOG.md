@@ -2,7 +2,7 @@
 
 # 3.2.0 (XXXX-XX-XX)
 ### Release Highlights
-Backups can now be encrypted through a password.
+Backups can now be encrypted through a password. To increase data security, an optional login into the application with a password can be activated.
 
 ### Featrues
 * Removed setting to change UI mode, since this did not work.
@@ -13,6 +13,10 @@ Backups can now be encrypted through a password.
 * Backups can now be encrypted using a password.
 * Label of `DetailType` is now loaded from resources whenever it is accessed in order for the label to be dynamically changed when device's language changes while the app is running.
 * Dialogs are no longer retained through the deprecated `DialogFragment.setRetainInstance(true)`-method. Instead, dialogs use a ViewModel to retain their state.
+* Optional login to the application with a password.
+* Password for optional login can be reset in settings.
+* Reordered items in `SettingsFragment`.
+* Refactoring of resource-strings to match initial naming pattern.
 
 <br>
 

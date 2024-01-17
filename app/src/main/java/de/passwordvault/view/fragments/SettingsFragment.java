@@ -15,10 +15,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
+import com.google.android.material.materialswitch.MaterialSwitch;
+
 import java.io.Serializable;
 import java.util.Objects;
 import de.passwordvault.R;
+import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.storage.backup.XmlBackupRestorer;
+import de.passwordvault.view.dialogs.ChangePasswordDialog;
+import de.passwordvault.view.dialogs.ConfigureLoginDialog;
 import de.passwordvault.view.dialogs.CreateBackupDialog;
 import de.passwordvault.view.dialogs.RestoreBackupDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
@@ -59,6 +64,11 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
      */
     private SettingsViewModel viewModel;
 
+    /**
+     * Attribute stores the inflated view of the fragment.
+     */
+    private View view;
+
 
     /**
      * Default constructor instantiates a new SettingsFragment.
@@ -90,21 +100,25 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View inflated = inflater.inflate(R.layout.fragment_settings, container, false);
+        view = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        inflated.findViewById(R.id.settings_xml_data_backup_clickable).setOnClickListener(view -> selectDirectory(SELECT_DIRECTORY_TO_CREATE_BACKUP));
-        inflated.findViewById(R.id.settings_xml_data_backup_info).setOnClickListener(view -> showInfoDialog(R.string.settings_create_data_backup, R.string.settings_xml_backup_info));
-        inflated.findViewById(R.id.settings_xml_data_restoration_clickable).setOnClickListener(view -> selectFile(SELECT_FILE_TO_RESTORE_BACKUP, "text/plain"));
-        inflated.findViewById(R.id.settings_xml_data_restoration_info).setOnClickListener(view -> showInfoDialog(R.string.settings_restore_data_backup, R.string.settings_xml_restoration_info));
-        inflated.findViewById(R.id.settings_used_software_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), OssLicensesMenuActivity.class)));
-        inflated.findViewById(R.id.settings_license_clickable).setOnClickListener(view -> showInfoDialog(R.string.settings_license_notice, R.string.app_license));
-        inflated.findViewById(R.id.settings_open_source_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_github_link)));
-        inflated.findViewById(R.id.settings_bug_report_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_github_issues_link)));
-        inflated.findViewById(R.id.settings_update_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_github_releases_link)));
-        inflated.findViewById(R.id.settings_html_export_clickable).setOnClickListener(view -> createFile(SELECT_FILE_TO_EXPORT_TO_HTML, "text/html", getString(R.string.settings_default_export_name)));
-        inflated.findViewById(R.id.settings_html_export_info).setOnClickListener(view -> showInfoDialog(R.string.settings_export_html, R.string.settings_export_html_info));
+        ((MaterialSwitch)view.findViewById(R.id.settings_security_login_switch)).setChecked(Account.getInstance().hasPassword());
+        view.findViewById(R.id.settings_security_login_switch).setOnClickListener(this::configureLogin);
+        view.findViewById(R.id.settings_security_password_clickable).setOnClickListener(view -> changePassword());
+        view.findViewById(R.id.settings_security_biometrics_switch).setActivated(Account.getInstance().useBiometrics());
+        view.findViewById(R.id.settings_security_backup_clickable).setOnClickListener(view -> selectDirectory(SELECT_DIRECTORY_TO_CREATE_BACKUP));
+        view.findViewById(R.id.settings_security_backup_button).setOnClickListener(view -> showInfoDialog(R.string.settings_security_backup, R.string.settings_security_backup_info_extended));
+        view.findViewById(R.id.settings_security_restore).setOnClickListener(view -> selectFile(SELECT_FILE_TO_RESTORE_BACKUP, "text/plain"));
+        view.findViewById(R.id.settings_security_restore_button).setOnClickListener(view -> showInfoDialog(R.string.settings_security_restore, R.string.settings_security_restore_info_extended));
+        view.findViewById(R.id.settings_used_software_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), OssLicensesMenuActivity.class)));
+        view.findViewById(R.id.settings_license_clickable).setOnClickListener(view -> showInfoDialog(R.string.settings_about_license_info, R.string.app_license));
+        view.findViewById(R.id.settings_open_source_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_about_github_link)));
+        view.findViewById(R.id.settings_bug_report_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_about_bug_link)));
+        view.findViewById(R.id.settings_update_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_about_update_link)));
+        view.findViewById(R.id.settings_html_export_clickable).setOnClickListener(view -> createFile(SELECT_FILE_TO_EXPORT_TO_HTML, "text/html", getString(R.string.settings_export_file)));
+        view.findViewById(R.id.settings_html_export_info).setOnClickListener(view -> showInfoDialog(R.string.settings_export_html, R.string.settings_export_html_info_extended));
 
-        return inflated;
+        return view;
     }
 
 
@@ -179,6 +193,9 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
             RestoreBackupDialog dialog = (RestoreBackupDialog)fragment;
             viewModel.restoreXmlBackup(dialog.getFile(), dialog.getPassword(), getContext());
         }
+        else if (fragment instanceof ConfigureLoginDialog) {
+            Account.getInstance().save();
+        }
     }
 
 
@@ -189,7 +206,9 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
      */
     @Override
     public void onNegativeCallback(DialogFragment fragment) {
-
+        if (fragment instanceof ConfigureLoginDialog) {
+            ((MaterialSwitch)view.findViewById(R.id.settings_security_login_switch)).setChecked(false);
+        }
     }
 
 
@@ -257,6 +276,42 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
     private void openUrl(String url) {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(browserIntent);
+    }
+
+
+    /**
+     * Method shows the dialog to enable the login of the application.
+     *
+     * @param view  MaterialSwitch which triggered this method.
+     */
+    private void configureLogin(View view) {
+        if (view == null) {
+            return;
+        }
+        MaterialSwitch materialSwitch;
+        try {
+            materialSwitch = (MaterialSwitch) view;
+        }
+        catch (ClassCastException e) {
+            return;
+        }
+        if (!materialSwitch.isChecked()) {
+            //Inverted logic -> When method is called, the switch just has been checked.
+            Account.getInstance().removeAccount();
+            Account.getInstance().save();
+            return;
+        }
+        ConfigureLoginDialog dialog = new ConfigureLoginDialog();
+        Bundle args = new Bundle();
+        args.putSerializable(ConfigureLoginDialog.KEY_CALLBACK_LISTENER, this);
+        dialog.setArguments(args);
+        dialog.show(requireActivity().getSupportFragmentManager(), "");
+    }
+
+
+    private void changePassword() {
+        ChangePasswordDialog dialog = new ChangePasswordDialog();
+        dialog.show(requireActivity().getSupportFragmentManager(), "");
     }
 
 }

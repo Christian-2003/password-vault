@@ -3,13 +3,16 @@
     <!-- Formats -->
     <string name="date_format">dd.MM.yyyy</string>
 
+
     <!-- App information -->
     <string name="app_description">Speichere Kontodaten sicher auf deinem Gerät, damit diese jederzeit und überall abgreifbar sind.</string>
+
 
     <!-- Bottom navigation -->
     <string name="bottom_navigation_home">Start</string>
     <string name="bottom_navigation_entries">Konten</string>
     <string name="bottom_navigation_settings">Einstellungen</string>
+
 
     <!-- Menu to sort entries list -->
     <string name="sort_entries_not_sorted">Nicht Sortiert</string>
@@ -18,53 +21,61 @@
     <string name="sort_entries_created_ascending">Erstellt: Aufsteigend</string>
     <string name="sort_entries_created_descending">Erstellt: Absteigend</string>
 
+
     <!-- Entries fragment -->
     <string name="entries_list">Einträge</string>
+
 
     <!-- Home fragment -->
     <string name="home">Start</string>
     <string name="home_button_view_accounts">Konten anzeigen</string>
     <string name="home_button_add_account">Konto hinzufügen</string>
 
+
     <!-- Settings -->
-    <string name="settings_appearance">Ansicht</string>
-    <string name="settings_backup">Backup</string>
-    <string name="settings_about">Über</string>
+    <string name="settings_security">Sicherheit</string>
+    <string name="settings_security_login">App-Login</string>
+    <string name="settings_security_login_info">Verlange Password zum Öffnen der App</string>
+    <string name="settings_security_password">Passwort ändern</string>
+    <string name="settings_security_password_info">Passwort zum Einloggen ändern</string>
+    <string name="settings_security_biometrics">Biometrie verwenden</string>
+    <string name="settings_security_biometrics_info">Biometrie zum EInloggen verwenden</string>
+    <string name="settings_security_backup">Backup erstellen</string>
+    <string name="settings_security_backup_info">(Verschlüsseltes) Backup erstellen</string>
+    <string name="settings_security_backup_info_extended">Erstellen Sie ein (optional verschlüsseltes) Backup Ihrer Daten. Das Backup wird nicht gelöscht, wenn die App deinstalliert wird.</string>
+    <string name="settings_security_backup_password_info">Wenn Sie ein Passwort eingeben, wird das Backup verschlüsselt. In diesem Fall wird das eingegebene Passwort für die Wiederherstellung benötigt.</string>
+    <string name="settings_security_backup_file">pv_backup.txt</string>
+    <string name="settings_security_backup_error">Backup konnte nicht erstellt werden</string>
+    <string name="settings_security_backup_success">Backup wurde erfolgreich erstellt</string>
+    <string name="settings_security_restore">Backup wiederherstellen</string>
+    <string name="settings_security_restore_info">(Verschlüsseltes) Backup wiederherstellen</string>
+    <string name="settings_security_restore_info_extended">Stellen Sie ein (optional verschlüsseltes) Backup Ihrer Daten wieder her.</string>
+    <string name="settings_security_restore_password_info">Bitte geben Sie das Passwort ein, was zum Verschlüsseln des Backups verwendet wurde.</string>
+    <string name="settings_security_restore_error">Das Backup konnte nicht wiederhergestellt werden</string>
+    <string name="settings_security_restore_error_xml">Backup-Datei korrput</string>
+    <string name="settings_security_restore_error_encryption">Ungültiges Passwort</string>
+    <string name="settings_security_restore_success">Backup wurde erfolgreich wiederhergestellt</string>
+
     <string name="settings_export">Exportieren</string>
-    <string name="settings_create_data_backup">Backup erstellen</string>
-    <string name="settings_restore_data_backup">Backup wiederherstellen</string>
-    <string name="settings_create_xml_backup">XML Backup erstellen</string>
-    <string name="settings_restore_xml_backup">XML Backup wiederherstellen</string>
-    <string name="settings_default_backup_name">pv_backup.txt</string>
-    <string name="settings_enter_password">Passwort</string>
-    <string name="settings_confirm_password">Passwort wiederholen</string>
-    <string name="settings_optional_info">(optional)</string>
-    <string name="settings_backup_password_info">Bitte merken Sie sich das Password, da es zur Wiederherstellung des Backups benötigt wird. Wenn Sie kein Passwort eingeben, wird das Backup nicht verschlüsselt werden.</string>
-    <string name="settings_backup_restore_with_password_info">Das Backup ist mit einem Password verschlüsselt. Ohne das Password kann das Backup nicht wiederhergestellt werden.</string>
-    <string name="settings_backup_error">Backup konnte nicht erstellt werden</string>
-    <string name="settings_backup_success">Backup wurde erfolgreich erstellt</string>
-    <string name="settings_restoration_error">Backup konnte nicht wiederhergestellt werden</string>
-    <string name="settings_restoration_xml_error">Backup-Datei korrupt</string>
-    <string name="settings_restoration_encryption_error">Falsches Passwort</string>
-    <string name="settings_restoration_success">Backup wurde erfolgreich wiederhergestellt</string>
-    <string name="settings_xml_backup_info">Erstelle ein Backup welches alle gespeicherten Konten beinhaltet. Das erstellte Backup wird bei Deinstallation der Anwendung nicht gelöscht. Allerdings wird das Backup NICHT verschlüsselt.</string>
-    <string name="settings_xml_restoration_info">Stelle ein unverschlüsseltes Backup wieder her.</string>
-    <string name="settings_export_html">In HTML exportieren</string>
-    <string name="settings_export_html_info">Exportiere deine Daten in ein lesbares HTML-Format. Bitte beachten Sie, dass sämtliche exportierte Daten nicht verschlüsselt werden.</string>
-    <string name="settings_export_html_readable">In lesbares HTML-Format exportieren</string>
-    <string name="settings_default_export_name">kontodaten.html</string>
+    <string name="settings_export_html">Daten exportieren</string>
+    <string name="settings_export_html_info">Daten in ein lesbares HTML-Format exportieren</string>
+    <string name="settings_export_html_info_extended">Exportieren Sie Ihre Daten in ein lesbares (unverschlüsseltes) HTML-Format.</string>
+    <string name="settings_export_file">kontodaten.html</string>
     <string name="settings_export_error">Daten konnten nicht exportiert werden</string>
-    <string name="settings_export_success">Daten wurden erfolgreich exportiert</string>
-    <string name="settings_license">Lizenz</string>
-    <string name="settings_license_notice">MIT Lizenz</string>
-    <string name="settings_used_software">Verwendete Software</string>
-    <string name="settings_see_licenses">Lizenzen ansehen</string>
-    <string name="settings_open_source">Open Source</string>
-    <string name="settings_open_github">GitHub-Repository öffnen</string>
-    <string name="settings_bug_report">Fehler Melden</string>
-    <string name="settings_open_github_issues">Fehler auf GitHub melden</string>
-    <string name="settings_update">Software aktualisieren</string>
-    <string name="settings_open_github_releases">Neue Version herunterladen</string>
+    <string name="settings_export_success">Daten wurde erfolgreich exportiert</string>
+
+    <string name="settings_about">Über</string>
+    <string name="settings_about_license">MIT License</string>
+    <string name="settings_about_license_info">Lizenz anzeigen (Nur in Englisch)</string>
+    <string name="settings_about_dependencies">Verwendete Software</string>
+    <string name="settings_about_dependencies_info">Verwendete Software anzeigen</string>
+    <string name="settings_about_github">GitHub</string>
+    <string name="settings_about_github_info">App auf GitHub öffnen</string>
+    <string name="settings_about_bug">Fehler melden</string>
+    <string name="settings_about_bug_info">Fehler auf GitHub melden</string>
+    <string name="settings_about_update">Software aktualisieren</string>
+    <string name="settings_about_update_info">Neueste Version herunterladen</string>
+
 
     <!-- Entry activity -->
     <string name="entry_name">Name</string>
@@ -77,6 +88,11 @@
     <string name="entry_hidden_details_info">Versteckte Informationen</string>
     <string name="entry_additional_info">Zusätzliches</string>
 
+
+    <!-- Login activity -->
+    <string name="login_info">Melden Sie sich in der App an</string>
+
+
     <!-- Detail dialog -->
     <string name="detail_dialog_title_edit">Information bearbeiten</string>
     <string name="detail_dialog_title_add">Information hinzufügen</string>
@@ -87,8 +103,10 @@
     <string name="detail_dialog_encrypted">Verschlüsselt</string>
     <string name="detail_dialog_visible">Sichtbar</string>
 
+
     <!-- ConfirmDelete dialog -->
     <string name="confirm_delete_dialog_confirm">Bestätige Löschung von</string>
+
 
     <!-- Buttons -->
     <string name="button_show_more">Mehr anzeigen</string>
@@ -98,6 +116,9 @@
     <string name="button_save">Speichern</string>
     <string name="button_cancel">Abbrechen</string>
     <string name="button_ok">Okay</string>
+    <string name="button_login">Einloggen</string>
+    <string name="button_biometrics">Biometrie verwenden</string>
+
 
     <!-- Placeholder -->
     <string name="placeholder_name">Name</string>
@@ -107,6 +128,7 @@
     <string name="placeholder_content">Inhalt</string>
     <string name="placeholder_security_score">0/0</string>
 
+
     <!-- Input hints -->
     <string name="hint_search">Suchen…</string>
     <string name="hint_password">Passwort</string>
@@ -114,9 +136,14 @@
     <string name="hint_filename">Dateiname</string>
     <string name="hint_directory">Ordner</string>
     <string name="hint_optional">(Optional)</string>
+    <string name="hint_current_password">Aktuelles Passwort</string>
+    <string name="hint_new_password">Neues Passwort</string>
+    <string name="hint_confirm_new_password">Neues Passwort wiederholen</string>
+
 
     <!-- Password / Passcode security -->
     <string name="password_security_score">Passwortsicherheit:</string>
+
 
     <!-- Detail type strings -->
     <string name="detail_text">Text</string>
@@ -128,18 +155,12 @@
     <string name="detail_password">Passwort</string>
     <string name="detail_url">URL</string>
 
+
     <!-- Error messages that are sent to the user -->
     <string name="error_cannot_show_entry">Eintrag kann nicht angezeigt werden.</string>
     <string name="error_empty_input">Dieses Feld darf nicht leer sein.</string>
+    <string name="error_passwords_incorrect">Falsches Passwort.</string>
     <string name="error_passwords_not_matching">Passwörter stimmen nicht überein.</string>
-
-    <!-- App License -->
-    <string name="app_license">Copyright © 2023 Christian-2003
-Jedem, der eine Kopie dieser Software und der zugehörigen Dokumentationsdateien (die „Software“) erhält, wird hiermit kostenlos die Erlaubnis erteilt, ohne Einschränkung mit der Software zu handeln, einschließlich und ohne Einschränkung der Rechte zur Nutzung, zum Kopieren, Ändern, Zusammenführen, Veröffentlichen, Verteilen, Unterlizenzieren und/oder Verkaufen von Kopien der Software, und Personen, denen die Software zur Verfügung gestellt wird, dies unter den folgenden Bedingungen zu gestatten:
-
-Der obige Urheberrechtshinweis und dieser Genehmigungshinweis müssen in allen Kopien oder wesentlichen Teilen der Software enthalten sein.
-
-DIE SOFTWARE WIRD OHNE MÄNGELGEWÄHR UND OHNE JEGLICHE AUSDRÜCKLICHE ODER STILLSCHWEIGENDE GEWÄHRLEISTUNG, EINSCHLIEẞLICH, ABER NICHT BESCHRÄNKT AUF DIE GEWÄHRLEISTUNG DER MARKTGÄNGIGKEIT, DER EIGNUNG FÜR EINEN BESTIMMTEN ZWECK UND DER NICHTVERLETZUNG VON RECHTEN DRITTER, ZUR VERFÜGUNG GESTELLT. DIE AUTOREN ODER URHEBERRECHTSINHABER SIND IN KEINEM FALL HAFTBAR FÜR ANSPRÜCHE, SCHÄDEN ODER ANDERE VERPFLICHTUNGEN, OB IN EINER VERTRAGS- ODER HAFTUNGSKLAGE, EINER UNERLAUBTEN HANDLUNG ODER ANDERWEITIG, DIE SICH AUS ODER IN VERBINDUNG MIT DER SOFTWARE ODER DER NUTZUNG ODER ANDEREN GESCHÄFTEN MIT DER SOFTWARE ERGEBEN.</string>
 
     <!-- HTML export -->
     <string name="html_export_document_title">Exportierte Daten</string>

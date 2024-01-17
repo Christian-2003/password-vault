@@ -3,14 +3,17 @@
     <!-- Formats -->
     <string name="date_format">MM/dd/yyyy</string>
 
+
     <!-- App information -->
     <string name="app_name" translatable="false">PasswordVault</string>
     <string name="app_description">Store your account data safely on your device to access at any place and at all times.</string>
+
 
     <!-- Bottom navigation -->
     <string name="bottom_navigation_home">Home</string>
     <string name="bottom_navigation_entries">Accounts</string>
     <string name="bottom_navigation_settings">Settings</string>
+
 
     <!-- Menu to sort entries list -->
     <string name="sort_entries_not_sorted">Not Sorted</string>
@@ -19,56 +22,64 @@
     <string name="sort_entries_created_ascending">Created: Ascending</string>
     <string name="sort_entries_created_descending">Created: Descending</string>
 
+
     <!-- Entries fragment -->
     <string name="entries_list">Entries</string>
+
 
     <!-- Home fragment -->
     <string name="home">Home</string>
     <string name="home_button_view_accounts">Show Accounts</string>
     <string name="home_button_add_account">Add Account</string>
 
+
     <!-- Settings -->
-    <string name="settings_appearance">Appearance</string>
-    <string name="settings_backup">Backup</string>
+    <string name="settings_security">Security</string>
+    <string name="settings_security_login">Require login</string>
+    <string name="settings_security_login_info">Require password to open app</string>
+    <string name="settings_security_password">Change password</string>
+    <string name="settings_security_password_info">Change password for login</string>
+    <string name="settings_security_biometrics">Use biometrics</string>
+    <string name="settings_security_biometrics_info">Use biometrics for login</string>
+    <string name="settings_security_backup">Create backup</string>
+    <string name="settings_security_backup_info">Create (encrypted) backup of your data</string>
+    <string name="settings_security_backup_info_extended">Create an (optionally encrypted) backup of your data. The backup will not be removed when the app is uninstalled.</string>
+    <string name="settings_security_backup_password_info">If you enter a password, the backup will be encrypted. In this case, the entered password is required when the backup shall be restored.</string>
+    <string name="settings_security_backup_file">pv_backup.txt</string>
+    <string name="settings_security_backup_error">Could not create backup</string>
+    <string name="settings_security_backup_success">Successfully created backup</string>
+    <string name="settings_security_restore">Restore backup</string>
+    <string name="settings_security_restore_info">Restore (encrypted) backup of your data</string>
+    <string name="settings_security_restore_info_extended">Restore an (optionally encrypted) backup of your data.</string>
+    <string name="settings_security_restore_password_info">Please enter the password which was used to encrypt the backup.</string>
+    <string name="settings_security_restore_error">Could not restore backup</string>
+    <string name="settings_security_restore_error_xml">Backup file corrupt</string>
+    <string name="settings_security_restore_error_encryption">Invalid password</string>
+    <string name="settings_security_restore_success">Successfully restored backup</string>
+
     <string name="settings_export">Export</string>
-    <string name="settings_about">About</string>
-    <string name="settings_create_data_backup">Backup data</string>
-    <string name="settings_restore_data_backup">Restore backup</string>
-    <string name="settings_create_xml_backup">Create XML backup</string>
-    <string name="settings_restore_xml_backup">Restore XML backup</string>
-    <string name="settings_default_backup_name">pv_backup.txt</string>
-    <string name="settings_enter_password">Password</string>
-    <string name="settings_confirm_password">Confirm password</string>
-    <string name="settings_optional_info">(Optional)</string>
-    <string name="settings_backup_password_info">Please remember the password, as it is needed when the backup shall be restored. If you do not enter a password, the backup will be unencrypted.</string>
-    <string name="settings_backup_restore_with_password_info">The backup is encrypted through a password. Without the password, the backup cannot be restored.</string>
-    <string name="settings_backup_error">Could not create backup</string>
-    <string name="settings_backup_success">Successfully created backup</string>
-    <string name="settings_restoration_error">Could not restore backup</string>
-    <string name="settings_restoration_xml_error">Backup file corrupt</string>
-    <string name="settings_restoration_encryption_error">Invalid password</string>
-    <string name="settings_restoration_success">Successfully restored backup</string>
-    <string name="settings_xml_backup_info">Create a backup which will contain all stored account data. The created backup will not be erased when the application is uninstalled. However, the backed up data will NOT be encrypted.</string>
-    <string name="settings_xml_restoration_info">Restore a backup which contains unencrypted account data.</string>
-    <string name="settings_export_html">Export to HTML</string>
-    <string name="settings_export_html_info">Export your data into a readable HTML format. Please note that any exported data is NOT encrypted.</string>
-    <string name="settings_export_html_readable">Export to readable HTML format</string>
-    <string name="settings_default_export_name">account_data.html</string>
+    <string name="settings_export_html">Export data</string>
+    <string name="settings_export_html_info">Export to readable HTML format</string>
+    <string name="settings_export_html_info_extended">Export your data into a readable (unencrypted) HTML format</string>
+    <string name="settings_export_file">account_data.html</string>
     <string name="settings_export_error">Could not export data</string>
     <string name="settings_export_success">Successfully exported data</string>
-    <string name="settings_license">License</string>
-    <string name="settings_license_notice">MIT License</string>
-    <string name="settings_used_software">Used Software</string>
-    <string name="settings_see_licenses">See Licenses</string>
-    <string name="settings_open_source">Open Source</string>
-    <string name="settings_open_github">Open GitHub repository</string>
-    <string name="settings_github_link" translatable="false">https://github.com/Christian-2003/password-vault</string>
-    <string name="settings_bug_report">Report Bugs</string>
-    <string name="settings_open_github_issues">Report Bug on GitHub</string>
-    <string name="settings_github_issues_link" translatable="false">https://github.com/Christian-2003/password-vault/issues</string>
-    <string name="settings_update">Software Update</string>
-    <string name="settings_open_github_releases">Download newest release</string>
-    <string name="settings_github_releases_link" translatable="false">https://github.com/Christian-2003/password-vault/releases/latest</string>
+
+    <string name="settings_about">About</string>
+    <string name="settings_about_license">MIT License</string>
+    <string name="settings_about_license_info">Show license</string>
+    <string name="settings_about_dependencies">Used Software</string>
+    <string name="settings_about_dependencies_info">Show used software</string>
+    <string name="settings_about_github">GitHub</string>
+    <string name="settings_about_github_info">Open app on GitHub</string>
+    <string name="settings_about_github_link" translatable="false">https://github.com/Christian-2003/password-vault</string>
+    <string name="settings_about_bug">Report Bugs</string>
+    <string name="settings_about_bug_info">Report Bug on GitHub</string>
+    <string name="settings_about_bug_link" translatable="false">https://github.com/Christian-2003/password-vault/issues</string>
+    <string name="settings_about_update">Software Update</string>
+    <string name="settings_about_update_info">Download newest release</string>
+    <string name="settings_about_update_link" translatable="false">https://github.com/Christian-2003/password-vault/releases/latest</string>
+
 
     <!-- Entry activity -->
     <string name="entry_name">Name</string>
@@ -81,6 +92,11 @@
     <string name="entry_hidden_details_info">Hidden Details</string>
     <string name="entry_additional_info">Additional</string>
 
+
+    <!-- Login activity -->
+    <string name="login_info">Login to the app</string>
+
+
     <!-- Detail dialog -->
     <string name="detail_dialog_title_edit">Edit Detail</string>
     <string name="detail_dialog_title_add">Add Detail</string>
@@ -91,8 +107,10 @@
     <string name="detail_dialog_encrypted">Encrypted</string>
     <string name="detail_dialog_visible">Visible</string>
 
+
     <!-- ConfirmDelete dialog -->
     <string name="confirm_delete_dialog_confirm">Confirm deletion of</string>
+
 
     <!-- Buttons -->
     <string name="button_show_more">Show more</string>
@@ -102,6 +120,9 @@
     <string name="button_save">Save</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_ok">Ok</string>
+    <string name="button_login">Login</string>
+    <string name="button_biometrics">Use biometrics</string>
+
 
     <!-- Placeholder -->
     <string name="placeholder_name">Name</string>
@@ -111,6 +132,7 @@
     <string name="placeholder_content">Content</string>
     <string name="placeholder_security_score">0/0</string>
 
+
     <!-- Input hints -->
     <string name="hint_search">Search…</string>
     <string name="hint_password">Password</string>
@@ -118,9 +140,14 @@
     <string name="hint_filename">Filename</string>
     <string name="hint_directory">Directory</string>
     <string name="hint_optional">(Optional)</string>
+    <string name="hint_current_password">Current password</string>
+    <string name="hint_new_password">New password</string>
+    <string name="hint_confirm_new_password">Confirm new password</string>
+
 
     <!-- Password / Passcode security -->
     <string name="password_security_score">Security Score:</string>
+
 
     <!-- Detail type strings -->
     <string name="detail_text">Text</string>
@@ -132,13 +159,16 @@
     <string name="detail_password">Password</string>
     <string name="detail_url">URL</string>
 
+
     <!-- Error messages that are sent to the user -->
     <string name="error_cannot_show_entry">Cannot show entry.</string>
     <string name="error_empty_input">This field cannot be empty.</string>
+    <string name="error_passwords_incorrect">Incorrect password.</string>
     <string name="error_passwords_not_matching">Passwords are not identical.</string>
 
+
     <!-- App License -->
-    <string name="app_license">MIT License
+    <string name="app_license" translatable="false">MIT License
 
 Copyright © 2023 Christian-2003
 
