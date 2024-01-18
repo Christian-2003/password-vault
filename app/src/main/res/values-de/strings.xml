@@ -35,11 +35,11 @@
     <!-- Settings -->
     <string name="settings_security">Sicherheit</string>
     <string name="settings_security_login">App-Login</string>
-    <string name="settings_security_login_info">Verlange Password zum Öffnen der App</string>
+    <string name="settings_security_login_info">Verlange Passwort zum Öffnen der App</string>
     <string name="settings_security_password">Passwort ändern</string>
     <string name="settings_security_password_info">Passwort zum Einloggen ändern</string>
     <string name="settings_security_biometrics">Biometrie verwenden</string>
-    <string name="settings_security_biometrics_info">Biometrie zum EInloggen verwenden</string>
+    <string name="settings_security_biometrics_info">Biometrie zum Einloggen verwenden</string>
     <string name="settings_security_backup">Backup erstellen</string>
     <string name="settings_security_backup_info">(Verschlüsseltes) Backup erstellen</string>
     <string name="settings_security_backup_info_extended">Erstellen Sie ein (optional verschlüsseltes) Backup Ihrer Daten. Das Backup wird nicht gelöscht, wenn die App deinstalliert wird.</string>
@@ -91,6 +91,9 @@
 
     <!-- Login activity -->
     <string name="login_info">Melden Sie sich in der App an</string>
+    <string name="login_biometrics_title">PasswordVault biometrischer Login</string>
+    <string name="login_biometrics_error">Authentifizierungsfehler</string>
+    <string name="login_biometrics_fail">Authentifizierung fehlgeschlagen.</string>
 
 
     <!-- Detail dialog -->

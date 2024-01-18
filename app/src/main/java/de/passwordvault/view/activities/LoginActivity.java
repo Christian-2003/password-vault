@@ -2,8 +2,13 @@ package de.passwordvault.view.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricPrompt;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -26,6 +31,11 @@ public class LoginActivity extends AppCompatActivity {
      */
     private LoginViewModel viewModel;
 
+    /**
+     * Attribute stores the biometric prompt which is used for biometric login.
+     */
+    private BiometricPrompt biometricPrompt;
+
 
     /**
      * Method is called whenever the {@link LoginActivity} is created or recreated.
@@ -44,10 +54,46 @@ public class LoginActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         findViewById(R.id.login_button_continue).setOnClickListener(view -> login());
-        findViewById(R.id.login_button_biometrics).setOnClickListener(view -> continueToMainActivity());
+
+        biometricPrompt = new BiometricPrompt(LoginActivity.this, viewModel.getExecutor(), new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                if (errorCode != 13) {
+                    //errorCode == 13 indicates the biometric login was cancelled!
+                    Toast.makeText(getApplicationContext(), getString(R.string.login_biometrics_error) + ": " + errString, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                continueToMainActivity();
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                //Do nothing, since biometric prompt already informs user about error!
+            }
+        });
+
+        //Hide biometrics button if biometrics are disabled or unavailable:
+        Button biometricLoginButton = findViewById(R.id.login_button_biometrics);
+        if (viewModel.useBiometrics()) {
+            biometricLoginButton.setOnClickListener(view -> showBiometricLoginDialog());
+            showBiometricLoginDialog(); //Initially open dialog.
+        }
+        else {
+            biometricLoginButton.setVisibility(View.GONE);
+        }
     }
 
 
+    /**
+     * Method tries to log the user in once the login-button is pressed. If the entered password
+     * is incorrect, the view is changed to inform the user about this.
+     */
     private void login() {
         TextInputEditText passwordEditText = findViewById(R.id.login_password);
         String password = Objects.requireNonNull(passwordEditText.getText()).toString();
@@ -60,6 +106,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Method opens the {@link MainActivity}.
+     */
     private void continueToMainActivity() {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -68,6 +117,17 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Method shows the biometric prompt to authenticate with the configured biometrics.
+     */
+    private void showBiometricLoginDialog() {
+        biometricPrompt.authenticate(viewModel.getBiometricPromptInfo());
+    }
+
+
+    /**
+     * Method is called whenever the activity is destroyed.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();

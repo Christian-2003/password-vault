@@ -3,7 +3,11 @@ package de.passwordvault.viewmodel.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.widget.Toast;
+
+import androidx.biometric.BiometricManager;
 import androidx.lifecycle.ViewModel;
+
+import de.passwordvault.App;
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.storage.backup.BackupException;
@@ -24,7 +28,19 @@ import de.passwordvault.view.fragments.SettingsFragment;
  * @version 3.2.0
  */
 public class SettingsViewModel extends ViewModel {
-    
+
+    /**
+     * Method tests whether class 3 biometrics are available on the Android device.
+     *
+     * @return  Whether class 3 biometrics are available.
+     */
+    public boolean areBiometricsAvailable() {
+        BiometricManager biometricManager = BiometricManager.from(App.getContext());
+        int result = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG);
+        return result == BiometricManager.BIOMETRIC_SUCCESS;
+    }
+
+
     /**
      * Method creates an XML backup of the application data. The created backup will be encrypted if
      * the passed password is not {@code null}.
@@ -81,6 +97,16 @@ public class SettingsViewModel extends ViewModel {
 
 
     /**
+     * Method returns whether the application uses login.
+     *
+     * @return  Whether the app uses login.
+     */
+    public boolean useAppLogin() {
+        return Account.getInstance().hasPassword();
+    }
+
+
+    /**
      * Method restores an XML backup at the specified URI.
      *
      * @param uri                   URI of the file containing the XML backup.
@@ -112,6 +138,16 @@ public class SettingsViewModel extends ViewModel {
             return;
         }
         Toast.makeText(context, context.getString(R.string.settings_security_restore_success), Toast.LENGTH_SHORT).show();
+    }
+
+
+    /**
+     * Method tests whether the login shall be done using biometrics.
+     *
+     * @return  Whether the login shall be done using biometrics.
+     */
+    public boolean useBiometrics() {
+        return Account.getInstance().useBiometrics();
     }
 
 }

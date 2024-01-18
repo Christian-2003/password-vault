@@ -10,13 +10,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.google.android.material.materialswitch.MaterialSwitch;
-
 import java.io.Serializable;
 import java.util.Objects;
 import de.passwordvault.R;
@@ -102,10 +100,27 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        ((MaterialSwitch)view.findViewById(R.id.settings_security_login_switch)).setChecked(Account.getInstance().hasPassword());
-        view.findViewById(R.id.settings_security_login_switch).setOnClickListener(this::configureLogin);
+        MaterialSwitch loginSwitch = view.findViewById(R.id.settings_security_login_switch);
+        loginSwitch.setChecked(viewModel.useAppLogin());
+        loginSwitch.setOnClickListener(this::configureLogin);
+        if (!viewModel.useAppLogin()) {
+            view.findViewById(R.id.settings_security_biometrics_container).setVisibility(View.GONE);
+            view.findViewById(R.id.settings_security_password_container).setVisibility(View.GONE);
+        }
+        else {
+            view.findViewById(R.id.settings_security_biometrics_container).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.settings_security_password_container).setVisibility(View.VISIBLE);
+        }
+        if (viewModel.areBiometricsAvailable()) {
+            MaterialSwitch biometricsSwitch = view.findViewById(R.id.settings_security_biometrics_switch);
+            biometricsSwitch.setOnClickListener(this::configureBiometrics);
+            biometricsSwitch.setChecked(viewModel.useBiometrics());
+        }
+        else {
+            view.findViewById(R.id.settings_security_biometrics_container).setVisibility(View.GONE);
+        }
+
         view.findViewById(R.id.settings_security_password_clickable).setOnClickListener(view -> changePassword());
-        view.findViewById(R.id.settings_security_biometrics_switch).setActivated(Account.getInstance().useBiometrics());
         view.findViewById(R.id.settings_security_backup_clickable).setOnClickListener(view -> selectDirectory(SELECT_DIRECTORY_TO_CREATE_BACKUP));
         view.findViewById(R.id.settings_security_backup_button).setOnClickListener(view -> showInfoDialog(R.string.settings_security_backup, R.string.settings_security_backup_info_extended));
         view.findViewById(R.id.settings_security_restore).setOnClickListener(view -> selectFile(SELECT_FILE_TO_RESTORE_BACKUP, "text/plain"));
@@ -167,7 +182,6 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
                 }
                 catch (Exception e) {
                     e.printStackTrace();
-                    Log.d("BACKUP", e.getMessage());
                 }
                 break;
             case SELECT_FILE_TO_EXPORT_TO_HTML:
@@ -195,6 +209,8 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         }
         else if (fragment instanceof ConfigureLoginDialog) {
             Account.getInstance().save();
+            view.findViewById(R.id.settings_security_password_container).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.settings_security_biometrics_container).setVisibility(View.VISIBLE);
         }
     }
 
@@ -299,6 +315,8 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
             //Inverted logic -> When method is called, the switch just has been checked.
             Account.getInstance().removeAccount();
             Account.getInstance().save();
+            this.view.findViewById(R.id.settings_security_password_container).setVisibility(View.GONE);
+            this.view.findViewById(R.id.settings_security_biometrics_container).setVisibility(View.GONE);
             return;
         }
         ConfigureLoginDialog dialog = new ConfigureLoginDialog();
@@ -309,9 +327,40 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
     }
 
 
+    /**
+     * Method opens a dialog to change the application login-password. The dialog handles everything
+     * else. No callback or arguments are needed.
+     */
     private void changePassword() {
         ChangePasswordDialog dialog = new ChangePasswordDialog();
         dialog.show(requireActivity().getSupportFragmentManager(), "");
+    }
+
+
+    /**
+     * Method toggles the {@link Account#setBiometrics(boolean)}-flag depending on the UseBiometrics-
+     * switch.
+     *
+     * @param view  Switch which was clicked whose state shall be used to update whether biometrics
+     *              shall be used.
+     */
+    private void configureBiometrics(View view) {
+        if (view == null) {
+            return;
+        }
+        MaterialSwitch materialSwitch;
+        try {
+            materialSwitch = (MaterialSwitch) view;
+        }
+        catch (ClassCastException e) {
+            return;
+        }
+        if (!viewModel.areBiometricsAvailable()) {
+            materialSwitch.setChecked(false);
+            return;
+        }
+        Account.getInstance().setBiometrics(materialSwitch.isChecked());
+        Account.getInstance().save();
     }
 
 }

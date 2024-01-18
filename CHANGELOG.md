@@ -14,9 +14,11 @@ Backups can now be encrypted through a password. To increase data security, an o
 * Label of `DetailType` is now loaded from resources whenever it is accessed in order for the label to be dynamically changed when device's language changes while the app is running.
 * Dialogs are no longer retained through the deprecated `DialogFragment.setRetainInstance(true)`-method. Instead, dialogs use a ViewModel to retain their state.
 * Optional login to the application with a password.
-* Password for optional login can be reset in settings.
+* Password for optional login can be changed in settings.
 * Reordered items in `SettingsFragment`.
 * Refactoring of resource-strings to match initial naming pattern.
+* Added buttons to all password inputs, to toggle password visibility.
+* Added _class 3_ biometric login.
 
 <br>
 

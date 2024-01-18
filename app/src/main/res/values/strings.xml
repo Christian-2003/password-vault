@@ -95,6 +95,9 @@
 
     <!-- Login activity -->
     <string name="login_info">Login to the app</string>
+    <string name="login_biometrics_title">PasswordVault biometric login</string>
+    <string name="login_biometrics_error">Authentication error</string>
+    <string name="login_biometrics_fail">Authentication failed.</string>
 
 
     <!-- Detail dialog -->
