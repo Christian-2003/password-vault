@@ -1,7 +1,7 @@
 package de.passwordvault.view.dialogs;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import de.passwordvault.R;
 import de.passwordvault.viewmodel.dialogs.RestoreBackupViewModel;
 
@@ -91,7 +94,7 @@ public class RestoreBackupDialog extends DialogFragment {
 
         view = requireActivity().getLayoutInflater().inflate(R.layout.dialog_restore_backup, null);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
         builder.setTitle(getString(R.string.settings_security_restore));
         builder.setView(view);
 

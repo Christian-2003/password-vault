@@ -1,9 +1,8 @@
 package de.passwordvault.view.dialogs;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import de.passwordvault.R;
 import de.passwordvault.view.utils.DialogCallbackListener;
 import de.passwordvault.model.detail.Detail;
@@ -59,7 +61,8 @@ public class DetailDialog extends DialogFragment {
 
     /**
      * Method returns the {@link Detail} which is created / edited by this dialog.
-     * @return
+     *
+     * @return  Detail which is being edited / created.
      */
     public Detail getDetail() {
         return viewModel.getDetail();
@@ -90,7 +93,7 @@ public class DetailDialog extends DialogFragment {
 
         view = requireActivity().getLayoutInflater().inflate(R.layout.dialog_detail, null);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity());
         builder.setTitle(viewModel.getDetail() == null ? R.string.detail_dialog_title_add : R.string.detail_dialog_title_edit);
         builder.setView(viewModel.createView(view));
 

@@ -78,12 +78,13 @@
             app:layout_constraintBottom_toTopOf="@id/login_button_biometrics"
             android:text="@string/button_login"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/login_button_biometrics"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/default_margin"
             android:text="@string/button_biometrics"
+            app:icon="@drawable/ic_biometrics"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

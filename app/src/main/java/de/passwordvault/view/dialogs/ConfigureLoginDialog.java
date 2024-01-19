@@ -1,7 +1,7 @@
 package de.passwordvault.view.dialogs;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import de.passwordvault.R;
 import de.passwordvault.viewmodel.dialogs.ConfigureLoginViewModel;
 
@@ -63,7 +66,7 @@ public class ConfigureLoginDialog extends DialogFragment {
 
         view = requireActivity().getLayoutInflater().inflate(R.layout.dialog_configure_login, null);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity());
         builder.setTitle(R.string.settings_security_password);
         builder.setView(view);
 

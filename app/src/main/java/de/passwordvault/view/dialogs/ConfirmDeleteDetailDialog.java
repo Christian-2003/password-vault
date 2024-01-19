@@ -7,6 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import de.passwordvault.R;
 import de.passwordvault.view.utils.DialogCallbackListener;
 import de.passwordvault.model.detail.Detail;
@@ -82,7 +85,7 @@ public class ConfirmDeleteDetailDialog extends DialogFragment {
             throw new ClassCastException(e.getMessage());
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity());
         builder.setTitle(R.string.button_delete);
         builder.setMessage(requireContext().getString(R.string.confirm_delete_dialog_confirm) + " " + viewModel.getDetail().getName() + ".");
 

@@ -1,7 +1,7 @@
 package de.passwordvault.view.fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import java.io.Serializable;
 import java.util.Objects;
@@ -126,7 +127,7 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         view.findViewById(R.id.settings_security_restore).setOnClickListener(view -> selectFile(SELECT_FILE_TO_RESTORE_BACKUP, "text/plain"));
         view.findViewById(R.id.settings_security_restore_button).setOnClickListener(view -> showInfoDialog(R.string.settings_security_restore, R.string.settings_security_restore_info_extended));
         view.findViewById(R.id.settings_used_software_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), OssLicensesMenuActivity.class)));
-        view.findViewById(R.id.settings_license_clickable).setOnClickListener(view -> showInfoDialog(R.string.settings_about_license_info, R.string.app_license));
+        view.findViewById(R.id.settings_license_clickable).setOnClickListener(view -> showInfoDialog(R.string.settings_about_license, R.string.app_license));
         view.findViewById(R.id.settings_open_source_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_about_github_link)));
         view.findViewById(R.id.settings_bug_report_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_about_bug_link)));
         view.findViewById(R.id.settings_update_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_about_update_link)));
@@ -278,7 +279,7 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
      * @param messageId Id if the resource-string for the dialog message.
      */
     private void showInfoDialog(int titleId, int messageId) {
-        AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+        AlertDialog dialog = new MaterialAlertDialogBuilder(requireActivity()).create();
         dialog.setTitle(getString(titleId));
         dialog.setMessage(getString(messageId));
         dialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.button_ok), (dialogInterface, i) -> dialogInterface.dismiss());
