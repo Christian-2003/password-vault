@@ -1,6 +1,6 @@
 <img src="docs/img/icon.png" height="150" align="right">
 
-# 3.2.0 (XXXX-XX-XX)
+# 3.2.0 (2023-01-19)
 ### Release Highlights
 Backups can now be encrypted through a password. To increase data security, an optional login into the application with a password can be activated.
 
