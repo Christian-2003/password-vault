@@ -124,7 +124,8 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         view.findViewById(R.id.settings_security_password_clickable).setOnClickListener(view -> changePassword());
         view.findViewById(R.id.settings_security_backup_clickable).setOnClickListener(view -> selectDirectory(SELECT_DIRECTORY_TO_CREATE_BACKUP));
         view.findViewById(R.id.settings_security_backup_button).setOnClickListener(view -> showInfoDialog(R.string.settings_security_backup, R.string.settings_security_backup_info_extended));
-        view.findViewById(R.id.settings_security_restore).setOnClickListener(view -> selectFile(SELECT_FILE_TO_RESTORE_BACKUP, "text/plain"));
+        //Require mime-type '*/*' to both restore text-backups (version 3.2.0 onwards) and binary-backups (version 3.1.0):
+        view.findViewById(R.id.settings_security_restore).setOnClickListener(view -> selectFile(SELECT_FILE_TO_RESTORE_BACKUP, "*/*"));
         view.findViewById(R.id.settings_security_restore_button).setOnClickListener(view -> showInfoDialog(R.string.settings_security_restore, R.string.settings_security_restore_info_extended));
         view.findViewById(R.id.settings_used_software_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), OssLicensesMenuActivity.class)));
         view.findViewById(R.id.settings_license_clickable).setOnClickListener(view -> showInfoDialog(R.string.settings_about_license, R.string.app_license));
