@@ -37,7 +37,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1' //Use of older version to compile for Android SDK 32
     implementation 'com.google.android.material:material:1.7.0' //Use of older version to compile for Android SDK 32
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
 

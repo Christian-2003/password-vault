@@ -210,7 +210,9 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         else if (fragment instanceof ConfigureLoginDialog) {
             Account.getInstance().save();
             view.findViewById(R.id.settings_security_password_container).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.settings_security_biometrics_container).setVisibility(View.VISIBLE);
+            if (viewModel.areBiometricsAvailable()) {
+                view.findViewById(R.id.settings_security_biometrics_container).setVisibility(View.VISIBLE);
+            }
         }
     }
 

@@ -112,8 +112,8 @@ public class LoginActivity extends AppCompatActivity {
     private void continueToMainActivity() {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
         startActivity(intent);
-        onDestroy();
     }
 
 
@@ -122,15 +122,6 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void showBiometricLoginDialog() {
         biometricPrompt.authenticate(viewModel.getBiometricPromptInfo());
-    }
-
-
-    /**
-     * Method is called whenever the activity is destroyed.
-     */
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
 }

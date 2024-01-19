@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:shapeAppearanceOverlay="@style/rounded_corners"
-            app:srcCompat="@mipmap/ic_launcher"
+            app:srcCompat="@mipmap/ic_launcher_round"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
