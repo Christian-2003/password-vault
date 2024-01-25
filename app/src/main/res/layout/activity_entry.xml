@@ -12,14 +12,14 @@
     <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/entry_app_bar"
-        style="@style/app_bar">
+        style="@style/pv.app_bar">
 
         <ImageButton
             android:id="@+id/entry_back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_back"
-            style="@style/image_button_app_bar"
+            style="@style/pv.button.image_button.app_bar"
             android:layout_marginEnd="20dp"/>
 
         <TextView
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
-            style="@style/app_bar_text"/>
+            style="@style/pv.text.app_bar"/>
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/entry_general_info"
-                style="@style/highlight_text"/>
+                style="@style/pv.text.highlight"/>
 
 
             <!-- LinearLayout contains the general information about the entry -->
@@ -61,14 +61,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/entry_name"
-                    style="@style/variant_text"/>
+                    style="@style/pv.text.variant"/>
 
                 <TextView
                     android:id="@+id/entry_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/placeholder_name"
-                    style="@style/default_text"/>
+                    style="@style/pv.text"/>
 
                 <View
                     style="@style/divider"/>
@@ -77,14 +77,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/entry_description"
-                    style="@style/variant_text"/>
+                    style="@style/pv.text.variant"/>
 
                 <TextView
                     android:id="@+id/entry_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/placeholder_description"
-                    style="@style/default_text"/>
+                    style="@style/pv.text"/>
 
             </LinearLayout>
 
@@ -93,7 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/entry_details_info"
-                style="@style/highlight_text"/>
+                style="@style/pv.text.highlight"/>
 
 
             <!-- LinearLayout contains the details of the entry -->
@@ -136,7 +136,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/entry_additional_info"
-                    style="@style/highlight_text"/>
+                    style="@style/pv.text.highlight"/>
 
 
                 <!-- LinearLayout contains additional information about the entry -->
@@ -150,14 +150,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/entry_uuid"
-                        style="@style/variant_text"/>
+                        style="@style/pv.text.variant"/>
 
                     <TextView
                         android:id="@+id/entry_uuid"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/placeholder_uuid"
-                        style="@style/default_text"/>
+                        style="@style/pv.text"/>
 
                     <View
                         style="@style/divider"/>
@@ -166,14 +166,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/entry_created"
-                        style="@style/variant_text"/>
+                        style="@style/pv.text.variant"/>
 
                     <TextView
                         android:id="@+id/entry_created"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/placeholder_date"
-                        style="@style/default_text"/>
+                        style="@style/pv.text"/>
 
                     <View
                         style="@style/divider"/>
@@ -182,14 +182,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/entry_changed"
-                        style="@style/variant_text"/>
+                        style="@style/pv.text.variant"/>
 
                     <TextView
                         android:id="@+id/entry_changed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/placeholder_date"
-                        style="@style/default_text"/>
+                        style="@style/pv.text"/>
 
                 </LinearLayout>
 
@@ -198,7 +198,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/entry_hidden_details_info"
-                    style="@style/highlight_text"/>
+                    style="@style/pv.text.highlight"/>
 
 
                 <!-- LinearLayout contains all hidden details -->

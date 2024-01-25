@@ -2,13 +2,66 @@
 
 <resources>
 
-    <!-- Style for the app bar -->
-    <style name="app_bar">
+    <!-- Top-level style which applies to all components of the application -->
+    <style name="pv"></style>
+
+
+
+    <!-- Text styles -->
+    <style name="pv.text">
+        <item name="android:textSize">@dimen/default_text_size</item>
+        <item name="android:textColor">@color/on_background</item>
+    </style>
+
+    <style name="pv.text.variant" parent="pv.text">
+        <item name="android:textColor">@color/on_background_variant</item>
+    </style>
+
+    <style name="pv.text.highlight" parent="pv.text">
+        <item name="android:textSize">@dimen/highlight_text_size</item>
+        <item name="android:layout_marginTop">@dimen/default_margin</item>
+        <item name="android:layout_marginStart">@dimen/default_margin</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="pv.text.app_bar" parent="pv.text">
+        <item name="android:textSize">@dimen/app_bar_text_size</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+
+
+
+    <!-- Styles for buttons -->
+    <style name="pv.button"></style>
+
+    <style name="pv.button.image_button">
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:minWidth">@dimen/image_button_width</item>
+        <item name="android:minHeight">@dimen/image_button_height</item>
+        <item name="android:tint">@color/pv_theme_onSurfaceVariant</item>
+    </style>
+
+    <style name="pv.button.image_button.app_bar" parent="pv.button.image_button">
+        <item name="android:tint">@color/pv_theme_onPrimary</item>
+    </style>
+
+
+
+    <!-- Styles for the app bar -->
+    <style name="pv.menu_bar">
+        <item name="android:background">@color/pv_theme_surface</item>
+    </style>
+
+    <style name="pv.app_bar">
         <item name="android:background">?attr/colorPrimary</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/app_bar_height</item>
     </style>
+
+
+
 
     <!-- Style for divider -->
     <style name="divider">
@@ -17,18 +70,6 @@
         <item name="android:background">@color/on_background_variant</item>
         <item name="android:layout_marginTop">@dimen/default_margin</item>
         <item name="android:layout_marginBottom">@dimen/default_margin</item>
-    </style>
-
-
-    <!-- Style for image buttons -->
-    <style name="image_button">
-        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
-        <item name="android:minWidth">@dimen/image_button_width</item>
-        <item name="android:minHeight">@dimen/image_button_height</item>
-        <item name="android:tint">@color/pv_theme_onSurfaceVariant</item>
-    </style>
-    <style name="image_button_app_bar" parent="image_button">
-        <item name="android:tint">@color/pv_theme_onPrimary</item>
     </style>
 
     <!-- Style for backgrounds -->
@@ -43,33 +84,7 @@
         <item name="android:backgroundTint">@color/pv_theme_popup_surface</item>
     </style>
 
-
-    <!-- Style for text -->
-    <style name="default_text">
-        <item name="android:textSize">@dimen/default_text_size</item>
-        <item name="android:textColor">@color/on_background</item>
-    </style>
-
-    <!-- Style for headline text -->
-    <style name="variant_text" parent="default_text">
-        <item name="android:textSize">@dimen/default_text_size</item>
-        <item name="android:textColor">@color/on_background_variant</item>
-    </style>
-
-    <style name="highlight_text" parent="default_text">
-        <item name="android:textSize">@dimen/highlight_text_size</item>
-        <item name="android:layout_marginTop">@dimen/default_margin</item>
-        <item name="android:layout_marginStart">@dimen/default_margin</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <!-- Style for app bar text -->
-    <style name="app_bar_text" parent="default_text">
-        <item name="android:textSize">@dimen/app_bar_text_size</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">?attr/colorOnPrimary</item>
-    </style>
-
+    <!-- Style to make the login image rounded -->
     <style name="rounded_corners">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>

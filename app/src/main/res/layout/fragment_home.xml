@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/home"
-                style="@style/highlight_text"/>
+                style="@style/pv.text.highlight"/>
 
         </LinearLayout>
 
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/app_description"
                 android:layout_marginBottom="@dimen/default_margin"
-                style="@style/default_text"/>
+                style="@style/pv.text"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/home_show_accounts_button"

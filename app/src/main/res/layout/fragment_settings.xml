@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_security"
-                style="@style/highlight_text"/>
+                style="@style/pv.text.highlight"/>
 
         </LinearLayout>
 
@@ -50,13 +50,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/settings_security_login"
-                        style="@style/default_text"/>
+                        style="@style/pv.text"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/settings_security_login_info"
-                        style="@style/variant_text"/>
+                        style="@style/pv.text.variant"/>
 
                 </LinearLayout>
 
@@ -94,13 +94,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/settings_security_biometrics"
-                            style="@style/default_text"/>
+                            style="@style/pv.text"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/settings_security_biometrics_info"
-                            style="@style/variant_text"/>
+                            style="@style/pv.text.variant"/>
 
                     </LinearLayout>
 
@@ -137,13 +137,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/settings_security_password"
-                        style="@style/default_text"/>
+                        style="@style/pv.text"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/settings_security_password_info"
-                        style="@style/variant_text"/>
+                        style="@style/pv.text.variant"/>
 
                 </LinearLayout>
 
@@ -171,13 +171,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/settings_security_backup"
-                        style="@style/default_text"/>
+                        style="@style/pv.text"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/settings_security_backup_info"
-                        style="@style/variant_text"/>
+                        style="@style/pv.text.variant"/>
 
                 </LinearLayout>
 
@@ -189,7 +189,7 @@
                     android:paddingStart="@dimen/default_padding"
                     android:layout_weight="0"
                     android:layout_gravity="center"
-                    style="@style/image_button"/>
+                    style="@style/pv.button.image_button"/>
 
             </LinearLayout>
 
@@ -215,13 +215,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/settings_security_restore"
-                        style="@style/default_text"/>
+                        style="@style/pv.text"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/settings_security_restore_info"
-                        style="@style/variant_text"/>
+                        style="@style/pv.text.variant"/>
 
                 </LinearLayout>
 
@@ -233,7 +233,7 @@
                     android:paddingStart="@dimen/default_padding"
                     android:layout_weight="0"
                     android:layout_gravity="center"
-                    style="@style/image_button"/>
+                    style="@style/pv.button.image_button"/>
 
             </LinearLayout>
 
@@ -252,7 +252,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_export"
-                style="@style/highlight_text"/>
+                style="@style/pv.text.highlight"/>
 
         </LinearLayout>
 
@@ -281,13 +281,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/settings_export_html"
-                        style="@style/default_text"/>
+                        style="@style/pv.text"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/settings_export_html_info"
-                        style="@style/variant_text"/>
+                        style="@style/pv.text.variant"/>
 
                 </LinearLayout>
 
@@ -299,7 +299,7 @@
                     android:paddingStart="@dimen/default_padding"
                     android:layout_weight="0"
                     android:layout_gravity="center"
-                    style="@style/image_button"/>
+                    style="@style/pv.button.image_button"/>
 
             </LinearLayout>
 
@@ -318,7 +318,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_about"
-                style="@style/highlight_text"/>
+                style="@style/pv.text.highlight"/>
 
         </LinearLayout>
 
@@ -341,13 +341,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_about_license"
-                    style="@style/default_text"/>
+                    style="@style/pv.text"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_about_license_info"
-                    style="@style/variant_text"/>
+                    style="@style/pv.text.variant"/>
 
             </LinearLayout>
 
@@ -367,13 +367,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_about_dependencies"
-                    style="@style/default_text"/>
+                    style="@style/pv.text"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_about_dependencies_info"
-                    style="@style/variant_text"/>
+                    style="@style/pv.text.variant"/>
 
             </LinearLayout>
 
@@ -393,13 +393,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_about_github"
-                    style="@style/default_text"/>
+                    style="@style/pv.text"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_about_github_info"
-                    style="@style/variant_text"/>
+                    style="@style/pv.text.variant"/>
 
             </LinearLayout>
 
@@ -419,13 +419,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_about_bug"
-                    style="@style/default_text"/>
+                    style="@style/pv.text"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_about_bug_info"
-                    style="@style/variant_text"/>
+                    style="@style/pv.text.variant"/>
 
             </LinearLayout>
 
@@ -445,13 +445,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_about_update"
-                    style="@style/default_text"/>
+                    style="@style/pv.text"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_about_update_info"
-                    style="@style/variant_text"/>
+                    style="@style/pv.text.variant"/>
 
             </LinearLayout>
 

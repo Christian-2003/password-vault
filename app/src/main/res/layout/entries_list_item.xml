@@ -14,7 +14,7 @@
         android:layout_alignParentTop="true"
         android:text="@string/placeholder_name"
         android:textStyle="bold"
-        style="@style/default_text"/>
+        style="@style/pv.text"/>
 
     <TextView
         android:id="@+id/entries_list_item_description"
@@ -23,6 +23,6 @@
         android:layout_below="@+id/entries_list_item_name"
         android:gravity="bottom"
         android:text="@string/placeholder_description"
-        style="@style/variant_text"/>
+        style="@style/pv.text.variant"/>
 
 </RelativeLayout>

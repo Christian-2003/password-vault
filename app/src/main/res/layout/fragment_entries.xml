@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/entries_list"
-            style="@style/highlight_text"/>
+            style="@style/pv.text.highlight"/>
 
         <ImageButton
             android:id="@+id/entries_search_button"
@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:src="@drawable/ic_search"
-            style="@style/image_button"/>
+            style="@style/pv.button.image_button"/>
 
         <ImageButton
             android:id="@+id/entries_sort_button"
@@ -37,7 +37,7 @@
             android:layout_gravity="center"
             android:paddingStart="@dimen/default_padding"
             android:src="@drawable/ic_sort"
-            style="@style/image_button"/>
+            style="@style/pv.button.image_button"/>
 
     </LinearLayout>
 
