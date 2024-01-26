@@ -10,7 +10,7 @@ Changes to app UI.
 
 <br>
 
-# 3.2.0 (2023-01-19)
+# 3.2.0 (2024-01-19)
 ### Release Highlights
 Backups can now be encrypted through a password. To increase data security, an optional login into the application with a password can be activated.
 
