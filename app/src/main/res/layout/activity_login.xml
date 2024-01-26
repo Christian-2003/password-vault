@@ -74,9 +74,7 @@
                         android:inputType="textPassword"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
-
             </LinearLayout>
-
         </ScrollView>
 
         <Button
@@ -97,5 +95,4 @@
             style="@style/Widget.Material3.Button.OutlinedButton"/>
 
     </LinearLayout>
-
 </LinearLayout>

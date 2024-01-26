@@ -1,61 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.fragments.HomeFragment">
 
-    <LinearLayout
+    <!-- Toolbar for the fragment -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/entries_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="@dimen/app_bar_height"
+        style="@style/pv.app_bar">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center"
+            android:text="@string/bottom_navigation_home"
+            style="@style/pv.text.app_bar"/>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.fragments.HomeFragment">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="@dimen/default_margin">
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/home_headline"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/home"
-                style="@style/pv.text.highlight"/>
+                android:orientation="vertical"
+                style="@style/background">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_description"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    style="@style/pv.text"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/home_show_accounts_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_button_view_accounts"
+                    app:icon="@drawable/ic_list"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/home_add_account_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_button_add_account"
+                    app:icon="@drawable/ic_add"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            style="@style/background">
+    </ScrollView>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/app_description"
-                android:layout_marginBottom="@dimen/default_margin"
-                style="@style/pv.text"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/home_show_accounts_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/home_button_view_accounts"
-                app:icon="@drawable/ic_list"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/home_add_account_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/home_button_add_account"
-                app:icon="@drawable/ic_add"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-</ScrollView>
+</LinearLayout>

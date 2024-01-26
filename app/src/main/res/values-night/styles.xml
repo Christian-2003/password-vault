@@ -2,6 +2,15 @@
 
 <resources>
 
+    <!-- Styles for texts -->
+    <style name="pv.text.app_bar" parent="pv.text">
+        <item name="android:textSize">@dimen/app_bar_text_size</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/pv_theme_onSurface</item>
+    </style>
+
+
+
     <!-- Style for the app bar -->
     <style name="pv.menu_bar">
         <item name="android:background">@color/pv_theme_surfaceVariant</item>

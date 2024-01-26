@@ -53,13 +53,13 @@
         <item name="android:background">@color/pv_theme_surface</item>
     </style>
 
+    <!-- Style for an AppBar which cannot be collapsed -->
     <style name="pv.app_bar">
         <item name="android:background">?attr/colorPrimary</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/app_bar_height</item>
     </style>
-
 
 
 

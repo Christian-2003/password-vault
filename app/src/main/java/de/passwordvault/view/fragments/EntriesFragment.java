@@ -20,7 +20,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
 import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.model.Observable;
@@ -105,26 +110,27 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
         });
 
         //Setup button to show / hide search bar:
-        EditText searchBar = inflated.findViewById(R.id.entries_search_bar);
+        TextInputLayout searchBarLayout = inflated.findViewById(R.id.entries_search_bar_container);
         ImageButton searchButton = inflated.findViewById(R.id.entries_search_button);
         searchButton.setOnClickListener(view -> {
             if (viewModel.isSearchBarVisible()) {
                 viewModel.setSearchBarVisible(false);
-                searchBar.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_left));
-                searchBar.postDelayed(() -> searchBar.setVisibility(View.GONE), getResources().getInteger(R.integer.default_anim_duration));
+                searchBarLayout.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_left));
+                searchBarLayout.postDelayed(() -> searchBarLayout.setVisibility(View.GONE), getResources().getInteger(R.integer.default_anim_duration));
             }
             else {
                 viewModel.setSearchBarVisible(true);
-                searchBar.setVisibility(View.VISIBLE);
-                searchBar.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left));
+                searchBarLayout.setVisibility(View.VISIBLE);
+                searchBarLayout.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left));
             }
         });
         if (viewModel.isSearchBarVisible()) {
-            searchBar.setVisibility(View.VISIBLE);
+            searchBarLayout.setVisibility(View.VISIBLE);
         }
         else {
-            searchBar.setVisibility(View.GONE);
+            searchBarLayout.setVisibility(View.GONE);
         }
+        TextInputEditText searchBar = inflated.findViewById(R.id.entries_search_bar);
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) {

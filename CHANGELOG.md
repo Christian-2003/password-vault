@@ -1,5 +1,15 @@
 <img src="docs/img/icon.png" height="150" align="right">
 
+# 3.2.1 (XXXX-XX-XX)
+### Release Highlights
+Changes to app UI.
+
+### Features
+* Moved buttons and headlines for fragments within main activity into app bar.
+* Changed color of bottom navigation bar.
+
+<br>
+
 # 3.2.0 (2023-01-19)
 ### Release Highlights
 Backups can now be encrypted through a password. To increase data security, an optional login into the application with a password can be activated.
