@@ -7,6 +7,7 @@ Changes to app UI.
 ### Features
 * Moved buttons and headlines for fragments within main activity into app bar.
 * Changed color of bottom navigation bar.
+* Click on "OK"-button on keyboard within app login tries to login the user.
 
 <br>
 

@@ -23,10 +23,6 @@
     <string name="sort_entries_created_descending">Created: Descending</string>
 
 
-    <!-- Entries fragment -->
-    <string name="entries_list">Entries</string>
-
-
     <!-- Home fragment -->
     <string name="home">Home</string>
     <string name="home_button_view_accounts">Show Accounts</string>

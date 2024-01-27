@@ -2,8 +2,11 @@ package de.passwordvault.view.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,7 +25,7 @@ import de.passwordvault.viewmodel.activities.LoginViewModel;
  * Class implements the {@link LoginActivity} which allows the user to login to the activity.
  *
  * @author  Christian-2003
- * @version 3.2.0
+ * @version 3.2.1
  */
 public class LoginActivity extends AppCompatActivity {
 
@@ -52,6 +55,14 @@ public class LoginActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_login);
         viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+
+        TextInputEditText passwordEditText = findViewById(R.id.login_password);
+        passwordEditText.setOnEditorActionListener((textView, actionId, keyEvent) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                login();
+            }
+            return true;
+        });
 
         findViewById(R.id.login_button_continue).setOnClickListener(view -> login());
 

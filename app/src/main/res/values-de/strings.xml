@@ -22,10 +22,6 @@
     <string name="sort_entries_created_descending">Erstellt: Absteigend</string>
 
 
-    <!-- Entries fragment -->
-    <string name="entries_list">Einträge</string>
-
-
     <!-- Home fragment -->
     <string name="home">Start</string>
     <string name="home_button_view_accounts">Konten anzeigen</string>

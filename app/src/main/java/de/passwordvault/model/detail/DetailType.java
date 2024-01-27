@@ -10,7 +10,7 @@ import de.passwordvault.R;
  * from the resources of the application and might therefore be different for different locales).
  *
  * @author  Christian-2003
- * @version 3.2.0
+ * @version 3.2.1
  */
 public enum DetailType {
 
@@ -99,6 +99,21 @@ public enum DetailType {
             return App.getContext().getString(displayNameId);
         }
         return "";
+    }
+
+    /**
+     * Method returns the placeholder for the name of a detail. If no suitable name placeholder exists,
+     * null is returned.
+     *
+     * @return  Suitable name placeholder or {@code null}.
+     */
+    public String getNamePlaceholder() {
+        switch (this) {
+            case EMAIL:
+            case PASSWORD:
+                return App.getContext().getString(displayNameId);
+        }
+        return null;
     }
 
     /**

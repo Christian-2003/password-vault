@@ -43,7 +43,7 @@ import de.passwordvault.view.activities.MainActivity;
  * within the {@linkplain MainActivity}.
  *
  * @author  Christian-2003
- * @version 3.2.0
+ * @version 3.2.1
  */
 public class EntriesFragment extends Fragment implements AdapterView.OnItemClickListener, PopupMenu.OnMenuItemClickListener, Observer<ArrayList<Entry>> {
 
