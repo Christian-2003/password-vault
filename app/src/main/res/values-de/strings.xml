@@ -153,6 +153,7 @@
     <string name="detail_email">E-Mail Adresse</string>
     <string name="detail_password">Passwort</string>
     <string name="detail_url">URL</string>
+    <string name="detail_pin">PIN Code</string>
 
 
     <!-- Error messages that are sent to the user -->

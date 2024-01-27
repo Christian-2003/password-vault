@@ -2,12 +2,17 @@
 
 # 3.2.1 (XXXX-XX-XX)
 ### Release Highlights
-Changes to app UI.
+Changes to app UI as well as some quality of life changes. Added PIN code as a type for details.
 
 ### Features
 * Moved buttons and headlines for fragments within main activity into app bar.
 * Changed color of bottom navigation bar.
 * Click on "OK"-button on keyboard within app login tries to login the user.
+* Changing type to "Password" in `DetailDialog` changes detail name automatically to "Password" and makes it obfuscated, if those respective UI components were not changed by the user beforehand.
+* Changing type to "E-Mail Address" in `DetailDialog` changes detail name automatically to "E-Mail Addres" if the name was not changed by the user beforehand.
+* Reordered UI elements within `DetailDialog`.
+* Added PIN code as a type for details.
+* Content input within `DetailDialog` is now obfuscated when obfuscate-checkbox is checked.
 
 <br>
 

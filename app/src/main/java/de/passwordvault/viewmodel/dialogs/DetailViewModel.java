@@ -1,6 +1,10 @@
 package de.passwordvault.viewmodel.dialogs;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -21,7 +25,7 @@ import de.passwordvault.view.utils.DialogCallbackListener;
  * Class implements the {@linkplain ViewModel} for the {@link DetailDialog}-class.
  *
  * @author  Christian-2003
- * @version 3.2.0
+ * @version 3.2.1
  */
 public class DetailViewModel extends ViewModel {
 
@@ -35,6 +39,18 @@ public class DetailViewModel extends ViewModel {
      * Attribute stores the {@link Detail} which shall be edited / created.
      */
     private Detail detail;
+
+    /**
+     * Attribute stores whether the name of the detail was entered automatically (= {@code true}) or
+     * by the user (= {@code false}).
+     */
+    private boolean nameEnteredAutomatically;
+
+    /**
+     * Attribute stores whether the checkbox to obfuscate the content was set automatically
+     * (= {@code true}) or by the user (= {@code false}).
+     */
+    private boolean obfuscatedEnteredAutomatically;
 
 
     /**
@@ -95,8 +111,15 @@ public class DetailViewModel extends ViewModel {
 
         AutoCompleteTextView detailTypeTextView = view.findViewById(R.id.detail_dialog_type);
         if (detail == null) {
+            //Dialog to create new detail:
             detailTypeTextView.setText(DetailType.TEXT.getDisplayName());
             detail = new Detail();
+            nameEnteredAutomatically = true;
+            obfuscatedEnteredAutomatically = true;
+        }
+        else {
+            nameEnteredAutomatically = false;
+            obfuscatedEnteredAutomatically = false;
         }
 
         TextInputEditText nameEditText = view.findViewById(R.id.detail_dialog_name);
@@ -111,6 +134,62 @@ public class DetailViewModel extends ViewModel {
             detailTypeTextView.setText(Detail.getTypes()[detail.getType().ordinal()]);
         }
         detailTypeTextView.setAdapter(new ArrayAdapter<>(view.getContext(), android.R.layout.simple_spinner_dropdown_item, Detail.getTypes()));
+
+        obfuscatedCheckBox.setOnClickListener(view1 -> obfuscatedEnteredAutomatically = false);
+
+        //Make EditText for content obfuscated when CheckBox is checked:
+        obfuscatedCheckBox.setOnCheckedChangeListener((compoundButton, b) -> {
+            TextInputLayout contentLayout = view.findViewById(R.id.detail_dialog_content_hint);
+            if (obfuscatedCheckBox.isChecked()) {
+                contentEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                contentLayout.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
+                contentEditText.setTransformationMethod(new PasswordTransformationMethod());
+            }
+            else {
+                contentEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                contentLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
+                contentEditText.setTransformationMethod(null);
+            }
+        });
+
+        detailTypeTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                DetailType type = Detail.getTypeByName(charSequence.toString());
+                String namePlaceholder = type.getNamePlaceholder();
+                if (namePlaceholder != null && nameEnteredAutomatically) {
+                    nameEditText.setText(namePlaceholder);
+                }
+                else if (nameEnteredAutomatically) {
+                    nameEditText.setText("");
+                }
+                if (type.shouldObfuscate() && obfuscatedEnteredAutomatically) {
+                    obfuscatedCheckBox.setChecked(true);
+                }
+                else if (obfuscatedEnteredAutomatically) {
+                    obfuscatedCheckBox.setChecked(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        nameEditText.setOnFocusChangeListener((view12, hasFocus) -> {
+            if (!hasFocus) {
+                TextInputEditText editText = (TextInputEditText) view12;
+                if (!Objects.requireNonNull(editText.getText()).toString().isEmpty() || !nameEnteredAutomatically) {
+                    nameEnteredAutomatically = false;
+                }
+            }
+        });
 
         return view;
     }
