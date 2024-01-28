@@ -2,11 +2,9 @@ package de.passwordvault.view.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +15,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import java.util.Objects;
 import de.passwordvault.R;
+import de.passwordvault.model.entry.EntryHandle;
 import de.passwordvault.model.security.login.Account;
 import de.passwordvault.viewmodel.activities.LoginViewModel;
 
@@ -121,6 +120,10 @@ public class LoginActivity extends AppCompatActivity {
      * Method opens the {@link MainActivity}.
      */
     private void continueToMainActivity() {
+        //Get the EntryHandle instance once, which will begin loading all entries from storage.
+        //While the app is changing activities (which takes a while) the entries can be loaded which
+        //makes navigating to the entries the first time a lot smoother.
+        EntryHandle.getInstance();
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         finish();

@@ -32,22 +32,36 @@ public class EntryHandle extends EntryHandleObservable {
      */
     private final ArrayList<Entry> initialEntries;
 
+    /**
+     * Attribute indicates whether entries are currently being loaded within a separate thread.
+     */
+    private static boolean loadingEntries;
+
 
     /**
      * Constructor constructs a new EntryHandle. This constructor is private to prevent the
      * instantiation of new instances, which would violate the singleton pattern.
      */
     private EntryHandle() {
+        loadingEntries = false;
         entries = new ArrayList<>();
         initialEntries = new ArrayList<>();
-        StorageManager manager = new StorageManager();
-        Log.d("EntryHandle", "Begin loading");
-        ArrayList<Entry> entries = manager.load();
-        if (entries != null) {
-            this.entries.addAll(entries);
-            initialEntries.addAll(entries);
-        }
-        Log.d("EntryHandle", "Finished loading");
+
+        //Load data from storage with a thread to slightly speed up performance:
+        Thread thread = new Thread(() -> {
+            loadingEntries = true;
+            Log.d("EntryHandle", "Begin loading");
+            StorageManager manager = new StorageManager();
+            ArrayList<Entry> entries = manager.load();
+            if (entries != null) {
+                EntryHandle.this.entries.addAll(entries);
+                initialEntries.addAll(entries);
+            }
+            loadingEntries = false;
+            Log.d("EntryHandle", "Finished loading");
+            return;
+        });
+        thread.start();
     }
 
 
@@ -123,8 +137,13 @@ public class EntryHandle extends EntryHandleObservable {
      * @return  Singleton-instance of this EntryHandle.
      */
     public static EntryHandle getInstance() {
-        if (singleton == null) {
+        if (singleton == null && !loadingEntries) {
             singleton = new EntryHandle();
+        }
+        else if (singleton == null && loadingEntries) {
+            while (loadingEntries) {
+                // Wait for entries being loaded...
+            }
         }
         return singleton;
     }
@@ -195,22 +214,20 @@ public class EntryHandle extends EntryHandleObservable {
      * Method removes the {@link Entry} with the specified UUID permanently. This can only be undone
      * when discarding all changes and not calling {@link StorageManager#save()}.
      *
-     * @param uuid                  UUID of the entry to remove.
-     * @return                      Whether any entry was removed.
+     * @param uuid UUID of the entry to remove.
      * @throws NullPointerException The passed UUID is {@code null}.
      */
-    public boolean remove(String uuid) throws NullPointerException {
+    public void remove(String uuid) throws NullPointerException {
         if (uuid == null) {
             throw new NullPointerException("Null is invalid UUID");
         }
         if (!initialEntries.contains(Entry.getInstance(uuid))) {
             //Entry does not exist:
-            return false;
+            return;
         }
         initialEntries.remove(Entry.getInstance(uuid));
         entries.remove(Entry.getInstance(uuid));
         notifyObservers();
-        return true;
     }
 
 

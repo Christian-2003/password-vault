@@ -62,6 +62,11 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
      */
     private ListView entriesListView;
 
+    /**
+     * Attribute stores the view of the fragment.
+     */
+    private View view;
+
 
     /**
      * Default constructor instantiates a new EntriesFragment.
@@ -94,13 +99,13 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         EntryHandle.getInstance().addObserver(this);
-        View inflated = inflater.inflate(R.layout.fragment_entries, container, false);
+        view = inflater.inflate(R.layout.fragment_entries, container, false);
 
         adapter = new ListAdapter(EntryHandle.getInstance().getData(), getContext());
-        entriesListView = inflated.findViewById(R.id.abbreviated_entries);
+        entriesListView = view.findViewById(R.id.abbreviated_entries);
 
         //Setup button to sort the entries:
-        ImageButton sortButton = inflated.findViewById(R.id.entries_sort_button);
+        ImageButton sortButton = view.findViewById(R.id.entries_sort_button);
         sortButton.setOnClickListener(view -> {
             Context wrapper = new ContextThemeWrapper(EntriesFragment.this.getContext(), R.style.popup_menu);
             PopupMenu popup = new PopupMenu(wrapper, sortButton);
@@ -110,8 +115,8 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
         });
 
         //Setup button to show / hide search bar:
-        TextInputLayout searchBarLayout = inflated.findViewById(R.id.entries_search_bar_container);
-        ImageButton searchButton = inflated.findViewById(R.id.entries_search_button);
+        TextInputLayout searchBarLayout = view.findViewById(R.id.entries_search_bar_container);
+        ImageButton searchButton = view.findViewById(R.id.entries_search_button);
         searchButton.setOnClickListener(view -> {
             if (viewModel.isSearchBarVisible()) {
                 viewModel.setSearchBarVisible(false);
@@ -130,7 +135,7 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
         else {
             searchBarLayout.setVisibility(View.GONE);
         }
-        TextInputEditText searchBar = inflated.findViewById(R.id.entries_search_bar);
+        TextInputEditText searchBar = view.findViewById(R.id.entries_search_bar);
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) {
@@ -152,7 +157,7 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
 
         populateListView();
 
-        return inflated;
+        return view;
     }
 
 
