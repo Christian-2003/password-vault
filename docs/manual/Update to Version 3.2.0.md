@@ -15,7 +15,7 @@ If you want to continue using PasswordVault, you need to ignore this warning and
 2. If you update to version 3.2.0 or later from version 3.1.0 or lower, you once need to uninstall your currently installed version of PasswordVault before you can install the new version. To do this (and keep your data, please follow the steps shown below).  
 After you have done this, you can safely update to new versions once they are released without following the steps below.
 
-### Update from version 3.1.0 or lower
+###### Update from version 3.1.0 or lower
 Due to the changes to the signed release APK, you need to execute the following steps if you want to update from version 3.1.0 or lower to any other version:
 
 1. Open PasswordVault and click **Settings > Create backup**.
@@ -33,7 +33,7 @@ You have successfully updated PasswordVault to version 3.2.0 or higher. Thank yo
 ## New Features and Improvements
 The following new features and improvements are included in version 3.2.0 and onwards:
 
-### Optional Login
+###### Optional Login
 To further increase the safety of your data within PasswordVault, you can now require login to the application. Activate the login by clicking **Settings > Require login** and enter a password which will be used for authentication whenever you want to open the app.
 
 You can easily reset your password by clicking **Settings > Change password**.
@@ -43,11 +43,11 @@ If your device supports biometric authentication (class 3), you can add biometri
 If class 3 biometrics are not available on your device, the respecitve options will not be shown within the application.
 
 
-### Optionally Encrypted Backup
+###### Optionally Encrypted Backup
 In order to ensure maximum security when you backup your data, backups can be encrypted. To do so, click **Settings > Create backup** and enter a password afterwards. If you do not enter a password, the backup will be unencrypted.
 
 Once you want to restore an encrypted backup, click **Settings > Restore backup**. The application prompts you to enter the password which was used for encryption. If you entered the correct password, the encrypted backup will be restored.
 
 
-### Changes to UI
+###### Changes to UI
 To meet the Material Design 3 standards, changes were made to multiple UI elements.

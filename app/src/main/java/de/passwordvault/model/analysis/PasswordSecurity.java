@@ -54,7 +54,6 @@ public class PasswordSecurity {
             passedQualityGates++;
         }
 
-
         //Quality gate 2: Special Characters:
         for (char specialCharacter : SPECIAL_CHARACTERS) {
             if (password.contains(String.valueOf(specialCharacter))) {

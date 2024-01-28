@@ -1,10 +1,12 @@
 <img src="docs/img/icon.png" height="150" align="right">
 
-# 3.2.1 (XXXX-XX-XX)
-### Release Highlights
+# Changelog
+
+## 3.2.1 (XXXX-XX-XX)
+###### Release Highlights
 Changes to app UI as well as some quality of life changes. Added PIN code as a type for details.
 
-### Features
+###### Features
 * Moved buttons and headlines for fragments within main activity into app bar.
 * Changed color of bottom navigation bar.
 * Click on "OK"-button on keyboard within app login tries to login the user.
@@ -16,11 +18,11 @@ Changes to app UI as well as some quality of life changes. Added PIN code as a t
 
 <br>
 
-# 3.2.0 (2024-01-19)
-### Release Highlights
+## 3.2.0 (2024-01-19)
+###### Release Highlights
 Backups can now be encrypted through a password. To increase data security, an optional login into the application with a password can be activated.
 
-### Featrues
+###### Features
 * Removed setting to change UI mode, since this did not work.
 * Cryptographic keys for AES can now be generated with a seed.
 * Refactored location for all ViewModels.
@@ -38,11 +40,11 @@ Backups can now be encrypted through a password. To increase data security, an o
 
 <br>
 
-# 3.1.0 (2023-12-31)
-### Release Highlights
+## 3.1.0 (2023-12-31)
+###### Release Highlights
 Account data can now be exported into readable HTML-format. Furthermore, account data can be backed up and restored, although backups will not be encrypted. Furthermore, some changes to the GUI were made and German was added as language to the application.
 
-### Features
+###### Features
 * Added `CreateXmlBackup`-class to backup the data to shared storage, which will not be wiped when the application is uninstalled.
 * Added `RestoreXmlBackup`-class to restore a backup from shared storage.
 * Added `BackupException`-class which can be thrown when some error with backups occur.
@@ -50,7 +52,7 @@ Account data can now be exported into readable HTML-format. Furthermore, account
 * Added support for German.
 * Changes in color scheme for app GUI.
 * Added `Observer<T>`- and `Observable<T>`-interfaces for Observer-pattern.
-* Added `EntryHandleObservable`-class to impleemnt observable for the `EntryHandle`.
+* Added `EntryHandleObservable`-class to implement observable for the `EntryHandle`.
 * Used Observer-pattern to fix a bug, where changes in entries were not updated in the `EntriesFragment`, which could result in a crash if the respective change was a deletion of an entry.
 * Fixed a bug where a detail was not shown with the hidden details after it'S visibility was changed.
 * Small QoL-changes
@@ -61,11 +63,11 @@ Account data can now be exported into readable HTML-format. Furthermore, account
 
 <br>
 
-# 3.0.0 (2023-12-28)
-### Release Highlights
+## 3.0.0 (2023-12-28)
+###### Release Highlights
 Major overhaul of the data handling results in backwards-compatibility break. Added some quality of life changes, which includes a new home fragment for the application.
 
-### Features
+###### Features
 * Updated `EditText` in `AddEntryActivity` and `DetailDialogFragment` to match Material Design 3 standards.
 * Details can now only be added when both name and content is set, otherwise, an error message is shown.
 * Entry can now only be added when name is set, otherwise, an error message is shown.
@@ -80,11 +82,11 @@ Major overhaul of the data handling results in backwards-compatibility break. Ad
 
 <br>
 
-# 2.2.1 (2023-10-13)
-### Release Highlights
+## 2.2.1 (2023-10-13)
+###### Release Highlights
 Major security overhaul: All entries are now being encrypted through an AES/GCM-Algorithm. The required key will be securely stored within the KeyStore.
 
-### Features
+###### Features
 * The entries in the `ListView` in `EntriesFragment` now fill entire horizontal width of the container.
 * Icons in bottom navigation bar are now outlined when not selected and filled when selected.
 * Fixed a bug where the correct entry was not opened after being selected within the `ListView` where a filter was used through the search bar.
@@ -95,22 +97,22 @@ Major security overhaul: All entries are now being encrypted through an AES/GCM-
 
 <br>
 
-# 2.2.0 (2023-10-10)
-### Release Highlights
+## 2.2.0 (2023-10-10)
+###### Release Highlights
 Major design overhaul: The Material Design 3 has been partially incorporated into the applications design. Furthermore, a custom icon for the application is introduced. When it comes to functionalities, the list of entries in can now be searched for any substring.
 
-### Features
+###### Features
 * List of `Entry`-instances in the `EntriesFragment` are now searchable. The algorithm searches a pattern (can be entered through a search bar) in the name and description of the entry.
 * Created App-icon.
 * Partial incorporation of Material Design 3.
 
 <br>
 
-# 2.1.0 (2023-10-09)
+## 2.1.0 (2023-10-09)
 ### Release Highlights
 Entries can now be sorted according to some categories.
 
-### Features
+###### Features
 * Changed name of `GenericSecurityException` to `SecurityException`.
 * Removed implementation of `Serializable`-interface from class `Detail`, as nothing for serialization was implemented and there is no need to serialize instances.
 * Entries within the `EntriesFragment` can be sorted according to the following categories: "Not sorted", "Name: Ascending", "Name: Descending", "Created: Ascending" and "Created: Descending".
@@ -119,11 +121,11 @@ Entries can now be sorted according to some categories.
 
 <br>
 
-# 2.0.0 (2023-10-04)
-### Release Highlights
+## 2.0.0 (2023-10-04)
+###### Release Highlights
 Backwards-compatibility breaking changes to the handling of entries within the backend. All details about entries are now loaded from persistent memory when the application starts, to minimize the number of times files have to be accessed throughout the applications lifecycle.
 
-### Features
+###### Features
 * Removed `AbbreviatedEntries` class and moved it's contents into `Entry`.
 * Changed the `EntryHandle` class to no longer regard abbreviated entries.
 * Changes throughout the application code to meet the above mentioned changes.
@@ -134,11 +136,11 @@ Backwards-compatibility breaking changes to the handling of entries within the b
 
 <br>
 
-# 1.0.1 (2023-09-23)
-### Release Highlighs
+## 1.0.1 (2023-09-23)
+###### Release Highlighs
 Added WISHLIST.md and VERSION.txt to project files. Bugfixes.
 
-### Features
+###### Features
 * Added WISHLIST.md which contains everything that needs to be fixed and features that can be implemented.
 * Added VERSION.txt which contains the version number of the current version.
 * Changed entry now correctly displayed after change in EntryActivity.
@@ -148,11 +150,11 @@ Added WISHLIST.md and VERSION.txt to project files. Bugfixes.
 
 <br>
 
-# 1.0.0 (2023-09-23)
-### Release Highlights
+## 1.0.0 (2023-09-23)
+###### Release Highlights
 The git repository was created on GitHub and all relevant project files were uploaded. The basic functions of the application work although there is much room for improvement.
 
-### Features
+###### Features
 * Account details can be stored / added / deleted
 * Sensitive content of a detail can be obfuscated
 * An account entry can be stored / added / deleted
