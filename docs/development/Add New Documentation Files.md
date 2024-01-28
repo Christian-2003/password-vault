@@ -27,7 +27,7 @@ Adding documentation files for development is an important task, as these files 
 ###### What to Document
 Everything that appears to be complicated should be documented. This could include data encodings, application processes and much more.
 
-If required, add pictures or diagrams to the documentation. This makes it a lot easier to understand certain structures and processes. Refer to the guidelines regarding [imgages](#images) for further information about using pictures.
+If required, add pictures or diagrams to the documentation. This makes it a lot easier to understand certain structures and processes. Refer to the guidelines regarding [images](#images) for further information about using pictures.
 
 ###### What Not to Document
 Please avoid documenting the source code within additional documentation files. Source code should be documented within the respective source files. This allows the documentation to be available within the IDE, which makes the development a lot easier.

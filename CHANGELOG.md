@@ -109,7 +109,7 @@ Major design overhaul: The Material Design 3 has been partially incorporated int
 <br>
 
 ## 2.1.0 (2023-10-09)
-### Release Highlights
+###### Release Highlights
 Entries can now be sorted according to some categories.
 
 ###### Features
