@@ -15,6 +15,7 @@ Changes to app UI as well as some quality of life changes. Added PIN code as a t
 * Reordered UI elements within `DetailDialog`.
 * Added PIN code as a type for details.
 * Content input within `DetailDialog` is now obfuscated when obfuscate-checkbox is checked.
+* Added custom landscape layout for `MainActivity` in which the navigation bar is located at the leading side instead of the bottom.
 
 <br>
 

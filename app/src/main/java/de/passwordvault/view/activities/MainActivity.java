@@ -7,7 +7,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import de.passwordvault.R;
 import de.passwordvault.model.storage.app.StorageManager;
@@ -19,7 +18,7 @@ import de.passwordvault.viewmodel.activities.MainViewModel;
  * point for the application and contains multiple fragments with different functionalities.
  *
  * @author  Christian-2003
- * @version 3.2.0
+ * @version 3.2.1
  */
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
 
@@ -44,14 +43,14 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         findViewById(R.id.main_fab).setOnClickListener(view -> startActivity(new Intent(MainActivity.this, AddEntryActivity.class)));
 
         //Configure bottom navigation bar:
-        BottomNavigationView bottomNavigationView = findViewById(R.id.main_navigation);
-        bottomNavigationView.setOnItemSelectedListener(this);
-        bottomNavigationView.setSelectedItemId(viewModel.getSelectedItem());
+        NavigationBarView navigationBarView = findViewById(R.id.main_navigation);
+        navigationBarView.setOnItemSelectedListener(this);
+        navigationBarView.setSelectedItemId(viewModel.getSelectedItem());
     }
 
 
     /**
-     * Method is called whenever a menu item in the {@linkplain BottomNavigationView} is selected and
+     * Method is called whenever a menu item in the {@linkplain NavigationBarView} is selected and
      * changes the view that is displayed within this MainActivity to the corresponding fragment.
      *
      * @param item  Menu item that was selected.
@@ -66,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     /**
      * Method switches to the fragment of the passed id. This method is needed for fragments of this
-     * activity to change the displayed fragment. This will update the {@linkplain BottomNavigationView}
+     * activity to change the displayed fragment. This will update the {@linkplain NavigationBarView}
      * to display the item that is switched to as "selected".
      *
      * @param id    Id of the fragment to which to switch.
@@ -80,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     /**
      * Method switches to the fragment of the passed id. This method is needed for fragments of this
      * activity to change the displayed fragment. Pass {@code true} as argument {@code updateUi}
-     * if the {@link BottomNavigationView} shall be updated by this method. This is not required if
+     * if the {@link NavigationBarView} shall be updated by this method. This is not required if
      * the method is called when the user clicks on the respective item.
      *
      * @param id        Id of the fragment to which to switch.
@@ -93,14 +92,14 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, viewModel.getHomeFragment()).commit();
                 viewModel.setSelectedItem(R.id.menu_home);
                 if (updateUi) {
-                    ((BottomNavigationView)findViewById(R.id.main_navigation)).setSelectedItemId(R.id.menu_home);
+                    ((NavigationBarView)findViewById(R.id.main_navigation)).setSelectedItemId(R.id.menu_home);
                 }
                 return true;
             case R.id.menu_entries:
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, viewModel.getEntriesFragment()).commit();
                 viewModel.setSelectedItem(R.id.menu_entries);
                 if (updateUi) {
-                    ((BottomNavigationView)findViewById(R.id.main_navigation)).setSelectedItemId(R.id.menu_entries);
+                    ((NavigationBarView)findViewById(R.id.main_navigation)).setSelectedItemId(R.id.menu_entries);
                 }
                 return true;
 
@@ -108,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, viewModel.getSettingsFragment()).commit();
                 viewModel.setSelectedItem(R.id.menu_settings);
                 if (updateUi) {
-                    ((BottomNavigationView)findViewById(R.id.main_navigation)).setSelectedItemId(R.id.menu_settings);
+                    ((NavigationBarView)findViewById(R.id.main_navigation)).setSelectedItemId(R.id.menu_settings);
                 }
                 return true;
         }
