@@ -2,6 +2,15 @@
 
 # Changelog
 
+## 3.3.0 (XXXX-XX-XX)
+###### Release Highlights
+n/a
+
+###### Features
+* Added models for custom password quality gates.
+
+<br>
+
 ## 3.2.1 (2024-02-02)
 ###### Release Highlights
 Changes to app UI as well as some quality of life changes. Added PIN code as a type for details.

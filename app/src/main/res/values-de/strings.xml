@@ -162,6 +162,15 @@
     <string name="error_passwords_incorrect">Falsches Passwort.</string>
     <string name="error_passwords_not_matching">Passwörter stimmen nicht überein.</string>
 
+
+    <!-- Password quality gates -->
+    <string name="quality_gate_0">Passwort ist länger als 12 Zeichen.</string>
+    <string name="quality_gate_1">Passwort ist länger als 18 Zeichen.</string>
+    <string name="quality_gate_2">Passwort enthält Sonderzeichen.</string>
+    <string name="quality_gate_3">Passwort enthält Zahlen.</string>
+    <string name="quality_gate_4">Passwort enthält Großbuchstaben.</string>
+
+
     <!-- HTML export -->
     <string name="html_export_document_title">Exportierte Daten</string>
 

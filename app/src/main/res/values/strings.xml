@@ -167,6 +167,14 @@
     <string name="error_passwords_not_matching">Passwords are not identical.</string>
 
 
+    <!-- Password quality gates -->
+    <string name="quality_gate_0">Password length is greater than 12 characters.</string>
+    <string name="quality_gate_1">Password length is greater than 18 characters.</string>
+    <string name="quality_gate_2">Password contains special characters.</string>
+    <string name="quality_gate_3">Password contains numbers</string>
+    <string name="quality_gate_4">Password contains capital letters.</string>
+
+
     <!-- App License -->
     <string name="app_license" translatable="false" formatted="true">MIT License\n\n
 Copyright © 2023 Christian-2003
@@ -281,6 +289,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     ================================================================================================
     -->
 
+    <!-- Regexes for password quality gates -->
+    <string name="quality_gate_regex_0" translatable="false">\b\w{12,}\b</string>
+    <string name="quality_gate_regex_1" translatable="false">\b\w{18,}\b</string>
+    <string name="quality_gate_regex_2" translatable="false">[!"'§$%&amp;/{(\\[})\\]=?\\\\°^*+~#,;.:-_€>&lt;|]</string>
+    <string name="quality_gate_regex_3" translatable="false">[0-9]</string>
+    <string name="quality_gate_regex_4" translatable="false">[A-Z]</string>
+
     <!-- File names -->
     <string name="entries_file" translatable="false">entries.csv</string>
     <string name="details_file" translatable="false">details.csv</string>
@@ -288,5 +303,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <!-- SharedPreferences -->
     <string name="preferences_file" translatable="false">settings</string>
     <string name="preferences_uimode" translatable="false">uimode</string>
+    <string name="preferences_quality_gates_default" translatable="false">quality_gates_default</string>
+    <string name="preferences_quality_gates_custom" translatable="false">quality_gates_custom</string>
 
 </resources>
