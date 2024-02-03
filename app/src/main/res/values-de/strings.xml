@@ -63,7 +63,7 @@
     <string name="settings_export_success">Daten wurde erfolgreich exportiert</string>
 
     <string name="settings_about">Über</string>
-    <string name="settings_about_license">MIT License</string>
+    <string name="settings_about_license">MIT Lizenz</string>
     <string name="settings_about_license_info">Lizenz anzeigen (Nur in Englisch)</string>
     <string name="settings_about_dependencies">Verwendete Software</string>
     <string name="settings_about_dependencies_info">Verwendete Software anzeigen</string>

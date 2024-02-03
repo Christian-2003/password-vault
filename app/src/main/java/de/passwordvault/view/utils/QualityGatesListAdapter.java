@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.view.View;
 import java.util.ArrayList;
@@ -41,11 +40,6 @@ public class QualityGatesListAdapter extends BaseAdapter {
          * Attribute stores the text view displaying the regex of the list item.
          */
         public TextView regex;
-
-        /**
-         * Attribute stores the radio button of the list item.
-         */
-        public RadioButton radioButton;
 
         /**
          * Attribute stores the check box of the list item.
@@ -148,7 +142,6 @@ public class QualityGatesListAdapter extends BaseAdapter {
             holder.regex = view.findViewById(R.id.quality_gate_list_regex);
             holder.description = view.findViewById(R.id.quality_gate_list_description);
             holder.checkBox = view.findViewById(R.id.quality_gate_list_checkbox);
-            holder.radioButton = view.findViewById(R.id.quality_gate_list_radio);
             holder.editButton = view.findViewById(R.id.quality_gate_list_edit_buttom);
             view.setTag(holder);
         }
@@ -159,12 +152,10 @@ public class QualityGatesListAdapter extends BaseAdapter {
         holder.regex.setText(gate.getRegex());
         holder.description.setText(gate.getDescription());
         holder.checkBox.setChecked(gate.isEnabled());
-        holder.radioButton.setVisibility(View.GONE);
         holder.editButton.setVisibility(gate.isEditable() ? View.VISIBLE : View.GONE);
 
         holder.checkBox.setOnClickListener(view1 -> {
             CheckBox checkBox = (CheckBox)view1;
-            checkBox.isSelected();
             gate.setEnabled(checkBox.isChecked());
             QualityGateManager.getInstance().setQualityGate(gate, index);
         });

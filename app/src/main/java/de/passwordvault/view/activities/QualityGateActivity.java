@@ -1,6 +1,7 @@
 package de.passwordvault.view.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,8 +13,13 @@ import android.widget.TextView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGate;
+import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
+import de.passwordvault.view.utils.DialogCallbackListener;
 import de.passwordvault.viewmodel.activities.QualityGateViewModel;
 
 
@@ -23,7 +29,7 @@ import de.passwordvault.viewmodel.activities.QualityGateViewModel;
  * @author  Christian-2003
  * @version 3.2.0
  */
-public class QualityGateActivity extends AppCompatActivity {
+public class QualityGateActivity extends AppCompatActivity implements DialogCallbackListener, Serializable {
 
     /**
      * Field stores the key with which to pass a quality gate to edit as serializable.
@@ -83,8 +89,12 @@ public class QualityGateActivity extends AppCompatActivity {
             deleteButton.setVisibility(View.VISIBLE);
         }
         deleteButton.setOnClickListener(view -> {
-            viewModel.removeQualityGate();
-            finish();
+            ConfirmDeleteDialog dialog = new ConfirmDeleteDialog();
+            Bundle args = new Bundle();
+            args.putSerializable(ConfirmDeleteDialog.KEY_CALLBACK_LISTENER, QualityGateActivity.this);
+            args.putString(ConfirmDeleteDialog.KEY_OBJECT, viewModel.getQualityGate().getDescription());
+            dialog.setArguments(args);
+            dialog.show(getSupportFragmentManager(), null);
         });
 
         findViewById(R.id.quality_gate_back_button).setOnClickListener(view -> finish());
@@ -105,7 +115,7 @@ public class QualityGateActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String regex = regexEditText.getText().toString();
+                String regex = Objects.requireNonNull(regexEditText.getText()).toString();
                 if (!viewModel.isRegexValid(regex)) {
                     testMatchOutput.setText(R.string.error_invalid_regex);
                     return;
@@ -123,6 +133,28 @@ public class QualityGateActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+
+    /**
+     * Method is called when a positive dialog callback is triggered.
+     *
+     * @param dialog    Dialog which called the method.
+     */
+    @Override
+    public void onPositiveCallback(DialogFragment dialog) {
+        viewModel.removeQualityGate();
+        finish();
+    }
+
+
+    /**
+     * Method is called when a negative dialog callback is triggered.
+     *
+     * @param dialog    Dialog which called the method.
+     */
+    @Override
+    public void onNegativeCallback(DialogFragment dialog) {
 
     }
 

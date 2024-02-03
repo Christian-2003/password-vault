@@ -36,7 +36,7 @@ import de.passwordvault.view.activities.MainActivity;
  * {@linkplain MainActivity}.
  *
  * @author  Christian-2003
- * @version 3.2.0
+ * @version 3.3.0
  */
 public class SettingsFragment extends Fragment implements DialogCallbackListener, Serializable {
 

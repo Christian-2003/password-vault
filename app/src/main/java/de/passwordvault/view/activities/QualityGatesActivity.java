@@ -5,7 +5,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.model.Observable;
@@ -29,6 +33,11 @@ public class QualityGatesActivity extends AppCompatActivity implements Observer<
      */
     private QualityGatesViewModel viewModel;
 
+    /**
+     * Attribute stores the list adapter for the list view displaying the quality gates.
+     */
+    private QualityGatesListAdapter listAdapter;
+
 
     /**
      * Method informs the {@link Observer} that the observed data has been changed. The passed
@@ -42,8 +51,7 @@ public class QualityGatesActivity extends AppCompatActivity implements Observer<
         if (o == null) {
             throw new NullPointerException();
         }
-        ListView listView = findViewById(R.id.quality_gates_list_view);
-        listView.setAdapter(new QualityGatesListAdapter(o.getData(), this));
+        listAdapter.notifyDataSetChanged();
     }
 
 
@@ -65,7 +73,8 @@ public class QualityGatesActivity extends AppCompatActivity implements Observer<
         findViewById(R.id.quality_gate_button_add).setOnClickListener(view -> startActivity(new Intent(QualityGatesActivity.this, QualityGateActivity.class)));
 
         ListView listView = findViewById(R.id.quality_gates_list_view);
-        listView.setAdapter(new QualityGatesListAdapter(QualityGateManager.getInstance().getData(), this));
+        listAdapter = new QualityGatesListAdapter(QualityGateManager.getInstance().getData(), this);
+        listView.setAdapter(listAdapter);
 
         QualityGateManager.getInstance().addObserver(this);
     }
