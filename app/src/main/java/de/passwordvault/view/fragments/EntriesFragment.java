@@ -16,11 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -32,7 +30,7 @@ import de.passwordvault.model.Observable;
 import de.passwordvault.model.Observer;
 import de.passwordvault.model.entry.EntryHandle;
 import de.passwordvault.viewmodel.fragments.EntriesViewModel;
-import de.passwordvault.view.utils.ListAdapter;
+import de.passwordvault.view.utils.EntriesListAdapter;
 import de.passwordvault.model.entry.Entry;
 import de.passwordvault.view.activities.EntryActivity;
 import de.passwordvault.view.activities.MainActivity;
@@ -55,7 +53,7 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
     /**
      * Attribute stores the ListAdapter for the ListView.
      */
-    private ListAdapter adapter;
+    private EntriesListAdapter adapter;
 
     /**
      * Attribute stores the {@linkplain ListView} which displays the {@link Entry}-instances.
@@ -101,7 +99,7 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
         EntryHandle.getInstance().addObserver(this);
         view = inflater.inflate(R.layout.fragment_entries, container, false);
 
-        adapter = new ListAdapter(EntryHandle.getInstance().getData(), getContext());
+        adapter = new EntriesListAdapter(EntryHandle.getInstance().getData(), getContext());
         entriesListView = view.findViewById(R.id.abbreviated_entries);
 
         //Setup button to sort the entries:
@@ -144,7 +142,7 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                ListAdapter adapter = (ListAdapter)(entriesListView.getAdapter());
+                EntriesListAdapter adapter = (EntriesListAdapter)(entriesListView.getAdapter());
                 adapter.getFilter().filter(s);
                 populateListView();
             }
@@ -241,7 +239,7 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
         if (o == null) {
             throw new NullPointerException("Null is invalid Observable");
         }
-        adapter = new ListAdapter(o.getData(), getContext());
+        adapter = new EntriesListAdapter(o.getData(), getContext());
         populateListView();
     }
 

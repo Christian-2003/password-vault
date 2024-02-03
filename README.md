@@ -28,21 +28,19 @@ The PasswordVault is an application for Android which allows the user to manage 
 The application allows the user to create account entries which can store account information about a specific account. Each account entry itself can store any number of account detail information, such as passwords, e-mail addresses, URLs, etc.
 
 ###### Used Technologies
-The application was developed with Java through the Android Studio IDE. The project is build using Gradle.
+The application was developed with Java through the Android Studio IDE. The project is built using Gradle.
 
 The version numbers for this project are determined based on the guidelines provided by [semver](https://semver.org/).
 
 ###### Miscellaneous
 The project contains a [changelog](CHANGELOG.md) which documents all changes that were made to the application in between software versions.
 
-Furthermore, a [wishlist](WISHLIST.md) contains a list of all known bugs, all knwon uses of deprecated functionalities, as well as a list of features that shall be added in the future.
-
 <br>
 
 ## How to Install and Run the Project
 If you want to use this project, there are two ways you can do this.
 
-Please note that the minimum required version for Android is Android 12 (SDK 31).
+Please note that the minimum required version for Android is Android 12 (SDK 32).
 
 ###### Install the release APK
 If you want to install the application on your Android device, you can follow these steps:

@@ -52,6 +52,8 @@
     <string name="settings_security_restore_error_xml">Backup file corrupt</string>
     <string name="settings_security_restore_error_encryption">Invalid password</string>
     <string name="settings_security_restore_success">Successfully restored backup</string>
+    <string name="settings_security_quality_gates">Password quality gates</string>
+    <string name="settings_security_quality_gates_info">Edit quality gates for passwords</string>
 
     <string name="settings_export">Export</string>
     <string name="settings_export_html">Export data</string>
@@ -121,6 +123,7 @@
     <string name="button_ok">Ok</string>
     <string name="button_login">Login</string>
     <string name="button_biometrics">Use biometrics</string>
+    <string name="button_add_quality_gate">Add quality gate</string>
 
 
     <!-- Placeholder -->
@@ -142,6 +145,9 @@
     <string name="hint_current_password">Current password</string>
     <string name="hint_new_password">New password</string>
     <string name="hint_confirm_new_password">Confirm new password</string>
+    <string name="hint_description">Description</string>
+    <string name="hint_regex">RegEx</string>
+    <string name="hint_regex_test">Test RegEx</string>
 
 
     <!-- Password / Passcode security -->
@@ -165,9 +171,15 @@
     <string name="error_empty_input">This field cannot be empty.</string>
     <string name="error_passwords_incorrect">Incorrect password.</string>
     <string name="error_passwords_not_matching">Passwords are not identical.</string>
+    <string name="error_invalid_regex">RegEx is invalid.</string>
 
 
     <!-- Password quality gates -->
+    <string name="quality_gate_enabled">Enabled</string>
+    <string name="quality_gate_configure">Configure quality gate</string>
+    <string name="quality_gate_test">Test quality gate</string>
+    <string name="quality_gate_input_match">Input passes quality gate.</string>
+    <string name="quality_gate_input_no_match">Input does not pass quality gate.</string>
     <string name="quality_gate_0">Password length is greater than 12 characters.</string>
     <string name="quality_gate_1">Password length is greater than 18 characters.</string>
     <string name="quality_gate_2">Password contains special characters.</string>
@@ -290,11 +302,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     -->
 
     <!-- Regexes for password quality gates -->
-    <string name="quality_gate_regex_0" translatable="false">\b\w{12,}\b</string>
-    <string name="quality_gate_regex_1" translatable="false">\b\w{18,}\b</string>
-    <string name="quality_gate_regex_2" translatable="false">[!"'§$%&amp;/{(\\[})\\]=?\\\\°^*+~#,;.:-_€>&lt;|]</string>
-    <string name="quality_gate_regex_3" translatable="false">[0-9]</string>
-    <string name="quality_gate_regex_4" translatable="false">[A-Z]</string>
+    <string name="quality_gate_regex_0" translatable="false">\\b(\\w|\\W){12,}\\b</string>
+    <string name="quality_gate_regex_1" translatable="false">\\b(\\w|\\W){18,}\\b</string>
+    <string name="quality_gate_regex_2" translatable="false">(\\w|\\W)*[!"'§$%&amp;/{(\\[})\\]=?\\\\°^*+~#,;.:-_€>&lt;|]+(\\w|\\W)*</string>
+    <string name="quality_gate_regex_3" translatable="false">(\\w|\\W)*[0-9]+(\\w|\\W)*</string>
+    <string name="quality_gate_regex_4" translatable="false">(\\w|\\W)*[A-Z]+(\\w|\\W)*</string>
 
     <!-- File names -->
     <string name="entries_file" translatable="false">entries.csv</string>

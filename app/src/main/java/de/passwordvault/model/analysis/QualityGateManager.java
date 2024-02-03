@@ -52,7 +52,7 @@ public class QualityGateManager implements Observable<ArrayList<QualityGate>> {
     private QualityGateManager() {
         observers = new ArrayList<>();
         qualityGates = new ArrayList<>();
-        generateDefaultQualityGates();
+        loadDefaultQualityGates();
         loadCustomQualityGates();
         cachedNumberOfQualityGates = -1;
     }
@@ -133,6 +133,14 @@ public class QualityGateManager implements Observable<ArrayList<QualityGate>> {
             cachedNumberOfQualityGates = -1;
             notifyObservers();
         }
+    }
+
+
+    /**
+     * Method removes all quality gates.
+     */
+    public void clearQualityGates() {
+        qualityGates.clear();
     }
 
 
@@ -279,7 +287,7 @@ public class QualityGateManager implements Observable<ArrayList<QualityGate>> {
         StringBuilder customQualityGates = new StringBuilder();
 
         for (QualityGate qualityGate : qualityGates) {
-            if (qualityGate.isEditable()) {
+            if (!qualityGate.isEditable()) {
                 //Default quality gate:
                 defaultQualityGates.append(qualityGate.isEnabled());
             }
@@ -304,7 +312,7 @@ public class QualityGateManager implements Observable<ArrayList<QualityGate>> {
     /**
      * Method generates the default quality gates based on what was stored within the shared preferences.
      */
-    private void generateDefaultQualityGates() {
+    private void loadDefaultQualityGates() {
         SharedPreferences preferences = App.getContext().getSharedPreferences(App.getContext().getString(R.string.preferences_file), Context.MODE_PRIVATE);
 
         if (!preferences.contains(App.getContext().getString(R.string.preferences_quality_gates_default))) {
@@ -326,20 +334,26 @@ public class QualityGateManager implements Observable<ArrayList<QualityGate>> {
             boolean enabled = false;
             try {
                 enabled = Boolean.parseBoolean(cells.get(i));
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 //Do nothing...
             }
             switch (i) {
                 case 0:
                     this.qualityGates.add(new QualityGate(App.getContext().getString(R.string.quality_gate_regex_0), App.getContext().getString(R.string.quality_gate_0), enabled, false));
+                    break;
                 case 1:
                     this.qualityGates.add(new QualityGate(App.getContext().getString(R.string.quality_gate_regex_1), App.getContext().getString(R.string.quality_gate_1), enabled, false));
+                    break;
                 case 2:
                     this.qualityGates.add(new QualityGate(App.getContext().getString(R.string.quality_gate_regex_2), App.getContext().getString(R.string.quality_gate_2), enabled, false));
+                    break;
                 case 3:
                     this.qualityGates.add(new QualityGate(App.getContext().getString(R.string.quality_gate_regex_3), App.getContext().getString(R.string.quality_gate_3), enabled, false));
+                    break;
                 case 4:
                     this.qualityGates.add(new QualityGate(App.getContext().getString(R.string.quality_gate_regex_4), App.getContext().getString(R.string.quality_gate_4), enabled, false));
+                    break;
             }
         }
     }

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
@@ -26,11 +24,11 @@ import de.passwordvault.view.fragments.EntriesFragment;
  * @author  Christian-2003
  * @version 2.2.0
  */
-public class ListAdapter extends BaseAdapter implements Filterable {
+public class EntriesListAdapter extends BaseAdapter implements Filterable {
 
     /**
      * Inner class models a {@link ViewHolder} for the generated {@linkplain View}-instances of
-     * the {@link ListAdapter}.
+     * the {@link EntriesListAdapter}.
      */
     private static class ViewHolder {
 
@@ -48,12 +46,12 @@ public class ListAdapter extends BaseAdapter implements Filterable {
 
 
     /**
-     * Attribute stores the {@link Entry}-instances that shall be displayed by the {@link ListAdapter}.
+     * Attribute stores the {@link Entry}-instances that shall be displayed by the {@link EntriesListAdapter}.
      */
     private ArrayList<Entry> originalEntries;
 
     /**
-     * Attribute stores the {@link Entry}-instances that are displayed by the {@link ListAdapter}.
+     * Attribute stores the {@link Entry}-instances that are displayed by the {@link EntriesListAdapter}.
      */
     private ArrayList<Entry> displayedEntries;
 
@@ -69,7 +67,7 @@ public class ListAdapter extends BaseAdapter implements Filterable {
      * @param entries   Entries to be displayed with the ListView.
      * @param context   Context for the adapter.
      */
-    public ListAdapter(ArrayList<Entry> entries, Context context) {
+    public EntriesListAdapter(ArrayList<Entry> entries, Context context) {
         originalEntries = entries;
         displayedEntries = entries;
         inflater = LayoutInflater.from(context);
@@ -126,7 +124,7 @@ public class ListAdapter extends BaseAdapter implements Filterable {
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.entries_list_item, parent, false);
+            convertView = inflater.inflate(R.layout.list_item_entries, parent, false);
             holder.name = convertView.findViewById(R.id.entries_list_item_name);
             holder.description = convertView.findViewById(R.id.entries_list_item_description);
             convertView.setTag(holder);
@@ -141,7 +139,7 @@ public class ListAdapter extends BaseAdapter implements Filterable {
 
 
     /**
-     * Method returns the {@link Filter} that is used with the {@link ListAdapter}.
+     * Method returns the {@link Filter} that is used with the {@link EntriesListAdapter}.
      *
      * @return  Used filter.
      */
@@ -181,8 +179,8 @@ public class ListAdapter extends BaseAdapter implements Filterable {
             }
 
             /**
-             * Method applies the filter results to the {@link ListAdapter} and calls
-             * {@linkplain ListAdapter#notifyDataSetChanged()} to update the {@linkplain android.widget.ListView}.
+             * Method applies the filter results to the {@link EntriesListAdapter} and calls
+             * {@linkplain EntriesListAdapter#notifyDataSetChanged()} to update the {@linkplain android.widget.ListView}.
              *
              * @param constraint    The constraint used to filter the data.
              * @param results       The result of the filtering operation.

@@ -30,6 +30,14 @@
             android:exported="true">
         </activity>
         <activity
+            android:name=".view.activities.QualityGatesActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".view.activities.QualityGateActivity"
+            android:exported="true">
+        </activity>
+        <activity
             android:name=".view.activities.MainActivity"
             android:exported="true">
             <meta-data

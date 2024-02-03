@@ -1,5 +1,8 @@
 package de.passwordvault.model.analysis;
 
+import java.io.Serializable;
+import java.util.regex.PatternSyntaxException;
+
 
 /**
  * Class models a quality gate for a password. A quality gate consists of a regex which a password
@@ -8,7 +11,7 @@ package de.passwordvault.model.analysis;
  * @author  Christian-2003
  * @version 3.3.0
  */
-public class QualityGate {
+public class QualityGate implements Serializable {
 
     /**
      * Attribute stores the regex of the quality gate.
@@ -151,7 +154,12 @@ public class QualityGate {
         if (s == null) {
             return false;
         }
-        return s.matches(regex);
+        try {
+            return s.matches(regex);
+        }
+        catch (PatternSyntaxException e) {
+            return false;
+        }
     }
 
 }

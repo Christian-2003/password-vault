@@ -9,7 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import java.util.concurrent.atomic.AtomicBoolean;
 import de.passwordvault.R;
-import de.passwordvault.model.analysis.PasswordSecurity;
+import de.passwordvault.model.analysis.QualityGateManager;
 import de.passwordvault.model.detail.Detail;
 
 
@@ -18,7 +18,7 @@ import de.passwordvault.model.detail.Detail;
  * The generated view is based on {@link R.layout#view_detail_wrapper}.
  *
  * @author  Christian-2003
- * @version 3.1.0
+ * @version 3.3.0
  */
 public class DetailViewBuilder {
 
@@ -142,10 +142,11 @@ public class DetailViewBuilder {
      */
     private void inflatePasswordView() {
         content = View.inflate(context, R.layout.view_detail_password, null);
-        int securityScore = PasswordSecurity.PERFORM_SECURITY_ANALYSIS(detail.getContent());
+        int securityScore = QualityGateManager.getInstance().calculatePassedQualityGates(detail.getContent());
+        int maxSecurityScore = QualityGateManager.getInstance().numberOfQualityGates();
 
         ProgressBar passwordSecurity = (ProgressBar)content.findViewById(R.id.entry_detail_password_security);
-        passwordSecurity.setMax(PasswordSecurity.MAX_SECURITY_SCORE * 1000);
+        passwordSecurity.setMax(maxSecurityScore * 1000);
         if (animate) {
             ValueAnimator animator = ValueAnimator.ofInt(0, securityScore * 1000);
             animator.setDuration(context.getResources().getInteger(R.integer.default_anim_duration) * 5L);
@@ -157,16 +158,17 @@ public class DetailViewBuilder {
         }
 
         TextView securityRatingView = content.findViewById(R.id.entry_detail_password_security_rating);
-        String securityRating = securityScore + "/" + PasswordSecurity.MAX_SECURITY_SCORE;
+        String securityRating = securityScore + "/" + maxSecurityScore;
         securityRatingView.setText(securityRating);
-        if (securityScore == 0 || securityScore == 1) {
+        double securityScorePercentage = (double)securityScore / (double)maxSecurityScore;
+        if (securityScorePercentage < 0.33) {
             securityRatingView.setTextColor(context.getColor(R.color.red));
         }
-        else if (securityScore == 2 || securityScore == 3) {
-            securityRatingView.setTextColor(context.getColor(R.color.yellow));
-        }
-        else if (securityScore == 4 || securityScore == 5) {
+        else if (securityScorePercentage > 0.67) {
             securityRatingView.setTextColor(context.getColor(R.color.green));
+        }
+        else {
+            securityRatingView.setTextColor(context.getColor(R.color.yellow));
         }
     }
 
