@@ -123,6 +123,12 @@ password-vault-v3.2.1.apk
 ## Commit Changes to GitHub
 Before publishing a new release, please commit all changes that were done to the repository (including the already mentioned changes within this guide) to the GitHub repository.
 
+For this commit, please choose the following commit summary: `Release version <version number>`. An example for this message might be as follows:  
+`Release version 3.2.1`
+
+For the commit description, always choose the following:  
+`Last changes before release!`
+
 ###### Checklist
 * Committed all changes to GitHub
 
