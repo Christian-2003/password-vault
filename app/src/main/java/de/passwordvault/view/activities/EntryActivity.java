@@ -6,6 +6,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import de.passwordvault.R;
 import de.passwordvault.model.entry.EntryHandle;
+import de.passwordvault.model.tags.Tag;
+import de.passwordvault.model.tags.TagCollection;
 import de.passwordvault.view.utils.DetailViewBuilder;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.viewmodel.activities.EntryViewModel;
@@ -20,6 +22,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -29,7 +35,7 @@ import java.util.ArrayList;
  * {@linkplain de.passwordvault.model.entry.Entry}.
  *
  * @author  Christian-2003
- * @version 3.2.0
+ * @version 3.3.0
  */
 public class EntryActivity extends AppCompatActivity implements DialogCallbackListener, Serializable {
 
@@ -149,11 +155,35 @@ public class EntryActivity extends AppCompatActivity implements DialogCallbackLi
         ((TextView)findViewById(R.id.entry_created)).setText(Utils.formatDate(entry.getCreated(), dateFormat));
         ((TextView)findViewById(R.id.entry_changed)).setText(Utils.formatDate(entry.getChanged(), dateFormat));
 
+        //Add tags:
+        populateTagsContainer(entry.getTags());
+
         //Add details:
         populateDetailsContainer(entry.getVisibleDetails(), R.id.entry_details_container);
         populateDetailsContainer(entry.getInvisibleDetails(), R.id.entry_hidden_details_container);
 
         showOrHideExtendedInfo();
+    }
+
+
+    /**
+     * Method populates the tag container with the tags within the specified tag collection.
+     *
+     * @param collection    Collection with whose tags to populate the tag container.
+     */
+    private void populateTagsContainer(TagCollection collection) {
+        if (collection.isEmpty()) {
+            findViewById(R.id.entry_tag_group).setVisibility(View.GONE);
+        }
+        else {
+            findViewById(R.id.entry_tag_group).setVisibility(View.VISIBLE);
+            ChipGroup chips = findViewById(R.id.entry_tag_container);
+            for (Tag tag : collection) {
+                Chip chip = new Chip(this);
+                chip.setText(tag.getName());
+                chips.addView(chip);
+            }
+        }
     }
 
 

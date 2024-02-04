@@ -4,12 +4,13 @@
 
 ## 3.3.0 (XXXX-XX-XX)
 ###### Release Highlights
-Added custom quality gates for password security which can be changed in settings.
+Added custom quality gates for password security which can be changed in settings. Furthermore, entries can now be categorized using tags.
 
 ###### Features
 * Added models for custom password quality gates.
 * Users can now implement custom password security quality gates through RegEx.
 * Removed deprecated password security analysis.
+* Added tags for entries.
 
 <br>
 

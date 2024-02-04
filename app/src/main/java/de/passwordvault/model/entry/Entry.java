@@ -7,13 +7,15 @@ import java.util.Calendar;
 import java.util.Objects;
 import java.util.UUID;
 import de.passwordvault.model.detail.Detail;
+import de.passwordvault.model.tags.Tag;
+import de.passwordvault.model.tags.TagCollection;
 
 
 /**
  * Class models an entry which contains all (login) information for any type of account.
  *
  * @author  Christian-2003
- * @version 3.0.0
+ * @version 3.3.0
  */
 public class Entry {
 
@@ -83,6 +85,11 @@ public class Entry {
      */
     private ArrayList<Detail> details;
 
+    /**
+     * Attribute stores the tags of the entry.
+     */
+    private TagCollection tags;
+
 
     /**
      * Constructor instantiates a new entry without any contents.
@@ -95,6 +102,7 @@ public class Entry {
         created = Calendar.getInstance();
         changed = created;
         details = new ArrayList<>();
+        tags = new TagCollection();
     }
 
     /**
@@ -111,6 +119,7 @@ public class Entry {
         this.created = entry.created;
         this.changed = entry.changed;
         this.details = new ArrayList<>(entry.getDetails());
+        this.tags = new TagCollection(entry.getTags());
     }
 
     /**
@@ -128,6 +137,7 @@ public class Entry {
         created = Calendar.getInstance();
         changed = created;
         details = new ArrayList<>();
+        tags = new TagCollection();
     }
 
 
@@ -185,6 +195,14 @@ public class Entry {
 
     public void setDetails(ArrayList<Detail> details) {
         this.details = details;
+    }
+
+    public TagCollection getTags() {
+        return tags;
+    }
+
+    public void setTags(TagCollection tags) {
+        this.tags = tags;
     }
 
 

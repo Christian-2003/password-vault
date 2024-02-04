@@ -2,6 +2,7 @@ package de.passwordvault.viewmodel.activities;
 
 import androidx.lifecycle.ViewModel;
 import de.passwordvault.model.entry.Entry;
+import de.passwordvault.model.tags.TagCollection;
 import de.passwordvault.view.activities.AddEntryActivity;
 
 
@@ -10,7 +11,7 @@ import de.passwordvault.view.activities.AddEntryActivity;
  * relevant data that shall be persistent throughout activity changes.
  *
  * @author  Christian-2003
- * @version 1.0.1
+ * @version 3.3.0
  */
 public class AddEntryViewModel extends ViewModel {
 

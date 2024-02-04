@@ -82,6 +82,7 @@
     <!-- Entry activity -->
     <string name="entry_name">Name</string>
     <string name="entry_description">Description</string>
+    <string name="entry_tags">Tags</string>
     <string name="entry_uuid">UUID</string>
     <string name="entry_created">Created</string>
     <string name="entry_changed">Changed</string>
@@ -109,6 +110,11 @@
     <string name="detail_dialog_visible">Visible</string>
 
 
+    <!-- Tag dialog -->
+    <string name="tag_dialog_title_add">Add tag</string>
+    <string name="tag_dialog_title_edit">Edit tag</string>
+
+
     <!-- ConfirmDelete dialog -->
     <string name="confirm_delete_dialog_confirm">Confirm deletion of</string>
 
@@ -124,6 +130,7 @@
     <string name="button_login">Login</string>
     <string name="button_biometrics">Use biometrics</string>
     <string name="button_add_quality_gate">Add quality gate</string>
+    <string name="button_add_tag">Add Tag</string>
 
 
     <!-- Placeholder -->
@@ -148,6 +155,7 @@
     <string name="hint_description">Description</string>
     <string name="hint_regex">RegEx</string>
     <string name="hint_regex_test">Test RegEx</string>
+    <string name="hint_name">Name</string>
 
 
     <!-- Password / Passcode security -->
@@ -317,5 +325,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <string name="preferences_uimode" translatable="false">uimode</string>
     <string name="preferences_quality_gates_default" translatable="false">quality_gates_default</string>
     <string name="preferences_quality_gates_custom" translatable="false">quality_gates_custom</string>
+    <string name="preferences_tags" translatable="false">entry_tags</string>
 
 </resources>

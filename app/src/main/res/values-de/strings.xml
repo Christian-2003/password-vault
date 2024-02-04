@@ -78,6 +78,7 @@
     <!-- Entry activity -->
     <string name="entry_name">Name</string>
     <string name="entry_description">Beschreibung</string>
+    <string name="entry_tags">Tags</string>
     <string name="entry_uuid">UUID</string>
     <string name="entry_created">Erstellt</string>
     <string name="entry_changed">Geändert</string>
@@ -105,6 +106,11 @@
     <string name="detail_dialog_visible">Sichtbar</string>
 
 
+    <!-- Tag dialog -->
+    <string name="tag_dialog_title_add">Tag hinzufügen</string>
+    <string name="tag_dialog_title_edit">Tag bearbeiten</string>
+
+
     <!-- ConfirmDelete dialog -->
     <string name="confirm_delete_dialog_confirm">Bestätige Löschung von</string>
 
@@ -120,6 +126,7 @@
     <string name="button_login">Einloggen</string>
     <string name="button_biometrics">Biometrie verwenden</string>
     <string name="button_add_quality_gate">Kriterium hinzufügen</string>
+    <string name="button_add_tag">Tag Hinzufügen</string>
 
 
     <!-- Placeholder -->
@@ -144,6 +151,7 @@
     <string name="hint_description">Beschreibung</string>
     <string name="hint_regex">RegEx</string>
     <string name="hint_regex_test">RegEx testen</string>
+    <string name="hint_name">Name</string>
 
 
     <!-- Password / Passcode security -->

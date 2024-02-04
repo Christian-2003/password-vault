@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
  * Class models a builder which can build CSV.
  *
  * @author  Christian-2003
- * @version 3.0.0
+ * @version 3.3.0
  */
 public class CsvBuilder extends CsvConfiguration {
 
@@ -199,6 +199,15 @@ public class CsvBuilder extends CsvConfiguration {
         else {
             append(arg.toString());
         }
+    }
+
+
+    /**
+     * Method appends a line feed to the generated CSV.
+     */
+    public void newLine() {
+        csv.append(ROW_DIVIDER);
+        containsContent = false;
     }
 
 
