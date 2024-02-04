@@ -3,9 +3,9 @@
 <resources>
 
     <dimen name="app_bar_height">56dp</dimen>
-    <dimen name="default_text_size">18sp</dimen>
-    <dimen name="highlight_text_size">20sp</dimen>
-    <dimen name="app_bar_text_size">20sp</dimen>
+    <dimen name="default_text_size">16sp</dimen>
+    <dimen name="highlight_text_size">18sp</dimen>
+    <dimen name="app_bar_text_size">22sp</dimen>
 
     <dimen name="background_corner_radius">20dp</dimen>
     <dimen name="default_padding">10dp</dimen>

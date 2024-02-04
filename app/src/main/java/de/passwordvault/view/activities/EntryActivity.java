@@ -178,6 +178,7 @@ public class EntryActivity extends AppCompatActivity implements DialogCallbackLi
         else {
             findViewById(R.id.entry_tag_group).setVisibility(View.VISIBLE);
             ChipGroup chips = findViewById(R.id.entry_tag_container);
+            chips.removeAllViews();
             for (Tag tag : collection) {
                 Chip chip = new Chip(this);
                 chip.setText(tag.getName());

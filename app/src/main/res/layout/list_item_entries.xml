@@ -25,4 +25,11 @@
         android:text="@string/placeholder_description"
         style="@style/pv.text.variant"/>
 
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/entries_list_item_tag_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/entries_list_item_description"
+        android:gravity="bottom"/>
+
 </RelativeLayout>
