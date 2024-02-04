@@ -217,15 +217,9 @@ public class TagManager implements Observable<ArrayList<Tag>> {
             return;
         }
         SharedPreferences.Editor editor = App.getContext().getSharedPreferences(App.getContext().getString(R.string.preferences_file), Context.MODE_PRIVATE).edit();
-        CsvBuilder builder = new CsvBuilder();
 
-        for (Tag tag : tags) {
-            builder.append(tag.getUuid());
-            builder.append(tag.getName());
-            builder.newLine();
-        }
 
-        editor.putString(App.getContext().getString(R.string.preferences_tags), builder.toString());
+        editor.putString(App.getContext().getString(R.string.preferences_tags), toCsv());
 
         editor.apply();
     }
@@ -290,6 +284,51 @@ public class TagManager implements Observable<ArrayList<Tag>> {
 
 
     /**
+     * Converts the managed tags into a CSV representation.
+     *
+     * @return  CSV representation of the tags.
+     */
+    public String toCsv() {
+        CsvBuilder builder = new CsvBuilder();
+
+        for (Tag tag : tags) {
+            builder.append(tag.getUuid());
+            builder.append(tag.getName());
+            builder.newLine();
+        }
+
+        return builder.toString();
+    }
+
+
+    /**
+     * Converts a CSV representation of the tags into tags.
+     *
+     * @param csv   CSV to convert into tags.
+     */
+    public void fromCsv(String csv) {
+        if (csv == null || csv.isEmpty()) {
+            return;
+        }
+        tags.clear();
+
+        String[] lines = csv.split("\n");
+        for (String line : lines) {
+            if (line == null || line.isEmpty()) {
+                continue;
+            }
+            CsvParser parser = new CsvParser(line);
+            ArrayList<String> tagContent = parser.parseCsv();
+            if (tagContent.size() != 2) {
+                //Tag corrupt:
+                continue;
+            }
+            tags.add(new Tag(tagContent.get(1), tagContent.get(0)));
+        }
+    }
+
+
+    /**
      * Method returns the index of the specified UUID within the list of tags. If no tag with the
      * specified UUID exists, {@code -1} is returned instead.
      *
@@ -319,23 +358,7 @@ public class TagManager implements Observable<ArrayList<Tag>> {
         SharedPreferences preferences = App.getContext().getSharedPreferences(App.getContext().getString(R.string.preferences_file), Context.MODE_PRIVATE);
 
         String tagsContent = preferences.getString(App.getContext().getString(R.string.preferences_tags), "");
-        if (tagsContent == null || tagsContent.isEmpty()) {
-            return;
-        }
-
-        String[] lines = tagsContent.split("\n");
-        for (String line : lines) {
-            if (line == null || line.isEmpty()) {
-                continue;
-            }
-            CsvParser parser = new CsvParser(line);
-            ArrayList<String> tagContent = parser.parseCsv();
-            if (tagContent.size() != 2) {
-                //Tag corrupt:
-                continue;
-            }
-            tags.add(new Tag(tagContent.get(1), tagContent.get(0)));
-        }
+        fromCsv(tagsContent);
     }
 
 

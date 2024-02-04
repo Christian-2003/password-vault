@@ -11,6 +11,7 @@ Added custom quality gates for password security which can be changed in setting
 * Users can now implement custom password security quality gates through RegEx.
 * Removed deprecated password security analysis.
 * Added tags for entries.
+* Tags are included in backups.
 
 <br>
 

@@ -19,6 +19,8 @@ import de.passwordvault.model.detail.DetailDTO;
 import de.passwordvault.model.entry.EntryDTO;
 import de.passwordvault.model.storage.app.InstanceToDTOConverter;
 import de.passwordvault.model.storage.encryption.EncryptionException;
+import de.passwordvault.model.tags.Tag;
+import de.passwordvault.model.tags.TagManager;
 
 
 /**
@@ -26,7 +28,7 @@ import de.passwordvault.model.storage.encryption.EncryptionException;
  * Android device.
  *
  * @author  Christian-2003
- * @version 3.2.0
+ * @version 3.3.0
  */
 public class XmlBackupCreator extends XmlBackupConfiguration {
 
@@ -109,6 +111,11 @@ public class XmlBackupCreator extends XmlBackupConfiguration {
 
         insertTag(writer, TAG_PASSWORD_VAULT, 0, false, true);
 
+        //Add version number:
+        insertTag(writer, TAG_VERSION, 4, false, false);
+        writer.write(Versions.VERSION_LATEST);
+        insertTag(writer, TAG_VERSION, 4, true, true);
+
         //Add encryption-related data:
         if (encryptionAlgorithm != null) {
             insertTag(writer, TAG_ENCRYPTION, 4, false, true);
@@ -140,6 +147,12 @@ public class XmlBackupCreator extends XmlBackupConfiguration {
 
         insertTag(writer, TAG_DETAILS, 8, true, true);
         insertTag(writer, TAG_DATA, 4, true, true);
+        insertTag(writer, TAG_TAGS, 4, false, true);
+
+        //Add all tags:
+        writer.write(TagManager.getInstance().toCsv());
+
+        insertTag(writer, TAG_TAGS, 4, true, true);
         insertTag(writer, TAG_PASSWORD_VAULT, 0, true, true);
     }
 

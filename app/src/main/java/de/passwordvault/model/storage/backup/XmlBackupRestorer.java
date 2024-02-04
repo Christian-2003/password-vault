@@ -22,6 +22,7 @@ import de.passwordvault.model.entry.EntryDTO;
 import de.passwordvault.model.entry.EntryHandle;
 import de.passwordvault.model.storage.app.DTOToInstanceConverter;
 import de.passwordvault.model.storage.encryption.EncryptionException;
+import de.passwordvault.model.tags.TagManager;
 
 
 /**
@@ -30,7 +31,7 @@ import de.passwordvault.model.storage.encryption.EncryptionException;
  * handled entries with the restored entries!!!
  *
  * @author  Christian-2003
- * @version 3.2.0
+ * @version 3.3.0
  */
 public class XmlBackupRestorer extends XmlBackupConfiguration{
 
@@ -131,13 +132,23 @@ public class XmlBackupRestorer extends XmlBackupConfiguration{
             try {
                 if (currentDataNode.getNodeName().equals(TAG_ENTRIES)) {
                     entries = getEntries(currentDataNode);
-                } else if (currentDataNode.getNodeName().equals(TAG_DETAILS)) {
+                }
+                else if (currentDataNode.getNodeName().equals(TAG_DETAILS)) {
                     details = getDetails(currentDataNode);
                 }
             }
             catch (EncryptionException e) {
                 e.printStackTrace();
                 throw e;
+            }
+        }
+
+        //Restore tags:
+        Node tagNode = xml.getElementsByTagName(TAG_TAGS).item(0);
+        if (tagNode != null) {
+            String content = tagNode.getTextContent();
+            if (content != null && !content.isEmpty()) {
+                TagManager.getInstance().fromCsv(content);
             }
         }
 

@@ -8,14 +8,40 @@ import de.passwordvault.model.storage.encryption.AES;
  * Class contains the configuration for the XML backup.
  *
  * @author  Christian-2003
- * @version 3.2.0
+ * @version 3.3.0
  */
 public abstract class XmlBackupConfiguration {
+
+    /**
+     * Class contains the version numbers. Add a new version number every time that meaningful
+     * changes happen to the XML backups, so that the XML restorer can account for these changes.
+     */
+    protected static class Versions {
+
+        /**
+         * Field stores the latest version number.
+         * <b>IMPORTANT: Update this to the newest version number every time a new version is
+         * introduced!</b>
+         */
+        public static final String VERSION_LATEST = "1";
+
+        /**
+         * Field stores the version number for the first XML backup.
+         */
+        public static final String VERSION_1 = "1";
+
+    }
+
 
     /**
      * Field stores the XML tag which encapsulates everything within the XML document.
      */
     protected static final String TAG_PASSWORD_VAULT = "password_vault";
+
+    /**
+     * Field stores the XML tag which encapsulates the version number of the XML backup.
+     */
+    protected static final String TAG_VERSION = "version";
 
     /**
      * Field stores the XML tag which encapsulates all data regarding the encryption.
@@ -42,6 +68,11 @@ public abstract class XmlBackupConfiguration {
      * Field stores the XML tag which contains the backed up details.
      */
     protected static final String TAG_DETAILS = "details";
+
+    /**
+     * Field stores the XML tag which contains the backed up tags.
+     */
+    protected static final String TAG_TAGS = "tags";
 
 
     /**
