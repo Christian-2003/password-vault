@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/entries_list_item_name"
-        android:gravity="bottom"
+        android:gravity="left"
         android:text="@string/placeholder_description"
         style="@style/pv.text.variant"/>
 
@@ -30,6 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/entries_list_item_description"
+        android:orientation="horizontal"
         android:gravity="bottom"/>
 
 </RelativeLayout>

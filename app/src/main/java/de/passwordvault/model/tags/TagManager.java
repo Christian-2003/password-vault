@@ -7,6 +7,8 @@ import de.passwordvault.App;
 import de.passwordvault.R;
 import de.passwordvault.model.Observable;
 import de.passwordvault.model.Observer;
+import de.passwordvault.model.entry.Entry;
+import de.passwordvault.model.entry.EntryHandle;
 import de.passwordvault.model.storage.csv.CsvBuilder;
 import de.passwordvault.model.storage.csv.CsvParser;
 
@@ -118,9 +120,9 @@ public class TagManager implements Observable<ArrayList<Tag>> {
         int index = indexOf(uuid);
         if (index != -1) {
             tags.set(index, tag);
+            stagedChanges = true;
+            notifyObservers();
         }
-        stagedChanges = true;
-        notifyObservers();
     }
 
 
@@ -155,6 +157,7 @@ public class TagManager implements Observable<ArrayList<Tag>> {
         boolean removed = tags.remove(tag);
         if (removed) {
             stagedChanges = true;
+            deleteTagFromAllEntries(tag);
             notifyObservers();
         }
         return removed;
@@ -333,6 +336,21 @@ public class TagManager implements Observable<ArrayList<Tag>> {
             }
             tags.add(new Tag(tagContent.get(1), tagContent.get(0)));
         }
+    }
+
+
+    /**
+     * Method starts a thread that removes the passed tag from all entries.
+     *
+     * @param deleteTag Tag which was deleted and now needs to be removed from all entries.
+     */
+    private void deleteTagFromAllEntries(Tag deleteTag) {
+        Thread deleteThread = new Thread(() -> {
+            for (Entry entry : EntryHandle.getInstance().getEntries()) {
+                entry.getTags().removeIf(tag -> tag.equals(deleteTag));
+            }
+        });
+        deleteThread.start();
     }
 
 }

@@ -66,7 +66,7 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
         if (bundle != null && bundle.containsKey("entry")) {
             //Activity shall be used to edit an entry:
             if (viewModel.getEntry() == null) {
-                viewModel.setEntry(new Entry(EntryHandle.getInstance().getEntry(bundle.getString("entry"))));
+                viewModel.setEntry(EntryHandle.getInstance().getEntry(bundle.getString("entry")));
             }
             ((TextView)findViewById(R.id.add_entry_title)).setText(viewModel.getEntry().getName());
             ((TextView)findViewById(R.id.add_entry_name)).setText(viewModel.getEntry().getName());
@@ -109,7 +109,7 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
             AddEntryActivity.this.finish();
         });
 
-        //Add ClicListener to add new tag:
+        //Add ClickListener to add new tag:
         findViewById(R.id.add_entry_button_add_tag).setOnClickListener(view -> {
             EditTagDialog dialog = new EditTagDialog();
             dialog.show(getSupportFragmentManager(), "");
@@ -206,7 +206,7 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
 
         //Test whether all required data was entered:
         boolean somethingNotEntered = false;
-        if (name == null || name.isEmpty()) {
+        if (name.isEmpty()) {
             ((TextInputLayout)findViewById(R.id.add_entry_name_hint)).setError(getResources().getString(R.string.error_empty_input));
             somethingNotEntered = true;
         }

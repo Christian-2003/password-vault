@@ -11,14 +11,9 @@ import android.widget.Filterable;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
-
 import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.model.entry.Entry;
-import de.passwordvault.model.tags.Tag;
 import de.passwordvault.view.fragments.EntriesFragment;
 
 
@@ -27,7 +22,7 @@ import de.passwordvault.view.fragments.EntriesFragment;
  * are displayed through a {@linkplain android.widget.ListView} within the {@linkplain EntriesFragment}.
  *
  * @author  Christian-2003
- * @version 3.3.0
+ * @version 2.2.0
  */
 public class EntriesListAdapter extends BaseAdapter implements Filterable {
 
@@ -46,11 +41,6 @@ public class EntriesListAdapter extends BaseAdapter implements Filterable {
          * Attribute stores the {@link TextView} to display the description.
          */
         public TextView description;
-
-        /**
-         * Attribute stores the {@linkplain ChipGroup} to display the tags.
-         */
-        public ChipGroup tagContainer;
 
     }
 
@@ -137,7 +127,6 @@ public class EntriesListAdapter extends BaseAdapter implements Filterable {
             convertView = inflater.inflate(R.layout.list_item_entries, parent, false);
             holder.name = convertView.findViewById(R.id.entries_list_item_name);
             holder.description = convertView.findViewById(R.id.entries_list_item_description);
-            holder.tagContainer = convertView.findViewById(R.id.entries_list_item_tag_container);
             convertView.setTag(holder);
         }
         else {
@@ -145,12 +134,6 @@ public class EntriesListAdapter extends BaseAdapter implements Filterable {
         }
         holder.name.setText(entry.getName());
         holder.description.setText(entry.getDescription());
-        holder.tagContainer.removeAllViews();
-        for (Tag tag : entry.getTags()) {
-            Chip chip = new Chip(convertView.getContext());
-            chip.setText(tag.getName());
-            holder.tagContainer.addView(chip);
-        }
         return convertView;
     }
 
