@@ -149,6 +149,7 @@ public class XmlBackupRestorer extends XmlBackupConfiguration{
             String content = tagNode.getTextContent();
             if (content != null && !content.isEmpty()) {
                 TagManager.getInstance().fromCsv(content);
+                TagManager.getInstance().save(true);
             }
         }
 

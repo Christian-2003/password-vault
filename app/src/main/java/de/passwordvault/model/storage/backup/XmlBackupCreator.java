@@ -114,7 +114,7 @@ public class XmlBackupCreator extends XmlBackupConfiguration {
         //Add version number:
         insertTag(writer, TAG_VERSION, 4, false, false);
         writer.write(Versions.VERSION_LATEST);
-        insertTag(writer, TAG_VERSION, 4, true, true);
+        insertTag(writer, TAG_VERSION, 0, true, true);
 
         //Add encryption-related data:
         if (encryptionAlgorithm != null) {
