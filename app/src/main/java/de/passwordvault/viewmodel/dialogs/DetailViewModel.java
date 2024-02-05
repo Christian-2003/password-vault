@@ -25,7 +25,7 @@ import de.passwordvault.view.utils.DialogCallbackListener;
  * Class implements the {@linkplain ViewModel} for the {@link DetailDialog}-class.
  *
  * @author  Christian-2003
- * @version 3.2.1
+ * @version 3.3.0
  */
 public class DetailViewModel extends ViewModel {
 
@@ -126,6 +126,7 @@ public class DetailViewModel extends ViewModel {
         nameEditText.setText(detail.getName());
         TextInputEditText contentEditText = view.findViewById(R.id.detail_dialog_content);
         contentEditText.setText(detail.getContent());
+        TextInputLayout contentLayout = view.findViewById(R.id.detail_dialog_content_hint);
         CheckBox obfuscatedCheckBox = view.findViewById(R.id.detail_dialog_obfuscated);
         obfuscatedCheckBox.setChecked(detail.isObfuscated());
         CheckBox visibleCheckBox = view.findViewById(R.id.detail_dialog_visible);
@@ -133,24 +134,15 @@ public class DetailViewModel extends ViewModel {
         if (detail.getType() != DetailType.UNDEFINED) {
             detailTypeTextView.setText(Detail.getTypes()[detail.getType().ordinal()]);
         }
+        if (detail.isObfuscated()) {
+            obfuscateContentEditText(true, view);
+        }
         detailTypeTextView.setAdapter(new ArrayAdapter<>(view.getContext(), android.R.layout.simple_spinner_dropdown_item, Detail.getTypes()));
 
         obfuscatedCheckBox.setOnClickListener(view1 -> obfuscatedEnteredAutomatically = false);
 
         //Make EditText for content obfuscated when CheckBox is checked:
-        obfuscatedCheckBox.setOnCheckedChangeListener((compoundButton, b) -> {
-            TextInputLayout contentLayout = view.findViewById(R.id.detail_dialog_content_hint);
-            if (obfuscatedCheckBox.isChecked()) {
-                contentEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                contentLayout.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
-                contentEditText.setTransformationMethod(new PasswordTransformationMethod());
-            }
-            else {
-                contentEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                contentLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
-                contentEditText.setTransformationMethod(null);
-            }
-        });
+        obfuscatedCheckBox.setOnCheckedChangeListener((compoundButton, b) -> obfuscateContentEditText(obfuscatedCheckBox.isChecked(), view));
 
         detailTypeTextView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -293,6 +285,29 @@ public class DetailViewModel extends ViewModel {
             detail.setVisible(visible);
         }
         return true;
+    }
+
+
+    /**
+     * Method changes whether the EditText which is used to enter the content of the detail should
+     * be obfuscated.
+     *
+     * @param obfuscate Whether the content should be obfuscated.
+     * @param view      Inflated dialog view.
+     */
+    private void obfuscateContentEditText(boolean obfuscate, View view) {
+        TextInputEditText contentEditText = view.findViewById(R.id.detail_dialog_content);
+        TextInputLayout contentLayout = view.findViewById(R.id.detail_dialog_content_hint);
+        if (obfuscate) {
+            contentEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            contentLayout.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
+            contentEditText.setTransformationMethod(new PasswordTransformationMethod());
+        }
+        else {
+            contentEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            contentLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
+            contentEditText.setTransformationMethod(null);
+        }
     }
 
 }
