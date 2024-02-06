@@ -149,10 +149,10 @@ public class EditTagViewModel extends ViewModel {
         tag.setName(name);
 
         if (creatingNewDialog) {
-            TagManager.getInstance().addTag(tag);
+            TagManager.getInstance().add(tag);
         }
         else {
-            TagManager.getInstance().setTag(tag, tag.getUuid());
+            TagManager.getInstance().set(tag, tag.getUuid());
         }
         TagManager.getInstance().save();
 
@@ -167,7 +167,7 @@ public class EditTagViewModel extends ViewModel {
         if (creatingNewDialog) {
             return;
         }
-        TagManager.getInstance().removeTag(tag);
+        TagManager.getInstance().remove(tag);
         TagManager.getInstance().save();
     }
 

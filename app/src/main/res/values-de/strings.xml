@@ -73,6 +73,7 @@
     <string name="settings_about_bug_info">Fehler auf GitHub melden</string>
     <string name="settings_about_update">Software aktualisieren</string>
     <string name="settings_about_update_info">Neueste Version herunterladen</string>
+    <string name="settings_about_version">App-Version</string>
 
 
     <!-- Entry activity -->

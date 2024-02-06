@@ -63,6 +63,15 @@
 
 
 
+    <!-- Style for eyecatcher -->
+    <style name="pv.eyecatcher">
+        <item name="android:background">@drawable/shape_important</item>
+        <item name="android:layout_height">14dp</item>
+        <item name="android:layout_width">14dp</item>
+    </style>
+
+
+
     <!-- Style for divider -->
     <style name="divider">
         <item name="android:layout_width">match_parent</item>

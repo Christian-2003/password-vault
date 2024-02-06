@@ -12,6 +12,7 @@ Added custom quality gates for password security which can be changed in setting
 * Removed deprecated password security analysis.
 * Added tags for entries.
 * Tags are included in backups.
+* Details are correctly obfuscated when editing obfuscated details.
 
 <br>
 

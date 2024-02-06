@@ -52,7 +52,7 @@ public class TagCollection extends ArrayList<Tag> {
             if (uuid == null || uuid.isEmpty()) {
                 continue;
             }
-            Tag tag = TagManager.getInstance().getTag(uuid);
+            Tag tag = TagManager.getInstance().get(uuid);
             if (tag != null) {
                 add(tag);
             }

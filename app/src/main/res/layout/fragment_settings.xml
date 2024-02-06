@@ -481,6 +481,22 @@
 
                 </LinearLayout>
 
+                <View
+                    style="@style/divider"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_about_version"
+                    style="@style/pv.text"/>
+
+                <TextView
+                    android:id="@+id/settings_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_about_version"
+                    style="@style/pv.text.variant"/>
+
             </LinearLayout>
 
         </LinearLayout>

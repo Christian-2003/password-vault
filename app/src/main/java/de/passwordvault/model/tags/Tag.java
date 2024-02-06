@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
+import de.passwordvault.model.Identifiable;
+
 
 /**
  * Class models a tag for {@link de.passwordvault.model.entry.Entry}-instances.
@@ -13,7 +15,7 @@ import java.util.UUID;
  * @author  Christian-2003
  * @version 3.3.0
  */
-public class Tag implements Serializable {
+public class Tag implements Serializable, Identifiable {
 
     /**
      * Attribute stores the name of the tag.

@@ -77,6 +77,7 @@
     <string name="settings_about_update">Software Update</string>
     <string name="settings_about_update_info">Download newest release</string>
     <string name="settings_about_update_link" translatable="false">https://github.com/Christian-2003/password-vault/releases/latest</string>
+    <string name="settings_about_version">App version</string>
 
 
     <!-- Entry activity -->

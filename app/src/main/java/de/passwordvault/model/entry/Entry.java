@@ -7,7 +7,6 @@ import java.util.Calendar;
 import java.util.Objects;
 import java.util.UUID;
 import de.passwordvault.model.detail.Detail;
-import de.passwordvault.model.tags.Tag;
 import de.passwordvault.model.tags.TagCollection;
 
 
@@ -19,17 +18,6 @@ import de.passwordvault.model.tags.TagCollection;
  */
 public class Entry {
 
-    /**
-     * Static method generates a new {@link Entry} instance with basic attribute values, as defined
-     * with {@link #Entry()}.
-     *
-     * @return  New Entry instance.
-     */
-    @NonNull
-    @Contract(" -> new")
-    public static Entry getInstance() {
-        return new Entry();
-    }
 
     /**
      * Static method generates a new {@link Entry} instance with the passed UUID.

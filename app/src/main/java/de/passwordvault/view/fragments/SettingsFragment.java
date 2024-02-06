@@ -13,11 +13,14 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import java.io.Serializable;
 import java.util.Objects;
+import de.passwordvault.BuildConfig;
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.storage.backup.XmlBackupRestorer;
@@ -121,6 +124,13 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         else {
             view.findViewById(R.id.settings_security_biometrics_container).setVisibility(View.GONE);
         }
+        if (BuildConfig.DEBUG) {
+            ((TextView)view.findViewById(R.id.settings_version)).setText(BuildConfig.VERSION_NAME + " (Debug Build)");
+        }
+        else {
+            ((TextView)view.findViewById(R.id.settings_version)).setText(BuildConfig.VERSION_NAME);
+        }
+
 
         view.findViewById(R.id.settings_security_password_clickable).setOnClickListener(view -> changePassword());
         view.findViewById(R.id.settings_security_backup_clickable).setOnClickListener(view -> selectDirectory(SELECT_DIRECTORY_TO_CREATE_BACKUP));
