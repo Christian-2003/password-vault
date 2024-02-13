@@ -13,10 +13,12 @@ import androidx.biometric.BiometricPrompt;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import java.io.File;
 import java.util.Objects;
 import de.passwordvault.R;
 import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.security.login.Account;
+import de.passwordvault.viewmodel.activities.DataConversionViewModel;
 import de.passwordvault.viewmodel.activities.LoginViewModel;
 
 
@@ -117,9 +119,20 @@ public class LoginActivity extends AppCompatActivity {
 
 
     /**
-     * Method opens the {@link MainActivity}.
+     * Method opens the {@link MainActivity} or the {@link DataConversionActivity} if data conversion
+     * is required.
      */
     private void continueToMainActivity() {
+        //Convert data before continuing if necessary:
+        File file = new File(getFilesDir(), "entries.csv");
+        if (file.exists()) {
+            Intent intent = new Intent(LoginActivity.this, DataConversionActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+            return;
+        }
+
         //Get the EntryManager instance once, which will begin loading all entries from storage.
         //While the app is changing activities (which takes a while) the entries can be loaded which
         //makes navigating to the entries the first time a lot smoother.

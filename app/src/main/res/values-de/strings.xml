@@ -96,6 +96,13 @@
     <string name="login_biometrics_fail">Authentifizierung fehlgeschlagen.</string>
 
 
+    <!-- DataConversion activity -->
+    <string name="data_conversion_headline">Update Nachbearbeitung</string>
+    <string name="data_conversion_subline">Aktualisiert auf Verision {version}</string>
+    <string name="data_conversion_info">Einige Vorbereitungen müssen durchgeführt werden, bevor Sie die App weiter benutzen können. Bitte seien Sie geduldig, dies wird nicht länger als eine Minute dauern.</string>
+    <string name="data_conversion_error">Fehler</string>
+
+
     <!-- Detail dialog -->
     <string name="detail_dialog_title_edit">Information bearbeiten</string>
     <string name="detail_dialog_title_add">Information hinzufügen</string>

@@ -23,11 +23,6 @@ import de.passwordvault.model.tags.TagCollection;
 public class EntryAbbreviated implements Identifiable, Storable, Serializable {
 
     /**
-     * Field stores the tag used for logging.
-     */
-    private static String TAG = "EntryAbbreviated";
-
-    /**
      * Attribute stores type 4 UUID of the entry.
      */
     protected String uuid;

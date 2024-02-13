@@ -100,6 +100,13 @@
     <string name="login_biometrics_fail">Authentication failed.</string>
 
 
+    <!-- DataConversion activity -->
+    <string name="data_conversion_headline">Update Post Processing</string>
+    <string name="data_conversion_subline">Updated to version {version}</string>
+    <string name="data_conversion_info">Some preparation need to be made before you can continue to use the app. Please be patient, this will only take up to one minute.</string>
+    <string name="data_conversion_error">Error</string>
+
+
     <!-- Detail dialog -->
     <string name="detail_dialog_title_edit">Edit Detail</string>
     <string name="detail_dialog_title_add">Add Detail</string>
