@@ -2,7 +2,6 @@ package de.passwordvault.model.storage.backup;
 
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
-import android.util.Log;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -16,11 +15,12 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import de.passwordvault.App;
-import de.passwordvault.model.detail.DetailDTO;
-import de.passwordvault.model.entry.Entry;
-import de.passwordvault.model.entry.EntryDTO;
-import de.passwordvault.model.entry.EntryHandle;
-import de.passwordvault.model.storage.app.DTOToInstanceConverter;
+import de.passwordvault.model.detail.DetailBackupDTO;
+import de.passwordvault.model.entry.EntryAbbreviated;
+import de.passwordvault.model.entry.EntryExtended;
+import de.passwordvault.model.entry.EntryManager;
+import de.passwordvault.model.storage.app.StorageException;
+import de.passwordvault.model.storage.csv.CsvConfiguration;
 import de.passwordvault.model.storage.encryption.EncryptionException;
 import de.passwordvault.model.tags.TagManager;
 
@@ -122,8 +122,8 @@ public class XmlBackupRestorer extends XmlBackupConfiguration{
         }
         //Read the data:
         NodeList dataNodes = xml.getElementsByTagName(TAG_DATA).item(0).getChildNodes();
-        ArrayList<EntryDTO> entries = null;
-        ArrayList<DetailDTO> details = null;
+        ArrayList<EntryAbbreviated> entries = null;
+        ArrayList<DetailBackupDTO> details = null;
         for (int i = 0; i < dataNodes.getLength(); i++) {
             Node currentDataNode = dataNodes.item(i);
             if (currentDataNode == null) {
@@ -204,26 +204,29 @@ public class XmlBackupRestorer extends XmlBackupConfiguration{
      * node.
      *
      * @param detailsNode           Node from which to retrieve the details.
-     * @return                      List of {@link DetailDTO}-instances.
+     * @return                      List of {@link DetailBackupDTO}-instances.
      * @throws EncryptionException  The data could not be decrypted.
      */
-    private ArrayList<DetailDTO> getDetails(Node detailsNode) throws EncryptionException {
+    private ArrayList<DetailBackupDTO> getDetails(Node detailsNode) throws EncryptionException {
         String content = detailsNode.getTextContent();
         if (content == null) {
             return null;
         }
-        String[] details = content.split("\n");
-        ArrayList<DetailDTO> detailDTOs = new ArrayList<>(details.length - 1);
+        String[] lines = content.split("" + CsvConfiguration.ROW_DIVIDER);
+        ArrayList<DetailBackupDTO> details = new ArrayList<>(lines.length - 1);
         //Ignore last line in for-loop, as it only contains spacing for the closing tag!
-        for (int i = 0; i < details.length - 1; i++) {
-            String s = details[i];
-            if (s == null || s.isEmpty()) {
+        for (String s : lines) {
+            DetailBackupDTO detail;
+            try {
+                detail = new DetailBackupDTO(decrypt(s));
+            }
+            catch (StorageException | NullPointerException | EncryptionException e) {
+                //Data corrupt:
                 continue;
             }
-            Log.d("RESTORE", "DetailContent='" + s + "'");
-            detailDTOs.add(new DetailDTO(decrypt(s)));
+            details.add(detail);
         }
-        return detailDTOs;
+        return details;
     }
 
     /**
@@ -231,39 +234,56 @@ public class XmlBackupRestorer extends XmlBackupConfiguration{
      * node.
      *
      * @param entriesNode           Node from which to retrieve the entries.
-     * @return                      List of {@link EntryDTO}-instances.
+     * @return                      List of {@link EntryAbbreviated}-instances.
      * @throws EncryptionException  The data could not be decrypted.
      */
-    private ArrayList<EntryDTO> getEntries(Node entriesNode) throws EncryptionException {
+    private ArrayList<EntryAbbreviated> getEntries(Node entriesNode) throws EncryptionException {
         String content = entriesNode.getTextContent();
         if (content == null) {
             return null;
         }
-        String[] entries = content.split("\n");
-        ArrayList<EntryDTO> entryDTOs = new ArrayList<>(entries.length - 1);
+        String[] lines = content.split("" + CsvConfiguration.ROW_DIVIDER);
+        ArrayList<EntryAbbreviated> entries = new ArrayList<>(lines.length - 1);
         //Ignore last line in for-loop, as it only contains spacing for the closing tag!
-        for (int i = 0; i < entries.length - 1; i++) {
-            String s = entries[i];
-            if (s == null || s.isEmpty()) {
+        for (String s : lines) {
+            EntryAbbreviated abbreviated = new EntryAbbreviated();
+            try {
+                abbreviated.fromStorable(decrypt(s));
+            }
+            catch (StorageException | EncryptionException e) {
+                //Data corrupt:
                 continue;
             }
-            Log.d("RESTORE", "EntryContent='" + s + "'");
-            entryDTOs.add(new EntryDTO(decrypt(s)));
+            entries.add(abbreviated);
         }
-        return entryDTOs;
+        return entries;
     }
 
 
     /**
-     * Method replaces the handled entries within {@link EntryHandle} with the passe DTOs.
+     * Method replaces the handled entries within {@link EntryManager} with the passe DTOs.
      *
-     * @param entries   List of {@link EntryDTO}-instances which shall replace the handled entries.
-     * @param details   List of {@link DetailDTO}-instances which shall replace the handled details.
+     * @param entries   List of {@link EntryAbbreviated}-instances which shall replace the handled
+     *                  entries.
+     * @param details   List of {@link DetailBackupDTO}-instances which shall replace the handled
+     *                  details.
      */
-    private void restoreEntries(ArrayList<EntryDTO> entries, ArrayList<DetailDTO> details) {
-        DTOToInstanceConverter converter = new DTOToInstanceConverter(entries, details);
-        ArrayList<Entry> generated = converter.generateInstances();
-        EntryHandle.getInstance().replaceAll(generated);
+    private void restoreEntries(ArrayList<EntryAbbreviated> entries, ArrayList<DetailBackupDTO> details) {
+        for (EntryAbbreviated abbreviated : entries) {
+            EntryExtended extended = new EntryExtended(abbreviated);
+            for (DetailBackupDTO detail : details) {
+                if (extended.getUuid().equals(detail.getEntryUuid())) {
+                    extended.add(detail.toDetail());
+                }
+            }
+            EntryManager.getInstance().add(extended);
+        }
+        try {
+            EntryManager.getInstance().save(true);
+        }
+        catch (StorageException e) {
+            //Ignore...
+        }
     }
 
 

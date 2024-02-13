@@ -15,7 +15,7 @@ import java.util.HashMap;
  * @author      Christian-2003
  * @version     3.3.0
  */
-public abstract class GenericManager<T extends Identifiable> implements IdentifiableManager<T>, PersistableManager, Observable<ArrayList<T>> {
+public abstract class GenericManager<T extends Identifiable> implements Manager<T>, Observable<ArrayList<T>> {
 
     /**
      * Attribute stores whether changes were made to the managed items. This is used to determine
@@ -46,8 +46,6 @@ public abstract class GenericManager<T extends Identifiable> implements Identifi
     private final ArrayList<Observer<ArrayList<T>>> observers;
 
 
-
-
     /**
      * Constructor instantiates a new <c>GenericManager</c>. The constructor automatically loads
      * all items from persistent storage.
@@ -58,7 +56,6 @@ public abstract class GenericManager<T extends Identifiable> implements Identifi
         cachedArrayList = new ArrayList<>();
         changesMade = false;
         changesSinceLastCachedArrayList = true; //Set to true so that new array list is generated when first accessed.
-        load();
     }
 
 

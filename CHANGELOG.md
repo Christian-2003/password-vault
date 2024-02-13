@@ -4,7 +4,7 @@
 
 ## 3.3.0 (XXXX-XX-XX)
 ###### Release Highlights
-Added custom quality gates for password security which can be changed in settings. Furthermore, entries can now be categorized using tags.
+Added custom quality gates for password security which can be changed in settings. Furthermore, entries can now be categorized using tags. Additionally, the storage of the accounts was completely reworked.
 
 ###### Features
 * Added models for custom password quality gates.
@@ -13,6 +13,7 @@ Added custom quality gates for password security which can be changed in setting
 * Added tags for entries.
 * Tags are included in backups.
 * Details are correctly obfuscated when editing obfuscated details.
+* Complete reworking of the storage management for entries and details.
 
 <br>
 

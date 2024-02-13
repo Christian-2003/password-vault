@@ -17,14 +17,14 @@ import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.model.Observable;
 import de.passwordvault.model.Observer;
-import de.passwordvault.model.entry.EntryHandle;
+import de.passwordvault.model.entry.EntryExtended;
+import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.tags.Tag;
 import de.passwordvault.model.tags.TagManager;
 import de.passwordvault.view.dialogs.EditTagDialog;
 import de.passwordvault.viewmodel.activities.AddEntryViewModel;
 import de.passwordvault.view.utils.DetailViewBuilder;
 import de.passwordvault.model.detail.Detail;
-import de.passwordvault.model.entry.Entry;
 import de.passwordvault.view.dialogs.ConfirmDeleteDetailDialog;
 import de.passwordvault.view.dialogs.DetailDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
@@ -66,7 +66,7 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
         if (bundle != null && bundle.containsKey("entry")) {
             //Activity shall be used to edit an entry:
             if (viewModel.getEntry() == null) {
-                viewModel.setEntry(EntryHandle.getInstance().getEntry(bundle.getString("entry")));
+                viewModel.setEntry(EntryManager.getInstance().get(bundle.getString("entry")));
             }
             ((TextView)findViewById(R.id.add_entry_title)).setText(viewModel.getEntry().getName());
             ((TextView)findViewById(R.id.add_entry_name)).setText(viewModel.getEntry().getName());
@@ -77,7 +77,7 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
         }
         else if (viewModel.getEntry() == null){
             //Activity shall be used to create a new entry:
-            viewModel.setEntry(new Entry());
+            viewModel.setEntry(new EntryExtended());
         }
 
         setupTags();
@@ -164,7 +164,7 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
             //New detail shall be added:
             DetailDialog detailDialog = (DetailDialog)dialog;
             Detail edited = detailDialog.getDetail();
-            Entry entry = viewModel.getEntry();
+            EntryExtended entry = viewModel.getEntry();
             if (viewModel.getEntry().contains(edited.getUuid())) {
                 entry.set(edited);
             }
@@ -175,7 +175,7 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
         }
         else if (dialog instanceof ConfirmDeleteDetailDialog) {
             ConfirmDeleteDetailDialog deleteDialog = (ConfirmDeleteDetailDialog)dialog;
-            Entry entry = viewModel.getEntry();
+            EntryExtended entry = viewModel.getEntry();
             entry.remove(deleteDialog.getUuid());
             viewModel.setEntry(entry);
         }
@@ -198,7 +198,7 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
 
 
     /**
-     * Method processes the user input and saves the edited entry to {@linkplain EntryHandle#getInstance()}.
+     * Method processes the user input and saves the edited entry to {@linkplain EntryManager}.
      */
     private boolean processUserInput() {
         String name = ((TextView)findViewById(R.id.add_entry_name)).getText().toString();
@@ -221,7 +221,7 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
         viewModel.getEntry().setName(name);
         viewModel.getEntry().setDescription(description);
         viewModel.getEntry().notifyDataChange();
-        EntryHandle.getInstance().set(viewModel.getEntry());
+        EntryManager.getInstance().set(viewModel.getEntry(), viewModel.getEntry().getUuid());
         return true;
     }
 

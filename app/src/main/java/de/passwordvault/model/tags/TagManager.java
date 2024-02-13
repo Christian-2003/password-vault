@@ -6,23 +6,24 @@ import java.util.ArrayList;
 import de.passwordvault.App;
 import de.passwordvault.R;
 import de.passwordvault.model.GenericManager;
-import de.passwordvault.model.entry.Entry;
-import de.passwordvault.model.entry.EntryHandle;
+import de.passwordvault.model.PersistableManager;
+import de.passwordvault.model.entry.EntryAbbreviated;
+import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.storage.csv.CsvBuilder;
 import de.passwordvault.model.storage.csv.CsvParser;
 
 
 /**
- * Class implements the tag manager which manages all available tags for {@link de.passwordvault.model.entry.Entry}-
- * instances. The class is implemented using singleton-pattern. The singleton-instance can be
- * retrieved through {@link #getInstance()}. When accessing the singleton-instance for the first time,
- * all previously saved tags are loaded from shared preferences. Tags must be saved manually through
- * {@link #save()}.
+ * Class implements the tag manager which manages all available tags for
+ * {@link de.passwordvault.model.entry.EntryAbbreviated}- instances. The class is implemented using
+ * singleton-pattern. The singleton-instance can be retrieved through {@link #getInstance()}. When
+ * accessing the singleton-instance for the first time, all previously saved tags are loaded from
+ * shared preferences. Tags must be saved manually through {@link #save()}.
  *
  * @author  Christian-2003
  * @version 3.3.0
  */
-public class TagManager extends GenericManager<Tag> {
+public class TagManager extends GenericManager<Tag> implements PersistableManager {
 
     /**
      * Field stores the singleton-instance of the tag manager.
@@ -38,6 +39,7 @@ public class TagManager extends GenericManager<Tag> {
      */
     private TagManager() {
         super();
+        load();
     }
 
 
@@ -177,8 +179,9 @@ public class TagManager extends GenericManager<Tag> {
      */
     private void deleteTagFromAllEntries(Tag deleteTag) {
         Thread deleteThread = new Thread(() -> {
-            for (Entry entry : EntryHandle.getInstance().getEntries()) {
+            for (EntryAbbreviated entry : EntryManager.getInstance().getData()) {
                 entry.getTags().removeIf(tag -> tag.equals(deleteTag));
+                //TODO: Remove tag from extended entries...
             }
         });
         deleteThread.start();

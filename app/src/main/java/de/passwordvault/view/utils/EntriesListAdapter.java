@@ -13,16 +13,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import de.passwordvault.R;
-import de.passwordvault.model.entry.Entry;
+import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.view.fragments.EntriesFragment;
 
 
 /**
- * Class models a custom {@linkplain ArrayAdapter} for {@linkplain Entry} instances which
+ * Class models a custom {@linkplain ArrayAdapter} for {@linkplain EntryAbbreviated} instances which
  * are displayed through a {@linkplain android.widget.ListView} within the {@linkplain EntriesFragment}.
  *
  * @author  Christian-2003
- * @version 2.2.0
+ * @version 3.3.0
  */
 public class EntriesListAdapter extends BaseAdapter implements Filterable {
 
@@ -46,14 +46,14 @@ public class EntriesListAdapter extends BaseAdapter implements Filterable {
 
 
     /**
-     * Attribute stores the {@link Entry}-instances that shall be displayed by the {@link EntriesListAdapter}.
+     * Attribute stores the {@link EntryAbbreviated}-instances that shall be displayed by the {@link EntriesListAdapter}.
      */
-    private ArrayList<Entry> originalEntries;
+    private ArrayList<EntryAbbreviated> originalEntries;
 
     /**
-     * Attribute stores the {@link Entry}-instances that are displayed by the {@link EntriesListAdapter}.
+     * Attribute stores the {@link EntryAbbreviated}-instances that are displayed by the {@link EntriesListAdapter}.
      */
-    private ArrayList<Entry> displayedEntries;
+    private ArrayList<EntryAbbreviated> displayedEntries;
 
     /**
      * Attribute stores the layout inflater to create the views.
@@ -67,7 +67,7 @@ public class EntriesListAdapter extends BaseAdapter implements Filterable {
      * @param entries   Entries to be displayed with the ListView.
      * @param context   Context for the adapter.
      */
-    public EntriesListAdapter(ArrayList<Entry> entries, Context context) {
+    public EntriesListAdapter(ArrayList<EntryAbbreviated> entries, Context context) {
         originalEntries = entries;
         displayedEntries = entries;
         inflater = LayoutInflater.from(context);
@@ -120,7 +120,7 @@ public class EntriesListAdapter extends BaseAdapter implements Filterable {
     @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Entry entry = (Entry)getItem(position);
+        EntryAbbreviated entry = (EntryAbbreviated)getItem(position);
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
@@ -156,7 +156,7 @@ public class EntriesListAdapter extends BaseAdapter implements Filterable {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();
-                ArrayList<Entry> filteredList = new ArrayList<>();
+                ArrayList<EntryAbbreviated> filteredList = new ArrayList<>();
                 if (originalEntries == null) {
                     originalEntries = new ArrayList<>(displayedEntries);
                 }
@@ -167,9 +167,9 @@ public class EntriesListAdapter extends BaseAdapter implements Filterable {
                 }
                 else {
                     constraint = constraint.toString().toLowerCase();
-                    for (Entry entry : originalEntries) {
+                    for (EntryAbbreviated entry : originalEntries) {
                         if (entry.matchesFilter(constraint)) {
-                            filteredList.add(new Entry(entry));
+                            filteredList.add(new EntryAbbreviated(entry));
                         }
                     }
                     results.count = filteredList.size();
@@ -188,7 +188,7 @@ public class EntriesListAdapter extends BaseAdapter implements Filterable {
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 //noinspection unchecked
-                displayedEntries = (ArrayList<Entry>)results.values;
+                displayedEntries = (ArrayList<EntryAbbreviated>)results.values;
                 notifyDataSetChanged();
             }
 

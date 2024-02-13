@@ -1,113 +1,186 @@
 package de.passwordvault.model.storage.app;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.util.Collection;
+import java.util.HashMap;
 import de.passwordvault.App;
-import de.passwordvault.R;
-import de.passwordvault.model.detail.DetailDTO;
-import de.passwordvault.model.entry.Entry;
-import de.passwordvault.model.entry.EntryDTO;
+import de.passwordvault.model.entry.EntryAbbreviated;
+import de.passwordvault.model.entry.EntryExtended;
+import de.passwordvault.model.storage.csv.CsvConfiguration;
 import de.passwordvault.model.storage.encryption.EncryptionException;
 import de.passwordvault.model.storage.file.EncryptedFileReader;
 import de.passwordvault.model.storage.file.EncryptedFileWriter;
 
 
 /**
- * Class implements a manager which can store the handled entries from the
- * {@link de.passwordvault.model.entry.EntryHandle} to secondary storage and vice versa.
+ * Class implements the storage manager (v2) that is being used since version 3.3.0 to store
+ * the managed entries. All data that is stored through this manager is being encrypted.
  *
  * @author  Christian-2003
- * @version 3.0.0
+ * @version 3.3.0
  */
 public class StorageManager {
 
     /**
-     * Method saves the handled entries from the {@link de.passwordvault.model.entry.EntryHandle} to
-     * secondary storage.
-     *
-     * @return  Whether the handled entries were successfully saved.
+     * Field stores the tag used for logging.
      */
-    public boolean save() {
-        //Convert handled entries into DTOs:
-        InstanceToDTOConverter converter = new InstanceToDTOConverter();
-        converter.generateDTOs();
-        ArrayList<DetailDTO> detailDTOs = converter.getDetailDTOs();
-        ArrayList<EntryDTO> entryDTOs = converter.getEntryDTOs();
+    private static final String TAG = "StorageManager";
 
-        //Generate CSV from DTOs:
-        StringBuilder detailCsv = new StringBuilder();
-        for (int i = 0; i < detailDTOs.size(); i++) {
-            detailCsv.append(detailDTOs.get(i).getCsv());
-            if (i < detailDTOs.size() - 1) {
-                detailCsv.append("\n");
-            }
-        }
-        StringBuilder entryCsv = new StringBuilder();
-        for (int i = 0; i < entryDTOs.size(); i++) {
-            entryCsv.append(entryDTOs.get(i).getCsv());
-            if (i < entryDTOs.size() - 1) {
-                entryCsv.append("\n");
-            }
-        }
+    /**
+     * Field stores the name of the file in which the list of abbreviated entries is stored.
+     */
+    private static final String ABBREVIATED_ENTRIES_FILE = "entries.csv";
 
-        //Save CSV to secondary storage:
-        String entryFile = App.getContext().getString(R.string.entries_file);
-        String detailsFile = App.getContext().getString(R.string.details_file);
-        EncryptedFileWriter writer = new EncryptedFileWriter();
-        try {
-            writer.write(entryFile, entryCsv.toString());
-            writer.write(detailsFile, detailCsv.toString());
-        }
-        catch (EncryptionException e) {
-            return false;
-        }
-        return true;
+    /**
+     * Field stores the generic name of the file in which extended entries are stored. To get the
+     * 'real' name for a file, replace "{id}" within this string with the ID of the entry.
+     */
+    private static final String EXTENDED_ENTRIES_FILE = "entry_{id}.csv";
+
+
+    /**
+     * Attribute stores the writer that can write to encrypted storage.
+     */
+    private final EncryptedFileWriter fileWriter;
+
+    /**
+     * Attribute stores the reader that can read from encrypted storage.
+     */
+    private final EncryptedFileReader fileReader;
+
+
+    /**
+     * Constructor instantiates a new storage manager.
+     */
+    public StorageManager() {
+        fileWriter = new EncryptedFileWriter();
+        fileReader = new EncryptedFileReader();
     }
 
 
     /**
-     * Method loads the entries from secondary storage. The loaded entries will be stored within
-     * the {@link de.passwordvault.model.entry.EntryHandle}.
+     * Method loads all abbreviated entries from storage and returns them as hashmap.
      *
-     * @return  List of the loaded entries.
+     * @return                      Hash map of all abbreviated entries.
+     * @throws EncryptionException  The data could be decrypted.
      */
-    public ArrayList<Entry> load() {
-        //Read file content:
-        EncryptedFileReader reader = new EncryptedFileReader();
-        String entryFile = App.getContext().getString(R.string.entries_file);
-        String detailsFile = App.getContext().getString(R.string.details_file);
-        String entryCsv = "";
-        String detailCsv = "";
-        try {
-            entryCsv = reader.read(entryFile);
-            detailCsv = reader.read(detailsFile);
+    public HashMap<String, EntryAbbreviated> loadAbbreviatedEntries() throws EncryptionException {
+        String fileContent = fileReader.read(ABBREVIATED_ENTRIES_FILE);
+        String[] lines = fileContent.split("" + CsvConfiguration.ROW_DIVIDER);
+        HashMap<String, EntryAbbreviated> entries = new HashMap<>();
+        for (String s : lines) {
+            if (s.isEmpty()) {
+                continue;
+            }
+            EntryAbbreviated entry = new EntryAbbreviated();
+            try {
+                entry.fromStorable(s);
+            }
+            catch (StorageException e) {
+                //Line is corrupt...
+                continue;
+            }
+            entries.put(entry.getUuid(), entry);
         }
-        catch (EncryptionException e) {
+        return entries;
+    }
+
+
+    /**
+     * Method saves the passed collection of abbreviated entries to persistent storage.
+     *
+     * @param entries               Collection of entries to be saved.
+     * @throws NullPointerException The passed collection is {@code null}.
+     * @throws EncryptionException  The data could not be encrypted.
+     */
+    public void saveAbbreviatedEntries(Collection<EntryAbbreviated> entries) throws NullPointerException, EncryptionException {
+        if (entries == null) {
+            throw new NullPointerException();
+        }
+        StringBuilder builder = new StringBuilder();
+        for (EntryAbbreviated entry : entries) {
+            builder.append(entry.toStorable());
+            builder.append(CsvConfiguration.ROW_DIVIDER);
+        }
+        fileWriter.write(ABBREVIATED_ENTRIES_FILE, builder.toString());
+    }
+
+
+    /**
+     * Method loads the extended entry of the specified abbreviated version. If no extended version
+     * exists, {@code null} is returned.
+     *
+     * @param abbreviated           Abbreviated entry whose extended version shall be loaded.
+     * @return                      Extended entry loaded from persistent storage.
+     * @throws NullPointerException The passed UUID is {@code null}.
+     * @throws EncryptionException  The entry could not be decrypted.
+     * @throws StorageException     The decrypted file could not be converted into an entry.
+     */
+    public EntryExtended loadExtendedEntry(EntryAbbreviated abbreviated) throws NullPointerException, EncryptionException, StorageException {
+        if (abbreviated.getUuid() == null) {
+            throw new NullPointerException();
+        }
+        String fileName = getFileName(abbreviated.getUuid());
+        File file = new File(App.getContext().getFilesDir(), fileName);
+        if (!file.exists()) {
             return null;
         }
-
-        //Convert content into DTO instances:
-        ArrayList<EntryDTO> entryDTOs = new ArrayList<>();
-        ArrayList<DetailDTO> detailDTOs = new ArrayList<>();
-        if (entryCsv != null) {
-            String[] entries = entryCsv.split("\n");
-            for (String s : entries) {
-                if (s != null && !s.isEmpty()) {
-                    entryDTOs.add(new EntryDTO(s));
-                }
-            }
+        try {
+            String content = fileReader.read(fileName);
+            EntryExtended created = new EntryExtended(abbreviated);
+            created.fromStorable(content);
+            return created;
         }
-        if (detailCsv != null) {
-            String[] details = detailCsv.split("\n");
-            for (String s : details) {
-                if (s != null & !s.isEmpty()) {
-                    detailDTOs.add(new DetailDTO(s));
-                }
-            }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
+    }
 
-        //Convert DTOs into Entry-instances:
-        DTOToInstanceConverter converter = new DTOToInstanceConverter(entryDTOs, detailDTOs);
-        return converter.generateInstances();
+
+    /**
+     * Method saves the extended entry to permanent storage. Only the extended parts (i.e. the details)
+     * of the extended entry is saved!
+     *
+     * @param entry                 Extended entry to be saved.
+     * @throws NullPointerException The passed entry is {@code null}.
+     * @throws EncryptionException  The entry could not be encrypted.
+     */
+    public void saveExtendedEntry(EntryExtended entry) throws NullPointerException, EncryptionException {
+        if (entry == null) {
+            throw new NullPointerException();
+        }
+        fileWriter.write(getFileName(entry.getUuid()), entry.toStorable());
+        File file = new File(App.getContext().getFilesDir(), getFileName(entry.getUuid()));
+    }
+
+
+    /**
+     * Method deletes the extended entry of the passed UUID from the filesystem.
+     *
+     * @param uuid                  UUID of the extended entry whose file to delete.
+     * @return                      Whether the file was deleted successfully.
+     * @throws NullPointerException The passed UUID is {@code null}.
+     */
+    public boolean deleteExtendedEntry(String uuid) throws NullPointerException {
+        File file = new File(App.getContext().getFilesDir(), getFileName(uuid));
+        boolean deleted = file.delete();
+        return deleted;
+    }
+
+
+    /**
+     * Method returns the name of the file in which the extended entry of the passed UUID is stored.
+     *
+     * @param uuid                  UUID of the extended entry whose file name should be returned.
+     * @return                      Name of the file in which the specified extended entry is stored.
+     * @throws NullPointerException The passed UUID is {@code null}.
+     */
+    private String getFileName(String uuid) throws NullPointerException {
+        if (uuid == null) {
+            throw new NullPointerException();
+        }
+        return EXTENDED_ENTRIES_FILE.replace("{id}", uuid);
     }
 
 }

@@ -6,10 +6,11 @@ import androidx.lifecycle.ViewModelProvider;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationBarView;
 import de.passwordvault.R;
-import de.passwordvault.model.storage.app.StorageManager;
+import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.viewmodel.activities.MainViewModel;
 
 
@@ -18,7 +19,7 @@ import de.passwordvault.viewmodel.activities.MainViewModel;
  * point for the application and contains multiple fragments with different functionalities.
  *
  * @author  Christian-2003
- * @version 3.2.1
+ * @version 3.3.0
  */
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
 
@@ -122,8 +123,12 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     @Override
     protected void onStop() {
         super.onStop();
-        StorageManager manager = new StorageManager();
-        manager.save();
+        try {
+            EntryManager.getInstance().save();
+        }
+        catch (Exception e) {
+            Log.d("EntryManager", "Could not save entries from MainActivity: " + e.getMessage());
+        }
     }
 
 }

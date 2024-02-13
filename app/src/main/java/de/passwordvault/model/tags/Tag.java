@@ -10,7 +10,7 @@ import de.passwordvault.model.Identifiable;
 
 
 /**
- * Class models a tag for {@link de.passwordvault.model.entry.Entry}-instances.
+ * Class models a tag for {@link de.passwordvault.model.entry.EntryAbbreviated}-instances.
  *
  * @author  Christian-2003
  * @version 3.3.0
@@ -105,12 +105,8 @@ public class Tag implements Serializable, Identifiable {
      * @return      Whether the UUIDs of both instances are identical.
      */
     @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Tag) {
-            Tag tag = (Tag)obj;
-            return tag.uuid.equals(uuid);
-        }
-        return false;
+    public boolean equals(Identifiable obj) {
+        return obj.getUuid().equals(uuid);
     }
 
 

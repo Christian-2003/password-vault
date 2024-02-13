@@ -1,7 +1,7 @@
 package de.passwordvault.viewmodel.activities;
 
 import androidx.lifecycle.ViewModel;
-import de.passwordvault.model.entry.Entry;
+import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.view.activities.EntryActivity;
 
 
@@ -10,14 +10,14 @@ import de.passwordvault.view.activities.EntryActivity;
  * relevant data that shall be persistent throughout activity changes.
  *
  * @author  Christian-2003
- * @version 1.0.0
+ * @version 3.3.0
  */
 public class EntryViewModel extends ViewModel {
 
     /**
      * Attribute stores the entry that is displayed through the EntryActivity.
      */
-    private Entry entry;
+    private EntryExtended entry;
 
     /**
      * Attribute stores whether the extended info of the entry is currently shown.
@@ -34,11 +34,11 @@ public class EntryViewModel extends ViewModel {
     }
 
 
-    public Entry getEntry() {
+    public EntryExtended getEntry() {
         return entry;
     }
 
-    public void setEntry(Entry entry) {
+    public void setEntry(EntryExtended entry) {
         this.entry = entry;
     }
 

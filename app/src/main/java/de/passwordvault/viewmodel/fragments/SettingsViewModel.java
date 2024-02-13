@@ -2,6 +2,7 @@ package de.passwordvault.viewmodel.fragments;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.biometric.BiometricManager;
@@ -25,7 +26,7 @@ import de.passwordvault.view.fragments.SettingsFragment;
  * relevant data and functionalities that are not directly bound to the view of the fragment.
  *
  * @author  Christian-2003
- * @version 3.2.0
+ * @version 3.3.0
  */
 public class SettingsViewModel extends ViewModel {
 
@@ -134,6 +135,8 @@ public class SettingsViewModel extends ViewModel {
             return;
         }
         catch (EncryptionException e) {
+            Log.d("RESTORE", "Invalid password: " + e.getMessage());
+            e.printStackTrace();
             Toast.makeText(context, context.getString(R.string.settings_security_restore_error_encryption), Toast.LENGTH_LONG).show();
             return;
         }

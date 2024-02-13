@@ -11,8 +11,9 @@ import java.io.OutputStreamWriter;
 import de.passwordvault.App;
 import de.passwordvault.R;
 import de.passwordvault.model.detail.Detail;
-import de.passwordvault.model.entry.Entry;
-import de.passwordvault.model.entry.EntryHandle;
+import de.passwordvault.model.entry.EntryAbbreviated;
+import de.passwordvault.model.entry.EntryExtended;
+import de.passwordvault.model.entry.EntryManager;
 
 
 /**
@@ -20,7 +21,7 @@ import de.passwordvault.model.entry.EntryHandle;
  * readable HTML format.
  *
  * @author  Christian-2003
- * @version 3.1.0
+ * @version 3.3.0
  */
 public class ExportToHtml {
 
@@ -99,8 +100,12 @@ public class ExportToHtml {
      */
     private String generateHtml() {
         StringBuilder entryHtml = new StringBuilder();
-        for (Entry entry : EntryHandle.getInstance().getEntries()) {
-            entryHtml.append(generateEntryHtml(entry));
+        for (EntryAbbreviated abbreviated : EntryManager.getInstance().getData()) {
+            EntryExtended extended = EntryManager.getInstance().get(abbreviated.getUuid(), false);
+            if (extended == null) {
+                continue;
+            }
+            entryHtml.append(generateEntryHtml(extended));
         }
         String html = dom.replace("{document_title}", App.getContext().getString(R.string.html_export_document_title));
         return html.replace("{entries}", entryHtml.toString());
@@ -113,7 +118,7 @@ public class ExportToHtml {
      * @param entry Entry for which the HTML shall be generated.
      * @return      Generated HTML.
      */
-    private String generateEntryHtml(Entry entry) {
+    private String generateEntryHtml(EntryExtended entry) {
         StringBuilder detailHtml = new StringBuilder();
         for (Detail detail : entry.getDetails()) {
             String html = detailContainer.replace("{name}", detail.getName());

@@ -4,13 +4,14 @@ import java.util.Comparator;
 
 
 /**
- * Class models a {@linkplain Comparator} which can compare {@link Entry}-instances according to
- * the dates on which they were created (i.e. the return value of {@link Entry#getCreated()}.
+ * Class models a {@linkplain Comparator} which can compare {@link EntryAbbreviated}-instances
+ * according to the dates on which they were created (i.e. the return value of
+ * {@link EntryAbbreviated#getCreated()}.
  *
  * @author  Christian-2003
- * @version 2.1.0
+ * @version 3.3.0
  */
-public class TimeComparator extends GenericComparator<Entry> {
+public class TimeComparator extends GenericComparator<EntryAbbreviated> {
 
     /**
      * Constructor instantiates a new {@link TimeComparator} which will not compare the
@@ -32,8 +33,8 @@ public class TimeComparator extends GenericComparator<Entry> {
 
 
     /**
-     * Method compares the two {@link Entry}-instances according to the dates on which they were
-     * created (i.e. {@link Entry#getCreated()}.
+     * Method compares the two {@link EntryAbbreviated}-instances according to the dates on which
+     * they were created (i.e. {@link EntryAbbreviated#getCreated()}.
      *
      * @param a                     First entry to be compared.
      * @param b                     Second entry to be compared.
@@ -42,7 +43,7 @@ public class TimeComparator extends GenericComparator<Entry> {
      * @throws NullPointerException One of the arguments is {@code null}.
      */
     @Override
-    public int compare(Entry a, Entry b) throws NullPointerException {
+    public int compare(EntryAbbreviated a, EntryAbbreviated b) throws NullPointerException {
         if (a == null || b == null) {
             throw new NullPointerException("Null is invalid Entry");
         }

@@ -9,7 +9,7 @@ package de.passwordvault.model;
  * @author      Christian-2003
  * @version     3.3.0
  */
-public interface IdentifiableManager<T extends Identifiable> {
+public interface Manager<T extends Identifiable> {
 
     /**
      * Method adds the specified item to the managed items.

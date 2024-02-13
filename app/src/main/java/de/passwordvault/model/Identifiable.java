@@ -24,7 +24,6 @@ public interface Identifiable {
      * @return      If the passed object is an instance of Identifiable and it's UUID is identical
      *              to the UUID of this instance.
      */
-    @Override
-    boolean equals(Object obj);
+    boolean equals(Identifiable obj);
 
 }

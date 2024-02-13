@@ -15,7 +15,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import java.util.Objects;
 import de.passwordvault.R;
-import de.passwordvault.model.entry.EntryHandle;
+import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.security.login.Account;
 import de.passwordvault.viewmodel.activities.LoginViewModel;
 
@@ -24,7 +24,7 @@ import de.passwordvault.viewmodel.activities.LoginViewModel;
  * Class implements the {@link LoginActivity} which allows the user to login to the activity.
  *
  * @author  Christian-2003
- * @version 3.2.1
+ * @version 3.3.0
  */
 public class LoginActivity extends AppCompatActivity {
 
@@ -120,10 +120,10 @@ public class LoginActivity extends AppCompatActivity {
      * Method opens the {@link MainActivity}.
      */
     private void continueToMainActivity() {
-        //Get the EntryHandle instance once, which will begin loading all entries from storage.
+        //Get the EntryManager instance once, which will begin loading all entries from storage.
         //While the app is changing activities (which takes a while) the entries can be loaded which
         //makes navigating to the entries the first time a lot smoother.
-        EntryHandle.getInstance();
+        EntryManager.getInstance(); //TODO: Find a better way to do this since EntryManager no longer loads from another thread.
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         finish();

@@ -18,7 +18,6 @@ import de.passwordvault.model.tags.TagCollection;
  */
 public class Entry {
 
-
     /**
      * Static method generates a new {@link Entry} instance with the passed UUID.
      *

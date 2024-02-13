@@ -4,13 +4,14 @@ import java.util.Comparator;
 
 
 /**
- * Class models a {@linkplain Comparator} which can compare {@link Entry}-instances lexicographically
- * according to their name (i.e. the return value of {@link Entry#getName()}.
+ * Class models a {@linkplain Comparator} which can compare {@link EntryAbbreviated}-instances
+ * lexicographically according to their name (i.e. the return value of
+ * {@link EntryAbbreviated#getName()}.
  *
  * @author  Christian-2003
- * @version 2.1.0
+ * @version 3.3.0
  */
-public class LexicographicComparator extends GenericComparator<Entry> {
+public class LexicographicComparator extends GenericComparator<EntryAbbreviated> {
 
     /**
      * Constructor instantiates a new {@link LexicographicComparator} which will not compare the
@@ -32,8 +33,8 @@ public class LexicographicComparator extends GenericComparator<Entry> {
 
 
     /**
-     * Method compares the two {@link Entry}-instances lexicographical according to their name (i.e.
-     * {@link Entry#getName()}.
+     * Method compares the two {@link EntryAbbreviated}-instances lexicographical according to their
+     * name (i.e. {@link EntryAbbreviated#getName()}.
      *
      * @param a                     First entry to be compared.
      * @param b                     Second entry to be compared.
@@ -42,7 +43,7 @@ public class LexicographicComparator extends GenericComparator<Entry> {
      * @throws NullPointerException One of the arguments is {@code null}.
      */
     @Override
-    public int compare(Entry a, Entry b) throws NullPointerException {
+    public int compare(EntryAbbreviated a, EntryAbbreviated b) throws NullPointerException {
         if (a == null || b == null) {
             throw new NullPointerException("Null is invalid Entry");
         }

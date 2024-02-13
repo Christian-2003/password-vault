@@ -41,7 +41,7 @@ public class EncryptedFileWriter {
             try {
                 file.createNewFile();
             }
-            catch (IOException e) {
+            catch (IOException | SecurityException e) {
                 //Could not create new file:
                 return false;
             }

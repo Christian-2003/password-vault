@@ -5,14 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import de.passwordvault.R;
-import de.passwordvault.model.entry.EntryHandle;
+import de.passwordvault.model.entry.EntryExtended;
+import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.tags.Tag;
 import de.passwordvault.model.tags.TagCollection;
 import de.passwordvault.view.utils.DetailViewBuilder;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.viewmodel.activities.EntryViewModel;
 import de.passwordvault.model.detail.Detail;
-import de.passwordvault.model.entry.Entry;
 import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
 import android.content.Intent;
@@ -22,17 +22,15 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
 
 /**
  * Class models the EntryActivity which is used to display all information about an
- * {@linkplain de.passwordvault.model.entry.Entry}.
+ * {@linkplain de.passwordvault.model.entry.EntryAbbreviated}.
  *
  * @author  Christian-2003
  * @version 3.3.0
@@ -54,7 +52,7 @@ public class EntryActivity extends AppCompatActivity implements DialogCallbackLi
      */
     public void onPositiveCallback(DialogFragment dialog) {
         //This entry shall be deleted:
-        EntryHandle.getInstance().remove(viewModel.getEntry().getUuid());
+        EntryManager.getInstance().remove(viewModel.getEntry().getUuid());
         EntryActivity.this.finish();
     }
 
@@ -82,7 +80,7 @@ public class EntryActivity extends AppCompatActivity implements DialogCallbackLi
         viewModel = new ViewModelProvider(this).get(EntryViewModel.class);
         if (viewModel.getEntry() == null) {
             Bundle bundle = getIntent().getExtras();
-            Entry entry = EntryHandle.getInstance().getEntry((String)bundle.get("uuid"));
+            EntryExtended entry = EntryManager.getInstance().get((String)bundle.get("uuid"));
             if (entry == null) {
                 Toast.makeText(getApplicationContext(), "Entry '"+ (String)bundle.get("uuid") + "' does not exist.", Toast.LENGTH_SHORT).show();
                 finish(); //Close activity.
@@ -97,7 +95,7 @@ public class EntryActivity extends AppCompatActivity implements DialogCallbackLi
     /**
      * Method is called whenever any {@linkplain android.app.Activity} that was started by this
      * Activity through {@linkplain #startActivityForResult(Intent, int, Bundle)} has finished.
-     * This is done to redraw this Activity with an edited / updated {@linkplain Entry}.
+     * This is done to redraw this Activity with an edited / updated {@linkplain EntryExtended}.
      *
      * @param requestCode   Code that was requested from the started Activity.
      * @param resultCode    Result code from the started Activity.
@@ -110,7 +108,7 @@ public class EntryActivity extends AppCompatActivity implements DialogCallbackLi
             return;
         }
         if (requestCode == 1) {
-            viewModel.setEntry(EntryHandle.getInstance().getEntry(viewModel.getEntry().getUuid()));
+            viewModel.setEntry(EntryManager.getInstance().get(viewModel.getEntry().getUuid()));
             drawActivity(); //Redraw activity
         }
     }
@@ -146,7 +144,11 @@ public class EntryActivity extends AppCompatActivity implements DialogCallbackLi
             EntryActivity.this.startActivityForResult(intent, 1);
         });
 
-        Entry entry = viewModel.getEntry();
+        EntryExtended entry = viewModel.getEntry();
+        if (entry == null) {
+            finish();
+            return;
+        }
         ((TextView)findViewById(R.id.entry_title)).setText(entry.getName());
         ((TextView)findViewById(R.id.entry_name)).setText(entry.getName());
         if (entry.getDescription().isEmpty()) {

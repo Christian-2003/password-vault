@@ -2,12 +2,10 @@ package de.passwordvault.model.storage.backup;
 
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
-import android.util.Log;
 
 import androidx.documentfile.provider.DocumentFile;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -15,11 +13,15 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import de.passwordvault.App;
+import de.passwordvault.model.detail.Detail;
+import de.passwordvault.model.detail.DetailBackupDTO;
 import de.passwordvault.model.detail.DetailDTO;
+import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryDTO;
-import de.passwordvault.model.storage.app.InstanceToDTOConverter;
+import de.passwordvault.model.entry.EntryExtended;
+import de.passwordvault.model.entry.EntryManager;
+import de.passwordvault.model.storage.csv.CsvConfiguration;
 import de.passwordvault.model.storage.encryption.EncryptionException;
-import de.passwordvault.model.tags.Tag;
 import de.passwordvault.model.tags.TagManager;
 
 
@@ -102,11 +104,6 @@ public class XmlBackupCreator extends XmlBackupConfiguration {
      * @throws EncryptionException  The backup could not be encrypted.
      */
     private void createXML(BufferedWriter writer) throws IOException, EncryptionException {
-        InstanceToDTOConverter converter = new InstanceToDTOConverter();
-        converter.generateDTOs();
-        ArrayList<EntryDTO> entryDTOs = converter.getEntryDTOs();
-        ArrayList<DetailDTO> detailDTOs = converter.getDetailDTOs();
-
         writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 
         insertTag(writer, TAG_PASSWORD_VAULT, 0, false, true);
@@ -131,18 +128,25 @@ public class XmlBackupCreator extends XmlBackupConfiguration {
         insertTag(writer, TAG_ENTRIES, 8, false, true);
 
         //Add all (optionally encrypted) entries:
-        for (int i = 0; i < entryDTOs.size(); i++) {
-            writer.write(encrypt(entryDTOs.get(i).getCsv()));
-            writer.write("\n");
+        for (EntryAbbreviated abbreviated : EntryManager.getInstance().getData()) {
+            writer.write(encrypt(abbreviated.toStorable()));
+            writer.write("" + CsvConfiguration.ROW_DIVIDER);
         }
 
         insertTag(writer, TAG_ENTRIES, 8, true, true);
         insertTag(writer, TAG_DETAILS, 8, false, true);
 
         //Add all (optionally encrypted) details:
-        for (int i = 0; i < detailDTOs.size(); i++) {
-            writer.write(encrypt(detailDTOs.get(i).getCsv()));
-            writer.write("\n");
+        for (EntryAbbreviated abbreviated : EntryManager.getInstance().getData()) {
+            EntryExtended extended = EntryManager.getInstance().get(abbreviated.getUuid(), false);
+            if (extended == null) {
+                continue;
+            }
+            for (Detail detail : extended.getDetails()) {
+                DetailBackupDTO detailDTO = new DetailBackupDTO(detail, extended.getUuid());
+                writer.write(encrypt(detailDTO.toStorable()));
+                writer.write("" + CsvConfiguration.ROW_DIVIDER);
+            }
         }
 
         insertTag(writer, TAG_DETAILS, 8, true, true);

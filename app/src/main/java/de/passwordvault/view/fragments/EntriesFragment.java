@@ -28,22 +28,22 @@ import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.model.Observable;
 import de.passwordvault.model.Observer;
-import de.passwordvault.model.entry.EntryHandle;
+import de.passwordvault.model.entry.EntryAbbreviated;
+import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.viewmodel.fragments.EntriesViewModel;
 import de.passwordvault.view.utils.EntriesListAdapter;
-import de.passwordvault.model.entry.Entry;
 import de.passwordvault.view.activities.EntryActivity;
 import de.passwordvault.view.activities.MainActivity;
 
 
 /**
- * Class implements the {@linkplain Fragment} that displays a list of {@linkplain Entry} instances
+ * Class implements the {@linkplain Fragment} that displays a list of {@linkplain EntryAbbreviated} instances
  * within the {@linkplain MainActivity}.
  *
  * @author  Christian-2003
- * @version 3.2.1
+ * @version 3.3.0
  */
-public class EntriesFragment extends Fragment implements AdapterView.OnItemClickListener, PopupMenu.OnMenuItemClickListener, Observer<ArrayList<Entry>> {
+public class EntriesFragment extends Fragment implements AdapterView.OnItemClickListener, PopupMenu.OnMenuItemClickListener, Observer<ArrayList<EntryAbbreviated>> {
 
     /**
      * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} for this fragment.
@@ -56,7 +56,7 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
     private EntriesListAdapter adapter;
 
     /**
-     * Attribute stores the {@linkplain ListView} which displays the {@link Entry}-instances.
+     * Attribute stores the {@linkplain ListView} which displays the {@link EntryAbbreviated}-instances.
      */
     private ListView entriesListView;
 
@@ -96,10 +96,10 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        EntryHandle.getInstance().addObserver(this);
+        EntryManager.getInstance().addObserver(this);
         view = inflater.inflate(R.layout.fragment_entries, container, false);
 
-        adapter = new EntriesListAdapter(EntryHandle.getInstance().getData(), getContext());
+        adapter = new EntriesListAdapter(EntryManager.getInstance().getData(), getContext());
         entriesListView = view.findViewById(R.id.abbreviated_entries);
 
         //Setup button to sort the entries:
@@ -162,7 +162,7 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        EntryHandle.getInstance().removeObserver(this);
+        EntryManager.getInstance().removeObserver(this);
     }
 
 
@@ -177,8 +177,8 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
     @Override
     public void onItemClick(@NonNull AdapterView<?> parent, View view, int position, long id) {
         Object item = parent.getAdapter().getItem(position);
-        if (item != null && item instanceof Entry) {
-            String uuid = ((Entry)item).getUuid();
+        if (item instanceof EntryAbbreviated) {
+            String uuid = ((EntryAbbreviated)item).getUuid();
             if (uuid != null) {
                 Intent intent = new Intent(getActivity(), EntryActivity.class);
                 intent.putExtra("uuid", uuid);
@@ -193,7 +193,7 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
 
     /**
      * Method is called whenever a menu item of the menu {@link R.menu#sort_entries_list} is clicked.
-     * This will sort the {@linkplain ListView} which displays all {@link Entry}-instances according
+     * This will sort the {@linkplain ListView} which displays all {@link EntryAbbreviated}-instances according
      * to the clicked menu item.
      *
      * @param item  Item which was clicked.
@@ -204,19 +204,19 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
     public boolean onMenuItemClick(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sort_entries_not_sorted:
-                EntryHandle.getInstance().removeAllSortings();
+                EntryManager.getInstance().removeAllSortings();
                 break;
             case R.id.sort_entries_name_ascending:
-                EntryHandle.getInstance().sortByName(false);
+                EntryManager.getInstance().sortByName(false);
                 break;
             case R.id.sort_entries_name_descending:
-                EntryHandle.getInstance().sortByName(true);
+                EntryManager.getInstance().sortByName(true);
                 break;
             case R.id.sort_entries_created_ascending:
-                EntryHandle.getInstance().sortByTime(false);
+                EntryManager.getInstance().sortByTime(false);
                 break;
             case R.id.sort_entries_created_descending:
-                EntryHandle.getInstance().sortByTime(true);
+                EntryManager.getInstance().sortByTime(true);
                 break;
             default:
                 return false;
@@ -235,7 +235,7 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
      * @throws NullPointerException The passed Observable is {@code null}.
      */
     @Override
-    public void update(Observable<ArrayList<Entry>> o) throws NullPointerException {
+    public void update(Observable<ArrayList<EntryAbbreviated>> o) throws NullPointerException {
         if (o == null) {
             throw new NullPointerException("Null is invalid Observable");
         }
@@ -245,7 +245,7 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
 
 
     /**
-     * Method populates the {@linkplain ListView} that displays all {@linkplain de.passwordvault.model.entry.Entry}
+     * Method populates the {@linkplain ListView} that displays all {@linkplain de.passwordvault.model.entry.EntryAbbreviated}
      * instances.
      */
     private void populateListView() {

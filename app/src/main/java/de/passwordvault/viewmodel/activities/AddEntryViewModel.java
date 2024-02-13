@@ -1,8 +1,7 @@
 package de.passwordvault.viewmodel.activities;
 
 import androidx.lifecycle.ViewModel;
-import de.passwordvault.model.entry.Entry;
-import de.passwordvault.model.tags.TagCollection;
+import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.view.activities.AddEntryActivity;
 
 
@@ -18,7 +17,7 @@ public class AddEntryViewModel extends ViewModel {
     /**
      * Attribute stores the entry that is currently being created / edited.
      */
-    private Entry entry;
+    private EntryExtended entry;
 
 
     /**
@@ -29,11 +28,11 @@ public class AddEntryViewModel extends ViewModel {
     }
 
 
-    public Entry getEntry() {
+    public EntryExtended getEntry() {
         return entry;
     }
 
-    public void setEntry(Entry entry) {
+    public void setEntry(EntryExtended entry) {
         this.entry = entry;
     }
 
