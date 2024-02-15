@@ -2,6 +2,8 @@ package de.passwordvault.model.storage.encryption;
 
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
+import android.util.Log;
+
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.security.MessageDigest;
@@ -143,6 +145,7 @@ public class AES {
             return new String(decryptedBytes, StandardCharsets.UTF_8);
         }
         catch (Exception e) {
+            Log.d("EFR", "Encryption: " + e.getMessage());
             throw new EncryptionException(e.getMessage());
         }
     }

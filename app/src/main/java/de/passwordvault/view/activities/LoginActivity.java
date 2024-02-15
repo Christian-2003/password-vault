@@ -2,6 +2,7 @@ package de.passwordvault.view.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -15,9 +16,14 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import java.io.File;
 import java.util.Objects;
+
+import de.passwordvault.App;
 import de.passwordvault.R;
 import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.security.login.Account;
+import de.passwordvault.model.storage.app.StorageException;
+import de.passwordvault.model.storage.encryption.EncryptionException;
+import de.passwordvault.model.storage.file.EncryptedFileWriter;
 import de.passwordvault.viewmodel.activities.DataConversionViewModel;
 import de.passwordvault.viewmodel.activities.LoginViewModel;
 
@@ -124,8 +130,9 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void continueToMainActivity() {
         //Convert data before continuing if necessary:
-        File file = new File(getFilesDir(), "entries.csv");
-        if (file.exists()) {
+        File entriesFile = new File(App.getContext().getFilesDir(), "entries.csv");
+        File detailsFile = new File(App.getContext().getFilesDir(), "details.csv");
+        if (entriesFile.exists() || detailsFile.exists()) {
             Intent intent = new Intent(LoginActivity.this, DataConversionActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             finish();
@@ -136,7 +143,13 @@ public class LoginActivity extends AppCompatActivity {
         //Get the EntryManager instance once, which will begin loading all entries from storage.
         //While the app is changing activities (which takes a while) the entries can be loaded which
         //makes navigating to the entries the first time a lot smoother.
-        EntryManager.getInstance(); //TODO: Find a better way to do this since EntryManager no longer loads from another thread.
+        try {
+            //TODO: Find a better way to do this since EntryManager no longer loads from another thread.
+            EntryManager.getInstance().load();
+        }
+        catch (Exception e) {
+            //Ignore
+        }
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         finish();
@@ -150,5 +163,4 @@ public class LoginActivity extends AppCompatActivity {
     private void showBiometricLoginDialog() {
         biometricPrompt.authenticate(viewModel.getBiometricPromptInfo());
     }
-
 }

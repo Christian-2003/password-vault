@@ -2,7 +2,6 @@ package de.passwordvault.model.entry;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import de.passwordvault.model.CachableManager;
 import de.passwordvault.model.Observable;
 import de.passwordvault.model.Observer;
@@ -21,11 +20,6 @@ import de.passwordvault.model.storage.encryption.EncryptionException;
  * @version 3.3.0
  */
 public class EntryManager implements CachableManager<EntryExtended>, Observable<ArrayList<EntryAbbreviated>>, PersistableManager {
-
-    /**
-     * Field stores the tag used for logging.
-     */
-    private static final String TAG = "EntryManager";
 
     /**
      * Field stores the singleton-instance of the entry manager.
@@ -81,7 +75,8 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
 
 
     /**
-     * Constructor instantiates a new entry manager which manages all available entries.
+     * Constructor instantiates a new entry manager which manages all available entries. Previously
+     * stored entries must be loaded manually.
      */
     private EntryManager() {
         observers = new ArrayList<>();
@@ -92,12 +87,6 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
         storageManager = new StorageManager();
         changesMade = true;
         changesMadeSinceCachedAbbreviatedList = true;
-        try {
-            load();
-        }
-        catch (StorageException e) {
-            //Ignore...
-        }
     }
 
 
@@ -130,7 +119,7 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
     }
 
     /**
-     * Method removes all items from the manager.
+     * Method removes all items from the manager AND storage.
      */
     @Override
     public void clear() {
@@ -148,6 +137,15 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
         changesMade = true;
         changesMadeSinceCachedAbbreviatedList = true;
         notifyObservers();
+    }
+
+
+    /**
+     * Method clears all items from the primary storage.
+     */
+    public void clearCache() {
+        extendedEntryCache.clear();
+        abbreviatedEntries.clear();
     }
 
 

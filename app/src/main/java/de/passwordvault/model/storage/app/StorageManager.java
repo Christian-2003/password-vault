@@ -22,14 +22,9 @@ import de.passwordvault.model.storage.file.EncryptedFileWriter;
 public class StorageManager {
 
     /**
-     * Field stores the tag used for logging.
-     */
-    private static final String TAG = "StorageManager";
-
-    /**
      * Field stores the name of the file in which the list of abbreviated entries is stored.
      */
-    private static final String ABBREVIATED_ENTRIES_FILE = "entries.csv";
+    private static final String ABBREVIATED_ENTRIES_FILE = "entries_list.csv";
 
     /**
      * Field stores the generic name of the file in which extended entries are stored. To get the
@@ -66,7 +61,7 @@ public class StorageManager {
      */
     public HashMap<String, EntryAbbreviated> loadAbbreviatedEntries() throws EncryptionException {
         String fileContent = fileReader.read(ABBREVIATED_ENTRIES_FILE);
-        String[] lines = fileContent.split("" + CsvConfiguration.ROW_DIVIDER);
+        String[] lines = fileContent.split("\n");
         HashMap<String, EntryAbbreviated> entries = new HashMap<>();
         for (String s : lines) {
             if (s.isEmpty()) {

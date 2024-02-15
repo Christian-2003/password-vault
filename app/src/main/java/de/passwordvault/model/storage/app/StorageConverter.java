@@ -7,7 +7,6 @@ import de.passwordvault.model.detail.DetailBackupDTO;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.model.entry.EntryManager;
-import de.passwordvault.model.storage.csv.CsvConfiguration;
 import de.passwordvault.model.storage.file.EncryptedFileReader;
 
 
@@ -83,7 +82,7 @@ public class StorageConverter {
         }
 
         //Clear EntryManager and reload:
-        EntryManager.getInstance().clear();
+        EntryManager.getInstance().clearCache();
         try {
             EntryManager.getInstance().load();
         }
@@ -91,9 +90,13 @@ public class StorageConverter {
             throw new ConverterException("Could not load converted data: " + e.getMessage());
         }
 
-        //Delete details.csv-file if everything worked:
-        File file = new File(App.getContext().getFilesDir(), FILE_DETAILS);
-        if (file.exists() && !file.delete()) {
+        //Delete old files if everything worked:
+        File entriesFile = new File(App.getContext().getFilesDir(), FILE_ENTRIES);
+        if (entriesFile.exists() && !entriesFile.delete()) {
+            throw new ConverterException("Could not delete unconverted files");
+        }
+        File detailsFile = new File(App.getContext().getFilesDir(), FILE_DETAILS);
+        if (detailsFile.exists() && !detailsFile.delete()) {
             throw new ConverterException("Could not delete unconverted files");
         }
     }
@@ -113,9 +116,9 @@ public class StorageConverter {
             throw new ConverterException("Cannot read file: " + e.getMessage());
         }
         if (fileContent == null) {
-            throw new ConverterException("Cannot read file");
+            throw new ConverterException("Cannot read entries-file");
         }
-        String[] lines = fileContent.split("" + CsvConfiguration.ROW_DIVIDER);
+        String[] lines = fileContent.split("\n");
         int corruptedEntries = 0;
         for (String s : lines) {
             EntryAbbreviated entry = new EntryAbbreviated();
@@ -129,7 +132,7 @@ public class StorageConverter {
             }
             entries.add(entry);
         }
-        if (corruptedEntries >= lines.length * 0.5 && lines.length < 4) {
+        if (corruptedEntries >= lines.length * 0.5 && lines.length > 4) {
             //More than half of the entries were corrupted:
             throw new ConverterException("A large portion of accounts (" + corruptedEntries + "/" + lines.length + ") was corrupted");
         }
@@ -149,10 +152,10 @@ public class StorageConverter {
             throw new ConverterException("Cannot read file: " + e.getMessage());
         }
         if (fileContent == null) {
-            throw new ConverterException("Cannot read file");
+            throw new ConverterException("Cannot read details-file");
         }
-        String[] lines = fileContent.split("" + CsvConfiguration.ROW_DIVIDER);
-        int corruptedEntries = 0;
+        String[] lines = fileContent.split("\n");
+        int corruptedDetails = 0;
         for (String s : lines) {
             DetailBackupDTO detail;
             try {
@@ -160,14 +163,14 @@ public class StorageConverter {
             }
             catch (Exception e) {
                 //Entry corrupt
-                corruptedEntries++;
+                corruptedDetails++;
                 continue;
             }
             details.add(detail);
         }
-        if (corruptedEntries >= lines.length * 0.5 && lines.length < 4) {
+        if (corruptedDetails >= lines.length * 0.5 && lines.length > 4) {
             //More than half of the entries were corrupted:
-            throw new ConverterException("A large portion of account information (" + corruptedEntries + "/" + lines.length + ") was corrupted");
+            throw new ConverterException("A large portion of account information (" + corruptedDetails + "/" + lines.length + ") was corrupted");
         }
     }
 

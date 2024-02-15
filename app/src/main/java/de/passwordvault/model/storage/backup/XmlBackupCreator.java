@@ -2,22 +2,17 @@ package de.passwordvault.model.storage.backup;
 
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
-
 import androidx.documentfile.provider.DocumentFile;
-
 import java.io.BufferedWriter;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import de.passwordvault.App;
 import de.passwordvault.model.detail.Detail;
 import de.passwordvault.model.detail.DetailBackupDTO;
-import de.passwordvault.model.detail.DetailDTO;
 import de.passwordvault.model.entry.EntryAbbreviated;
-import de.passwordvault.model.entry.EntryDTO;
 import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.storage.csv.CsvConfiguration;

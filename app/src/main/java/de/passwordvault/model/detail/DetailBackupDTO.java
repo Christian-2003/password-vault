@@ -148,7 +148,7 @@ public class DetailBackupDTO extends Detail {
                         setChanged(changed);
                         break;
                     case 6:
-                        int typePersistentId = Integer.parseInt(cell);
+                        byte typePersistentId = Byte.parseByte(cell);
                         for (DetailType type : DetailType.values()) {
                             if (type.getPersistentId() == typePersistentId) {
                                 setType(type);
