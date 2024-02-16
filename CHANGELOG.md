@@ -15,6 +15,7 @@ Added custom quality gates for password security which can be changed in setting
 * Details are correctly obfuscated when editing obfuscated details.
 * Complete reworking of the storage management for entries and details.
 * Stored details and entries are converted the first time the app is opened with data from before version 3.3.0.
+* Toggling biometrics for login requires confirming identity through biometrics.
 
 <br>
 

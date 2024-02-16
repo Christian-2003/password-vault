@@ -4,10 +4,11 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
-
 import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModel;
-
+import java.util.concurrent.Executor;
 import de.passwordvault.App;
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.Account;
@@ -31,6 +32,80 @@ import de.passwordvault.view.fragments.SettingsFragment;
 public class SettingsViewModel extends ViewModel {
 
     /**
+     * Field indicates that no biometric action takes place.
+     */
+    public static final byte BIOMETRIC_ACTION_NONE = -1;
+
+    /**
+     * Field indicates that biometrics are used to turn biometrics on.
+     */
+    public static final byte BIOMETRIC_ACTION_TURN_BIOMETRICS_ON = 0;
+
+    /**
+     * Field indicates that biometrics are used to turn biometrics off.
+     */
+    public static final byte BIOMETRIC_ACTION_TURN_BIOMETRICS_OFF = 1;
+
+    /**
+     * Field indicates that biometrics are used to disable login.
+     */
+    public static final byte BIOMETRIC_ACTION_DISABLE_LOGIN = 2;
+
+
+    /**
+     * Attribute indicates the current biometric action.
+     */
+    private byte currentBiometricAction;
+
+    /**
+     * Attribute stores the prompt info for the biometric prompt.
+     */
+    private final BiometricPrompt.PromptInfo biometricPromptInfo = new BiometricPrompt.PromptInfo.Builder().setTitle(App.getContext().getString(R.string.login_biometrics_title)).setNegativeButtonText(App.getContext().getString(R.string.button_cancel)).build();
+
+    /**
+     * Attribute stores the executor that is used for executing the biometric-login dialog.
+     */
+    private final Executor executor = ContextCompat.getMainExecutor(App.getContext());
+
+
+    /**
+     * Method returns the current biometric action.
+     *
+     * @return  Current biometric action.
+     */
+    public byte getCurrentBiometricAction() {
+        return currentBiometricAction;
+    }
+
+    /**
+     * Method changes the current biometric action to the passed argument.
+     *
+     * @param currentBiometricAction    New biometric action.
+     */
+    public void setCurrentBiometricAction(byte currentBiometricAction) {
+        this.currentBiometricAction = currentBiometricAction;
+    }
+
+    /**
+     * Method returns the {@link #biometricPromptInfo}.
+     *
+     * @return  Prompt info of the biometric prompt.
+     */
+    public BiometricPrompt.PromptInfo getBiometricPromptInfo() {
+        return biometricPromptInfo;
+    }
+
+    /**
+     * Method returns the {@link #executor}.
+     *
+     * @return  Executor.
+     */
+    public Executor getExecutor() {
+        return executor;
+    }
+
+
+    /**
      * Method tests whether class 3 biometrics are available on the Android device.
      *
      * @return  Whether class 3 biometrics are available.
@@ -39,6 +114,17 @@ public class SettingsViewModel extends ViewModel {
         BiometricManager biometricManager = BiometricManager.from(App.getContext());
         int result = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG);
         return result == BiometricManager.BIOMETRIC_SUCCESS;
+    }
+
+
+    /**
+     * Method tests whether the provided password is correct.
+     *
+     * @param s Password to be tested.
+     * @return  Whether the password matches.
+     */
+    public boolean confirmPassword(String s) throws NullPointerException {
+        return Account.getInstance().isPassword(s);
     }
 
 

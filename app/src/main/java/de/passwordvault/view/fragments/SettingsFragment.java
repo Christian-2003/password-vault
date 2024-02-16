@@ -1,12 +1,15 @@
 package de.passwordvault.view.fragments;
 
 import android.app.Activity;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
+import androidx.biometric.BiometricPrompt;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -14,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -24,6 +28,7 @@ import de.passwordvault.BuildConfig;
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.storage.backup.XmlBackupRestorer;
+import de.passwordvault.view.activities.LoginActivity;
 import de.passwordvault.view.activities.QualityGatesActivity;
 import de.passwordvault.view.dialogs.ChangePasswordDialog;
 import de.passwordvault.view.dialogs.ConfigureLoginDialog;
@@ -66,6 +71,11 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
      * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} for this fragment.
      */
     private SettingsViewModel viewModel;
+
+    /**
+     * Attribute stores the biometric prompt which is used for biometric authentication.
+     */
+    private BiometricPrompt biometricPrompt;
 
     /**
      * Attribute stores the inflated view of the fragment.
@@ -146,6 +156,62 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         view.findViewById(R.id.settings_update_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_about_update_link)));
         view.findViewById(R.id.settings_html_export_clickable).setOnClickListener(view -> createFile(SELECT_FILE_TO_EXPORT_TO_HTML, "text/html", getString(R.string.settings_export_file)));
         view.findViewById(R.id.settings_html_export_info).setOnClickListener(view -> showInfoDialog(R.string.settings_export_html, R.string.settings_export_html_info_extended));
+
+        biometricPrompt = new BiometricPrompt(requireActivity(), viewModel.getExecutor(), new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                switch (viewModel.getCurrentBiometricAction()) {
+                    case SettingsViewModel.BIOMETRIC_ACTION_TURN_BIOMETRICS_ON:
+                        MaterialSwitch toggleBiometricsOnSwitch = view.findViewById(R.id.settings_security_biometrics_switch);
+                        toggleBiometricsOnSwitch.setChecked(false);
+                        Account.getInstance().setBiometrics(false);
+                        Account.getInstance().save();
+                        break;
+                    case SettingsViewModel.BIOMETRIC_ACTION_TURN_BIOMETRICS_OFF:
+                        MaterialSwitch toggleBiometricsOffSwitch = view.findViewById(R.id.settings_security_biometrics_switch);
+                        toggleBiometricsOffSwitch.setChecked(true);
+                        Account.getInstance().setBiometrics(true);
+                        Account.getInstance().save();
+                        break;
+                }
+
+                viewModel.setCurrentBiometricAction(SettingsViewModel.BIOMETRIC_ACTION_NONE);
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                switch (viewModel.getCurrentBiometricAction()) {
+                    case SettingsViewModel.BIOMETRIC_ACTION_TURN_BIOMETRICS_ON:
+                        MaterialSwitch toggleBiometricsOnSwitch = view.findViewById(R.id.settings_security_biometrics_switch);
+                        if (!viewModel.areBiometricsAvailable()) {
+                            toggleBiometricsOnSwitch.setChecked(false);
+                            return;
+                        }
+                        Account.getInstance().setBiometrics(true);
+                        Account.getInstance().save();
+                        break;
+                    case SettingsViewModel.BIOMETRIC_ACTION_TURN_BIOMETRICS_OFF:
+                        MaterialSwitch toggleBiometricsOffSwitch = view.findViewById(R.id.settings_security_biometrics_switch);
+                        if (!viewModel.areBiometricsAvailable()) {
+                            toggleBiometricsOffSwitch.setChecked(true);
+                            return;
+                        }
+                        Account.getInstance().setBiometrics(false);
+                        Account.getInstance().save();
+                        break;
+                }
+
+                viewModel.setCurrentBiometricAction(SettingsViewModel.BIOMETRIC_ACTION_NONE);
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                //Do nothing, since biometric prompt already informs user about error!
+            }
+        });
 
         return view;
     }
@@ -371,12 +437,25 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         catch (ClassCastException e) {
             return;
         }
-        if (!viewModel.areBiometricsAvailable()) {
-            materialSwitch.setChecked(false);
-            return;
+        byte biometricAction;
+        if (materialSwitch.isChecked()) {
+            biometricAction = SettingsViewModel.BIOMETRIC_ACTION_TURN_BIOMETRICS_ON;
         }
-        Account.getInstance().setBiometrics(materialSwitch.isChecked());
-        Account.getInstance().save();
+        else {
+            biometricAction = SettingsViewModel.BIOMETRIC_ACTION_TURN_BIOMETRICS_OFF;
+        }
+        showBiometricAuthenticationDialog(biometricAction);
+    }
+
+
+    /**
+     * Method shows the biometric prompt to authenticate with the configured biometrics.
+     *
+     * @param biometricAction   Action for which the biometric prompt shall be opened.
+     */
+    private void showBiometricAuthenticationDialog(byte biometricAction) {
+        viewModel.setCurrentBiometricAction(biometricAction);
+        biometricPrompt.authenticate(viewModel.getBiometricPromptInfo());
     }
 
 }
