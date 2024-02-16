@@ -2,6 +2,7 @@ package de.passwordvault.viewmodel.activities;
 
 import androidx.lifecycle.ViewModel;
 import de.passwordvault.model.entry.EntryExtended;
+import de.passwordvault.model.tags.TagCollection;
 import de.passwordvault.view.activities.AddEntryActivity;
 
 
@@ -19,6 +20,11 @@ public class AddEntryViewModel extends ViewModel {
      */
     private EntryExtended entry;
 
+    /**
+     * Attribute stores the tags of the entry that are being edited.
+     */
+    private TagCollection tags;
+
 
     /**
      * Constructor instantiates a new AddEntryViewModel with default values.
@@ -34,6 +40,17 @@ public class AddEntryViewModel extends ViewModel {
 
     public void setEntry(EntryExtended entry) {
         this.entry = entry;
+    }
+
+    public TagCollection getTags() {
+        return tags;
+    }
+
+    public void setTags(TagCollection tags) throws NullPointerException {
+        if (tags == null) {
+            throw new NullPointerException();
+        }
+        this.tags = tags;
     }
 
 }

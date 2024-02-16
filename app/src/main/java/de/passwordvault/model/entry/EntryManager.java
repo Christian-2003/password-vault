@@ -1,6 +1,7 @@
 package de.passwordvault.model.entry;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import de.passwordvault.model.CachableManager;
 import de.passwordvault.model.Observable;
@@ -415,6 +416,16 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
                 throw new StorageException(e.getMessage());
             }
         }
+    }
+
+
+    /**
+     * Method returns a collection containing all cached extended entries.
+     *
+     * @return  Collection containing all extended entries.
+     */
+    public Collection<EntryExtended> getExtendedEntryCache() {
+        return extendedEntryCache.values();
     }
 
 

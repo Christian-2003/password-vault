@@ -20,6 +20,7 @@ import de.passwordvault.model.Observer;
 import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.tags.Tag;
+import de.passwordvault.model.tags.TagCollection;
 import de.passwordvault.model.tags.TagManager;
 import de.passwordvault.view.dialogs.EditTagDialog;
 import de.passwordvault.viewmodel.activities.AddEntryViewModel;
@@ -67,6 +68,7 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
             //Activity shall be used to edit an entry:
             if (viewModel.getEntry() == null) {
                 viewModel.setEntry(EntryManager.getInstance().get(bundle.getString("entry")));
+                viewModel.setTags(new TagCollection(viewModel.getEntry().getTags()));
             }
             ((TextView)findViewById(R.id.add_entry_title)).setText(viewModel.getEntry().getName());
             ((TextView)findViewById(R.id.add_entry_name)).setText(viewModel.getEntry().getName());
@@ -221,6 +223,7 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
         viewModel.getEntry().setName(name);
         viewModel.getEntry().setDescription(description);
         viewModel.getEntry().notifyDataChange();
+        viewModel.getEntry().setTags(viewModel.getTags());
         EntryManager.getInstance().set(viewModel.getEntry(), viewModel.getEntry().getUuid());
         return true;
     }
@@ -239,7 +242,7 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
             chip.setCheckedIcon(AppCompatResources.getDrawable(this, R.drawable.ic_check));
             chip.setCheckedIconVisible(true);
 
-            for (Tag entryTag : viewModel.getEntry().getTags()) {
+            for (Tag entryTag : viewModel.getTags()) {
                 if (tag.equals(entryTag)) {
                     chip.setChecked(true);
                 }
@@ -256,10 +259,10 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
 
             chip.setOnClickListener(view -> {
                 if (chip.isChecked()) {
-                    viewModel.getEntry().getTags().add(tag);
+                    viewModel.getTags().add(tag);
                 }
                 else {
-                    viewModel.getEntry().getTags().remove(tag);
+                    viewModel.getTags().remove(tag);
                 }
             });
 

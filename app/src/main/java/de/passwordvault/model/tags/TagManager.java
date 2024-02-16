@@ -8,6 +8,7 @@ import de.passwordvault.R;
 import de.passwordvault.model.GenericManager;
 import de.passwordvault.model.PersistableManager;
 import de.passwordvault.model.entry.EntryAbbreviated;
+import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.storage.csv.CsvBuilder;
 import de.passwordvault.model.storage.csv.CsvParser;
@@ -181,7 +182,9 @@ public class TagManager extends GenericManager<Tag> implements PersistableManage
         Thread deleteThread = new Thread(() -> {
             for (EntryAbbreviated entry : EntryManager.getInstance().getData()) {
                 entry.getTags().removeIf(tag -> tag.equals(deleteTag));
-                //TODO: Remove tag from extended entries...
+            }
+            for (EntryExtended entry : EntryManager.getInstance().getExtendedEntryCache()) {
+                entry.getTags().removeIf(tag -> tag.equals(deleteTag));
             }
         });
         deleteThread.start();
