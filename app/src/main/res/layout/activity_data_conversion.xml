@@ -84,7 +84,6 @@
                     android:indeterminate="true"/>
 
             </LinearLayout>
-
         </ScrollView>
 
         <com.google.android.material.button.MaterialButton
@@ -92,9 +91,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/default_margin"
-            android:text="@string/button_cancel"
+            android:text="@string/button_cancel"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/data_conversion_continue_anyway"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/default_margin"
+            android:text="@string/button_continue_without_converting"
             style="@style/Widget.Material3.Button.OutlinedButton"/>
 
     </LinearLayout>
-
 </LinearLayout>

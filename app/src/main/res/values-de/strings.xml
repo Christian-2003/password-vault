@@ -135,6 +135,7 @@
     <string name="button_biometrics">Biometrie verwenden</string>
     <string name="button_add_quality_gate">Kriterium hinzufügen</string>
     <string name="button_add_tag">Tag Hinzufügen</string>
+    <string name="button_continue_without_converting">Ohne Konvertierung Fortfahren</string>
 
 
     <!-- Placeholder -->

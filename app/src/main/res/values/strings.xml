@@ -139,6 +139,7 @@
     <string name="button_biometrics">Use biometrics</string>
     <string name="button_add_quality_gate">Add quality gate</string>
     <string name="button_add_tag">Add Tag</string>
+    <string name="button_continue_without_converting">Continue without Converting</string>
 
 
     <!-- Placeholder -->

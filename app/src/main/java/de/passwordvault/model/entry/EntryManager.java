@@ -424,11 +424,12 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
      * @param reverseSorted Whether the data shall be reverse-sorted.
      */
     public void sortByName(boolean reverseSorted) {
-        if (abbreviatedEntriesArrayListCacheSortingAlgorithm instanceof LexicographicComparator) {
+        if (abbreviatedEntriesArrayListCacheSortingAlgorithm instanceof LexicographicComparator && ((LexicographicComparator)abbreviatedEntriesArrayListCacheSortingAlgorithm).reverseSorted == reverseSorted) {
             return;
         }
         abbreviatedEntriesArrayListCacheSortingAlgorithm = new LexicographicComparator(reverseSorted);
         changesMadeSinceCachedAbbreviatedList = true;
+        notifyObservers();
     }
 
     /**
@@ -438,11 +439,13 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
      * @param reverseSorted Whether the data shall be reverse-sorted.
      */
     public void sortByTime(boolean reverseSorted) {
-        if (abbreviatedEntriesArrayListCacheSortingAlgorithm instanceof TimeComparator) {
+        if (abbreviatedEntriesArrayListCacheSortingAlgorithm instanceof TimeComparator && ((TimeComparator)abbreviatedEntriesArrayListCacheSortingAlgorithm).reverseSorted == reverseSorted) {
+
             return;
         }
         abbreviatedEntriesArrayListCacheSortingAlgorithm = new TimeComparator(reverseSorted);
         changesMadeSinceCachedAbbreviatedList = true;
+        notifyObservers();
     }
 
     /**
@@ -455,6 +458,7 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
         }
         abbreviatedEntriesArrayListCacheSortingAlgorithm = null;
         changesMadeSinceCachedAbbreviatedList = true;
+        notifyObservers();
     }
 
 
