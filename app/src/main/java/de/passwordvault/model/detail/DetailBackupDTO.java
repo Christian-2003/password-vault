@@ -170,4 +170,27 @@ public class DetailBackupDTO extends Detail {
         }
     }
 
+
+    /**
+     * Method returns a CSV-representation of the attribute names that are generated when calling
+     * {@link #toStorable()}.
+     *
+     * @return  CSV-representation of the attribute names.
+     */
+    public static String getStorableAttributes() {
+        CsvBuilder builder = new CsvBuilder();
+
+        builder.append("UUID");
+        builder.append("EntryUUID");
+        builder.append("Name");
+        builder.append("Content");
+        builder.append("Created");
+        builder.append("Edited");
+        builder.append("TypeID");
+        builder.append("IsVisible");
+        builder.append("IsObfuscated");
+
+        return builder.toString();
+    }
+
 }

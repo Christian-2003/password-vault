@@ -360,4 +360,24 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
         }
     }
 
+    /**
+     * Method returns a CSV-representation of the attribute names that are generated when calling
+     * {@link #toStorable()}.
+     *
+     * @return  CSV-representation of the attribute names.
+     */
+    public static String getStorableAttributes() {
+        CsvBuilder builder = new CsvBuilder();
+
+        builder.append("UUID");
+        builder.append("Name");
+        builder.append("Description");
+        builder.append("Created");
+        builder.append("Edited");
+        builder.append("IsVisible");
+        builder.append("Tags");
+
+        return builder.toString();
+    }
+
 }

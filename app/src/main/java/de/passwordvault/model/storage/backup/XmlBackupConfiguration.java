@@ -39,9 +39,24 @@ public abstract class XmlBackupConfiguration {
     protected static final String TAG_PASSWORD_VAULT = "password_vault";
 
     /**
+     * Field stores the XML tag which encapsulates the metadata of the XML backup.
+     */
+    protected static final String TAG_METADATA = "metadata";
+
+    /**
      * Field stores the XML tag which encapsulates the version number of the XML backup.
      */
     protected static final String TAG_VERSION = "version";
+
+    /**
+     * Field stores the XML tag which encapsulates the app version with which the XML backup was created.
+     */
+    protected static final String TAG_APP_VERSION = "app_version";
+
+    /**
+     * Field stores the XML tag which encapsulates the date on which the backup was created.
+     */
+    protected static final String TAG_BACKUP_CREATED = "created";
 
     /**
      * Field stores the XML tag which encapsulates all data regarding the encryption.
@@ -60,9 +75,19 @@ public abstract class XmlBackupConfiguration {
     protected static final String TAG_DATA = "data";
 
     /**
+     * Field stores the XML tag which contains the entries column names.
+     */
+    protected static final String TAG_ENTRIES_HEADER = "entries_header";
+
+    /**
      * Field stores the XML tag which contains the backed up entries.
      */
     protected static final String TAG_ENTRIES = "entries";
+
+    /**
+     * Field stores the XML tag which contains the entries column names.
+     */
+    protected static final String TAG_DETAILS_HEADER = "details_header";
 
     /**
      * Field stores the XML tag which contains the backed up details.

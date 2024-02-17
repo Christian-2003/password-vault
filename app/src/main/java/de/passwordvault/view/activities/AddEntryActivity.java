@@ -80,6 +80,7 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
         else if (viewModel.getEntry() == null){
             //Activity shall be used to create a new entry:
             viewModel.setEntry(new EntryExtended());
+            viewModel.setTags(new TagCollection());
         }
 
         setupTags();
