@@ -33,6 +33,8 @@
     <string name="settings_security">Security</string>
     <string name="settings_security_login">Require login</string>
     <string name="settings_security_login_info">Require password to open app</string>
+    <string name="settings_security_disable_login_title">Disable Login</string>
+    <string name="settings_security_disable_login_info">Enter Password to disable login.</string>
     <string name="settings_security_password">Change password</string>
     <string name="settings_security_password_info">Change password for login</string>
     <string name="settings_security_biometrics">Use biometrics</string>

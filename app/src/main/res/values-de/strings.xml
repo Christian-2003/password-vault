@@ -32,6 +32,8 @@
     <string name="settings_security">Sicherheit</string>
     <string name="settings_security_login">App-Login</string>
     <string name="settings_security_login_info">Verlange Passwort zum Öffnen der App</string>
+    <string name="settings_security_disable_login_title">App-Login deaktivieren</string>
+    <string name="settings_security_disable_login_info">Geben Sie Ihr Passwort ein, um den App-Login zu deaktivieren.</string>
     <string name="settings_security_password">Passwort ändern</string>
     <string name="settings_security_password_info">Passwort zum Einloggen ändern</string>
     <string name="settings_security_biometrics">Biometrie verwenden</string>

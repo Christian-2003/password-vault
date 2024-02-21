@@ -1,77 +1,60 @@
 package de.passwordvault.view.dialogs;
 
 import android.annotation.SuppressLint;
-import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
 import de.passwordvault.R;
-import de.passwordvault.viewmodel.dialogs.RestoreBackupViewModel;
+import de.passwordvault.viewmodel.dialogs.EnterPasswordViewModel;
 
 
 /**
- * Class implements a {@linkplain Dialog} which allows the user to enter a password to restore an
- * encrypted backup. The class that calls this dialog must always implement the interface
- * {@link de.passwordvault.view.utils.DialogCallbackListener}.
+ * Class implements a dialog through which the user can confirm the
+ * {@link de.passwordvault.model.security.login.Account}-password. If the entered password is correct,
+ * the positive callback is triggered.
  *
  * @author  Christian-2003
- * @version 3.2.0
+ * @version 3.3.0
  */
-public class RestoreBackupDialog extends DialogFragment {
+public class EnterPasswordDialog extends DialogFragment {
 
     /**
-     * Field contains the key that needs to be used when passing the file as argument.
-     */
-    public static final String KEY_FILE = "file";
-
-    /**
-     * Field contains the key that needs to be used when passing a
+     * Field stores the key that needs to be used when passing a
      * {@link de.passwordvault.view.utils.DialogCallbackListener} as argument.
      */
     public static final String KEY_CALLBACK_LISTENER = "callback_listener";
 
-
     /**
-     * Attribute stores the {@link RestoreBackupViewModel} for this {@link RestoreBackupDialog}.
+     * Field stores the key that needs to be used when passing a title as argument.
      */
-    private RestoreBackupViewModel viewModel;
+    public static final String KEY_TITLE = "title";
 
     /**
-     * Attribute stores the view for the dialog.
+     * Field stores the key that needs to be used when passing an optional info text as argument.
+     */
+    public static final String KEY_INFO = "info";
+
+
+    /**
+     * Attribute stores the {@link EnterPasswordViewModel} for this dialog.
+     */
+    private EnterPasswordViewModel viewModel;
+
+    /**
+     * Attribute stores the inflated view of this dialog.
      */
     private View view;
 
-    /**
-     * Method returns the URI to the file from which the backup shall be restored.
-     *
-     * @return  URI to the file of the backup.
-     */
-    public Uri getFile() {
-        return viewModel.getFile();
-    }
 
     /**
-     * Method returns the password that was entered by the user. If the user did not enter
-     * any password, {@code null} is returned.
-     *
-     * @return  Entered password.
-     */
-    public String getPassword() {
-        return viewModel.getPassword();
-    }
-
-
-    /**
-     * Method is called whenever a {@link RestoreBackupViewModel} is created.
+     * Method is called whenever a {@link EnterPasswordViewModel} is created.
      *
      * @param savedInstanceState    Previously saved state of the instance.
      * @return                      Created dialog.
@@ -81,22 +64,20 @@ public class RestoreBackupDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) throws ClassCastException {
         super.onCreateDialog(savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(RestoreBackupViewModel.class);
+        viewModel = new ViewModelProvider(this).get(EnterPasswordViewModel.class);
 
         try {
             viewModel.processArguments(getArguments());
         }
         catch (Exception e) {
-            //Converting every occurring exception to 'ClassCastException' to match methods signature
-            //must surely be the stupidest decision made in this project so far...
             throw new ClassCastException(e.getMessage());
         }
 
-        view = requireActivity().getLayoutInflater().inflate(R.layout.dialog_restore_backup, null);
+        view = requireActivity().getLayoutInflater().inflate(R.layout.enter_password_dialog, null);
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity());
-        builder.setTitle(getString(R.string.settings_security_restore));
-        builder.setView(view);
+        builder.setTitle(viewModel.getTitle());
+        builder.setView(viewModel.createView(view));
 
         builder.setPositiveButton(R.string.button_ok, (dialog, id) -> {
             //Action implemented in onStart()-method!
@@ -110,8 +91,8 @@ public class RestoreBackupDialog extends DialogFragment {
 
 
     /**
-     * Method is called whenever the {@link RestoreBackupDialog} is started. The method configures the
-     * click listeners for the dialog buttons.
+     * Method is called whenever the dialog is started. The method configures the click listeners
+     * for the dialog buttons.
      */
     @Override
     public void onStart() {
@@ -125,19 +106,19 @@ public class RestoreBackupDialog extends DialogFragment {
         //Configure positive button:
         Button positiveButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(view -> {
-            if (!viewModel.processUserInput(RestoreBackupDialog.this.view)) {
+            if (!viewModel.processUserInput(EnterPasswordDialog.this.view)) {
                 //Some inputs are incorrect:
                 return;
             }
             dismiss();
-            viewModel.getCallbackListener().onPositiveCallback(RestoreBackupDialog.this);
+            viewModel.getCallbackListener().onPositiveCallback(EnterPasswordDialog.this);
         });
 
         //Configure negative button:
         Button negativeButton = dialog.getButton(Dialog.BUTTON_NEGATIVE);
         negativeButton.setOnClickListener(view -> {
             dismiss();
-            viewModel.getCallbackListener().onNegativeCallback(RestoreBackupDialog.this);
+            viewModel.getCallbackListener().onNegativeCallback(EnterPasswordDialog.this);
         });
     }
 
