@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title>Home</title>
+    <meta charset="utf-8">
+    <link rel="icon" href="img/icon.png">
+    <link rel="stylesheet" href="css/default.css">
+</head>
+
+<body>
+    <header>
+        <img src="img/icon.png"/>
+        <h1>PaswordVault</h1>
+        <a href="index.html">Home</a>
+        <a href="tutorials.html">Tutorials</a>
+        <a href="quickstart.html">Quick Start</a>
+        <a href="security.html" class="selected">Security</a>
+    </header>
+
+    <div>
+        <h1>Security</h1>
+        <p>You can store your most sensitive account information with PasswordVault. Naturally, security is one of our primary concerns.
+            Therefore, you might be interested which steps we take to ensure maximum security of your data. We will answer this question
+            within this page.</p>
+        <h2>Where Is My Data Being Stored?</h2>
+        <p>Android provides a unique approach to data storage. Each application has its own directory into which it can store data. The
+            operating system prohibits any other app from accessing this directory. Therefore, your data is safe from any other app on your
+            device. The internal app storage - in which your sensitive data is stored - can only be accesses through PasswordVault. Furthermore,
+            this directory is automatically encrypted by the operating system.</p>
+        <h2>Encryption</h2>
+        <p>Even though the operating system automatically encrypts the data and prevents any access from outside PasswordVault, this might not
+            be enough. Considering the importance of securing your data under any circumstances, PasswordVault additionally encrypts your data
+            through the Advanced Encryption Standard (AES), which is one of the most popular encryption algorithms.
+        </p>
+        <h3>Advanced Encryption Standard (AES)</h3>
+        <p>As an industrial standard for over a decade, AES is one of the most secure encryption algorithms that is publicly available. This
+            algorithm proved itself to be resilient against any form of attack. After twenty years of existence, no attack has been found that
+            can be performed with reasonable time and resources. As an interesting side note, this algorithm is used to encrypt the most
+            sensitive and classified documents of the United States Government.</p>
+            <p>PasswordVault uses this algorithm to encrypt your data any chance
+            it gets with the most secure settings. Those settings include a <b>256 Bit cryptographic key</b>, as well as the <b>GCM mode</b> to
+            ensure data integrity. The previously mentioned key is securely stored within the Android Keystore to prevent unauthorized access.</p>
+        </p>
+        <h3>Android Keystore</h3>
+        <p>The Android Keystore is an integral part of the security environment that is provided by the operating system. It can securely store
+            cryptographic keys and prevents their extraction through hardware and software. Generated keys can never be retrieved from the keystore.
+            To perform cryptographic operations, the respective data is handed to the keystore, which performs the operations with the stored key.</p>
+        <p>PasswordVault uses the Android Keystore to securely store your cryptographic key.</p>
+        <h2>Backups</h2>
+        <p>You can create backups of your data within the application. These backups are optionally encrypted, if you provide a password. This
+            password is used to generate a cryptographic key which is used to encrypt the backup through the AES algorithm. When decrypting your
+            data, you need to provide the same password.
+        </p>
+    </div>
+</body>
+</html>
