@@ -25,9 +25,22 @@ public class LoginViewModel extends ViewModel {
     private final BiometricPrompt.PromptInfo biometricPromptInfo = new BiometricPrompt.PromptInfo.Builder().setTitle(App.getContext().getString(R.string.login_biometrics_title)).setNegativeButtonText(App.getContext().getString(R.string.button_cancel)).build();
 
     /**
+     * Attribute stores whether the biometric authentication was cancelled on purpose by the user.
+     */
+    private boolean biometricAuthenticationCancelled;
+
+    /**
      * Attribute stores the executor that is used for executing the biometric-login dialog.
      */
     private final Executor executor = ContextCompat.getMainExecutor(App.getContext());
+
+
+    /**
+     * Constructor instantiates a new view model.
+     */
+    public LoginViewModel() {
+        biometricAuthenticationCancelled = false;
+    }
 
 
     /**
@@ -37,6 +50,25 @@ public class LoginViewModel extends ViewModel {
      */
     public BiometricPrompt.PromptInfo getBiometricPromptInfo() {
         return biometricPromptInfo;
+    }
+
+    /**
+     * Method returns whether the biometric authentication was cancelled by the user on purpose.
+     *
+     * @return  Whether biometric authentication was cancelled on purpose.
+     */
+    public boolean isBiometricAuthenticationCancelled() {
+        return biometricAuthenticationCancelled;
+    }
+
+    /**
+     * Method changes whether the biometric authentication is cancelled by the user on purpose.
+     *
+     * @param biometricAuthenticationCancelled  Whether biometric authentication is cancelled on
+     *                                          purpose.
+     */
+    public void setBiometricAuthenticationCancelled(boolean biometricAuthenticationCancelled) {
+        this.biometricAuthenticationCancelled = biometricAuthenticationCancelled;
     }
 
     /**

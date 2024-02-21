@@ -17,6 +17,7 @@ Added custom quality gates for password security which can be changed in setting
 * Stored details and entries are converted the first time the app is opened with data from before version 3.3.0.
 * Toggling biometrics for login requires confirming identity through biometrics.
 * Disabeling app login requires biometric authentication (if available) or confirmation through app password.
+* Rotating `LoginActivity` after cancelling biometric login no longer shows biometric prompt.
 
 <br>
 

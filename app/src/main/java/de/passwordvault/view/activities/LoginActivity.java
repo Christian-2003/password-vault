@@ -78,6 +78,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
+                if (errorCode == 13) {
+                    viewModel.setBiometricAuthenticationCancelled(true);
+                }
                 if (errorCode != 13) {
                     //errorCode == 13 indicates the biometric login was cancelled!
                     Toast.makeText(getApplicationContext(), getString(R.string.login_biometrics_error) + ": " + errString, Toast.LENGTH_SHORT).show();
@@ -101,7 +104,9 @@ public class LoginActivity extends AppCompatActivity {
         Button biometricLoginButton = findViewById(R.id.login_button_biometrics);
         if (viewModel.useBiometrics()) {
             biometricLoginButton.setOnClickListener(view -> showBiometricLoginDialog());
-            showBiometricLoginDialog(); //Initially open dialog.
+            if (!viewModel.isBiometricAuthenticationCancelled()) {
+                showBiometricLoginDialog(); //Initially open dialog.
+            }
         }
         else {
             biometricLoginButton.setVisibility(View.GONE);
@@ -161,6 +166,7 @@ public class LoginActivity extends AppCompatActivity {
      * Method shows the biometric prompt to authenticate with the configured biometrics.
      */
     private void showBiometricLoginDialog() {
+        viewModel.setBiometricAuthenticationCancelled(false);
         biometricPrompt.authenticate(viewModel.getBiometricPromptInfo());
     }
 }
