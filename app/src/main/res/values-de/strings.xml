@@ -77,6 +77,12 @@
     <string name="settings_about_update_info">Neueste Version herunterladen</string>
     <string name="settings_about_version">App-Version</string>
 
+    <string name="settings_data">Daten</string>
+    <string name="settings_data_delete">Daten löschen</string>
+    <string name="settings_data_delete_info">Alle Daten unumkehrbar Löschen</string>
+    <string name="settings_data_delete_dialog_info">sämtlichen Daten</string>
+    <string name="settings_data_delete_dialog_info_extended">Bestätigen Sie Ihr Passwort um alle Daten unumkehrbar zu Löschen.</string>
+
 
     <!-- Entry activity -->
     <string name="entry_name">Name</string>

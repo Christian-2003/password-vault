@@ -18,6 +18,7 @@ Added custom quality gates for password security which can be changed in setting
 * Toggling biometrics for login requires confirming identity through biometrics.
 * Disabeling app login requires biometric authentication (if available) or confirmation through app password.
 * Rotating `LoginActivity` after cancelling biometric login no longer shows biometric prompt.
+* Added button to settings to delete all data. Deleting all data requires authentication (if available) or confirmation through dialog.
 
 <br>
 

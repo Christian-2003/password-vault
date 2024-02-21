@@ -81,6 +81,12 @@
     <string name="settings_about_update_link" translatable="false">https://github.com/Christian-2003/password-vault/releases/latest</string>
     <string name="settings_about_version">App version</string>
 
+    <string name="settings_data">Data</string>
+    <string name="settings_data_delete">Delete Data</string>
+    <string name="settings_data_delete_info">Irreversibly delete all data</string>
+    <string name="settings_data_delete_dialog_info">all data</string>
+    <string name="settings_data_delete_dialog_info_extended">Confirm password to delete all data irreversibly.</string>
+
 
     <!-- Entry activity -->
     <string name="entry_name">Name</string>

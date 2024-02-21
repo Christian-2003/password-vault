@@ -8,10 +8,14 @@ import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModel;
+
 import java.util.concurrent.Executor;
 import de.passwordvault.App;
 import de.passwordvault.R;
+import de.passwordvault.model.analysis.QualityGateManager;
+import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.security.login.Account;
+import de.passwordvault.model.storage.app.StorageException;
 import de.passwordvault.model.storage.backup.BackupException;
 import de.passwordvault.model.storage.backup.XmlBackupCreator;
 import de.passwordvault.model.storage.backup.XmlBackupRestorer;
@@ -19,6 +23,7 @@ import de.passwordvault.model.storage.backup.XmlException;
 import de.passwordvault.model.storage.encryption.EncryptionException;
 import de.passwordvault.model.storage.export.ExportException;
 import de.passwordvault.model.storage.export.ExportToHtml;
+import de.passwordvault.model.tags.TagManager;
 import de.passwordvault.view.fragments.SettingsFragment;
 
 
@@ -32,30 +37,35 @@ import de.passwordvault.view.fragments.SettingsFragment;
 public class SettingsViewModel extends ViewModel {
 
     /**
-     * Field indicates that no biometric action takes place.
+     * Field indicates that no action takes place.
      */
-    public static final byte BIOMETRIC_ACTION_NONE = -1;
+    public static final byte ACTION_NONE = -1;
 
     /**
      * Field indicates that biometrics are used to turn biometrics on.
      */
-    public static final byte BIOMETRIC_ACTION_TURN_BIOMETRICS_ON = 0;
+    public static final byte ACTION_TURN_BIOMETRICS_ON = 0;
 
     /**
      * Field indicates that biometrics are used to turn biometrics off.
      */
-    public static final byte BIOMETRIC_ACTION_TURN_BIOMETRICS_OFF = 1;
+    public static final byte ACTION_TURN_BIOMETRICS_OFF = 1;
 
     /**
      * Field indicates that biometrics are used to disable login.
      */
-    public static final byte BIOMETRIC_ACTION_DISABLE_LOGIN = 2;
+    public static final byte ACTION_DISABLE_LOGIN = 2;
+
+    /**
+     * Field indicates that biometrics are used to disable login.
+     */
+    public static final byte ACTION_DELETE_DATA = 3;
 
 
     /**
      * Attribute indicates the current biometric action.
      */
-    private byte currentBiometricAction;
+    private byte currentAction;
 
     /**
      * Attribute stores the prompt info for the biometric prompt.
@@ -73,17 +83,17 @@ public class SettingsViewModel extends ViewModel {
      *
      * @return  Current biometric action.
      */
-    public byte getCurrentBiometricAction() {
-        return currentBiometricAction;
+    public byte getCurrentAction() {
+        return currentAction;
     }
 
     /**
      * Method changes the current biometric action to the passed argument.
      *
-     * @param currentBiometricAction    New biometric action.
+     * @param currentAction    New biometric action.
      */
-    public void setCurrentBiometricAction(byte currentBiometricAction) {
-        this.currentBiometricAction = currentBiometricAction;
+    public void setCurrentAction(byte currentAction) {
+        this.currentAction = currentAction;
     }
 
     /**
@@ -156,6 +166,27 @@ public class SettingsViewModel extends ViewModel {
             Toast.makeText(context, context.getString(R.string.settings_security_backup_error), Toast.LENGTH_LONG).show();
         }
         Toast.makeText(context, context.getString(R.string.settings_security_backup_success), Toast.LENGTH_SHORT).show();
+    }
+
+
+    /**
+     * Method IRREVERSIBLY deletes all data from the device!
+     */
+    public void deleteAllData() {
+        TagManager.getInstance().clear();
+        TagManager.getInstance().save(true);
+
+        QualityGateManager.getInstance().clearQualityGates();
+        QualityGateManager.getInstance().saveAllQualityGates();
+
+        EntryManager.getInstance().clear();
+        try {
+            EntryManager.getInstance().save(true);
+        }
+        catch (StorageException e) {
+            //Ignore...
+        }
+        setCurrentAction(ACTION_NONE);
     }
 
 

@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -28,10 +27,10 @@ import de.passwordvault.BuildConfig;
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.storage.backup.XmlBackupRestorer;
-import de.passwordvault.view.activities.LoginActivity;
 import de.passwordvault.view.activities.QualityGatesActivity;
 import de.passwordvault.view.dialogs.ChangePasswordDialog;
 import de.passwordvault.view.dialogs.ConfigureLoginDialog;
+import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
 import de.passwordvault.view.dialogs.CreateBackupDialog;
 import de.passwordvault.view.dialogs.EnterPasswordDialog;
 import de.passwordvault.view.dialogs.RestoreBackupDialog;
@@ -157,37 +156,41 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         view.findViewById(R.id.settings_update_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_about_update_link)));
         view.findViewById(R.id.settings_html_export_clickable).setOnClickListener(view -> createFile(SELECT_FILE_TO_EXPORT_TO_HTML, "text/html", getString(R.string.settings_export_file)));
         view.findViewById(R.id.settings_html_export_info).setOnClickListener(view -> showInfoDialog(R.string.settings_export_html, R.string.settings_export_html_info_extended));
+        view.findViewById(R.id.settings_data_delete_clickable).setOnClickListener(view -> deleteData());
 
         biometricPrompt = new BiometricPrompt(requireActivity(), viewModel.getExecutor(), new BiometricPrompt.AuthenticationCallback() {
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
-                switch (viewModel.getCurrentBiometricAction()) {
-                    case SettingsViewModel.BIOMETRIC_ACTION_TURN_BIOMETRICS_ON:
+                switch (viewModel.getCurrentAction()) {
+                    case SettingsViewModel.ACTION_TURN_BIOMETRICS_ON:
                         MaterialSwitch toggleBiometricsOnSwitch = view.findViewById(R.id.settings_security_biometrics_switch);
                         toggleBiometricsOnSwitch.setChecked(false);
                         Account.getInstance().setBiometrics(false);
                         Account.getInstance().save();
                         break;
-                    case SettingsViewModel.BIOMETRIC_ACTION_TURN_BIOMETRICS_OFF:
+                    case SettingsViewModel.ACTION_TURN_BIOMETRICS_OFF:
                         MaterialSwitch toggleBiometricsOffSwitch = view.findViewById(R.id.settings_security_biometrics_switch);
                         toggleBiometricsOffSwitch.setChecked(true);
                         Account.getInstance().setBiometrics(true);
                         Account.getInstance().save();
                         break;
-                    case SettingsViewModel.BIOMETRIC_ACTION_DISABLE_LOGIN:
+                    case SettingsViewModel.ACTION_DISABLE_LOGIN:
                         ((MaterialSwitch)view.findViewById(R.id.settings_security_login_switch)).setChecked(true);
+                        break;
+                    case SettingsViewModel.ACTION_DELETE_DATA:
+                        viewModel.setCurrentAction(SettingsViewModel.ACTION_NONE);
                         break;
                 }
 
-                viewModel.setCurrentBiometricAction(SettingsViewModel.BIOMETRIC_ACTION_NONE);
+                viewModel.setCurrentAction(SettingsViewModel.ACTION_NONE);
             }
 
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                switch (viewModel.getCurrentBiometricAction()) {
-                    case SettingsViewModel.BIOMETRIC_ACTION_TURN_BIOMETRICS_ON:
+                switch (viewModel.getCurrentAction()) {
+                    case SettingsViewModel.ACTION_TURN_BIOMETRICS_ON:
                         MaterialSwitch toggleBiometricsOnSwitch = view.findViewById(R.id.settings_security_biometrics_switch);
                         if (!viewModel.areBiometricsAvailable()) {
                             toggleBiometricsOnSwitch.setChecked(false);
@@ -196,7 +199,7 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
                         Account.getInstance().setBiometrics(true);
                         Account.getInstance().save();
                         break;
-                    case SettingsViewModel.BIOMETRIC_ACTION_TURN_BIOMETRICS_OFF:
+                    case SettingsViewModel.ACTION_TURN_BIOMETRICS_OFF:
                         MaterialSwitch toggleBiometricsOffSwitch = view.findViewById(R.id.settings_security_biometrics_switch);
                         if (!viewModel.areBiometricsAvailable()) {
                             toggleBiometricsOffSwitch.setChecked(true);
@@ -205,12 +208,15 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
                         Account.getInstance().setBiometrics(false);
                         Account.getInstance().save();
                         break;
-                    case SettingsViewModel.BIOMETRIC_ACTION_DISABLE_LOGIN:
+                    case SettingsViewModel.ACTION_DISABLE_LOGIN:
                         deactivateLogin();
+                        break;
+                    case SettingsViewModel.ACTION_DELETE_DATA:
+                        viewModel.deleteAllData();
                         break;
                 }
 
-                viewModel.setCurrentBiometricAction(SettingsViewModel.BIOMETRIC_ACTION_NONE);
+                viewModel.setCurrentAction(SettingsViewModel.ACTION_NONE);
             }
 
             @Override
@@ -302,7 +308,15 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
             }
         }
         else if (fragment instanceof EnterPasswordDialog) {
-            deactivateLogin();
+            if (viewModel.getCurrentAction() == SettingsViewModel.ACTION_DELETE_DATA) {
+                viewModel.deleteAllData();
+            }
+            else {
+                deactivateLogin();
+            }
+        }
+        else if (fragment instanceof ConfirmDeleteDialog) {
+            viewModel.deleteAllData();
         }
     }
 
@@ -318,7 +332,16 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
             ((MaterialSwitch)view.findViewById(R.id.settings_security_login_switch)).setChecked(false);
         }
         else if (fragment instanceof EnterPasswordDialog) {
-            ((MaterialSwitch)view.findViewById(R.id.settings_security_login_switch)).setChecked(true);
+            if (viewModel.getCurrentAction() == SettingsViewModel.ACTION_DELETE_DATA) {
+                viewModel.setCurrentAction(SettingsViewModel.ACTION_NONE);
+            }
+            else {
+                ((MaterialSwitch)view.findViewById(R.id.settings_security_login_switch)).setChecked(true);
+                viewModel.setCurrentAction(SettingsViewModel.ACTION_NONE);
+            }
+        }
+        else if (fragment instanceof ConfirmDeleteDialog) {
+            viewModel.setCurrentAction(SettingsViewModel.ACTION_NONE);
         }
     }
 
@@ -409,7 +432,7 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         if (!materialSwitch.isChecked()) {
             //Inverted logic -> When method is called, the switch just has been checked.
             if (Account.getInstance().useBiometrics()) {
-                showBiometricAuthenticationDialog(SettingsViewModel.BIOMETRIC_ACTION_DISABLE_LOGIN);
+                showBiometricAuthenticationDialog(SettingsViewModel.ACTION_DISABLE_LOGIN);
             }
             else {
                 EnterPasswordDialog dialog = new EnterPasswordDialog();
@@ -427,6 +450,35 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         args.putSerializable(ConfigureLoginDialog.KEY_CALLBACK_LISTENER, this);
         dialog.setArguments(args);
         dialog.show(requireActivity().getSupportFragmentManager(), "");
+    }
+
+
+    private void deleteData() {
+        viewModel.setCurrentAction(SettingsViewModel.ACTION_DELETE_DATA);
+        if (viewModel.useAppLogin()) {
+            //Authenticate through app login:
+            if (viewModel.useBiometrics()) {
+                showBiometricAuthenticationDialog(SettingsViewModel.ACTION_DELETE_DATA);
+            }
+            else {
+                EnterPasswordDialog dialog = new EnterPasswordDialog();
+                Bundle args = new Bundle();
+                args.putSerializable(EnterPasswordDialog.KEY_CALLBACK_LISTENER, this);
+                args.putString(EnterPasswordDialog.KEY_TITLE, getString(R.string.settings_data_delete));
+                args.putString(EnterPasswordDialog.KEY_INFO, getString(R.string.settings_data_delete_dialog_info_extended));
+                dialog.setArguments(args);
+                dialog.show(requireActivity().getSupportFragmentManager(), "");
+            }
+        }
+        else {
+            //No app login:
+            ConfirmDeleteDialog dialog = new ConfirmDeleteDialog();
+            Bundle args = new Bundle();
+            args.putSerializable(ConfirmDeleteDialog.KEY_CALLBACK_LISTENER, this);
+            args.putString(ConfirmDeleteDialog.KEY_OBJECT, getString(R.string.settings_data_delete_dialog_info));
+            dialog.setArguments(args);
+            dialog.show(requireActivity().getSupportFragmentManager(), "");
+        }
     }
 
 
@@ -460,10 +512,10 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         }
         byte biometricAction;
         if (materialSwitch.isChecked()) {
-            biometricAction = SettingsViewModel.BIOMETRIC_ACTION_TURN_BIOMETRICS_ON;
+            biometricAction = SettingsViewModel.ACTION_TURN_BIOMETRICS_ON;
         }
         else {
-            biometricAction = SettingsViewModel.BIOMETRIC_ACTION_TURN_BIOMETRICS_OFF;
+            biometricAction = SettingsViewModel.ACTION_TURN_BIOMETRICS_OFF;
         }
         showBiometricAuthenticationDialog(biometricAction);
     }
@@ -475,10 +527,14 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
      * @param biometricAction   Action for which the biometric prompt shall be opened.
      */
     private void showBiometricAuthenticationDialog(byte biometricAction) {
-        viewModel.setCurrentBiometricAction(biometricAction);
+        viewModel.setCurrentAction(biometricAction);
         biometricPrompt.authenticate(viewModel.getBiometricPromptInfo());
     }
 
+
+    /**
+     * Method deactivates the login.
+     */
     private void deactivateLogin() {
         Account.getInstance().removeAccount();
         Account.getInstance().save();
