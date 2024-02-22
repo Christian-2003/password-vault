@@ -178,22 +178,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/entry_uuid"
-                        style="@style/pv.text.variant"/>
-
-                    <TextView
-                        android:id="@+id/entry_uuid"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/placeholder_uuid"
-                        style="@style/pv.text"/>
-
-                    <View
-                        style="@style/divider"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:text="@string/entry_created"
                         style="@style/pv.text.variant"/>
 

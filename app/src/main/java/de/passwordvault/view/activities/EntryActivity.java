@@ -158,7 +158,6 @@ public class EntryActivity extends AppCompatActivity implements DialogCallbackLi
             findViewById(R.id.entry_description_container).setVisibility(View.VISIBLE);
         }
         ((TextView)findViewById(R.id.entry_description)).setText(entry.getDescription());
-        ((TextView)findViewById(R.id.entry_uuid)).setText(entry.getUuid());
         String dateFormat = getString(R.string.date_format);
         ((TextView)findViewById(R.id.entry_created)).setText(Utils.formatDate(entry.getCreated(), dateFormat));
         ((TextView)findViewById(R.id.entry_changed)).setText(Utils.formatDate(entry.getChanged(), dateFormat));

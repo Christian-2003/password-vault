@@ -5,12 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +28,7 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.model.Observable;
@@ -108,7 +113,9 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
             Context wrapper = new ContextThemeWrapper(EntriesFragment.this.getContext(), R.style.popup_menu);
             PopupMenu popup = new PopupMenu(wrapper, sortButton);
             popup.getMenuInflater().inflate(R.menu.sort_entries_list, popup.getMenu());
+            popup.getMenu().findItem(viewModel.getSelectedEntrySorting()).setIcon(R.drawable.ic_check);
             popup.setOnMenuItemClickListener(EntriesFragment.this);
+            popup.setForceShowIcon(true);
             popup.show();
         });
 
@@ -204,18 +211,23 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
     public boolean onMenuItemClick(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sort_entries_not_sorted:
+                viewModel.setSelectedEntrySorting(R.id.sort_entries_not_sorted);
                 EntryManager.getInstance().removeAllSortings();
                 break;
             case R.id.sort_entries_name_ascending:
+                viewModel.setSelectedEntrySorting(R.id.sort_entries_name_ascending);
                 EntryManager.getInstance().sortByName(false);
                 break;
             case R.id.sort_entries_name_descending:
+                viewModel.setSelectedEntrySorting(R.id.sort_entries_name_descending);
                 EntryManager.getInstance().sortByName(true);
                 break;
             case R.id.sort_entries_created_ascending:
+                viewModel.setSelectedEntrySorting(R.id.sort_entries_created_ascending);
                 EntryManager.getInstance().sortByTime(false);
                 break;
             case R.id.sort_entries_created_descending:
+                viewModel.setSelectedEntrySorting(R.id.sort_entries_created_descending);
                 EntryManager.getInstance().sortByTime(true);
                 break;
             default:

@@ -19,6 +19,8 @@ Added custom quality gates for password security which can be changed in setting
 * Disabeling app login requires biometric authentication (if available) or confirmation through app password.
 * Rotating `LoginActivity` after cancelling biometric login no longer shows biometric prompt.
 * Added button to settings to delete all data. Deleting all data requires authentication (if available) or confirmation through dialog.
+* UUID of entries is no longer shown in `EntryActivity`, since this is very useless for the user.
+* `EntriesFragment` shows current sorting of entries in popup menu.
 
 <br>
 

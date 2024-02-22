@@ -91,6 +91,8 @@
     <!-- Style for popup menus -->
     <style name="popup_menu" parent="@android:style/Widget.PopupMenu">
         <item name="android:backgroundTint">@color/pv_theme_popup_surface</item>
+        <item name="android:iconTint">@color/on_background</item>
+        <item name="android:textColor">@color/on_background</item>
     </style>
 
     <!-- Style to make the login image rounded -->
