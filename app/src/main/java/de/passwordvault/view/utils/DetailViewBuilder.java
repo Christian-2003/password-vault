@@ -125,7 +125,8 @@ public class DetailViewBuilder {
                 if (obfuscated.get()) {
                     obfuscated.set(false);
                     textContent.setText(detail.getContent());
-                } else {
+                }
+                else {
                     obfuscated.set(true);
                     textContent.setText(Utils.obfuscate(detail.getContent()));
                 }

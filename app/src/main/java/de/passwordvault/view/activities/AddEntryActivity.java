@@ -4,10 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -23,6 +26,8 @@ import de.passwordvault.model.tags.Tag;
 import de.passwordvault.model.tags.TagCollection;
 import de.passwordvault.model.tags.TagManager;
 import de.passwordvault.view.dialogs.EditTagDialog;
+import de.passwordvault.view.utils.DetailsItemMoveCallback;
+import de.passwordvault.view.utils.DetailsRecyclerViewAdapter;
 import de.passwordvault.viewmodel.activities.AddEntryViewModel;
 import de.passwordvault.view.utils.DetailViewBuilder;
 import de.passwordvault.model.detail.Detail;
@@ -47,7 +52,7 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
     /**
      * Attribute stores the container which displays the details.
      */
-    private LinearLayout detailsContainer;
+    private RecyclerView detailsContainer;
 
 
     /**
@@ -61,8 +66,6 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
         setContentView(R.layout.activity_add_entry);
         viewModel = new ViewModelProvider(this).get(AddEntryViewModel.class);
 
-        detailsContainer = findViewById(R.id.add_entry_details_container);
-
         Bundle bundle = getIntent().getExtras();
         if (bundle != null && bundle.containsKey("entry")) {
             //Activity shall be used to edit an entry:
@@ -73,15 +76,20 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
             ((TextView)findViewById(R.id.add_entry_title)).setText(viewModel.getEntry().getName());
             ((TextView)findViewById(R.id.add_entry_name)).setText(viewModel.getEntry().getName());
             ((TextView)findViewById(R.id.add_entry_description)).setText(viewModel.getEntry().getDescription());
-            for (Detail detail : viewModel.getEntry().getDetails()) {
-                addDetailToContainer(detail);
-            }
         }
         else if (viewModel.getEntry() == null){
             //Activity shall be used to create a new entry:
             viewModel.setEntry(new EntryExtended());
             viewModel.setTags(new TagCollection());
         }
+
+        detailsContainer = findViewById(R.id.add_entry_details_container);
+        DetailsRecyclerViewAdapter adapter = new DetailsRecyclerViewAdapter(viewModel.getEntry().getDetails());
+        ItemTouchHelper.Callback callback = new DetailsItemMoveCallback(adapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(detailsContainer);
+        detailsContainer.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
+        detailsContainer.setAdapter(adapter);
 
         setupTags();
 

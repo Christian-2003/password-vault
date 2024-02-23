@@ -2,6 +2,15 @@
 
 # Changelog
 
+## 3.4.0 (XXXX-XX-XX)
+###### Release Highlights
+Details are now reorderable
+
+###### Features
+* Details can be reordered.
+
+<br>
+
 ## 3.3.0 (2024-02-22)
 ###### Release Highlights
 Added custom quality gates for password security which can be changed in settings. Furthermore, entries can now be categorized using tags. Additionally, the storage of the accounts was completely reworked.

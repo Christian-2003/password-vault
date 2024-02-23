@@ -40,8 +40,9 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_left_margin_outside_container"
                 android:text="@string/quality_gate_configure"
                 style="@style/pv.text.highlight"/>
 
@@ -92,8 +93,9 @@
 
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_left_margin_outside_container"
                 android:text="@string/quality_gate_test"
                 style="@style/pv.text.highlight"/>
 

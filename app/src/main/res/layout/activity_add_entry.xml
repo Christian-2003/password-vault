@@ -29,7 +29,7 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
@@ -42,6 +42,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_left_margin_outside_container"
                 android:text="@string/entry_general_info"
                 style="@style/pv.text.highlight"/>
 
@@ -105,6 +106,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_left_margin_outside_container"
                 android:text="@string/entry_details_info"
                 style="@style/pv.text.highlight"/>
 
@@ -118,11 +120,12 @@
 
                 <!-- LinearLayout contains all details. These details are added
                 programmatically through the class AddEntryActivity -->
-                <LinearLayout
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/add_entry_details_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"/>
+                    android:orientation="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/add_entry_button_add_detail"
@@ -136,7 +139,7 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 
     <!-- ConstraintLayout contains the toolbar at the bottom -->
