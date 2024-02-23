@@ -204,3 +204,9 @@ This is a complete checklist of all steps that need to be taken to release a new
     * Entered name
     * Created new tag
     * Created description
+
+<br>
+
+***
+2024-02-23  
+&copy; Christian-2003

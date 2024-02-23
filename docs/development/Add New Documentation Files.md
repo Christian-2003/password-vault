@@ -152,6 +152,17 @@ This document describes the process of adding new documentation files to the pro
 ...
 ```
 
+###### Bottom of The Document
+Please include a copyright-notice and the date of last modification at the bottom of the document:
+
+```markdown
+***
+2024-02-23  
+&copy; Christian-2003
+```
+
+An exception to this rule is the README.md within the root file, which does not necessarily need this.
+
 <br>
 
 ## Links Between Documents
@@ -179,3 +190,9 @@ When doing this, it might be advisable to add alignment to the image as well:
 ```html
 <img src="../img/icon.png" height="150" align="center">
 ```
+
+<br>
+
+***
+2024-02-23  
+&copy; Christian-2003

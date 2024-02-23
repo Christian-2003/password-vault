@@ -51,3 +51,9 @@ Once you want to restore an encrypted backup, click **Settings > Restore backup*
 
 ###### Changes to UI
 To meet the Material Design 3 standards, changes were made to multiple UI elements.
+
+<br>
+
+***
+2024-02-23  
+&copy; Christian-2003
