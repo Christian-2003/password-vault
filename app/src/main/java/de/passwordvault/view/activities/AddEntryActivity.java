@@ -54,6 +54,8 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
      */
     private RecyclerView detailsContainer;
 
+    private DetailsRecyclerViewAdapter adapter;
+
 
     /**
      * Method is called whenever the activity is created / recreated.
@@ -84,7 +86,7 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
         }
 
         detailsContainer = findViewById(R.id.add_entry_details_container);
-        DetailsRecyclerViewAdapter adapter = new DetailsRecyclerViewAdapter(viewModel.getEntry().getDetails());
+        adapter = new DetailsRecyclerViewAdapter(viewModel.getEntry().getDetails());
         ItemTouchHelper.Callback callback = new DetailsItemMoveCallback(adapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(detailsContainer);
@@ -178,22 +180,20 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
             EntryExtended entry = viewModel.getEntry();
             if (viewModel.getEntry().contains(edited.getUuid())) {
                 entry.set(edited);
+                adapter.notifyItemChanged(entry.getDetails().indexOf(edited));
             }
             else {
                 entry.add(edited);
+                adapter.notifyItemInserted(entry.getDetails().size() - 1);
             }
-            viewModel.setEntry(entry);
         }
         else if (dialog instanceof ConfirmDeleteDetailDialog) {
             ConfirmDeleteDetailDialog deleteDialog = (ConfirmDeleteDetailDialog)dialog;
-            EntryExtended entry = viewModel.getEntry();
-            entry.remove(deleteDialog.getUuid());
-            viewModel.setEntry(entry);
-        }
-        //Redraw detailContainer:
-        detailsContainer.removeAllViews();
-        for (Detail detail : viewModel.getEntry().getDetails()) {
-            addDetailToContainer(detail);
+            int index = viewModel.getEntry().indexOf(deleteDialog.getUuid());
+            viewModel.getEntry().remove(deleteDialog.getUuid());
+            if (index != -1) {
+                adapter.notifyItemRemoved(index);
+            }
         }
     }
 

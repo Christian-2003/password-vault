@@ -170,6 +170,21 @@ public class EntryExtended extends EntryAbbreviated implements Storable {
     }
 
     /**
+     * Method returns the index of the detail with the passed UUID.
+     *
+     * @param uuid  UUID of the detail whose index to return.
+     * @return      Index of the detail with the passed UUID.
+     */
+    public int indexOf(String uuid) {
+        for (int i = 0; i < details.size(); i++) {
+            if (details.get(i).getUuid().endsWith(uuid)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
      * Method tests whether the entry contains a detail of the passed UUID.
      *
      * @param uuid  UUID to be tested.
