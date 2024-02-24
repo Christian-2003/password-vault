@@ -1,7 +1,6 @@
 package de.passwordvault.view.fragments;
 
 import android.app.Activity;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
@@ -44,7 +43,7 @@ import de.passwordvault.view.activities.MainActivity;
  * {@linkplain MainActivity}.
  *
  * @author  Christian-2003
- * @version 3.3.0
+ * @version 3.4.0
  */
 public class SettingsFragment extends Fragment implements DialogCallbackListener, Serializable, CompoundButton.OnCheckedChangeListener {
 
@@ -140,7 +139,6 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         else {
             ((TextView)view.findViewById(R.id.settings_version)).setText(BuildConfig.VERSION_NAME);
         }
-
 
         view.findViewById(R.id.settings_security_password_clickable).setOnClickListener(view -> changePassword());
         view.findViewById(R.id.settings_security_backup_clickable).setOnClickListener(view -> selectDirectory(SELECT_DIRECTORY_TO_CREATE_BACKUP));
