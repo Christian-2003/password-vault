@@ -1,4 +1,4 @@
-<img src="../img/icon.png" height="150" align="right">
+<img src="../img/icon.png" height="150" align="right"/>
 
 # Quickstart Guide
 This document contains a guide on how to use PasswordVault.
@@ -22,14 +22,18 @@ In order to protect your data, the app employs the highest industrial encryption
 ## Add New Accounts
 Once you open PasswordVault, you are presented the home screen. In order to add a new account, you need to click the **+**-button at the bottom right corner of the screen. This will open a new screen through which you can configure the account.
 
-<img src="../img/manual/home_fab.png" height="390" align="center">
+<div align="center">
+    <img src="../img/manual/home_fab.png" height="390"/>
+</div>
 
 ###### Provide Account Information
 The name of the account, e.g. "Discord" and provide an optional description. You always need to enter a name, whereas a description is not necessarily required.
 
 You have successfully enterd the most basic information about your account. However, you might want to add more sophisticated information, such as login data. To do so, press the **Add Detail**-button.
 
-<img src="../img/manual/edit_account_add_detail.png" height="390" align="center">
+<div align="center">
+    <img src="../img/manual/edit_account_add_detail.png" height="390"/>
+</div>
 
 A new dialog should appear through which you can configure the added detail.
 
@@ -55,11 +59,16 @@ Next, you need to enter a content. In this case, this is the e-mail address with
 
 Afterwards, click the **Save**-button to save the detail.
 
-<img src="../img/manual/edit_account_detail_content.png" height="390" align="center">
+<div align="center">
+    <img src="../img/manual/edit_account_detail_content.png" height="390"/>
+</div>
+
 
 The detail should now appear above the **Add Detail**-button. Most details display only their name and content. However, some details (like passwords) display some additional information. In the case of passwords, a security score is displayed to indicate the password's security.
 
-<img src="../img/manual/edit_account_detail_example.png" height="390" align="center">
+<div align="center">
+    <img src="../img/manual/edit_account_detail_example.png" height="390">
+</div>
 
 You can add as many details to an account as you like. Examples for details that you could add might be:
 * Login e-mail addresses
@@ -82,11 +91,15 @@ The next step shows you how to view the accounts that are configured within Pass
 ## View Your Accounts
 If you want to view an account that you have previously configured, go to the **Accounts** page.
 
-<img src="../img/manual/accounts_page.png" height="390" align="center">
+<div align="center">
+    <img src="../img/manual/accounts_page.png" height="390"/>
+</div>
 
 This page displays a list of all your configured accounts. Let's click on **Discord** to view the previously configured account. This will show you all provided information about the account.
 
-<img src="../img/manual/show_account.png" height="390" align="center">
+<div align="center">
+    <img src="../img/manual/show_account.png" height="390"/>
+</div>
 
 If you want to edit the account, click the **Edit**-button in the bottom left corner of the screen. This opens a new page through which you can edit the account the same way you [created](#add-new-accounts) it.
 

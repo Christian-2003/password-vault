@@ -1,4 +1,4 @@
-<img src="../img/icon.png" height="150" align="right">
+<img src="../img/icon.png" height="150" align="right"/>
 
 # Add new Documentation Files
 This document describes the process of adding new documentation files to the project and is aimed at developers to better understand the process of adding such files.
@@ -120,7 +120,7 @@ Before every `<h2>`-headline, add a `<br>`-element to further visually divide th
 ###### Top of The Document
 At the top of the document, add the PasswordVault logo to the right hand side. This can be done by using the following HTML in the first line of the markdown file:
 ```html
-<img src="../img/icon.png" height="150" align="right">
+<img src="../img/icon.png" height="150" align="right"/>
 ```
 Replace `../img/icon.png` with the relative path to the PasswordVault icon.
 
@@ -133,7 +133,7 @@ If you think that your document is large enough, you can add a table of contents
 An example for a top of the document might be as follows:
 
 ```markdown
-<img src="../img/icon.png" height="150" align="right">
+<img src="../img/icon.png" height="150" align="right"/>
 
 # Add New Documentation Files
 This document describes the process of adding new documentation files to the project and is aimed at developers to better understand the process of adding such files.
@@ -184,15 +184,17 @@ Include images using the default markdown syntax whenever possible, e.g.:
 
 If you feel that an image is too large, use the HTML-method instead. With this method, provide height or width constraints to make the image smaller within your document, e.g.:
 ```html
-<img src="../img/icon.png" height="150">
+<img src="../img/icon.png" height="390"/>
 ```
 When doing this, it might be advisable to add alignment to the image as well:
 ```html
-<img src="../img/icon.png" height="150" align="center">
+<div align="center">
+    <img src="../img/icon.png" height="390"/>
+</div>
 ```
 
 <br>
 
 ***
-2024-02-23  
+2024-02-24  
 &copy; Christian-2003

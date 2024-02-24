@@ -1,4 +1,4 @@
-<img src="../img/icon.png" height="150" align="right">
+<img src="../img/icon.png" height="150" align="right"/>
 
 # Release Guide
 This document describes the process of releasing a new version of the PasswordVault application. It is aimed at developers to better undestand the release-process and to prevent any important steps from being accidentally skipped. Therefore, this guide contains a list of all steps that need to be taken in order to release a new version of the software.

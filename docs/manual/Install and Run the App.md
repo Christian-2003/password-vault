@@ -1,4 +1,4 @@
-<img src="../img/icon.png" height="150" align="right">
+<img src="../img/icon.png" height="150" align="right"/>
 
 # Install and Run the App
 This page describes how you can install and run PasswordVault on your Android device.
@@ -28,7 +28,9 @@ You can download the newest release from the GitHub [releases](https://github.co
 
 Once you have opened the GitHub releases-page, you may download the APK file.
 
-<img src="../img/manual/locate_release.png" style="max-height:390px;" align="center">
+<div align="center">
+    <img src="../img/manual/locate_release.png" style="max-height:390px;"/>
+</div>
 
 ###### Install the Release APK
 After downloading a PasswordVault release APK, you can locate the APK file through the file explorer on your Android device.

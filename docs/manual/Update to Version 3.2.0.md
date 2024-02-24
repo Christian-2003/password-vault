@@ -1,4 +1,4 @@
-<img src="../img/icon.png" height="150" align="right">
+<img src="../img/icon.png" height="150" align="right"/>
 
 # Update to Version 3.2.0
 This page explains how to update to the newest version of PasswordVault, version 3.2.0 . You can [download it here](https://github.com/Christian-2003/password-vault/releases/tag/v3.2.0) or update inside PasswordVault by clicking **Settings > Software Update**.
