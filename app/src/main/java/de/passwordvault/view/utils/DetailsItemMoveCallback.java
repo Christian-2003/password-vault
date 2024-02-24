@@ -1,9 +1,19 @@
 package de.passwordvault.view.utils;
 
+import android.os.Bundle;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+
+import de.passwordvault.model.detail.Detail;
+import de.passwordvault.view.activities.AddEntryActivity;
+import de.passwordvault.view.dialogs.ConfirmDeleteDetailDialog;
 
 
 /**
@@ -43,11 +53,19 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
          */
         void onRowClear(DetailsRecyclerViewAdapter.ViewHolder viewHolder);
 
+        /**
+         * Method is called whenever an item is being swiped.
+         *
+         * @param viewHolder    View holder if the swiped item.
+         * @param direction     Direction into which the item was swiped.
+         */
+        void onRowSwiped(DetailsRecyclerViewAdapter.ViewHolder viewHolder, int direction);
+
     }
 
 
     /**
-     * Recycler view adapter of this callback.
+     * Attribute stores the recycler view adapter of this callback.
      */
     private final ItemTouchHelperContract adapter;
 
@@ -55,7 +73,7 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
     /**
      * Constructor instantiates a new callback for a recycler view.
      *
-     * @param adapter               Recycler view adapter for which this callback is being constructed.s
+     * @param adapter               Recycler view adapter for which this callback is being constructed.
      * @throws NullPointerException The passed adapter is {@code null}.
      */
     public DetailsItemMoveCallback(ItemTouchHelperContract adapter) throws NullPointerException {
@@ -83,7 +101,7 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
      */
     @Override
     public boolean isItemViewSwipeEnabled() {
-        return false;
+        return true;
     }
 
     /**
@@ -94,11 +112,14 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
      */
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
+        adapter.onRowSwiped((DetailsRecyclerViewAdapter.ViewHolder)viewHolder, direction);
     }
 
     /**
-     * Method returns the movement flags of the move action.
+     * Method returns the movement flags of the move action. Movement flags indicate into which direction
+     * the item can be moved when it is being dragged. With this implementation, the item can only
+     * be dragged up and down.
+     *
      * @param recyclerView  The RecyclerView to which ItemTouchHelper is attached.
      * @param viewHolder    The ViewHolder for which the movement information is necessary.
      * @return              Movement flags.
@@ -106,7 +127,8 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
         int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-        return makeMovementFlags(dragFlags, 0);
+        int swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+        return makeMovementFlags(dragFlags, swipeFlags);
     }
 
     /**

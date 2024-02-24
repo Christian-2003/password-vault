@@ -2,11 +2,13 @@ package de.passwordvault.view.utils;
 
 import androidx.fragment.app.DialogFragment;
 
+import java.io.Serializable;
+
 /**
  * Interface must be implemented by all activities that create an instance of
  * {@linkplain DialogFragment}.
  */
-public interface DialogCallbackListener {
+public interface DialogCallbackListener extends Serializable {
 
     /**
      * Method is called whenever the {@linkplain DialogFragment} is closed through the

@@ -1,6 +1,8 @@
 package de.passwordvault.view.utils;
 
 import android.animation.ValueAnimator;
+import android.app.Dialog;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -20,6 +26,9 @@ import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGateManager;
 import de.passwordvault.model.detail.Detail;
 import de.passwordvault.model.detail.DetailType;
+import de.passwordvault.view.activities.AddEntryActivity;
+import de.passwordvault.view.dialogs.ConfirmDeleteDetailDialog;
+import de.passwordvault.view.dialogs.DetailDialog;
 
 
 /**
@@ -106,6 +115,17 @@ public class DetailsRecyclerViewAdapter extends RecyclerView.Adapter<DetailsRecy
      */
     private final ArrayList<Detail> data;
 
+    /**
+     * Attribute stores the activity in which the dialog is being displayed.
+     */
+    private final AppCompatActivity activity;
+
+    /**
+     * Attribute stores the callback listener for dialogs that might be opened through specific
+     * actions on items of the recycler view.
+     */
+    private final DialogCallbackListener callbackListener;
+
 
     /**
      * Constructor instantiates a new adapter for a recycler view to display the passed list of
@@ -114,11 +134,13 @@ public class DetailsRecyclerViewAdapter extends RecyclerView.Adapter<DetailsRecy
      * @param data                  List of details to be displayed.
      * @throws NullPointerException The passed list of details is {@code null}.
      */
-    public DetailsRecyclerViewAdapter(ArrayList<Detail> data) throws NullPointerException {
-        if (data == null) {
+    public DetailsRecyclerViewAdapter(ArrayList<Detail> data, AppCompatActivity activity, DialogCallbackListener callbackListener) throws NullPointerException {
+        if (data == null || activity == null || callbackListener == null) {
             throw new NullPointerException();
         }
         this.data = data;
+        this.activity = activity;
+        this.callbackListener = callbackListener;
     }
 
 
@@ -261,6 +283,32 @@ public class DetailsRecyclerViewAdapter extends RecyclerView.Adapter<DetailsRecy
     @Override
     public void onRowClear(ViewHolder viewHolder) {
 
+    }
+
+    /**
+     * Method is called whenever an item is being swiped.
+     *
+     * @param viewHolder    View holder if the swiped item.
+     * @param direction     Direction into which the item was swiped.
+     */
+    @Override
+    public void onRowSwiped(DetailsRecyclerViewAdapter.ViewHolder viewHolder, int direction) {
+        if (direction == ItemTouchHelper.LEFT) {
+            ConfirmDeleteDetailDialog dialog = new ConfirmDeleteDetailDialog();
+            Bundle dialogArgs = new Bundle();
+            dialogArgs.putSerializable(ConfirmDeleteDetailDialog.KEY_CALLBACK_LISTENER, callbackListener);
+            dialogArgs.putSerializable(ConfirmDeleteDetailDialog.KEY_DETAIL, data.get(viewHolder.getAdapterPosition()));
+            dialog.setArguments(dialogArgs);
+            dialog.show(activity.getSupportFragmentManager(), null);
+        }
+        else if (direction == ItemTouchHelper.RIGHT) {
+            DetailDialog dialog = new DetailDialog();
+            Bundle dialogArgs = new Bundle();
+            dialogArgs.putSerializable(DetailDialog.KEY_CALLBACK_LISTENER, callbackListener);
+            dialogArgs.putSerializable(DetailDialog.KEY_DETAIL, data.get(viewHolder.getAdapterPosition()));
+            dialog.setArguments(dialogArgs);
+            dialog.show(activity.getSupportFragmentManager(), "");
+        }
     }
 
 }

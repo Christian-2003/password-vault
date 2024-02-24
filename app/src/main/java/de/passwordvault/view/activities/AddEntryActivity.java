@@ -86,7 +86,7 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
         }
 
         detailsContainer = findViewById(R.id.add_entry_details_container);
-        adapter = new DetailsRecyclerViewAdapter(viewModel.getEntry().getDetails());
+        adapter = new DetailsRecyclerViewAdapter(viewModel.getEntry().getDetails(), this, this);
         ItemTouchHelper.Callback callback = new DetailsItemMoveCallback(adapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(detailsContainer);
@@ -131,42 +131,6 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
 
 
     /**
-     * Method adds the passed {@linkplain Detail} to the {@linkplain #detailsContainer}.
-     *
-     * @param detail    Detail which shall be added to the container.
-     */
-    private void addDetailToContainer(Detail detail) {
-        //View created = Singleton.GENERATE_DETAIL_VIEW(AddEntryActivity.this, detail);
-        DetailViewBuilder builder = new DetailViewBuilder(this, detail);
-        View created = builder.inflate();
-
-        ImageButton deleteButton = created.findViewById(R.id.entry_detail_delete_button);
-        deleteButton.setVisibility(View.VISIBLE);
-        deleteButton.setOnClickListener(view -> {
-            ConfirmDeleteDetailDialog dialog = new ConfirmDeleteDetailDialog();
-            Bundle dialogArgs = new Bundle();
-            dialogArgs.putSerializable(ConfirmDeleteDetailDialog.KEY_CALLBACK_LISTENER, AddEntryActivity.this);
-            dialogArgs.putSerializable(ConfirmDeleteDetailDialog.KEY_DETAIL, detail);
-            dialog.setArguments(dialogArgs);
-            dialog.show(getSupportFragmentManager(), null);
-        });
-        ImageButton editButton = created.findViewById(R.id.entry_detail_edit_button);
-        editButton.setVisibility(View.VISIBLE);
-        editButton.setOnClickListener(view -> {
-            DetailDialog dialog = new DetailDialog();
-            Bundle dialogArgs = new Bundle();
-            dialogArgs.putSerializable(DetailDialog.KEY_CALLBACK_LISTENER, AddEntryActivity.this);
-            dialogArgs.putSerializable(DetailDialog.KEY_DETAIL, detail);
-            dialog.setArguments(dialogArgs);
-            dialog.show(getSupportFragmentManager(), "");
-        });
-
-        detailsContainer.addView(created);
-        View.inflate(AddEntryActivity.this, R.layout.divider_horizontal, detailsContainer);
-    }
-
-
-    /**
      * Method is called whenever the {@linkplain DialogFragment} is closed through the
      * 'positive' button (i.e. the SAVE button).
      *
@@ -201,10 +165,24 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
      * Method is called whenever the {@linkplain DialogFragment} is closed through the
      * 'negative' button (i.e. the CANCEL button).
      *
-     * @param dialog    Dialog which called the method.
+     * @param fragment  Dialog which called the method.
      */
-    public void onNegativeCallback(DialogFragment dialog) {
+    public void onNegativeCallback(DialogFragment fragment) {
         //There is no need to do anything since the edited detail shall not be saved.
+        if (fragment instanceof ConfirmDeleteDetailDialog) {
+            ConfirmDeleteDetailDialog dialog = (ConfirmDeleteDetailDialog)fragment;
+            int index = viewModel.getEntry().indexOf(dialog.getUuid());
+            if (index != -1) {
+                adapter.notifyItemChanged(index);
+            }
+        }
+        else if (fragment instanceof DetailDialog) {
+            DetailDialog dialog = (DetailDialog)fragment;
+            int index = viewModel.getEntry().indexOf(dialog.getDetail().getUuid());
+            if (index != -1) {
+                adapter.notifyItemChanged(index);
+            }
+        }
     }
 
 
