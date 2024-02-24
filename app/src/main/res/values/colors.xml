@@ -33,6 +33,7 @@
     <color name="pv_theme_outlineVariant">#BEC9C7</color>
     <color name="pv_theme_scrim">#000000</color>
     <color name="pv_theme_popup_surface">#FCFCFE</color>
+    <color name="pv_theme_swipe_image_color">@color/pv_theme_surfaceVariant</color>
 
 
     <!-- The following colors are only present to preserve backwards compatibility! -->

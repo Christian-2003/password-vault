@@ -1,16 +1,28 @@
 package de.passwordvault.view.utils;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import de.passwordvault.App;
+import de.passwordvault.R;
 import de.passwordvault.model.detail.Detail;
 import de.passwordvault.view.activities.AddEntryActivity;
 import de.passwordvault.view.dialogs.ConfirmDeleteDetailDialog;
@@ -113,6 +125,9 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
         adapter.onRowSwiped((DetailsRecyclerViewAdapter.ViewHolder)viewHolder, direction);
+        if (adapter instanceof DetailsRecyclerViewAdapter) {
+            //((DetailsRecyclerViewAdapter)adapter).notifyItemChanged(viewHolder.getAdapterPosition());
+        }
     }
 
     /**
@@ -174,6 +189,75 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
         if (viewHolder instanceof DetailsRecyclerViewAdapter.ViewHolder) {
             adapter.onRowClear((DetailsRecyclerViewAdapter.ViewHolder)viewHolder);
         }
+    }
+
+
+    /**
+     * Method is called whenever an item is swiped to draw whatever is beneath the swiped item.
+     *
+     * @param canvas            The canvas which RecyclerView is drawing its children
+     * @param recyclerView      The RecyclerView to which ItemTouchHelper is attached to
+     * @param viewHolder        The ViewHolder which is being interacted by the User or it was
+     *                          interacted and simply animating to its original position
+     * @param dX                The amount of horizontal displacement caused by user's action
+     * @param dY                The amount of vertical displacement caused by user's action
+     * @param actionState       The type of interaction on the View. Is either {@link
+     *                          #ACTION_STATE_DRAG} or {@link #ACTION_STATE_SWIPE}.
+     * @param isCurrentlyActive True if this view is currently being controlled by the user or
+     *                          false it is simply animating back to its original state.
+     */
+    @Override
+    public void onChildDraw(@NonNull Canvas canvas, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+            View itemView = viewHolder.itemView;
+            Paint paint = new Paint();
+            Bitmap icon;
+            if (dX > 1) {
+                paint.setColor(App.getContext().getColor(R.color.pv_theme_primary));
+                icon = getBitmap(R.drawable.ic_edit);
+                canvas.drawRect((float)itemView.getLeft(), (float)itemView.getTop(), dX, (float)itemView.getBottom(), paint);
+                canvas.drawBitmap(icon, (float)itemView.getLeft() + convertDpToPx(16), (float)itemView.getTop() + ((float)itemView.getBottom() - (float)itemView.getTop() - icon.getHeight()) / 2, paint);
+            }
+            else if (dX < -1) {
+                paint.setColor(App.getContext().getColor(R.color.red));
+                icon = getBitmap(R.drawable.ic_delete);
+                canvas.drawRect((float)itemView.getRight() + dX, (float)itemView.getTop(), (float)itemView.getRight(), (float)itemView.getBottom(), paint);
+                canvas.drawBitmap(icon, (float)itemView.getRight() - convertDpToPx(16) - icon.getWidth(), (float)itemView.getTop() + ((float)itemView.getBottom() - (float)itemView.getTop() - icon.getHeight()) / 2, paint);
+            }
+            float alpha = 1F - Math.abs(dX) / (float)itemView.getWidth();
+            itemView.setAlpha(alpha);
+            itemView.setTranslationX(dX);
+        }
+        else {
+            super.onChildDraw(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        }
+    }
+
+
+    /**
+     * Method converts dp into px.
+     *
+     * @param dp    Dp to be converted into px.
+     * @return      Px converted from the passed dp.
+     */
+    private int convertDpToPx(int dp) {
+        return Math.round(dp * (App.getContext().getResources().getDisplayMetrics().xdpi / DisplayMetrics.DENSITY_DEFAULT));
+    }
+
+    /**
+     * Method returns the passed drawable vector graphic as bitmap.
+     *
+     * @param drawableId    Drawable vector graphic to be returned as bitmap.
+     * @return              Bitmap generated from the passed vector drawable.
+     */
+    private Bitmap getBitmap(int drawableId) {
+        Drawable drawable = AppCompatResources.getDrawable(App.getContext(), drawableId);
+        drawable.setTint(App.getContext().getColor(R.color.pv_theme_swipe_image_color));
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
     }
 
 }

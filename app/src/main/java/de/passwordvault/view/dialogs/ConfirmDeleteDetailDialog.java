@@ -1,15 +1,12 @@
 package de.passwordvault.view.dialogs;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
 import de.passwordvault.R;
 import de.passwordvault.view.utils.DialogCallbackListener;
 import de.passwordvault.model.detail.Detail;

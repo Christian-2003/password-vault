@@ -8,6 +8,8 @@ Details are now reorderable
 
 ###### Features
 * Details can be reordered.
+* Added swipe gestures to edit / delete details.
+* Changed character used for obfuscation from '*' to '\u2022'.
 
 <br>
 

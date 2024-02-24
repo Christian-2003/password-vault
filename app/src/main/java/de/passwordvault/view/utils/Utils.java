@@ -10,7 +10,7 @@ import java.util.Calendar;
  * necessary to implement each of the provided methods with it's own class.
  *
  * @author  Christian-2003
- * @version 3.0.0
+ * @version 3.4.0
  */
 public class Utils {
 
@@ -42,7 +42,7 @@ public class Utils {
         }
         StringBuilder builder = new StringBuilder(s.length());
         for (int i = 0; i < s.length(); i++) {
-            builder.append('*');
+            builder.append('•'); // 'U+2022'
         }
         return builder.toString();
     }

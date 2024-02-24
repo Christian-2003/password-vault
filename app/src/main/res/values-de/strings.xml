@@ -79,9 +79,9 @@
 
     <string name="settings_data">Daten</string>
     <string name="settings_data_delete">Daten löschen</string>
-    <string name="settings_data_delete_info">Alle Daten unumkehrbar Löschen</string>
+    <string name="settings_data_delete_info">Alle Daten unumkehrbar löschen</string>
     <string name="settings_data_delete_dialog_info">sämtlichen Daten</string>
-    <string name="settings_data_delete_dialog_info_extended">Bestätigen Sie Ihr Passwort um alle Daten unumkehrbar zu Löschen.</string>
+    <string name="settings_data_delete_dialog_info_extended">Bestätigen Sie Ihr Passwort um alle Daten unumkehrbar zu löschen.</string>
 
 
     <!-- Entry activity -->

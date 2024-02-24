@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -194,10 +195,12 @@ public class DetailsRecyclerViewAdapter extends RecyclerView.Adapter<DetailsRecy
             holder.obfuscateButton.setOnClickListener(view -> {
                 if (obfuscated.get()) {
                     obfuscated.set(false);
+                    holder.obfuscateButton.setImageDrawable(AppCompatResources.getDrawable(holder.obfuscateButton.getContext(), R.drawable.ic_show_off));
                     holder.content.setText(detail.getContent());
                 }
                 else {
                     obfuscated.set(true);
+                    holder.obfuscateButton.setImageDrawable(AppCompatResources.getDrawable(holder.obfuscateButton.getContext(), R.drawable.ic_show));
                     holder.content.setText(Utils.obfuscate(detail.getContent()));
                 }
             });
