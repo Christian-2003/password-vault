@@ -16,8 +16,8 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.TextView;
-
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.materialswitch.MaterialSwitch;
@@ -46,7 +46,7 @@ import de.passwordvault.view.activities.MainActivity;
  * @author  Christian-2003
  * @version 3.3.0
  */
-public class SettingsFragment extends Fragment implements DialogCallbackListener, Serializable {
+public class SettingsFragment extends Fragment implements DialogCallbackListener, Serializable, CompoundButton.OnCheckedChangeListener {
 
     /**
      * Field stores the request code for when the user selects the directory into which an XML backup
@@ -117,7 +117,7 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
 
         MaterialSwitch loginSwitch = view.findViewById(R.id.settings_security_login_switch);
         loginSwitch.setChecked(viewModel.useAppLogin());
-        loginSwitch.setOnClickListener(this::configureLogin);
+        loginSwitch.setOnCheckedChangeListener(this);
         if (!viewModel.useAppLogin()) {
             view.findViewById(R.id.settings_security_biometrics_container).setVisibility(View.GONE);
             view.findViewById(R.id.settings_security_password_container).setVisibility(View.GONE);
@@ -128,8 +128,8 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         }
         if (viewModel.areBiometricsAvailable()) {
             MaterialSwitch biometricsSwitch = view.findViewById(R.id.settings_security_biometrics_switch);
-            biometricsSwitch.setOnClickListener(this::configureBiometrics);
             biometricsSwitch.setChecked(viewModel.useBiometrics());
+            biometricsSwitch.setOnCheckedChangeListener(this);
         }
         else {
             view.findViewById(R.id.settings_security_biometrics_container).setVisibility(View.GONE);
@@ -165,18 +165,25 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
                 switch (viewModel.getCurrentAction()) {
                     case SettingsViewModel.ACTION_TURN_BIOMETRICS_ON:
                         MaterialSwitch toggleBiometricsOnSwitch = view.findViewById(R.id.settings_security_biometrics_switch);
+                        toggleBiometricsOnSwitch.setOnCheckedChangeListener(null);
                         toggleBiometricsOnSwitch.setChecked(false);
+                        toggleBiometricsOnSwitch.setOnCheckedChangeListener(SettingsFragment.this);
                         Account.getInstance().setBiometrics(false);
                         Account.getInstance().save();
                         break;
                     case SettingsViewModel.ACTION_TURN_BIOMETRICS_OFF:
                         MaterialSwitch toggleBiometricsOffSwitch = view.findViewById(R.id.settings_security_biometrics_switch);
+                        toggleBiometricsOffSwitch.setOnCheckedChangeListener(null);
                         toggleBiometricsOffSwitch.setChecked(true);
+                        toggleBiometricsOffSwitch.setOnCheckedChangeListener(SettingsFragment.this);
                         Account.getInstance().setBiometrics(true);
                         Account.getInstance().save();
                         break;
                     case SettingsViewModel.ACTION_DISABLE_LOGIN:
-                        ((MaterialSwitch)view.findViewById(R.id.settings_security_login_switch)).setChecked(true);
+                        MaterialSwitch disableLoginSwitch = view.findViewById(R.id.settings_security_login_switch);
+                        disableLoginSwitch.setOnCheckedChangeListener(null);
+                        disableLoginSwitch.setChecked(true);
+                        disableLoginSwitch.setOnCheckedChangeListener(SettingsFragment.this);
                         break;
                     case SettingsViewModel.ACTION_DELETE_DATA:
                         viewModel.setCurrentAction(SettingsViewModel.ACTION_NONE);
@@ -193,7 +200,9 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
                     case SettingsViewModel.ACTION_TURN_BIOMETRICS_ON:
                         MaterialSwitch toggleBiometricsOnSwitch = view.findViewById(R.id.settings_security_biometrics_switch);
                         if (!viewModel.areBiometricsAvailable()) {
+                            toggleBiometricsOnSwitch.setOnCheckedChangeListener(null);
                             toggleBiometricsOnSwitch.setChecked(false);
+                            toggleBiometricsOnSwitch.setOnCheckedChangeListener(SettingsFragment.this);
                             return;
                         }
                         Account.getInstance().setBiometrics(true);
@@ -202,7 +211,9 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
                     case SettingsViewModel.ACTION_TURN_BIOMETRICS_OFF:
                         MaterialSwitch toggleBiometricsOffSwitch = view.findViewById(R.id.settings_security_biometrics_switch);
                         if (!viewModel.areBiometricsAvailable()) {
+                            toggleBiometricsOffSwitch.setOnCheckedChangeListener(null);
                             toggleBiometricsOffSwitch.setChecked(true);
+                            toggleBiometricsOffSwitch.setOnCheckedChangeListener(SettingsFragment.this);
                             return;
                         }
                         Account.getInstance().setBiometrics(false);
@@ -329,19 +340,69 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
     @Override
     public void onNegativeCallback(DialogFragment fragment) {
         if (fragment instanceof ConfigureLoginDialog) {
-            ((MaterialSwitch)view.findViewById(R.id.settings_security_login_switch)).setChecked(false);
+            MaterialSwitch materialSwitch = view.findViewById(R.id.settings_security_login_switch);
+            materialSwitch.setOnCheckedChangeListener(null);
+            materialSwitch.setChecked(false);
+            materialSwitch.setOnCheckedChangeListener(this);
         }
         else if (fragment instanceof EnterPasswordDialog) {
             if (viewModel.getCurrentAction() == SettingsViewModel.ACTION_DELETE_DATA) {
                 viewModel.setCurrentAction(SettingsViewModel.ACTION_NONE);
             }
             else {
-                ((MaterialSwitch)view.findViewById(R.id.settings_security_login_switch)).setChecked(true);
+                MaterialSwitch materialSwitch = view.findViewById(R.id.settings_security_login_switch);
+                materialSwitch.setOnCheckedChangeListener(null);
+                materialSwitch.setChecked(true);
+                materialSwitch.setOnCheckedChangeListener(this);
                 viewModel.setCurrentAction(SettingsViewModel.ACTION_NONE);
             }
         }
         else if (fragment instanceof ConfirmDeleteDialog) {
             viewModel.setCurrentAction(SettingsViewModel.ACTION_NONE);
+        }
+    }
+
+
+    /**
+     * Method is called whenever the state of the switch is changed.
+     *
+     * @param compoundButton    Switch whose state was changed.
+     * @param isChecked         Whether the switch is checked.
+     */
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+        if (compoundButton.getId() == R.id.settings_security_login_switch) {
+            if (!isChecked) {
+                //Inverted logic -> When method is called, the switch just has been checked.
+                if (Account.getInstance().useBiometrics()) {
+                    showBiometricAuthenticationDialog(SettingsViewModel.ACTION_DISABLE_LOGIN);
+                }
+                else {
+                    EnterPasswordDialog dialog = new EnterPasswordDialog();
+                    Bundle args = new Bundle();
+                    args.putSerializable(EnterPasswordDialog.KEY_CALLBACK_LISTENER, this);
+                    args.putString(EnterPasswordDialog.KEY_TITLE, getString(R.string.settings_security_disable_login_title));
+                    args.putString(EnterPasswordDialog.KEY_INFO, getString(R.string.settings_security_disable_login_info));
+                    dialog.setArguments(args);
+                    dialog.show(requireActivity().getSupportFragmentManager(), "");
+                }
+                return;
+            }
+            ConfigureLoginDialog dialog = new ConfigureLoginDialog();
+            Bundle args = new Bundle();
+            args.putSerializable(ConfigureLoginDialog.KEY_CALLBACK_LISTENER, this);
+            dialog.setArguments(args);
+            dialog.show(requireActivity().getSupportFragmentManager(), "");
+        }
+        else if (compoundButton.getId() == R.id.settings_security_biometrics_switch) {
+            byte action;
+            if (isChecked) {
+                action = SettingsViewModel.ACTION_TURN_BIOMETRICS_ON;
+            }
+            else {
+                action = SettingsViewModel.ACTION_TURN_BIOMETRICS_OFF;
+            }
+            showBiometricAuthenticationDialog(action);
         }
     }
 
@@ -413,46 +474,6 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
     }
 
 
-    /**
-     * Method shows the dialog to enable the login of the application.
-     *
-     * @param view  MaterialSwitch which triggered this method.
-     */
-    private void configureLogin(View view) {
-        if (view == null) {
-            return;
-        }
-        MaterialSwitch materialSwitch;
-        try {
-            materialSwitch = (MaterialSwitch) view;
-        }
-        catch (ClassCastException e) {
-            return;
-        }
-        if (!materialSwitch.isChecked()) {
-            //Inverted logic -> When method is called, the switch just has been checked.
-            if (Account.getInstance().useBiometrics()) {
-                showBiometricAuthenticationDialog(SettingsViewModel.ACTION_DISABLE_LOGIN);
-            }
-            else {
-                EnterPasswordDialog dialog = new EnterPasswordDialog();
-                Bundle args = new Bundle();
-                args.putSerializable(EnterPasswordDialog.KEY_CALLBACK_LISTENER, this);
-                args.putString(EnterPasswordDialog.KEY_TITLE, getString(R.string.settings_security_disable_login_title));
-                args.putString(EnterPasswordDialog.KEY_INFO, getString(R.string.settings_security_disable_login_info));
-                dialog.setArguments(args);
-                dialog.show(requireActivity().getSupportFragmentManager(), "");
-            }
-            return;
-        }
-        ConfigureLoginDialog dialog = new ConfigureLoginDialog();
-        Bundle args = new Bundle();
-        args.putSerializable(ConfigureLoginDialog.KEY_CALLBACK_LISTENER, this);
-        dialog.setArguments(args);
-        dialog.show(requireActivity().getSupportFragmentManager(), "");
-    }
-
-
     private void deleteData() {
         viewModel.setCurrentAction(SettingsViewModel.ACTION_DELETE_DATA);
         if (viewModel.useAppLogin()) {
@@ -489,35 +510,6 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
     private void changePassword() {
         ChangePasswordDialog dialog = new ChangePasswordDialog();
         dialog.show(requireActivity().getSupportFragmentManager(), "");
-    }
-
-
-    /**
-     * Method toggles the {@link Account#setBiometrics(boolean)}-flag depending on the UseBiometrics-
-     * switch.
-     *
-     * @param view  Switch which was clicked whose state shall be used to update whether biometrics
-     *              shall be used.
-     */
-    private void configureBiometrics(View view) {
-        if (view == null) {
-            return;
-        }
-        MaterialSwitch materialSwitch;
-        try {
-            materialSwitch = (MaterialSwitch) view;
-        }
-        catch (ClassCastException e) {
-            return;
-        }
-        byte biometricAction;
-        if (materialSwitch.isChecked()) {
-            biometricAction = SettingsViewModel.ACTION_TURN_BIOMETRICS_ON;
-        }
-        else {
-            biometricAction = SettingsViewModel.ACTION_TURN_BIOMETRICS_OFF;
-        }
-        showBiometricAuthenticationDialog(biometricAction);
     }
 
 
