@@ -32,7 +32,7 @@
 
 
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1">
@@ -127,12 +127,13 @@
                 style="@style/pv.text.highlight"/>
 
 
-            <!-- LinearLayout contains the details of the entry -->
-            <LinearLayout
+            <!-- RecyclerView contains the details of the entry -->
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/entry_details_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 style="@style/background"/>
 
 
@@ -218,19 +219,20 @@
                     style="@style/pv.text.highlight"/>
 
 
-                <!-- LinearLayout contains all hidden details -->
-                <LinearLayout
+                <!-- RecyclerView contains all hidden details -->
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/entry_hidden_details_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    style="@style/background"/>
+                    style="@style/background"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 
     <!-- ConstraintLayout contains the buttons at the bottom of the screen -->

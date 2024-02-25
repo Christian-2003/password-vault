@@ -1,31 +1,18 @@
 package de.passwordvault.view.utils;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.VectorDrawable;
-import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.ArrayList;
-
 import de.passwordvault.App;
 import de.passwordvault.R;
-import de.passwordvault.model.detail.Detail;
-import de.passwordvault.view.activities.AddEntryActivity;
-import de.passwordvault.view.dialogs.ConfirmDeleteDetailDialog;
 
 
 /**
@@ -81,18 +68,34 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
      */
     private final ItemTouchHelperContract adapter;
 
+    /**
+     * Attribute stores whether the items in the view can be swiped.
+     */
+    private final boolean canSwipe;
+
+    /**
+     * Attribute stores whether the items in the view can be reordered.
+     */
+    private final boolean canReorder;
+
 
     /**
      * Constructor instantiates a new callback for a recycler view.
      *
      * @param adapter               Recycler view adapter for which this callback is being constructed.
+     * @param canSwipe              Flag indicates whether the items in the recycler view can be
+     *                              swiped.
+     * @param canReorder            Flag indicates whether the items in the recycler view can be
+     *                              reordered.
      * @throws NullPointerException The passed adapter is {@code null}.
      */
-    public DetailsItemMoveCallback(ItemTouchHelperContract adapter) throws NullPointerException {
+    public DetailsItemMoveCallback(ItemTouchHelperContract adapter, boolean canSwipe, boolean canReorder) throws NullPointerException {
         if (adapter == null) {
             throw new NullPointerException();
         }
         this.adapter = adapter;
+        this.canSwipe = canSwipe;
+        this.canReorder = canReorder;
     }
 
 
@@ -103,7 +106,7 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
      */
     @Override
     public boolean isLongPressDragEnabled() {
-        return true;
+        return canReorder;
     }
 
     /**
@@ -113,7 +116,7 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
      */
     @Override
     public boolean isItemViewSwipeEnabled() {
-        return true;
+        return canSwipe;
     }
 
     /**
@@ -125,9 +128,11 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
         adapter.onRowSwiped((DetailsRecyclerViewAdapter.ViewHolder)viewHolder, direction);
+        /*
         if (adapter instanceof DetailsRecyclerViewAdapter) {
-            //((DetailsRecyclerViewAdapter)adapter).notifyItemChanged(viewHolder.getAdapterPosition());
+            ((DetailsRecyclerViewAdapter)adapter).notifyItemChanged(viewHolder.getAdapterPosition());
         }
+        */
     }
 
     /**
@@ -201,8 +206,7 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
      *                          interacted and simply animating to its original position
      * @param dX                The amount of horizontal displacement caused by user's action
      * @param dY                The amount of vertical displacement caused by user's action
-     * @param actionState       The type of interaction on the View. Is either {@link
-     *                          #ACTION_STATE_DRAG} or {@link #ACTION_STATE_SWIPE}.
+     * @param actionState       The type of interaction on the View.
      * @param isCurrentlyActive True if this view is currently being controlled by the user or
      *                          false it is simply animating back to its original state.
      */
@@ -216,13 +220,17 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
                 paint.setColor(App.getContext().getColor(R.color.pv_theme_primary));
                 icon = getBitmap(R.drawable.ic_edit);
                 canvas.drawRect((float)itemView.getLeft(), (float)itemView.getTop(), dX, (float)itemView.getBottom(), paint);
-                canvas.drawBitmap(icon, (float)itemView.getLeft() + convertDpToPx(16), (float)itemView.getTop() + ((float)itemView.getBottom() - (float)itemView.getTop() - icon.getHeight()) / 2, paint);
+                if (icon != null) {
+                    canvas.drawBitmap(icon, (float) itemView.getLeft() + convertDpToPx(16), (float) itemView.getTop() + ((float) itemView.getBottom() - (float) itemView.getTop() - icon.getHeight()) / 2, paint);
+                }
             }
             else if (dX < -1) {
                 paint.setColor(App.getContext().getColor(R.color.red));
                 icon = getBitmap(R.drawable.ic_delete);
                 canvas.drawRect((float)itemView.getRight() + dX, (float)itemView.getTop(), (float)itemView.getRight(), (float)itemView.getBottom(), paint);
-                canvas.drawBitmap(icon, (float)itemView.getRight() - convertDpToPx(16) - icon.getWidth(), (float)itemView.getTop() + ((float)itemView.getBottom() - (float)itemView.getTop() - icon.getHeight()) / 2, paint);
+                if (icon != null) {
+                    canvas.drawBitmap(icon, (float)itemView.getRight() - convertDpToPx(16) - icon.getWidth(), (float)itemView.getTop() + ((float)itemView.getBottom() - (float)itemView.getTop() - icon.getHeight()) / 2, paint);
+                }
             }
             float alpha = 1F - Math.abs(dX) / (float)itemView.getWidth();
             itemView.setAlpha(alpha);
@@ -252,6 +260,9 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
      */
     private Bitmap getBitmap(int drawableId) {
         Drawable drawable = AppCompatResources.getDrawable(App.getContext(), drawableId);
+        if (drawable == null) {
+            return null;
+        }
         drawable.setTint(App.getContext().getColor(R.color.pv_theme_swipe_image_color));
         Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);

@@ -7,10 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -29,7 +26,6 @@ import de.passwordvault.view.dialogs.EditTagDialog;
 import de.passwordvault.view.utils.DetailsItemMoveCallback;
 import de.passwordvault.view.utils.DetailsRecyclerViewAdapter;
 import de.passwordvault.viewmodel.activities.AddEntryViewModel;
-import de.passwordvault.view.utils.DetailViewBuilder;
 import de.passwordvault.model.detail.Detail;
 import de.passwordvault.view.dialogs.ConfirmDeleteDetailDialog;
 import de.passwordvault.view.dialogs.DetailDialog;
@@ -40,7 +36,7 @@ import de.passwordvault.view.utils.DialogCallbackListener;
  * Class implements an activity which can add (or edit) entries.
  *
  * @author  Christian-2003
- * @version 3.3.0
+ * @version 3.4.0
  */
 public class AddEntryActivity extends AppCompatActivity implements DialogCallbackListener, Serializable, Observer<ArrayList<Tag>> {
 
@@ -50,10 +46,8 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
     private AddEntryViewModel viewModel;
 
     /**
-     * Attribute stores the container which displays the details.
+     * Attribute stores the adapter for the recycler view displaying all details.
      */
-    private RecyclerView detailsContainer;
-
     private DetailsRecyclerViewAdapter adapter;
 
 
@@ -85,9 +79,9 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
             viewModel.setTags(new TagCollection());
         }
 
-        detailsContainer = findViewById(R.id.add_entry_details_container);
+        RecyclerView detailsContainer = findViewById(R.id.add_entry_details_container);
         adapter = new DetailsRecyclerViewAdapter(viewModel.getEntry().getDetails(), this, this);
-        ItemTouchHelper.Callback callback = new DetailsItemMoveCallback(adapter);
+        ItemTouchHelper.Callback callback = new DetailsItemMoveCallback(adapter, true, true);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(detailsContainer);
         detailsContainer.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));

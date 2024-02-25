@@ -4,28 +4,30 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
+
 import de.passwordvault.R;
 import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.tags.Tag;
 import de.passwordvault.model.tags.TagCollection;
-import de.passwordvault.view.utils.DetailViewBuilder;
+import de.passwordvault.view.utils.DetailsItemMoveCallback;
+import de.passwordvault.view.utils.DetailsRecyclerViewAdapter;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.viewmodel.activities.EntryViewModel;
-import de.passwordvault.model.detail.Detail;
 import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import java.io.Serializable;
-import java.util.ArrayList;
 
 
 /**
@@ -33,7 +35,7 @@ import java.util.ArrayList;
  * {@linkplain de.passwordvault.model.entry.EntryAbbreviated}.
  *
  * @author  Christian-2003
- * @version 3.3.0
+ * @version 3.4.0
  */
 public class EntryActivity extends AppCompatActivity implements DialogCallbackListener, Serializable {
 
@@ -41,7 +43,6 @@ public class EntryActivity extends AppCompatActivity implements DialogCallbackLi
      * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} for the EntryActivity.
      */
     private EntryViewModel viewModel;
-
 
 
     /**
@@ -165,9 +166,33 @@ public class EntryActivity extends AppCompatActivity implements DialogCallbackLi
         //Add tags:
         populateTagsContainer(entry.getTags());
 
-        //Add details:
-        populateDetailsContainer(entry.getVisibleDetails(), R.id.entry_details_container);
-        populateDetailsContainer(entry.getInvisibleDetails(), R.id.entry_hidden_details_container);
+        //Add visible details:
+        RecyclerView visibleDetailsContainer = findViewById(R.id.entry_details_container);
+        DetailsRecyclerViewAdapter visibleDetailsAdapter = new DetailsRecyclerViewAdapter(viewModel.getEntry().getVisibleDetails(), this, this);
+        ItemTouchHelper.Callback visibleDetailsCallback = new DetailsItemMoveCallback(visibleDetailsAdapter, false, false);
+        ItemTouchHelper visibleDetailsTouchHelper = new ItemTouchHelper(visibleDetailsCallback);
+        visibleDetailsTouchHelper.attachToRecyclerView(visibleDetailsContainer);
+        visibleDetailsContainer.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
+        visibleDetailsContainer.setAdapter(visibleDetailsAdapter);
+
+        //Add hidden details:
+        RecyclerView hiddenDetailsContainer = findViewById(R.id.entry_hidden_details_container);
+        DetailsRecyclerViewAdapter hiddenDetailsAdapter = new DetailsRecyclerViewAdapter(viewModel.getEntry().getInvisibleDetails(), this, this);
+        ItemTouchHelper.Callback hiddenDetailsCallback = new DetailsItemMoveCallback(hiddenDetailsAdapter, false, false);
+        ItemTouchHelper hiddenDetailsTouchHelper = new ItemTouchHelper(hiddenDetailsCallback);
+        hiddenDetailsTouchHelper.attachToRecyclerView(hiddenDetailsContainer);
+        hiddenDetailsContainer.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
+        hiddenDetailsContainer.setAdapter(hiddenDetailsAdapter);
+
+        //Optionally show hidden details:
+        if (viewModel.getEntry().getInvisibleDetails().isEmpty()) {
+            findViewById(R.id.entry_hidden_details_container_title).setVisibility(View.GONE);
+            hiddenDetailsContainer.setVisibility(View.GONE);
+        }
+        else {
+            findViewById(R.id.entry_hidden_details_container_title).setVisibility(View.VISIBLE);
+            hiddenDetailsContainer.setVisibility(View.VISIBLE);
+        }
 
         showOrHideExtendedInfo();
     }
@@ -191,48 +216,6 @@ public class EntryActivity extends AppCompatActivity implements DialogCallbackLi
                 chip.setText(tag.getName());
                 chips.addView(chip);
             }
-        }
-    }
-
-
-    /**
-     * Method populates the specified container {@code containerId} with the passed list of
-     * {@linkplain Detail} instances. If the passed {@linkplain ArrayList} of Details is empty,
-     * the container and it's corresponding headline is hidden from the activity.
-     *
-     * @param details       List of details to be shown in the container.
-     * @param containerId   ID of the container in which the passed details shall be shown.
-     */
-    private void populateDetailsContainer(ArrayList<Detail> details, int containerId) {
-        LinearLayout detailsContainer = findViewById(containerId);
-        if (details.isEmpty()) {
-            detailsContainer.setVisibility(View.GONE);
-            if (containerId == R.id.entry_hidden_details_container) {
-                findViewById(R.id.entry_hidden_details_container_title).setVisibility(View.GONE);
-            }
-            else if (containerId == R.id.entry_details_container) {
-                findViewById(R.id.entry_details_container_title).setVisibility(View.GONE);
-            }
-            return;
-        }
-
-        detailsContainer.removeAllViews();
-        for (int i = 0; i < details.size(); i++) {
-            Detail detail = details.get(i);
-            DetailViewBuilder viewBuilder = new DetailViewBuilder(EntryActivity.this, detail, true);
-            View created = viewBuilder.inflate();
-            detailsContainer.addView(created);
-            if (i < details.size() - 1) {
-                View.inflate(EntryActivity.this, R.layout.divider_horizontal, detailsContainer);
-            }
-        }
-
-        detailsContainer.setVisibility(View.VISIBLE);
-        if (containerId == R.id.entry_hidden_details_container) {
-            findViewById(R.id.entry_hidden_details_container_title).setVisibility(View.VISIBLE);
-        }
-        else if (containerId == R.id.entry_details_container) {
-            findViewById(R.id.entry_details_container_title).setVisibility(View.VISIBLE);
         }
     }
 

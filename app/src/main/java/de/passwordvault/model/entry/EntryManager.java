@@ -147,6 +147,7 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
     public void clearCache() {
         extendedEntryCache.clear();
         abbreviatedEntries.clear();
+        changesMadeSinceCachedAbbreviatedList = true;
     }
 
 
@@ -482,6 +483,7 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
         if (abbreviatedEntriesArrayListCacheSortingAlgorithm != null) {
             abbreviatedEntriesArrayListCache.sort(abbreviatedEntriesArrayListCacheSortingAlgorithm);
         }
+        changesMadeSinceCachedAbbreviatedList = false;
     }
 
 }
