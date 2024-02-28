@@ -1,7 +1,6 @@
 package de.passwordvault.view.utils;
 
 import android.animation.ValueAnimator;
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,19 +14,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import javax.xml.validation.Validator;
-
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGateManager;
 import de.passwordvault.model.detail.Detail;
 import de.passwordvault.model.detail.DetailType;
-import de.passwordvault.view.activities.AddEntryActivity;
 import de.passwordvault.view.dialogs.ConfirmDeleteDetailDialog;
 import de.passwordvault.view.dialogs.DetailDialog;
 

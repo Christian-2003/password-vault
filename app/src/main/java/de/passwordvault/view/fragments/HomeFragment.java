@@ -4,16 +4,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
-
+import java.util.ArrayList;
 import de.passwordvault.R;
+import de.passwordvault.model.Observable;
+import de.passwordvault.model.Observer;
+import de.passwordvault.model.entry.EntryAbbreviated;
+import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.view.activities.AddEntryActivity;
+import de.passwordvault.view.activities.EntryActivity;
 import de.passwordvault.view.activities.MainActivity;
+import de.passwordvault.view.utils.EntriesRecyclerViewAdapter;
+import de.passwordvault.view.utils.OnRecyclerItemClickListener;
 
 
 /**
@@ -21,9 +29,14 @@ import de.passwordvault.view.activities.MainActivity;
  * used within the {@linkplain MainActivity}.
  *
  * @author  Christian-2003
- * @version 3.0.0
+ * @version 3.4.0
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements Observer<ArrayList<EntryAbbreviated>>, OnRecyclerItemClickListener<EntryAbbreviated> {
+
+    private EntriesRecyclerViewAdapter adapter;
+
+    private View view;
+
 
     /**
      * Default constructor instantiates a new HomeFragment.
@@ -54,12 +67,13 @@ public class HomeFragment extends Fragment {
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View inflated = inflater.inflate(R.layout.fragment_home, container, false);
+        EntryManager.getInstance().addObserver(this);
+        view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        Button addAccountButton = inflated.findViewById(R.id.home_add_account_button);
+        Button addAccountButton = view.findViewById(R.id.home_add_account_button);
         addAccountButton.setOnClickListener(view -> startActivity(new Intent(HomeFragment.this.getActivity(), AddEntryActivity.class)));
 
-        Button viewAccountsButton = inflated.findViewById(R.id.home_show_accounts_button);
+        Button viewAccountsButton = view.findViewById(R.id.home_show_accounts_button);
         viewAccountsButton.setOnClickListener(view -> {
             FragmentActivity fragmentActivity = HomeFragment.this.getActivity();
             if (fragmentActivity instanceof MainActivity) {
@@ -71,8 +85,49 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        // Inflate the layout for this fragment
-        return inflated;
+        adapter = new EntriesRecyclerViewAdapter(EntryManager.getInstance().getMostRecentlyEditedEntries(), this);
+        RecyclerView recyclerView = view.findViewById(R.id.home_recently_changed_container);
+        recyclerView.addItemDecoration(new DividerItemDecoration(requireActivity(), DividerItemDecoration.VERTICAL));
+        recyclerView.setAdapter(adapter);
+        return view;
+    }
+
+
+    /**
+     * Lifecycle-based method is called when the view is destroyed and no longer being used.
+     */
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EntryManager.getInstance().removeObserver(this);
+    }
+
+
+    /**
+     * Method informs the {@link Observer} that the observed data has been changed. The passed
+     * {@link Observable} references the object which is being observed.
+     *
+     * @param o                     Observed instance whose data was changed.
+     * @throws NullPointerException The passed Observable is {@code null}.
+     */
+    @Override
+    public void update(Observable<ArrayList<EntryAbbreviated>> o) throws NullPointerException {
+        if (o == null) {
+            throw new NullPointerException("Null is invalid Observable");
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Method is called whenever an item within the recycler view of this fragment is clicked.
+     *
+     * @param item  Clicked item.
+     */
+    @Override
+    public void onItemClick(EntryAbbreviated item) {
+        Intent intent = new Intent(getActivity(), EntryActivity.class);
+        intent.putExtra("uuid", item.getUuid());
+        getActivity().startActivity(intent);
     }
 
 }

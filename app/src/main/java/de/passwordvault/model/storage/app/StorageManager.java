@@ -159,8 +159,7 @@ public class StorageManager {
      */
     public boolean deleteExtendedEntry(String uuid) throws NullPointerException {
         File file = new File(App.getContext().getFilesDir(), getFileName(uuid));
-        boolean deleted = file.delete();
-        return deleted;
+        return file.delete();
     }
 
 

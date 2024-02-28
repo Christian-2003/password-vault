@@ -11,6 +11,7 @@ Details are now reorderable
 * Added swipe gestures to edit / delete details.
 * Changed character used for obfuscation from '*' to '\u2022'.
 * Fixed a bug where switches in settings did not correctly trigger app response when switched.
+* Added five of the most recently edited entries to `HomeFragment`.
 
 <br>
 

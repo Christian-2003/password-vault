@@ -18,7 +18,7 @@ import de.passwordvault.model.storage.encryption.EncryptionException;
  * retrieved through {@link #getInstance()}.
  *
  * @author  Christian-2003
- * @version 3.3.0
+ * @version 3.4.0
  */
 public class EntryManager implements CachableManager<EntryExtended>, Observable<ArrayList<EntryAbbreviated>>, PersistableManager {
 
@@ -26,6 +26,11 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
      * Field stores the singleton-instance of the entry manager.
      */
     private static EntryManager singleton;
+
+    /**
+     * Field stores how many most recently edited entries shall be generated.
+     */
+    private static final int NUMBER_OF_RECENTLY_EDITED_ENTRIES = 5;
 
 
     /**
@@ -49,6 +54,11 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
      * observers.
      */
     private final ArrayList<EntryAbbreviated> abbreviatedEntriesArrayListCache;
+
+    /**
+     * Attribute stores the cache of the array list of the most recently edited entries.
+     */
+    private final ArrayList<EntryAbbreviated> mostRecentlyEditedEntriesCache;
 
     /**
      * Attribute stores the comparator which shall be used to sort the
@@ -84,6 +94,7 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
         abbreviatedEntries = new HashMap<>();
         extendedEntryCache = new HashMap<>();
         abbreviatedEntriesArrayListCache = new ArrayList<>();
+        mostRecentlyEditedEntriesCache = new ArrayList<>();
         abbreviatedEntriesArrayListCacheSortingAlgorithm = null;
         storageManager = new StorageManager();
         changesMade = true;
@@ -330,7 +341,7 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
     @Override
     public ArrayList<EntryAbbreviated> getData() {
         if (changesMadeSinceCachedAbbreviatedList) {
-            generateAbbreviatedEntriesArrayListCache();
+            generateCacheAfterChangesMade();
         }
         return abbreviatedEntriesArrayListCache;
     }
@@ -429,6 +440,19 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
         return extendedEntryCache.values();
     }
 
+    /**
+     * Method returns a list with the most recently edited entries. These entries are determined
+     * based on {@link EntryAbbreviated#getChanged()}.
+     *
+     * @return  List of the most recently edited entries.
+     */
+    public ArrayList<EntryAbbreviated> getMostRecentlyEditedEntries() {
+        if (changesMadeSinceCachedAbbreviatedList) {
+            generateCacheAfterChangesMade();
+        }
+        return mostRecentlyEditedEntriesCache;
+    }
+
 
     /**
      * Method sorts the array list of entries (retrieved through {@link #getData()}) by their name.
@@ -475,6 +499,16 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
 
 
     /**
+     * Method regenerates all caches after changes were made to the dataset, which is indicated
+     * through the flag {@link #changesMadeSinceCachedAbbreviatedList}.
+     */
+    private void generateCacheAfterChangesMade() {
+        generateAbbreviatedEntriesArrayListCache();
+        generateMostRecentlyEditedEntriesArrayListCache();
+        changesMadeSinceCachedAbbreviatedList = false;
+    }
+
+    /**
      * Method generates the cached array list of entries as it is requested by observers.
      */
     private void generateAbbreviatedEntriesArrayListCache() {
@@ -483,7 +517,36 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
         if (abbreviatedEntriesArrayListCacheSortingAlgorithm != null) {
             abbreviatedEntriesArrayListCache.sort(abbreviatedEntriesArrayListCacheSortingAlgorithm);
         }
-        changesMadeSinceCachedAbbreviatedList = false;
+    }
+
+    /**
+     * Method generates the cached array list of the most recently changed entries.
+     * <b>Important:</b> Only ever call this method AFTER calling
+     * {@link #generateAbbreviatedEntriesArrayListCache()}!
+     */
+    private void generateMostRecentlyEditedEntriesArrayListCache() {
+        if (abbreviatedEntriesArrayListCache.isEmpty()) {
+            return;
+        }
+        mostRecentlyEditedEntriesCache.clear();
+        EntryAbbreviated mostRecentlyChanged = abbreviatedEntriesArrayListCache.get(0);
+        for (int i = 1; i < abbreviatedEntriesArrayListCache.size(); i++) {
+            if (abbreviatedEntriesArrayListCache.get(i).getChanged().compareTo(mostRecentlyChanged.getChanged()) > 0) {
+                mostRecentlyChanged = abbreviatedEntriesArrayListCache.get(i);
+            }
+        }
+        mostRecentlyEditedEntriesCache.add(mostRecentlyChanged);
+
+        for (int i = 0; i < NUMBER_OF_RECENTLY_EDITED_ENTRIES - 1; i++) {
+            EntryAbbreviated newMostRecentlyChanged = abbreviatedEntriesArrayListCache.get(0);
+            for (int j = 1; j < abbreviatedEntriesArrayListCache.size(); j++) {
+                if (abbreviatedEntriesArrayListCache.get(j).getChanged().compareTo(newMostRecentlyChanged.getChanged()) > 0 && abbreviatedEntriesArrayListCache.get(j).getChanged().compareTo(mostRecentlyChanged.getChanged()) < 0) {
+                    newMostRecentlyChanged = abbreviatedEntriesArrayListCache.get(j);
+                }
+            }
+            mostRecentlyChanged = newMostRecentlyChanged;
+            mostRecentlyEditedEntriesCache.add(mostRecentlyChanged);
+        }
     }
 
 }
