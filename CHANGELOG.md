@@ -13,6 +13,9 @@ Details are now reorderable
 * Fixed a bug where switches in settings did not correctly trigger app response when switched.
 * Added five of the most recently edited entries to `HomeFragment`.
 * Replaced `ListView` in `EntriesFragment` with `RecyclerView` to increase performance.
+* Deleted _WISHLIST.md_, since this project uses GitHub Issues to track bugs and enhancements since 2023-12-29
+* Added tutorials for app installation and quickstart.
+* Improvements to _README.md_
 
 <br>
 

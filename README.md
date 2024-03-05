@@ -5,7 +5,7 @@
 ![GitHub](https://img.shields.io/github/issues/Christian-2003/password-vault?color=purple)
 ![GitHub](https://img.shields.io/github/repo-size/Christian-2003/password-vault?color=blue)
 
-The PasswordVault is an application for Android which allows the user to manage account data.
+PasswordVault allows you to securely manage your most sensitive account data on your Android device locally.
 
 <div align="center">
     <img src="docs/img/preview_1.png" height="390">
@@ -15,59 +15,41 @@ The PasswordVault is an application for Android which allows the user to manage 
 
 ###### Table of Contents
 1. [Description](#description)
-2. [How to install and run the project](#how-to-install-and-run-the-project)
-3. [How to use the application](#how-to-use-the-application)
-4. [Contributors](#contributors)
-5. [License](#license)
-6. [How to contribute](#how-to-contribute)
+2. [Install and Use the Project](#install-and-use-the-project)
+3. [Contributors](#contributors)
+4. [License](#license)
+5. [How to contribute](#how-to-contribute)
 
 <br>
 
 ## Description
-###### Functionalities
-The application allows the user to create account entries which can store account information about a specific account. Each account entry itself can store any number of account detail information, such as passwords, e-mail addresses, URLs, etc.
+PasswordVault allows you to securely store your most sensitive account data on your device locally. You can add as many accounts to the app as you wish. Each account can contain as many details as you like, such as passwords, e-mail addresses, security questions, etc.
 
 ###### Used Technologies
-The application was developed with Java through the Android Studio IDE. The project is built using Gradle.
+The application is developed with Java and XML through the Android Studio IDE. Therefore, the app is built using Gradle.
 
-The version numbers for this project are determined based on the guidelines provided by [semver](https://semver.org/).
+The app uses Google's Material Design to impement a comfortable and visually pleasing design, that users can intuitively work with.
+
+Furthermore, all data is encrypted through the Advanced Encryption Standard (AES) with Galois / Counter Mode (GCM) with a key size of 256 bits.
 
 ###### Miscellaneous
+The version numbers for this project are determined based on the guidelines provided by [semver](https://semver.org/).
+
 The project contains a [changelog](CHANGELOG.md) which documents all changes that were made to the application in between software versions.
 
 <br>
 
-## How to Install and Run the Project
-If you want to use this project, there are two ways you can do this.
+## Install and Use the Project
 
-Please note that the minimum required version for Android is Android 12 (SDK 32).
+###### Install the App
+If you want to use the app, you can download the APK file [here](https://github.com/Christian-2003/password-vault/releases/latest). For further details about the installation as well as system requirements, take a look at the [installation guide](docs/manual/Install%20and%20Run%20the%20App.md).
 
-###### Install the release APK
-If you want to install the application on your Android device, you can follow these steps:
-1. Download the newest release from [here](https://github.com/Christian-2003/password-vault/releases).
-2. Move the downloaded APK file to your Android device.
-3. Open the filesystem on your Android Device and locate the previously downloaded APK file.
-4. Execute the APK file.
-5. The application should now be installed.
+Information about app updates an be found in the installation guide as well. Keep in mind that updating from version 3.1.0 or lower requries special attention as described [here](docs/manual/Update%20to%20Version%203.2.0.md).
 
-###### Build and Run this Repository
-If you prefer to install the application through this repository, you may follow these steps:
-1. Download this repository or clone using `git clone https://github.com/Christian-2003/password-vault`.
-2. Open the project with the Android Studio IDE.
-3. Now you can build and run the project either on an emulator or an Android debugging device that is connected to your computer.
+Steps to build and run the project through the Android Studio IDE are covered within the installation guide as well: [Cloning This Repository](docs/manual/Install%20and%20Run%20the%20App.md#cloning-this-repository).
 
-Please note that the repository may contain features that might be changed or removed for the next release.
-
-<br>
-
-## How to Use the Application
-If you open the application, you are presented the home screen (currently empty). You can move to the "Accounts"-page through the navigation bar at the bottom. There you will see all your created accounts.
-
-If you click the floating action button "+", you can create a new account. Provide a name and a description. You can click the "Add Detail" button in order to add a new login detail. This opens a dialog window where you can enter a name and the content for the detail. You may choose the display type (i.e. Password or Text) below. Choose the "Obfuscated" setting to obfuscate the content later. Unchoose the "Visible" setting to make the detail not visible. Afterwards, you can click "Save" to save the detail.
-
-The detail should now be displayed. You can add as many details as you want.
-
-Click "Save" to save your account. Now your account should be displayed on the "Accounts"-page. If you click on the previously created account, you can view your account details. If you click "Edit", you may edit your account.
+###### How to Use the Application
+A detailed quickstart guide can be found [here](docs/manual/Quickstart%20Guide.md). This guide covers all steps to add a new account to the app.
 
 <br>
 
@@ -87,5 +69,7 @@ If you want to contribute to this project, feel free to do so.
 Feel free to open issues, for anything you feel is appropriate. If you want to report bugs, please provide steps to reproduce the bug.
 
 If you want to contribute to the code development, be a self respecting person and use the coding guidelines for Java that are taught in school and university.
+
+A few guides for development-purposes are published [here](docs/development/). If you are interested in contributing, this would be a good start.
 
 The project will be developed in English.
