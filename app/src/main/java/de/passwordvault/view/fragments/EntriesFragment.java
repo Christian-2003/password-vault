@@ -5,38 +5,35 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-import androidx.appcompat.view.menu.MenuBuilder;
-import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.model.Observable;
 import de.passwordvault.model.Observer;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryManager;
+import de.passwordvault.view.utils.EntriesRecyclerViewAdapter;
+import de.passwordvault.view.utils.OnRecyclerItemClickListener;
 import de.passwordvault.viewmodel.fragments.EntriesViewModel;
-import de.passwordvault.view.utils.EntriesListAdapter;
 import de.passwordvault.view.activities.EntryActivity;
 import de.passwordvault.view.activities.MainActivity;
 
@@ -48,7 +45,7 @@ import de.passwordvault.view.activities.MainActivity;
  * @author  Christian-2003
  * @version 3.3.0
  */
-public class EntriesFragment extends Fragment implements AdapterView.OnItemClickListener, PopupMenu.OnMenuItemClickListener, Observer<ArrayList<EntryAbbreviated>> {
+public class EntriesFragment extends Fragment implements OnRecyclerItemClickListener<EntryAbbreviated>, PopupMenu.OnMenuItemClickListener, Observer<ArrayList<EntryAbbreviated>> {
 
     /**
      * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} for this fragment.
@@ -56,14 +53,9 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
     private EntriesViewModel viewModel;
 
     /**
-     * Attribute stores the ListAdapter for the ListView.
+     * Attribute stores the adapter for the recycler view which displays the abbreviated entries.
      */
-    private EntriesListAdapter adapter;
-
-    /**
-     * Attribute stores the {@linkplain ListView} which displays the {@link EntryAbbreviated}-instances.
-     */
-    private ListView entriesListView;
+    private EntriesRecyclerViewAdapter adapter;
 
     /**
      * Attribute stores the view of the fragment.
@@ -104,8 +96,10 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
         EntryManager.getInstance().addObserver(this);
         view = inflater.inflate(R.layout.fragment_entries, container, false);
 
-        adapter = new EntriesListAdapter(EntryManager.getInstance().getData(), getContext());
-        entriesListView = view.findViewById(R.id.abbreviated_entries);
+        adapter = new EntriesRecyclerViewAdapter(EntryManager.getInstance().getData(), this);
+        RecyclerView recyclerView = view.findViewById(R.id.abbreviated_entries);
+        recyclerView.addItemDecoration(new DividerItemDecoration(requireActivity(), DividerItemDecoration.VERTICAL));
+        recyclerView.setAdapter(adapter);
 
         //Setup button to sort the entries:
         ImageButton sortButton = view.findViewById(R.id.entries_sort_button);
@@ -149,9 +143,7 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                EntriesListAdapter adapter = (EntriesListAdapter)(entriesListView.getAdapter());
                 adapter.getFilter().filter(s);
-                populateListView();
             }
 
             @Override
@@ -159,8 +151,6 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
                 //Do nothing...
             }
         });
-
-        populateListView();
 
         return view;
     }
@@ -174,26 +164,17 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
 
 
     /**
-     * Method is called when an item within the {@linkplain android.widget.ListView} is selected.
+     * Method is called whenever an entry within the recycler view is clicked.
      *
-     * @param parent    AdapterView that contains the selected item.
-     * @param view      The view within the AdapterView that was selected.
-     * @param position  The position of the view within the adapter.
-     * @param id        The row ID of the item that was selected.
+     * @param item  Clicked item.
      */
     @Override
-    public void onItemClick(@NonNull AdapterView<?> parent, View view, int position, long id) {
-        Object item = parent.getAdapter().getItem(position);
-        if (item instanceof EntryAbbreviated) {
-            String uuid = ((EntryAbbreviated)item).getUuid();
-            if (uuid != null) {
-                Intent intent = new Intent(getActivity(), EntryActivity.class);
-                intent.putExtra("uuid", uuid);
-                getActivity().startActivity(intent);
-            }
-        }
-        else {
-            Toast.makeText(getContext(), getString(R.string.error_cannot_show_entry), Toast.LENGTH_SHORT).show();
+    public void onItemClick(EntryAbbreviated item) {
+        String uuid = ((EntryAbbreviated)item).getUuid();
+        if (uuid != null) {
+            Intent intent = new Intent(getActivity(), EntryActivity.class);
+            intent.putExtra("uuid", uuid);
+            getActivity().startActivity(intent);
         }
     }
 
@@ -234,7 +215,8 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
                 return false;
         }
         viewModel.setSelectedEntrySorting(item.getItemId());
-        populateListView();
+        EntryManager.getInstance().getData(); // getData() forces cache to be sorted, which updates the sorting of the recycler view.
+        adapter.notifyDataSetChanged();
         return true;
     }
 
@@ -251,19 +233,7 @@ public class EntriesFragment extends Fragment implements AdapterView.OnItemClick
         if (o == null) {
             throw new NullPointerException("Null is invalid Observable");
         }
-        adapter = new EntriesListAdapter(o.getData(), getContext());
-        populateListView();
-    }
-
-
-    /**
-     * Method populates the {@linkplain ListView} that displays all {@linkplain de.passwordvault.model.entry.EntryAbbreviated}
-     * instances.
-     */
-    private void populateListView() {
-        entriesListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        entriesListView.setOnItemClickListener(this);
     }
 
 }

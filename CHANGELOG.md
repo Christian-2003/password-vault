@@ -12,6 +12,7 @@ Details are now reorderable
 * Changed character used for obfuscation from '*' to '\u2022'.
 * Fixed a bug where switches in settings did not correctly trigger app response when switched.
 * Added five of the most recently edited entries to `HomeFragment`.
+* Replaced `ListView` in `EntriesFragment` with `RecyclerView` to increase performance.
 
 <br>
 

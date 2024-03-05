@@ -3,7 +3,8 @@ package de.passwordvault.view.utils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,7 +19,7 @@ import de.passwordvault.model.entry.EntryAbbreviated;
  * @author  Christian-2003
  * @version 3.4.0
  */
-public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecyclerViewAdapter.ViewHolder> {
+public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecyclerViewAdapter.ViewHolder> implements Filterable {
 
     /**
      * Class implements a view holder for an abbreviated entry.
@@ -61,6 +62,11 @@ public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecy
      */
     private final ArrayList<EntryAbbreviated> data;
 
+    private ArrayList<EntryAbbreviated> filteredData;
+
+    /**
+     * Attribute stores the click listener that is called when an item is clicked.
+     */
     private final OnRecyclerItemClickListener<EntryAbbreviated> clickListener;
 
 
@@ -76,6 +82,7 @@ public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecy
             throw new NullPointerException();
         }
         this.data = data;
+        filteredData = data;
         this.clickListener = clickListener;
     }
 
@@ -104,7 +111,7 @@ public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecy
      */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        EntryAbbreviated entry = data.get(position);
+        EntryAbbreviated entry = filteredData.get(position);
         holder.name.setText(entry.getName());
         holder.description.setText(entry.getDescription());
         if (clickListener != null) {
@@ -120,7 +127,60 @@ public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecy
      */
     @Override
     public int getItemCount() {
-        return data.size();
+        return filteredData.size();
+    }
+
+
+    /**
+     * Method returns a filter that can be used to filter the data that is being displayed by the
+     * recycler view.
+     *
+     * @return  Filter for filtering the displayed data.
+     */
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+
+            /**
+             * Method filters {@link EntriesRecyclerViewAdapter#data} according to the specified
+             * char sequence.
+             *
+             * @param s Filter to be applied to name or description of the entries.
+             * @return  Generated filter results.
+             */
+            @Override
+            protected FilterResults performFiltering(CharSequence s) {
+                FilterResults results = new FilterResults();
+                if (s == null || s.length() == 0) {
+                    results.count = data.size();
+                    results.values = data;
+                }
+                else {
+                    ArrayList<EntryAbbreviated> filteredData = new ArrayList<>();
+                    s = s.toString().toLowerCase();
+                    for (EntryAbbreviated entry : data) {
+                        if (entry.matchesFilter(s)) {
+                            filteredData.add(entry);
+                        }
+                    }
+                    results.count = filteredData.size();
+                    results.values = filteredData;
+                }
+                return results;
+            }
+
+            /**
+             * Method applies the passed filter results to the recycler view.
+             *
+             * @param s             Filter which was applied to name and description of the entries.
+             * @param filterResults Filter results generated while filtering.
+             */
+            @Override
+            protected void publishResults(CharSequence s, FilterResults filterResults) {
+                EntriesRecyclerViewAdapter.this.filteredData = (ArrayList<EntryAbbreviated>)filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
 }
