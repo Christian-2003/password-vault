@@ -57,6 +57,8 @@
     <string name="settings_security_restore_success">Successfully restored backup</string>
     <string name="settings_security_quality_gates">Password quality gates</string>
     <string name="settings_security_quality_gates_info">Edit quality gates for passwords</string>
+    <string name="settings_security_password_analysis">Password security analysis</string>
+    <string name="settings_security_password_analysis_info">Perform a security analysis for all passwords</string>
 
     <string name="settings_export">Export</string>
     <string name="settings_export_html">Export data</string>
@@ -100,6 +102,13 @@
     <string name="entry_details_info">Details</string>
     <string name="entry_hidden_details_info">Hidden Details</string>
     <string name="entry_additional_info">Additional</string>
+
+
+    <!-- PasswordAnalysis activity -->
+    <string name="password_analysis_title">Password Analysis</string>
+    <string name="password_analysis_hint">Passwords are being analyzed. This might take some time, please be patient.</string>
+    <string name="password_results_general_title">General</string>
+    <string name="password_results_general_average_score">Average security score</string>
 
 
     <!-- Login activity -->

@@ -56,6 +56,8 @@
     <string name="settings_security_restore_success">Backup wurde erfolgreich wiederhergestellt</string>
     <string name="settings_security_quality_gates">Passwortsicherheits-Kriterien</string>
     <string name="settings_security_quality_gates_info">Passwortsicherheits-Kriterien bearbeiten</string>
+    <string name="settings_security_password_analysis">Passwortsicherheitsanalyse</string>
+    <string name="settings_security_password_analysis_info">Sicherheit sämtlicher Passwörter analysieren</string>
 
     <string name="settings_export">Exportieren</string>
     <string name="settings_export_html">Daten exportieren</string>
@@ -96,6 +98,13 @@
     <string name="entry_details_info">Informationen</string>
     <string name="entry_hidden_details_info">Versteckte Informationen</string>
     <string name="entry_additional_info">Zusätzliches</string>
+
+
+    <!-- PasswordAnalysis activity -->
+    <string name="password_analysis_title">Passwortanalyse</string>
+    <string name="password_analysis_hint">Passwörter werden analysiert. Dies kann eine Zeit in Anspruch nehmen, bitte gedulden Sie sich.</string>
+    <string name="password_results_general_title">Allgemein</string>
+    <string name="password_results_general_average_score">Durchschnittliche Passwortsicherheit</string>
 
 
     <!-- Login activity -->

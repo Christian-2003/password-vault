@@ -48,7 +48,6 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-
     <!-- Searchbar for the fragment -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/entries_search_bar_container"

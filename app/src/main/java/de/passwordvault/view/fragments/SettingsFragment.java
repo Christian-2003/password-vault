@@ -26,6 +26,7 @@ import de.passwordvault.BuildConfig;
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.storage.backup.XmlBackupRestorer;
+import de.passwordvault.view.activities.PasswordAnalysisActivity;
 import de.passwordvault.view.activities.QualityGatesActivity;
 import de.passwordvault.view.dialogs.ChangePasswordDialog;
 import de.passwordvault.view.dialogs.ConfigureLoginDialog;
@@ -147,6 +148,7 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         view.findViewById(R.id.settings_security_restore).setOnClickListener(view -> selectFile(SELECT_FILE_TO_RESTORE_BACKUP, "*/*"));
         view.findViewById(R.id.settings_security_restore_button).setOnClickListener(view -> showInfoDialog(R.string.settings_security_restore, R.string.settings_security_restore_info_extended));
         view.findViewById(R.id.settings_security_quality_gates).setOnClickListener(view -> startActivity(new Intent(getActivity(), QualityGatesActivity.class)));
+        view.findViewById(R.id.settings_security_password_analysis_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), PasswordAnalysisActivity.class)));
         view.findViewById(R.id.settings_used_software_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), OssLicensesMenuActivity.class)));
         view.findViewById(R.id.settings_license_clickable).setOnClickListener(view -> showInfoDialog(R.string.settings_about_license, R.string.app_license));
         view.findViewById(R.id.settings_open_source_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_about_github_link)));
