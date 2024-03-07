@@ -13,8 +13,9 @@ public interface OnRecyclerItemClickListener<T> {
     /**
      * Method is called when the item which is passed as argument is clicked by the user.
      *
-     * @param item  Clicked item.
+     * @param item      Clicked item.
+     * @param position  Index of the clicked item.
      */
-    void onItemClick(T item);
+    void onItemClick(T item, int position);
 
 }

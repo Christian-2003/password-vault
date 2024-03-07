@@ -121,10 +121,11 @@ public class HomeFragment extends Fragment implements Observer<ArrayList<EntryAb
     /**
      * Method is called whenever an item within the recycler view of this fragment is clicked.
      *
-     * @param item  Clicked item.
+     * @param item      Clicked item.
+     * @param position  Index of the clicked item.
      */
     @Override
-    public void onItemClick(EntryAbbreviated item) {
+    public void onItemClick(EntryAbbreviated item, int position) {
         Intent intent = new Intent(getActivity(), EntryActivity.class);
         intent.putExtra("uuid", item.getUuid());
         getActivity().startActivity(intent);

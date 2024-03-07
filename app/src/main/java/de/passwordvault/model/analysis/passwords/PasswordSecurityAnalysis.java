@@ -15,6 +15,9 @@ import de.passwordvault.model.entry.EntryManager;
  * Class models the password security analysis. An instance of the class can analyze all passwords
  * that are available to the app. An average security score is calculated. Furthermore, the analysis
  * finds duplicate passwords.
+ *
+ * @author  Christian-2003
+ * @version 3.4.0
  */
 public class PasswordSecurityAnalysis implements Observable<ArrayList<Password>>, Runnable {
 
@@ -81,7 +84,9 @@ public class PasswordSecurityAnalysis implements Observable<ArrayList<Password>>
      * a separate thread.
      */
     public void analyze() {
-        analysisThread.start();
+        if (!analysisThread.isAlive()) {
+            analysisThread.start();
+        }
     }
 
 

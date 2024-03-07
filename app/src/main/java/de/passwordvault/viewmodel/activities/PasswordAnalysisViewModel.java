@@ -1,15 +1,21 @@
 package de.passwordvault.viewmodel.activities;
 
 import androidx.lifecycle.ViewModel;
-
 import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
 
+
+/**
+ * Class implements a view model for the {@link de.passwordvault.view.activities.PasswordAnalysisActivity}.
+ *
+ * @author  Christian-2003
+ * @version 3.4.0
+ */
 public class PasswordAnalysisViewModel extends ViewModel {
 
     /**
      * Attribute stores the analysis algorithm with which the password analysis is performed.
      */
-    private PasswordSecurityAnalysis analysisAlgorithm;
+    private final PasswordSecurityAnalysis analysisAlgorithm;
 
     /**
      * Attribute indicates whether the password security analysis has been finished.

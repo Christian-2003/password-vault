@@ -105,6 +105,9 @@
     <string name="password_analysis_hint">Passwörter werden analysiert. Dies kann eine Zeit in Anspruch nehmen, bitte gedulden Sie sich.</string>
     <string name="password_results_general_title">Allgemein</string>
     <string name="password_results_general_average_score">Durchschnittliche Passwortsicherheit</string>
+    <string name="password_results_general_duplicates">Doppelte Passwörter</string>
+    <string name="password_results_general_duplicates_hint">{arg} doppelte Passwörter anzeigen</string>
+    <string name="password_results_list_title">Analysierte Passwörter</string>
 
 
     <!-- Login activity -->

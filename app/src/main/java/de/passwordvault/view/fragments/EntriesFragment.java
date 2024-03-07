@@ -166,10 +166,11 @@ public class EntriesFragment extends Fragment implements OnRecyclerItemClickList
     /**
      * Method is called whenever an entry within the recycler view is clicked.
      *
-     * @param item  Clicked item.
+     * @param item      Clicked item.
+     * @param position  Index of the clicked item.
      */
     @Override
-    public void onItemClick(EntryAbbreviated item) {
+    public void onItemClick(EntryAbbreviated item, int position) {
         String uuid = ((EntryAbbreviated)item).getUuid();
         if (uuid != null) {
             Intent intent = new Intent(getActivity(), EntryActivity.class);

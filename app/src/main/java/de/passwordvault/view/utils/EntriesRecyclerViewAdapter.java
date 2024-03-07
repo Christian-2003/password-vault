@@ -115,7 +115,7 @@ public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecy
         holder.name.setText(entry.getName());
         holder.description.setText(entry.getDescription());
         if (clickListener != null) {
-            holder.itemView.setOnClickListener(view -> clickListener.onItemClick(entry));
+            holder.itemView.setOnClickListener(view -> clickListener.onItemClick(entry, position));
         }
     }
 

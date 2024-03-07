@@ -1,6 +1,8 @@
 package de.passwordvault.model.analysis.passwords;
 
 
+import java.io.Serializable;
+
 import de.passwordvault.model.analysis.QualityGateManager;
 
 /**
@@ -9,7 +11,7 @@ import de.passwordvault.model.analysis.QualityGateManager;
  * @author  Christian-2003
  * @version 3.4.0
  */
-public class Password {
+public class Password implements Serializable {
 
     /**
      * Field stores a value to indicate that no security score has been generated.
