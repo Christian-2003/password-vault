@@ -46,6 +46,10 @@
             android:exported="true">
         </activity>
         <activity
+            android:name=".view.activities.DuplicatePasswordEntriesActivity"
+            android:exported="true">
+        </activity>
+        <activity
             android:name=".view.activities.DataConversionActivity"
             android:exported="true">
         </activity>

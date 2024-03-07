@@ -4,7 +4,8 @@
 
 ## 3.4.0 (XXXX-XX-XX)
 ###### Release Highlights
-Details are now reorderable
+Details are now reorderable and the app can perform a password security analysis for all passwords at once. The analysis calculates the average security score, and
+fins duplicate passwords.
 
 ###### Features
 * Details can be reordered.
@@ -16,6 +17,7 @@ Details are now reorderable
 * Deleted _WISHLIST.md_, since this project uses GitHub Issues to track bugs and enhancements since 2023-12-29
 * Added tutorials for app installation and quickstart.
 * Improvements to _README.md_
+* Added extensive password security analysis for all passwords to the app.
 
 <br>
 

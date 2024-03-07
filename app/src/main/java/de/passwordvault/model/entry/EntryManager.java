@@ -116,6 +116,27 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
 
 
     /**
+     * Method clears all items from the primary storage.
+     */
+    public void clearCache() {
+        extendedEntryCache.clear();
+        abbreviatedEntries.clear();
+        changesMadeSinceCachedAbbreviatedList = true;
+    }
+
+    /**
+     * Method returns the abbreviated entry of the passed UUID. If no entry exists, {@code null} is
+     * returned.
+     *
+     * @param uuid  UUID of the abbreviated entry to be returned.
+     * @return      Abbreviated entry of the passed UUID.
+     */
+    public EntryAbbreviated getAbbreviated(String uuid) {
+        return abbreviatedEntries.get(uuid);
+    }
+
+
+    /**
      * Method adds the specified item to the managed items.
      *
      * @param item                  Item to be added.
@@ -150,17 +171,6 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
         changesMadeSinceCachedAbbreviatedList = true;
         notifyObservers();
     }
-
-
-    /**
-     * Method clears all items from the primary storage.
-     */
-    public void clearCache() {
-        extendedEntryCache.clear();
-        abbreviatedEntries.clear();
-        changesMadeSinceCachedAbbreviatedList = true;
-    }
-
 
     /**
      * Method tests whether the manager contains the passed item.

@@ -189,7 +189,7 @@ public class PasswordSecurityAnalysis implements Observable<ArrayList<Password>>
         for (int i = 0; i < passwords.size(); i++) {
             Password password = passwords.get(i);
             averageSecurityScore += password.getSecurityScore();
-            for (int j = i; j < passwords.size(); j++) {
+            for (int j = i + 1; j < passwords.size(); j++) {
                 Password comparedPassword = passwords.get(j);
                 if (password.getCleartextPassword().equals(comparedPassword.getCleartextPassword())) {
                     //Identical password found:

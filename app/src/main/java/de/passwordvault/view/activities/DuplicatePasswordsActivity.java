@@ -1,5 +1,6 @@
 package de.passwordvault.view.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.Nullable;
@@ -7,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.passwords.Password;
@@ -16,16 +16,31 @@ import de.passwordvault.view.utils.PasswordsRecyclerViewAdapter;
 import de.passwordvault.viewmodel.activities.DuplicatePasswordsViewModel;
 
 
+/**
+ * Class implements an activity which shows a list of duplicate passwords.
+ *
+ * @author  Christian-2003
+ * @version 3.4.0
+ */
 public class DuplicatePasswordsActivity extends AppCompatActivity implements OnRecyclerItemClickListener<Password> {
 
+    /**
+     * Field stores the key that needs to be used when passing the list of duplicate passwords.
+     */
     public static final String KEY_PASSWORDS = "passwords";
 
 
+    /**
+     * Attribute stores the view model for the activity.
+     */
     private DuplicatePasswordsViewModel viewModel;
 
-    private PasswordsRecyclerViewAdapter adapter;
 
-
+    /**
+     * Method is called whenever the activity is created.
+     *
+     * @param savedInstanceState    Previously saved state of the instance.
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +72,7 @@ public class DuplicatePasswordsActivity extends AppCompatActivity implements OnR
             passwords.add(password.get(0));
         }
 
-        adapter = new PasswordsRecyclerViewAdapter(passwords, this, false);
+        PasswordsRecyclerViewAdapter adapter = new PasswordsRecyclerViewAdapter(passwords, this, false);
         RecyclerView recyclerView = findViewById(R.id.duplicate_passwords_recycler_view);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -73,7 +88,9 @@ public class DuplicatePasswordsActivity extends AppCompatActivity implements OnR
     @Override
     public void onItemClick(Password item, int position) {
         ArrayList<Password> passwords = viewModel.getPasswords().get(position);
-        //TODO: Launch activity...
+        Intent intent = new Intent(this, DuplicatePasswordEntriesActivity.class);
+        intent.putExtra(DuplicatePasswordEntriesActivity.KEY_PASSWORDS, passwords);
+        startActivity(intent);
     }
 
 }
