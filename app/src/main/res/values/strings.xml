@@ -105,6 +105,9 @@
 
 
     <!-- PasswordAnalysis activity -->
+    <string name="password_analysis_menu_general">General</string>
+    <string name="password_analysis_menu_list">Passwords</string>
+    <string name="password_analysis_menu_duplicates">Duplicates</string>
     <string name="password_analysis_title">Password Analysis</string>
     <string name="password_analysis_hint">Passwords are being analyzed. This might take some time, please be patient.</string>
     <string name="password_results_general_title">General</string>

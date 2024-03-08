@@ -9,6 +9,7 @@ import de.passwordvault.model.detail.DetailType;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.model.entry.EntryManager;
+import de.passwordvault.viewmodel.fragments.PasswordAnalysisGeneralViewModel;
 
 
 /**
@@ -20,6 +21,12 @@ import de.passwordvault.model.entry.EntryManager;
  * @version 3.4.0
  */
 public class PasswordSecurityAnalysis implements Observable<ArrayList<Password>>, Runnable {
+
+    /**
+     * Field stores the singleton-instance of the class.
+     */
+    private static PasswordSecurityAnalysis singleton;
+
 
     /**
      * Attribute stores all observers for this instance.
@@ -44,18 +51,31 @@ public class PasswordSecurityAnalysis implements Observable<ArrayList<Password>>
     /**
      * Thread performs the analysis of the passwords.
      */
-    private final Thread analysisThread;
+    private Thread analysisThread;
 
 
     /**
      * Constructor instantiates a new instance to analyze the password security.
      */
-    public PasswordSecurityAnalysis() {
+    private PasswordSecurityAnalysis() {
         observers = new ArrayList<>();
         passwords = new ArrayList<>();
         identicalPasswords = new ArrayList<>();
         averageSecurityScore = 0.0;
-        analysisThread = new Thread(this);
+        analysisThread = null;
+    }
+
+
+    /**
+     * Method returns the singleton-instance of the class.
+     *
+     * @return  Singleton-instance of the class.
+     */
+    public static PasswordSecurityAnalysis getInstance() {
+        if (singleton == null) {
+            singleton = new PasswordSecurityAnalysis();
+        }
+        return singleton;
     }
 
 
@@ -84,7 +104,8 @@ public class PasswordSecurityAnalysis implements Observable<ArrayList<Password>>
      * a separate thread.
      */
     public void analyze() {
-        if (!analysisThread.isAlive()) {
+        if (analysisThread == null) {
+            analysisThread = new Thread(this);
             analysisThread.start();
         }
     }

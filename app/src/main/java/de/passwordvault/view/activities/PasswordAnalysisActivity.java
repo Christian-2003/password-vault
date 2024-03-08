@@ -11,13 +11,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+
 import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.model.Observable;
 import de.passwordvault.model.Observer;
 import de.passwordvault.model.analysis.QualityGateManager;
 import de.passwordvault.model.analysis.passwords.Password;
+import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
+import de.passwordvault.view.utils.PasswordAnalysisFragmentStateAdapter;
 import de.passwordvault.view.utils.PasswordsRecyclerViewAdapter;
 import de.passwordvault.viewmodel.activities.PasswordAnalysisViewModel;
 
@@ -28,7 +35,7 @@ import de.passwordvault.viewmodel.activities.PasswordAnalysisViewModel;
  * @author  Christian-2003
  * @version 3.4.0
  */
-public class PasswordAnalysisActivity extends AppCompatActivity implements Observer<ArrayList<Password>>, OnRecyclerItemClickListener<Password> {
+public class PasswordAnalysisActivity extends AppCompatActivity implements Observer<ArrayList<Password>> {
 
     /**
      * Attribute stores the view model of the activity.
@@ -49,9 +56,9 @@ public class PasswordAnalysisActivity extends AppCompatActivity implements Obser
 
         findViewById(R.id.password_analysis_back_button).setOnClickListener(view -> finish());
         showAnalysisResults(viewModel.isAnalysisFinished());
-        viewModel.getAnalysisAlgorithm().addObserver(this);
+        PasswordSecurityAnalysis.getInstance().addObserver(this);
         if (!viewModel.isAnalysisFinished()) {
-            viewModel.getAnalysisAlgorithm().analyze();
+            PasswordSecurityAnalysis.getInstance().analyze();
         }
     }
 
@@ -62,9 +69,10 @@ public class PasswordAnalysisActivity extends AppCompatActivity implements Obser
     @Override
     public void finish() {
         super.finish();
-        viewModel.getAnalysisAlgorithm().removeObserver(this);
+        PasswordSecurityAnalysis.getInstance().removeObserver(this);
         if (!viewModel.isAnalysisFinished()) {
-            viewModel.getAnalysisAlgorithm().cancel();
+            PasswordSecurityAnalysis.getInstance().cancel();
+            viewModel.setAnalysisFinished(false);
         }
     }
 
@@ -80,32 +88,12 @@ public class PasswordAnalysisActivity extends AppCompatActivity implements Obser
         findViewById(R.id.password_analysis_container_analyzing).setVisibility(showResults ? View.GONE : View.VISIBLE);
         findViewById(R.id.password_analysis_container_results).setVisibility(showResults ? View.VISIBLE : View.GONE);
         if (showResults) {
-            //Display security score:
-            TextView scoreView = findViewById(R.id.password_analysis_average_security_score);
-            String scoreString = (Math.floor(viewModel.getAnalysisAlgorithm().getAverageSecurityScore() * 100) / 100) + "/" + QualityGateManager.getInstance().numberOfQualityGates();
-            scoreView.setText(scoreString);
-            ProgressBar scoreBar = findViewById(R.id.password_analysis_average_security_score_bar);
-            scoreBar.setMax(QualityGateManager.getInstance().numberOfQualityGates() * 1000);
-            scoreBar.setProgress((int)(viewModel.getAnalysisAlgorithm().getAverageSecurityScore() * 1000));
+            PasswordAnalysisFragmentStateAdapter adapter = new PasswordAnalysisFragmentStateAdapter(this);
+            ViewPager2 viewPager = findViewById(R.id.password_analysis_view_pager);
+            viewPager.setAdapter(adapter);
 
-            //Display duplicate passwords:
-            TextView duplicatesTextView = findViewById(R.id.password_analysis_duplicates);
-            duplicatesTextView.setText(getString(R.string.password_results_general_duplicates_hint).replace("{arg}", "" + viewModel.getAnalysisAlgorithm().getIdenticalPasswords().size()));
-
-            //Display analyzed passwords:
-            Log.d("PasswordAnalysis", "Analyzed " + viewModel.getAnalysisAlgorithm().getData().size() + " passwords");
-            PasswordsRecyclerViewAdapter adapter = new PasswordsRecyclerViewAdapter(viewModel.getAnalysisAlgorithm().getData(), this, true);
-            RecyclerView recyclerView = findViewById(R.id.password_analysis_recycler_view);
-            recyclerView.setAdapter(adapter);
-            recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-
-            if (viewModel.getAnalysisAlgorithm().getData().size() > 0) {
-                findViewById(R.id.password_analysis_duplicates_clickable).setOnClickListener(view -> {
-                    Intent intent = new Intent(PasswordAnalysisActivity.this, DuplicatePasswordsActivity.class);
-                    intent.putExtra(DuplicatePasswordsActivity.KEY_PASSWORDS, viewModel.getAnalysisAlgorithm().getIdenticalPasswords());
-                    startActivity(intent);
-                });
-            }
+            TabLayout tabs = findViewById(R.id.password_analysis_tabs);
+            new TabLayoutMediator(tabs, viewPager, this::updateTabName).attach();
         }
     }
 
@@ -127,17 +115,18 @@ public class PasswordAnalysisActivity extends AppCompatActivity implements Obser
     }
 
 
-    /**
-     * Method is called when the item which is passed as argument is clicked by the user.
-     *
-     * @param item      Clicked item.
-     * @param position  Index of the clicked item.
-     */
-    @Override
-    public void onItemClick(Password item, int position) {
-        Intent intent = new Intent(this, EntryActivity.class);
-        intent.putExtra("uuid", item.getEntryUuid());
-        startActivity(intent);
+    private void updateTabName(TabLayout.Tab tab, int position) {
+        switch (position) {
+            case 0:
+                tab.setText(R.string.password_analysis_menu_general);
+                break;
+            case 1:
+                tab.setText(R.string.password_analysis_menu_list);
+                break;
+            case 2:
+                tab.setText(R.string.password_analysis_menu_duplicates);
+                break;
+        }
     }
 
 }

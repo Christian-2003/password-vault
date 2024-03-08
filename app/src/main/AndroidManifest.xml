@@ -42,10 +42,6 @@
             android:exported="true">
         </activity>
         <activity
-            android:name=".view.activities.DuplicatePasswordsActivity"
-            android:exported="true">
-        </activity>
-        <activity
             android:name=".view.activities.DuplicatePasswordEntriesActivity"
             android:exported="true">
         </activity>
