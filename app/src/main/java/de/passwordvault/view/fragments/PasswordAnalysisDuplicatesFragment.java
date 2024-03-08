@@ -66,8 +66,12 @@ public class PasswordAnalysisDuplicatesFragment extends Fragment implements OnRe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_password_analysis_duplicates, container, false);
 
+        boolean duplicatesFound = PasswordSecurityAnalysis.getInstance().getIdenticalPasswords().size() != 0;
+        view.findViewById(R.id.duplicate_passwords_none_container).setVisibility(duplicatesFound ? View.GONE : View.VISIBLE);
+
         PasswordsRecyclerViewAdapter adapter = new PasswordsRecyclerViewAdapter(viewModel.getPasswords(), this, false);
         RecyclerView recyclerView = view.findViewById(R.id.duplicate_passwords_recycler_view);
+        recyclerView.setVisibility(duplicatesFound ? View.VISIBLE : View.GONE);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(requireActivity(), DividerItemDecoration.VERTICAL));
 

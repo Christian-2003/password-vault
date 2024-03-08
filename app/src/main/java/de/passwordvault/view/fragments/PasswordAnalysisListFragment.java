@@ -67,8 +67,12 @@ public class PasswordAnalysisListFragment extends Fragment implements OnRecycler
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_password_analysis_list, container, false);
 
+        boolean passwordsFound = PasswordSecurityAnalysis.getInstance().getData().size() != 0;
+        view.findViewById(R.id.password_analysis_list_none_container).setVisibility(passwordsFound ? View.GONE : View.VISIBLE);
+
         PasswordsRecyclerViewAdapter adapter = new PasswordsRecyclerViewAdapter(PasswordSecurityAnalysis.getInstance().getData(), this, true);
         RecyclerView recyclerView = view.findViewById(R.id.password_analysis_recycler_view);
+        recyclerView.setVisibility(passwordsFound ? View.VISIBLE : View.GONE);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(requireActivity(), DividerItemDecoration.VERTICAL));
 

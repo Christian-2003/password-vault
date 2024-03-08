@@ -9,7 +9,6 @@ import de.passwordvault.model.detail.DetailType;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.model.entry.EntryManager;
-import de.passwordvault.viewmodel.fragments.PasswordAnalysisGeneralViewModel;
 
 
 /**
