@@ -1,6 +1,10 @@
 package de.passwordvault.viewmodel.activities;
 
 import androidx.lifecycle.ViewModel;
+
+import com.google.android.material.tabs.TabLayout;
+
+import de.passwordvault.R;
 import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
 
 
@@ -13,35 +17,32 @@ import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
 public class PasswordAnalysisViewModel extends ViewModel {
 
     /**
-     * Attribute indicates whether the password security analysis has been finished.
-     */
-    private boolean analysisFinished;
-
-
-    /**
      * Constructor instantiates a new view model.
      */
     public PasswordAnalysisViewModel() {
-        analysisFinished = false;
+
     }
 
 
     /**
-     * Method changes whether the analysis has been finished.
+     * Method updates the name of the passed tab at the specified position. The name is determined
+     * based on the specified position within the tab bar.
      *
-     * @param analysisFinished  Whether the analysis has been finished.
+     * @param tab       Tab whose name to update.
+     * @param position  Position of the tab within the tab bar.
      */
-    public void setAnalysisFinished(boolean analysisFinished) {
-        this.analysisFinished = analysisFinished;
-    }
-
-    /**
-     * Method returns whether the analysis has been finished.
-     *
-     * @return  Whether the analysis has been finished.
-     */
-    public boolean isAnalysisFinished() {
-        return analysisFinished;
+    public void updateTabName(TabLayout.Tab tab, int position) {
+        switch (position) {
+            case 0:
+                tab.setText(R.string.password_analysis_menu_general);
+                break;
+            case 1:
+                tab.setText(R.string.password_analysis_menu_list);
+                break;
+            case 2:
+                tab.setText(R.string.password_analysis_menu_duplicates);
+                break;
+        }
     }
 
 }

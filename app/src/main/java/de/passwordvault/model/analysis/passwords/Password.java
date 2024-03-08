@@ -1,9 +1,8 @@
 package de.passwordvault.model.analysis.passwords;
 
-
 import java.io.Serializable;
-
 import de.passwordvault.model.analysis.QualityGateManager;
+
 
 /**
  * Class models a password for the password security analysis.
@@ -30,9 +29,18 @@ public class Password implements Serializable {
     private final String entryUuid;
 
     /**
+     * Attribute stores the name of the account of which the password is a part of. The name is stored
+     * since it is displayed in the list of analyzed passwords to the user. Accessing the name through
+     * {@link de.passwordvault.model.entry.EntryManager} would be possible using the {@link #entryUuid}.
+     * However, due to the poor performance of HashMap with string-keys (?), accessing the name this
+     * way for a lot of passwords results in a poor app performance and noticeable lag.
+     */
+    private final String name;
+
+    /**
      * Attribute stores the security score of the password.
      */
-    private int securityScore;
+    private int cachedSecurityScore;
 
 
     /**
@@ -42,13 +50,19 @@ public class Password implements Serializable {
      * @param entryUuid             UUID of the entry to which the password belongs.
      * @throws NullPointerException One of the passed arguments is {@code null}.
      */
-    public Password(String cleartextPassword, String entryUuid) throws NullPointerException {
+    public Password(String cleartextPassword, String entryUuid, String name) throws NullPointerException {
         if (cleartextPassword == null || entryUuid == null) {
             throw new NullPointerException();
         }
         this.cleartextPassword = cleartextPassword;
         this.entryUuid = entryUuid;
-        securityScore= NO_SECURITY_SCORE_GENERATED;
+        if (name != null) {
+            this.name = name;
+        }
+        else {
+            this.name = "";
+        }
+        cachedSecurityScore = NO_SECURITY_SCORE_GENERATED;
     }
 
 
@@ -71,16 +85,25 @@ public class Password implements Serializable {
     }
 
     /**
+     * Method returns the name of the entry of which the password is a part of.
+     *
+     * @return  Name of the entry of which the password is a part of.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
      * Method returns the security score for the password generated through
      * {@link QualityGateManager#calculatePassedQualityGates(String)}.
      *
      * @return  Security score for the password.
      */
     public int getSecurityScore() {
-        if (securityScore == NO_SECURITY_SCORE_GENERATED) {
-            securityScore = QualityGateManager.getInstance().calculatePassedQualityGates(cleartextPassword);
+        if (cachedSecurityScore == NO_SECURITY_SCORE_GENERATED) {
+            cachedSecurityScore = QualityGateManager.getInstance().calculatePassedQualityGates(cleartextPassword);
         }
-        return securityScore;
+        return cachedSecurityScore;
     }
 
 }

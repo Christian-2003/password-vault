@@ -49,9 +49,19 @@ public class PasswordSecurityAnalysis implements Observable<ArrayList<Password>>
     private double averageSecurityScore;
 
     /**
-     * Thread performs the analysis of the passwords.
+     * Attribute stores the thread that performs the analysis of the passwords.
      */
     private Thread analysisThread;
+
+    /**
+     * Attribute indicates whether the analysis has been completed.
+     */
+    private boolean analysisCompleted;
+
+    /**
+     * Attribute indicates whether an analysis is currently running.
+     */
+    private boolean analysisRunning;
 
 
     /**
@@ -63,6 +73,8 @@ public class PasswordSecurityAnalysis implements Observable<ArrayList<Password>>
         identicalPasswords = new ArrayList<>();
         averageSecurityScore = 0.0;
         analysisThread = null;
+        analysisCompleted = false;
+        analysisRunning = false;
     }
 
 
@@ -97,6 +109,26 @@ public class PasswordSecurityAnalysis implements Observable<ArrayList<Password>>
         return identicalPasswords;
     }
 
+    /**
+     * Method returns whether an analysis has completed and results are available. If this is {@code false},
+     * accessing the results should be avoided.
+     *
+     * @return  Whether an analysis has completed.
+     */
+    public boolean isAnalysisCompleted() {
+        return analysisCompleted;
+    }
+
+    /**
+     * Method returns whether an analysis is currently running. If this is {@code true}, avoid
+     * accessing the analysis results as they may be incomplete.
+     *
+     * @return  Whether the analysis is currently running.
+     */
+    public boolean isAnalysisRunning() {
+        return analysisRunning;
+    }
+
 
     /**
      * Method performs the password security analysis for all passwords of the application. Since
@@ -104,7 +136,20 @@ public class PasswordSecurityAnalysis implements Observable<ArrayList<Password>>
      * a separate thread.
      */
     public void analyze() {
-        if (analysisThread == null) {
+        analyze(false);
+    }
+
+
+    /**
+     * Method performs the password security analysis for all passwords of the application. Since
+     * this analysis is very resource-intensive and takes some time, the analysis is performed from
+     * a separate thread.
+     *
+     * @param force Set this to {@code true} to cancel any running analysis and restart.
+     */
+    public void analyze(boolean force) {
+        if (analysisThread == null || force) {
+            cancel();
             analysisThread = new Thread(this);
             analysisThread.start();
         }
@@ -112,20 +157,22 @@ public class PasswordSecurityAnalysis implements Observable<ArrayList<Password>>
 
 
     /**
-     * Method cancels the password analysis and removes all references from the app. The passwords
-     * should be removed from memory during the next garbage collector cycle.
+     * Method cancels the password analysis.
      */
     public void cancel() {
         try {
-            if (analysisThread.isAlive()) {
-                analysisThread.stop();
+            if (analysisThread != null && analysisThread.isAlive()) {
+                analysisThread.interrupt();
             }
         }
         catch (SecurityException e) {
-            Log.d("PasswordAnalysis", "Cannot stop analysis thread: " + e.getMessage());
+            Log.d("PasswordAnalysis", "Cannot interrupt password analysis thread: " + e.getMessage());
         }
         passwords.clear();
         identicalPasswords.clear();
+        analysisThread = null;
+        analysisRunning = false;
+        analysisCompleted = false;
     }
 
 
@@ -195,13 +242,15 @@ public class PasswordSecurityAnalysis implements Observable<ArrayList<Password>>
         passwords.clear();
         identicalPasswords.clear();
         averageSecurityScore = 0.0;
+        analysisCompleted = false;
+        analysisRunning = true;
 
         //Retrieve all passwords:
         for (EntryAbbreviated abbreviated : EntryManager.getInstance().getData()) {
             EntryExtended extended = EntryManager.getInstance().get(abbreviated.getUuid(), false);
             for (Detail detail : extended.getDetails()) {
                 if (detail.getType() == DetailType.PASSWORD) {
-                    passwords.add(new Password(detail.getContent(), extended.getUuid()));
+                    passwords.add(new Password(detail.getContent(), extended.getUuid(), extended.getName()));
                 }
             }
         }
@@ -234,6 +283,8 @@ public class PasswordSecurityAnalysis implements Observable<ArrayList<Password>>
             }
         }
         averageSecurityScore = averageSecurityScore / passwords.size();
+        analysisCompleted = true;
+        analysisRunning = false;
         notifyObservers();
     }
 

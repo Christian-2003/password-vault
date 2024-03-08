@@ -136,7 +136,8 @@ public class PasswordsRecyclerViewAdapter extends RecyclerView.Adapter<Passwords
         Password password = data.get(position);
         holder.password.setText(Utils.obfuscate(password.getCleartextPassword()));
         if (displayEntryName) {
-            holder.name.setText(EntryManager.getInstance().get(password.getEntryUuid()).getName());
+            //holder.name.setText(EntryManager.getInstance().get(password.getEntryUuid()).getName());
+            holder.name.setText(password.getName());
         }
         else {
             holder.name.setVisibility(View.GONE);

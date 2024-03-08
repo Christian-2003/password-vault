@@ -55,9 +55,10 @@ public class PasswordAnalysisActivity extends AppCompatActivity implements Obser
         viewModel = new ViewModelProvider(this).get(PasswordAnalysisViewModel.class);
 
         findViewById(R.id.password_analysis_back_button).setOnClickListener(view -> finish());
-        showAnalysisResults(viewModel.isAnalysisFinished());
+        findViewById(R.id.password_analysis_reload_button).setOnClickListener(view -> restartAnalysis());
+        showAnalysisResults(PasswordSecurityAnalysis.getInstance().isAnalysisCompleted());
         PasswordSecurityAnalysis.getInstance().addObserver(this);
-        if (!viewModel.isAnalysisFinished()) {
+        if (!PasswordSecurityAnalysis.getInstance().isAnalysisCompleted() && !PasswordSecurityAnalysis.getInstance().isAnalysisRunning()) {
             PasswordSecurityAnalysis.getInstance().analyze();
         }
     }
@@ -70,10 +71,6 @@ public class PasswordAnalysisActivity extends AppCompatActivity implements Obser
     public void finish() {
         super.finish();
         PasswordSecurityAnalysis.getInstance().removeObserver(this);
-        if (!viewModel.isAnalysisFinished()) {
-            PasswordSecurityAnalysis.getInstance().cancel();
-            viewModel.setAnalysisFinished(false);
-        }
     }
 
 
@@ -93,7 +90,7 @@ public class PasswordAnalysisActivity extends AppCompatActivity implements Obser
             viewPager.setAdapter(adapter);
 
             TabLayout tabs = findViewById(R.id.password_analysis_tabs);
-            new TabLayoutMediator(tabs, viewPager, this::updateTabName).attach();
+            new TabLayoutMediator(tabs, viewPager, (tab, position) -> PasswordAnalysisActivity.this.viewModel.updateTabName(tab, position)).attach();
         }
     }
 
@@ -110,23 +107,16 @@ public class PasswordAnalysisActivity extends AppCompatActivity implements Obser
         if (o == null) {
             throw new NullPointerException();
         }
-        viewModel.setAnalysisFinished(true);
         runOnUiThread(() -> showAnalysisResults(true));
     }
 
 
-    private void updateTabName(TabLayout.Tab tab, int position) {
-        switch (position) {
-            case 0:
-                tab.setText(R.string.password_analysis_menu_general);
-                break;
-            case 1:
-                tab.setText(R.string.password_analysis_menu_list);
-                break;
-            case 2:
-                tab.setText(R.string.password_analysis_menu_duplicates);
-                break;
-        }
+
+
+
+    private void restartAnalysis() {
+        showAnalysisResults(false);
+        PasswordSecurityAnalysis.getInstance().analyze(true);
     }
 
 }
