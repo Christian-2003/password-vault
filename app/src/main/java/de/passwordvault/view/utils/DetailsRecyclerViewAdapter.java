@@ -120,21 +120,31 @@ public class DetailsRecyclerViewAdapter extends RecyclerView.Adapter<DetailsRecy
      */
     private final DialogCallbackListener callbackListener;
 
+    /**
+     * Attribute stores the click listener for when an item is long clicked. This is {@code null} if
+     * no action is desired.
+     */
+    private final OnRecyclerItemClickListener<Detail> itemLongPressClickListener;
+
 
     /**
      * Constructor instantiates a new adapter for a recycler view to display the passed list of
      * details.
      *
-     * @param data                  List of details to be displayed.
-     * @throws NullPointerException The passed list of details is {@code null}.
+     * @param data                          List of details to be displayed.
+     * @param activity                      AppCompatActivity which contains the recycler view.
+     * @param callbackListener              Callback listener for dialog callbacks.
+     * @param itemLongPressClickListener    Listener for when an item is long clicked.
+     * @throws NullPointerException         The passed list of details is {@code null}.
      */
-    public DetailsRecyclerViewAdapter(ArrayList<Detail> data, AppCompatActivity activity, DialogCallbackListener callbackListener) throws NullPointerException {
+    public DetailsRecyclerViewAdapter(ArrayList<Detail> data, AppCompatActivity activity, DialogCallbackListener callbackListener, OnRecyclerItemClickListener<Detail> itemLongPressClickListener) throws NullPointerException {
         if (data == null || activity == null || callbackListener == null) {
             throw new NullPointerException();
         }
         this.data = data;
         this.activity = activity;
         this.callbackListener = callbackListener;
+        this.itemLongPressClickListener = itemLongPressClickListener;
     }
 
 
@@ -201,6 +211,12 @@ public class DetailsRecyclerViewAdapter extends RecyclerView.Adapter<DetailsRecy
         else {
             holder.obfuscateButton.setVisibility(View.GONE);
             holder.content.setText(detail.getContent());
+        }
+        if (itemLongPressClickListener != null) {
+            holder.itemView.setOnLongClickListener(view -> {
+                itemLongPressClickListener.onItemClick(detail, position);
+                return true;
+            });
         }
 
         if (holder instanceof PasswordViewHolder) {

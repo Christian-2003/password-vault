@@ -1,11 +1,11 @@
 package de.passwordvault.view.utils;
 
-import android.graphics.Color;
-
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
-
 import de.passwordvault.App;
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGateManager;
@@ -71,6 +71,18 @@ public class Utils {
         else {
             return App.getContext().getColor(R.color.yellow);
         }
+    }
+
+
+    /**
+     * Method copies the passed string to the clipboard.
+     *
+     * @param s String to be copied to the clipboard.
+     */
+    public static void copyToClipboard(String s) {
+        ClipboardManager clipboard = (ClipboardManager)App.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Copied Text", s);
+        clipboard.setPrimaryClip(clip);
     }
 
 }

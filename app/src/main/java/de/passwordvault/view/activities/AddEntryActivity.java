@@ -80,7 +80,7 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
         }
 
         RecyclerView detailsContainer = findViewById(R.id.add_entry_details_container);
-        adapter = new DetailsRecyclerViewAdapter(viewModel.getEntry().getDetails(), this, this);
+        adapter = new DetailsRecyclerViewAdapter(viewModel.getEntry().getDetails(), this, this, null);
         ItemTouchHelper.Callback callback = new DetailsItemMoveCallback(adapter, true, true);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(detailsContainer);

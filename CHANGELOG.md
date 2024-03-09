@@ -18,6 +18,7 @@ fins duplicate passwords.
 * Added tutorials for app installation and quickstart.
 * Improvements to _README.md_
 * Added extensive password security analysis for all passwords to the app.
+* Content of details can be copied to the clipboard through long press on the detail.
 
 <br>
 

@@ -9,12 +9,14 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import de.passwordvault.R;
+import de.passwordvault.model.detail.Detail;
 import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.tags.Tag;
 import de.passwordvault.model.tags.TagCollection;
 import de.passwordvault.view.utils.DetailsItemMoveCallback;
 import de.passwordvault.view.utils.DetailsRecyclerViewAdapter;
+import de.passwordvault.view.utils.OnRecyclerItemClickListener;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.viewmodel.activities.EntryViewModel;
 import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
@@ -37,7 +39,7 @@ import java.io.Serializable;
  * @author  Christian-2003
  * @version 3.4.0
  */
-public class EntryActivity extends AppCompatActivity implements DialogCallbackListener, Serializable {
+public class EntryActivity extends AppCompatActivity implements DialogCallbackListener, Serializable, OnRecyclerItemClickListener<Detail> {
 
     /**
      * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} for the EntryActivity.
@@ -116,6 +118,18 @@ public class EntryActivity extends AppCompatActivity implements DialogCallbackLi
 
 
     /**
+     * Method is called when the item which is passed as argument is clicked by the user.
+     *
+     * @param item      Clicked item.
+     * @param position  Index of the clicked item.
+     */
+    @Override
+    public void onItemClick(Detail item, int position) {
+        Utils.copyToClipboard(item.getContent());
+    }
+
+
+    /**
      * Method draws this {@linkplain android.app.Activity}.
      */
     private void drawActivity() {
@@ -168,7 +182,7 @@ public class EntryActivity extends AppCompatActivity implements DialogCallbackLi
 
         //Add visible details:
         RecyclerView visibleDetailsContainer = findViewById(R.id.entry_details_container);
-        DetailsRecyclerViewAdapter visibleDetailsAdapter = new DetailsRecyclerViewAdapter(viewModel.getEntry().getVisibleDetails(), this, this);
+        DetailsRecyclerViewAdapter visibleDetailsAdapter = new DetailsRecyclerViewAdapter(viewModel.getEntry().getVisibleDetails(), this, this, this);
         ItemTouchHelper.Callback visibleDetailsCallback = new DetailsItemMoveCallback(visibleDetailsAdapter, false, false);
         ItemTouchHelper visibleDetailsTouchHelper = new ItemTouchHelper(visibleDetailsCallback);
         visibleDetailsTouchHelper.attachToRecyclerView(visibleDetailsContainer);
@@ -177,7 +191,7 @@ public class EntryActivity extends AppCompatActivity implements DialogCallbackLi
 
         //Add hidden details:
         RecyclerView hiddenDetailsContainer = findViewById(R.id.entry_hidden_details_container);
-        DetailsRecyclerViewAdapter hiddenDetailsAdapter = new DetailsRecyclerViewAdapter(viewModel.getEntry().getInvisibleDetails(), this, this);
+        DetailsRecyclerViewAdapter hiddenDetailsAdapter = new DetailsRecyclerViewAdapter(viewModel.getEntry().getInvisibleDetails(), this, this, this);
         ItemTouchHelper.Callback hiddenDetailsCallback = new DetailsItemMoveCallback(hiddenDetailsAdapter, false, false);
         ItemTouchHelper hiddenDetailsTouchHelper = new ItemTouchHelper(hiddenDetailsCallback);
         hiddenDetailsTouchHelper.attachToRecyclerView(hiddenDetailsContainer);
