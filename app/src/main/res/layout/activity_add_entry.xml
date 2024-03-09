@@ -100,6 +100,47 @@
                         style="@style/pv.button.image_button"/>
 
                 </com.google.android.material.chip.ChipGroup>
+
+                <View
+                    style="@style/divider"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/entry_package"
+                    style="@style/pv.text.variant"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/add_entry_package_none"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:text="@string/entry_package_none"
+                        style="@style/pv.text"/>
+
+                    <include
+                        android:id="@+id/add_entry_package_selected"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        layout="@layout/list_item_package"/>
+
+                    <ImageButton
+                        android:id="@+id/add_entry_package_edit_button"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_edit"
+                        style="@style/pv.button.image_button"/>
+
+                </LinearLayout>
                 
             </LinearLayout>
 

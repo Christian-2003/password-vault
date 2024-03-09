@@ -9,7 +9,7 @@ Small bugfixe.
 ###### Features
 * Fixed a bug within HTML exprots, where `<h2>`-elements were not correctly closed.
 * Manifest cleanup.
-* Fixed app name from "PasswordVault" to "Password Vault"
+* Fixed app name from "PasswordVault" to "Password Vault".
 
 <br>
 

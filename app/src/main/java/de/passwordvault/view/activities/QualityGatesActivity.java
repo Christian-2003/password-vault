@@ -5,10 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import de.passwordvault.R;
@@ -16,7 +13,7 @@ import de.passwordvault.model.Observable;
 import de.passwordvault.model.Observer;
 import de.passwordvault.model.analysis.QualityGate;
 import de.passwordvault.model.analysis.QualityGateManager;
-import de.passwordvault.view.utils.QualityGatesListAdapter;
+import de.passwordvault.view.utils.adapters.QualityGatesListAdapter;
 import de.passwordvault.viewmodel.activities.QualityGatesViewModel;
 
 

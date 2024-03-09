@@ -14,7 +14,7 @@ import de.passwordvault.model.analysis.passwords.Password;
 import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
 import de.passwordvault.view.activities.EntryActivity;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
-import de.passwordvault.view.utils.PasswordsRecyclerViewAdapter;
+import de.passwordvault.view.utils.adapters.PasswordsRecyclerViewAdapter;
 import de.passwordvault.viewmodel.fragments.PasswordAnalysisListViewModel;
 
 

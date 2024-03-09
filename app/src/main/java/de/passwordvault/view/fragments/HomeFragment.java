@@ -20,7 +20,7 @@ import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.view.activities.AddEntryActivity;
 import de.passwordvault.view.activities.EntryActivity;
 import de.passwordvault.view.activities.MainActivity;
-import de.passwordvault.view.utils.EntriesRecyclerViewAdapter;
+import de.passwordvault.view.utils.adapters.EntriesRecyclerViewAdapter;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
 
 

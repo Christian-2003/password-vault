@@ -18,7 +18,7 @@ import de.passwordvault.model.tags.TagCollection;
  * of account. Further details about an entry are only available in {@link EntryExtended}.
  *
  * @author  Christian-2003
- * @version 3.3.0
+ * @version 3.5.0
  */
 public class EntryAbbreviated implements Identifiable, Storable, Serializable {
 
@@ -57,6 +57,12 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
      */
     private TagCollection tags;
 
+    /**
+     * Attribute stores the name of the package of the app for which this entry stores login data.
+     * If no package is selected, this is be {@code null}.
+     */
+    private String anchorPackageName;
+
 
     /**
      * Constructor instantiates a new entry without any contents.
@@ -69,6 +75,7 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
         setCreated(Calendar.getInstance());
         setChanged(getCreated());
         setTags(new TagCollection());
+        setAnchorPackageName(null);
     }
 
     /**
@@ -89,6 +96,7 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
         setCreated(entry.getCreated());
         setChanged(entry.getChanged());
         setTags(new TagCollection(entry.getTags()));
+        setAnchorPackageName(entry.getAnchorPackageName());
     }
 
 
@@ -242,6 +250,27 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
         this.tags = tags;
     }
 
+    /**
+     * Method returns the package name of the app for which the entry stores login information.
+     * The method returns {@code null} if the entry does not store login information for any
+     * specific package.
+     *
+     * @return  Name of the package for which this login information is stored.
+     */
+    public String getAnchorPackageName() {
+        return anchorPackageName;
+    }
+
+    /**
+     * Method changes the package name of the app for which the entry stores login information. Pass
+     * {@code null} if the entry does not store data for any application.
+     *
+     * @param anchorPackageName Name of the package for which the entry stores login data.
+     */
+    public void setAnchorPackageName(String anchorPackageName) {
+        this.anchorPackageName = anchorPackageName;
+    }
+
 
     /**
      * Notifies this Entry that some of its data was changed. This will update the value of
@@ -303,6 +332,7 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
         builder.append(changed.getTimeInMillis());
         builder.append(visible);
         builder.append(tags.toCsv());
+        builder.append(anchorPackageName == null ? "" : anchorPackageName);
 
         return builder.toString();
     }
@@ -352,6 +382,9 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
                     case 6:
                         setTags(new TagCollection(cell));
                         break;
+                    case 7:
+                        setAnchorPackageName(cell != null ? (cell.length() == 0 ? null : cell) : null);
+                        break;
                 }
             }
             catch (NumberFormatException e) {
@@ -376,6 +409,7 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
         builder.append("Edited");
         builder.append("IsVisible");
         builder.append("Tags");
+        builder.append("AnchorPackage");
 
         return builder.toString();
     }

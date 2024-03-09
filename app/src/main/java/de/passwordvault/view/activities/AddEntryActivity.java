@@ -7,24 +7,30 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputLayout;
-import java.io.Serializable;
 import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.model.Observable;
 import de.passwordvault.model.Observer;
 import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.model.entry.EntryManager;
+import de.passwordvault.model.packages.Package;
+import de.passwordvault.model.packages.PackagesManager;
 import de.passwordvault.model.tags.Tag;
 import de.passwordvault.model.tags.TagCollection;
 import de.passwordvault.model.tags.TagManager;
 import de.passwordvault.view.dialogs.EditTagDialog;
+import de.passwordvault.view.utils.ActivityCallbackListener;
 import de.passwordvault.view.utils.DetailsItemMoveCallback;
-import de.passwordvault.view.utils.DetailsRecyclerViewAdapter;
+import de.passwordvault.view.utils.adapters.DetailsRecyclerViewAdapter;
 import de.passwordvault.viewmodel.activities.AddEntryViewModel;
 import de.passwordvault.model.detail.Detail;
 import de.passwordvault.view.dialogs.ConfirmDeleteDetailDialog;
@@ -38,7 +44,7 @@ import de.passwordvault.view.utils.DialogCallbackListener;
  * @author  Christian-2003
  * @version 3.4.0
  */
-public class AddEntryActivity extends AppCompatActivity implements DialogCallbackListener, Serializable, Observer<ArrayList<Tag>> {
+public class AddEntryActivity extends AppCompatActivity implements DialogCallbackListener, ActivityCallbackListener, Observer<ArrayList<Tag>> {
 
     /**
      * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} of this activity.
@@ -88,6 +94,16 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
         detailsContainer.setAdapter(adapter);
 
         setupTags();
+        setupPackage();
+
+        findViewById(R.id.add_entry_package_edit_button).setOnClickListener(view -> {
+            Intent intent = new Intent(AddEntryActivity.this, PackagesActivity.class);
+            intent.putExtra(PackagesActivity.KEY_CALLBACK_LISTENER, AddEntryActivity.this);
+            if (AddEntryActivity.this.viewModel.getEntry().getAnchorPackageName() != null) {
+                intent.putExtra(PackagesActivity.KEY_PACKAGE, AddEntryActivity.this.viewModel.getEntry().getAnchorPackageName());
+            }
+            AddEntryActivity.this.startActivity(intent);
+        });
 
         //Add ClickListeners to close the activity:
         findViewById(R.id.add_entry_button_back).setOnClickListener(view -> AddEntryActivity.this.finish());
@@ -98,7 +114,6 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
 
         //Add ClickListener to add new detail:
         findViewById(R.id.add_entry_button_add_detail).setOnClickListener(view -> {
-
             DetailDialog dialog = new DetailDialog();
             Bundle dialogArgs = new Bundle();
             dialogArgs.putSerializable(DetailDialog.KEY_CALLBACK_LISTENER, AddEntryActivity.this);
@@ -130,6 +145,7 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
      *
      * @param dialog    Dialog which called the method.
      */
+    @Override
     public void onPositiveCallback(DialogFragment dialog) {
         if (dialog instanceof DetailDialog) {
             //New detail shall be added:
@@ -156,11 +172,26 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
     }
 
     /**
+     * Method is called when the launched activity has finished with a positive result.
+     *
+     * @param activity  Activity which finished positively.
+     */
+    @Override
+    public void onPositiveCallback(AppCompatActivity activity) {
+        if (activity instanceof PackagesActivity) {
+            PackagesActivity packagesActivity = (PackagesActivity)activity;
+            viewModel.getEntry().setAnchorPackageName(packagesActivity.getSelectedPackageName());
+            setupPackage();
+        }
+    }
+
+    /**
      * Method is called whenever the {@linkplain DialogFragment} is closed through the
      * 'negative' button (i.e. the CANCEL button).
      *
      * @param fragment  Dialog which called the method.
      */
+    @Override
     public void onNegativeCallback(DialogFragment fragment) {
         //There is no need to do anything since the edited detail shall not be saved.
         if (fragment instanceof ConfirmDeleteDetailDialog) {
@@ -179,6 +210,15 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
         }
     }
 
+    /**
+     * Method is called when the launched activity has finished with a negative result.
+     *
+     * @param activity  Activity which finished negatively.
+     */
+    @Override
+    public void onNegativeCallback(AppCompatActivity activity) {
+
+    }
 
     /**
      * Method processes the user input and saves the edited entry to {@linkplain EntryManager}.
@@ -213,7 +253,7 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
     /**
      * Method initializes the UI to display the tags of the entry.
      */
-    public void setupTags() {
+    private void setupTags() {
         ChipGroup chips = findViewById(R.id.add_entry_tag_container);
         chips.removeViews(0, chips.getChildCount() - 1);
         for (Tag tag : TagManager.getInstance().getData()) {
@@ -248,6 +288,27 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
             });
 
             chips.addView(chip, chips.getChildCount() - 1);
+        }
+    }
+
+
+    /**
+     * Method initializes the UI to display the package of the entry.
+     */
+    private void setupPackage() {
+        LinearLayout selectedPackage = findViewById(R.id.add_entry_package_selected);
+        selectedPackage.setVisibility(viewModel.getEntry().getAnchorPackageName() == null ? View.GONE : View.VISIBLE);
+        findViewById(R.id.add_entry_package_none).setVisibility(viewModel.getEntry().getAnchorPackageName() == null ? View.VISIBLE : View.GONE);
+        if (viewModel.getEntry().getAnchorPackageName() != null) {
+            Package p = PackagesManager.getInstance().getPackage(viewModel.getEntry().getAnchorPackageName());
+            if (p == null) {
+                ((TextView)selectedPackage.findViewById(R.id.list_item_package_name)).setText(viewModel.getEntry().getAnchorPackageName());
+                return;
+            }
+            ((TextView)selectedPackage.findViewById(R.id.list_item_package_name)).setText(p.getAppName());
+            if (p.getLogo() != null) {
+                ((ShapeableImageView)selectedPackage.findViewById(R.id.list_item_package_logo)).setImageDrawable(p.getLogo());
+            }
         }
     }
 

@@ -15,7 +15,7 @@ import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.tags.Tag;
 import de.passwordvault.model.tags.TagCollection;
 import de.passwordvault.view.utils.DetailsItemMoveCallback;
-import de.passwordvault.view.utils.DetailsRecyclerViewAdapter;
+import de.passwordvault.view.utils.adapters.DetailsRecyclerViewAdapter;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.viewmodel.activities.EntryViewModel;

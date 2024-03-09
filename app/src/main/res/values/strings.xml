@@ -102,6 +102,8 @@
     <string name="entry_details_info">Details</string>
     <string name="entry_hidden_details_info">Hidden Details</string>
     <string name="entry_additional_info">Additional</string>
+    <string name="entry_package">App</string>
+    <string name="entry_package_none">None selected</string>
 
 
     <!-- PasswordAnalysis activity -->
@@ -117,6 +119,13 @@
     <string name="password_results_general_duplicates_none">No duplicate passwords</string>
     <string name="password_results_list_title">Analyzed Passwords</string>
     <string name="password_results_list_none">No passwords</string>
+
+
+    <!-- Packages activity -->
+    <string name="packages_title">Apps</string>
+    <string name="packages_list_title">Installed apps</string>
+    <string name="packages_selected_title">Selected app</string>
+    <string name="packages_selected_none">None selected</string>
 
 
     <!-- Login activity -->
@@ -166,6 +175,7 @@
     <string name="button_add_quality_gate">Add quality gate</string>
     <string name="button_add_tag">Add Tag</string>
     <string name="button_continue_without_converting">Continue without Converting</string>
+    <string name="button_remove_package">Remove app</string>
 
 
     <!-- Placeholder -->

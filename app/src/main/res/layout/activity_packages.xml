@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".view.activities.PackagesActivity">
+
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        style="@style/pv.app_bar">
+
+        <ImageButton
+            android:id="@+id/packages_back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back"
+            style="@style/pv.button.image_button.app_bar"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/packages_title"
+            style="@style/pv.text.app_bar"/>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_left_margin_outside_container"
+        android:text="@string/packages_selected_title"
+        style="@style/pv.text.highlight"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        style="@style/background">
+
+        <TextView
+            android:id="@+id/packages_selected_none"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/packages_selected_none"
+            style="@style/pv.text.variant"/>
+
+        <include
+            android:id="@+id/packages_selected_item"
+            layout="@layout/list_item_package"/>
+
+        <Button
+            android:id="@+id/packages_remove_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/button_remove_package"
+            style="@style/Widget.Material3.Button.TextButton"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_left_margin_outside_container"
+        android:text="@string/packages_list_title"
+        style="@style/pv.text.highlight"/>
+    
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/packages_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        style="@style/background"/>
+
+</LinearLayout>

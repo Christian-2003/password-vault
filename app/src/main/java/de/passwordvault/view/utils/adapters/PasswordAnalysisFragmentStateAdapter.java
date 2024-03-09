@@ -1,4 +1,4 @@
-package de.passwordvault.view.utils;
+package de.passwordvault.view.utils.adapters;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

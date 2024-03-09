@@ -1,4 +1,4 @@
-package de.passwordvault.view.utils;
+package de.passwordvault.view.utils.adapters;
 
 import android.animation.ValueAnimator;
 import android.os.Bundle;
@@ -23,6 +23,10 @@ import de.passwordvault.model.detail.Detail;
 import de.passwordvault.model.detail.DetailType;
 import de.passwordvault.view.dialogs.ConfirmDeleteDetailDialog;
 import de.passwordvault.view.dialogs.DetailDialog;
+import de.passwordvault.view.utils.DetailsItemMoveCallback;
+import de.passwordvault.view.utils.DialogCallbackListener;
+import de.passwordvault.view.utils.OnRecyclerItemClickListener;
+import de.passwordvault.view.utils.Utils;
 
 
 /**

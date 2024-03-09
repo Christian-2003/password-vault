@@ -1,4 +1,4 @@
-package de.passwordvault.view.utils;
+package de.passwordvault.view.utils.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.model.entry.EntryAbbreviated;
+import de.passwordvault.view.utils.OnRecyclerItemClickListener;
 
 
 /**

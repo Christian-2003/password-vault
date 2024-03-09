@@ -13,7 +13,7 @@ import de.passwordvault.R;
 import de.passwordvault.model.analysis.passwords.Password;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryManager;
-import de.passwordvault.view.utils.EntriesRecyclerViewAdapter;
+import de.passwordvault.view.utils.adapters.EntriesRecyclerViewAdapter;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
 import de.passwordvault.viewmodel.activities.DuplicatePasswordEntriesViewModel;
 

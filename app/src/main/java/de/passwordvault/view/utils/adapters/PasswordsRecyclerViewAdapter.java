@@ -1,10 +1,9 @@
-package de.passwordvault.view.utils;
+package de.passwordvault.view.utils.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
@@ -14,7 +13,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGateManager;
 import de.passwordvault.model.analysis.passwords.Password;
-import de.passwordvault.model.entry.EntryManager;
+import de.passwordvault.view.utils.OnRecyclerItemClickListener;
+import de.passwordvault.view.utils.Utils;
 
 
 /**

@@ -1,4 +1,4 @@
-package de.passwordvault.view.utils;
+package de.passwordvault.view.utils.adapters;
 
 import android.content.Context;
 import android.content.Intent;

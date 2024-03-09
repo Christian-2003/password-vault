@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.App;
 import de.passwordvault.R;
+import de.passwordvault.view.utils.adapters.DetailsRecyclerViewAdapter;
 
 
 /**

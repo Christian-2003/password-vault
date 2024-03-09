@@ -30,6 +30,7 @@
         <activity android:name=".view.activities.PasswordAnalysisActivity" android:exported="false"/>
         <activity android:name=".view.activities.DuplicatePasswordEntriesActivity" android:exported="false"/>
         <activity android:name=".view.activities.DataConversionActivity" android:exported="false"/>
+        <activity android:name=".view.activities.PackagesActivity" android:exported="false"/>
 
         <!-- Autofill Service for password manager -->
         <service

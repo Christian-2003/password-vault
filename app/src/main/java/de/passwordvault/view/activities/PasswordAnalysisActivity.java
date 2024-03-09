@@ -1,16 +1,11 @@
 package de.passwordvault.view.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
@@ -20,12 +15,9 @@ import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.model.Observable;
 import de.passwordvault.model.Observer;
-import de.passwordvault.model.analysis.QualityGateManager;
 import de.passwordvault.model.analysis.passwords.Password;
 import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
-import de.passwordvault.view.utils.OnRecyclerItemClickListener;
-import de.passwordvault.view.utils.PasswordAnalysisFragmentStateAdapter;
-import de.passwordvault.view.utils.PasswordsRecyclerViewAdapter;
+import de.passwordvault.view.utils.adapters.PasswordAnalysisFragmentStateAdapter;
 import de.passwordvault.viewmodel.activities.PasswordAnalysisViewModel;
 
 

@@ -31,7 +31,7 @@ import de.passwordvault.model.Observable;
 import de.passwordvault.model.Observer;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryManager;
-import de.passwordvault.view.utils.EntriesRecyclerViewAdapter;
+import de.passwordvault.view.utils.adapters.EntriesRecyclerViewAdapter;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
 import de.passwordvault.viewmodel.fragments.EntriesViewModel;
 import de.passwordvault.view.activities.EntryActivity;
