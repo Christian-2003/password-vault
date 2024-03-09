@@ -1,6 +1,8 @@
 package de.passwordvault.view.fragments;
 
+import android.animation.ValueAnimator;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider;
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGateManager;
 import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
+import de.passwordvault.view.activities.PasswordAnalysisActivity;
+import de.passwordvault.view.utils.Utils;
 import de.passwordvault.viewmodel.fragments.PasswordAnalysisGeneralViewModel;
 
 
@@ -63,19 +67,37 @@ public class PasswordAnalysisGeneralFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_password_analysis_general, container, false);
 
-        String securityScore = (Math.floor(PasswordSecurityAnalysis.getInstance().getAverageSecurityScore() * 100) / 100) + "/" + QualityGateManager.getInstance().numberOfQualityGates();
-        ((TextView)view.findViewById(R.id.password_analysis_general_security_score)).setText(securityScore);
+        String securityScore = (Math.floor(PasswordSecurityAnalysis.getInstance().getAverageSecurityScore() * 100) / 100) + " / " + QualityGateManager.getInstance().numberOfQualityGates();
+        TextView securityScoreTextView = view.findViewById(R.id.password_analysis_general_security_score);
+        securityScoreTextView.setText(securityScore);
+        securityScoreTextView.setTextColor(Utils.getPasswordSecurityScoreColor((int)PasswordSecurityAnalysis.getInstance().getAverageSecurityScore()));
 
         ProgressBar securityBar = view.findViewById(R.id.password_analysis_general_security_bar);
         securityBar.setMax(QualityGateManager.getInstance().numberOfQualityGates() * 1000);
-        securityBar.setProgress((int)(PasswordSecurityAnalysis.getInstance().getAverageSecurityScore() * 1000));
-        //TODO: Animate security bar...
+        ValueAnimator animator = ValueAnimator.ofInt(0, (int)(PasswordSecurityAnalysis.getInstance().getAverageSecurityScore() * 1000));
+        animator.setDuration(requireActivity().getResources().getInteger(R.integer.default_anim_duration) * 5L);
+        animator.addUpdateListener(animation -> securityBar.setProgress((int) animation.getAnimatedValue()));
+        animator.start();
 
         String duplicates = view.getContext().getString(R.string.password_results_general_duplicates_hint).replace("{arg}", "" + PasswordSecurityAnalysis.getInstance().getIdenticalPasswords().size());
         ((TextView)view.findViewById(R.id.password_analysis_general_duplicates)).setText(duplicates);
-        //TODO: Add click listener to duplicates...
+        view.findViewById(R.id.password_analysis_duplicates_clickable).setOnClickListener(view -> showDuplicatePasswords());
 
         return view;
+    }
+
+
+    /**
+     * Method shows the fragment in which the duplicate passwords are shown.
+     */
+    private void showDuplicatePasswords() {
+        try {
+            PasswordAnalysisActivity activity = (PasswordAnalysisActivity)requireActivity();
+            activity.showFragmentPage(2);
+        }
+        catch (ClassCastException e) {
+            Log.d("PasswordAnalysisGeneralFragment", "Cannot cast FragmentActivity to PasswordAnalysisActivity");
+        }
     }
 
 }

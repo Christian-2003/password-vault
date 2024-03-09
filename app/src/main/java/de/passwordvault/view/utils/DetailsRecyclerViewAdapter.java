@@ -215,16 +215,7 @@ public class DetailsRecyclerViewAdapter extends RecyclerView.Adapter<DetailsRecy
             viewHolder.securityBar.setProgress(securityScore * 1000);
             String securityRating = securityScore + "/" + maxSecurityScore;
             viewHolder.securityScore.setText(securityRating);
-            double securityScorePercentage = (double)securityScore / (double)maxSecurityScore;
-            if (securityScorePercentage < 0.33) {
-                viewHolder.securityScore.setTextColor(viewHolder.securityScore.getContext().getColor(R.color.red));
-            }
-            else if (securityScorePercentage > 0.67) {
-                viewHolder.securityScore.setTextColor(viewHolder.securityScore.getContext().getColor(R.color.green));
-            }
-            else {
-                viewHolder.securityScore.setTextColor(viewHolder.securityScore.getContext().getColor(R.color.yellow));
-            }
+            viewHolder.securityScore.setTextColor(Utils.getPasswordSecurityScoreColor(securityScore));
         }
     }
 

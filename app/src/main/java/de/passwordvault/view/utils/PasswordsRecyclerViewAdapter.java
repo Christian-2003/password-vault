@@ -142,17 +142,8 @@ public class PasswordsRecyclerViewAdapter extends RecyclerView.Adapter<Passwords
         else {
             holder.name.setVisibility(View.GONE);
         }
-        holder.securityScore.setText(password.getSecurityScore() + "/" + QualityGateManager.getInstance().numberOfQualityGates());
-        double securityScorePercentage = (double)password.getSecurityScore() / (double)QualityGateManager.getInstance().numberOfQualityGates();
-        if (securityScorePercentage < 0.33) {
-            holder.securityScore.setTextColor(holder.securityScore.getContext().getColor(R.color.red));
-        }
-        else if (securityScorePercentage > 0.67) {
-            holder.securityScore.setTextColor(holder.securityScore.getContext().getColor(R.color.green));
-        }
-        else {
-            holder.securityScore.setTextColor(holder.securityScore.getContext().getColor(R.color.yellow));
-        }
+        holder.securityScore.setText(password.getSecurityScore() + " / " + QualityGateManager.getInstance().numberOfQualityGates());
+        holder.securityScore.setTextColor(Utils.getPasswordSecurityScoreColor(password.getSecurityScore()));
         AtomicBoolean obfuscated = new AtomicBoolean(true);
         holder.obfuscateButton.setOnClickListener(view -> {
             if (obfuscated.get()) {

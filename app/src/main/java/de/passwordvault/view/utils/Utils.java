@@ -1,8 +1,14 @@
 package de.passwordvault.view.utils;
 
+import android.graphics.Color;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+
+import de.passwordvault.App;
+import de.passwordvault.R;
+import de.passwordvault.model.analysis.QualityGateManager;
 
 
 /**
@@ -45,6 +51,26 @@ public class Utils {
             builder.append('•'); // 'U+2022'
         }
         return builder.toString();
+    }
+
+
+    /**
+     * Method returns the color for the specified password security score.
+     *
+     * @param score Password security score for which the color shall be returned.
+     * @return      Color for the passed security score.
+     */
+    public static int getPasswordSecurityScoreColor(int score) {
+        double securityScorePercentage = (double)score / (double)QualityGateManager.getInstance().numberOfQualityGates();
+        if (securityScorePercentage < 0.33) {
+            return App.getContext().getColor(R.color.red);
+        }
+        else if (securityScorePercentage > 0.67) {
+            return App.getContext().getColor(R.color.green);
+        }
+        else {
+            return App.getContext().getColor(R.color.yellow);
+        }
     }
 
 }

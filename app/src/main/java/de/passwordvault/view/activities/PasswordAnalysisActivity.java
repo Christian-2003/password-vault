@@ -42,6 +42,16 @@ public class PasswordAnalysisActivity extends AppCompatActivity implements Obser
      */
     private PasswordAnalysisViewModel viewModel;
 
+    /**
+     * Attribute stores the adapter for the view pager which shows the different tabs of the activity.
+     */
+    private PasswordAnalysisFragmentStateAdapter adapter;
+
+    /**
+     * Attribute stores the view pager displaying the different tabs.
+     */
+    private ViewPager2 viewPager;
+
 
     /**
      * Method creates a new activity.
@@ -85,8 +95,8 @@ public class PasswordAnalysisActivity extends AppCompatActivity implements Obser
         findViewById(R.id.password_analysis_container_analyzing).setVisibility(showResults ? View.GONE : View.VISIBLE);
         findViewById(R.id.password_analysis_container_results).setVisibility(showResults ? View.VISIBLE : View.GONE);
         if (showResults) {
-            PasswordAnalysisFragmentStateAdapter adapter = new PasswordAnalysisFragmentStateAdapter(this);
-            ViewPager2 viewPager = findViewById(R.id.password_analysis_view_pager);
+            adapter = new PasswordAnalysisFragmentStateAdapter(this);
+            viewPager = findViewById(R.id.password_analysis_view_pager);
             viewPager.setAdapter(adapter);
 
             TabLayout tabs = findViewById(R.id.password_analysis_tabs);
@@ -111,10 +121,25 @@ public class PasswordAnalysisActivity extends AppCompatActivity implements Obser
     }
 
 
+    /**
+     * Method shows the fragment within the activity's view pager at the specified position.
+     *
+     * @param position  Position of the page to be shown.
+     */
+    public void showFragmentPage(int position) {
+        if (position >= 0 && position < adapter.getItemCount()) {
+            viewPager.setCurrentItem(position, true);
+        }
+    }
 
 
-
+    /**
+     * Method restarts the password security analysis.
+     */
     private void restartAnalysis() {
+        if (PasswordSecurityAnalysis.getInstance().isAnalysisRunning()) {
+            return;
+        }
         showAnalysisResults(false);
         PasswordSecurityAnalysis.getInstance().analyze(true);
     }
