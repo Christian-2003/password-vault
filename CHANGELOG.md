@@ -2,12 +2,14 @@
 
 # Changelog
 
-## 3.4.1 (XXXX-XX-XX)
+## 3.5.0 (XXXX-XX-XX)
 ###### Release Highlights
-Small bugfixes.
+Small bugfixe.
 
 ###### Features
 * Fixed a bug within HTML exprots, where `<h2>`-elements were not correctly closed.
+* Manifest cleanup.
+* Fixed app name from "PasswordVault" to "Password Vault"
 
 <br>
 

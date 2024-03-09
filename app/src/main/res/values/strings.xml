@@ -5,7 +5,7 @@
 
 
     <!-- App information -->
-    <string name="app_name" translatable="false">PasswordVault</string>
+    <string name="app_name" translatable="false">Password Vault</string>
     <string name="app_description">Store your account data safely on your device to access at any place and at all times.</string>
 
 

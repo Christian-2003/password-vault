@@ -1,61 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.PasswordVault"
-        android:name=".App"
-        tools:targetApi="31">
-        <activity
-            android:name=".view.activities.LoginActivity"
-            android:exported="true">
+        android:name=".App">
+
+        <!-- LoginActivity starts the entire application when opened through the launcher -->
+        <activity android:name=".view.activities.LoginActivity" android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".view.activities.AddEntryActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name=".view.activities.EntryActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name=".view.activities.QualityGatesActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name=".view.activities.QualityGateActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name=".view.activities.PasswordAnalysisActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name=".view.activities.DuplicatePasswordEntriesActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name=".view.activities.DataConversionActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name=".view.activities.MainActivity"
-            android:exported="true">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-    </application>
 
+        <!-- Other activities of the application -->
+        <activity android:name=".view.activities.MainActivity" android:exported="false"/>
+        <activity android:name=".view.activities.AddEntryActivity" android:exported="false"/>
+        <activity android:name=".view.activities.EntryActivity" android:exported="false"/>
+        <activity android:name=".view.activities.QualityGatesActivity" android:exported="false"/>
+        <activity android:name=".view.activities.QualityGateActivity" android:exported="false"/>
+        <activity android:name=".view.activities.PasswordAnalysisActivity" android:exported="false"/>
+        <activity android:name=".view.activities.DuplicatePasswordEntriesActivity" android:exported="false"/>
+        <activity android:name=".view.activities.DataConversionActivity" android:exported="false"/>
+
+        <!-- Autofill Service for password manager -->
+        <service
+            android:name=".model.autofill.PasswordVaultAutofillService"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_AUTOFILL_SERVICE">
+
+            <intent-filter>
+                <action android:name="android.service.autofill.AutofillService"/>
+            </intent-filter>
+            <meta-data android:name="android.autofill" android:resource="@xml/service_configuration"/>
+        </service>
+
+    </application>
 </manifest>
