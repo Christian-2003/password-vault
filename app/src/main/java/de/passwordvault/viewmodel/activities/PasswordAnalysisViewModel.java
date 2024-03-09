@@ -1,11 +1,8 @@
 package de.passwordvault.viewmodel.activities;
 
 import androidx.lifecycle.ViewModel;
-
 import com.google.android.material.tabs.TabLayout;
-
 import de.passwordvault.R;
-import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
 
 
 /**

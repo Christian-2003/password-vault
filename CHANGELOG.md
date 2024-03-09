@@ -2,10 +2,10 @@
 
 # Changelog
 
-## 3.4.0 (XXXX-XX-XX)
+## 3.4.0 (2024-03-09)
 ###### Release Highlights
 Details are now reorderable and the app can perform a password security analysis for all passwords at once. The analysis calculates the average security score, and
-fins duplicate passwords.
+finds duplicate passwords.
 
 ###### Features
 * Details can be reordered.
