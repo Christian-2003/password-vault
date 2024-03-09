@@ -321,7 +321,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 &lt;/html&gt;
     </string>
     <string name="html_export_entry_container" translatable="false">
-&lt;h2&gt;{name}&lt;/h1&gt;
+&lt;h2&gt;{name}&lt;/h2&gt;
     &lt;div class="container"&gt;
     &lt;p&gt;{description}&lt;/p&gt;
     {details}

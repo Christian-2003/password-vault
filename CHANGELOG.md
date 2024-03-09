@@ -2,6 +2,15 @@
 
 # Changelog
 
+## 3.4.1 (XXXX-XX-XX)
+###### Release Highlights
+Small bugfixes.
+
+###### Features
+* Fixed a bug within HTML exprots, where `<h2>`-elements were not correctly closed.
+
+<br>
+
 ## 3.4.0 (2024-03-09)
 ###### Release Highlights
 Details are now reorderable and the app can perform a password security analysis for all passwords at once. The analysis calculates the average security score, and
