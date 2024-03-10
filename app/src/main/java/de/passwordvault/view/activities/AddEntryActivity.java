@@ -1,11 +1,7 @@
 package de.passwordvault.view.activities;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.DialogFragment;
@@ -15,9 +11,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,7 +28,10 @@ import de.passwordvault.model.Observer;
 import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.packages.Package;
+import de.passwordvault.model.packages.PackageCollection;
 import de.passwordvault.model.packages.PackagesManager;
+import de.passwordvault.model.packages.SerializablePackage;
+import de.passwordvault.model.packages.SerializablePackageCollection;
 import de.passwordvault.model.tags.Tag;
 import de.passwordvault.model.tags.TagCollection;
 import de.passwordvault.model.tags.TagManager;
@@ -114,9 +111,14 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
         activityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                 Bundle results = result.getData().getExtras();
-                if (results != null && results.containsKey(PackagesActivity.KEY_PACKAGE)) {
-                    viewModel.getEntry().setAnchorPackageName(results.getString(PackagesActivity.KEY_PACKAGE));
-                    Log.d("AEA", "Set package to " + viewModel.getEntry().getAnchorPackageName());
+                if (results != null && results.containsKey(PackagesActivity.KEY_PACKAGES)) {
+                    try {
+                        SerializablePackageCollection packages = (SerializablePackageCollection)results.getSerializable(PackagesActivity.KEY_PACKAGES);
+                        viewModel.getEntry().setPackages(packages.toPackageCollection());
+                    }
+                    catch (Exception e) {
+                        return;
+                    }
                     setupPackage();
                 }
             }
@@ -124,9 +126,8 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
 
         findViewById(R.id.add_entry_package_edit_button).setOnClickListener(view -> {
             Intent intent = new Intent(AddEntryActivity.this, PackagesActivity.class);
-            if (AddEntryActivity.this.viewModel.getEntry().getAnchorPackageName() != null) {
-                intent.putExtra(PackagesActivity.KEY_PACKAGE, AddEntryActivity.this.viewModel.getEntry().getAnchorPackageName());
-            }
+            SerializablePackageCollection packages = new SerializablePackageCollection(viewModel.getEntry().getPackages());
+            intent.putExtra(PackagesActivity.KEY_PACKAGES, packages);
             activityLauncher.launch(intent);
         });
 
@@ -299,6 +300,7 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
      */
     private void setupPackage() {
         LinearLayout selectedPackage = findViewById(R.id.add_entry_package_selected);
+        /*
         selectedPackage.setVisibility(viewModel.getEntry().getAnchorPackageName() == null ? View.GONE : View.VISIBLE);
         findViewById(R.id.add_entry_package_none).setVisibility(viewModel.getEntry().getAnchorPackageName() == null ? View.VISIBLE : View.GONE);
         if (viewModel.getEntry().getAnchorPackageName() != null) {
@@ -312,6 +314,8 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
                 ((ShapeableImageView)selectedPackage.findViewById(R.id.list_item_package_logo)).setImageDrawable(p.getLogo());
             }
         }
+        */
+        //TODO: Show multiple packages...
     }
 
 

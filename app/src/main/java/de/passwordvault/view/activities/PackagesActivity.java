@@ -1,23 +1,17 @@
 package de.passwordvault.view.activities;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.imageview.ShapeableImageView;
+import androidx.viewpager2.widget.ViewPager2;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import de.passwordvault.R;
-import de.passwordvault.model.packages.Package;
-import de.passwordvault.model.packages.PackagesManager;
-import de.passwordvault.view.utils.OnRecyclerItemClickListener;
-import de.passwordvault.view.utils.adapters.PackagesRecyclerViewAdapter;
+import de.passwordvault.model.packages.SerializablePackageCollection;
+import de.passwordvault.view.utils.adapters.PackagesFragmentStateAdapter;
 import de.passwordvault.viewmodel.activities.PackagesViewModel;
 
 
@@ -28,12 +22,12 @@ import de.passwordvault.viewmodel.activities.PackagesViewModel;
  * @author  Christian-2003
  * @version 3.5.0
  */
-public class PackagesActivity extends AppCompatActivity implements OnRecyclerItemClickListener<Package> {
+public class PackagesActivity extends AppCompatActivity {
 
     /**
      * Field stores the key that needs to be used when passing the selected package as argument.
      */
-    public static final String KEY_PACKAGE = "package";
+    public static final String KEY_PACKAGES = "packages";
 
 
     /**
@@ -55,30 +49,19 @@ public class PackagesActivity extends AppCompatActivity implements OnRecyclerIte
 
         Bundle args = getIntent().getExtras();
         if (!viewModel.processArguments(args)) {
+            Log.d("PA", "ProcessArguments returned false");
             finish();
             return;
         }
 
         findViewById(R.id.packages_back_button).setOnClickListener(view -> finish());
-        Button removePackageButton = findViewById(R.id.packages_remove_button);
-        removePackageButton.setVisibility(viewModel.getSelectedPackageName() == null ? View.GONE : View.VISIBLE);
-        removePackageButton.setOnClickListener(view -> removePackage());
 
-        LinearLayout selectedItem = findViewById(R.id.packages_selected_item);
-        selectedItem.setVisibility(viewModel.getSelectedPackageName() == null ? View.GONE : View.VISIBLE);
-        findViewById(R.id.packages_selected_none).setVisibility(viewModel.getSelectedPackageName() == null ? View.VISIBLE : View.GONE);
-        if (viewModel.getSelectedPackageName() != null) {
-            Drawable logo = PackagesManager.getInstance().getPackageLogo(viewModel.getSelectedPackageName());
-            if (logo != null) {
-                ((ShapeableImageView)selectedItem.findViewById(R.id.list_item_package_logo)).setImageDrawable(logo);
-            }
-            ((TextView)selectedItem.findViewById(R.id.list_item_package_name)).setText(PackagesManager.getInstance().getPackage(viewModel.getSelectedPackageName()).getAppName());
-        }
+        PackagesFragmentStateAdapter adapter = new PackagesFragmentStateAdapter(this);
+        ViewPager2 viewPager = findViewById(R.id.packages_view_pager);
+        viewPager.setAdapter(adapter);
 
-        PackagesRecyclerViewAdapter adapter = new PackagesRecyclerViewAdapter(PackagesManager.getInstance().getPackages(), this);
-        RecyclerView recyclerView = findViewById(R.id.packages_recycler_view);
-        recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        TabLayout tabs = findViewById(R.id.packages_tabs);
+        new TabLayoutMediator(tabs, viewPager, (tab, position) -> PackagesActivity.this.viewModel.updateTabName(tab, position)).attach();
     }
 
 
@@ -88,31 +71,10 @@ public class PackagesActivity extends AppCompatActivity implements OnRecyclerIte
     @Override
     public void finish() {
         Intent intent = new Intent(PackagesActivity.this, AddEntryActivity.class);
-        intent.putExtra(PackagesActivity.KEY_PACKAGE, viewModel.getSelectedPackageName());
+        SerializablePackageCollection packages = new SerializablePackageCollection(viewModel.getPackages());
+        intent.putExtra(PackagesActivity.KEY_PACKAGES, packages);
         setResult(RESULT_OK, intent);
         super.finish();
-    }
-
-
-    /**
-     * Method is called when the item which is passed as argument is clicked by the user.
-     *
-     * @param item      Clicked item.
-     * @param position  Index of the clicked item.
-     */
-    @Override
-    public void onItemClick(Package item, int position) {
-        viewModel.setSelectedPackageName(item.getPackageName());
-        finish();
-    }
-
-
-    /**
-     * Method removes the package and closes the activity.
-     */
-    private void removePackage() {
-        viewModel.setSelectedPackageName(null);
-        finish();
     }
 
 }

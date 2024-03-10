@@ -1,20 +1,25 @@
 package de.passwordvault.model.packages;
 
+import android.content.pm.ApplicationInfo;
 import android.graphics.drawable.Drawable;
+import de.passwordvault.model.Identifiable;
 
 
 /**
- * Class models a package. A package is an app that is installed on the Android device.
+ * Class models a package. A package is an app that is installed on the Android device. The class
+ * implements the {@link Identifiable}-interface, using the unique package names instead of UUIDs.
+ * <b>Important: This class is NOT serializable, since it contains an instance of
+ * {@linkplain ApplicationInfo}!</b>
  *
  * @author  Christian-2003
  * @version 3.5.0
  */
-public class Package {
+public class Package extends SerializablePackage {
 
     /**
-     * Attribute stores the package name of the package, e.g. {@code com.example.app_name}.
+     * Attribute stores the application info from which the data of the package is loaded.
      */
-    private String packageName;
+    private final ApplicationInfo applicationInfo;
 
     /**
      * Attribute stores the name of the app.
@@ -26,22 +31,24 @@ public class Package {
      */
     private Drawable logo;
 
+    /**
+     * Attribute indicates whether the application logo is loaded.
+     */
+    private boolean logoLoaded;
+
 
     /**
-     * Constructor instantiates a new package with the passed arguments.
+     * Constructor instantiates a new package for the passed application info.
      *
-     * @param packageName           Name of the package (e.g. {@code com.example.app_name}).
-     * @param appName               Name of the app.
-     * @param logo                  App-logo as drawable.
-     * @throws NullPointerException Package or app name is {@code null}.
+     * @param applicationInfo       Application info for which to create the package.
+     * @throws NullPointerException The passed application info is {@code null}.
      */
-    public Package(String packageName, String appName, Drawable logo) throws NullPointerException {
-        if (packageName == null || appName == null) {
-            throw new NullPointerException();
-        }
-        this.packageName = packageName;
-        this.appName = appName;
-        this.logo = logo;
+    public Package(ApplicationInfo applicationInfo) throws NullPointerException {
+        super(applicationInfo.packageName);
+        this.applicationInfo = applicationInfo;
+        appName = null;
+        logo = null;
+        logoLoaded = false;
     }
 
 
@@ -55,38 +62,18 @@ public class Package {
     }
 
     /**
-     * Method changes the name of the package to the passed argument.
-     *
-     * @param packageName           New package name.
-     * @throws NullPointerException The passed argument is {@code null}.
-     */
-    public void setPackageName(String packageName) throws NullPointerException {
-        if (packageName == null) {
-            throw new NullPointerException();
-        }
-        this.packageName = packageName;
-    }
-
-    /**
      * Method returns the name of the app.
      *
      * @return  Name of the app.
      */
     public String getAppName() {
-        return appName;
-    }
-
-    /**
-     * Method changes the name of the app to the passed argument.
-     *
-     * @param appName               New name for the app.
-     * @throws NullPointerException The passed argument is {@code null}.
-     */
-    public void setAppName(String appName) throws NullPointerException {
         if (appName == null) {
-            throw new NullPointerException();
+            appName = PackagesManager.getInstance().getApplicationName(applicationInfo);
+            if (appName == null) {
+                appName = "";
+            }
         }
-        this.appName = appName;
+        return appName;
     }
 
     /**
@@ -95,16 +82,11 @@ public class Package {
      * @return  Logo of the app as drawable.
      */
     public Drawable getLogo() {
+        if (!logoLoaded) {
+            logo = PackagesManager.getInstance().getPackageLogo(packageName);
+            logoLoaded = true;
+        }
         return logo;
-    }
-
-    /**
-     * Method changes the logo of the package to the passed drawable.
-     *
-     * @param logo  New logo for the app.
-     */
-    public void setLogo(Drawable logo) {
-        this.logo = logo;
     }
 
 }

@@ -13,15 +13,26 @@
         android:layout_width="@dimen/image_button_width"
         android:layout_height="@dimen/image_button_height"
         android:layout_margin="@dimen/default_margin"
+        android:layout_weight="0"
         app:shapeAppearanceOverlay="@style/rounded_corners"/>
 
     <TextView
         android:id="@+id/list_item_package_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="center"
+        android:layout_weight="1"
         android:layout_marginStart="@dimen/default_margin"
         android:text="@string/app_name"
         style="@style/pv.text"/>
+
+    <ImageButton
+        android:id="@+id/list_item_package_delete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0"
+        android:src="@drawable/ic_delete"
+        style="@style/pv.button.image_button"/>
 
 </LinearLayout>

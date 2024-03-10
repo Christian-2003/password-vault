@@ -1,11 +1,8 @@
 package de.passwordvault.model.packages;
 
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 import de.passwordvault.App;
@@ -73,7 +70,7 @@ public class PackagesManager {
                     //Ignore system packages:
                     continue;
                 }
-                packagesCache.add(new Package(app.packageName, getApplicationName(app), getPackageLogo(app.packageName)));
+                packagesCache.add(new Package(app));
             }
         }
         return packagesCache;
@@ -121,7 +118,13 @@ public class PackagesManager {
     }
 
 
-    private String getApplicationName(ApplicationInfo info) {
+    /**
+     * Method returns the name of the package for the passed ApplicationInfo-instance.
+     *
+     * @param info  Info of the application whose name shall be returned.
+     * @return      Display name for the application.
+     */
+    public String getApplicationName(ApplicationInfo info) {
         return info.nonLocalizedLabel != null ? info.nonLocalizedLabel.toString() : info.loadLabel(packageManager).toString();
     }
 

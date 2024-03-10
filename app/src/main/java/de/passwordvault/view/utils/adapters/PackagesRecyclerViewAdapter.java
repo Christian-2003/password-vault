@@ -3,6 +3,7 @@ package de.passwordvault.view.utils.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +38,11 @@ public class PackagesRecyclerViewAdapter extends RecyclerView.Adapter<PackagesRe
         public TextView name;
 
         /**
+         * Attribute stores the image button used for deleting a package.
+         */
+        public ImageButton deleteButton;
+
+        /**
          * Attribute stores the item view for which this view holder exists.
          */
         public View itemView;
@@ -51,6 +57,7 @@ public class PackagesRecyclerViewAdapter extends RecyclerView.Adapter<PackagesRe
             super(itemView);
             logo = itemView.findViewById(R.id.list_item_package_logo);
             name = itemView.findViewById(R.id.list_item_package_name);
+            deleteButton = itemView.findViewById(R.id.list_item_package_delete_button);
             this.itemView = itemView;
         }
 
@@ -68,20 +75,30 @@ public class PackagesRecyclerViewAdapter extends RecyclerView.Adapter<PackagesRe
      */
     private final OnRecyclerItemClickListener<Package> clickListener;
 
+    /**
+     * Attribute stores the click listener that is called when the delete button of an item is clicked.
+     * If this is {@code null}, the delete button is disabled and not shown.
+     */
+    private final OnRecyclerItemClickListener<Package> deleteButtonClickListener;
+
 
     /**
-     * Constructor instantiates a new adapter for a recycler view which can display packages.
+     * Constructor instantiates a new adapter for a recycler view which can display packages. Pass
+     * {@code null} for deleteButtonClickListener to disable the delete button.
      *
-     * @param data                  List of packages to be displayed.
-     * @param clickListener         Click listener that shall be called when an item is clicked.
-     * @throws NullPointerException The passed list of packages is {@code null}.
+     * @param data                      List of packages to be displayed.
+     * @param clickListener             Click listener that shall be called when an item is clicked.
+     * @param deleteButtonClickListener Click listener that shall be called when the delete button
+     *                                  of an item is clicked.
+     * @throws NullPointerException     The passed list of packages is {@code null}.
      */
-    public PackagesRecyclerViewAdapter(ArrayList<Package> data, OnRecyclerItemClickListener<Package> clickListener) throws NullPointerException {
+    public PackagesRecyclerViewAdapter(ArrayList<Package> data, OnRecyclerItemClickListener<Package> clickListener, OnRecyclerItemClickListener<Package> deleteButtonClickListener) throws NullPointerException {
         if (data == null) {
             throw new NullPointerException();
         }
         this.data = data;
         this.clickListener = clickListener;
+        this.deleteButtonClickListener = deleteButtonClickListener;
     }
 
 
@@ -116,6 +133,12 @@ public class PackagesRecyclerViewAdapter extends RecyclerView.Adapter<PackagesRe
         holder.name.setText(p.getAppName());
         if (clickListener != null) {
             holder.itemView.setOnClickListener(view -> clickListener.onItemClick(p, position));
+        }
+        if (deleteButtonClickListener == null) {
+            holder.deleteButton.setVisibility(View.GONE);
+        }
+        else {
+            holder.deleteButton.setOnClickListener(view -> deleteButtonClickListener.onItemClick(p, position));
         }
     }
 

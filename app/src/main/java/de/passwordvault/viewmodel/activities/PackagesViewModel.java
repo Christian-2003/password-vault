@@ -1,8 +1,17 @@
 package de.passwordvault.viewmodel.activities;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.lifecycle.ViewModel;
+import com.google.android.material.tabs.TabLayout;
+
+import java.util.ArrayList;
+
+import de.passwordvault.R;
+import de.passwordvault.model.packages.PackageCollection;
+import de.passwordvault.model.packages.SerializablePackage;
+import de.passwordvault.model.packages.SerializablePackageCollection;
 import de.passwordvault.view.activities.PackagesActivity;
 
 
@@ -15,38 +24,40 @@ import de.passwordvault.view.activities.PackagesActivity;
 public class PackagesViewModel extends ViewModel {
 
     /**
-     * Attribute stores the name of the selected package. This is {@code null} when no package is
-     * selected.
+     * Attribute stores the packages that are selected by the activity.
      */
-    private String selectedPackageName;
+    private PackageCollection packages;
 
 
     /**
-     * Constructor instantiates a new view model.
+     * Constructor instantiates a new view model for the {@link PackagesActivity} and it's fragments.
      */
     public PackagesViewModel() {
-        selectedPackageName = null;
+        packages = null;
     }
 
 
     /**
-     * Method returns the name of the selected package. This is {@code null} if no package is
-     * selected.
+     * Method returns the packages that are selected. This is {@code null} only when they were not
+     * set previously.
      *
-     * @return  Name of the selected package.
+     * @return  Selected packages.
      */
-    public String getSelectedPackageName() {
-        return selectedPackageName;
+    public PackageCollection getPackages() {
+        return packages;
     }
 
     /**
-     * Method changes the name of the selected package. Pass {@code null} if no package shall be
-     * selected.
+     * Method changes the selected packages to the passed argument.
      *
-     * @param selectedPackageName   New selected package name.
+     * @param packages              New collection of selected packages.
+     * @throws NullPointerException The passed argument is {@code null}.
      */
-    public void setSelectedPackageName(String selectedPackageName) {
-        this.selectedPackageName = selectedPackageName;
+    public void setPackages(PackageCollection packages) throws NullPointerException {
+        if (packages == null) {
+            throw new NullPointerException();
+        }
+        this.packages = packages;
     }
 
 
@@ -58,12 +69,40 @@ public class PackagesViewModel extends ViewModel {
      */
     public boolean processArguments(Bundle args) {
         if (args == null) {
+            setPackages(new PackageCollection());
             return true;
         }
-        if (args.containsKey(PackagesActivity.KEY_PACKAGE)) {
-            setSelectedPackageName(args.getString(PackagesActivity.KEY_PACKAGE));
+        if (args.containsKey(PackagesActivity.KEY_PACKAGES)) {
+            try {
+                ArrayList<SerializablePackage> packages = (ArrayList<SerializablePackage>)args.getSerializable(PackagesActivity.KEY_PACKAGES);
+                SerializablePackageCollection serializablePackages = new SerializablePackageCollection(packages);
+                setPackages(serializablePackages.toPackageCollection());
+            }
+            catch (Exception e) {
+                Log.d("PA", e.getMessage());
+                return false;
+            }
         }
         return true;
+    }
+
+
+    /**
+     * Method updates the name of the passed tab at the specified position. The name is determined
+     * based on the specified position within the tab bar.
+     *
+     * @param tab       Tab whose name to update.
+     * @param position  Position of the tab within the tab bar.
+     */
+    public void updateTabName(TabLayout.Tab tab, int position) {
+        switch (position) {
+            case 0:
+                tab.setText(R.string.packages_selected_title);
+                break;
+            case 1:
+                tab.setText(R.string.packages_list_title);
+                break;
+        }
     }
 
 }

@@ -124,8 +124,9 @@
     <!-- Packages activity -->
     <string name="packages_title">Apps</string>
     <string name="packages_list_title">Installed apps</string>
-    <string name="packages_selected_title">Selected app</string>
+    <string name="packages_selected_title">Selected apps</string>
     <string name="packages_selected_none">None selected</string>
+    <string name="packages_list_none">None available</string>
 
 
     <!-- Login activity -->

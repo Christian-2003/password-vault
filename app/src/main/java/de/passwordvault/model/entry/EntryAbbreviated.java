@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Objects;
 import java.util.UUID;
 import de.passwordvault.model.Identifiable;
+import de.passwordvault.model.packages.PackageCollection;
 import de.passwordvault.model.storage.app.Storable;
 import de.passwordvault.model.storage.app.StorageException;
 import de.passwordvault.model.storage.csv.CsvBuilder;
@@ -58,10 +59,9 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
     private TagCollection tags;
 
     /**
-     * Attribute stores the name of the package of the app for which this entry stores login data.
-     * If no package is selected, this is be {@code null}.
+     * Attribute stores the packages to which the entry is assigned.
      */
-    private String anchorPackageName;
+    private PackageCollection packages;
 
 
     /**
@@ -75,7 +75,7 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
         setCreated(Calendar.getInstance());
         setChanged(getCreated());
         setTags(new TagCollection());
-        setAnchorPackageName(null);
+        setPackages(new PackageCollection());
     }
 
     /**
@@ -96,7 +96,7 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
         setCreated(entry.getCreated());
         setChanged(entry.getChanged());
         setTags(new TagCollection(entry.getTags()));
-        setAnchorPackageName(entry.getAnchorPackageName());
+        setPackages(entry.getPackages());
     }
 
 
@@ -247,28 +247,30 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
         if (tags == null) {
             throw new NullPointerException();
         }
-        this.tags = tags;
+        this.tags = new TagCollection(tags);
     }
 
     /**
-     * Method returns the package name of the app for which the entry stores login information.
-     * The method returns {@code null} if the entry does not store login information for any
-     * specific package.
+     * Method returns a collection containing all packages to which the entry is assigned.
      *
-     * @return  Name of the package for which this login information is stored.
+     * @return  List of packages.
      */
-    public String getAnchorPackageName() {
-        return anchorPackageName;
+    public PackageCollection getPackages() {
+        return packages;
     }
 
     /**
-     * Method changes the package name of the app for which the entry stores login information. Pass
-     * {@code null} if the entry does not store data for any application.
+     * Method changes the collection of packages to which the entry is assigned to the passed
+     * argument.
      *
-     * @param anchorPackageName Name of the package for which the entry stores login data.
+     * @param packages              New list of packages for the entry.
+     * @throws NullPointerException The passed argument is {@code null}.
      */
-    public void setAnchorPackageName(String anchorPackageName) {
-        this.anchorPackageName = anchorPackageName;
+    public void setPackages(PackageCollection packages) throws NullPointerException {
+        if (packages == null) {
+            throw new NullPointerException();
+        }
+        this.packages = new PackageCollection(packages);
     }
 
 
@@ -332,7 +334,7 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
         builder.append(changed.getTimeInMillis());
         builder.append(visible);
         builder.append(tags.toCsv());
-        builder.append(anchorPackageName == null ? "" : anchorPackageName);
+        builder.append(packages.toCsv());
 
         return builder.toString();
     }
@@ -383,7 +385,7 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
                         setTags(new TagCollection(cell));
                         break;
                     case 7:
-                        setAnchorPackageName(cell != null ? (cell.length() == 0 ? null : cell) : null);
+                        setPackages(new PackageCollection(cell));
                         break;
                 }
             }
@@ -409,7 +411,7 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
         builder.append("Edited");
         builder.append("IsVisible");
         builder.append("Tags");
-        builder.append("AnchorPackage");
+        builder.append("Packages");
 
         return builder.toString();
     }
