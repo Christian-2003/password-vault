@@ -1,8 +1,11 @@
 package de.passwordvault.model.packages;
 
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 import de.passwordvault.App;
@@ -64,9 +67,13 @@ public class PackagesManager {
     public ArrayList<Package> getPackages() {
         if (packagesCache == null) {
             packagesCache = new ArrayList<>();
-            List<PackageInfo> packages = packageManager.getInstalledPackages(PackageManager.GET_META_DATA);
-            for (PackageInfo p : packages) {
-                packagesCache.add(new Package(p.packageName, p.applicationInfo.name, getPackageLogo(p.packageName)));
+            List<ApplicationInfo> apps = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
+            for (ApplicationInfo app : apps) {
+                if ((app.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
+                    //Ignore system packages:
+                    continue;
+                }
+                packagesCache.add(new Package(app.packageName, getApplicationName(app), getPackageLogo(app.packageName)));
             }
         }
         return packagesCache;
@@ -84,6 +91,9 @@ public class PackagesManager {
     public Package getPackage(String packageName) throws NullPointerException {
         if (packageName == null) {
             throw new NullPointerException();
+        }
+        if (packagesCache == null) {
+            getPackages();
         }
         for (Package p : packagesCache) {
             if (p.getPackageName().equals(packageName)) {
@@ -103,11 +113,16 @@ public class PackagesManager {
      */
     public Drawable getPackageLogo(String packageName) {
         try {
-            return packageManager.getApplicationLogo(packageName);
+            return packageManager.getApplicationIcon(packageName);
         }
         catch (PackageManager.NameNotFoundException e) {
             return null;
         }
+    }
+
+
+    private String getApplicationName(ApplicationInfo info) {
+        return info.nonLocalizedLabel != null ? info.nonLocalizedLabel.toString() : info.loadLabel(packageManager).toString();
     }
 
 }

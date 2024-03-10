@@ -2,10 +2,8 @@ package de.passwordvault.viewmodel.activities;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import de.passwordvault.view.activities.PackagesActivity;
-import de.passwordvault.view.utils.ActivityCallbackListener;
 
 
 /**
@@ -22,42 +20,14 @@ public class PackagesViewModel extends ViewModel {
      */
     private String selectedPackageName;
 
-    /**
-     * Attribute stores the callback listener that shall be notified when the activity finishes.
-     */
-    private ActivityCallbackListener callbackListener;
-
 
     /**
      * Constructor instantiates a new view model.
      */
     public PackagesViewModel() {
         selectedPackageName = null;
-        callbackListener= null;
     }
 
-
-    /**
-     * Method returns the callback listener.
-     *
-     * @return  Callback listener.
-     */
-    public ActivityCallbackListener getCallbackListener() {
-        return callbackListener;
-    }
-
-    /**
-     * Method changes the callback listener to the passed argument.
-     *
-     * @param callbackListener      New callback listener.
-     * @throws NullPointerException The passed argument is {@code null}.
-     */
-    public void setCallbackListener(ActivityCallbackListener callbackListener) throws NullPointerException {
-        if (callbackListener == null) {
-            throw new NullPointerException();
-        }
-        this.callbackListener = callbackListener;
-    }
 
     /**
      * Method returns the name of the selected package. This is {@code null} if no package is
@@ -88,18 +58,7 @@ public class PackagesViewModel extends ViewModel {
      */
     public boolean processArguments(Bundle args) {
         if (args == null) {
-            return false;
-        }
-        if (args.containsKey(PackagesActivity.KEY_CALLBACK_LISTENER)) {
-            try {
-                setCallbackListener((ActivityCallbackListener)args.getSerializable(PackagesActivity.KEY_CALLBACK_LISTENER));
-            }
-            catch (ClassCastException e) {
-                return false;
-            }
-        }
-        else {
-            return false;
+            return true;
         }
         if (args.containsKey(PackagesActivity.KEY_PACKAGE)) {
             setSelectedPackageName(args.getString(PackagesActivity.KEY_PACKAGE));

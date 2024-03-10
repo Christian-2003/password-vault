@@ -51,6 +51,7 @@ public class PackagesRecyclerViewAdapter extends RecyclerView.Adapter<PackagesRe
             super(itemView);
             logo = itemView.findViewById(R.id.list_item_package_logo);
             name = itemView.findViewById(R.id.list_item_package_name);
+            this.itemView = itemView;
         }
 
     }

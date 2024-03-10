@@ -10,6 +10,7 @@ Small bugfixe.
 * Fixed a bug within HTML exprots, where `<h2>`-elements were not correctly closed.
 * Manifest cleanup.
 * Fixed app name from "PasswordVault" to "Password Vault".
+* Users can select an installed app with which an account shall be associated.
 
 <br>
 

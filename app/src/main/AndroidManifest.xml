@@ -46,4 +46,8 @@
         </service>
 
     </application>
+
+    <!-- Permission needed to select a target app for password manager -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
+
 </manifest>

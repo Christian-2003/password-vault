@@ -1,5 +1,11 @@
 package de.passwordvault.view.activities;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.DialogFragment;
@@ -7,8 +13,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,7 +39,6 @@ import de.passwordvault.model.tags.Tag;
 import de.passwordvault.model.tags.TagCollection;
 import de.passwordvault.model.tags.TagManager;
 import de.passwordvault.view.dialogs.EditTagDialog;
-import de.passwordvault.view.utils.ActivityCallbackListener;
 import de.passwordvault.view.utils.DetailsItemMoveCallback;
 import de.passwordvault.view.utils.adapters.DetailsRecyclerViewAdapter;
 import de.passwordvault.viewmodel.activities.AddEntryViewModel;
@@ -44,12 +54,17 @@ import de.passwordvault.view.utils.DialogCallbackListener;
  * @author  Christian-2003
  * @version 3.4.0
  */
-public class AddEntryActivity extends AppCompatActivity implements DialogCallbackListener, ActivityCallbackListener, Observer<ArrayList<Tag>> {
+public class AddEntryActivity extends AppCompatActivity implements DialogCallbackListener, Observer<ArrayList<Tag>> {
 
     /**
      * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} of this activity.
      */
     private AddEntryViewModel viewModel;
+
+    /**
+     * Attribute stores the activity result launcher used for launching an activity.
+     */
+    private ActivityResultLauncher<Intent> activityLauncher;
 
     /**
      * Attribute stores the adapter for the recycler view displaying all details.
@@ -96,13 +111,23 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
         setupTags();
         setupPackage();
 
+        activityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                Bundle results = result.getData().getExtras();
+                if (results != null && results.containsKey(PackagesActivity.KEY_PACKAGE)) {
+                    viewModel.getEntry().setAnchorPackageName(results.getString(PackagesActivity.KEY_PACKAGE));
+                    Log.d("AEA", "Set package to " + viewModel.getEntry().getAnchorPackageName());
+                    setupPackage();
+                }
+            }
+        });
+
         findViewById(R.id.add_entry_package_edit_button).setOnClickListener(view -> {
             Intent intent = new Intent(AddEntryActivity.this, PackagesActivity.class);
-            intent.putExtra(PackagesActivity.KEY_CALLBACK_LISTENER, AddEntryActivity.this);
             if (AddEntryActivity.this.viewModel.getEntry().getAnchorPackageName() != null) {
                 intent.putExtra(PackagesActivity.KEY_PACKAGE, AddEntryActivity.this.viewModel.getEntry().getAnchorPackageName());
             }
-            AddEntryActivity.this.startActivity(intent);
+            activityLauncher.launch(intent);
         });
 
         //Add ClickListeners to close the activity:
@@ -172,20 +197,6 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
     }
 
     /**
-     * Method is called when the launched activity has finished with a positive result.
-     *
-     * @param activity  Activity which finished positively.
-     */
-    @Override
-    public void onPositiveCallback(AppCompatActivity activity) {
-        if (activity instanceof PackagesActivity) {
-            PackagesActivity packagesActivity = (PackagesActivity)activity;
-            viewModel.getEntry().setAnchorPackageName(packagesActivity.getSelectedPackageName());
-            setupPackage();
-        }
-    }
-
-    /**
      * Method is called whenever the {@linkplain DialogFragment} is closed through the
      * 'negative' button (i.e. the CANCEL button).
      *
@@ -210,15 +221,6 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
         }
     }
 
-    /**
-     * Method is called when the launched activity has finished with a negative result.
-     *
-     * @param activity  Activity which finished negatively.
-     */
-    @Override
-    public void onNegativeCallback(AppCompatActivity activity) {
-
-    }
 
     /**
      * Method processes the user input and saves the edited entry to {@linkplain EntryManager}.

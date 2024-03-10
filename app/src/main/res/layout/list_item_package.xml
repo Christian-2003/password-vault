@@ -13,7 +13,6 @@
         android:layout_width="@dimen/image_button_width"
         android:layout_height="@dimen/image_button_height"
         android:layout_margin="@dimen/default_margin"
-        android:src="@mipmap/ic_launcher_round"
         app:shapeAppearanceOverlay="@style/rounded_corners"/>
 
     <TextView
