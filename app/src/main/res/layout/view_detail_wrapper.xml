@@ -6,8 +6,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/default_margin"
-    android:layout_marginBottom="@dimen/default_margin">
+    android:padding="@dimen/default_padding">
 
 
     <!-- LinearLayout contains general info about the detail -->

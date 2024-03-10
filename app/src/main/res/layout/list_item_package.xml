@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:padding="@dimen/default_padding"
     android:background="?attr/selectableItemBackground">
 
     <com.google.android.material.imageview.ShapeableImageView

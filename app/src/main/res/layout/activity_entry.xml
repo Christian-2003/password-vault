@@ -57,27 +57,36 @@
                 android:orientation="vertical"
                 style="@style/background">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/entry_name"
-                    style="@style/pv.text.variant"/>
+                    android:padding="@dimen/default_padding"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/entry_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/placeholder_name"
-                    style="@style/pv.text"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/entry_name"
+                        style="@style/pv.text.variant"/>
+
+                    <TextView
+                        android:id="@+id/entry_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/placeholder_name"
+                        style="@style/pv.text"/>
+
+                </LinearLayout>
+
+                <View
+                    style="@style/divider"/>
 
                 <LinearLayout
                     android:id="@+id/entry_description_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/default_padding"
                     android:orientation="vertical">
-
-                    <View
-                        style="@style/divider"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -94,14 +103,15 @@
 
                 </LinearLayout>
 
+                <View
+                    style="@style/divider"/>
+
                 <LinearLayout
                     android:id="@+id/entry_tag_group"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/default_padding"
                     android:orientation="vertical">
-
-                    <View
-                        style="@style/divider"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -179,34 +189,50 @@
                     android:orientation="vertical"
                     style="@style/background">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/entry_created"
-                        style="@style/pv.text.variant"/>
+                        android:padding="@dimen/default_padding"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/entry_created"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/placeholder_date"
-                        style="@style/pv.text"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/entry_created"
+                            style="@style/pv.text.variant"/>
+
+                        <TextView
+                            android:id="@+id/entry_created"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/placeholder_date"
+                            style="@style/pv.text"/>
+
+                    </LinearLayout>
 
                     <View
                         style="@style/divider"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/entry_changed"
-                        style="@style/pv.text.variant"/>
+                        android:padding="@dimen/default_padding"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/entry_changed"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/placeholder_date"
-                        style="@style/pv.text"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/entry_changed"
+                            style="@style/pv.text.variant"/>
+
+                        <TextView
+                            android:id="@+id/entry_changed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/placeholder_date"
+                            style="@style/pv.text"/>
+                        
+                    </LinearLayout>
 
                 </LinearLayout>
 

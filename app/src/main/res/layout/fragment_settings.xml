@@ -52,7 +52,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="@dimen/default_padding">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -84,14 +85,15 @@
 
                 </LinearLayout>
 
+                <View
+                    style="@style/divider"/>
+
                 <LinearLayout
                     android:id="@+id/settings_security_biometrics_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/default_padding"
                     android:orientation="vertical">
-
-                    <View
-                        style="@style/divider"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -130,19 +132,20 @@
 
                 </LinearLayout>
 
+                <View
+                    style="@style/divider"/>
+
                 <LinearLayout
                     android:id="@+id/settings_security_password_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <View
-                        style="@style/divider"/>
-
                     <LinearLayout
                         android:id="@+id/settings_security_password_clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:padding="@dimen/default_padding"
                         android:orientation="vertical"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
@@ -177,6 +180,7 @@
                         android:id="@+id/settings_security_backup_clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:padding="@dimen/default_padding"
                         android:orientation="vertical"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
@@ -221,6 +225,7 @@
                         android:id="@+id/settings_security_restore"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:padding="@dimen/default_padding"
                         android:orientation="vertical"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
@@ -260,6 +265,7 @@
                     android:id="@+id/settings_security_quality_gates"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/default_padding"
                     android:orientation="vertical"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
@@ -287,6 +293,7 @@
                     android:id="@+id/settings_security_password_analysis_clickable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/default_padding"
                     android:orientation="vertical"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
@@ -334,6 +341,7 @@
                         android:id="@+id/settings_html_export_clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:padding="@dimen/default_padding"
                         android:orientation="vertical"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
@@ -373,6 +381,7 @@
                     android:id="@+id/settings_data_delete_clickable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/default_padding"
                     android:orientation="vertical"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
@@ -416,6 +425,7 @@
                     android:id="@+id/settings_license_clickable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/default_padding"
                     android:orientation="vertical"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
@@ -442,6 +452,7 @@
                     android:id="@+id/settings_used_software_clickable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/default_padding"
                     android:orientation="vertical"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
@@ -468,6 +479,7 @@
                     android:id="@+id/settings_open_source_clickable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/default_padding"
                     android:orientation="vertical"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
@@ -494,6 +506,7 @@
                     android:id="@+id/settings_bug_report_clickable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/default_padding"
                     android:orientation="vertical"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
@@ -520,6 +533,7 @@
                     android:id="@+id/settings_update_clickable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/default_padding"
                     android:orientation="vertical"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
@@ -542,18 +556,26 @@
                 <View
                     style="@style/divider"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/settings_about_version"
-                    style="@style/pv.text"/>
+                    android:padding="@dimen/default_padding"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/settings_version"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/settings_about_version"
-                    style="@style/pv.text.variant"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_about_version"
+                        style="@style/pv.text"/>
+
+                    <TextView
+                        android:id="@+id/settings_version"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_about_version"
+                        style="@style/pv.text.variant"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 

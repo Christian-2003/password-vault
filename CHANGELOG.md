@@ -4,13 +4,17 @@
 
 ## 3.5.0 (XXXX-XX-XX)
 ###### Release Highlights
-Small bugfixe.
+Major visual enhancements regarding boundaries of clickable contents.
 
 ###### Features
 * Fixed a bug within HTML exprots, where `<h2>`-elements were not correctly closed.
 * Manifest cleanup.
 * Fixed app name from "PasswordVault" to "Password Vault".
 * Users can select an installed app with which an account shall be associated.
+* Moved padding from container to views.
+* Added clipping child-views to container bounds.
+* Selectable item backgrounds now fill entire parent-container.
+* Enhanced boundaries for swipe action backgrounds in `AddEntryActivity`
 
 <br>
 

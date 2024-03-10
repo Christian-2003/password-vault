@@ -54,92 +54,121 @@
                 android:orientation="vertical"
                 style="@style/background">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/add_entry_name_hint"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/entry_name">
+                    android:padding="@dimen/default_padding"
+                    android:orientation="vertical">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/add_entry_name"
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/add_entry_name_hint"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/add_entry_description_hint"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/entry_description">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/add_entry_description"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/entry_tags"
-                    android:paddingTop="@dimen/default_padding"
-                    android:layout_marginTop="@dimen/default_margin"
-                    style="@style/pv.text.variant"/>
-
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/add_entry_tag_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    
-                    <ImageButton
-                        android:id="@+id/add_entry_button_add_tag"
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_add"
-                        style="@style/pv.button.image_button"/>
+                        android:hint="@string/entry_name">
 
-                </com.google.android.material.chip.ChipGroup>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/add_entry_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/add_entry_description_hint"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/entry_description">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/add_entry_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
 
                 <View
                     style="@style/divider"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/entry_package"
-                    style="@style/pv.text.variant"/>
+                    android:padding="@dimen/default_padding"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/entry_tags"
+                        android:paddingTop="@dimen/default_padding"
+                        android:layout_marginTop="@dimen/default_margin"
+                        style="@style/pv.text.variant"/>
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/add_entry_tag_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageButton
+                            android:id="@+id/add_entry_button_add_tag"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_add"
+                            style="@style/pv.button.image_button"/>
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                </LinearLayout>
+
+                <View
+                    style="@style/divider"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:padding="@dimen/default_padding"
+                    android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/add_entry_package_none"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:text="@string/entry_package_none"
-                        style="@style/pv.text"/>
-
-                    <include
-                        android:id="@+id/add_entry_package_selected"
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        layout="@layout/list_item_package"/>
-
-                    <ImageButton
-                        android:id="@+id/add_entry_package_edit_button"
-                        android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_edit"
-                        style="@style/pv.button.image_button"/>
+                        android:layout_height="wrap_content"
+                        android:text="@string/entry_package"
+                        style="@style/pv.text.variant"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/add_entry_package_none"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:text="@string/entry_package_none"
+                            style="@style/pv.text"/>
+
+                        <include
+                            android:id="@+id/add_entry_package_selected"
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            layout="@layout/list_item_package"/>
+
+                        <ImageButton
+                            android:id="@+id/add_entry_package_edit_button"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_edit"
+                            style="@style/pv.button.image_button"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
                 
