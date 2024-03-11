@@ -32,6 +32,11 @@ public class PackagesSelectedFragment extends Fragment implements OnRecyclerItem
     private PackagesViewModel viewModel;
 
     /**
+     * Attribute stores the inflated view of the fragment.
+     */
+    private View view;
+
+    /**
      * Attribute stores the adapter for the recycler view displaying the selected packages.
      */
     private PackagesRecyclerViewAdapter adapter;
@@ -48,16 +53,10 @@ public class PackagesSelectedFragment extends Fragment implements OnRecyclerItem
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_packages_selected, container, false);
+        view = inflater.inflate(R.layout.fragment_packages_selected, container, false);
         viewModel = new ViewModelProvider(requireActivity()).get(PackagesViewModel.class);
 
-        view.findViewById(R.id.packages_selected_none).setVisibility(viewModel.getPackages().size() == 0 ? View.VISIBLE : View.GONE);
-
-        adapter = new PackagesRecyclerViewAdapter(viewModel.getPackages(), null, this);
-        RecyclerView recyclerView = view.findViewById(R.id.packages_selected_recycler_view);
-        recyclerView.setVisibility(viewModel.getPackages().size() == 0 ? View.GONE : View.VISIBLE);
-        recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(requireActivity(), DividerItemDecoration.VERTICAL));
+        setupList();
 
         return view;
     }
@@ -74,6 +73,10 @@ public class PackagesSelectedFragment extends Fragment implements OnRecyclerItem
         try {
             viewModel.getPackages().remove(item);
             adapter.notifyDataSetChanged();
+            if (viewModel.getPackages().isEmpty()) {
+                //Removed last package:
+                setupList();
+            }
         }
         catch (IndexOutOfBoundsException e) {
             //This should not be triggered. Better be safe than sorry...
@@ -85,7 +88,23 @@ public class PackagesSelectedFragment extends Fragment implements OnRecyclerItem
      * Method informs the adapter of the fragment, that a package was added to the selected packages.
      */
     public void notifyPackageAdded() {
+        if (viewModel.getPackages().size() == 1) {
+            //Added first package:
+            setupList();
+        }
         adapter.notifyItemInserted(adapter.getItemCount());
+    }
+
+
+    private void setupList() {
+        view.findViewById(R.id.packages_selected_none).setVisibility(viewModel.getPackages().size() == 0 ? View.VISIBLE : View.GONE);
+
+        RecyclerView recyclerView = view.findViewById(R.id.packages_selected_recycler_view);
+        recyclerView.setVisibility(viewModel.getPackages().size() == 0 ? View.GONE : View.VISIBLE);
+        if (adapter == null) {
+            adapter = new PackagesRecyclerViewAdapter(viewModel.getPackages(), null, this);
+            recyclerView.setAdapter(adapter);
+        }
     }
 
 }

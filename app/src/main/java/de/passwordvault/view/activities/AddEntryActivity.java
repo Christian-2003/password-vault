@@ -103,7 +103,6 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
         ItemTouchHelper.Callback callback = new DetailsItemMoveCallback(adapter, true, true);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(detailsContainer);
-        detailsContainer.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
         detailsContainer.setAdapter(adapter);
 
         setupTags();
@@ -115,7 +114,9 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
                 if (results != null && results.containsKey(PackagesActivity.KEY_PACKAGES)) {
                     try {
                         ArrayList<SerializablePackage> packages = (ArrayList<SerializablePackage>)results.getSerializable(PackagesActivity.KEY_PACKAGES);
-                        viewModel.getEntry().setPackages(new SerializablePackageCollection(packages).toPackageCollection());
+                        if (packages != null) {
+                            viewModel.getEntry().setPackages(new SerializablePackageCollection(packages).toPackageCollection());
+                        }
                     }
                     catch (Exception e) {
                         Log.d("AddEntryActivity", e.getMessage());

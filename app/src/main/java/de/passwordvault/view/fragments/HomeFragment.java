@@ -33,8 +33,14 @@ import de.passwordvault.view.utils.OnRecyclerItemClickListener;
  */
 public class HomeFragment extends Fragment implements Observer<ArrayList<EntryAbbreviated>>, OnRecyclerItemClickListener<EntryAbbreviated> {
 
+    /**
+     * Attribute stores the adapter for the recycler view displaying the most recently edited entries.
+     */
     private EntriesRecyclerViewAdapter adapter;
 
+    /**
+     * Attribute stores the inflated view of the fragment.
+     */
     private View view;
 
 
@@ -87,7 +93,6 @@ public class HomeFragment extends Fragment implements Observer<ArrayList<EntryAb
 
         adapter = new EntriesRecyclerViewAdapter(EntryManager.getInstance().getMostRecentlyEditedEntries(), this);
         RecyclerView recyclerView = view.findViewById(R.id.home_recently_changed_container);
-        recyclerView.addItemDecoration(new DividerItemDecoration(requireActivity(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
         return view;
     }

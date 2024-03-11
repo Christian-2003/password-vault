@@ -12,12 +12,14 @@ import de.passwordvault.R;
 import de.passwordvault.model.detail.Detail;
 import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.model.entry.EntryManager;
+import de.passwordvault.model.packages.PackageCollection;
 import de.passwordvault.model.tags.Tag;
 import de.passwordvault.model.tags.TagCollection;
 import de.passwordvault.view.utils.DetailsItemMoveCallback;
 import de.passwordvault.view.utils.adapters.DetailsRecyclerViewAdapter;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
 import de.passwordvault.view.utils.Utils;
+import de.passwordvault.view.utils.adapters.PackagesLogoRecyclerViewAdapter;
 import de.passwordvault.viewmodel.activities.EntryViewModel;
 import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
@@ -180,13 +182,15 @@ public class EntryActivity extends AppCompatActivity implements DialogCallbackLi
         //Add tags:
         populateTagsContainer(entry.getTags());
 
+        //Add packages:
+        populatePackagesContainer(entry.getPackages());
+
         //Add visible details:
         RecyclerView visibleDetailsContainer = findViewById(R.id.entry_details_container);
         DetailsRecyclerViewAdapter visibleDetailsAdapter = new DetailsRecyclerViewAdapter(viewModel.getEntry().getVisibleDetails(), this, this, this);
         ItemTouchHelper.Callback visibleDetailsCallback = new DetailsItemMoveCallback(visibleDetailsAdapter, false, false);
         ItemTouchHelper visibleDetailsTouchHelper = new ItemTouchHelper(visibleDetailsCallback);
         visibleDetailsTouchHelper.attachToRecyclerView(visibleDetailsContainer);
-        visibleDetailsContainer.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
         visibleDetailsContainer.setAdapter(visibleDetailsAdapter);
 
         //Add hidden details:
@@ -195,7 +199,6 @@ public class EntryActivity extends AppCompatActivity implements DialogCallbackLi
         ItemTouchHelper.Callback hiddenDetailsCallback = new DetailsItemMoveCallback(hiddenDetailsAdapter, false, false);
         ItemTouchHelper hiddenDetailsTouchHelper = new ItemTouchHelper(hiddenDetailsCallback);
         hiddenDetailsTouchHelper.attachToRecyclerView(hiddenDetailsContainer);
-        hiddenDetailsContainer.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
         hiddenDetailsContainer.setAdapter(hiddenDetailsAdapter);
 
         //Optionally show hidden details:
@@ -230,6 +233,19 @@ public class EntryActivity extends AppCompatActivity implements DialogCallbackLi
                 chip.setText(tag.getName());
                 chips.addView(chip);
             }
+        }
+    }
+
+
+    private void populatePackagesContainer(PackageCollection packages) {
+        if (packages.isEmpty()) {
+            findViewById(R.id.entry_packages_container).setVisibility(View.GONE);
+        }
+        else {
+            findViewById(R.id.entry_packages_container).setVisibility(View.VISIBLE);
+            RecyclerView recyclerView = findViewById(R.id.entry_packages_recycler_view);
+            PackagesLogoRecyclerViewAdapter adapter = new PackagesLogoRecyclerViewAdapter(packages);
+            recyclerView.setAdapter(adapter);
         }
     }
 

@@ -73,7 +73,6 @@ public class PasswordAnalysisDuplicatesFragment extends Fragment implements OnRe
         RecyclerView recyclerView = view.findViewById(R.id.duplicate_passwords_recycler_view);
         recyclerView.setVisibility(duplicatesFound ? View.VISIBLE : View.GONE);
         recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(requireActivity(), DividerItemDecoration.VERTICAL));
 
         return view;
     }

@@ -98,7 +98,6 @@ public class EntriesFragment extends Fragment implements OnRecyclerItemClickList
 
         adapter = new EntriesRecyclerViewAdapter(EntryManager.getInstance().getData(), this);
         RecyclerView recyclerView = view.findViewById(R.id.abbreviated_entries);
-        recyclerView.addItemDecoration(new DividerItemDecoration(requireActivity(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
 
         //Setup button to sort the entries:

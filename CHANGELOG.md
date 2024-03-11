@@ -10,7 +10,7 @@ Major visual enhancements regarding boundaries of clickable contents.
 * Fixed a bug within HTML exprots, where `<h2>`-elements were not correctly closed.
 * Manifest cleanup.
 * Fixed app name from "PasswordVault" to "Password Vault".
-* Users can select an installed app with which an account shall be associated.
+* Users can select installed apps that shall be associated with an entry for the password manager.
 * Moved padding from container to views.
 * Added clipping child-views to container bounds.
 * Selectable item backgrounds now fill entire parent-container.

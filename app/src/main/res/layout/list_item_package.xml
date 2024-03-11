@@ -5,35 +5,44 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="@dimen/default_padding"
-    android:background="?attr/selectableItemBackground">
+    android:orientation="vertical">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/list_item_package_logo"
-        android:layout_width="@dimen/image_button_width"
-        android:layout_height="@dimen/image_button_height"
-        android:layout_margin="@dimen/default_margin"
-        android:layout_weight="0"
-        app:shapeAppearanceOverlay="@style/rounded_corners"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/default_padding"
+        android:background="?attr/selectableItemBackground"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/list_item_package_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:layout_marginStart="@dimen/default_margin"
-        android:text="@string/app_name"
-        style="@style/pv.text"/>
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/list_item_package_logo"
+            android:layout_width="@dimen/image_button_width"
+            android:layout_height="@dimen/image_button_height"
+            android:layout_margin="@dimen/default_margin"
+            android:layout_weight="0"
+            app:shapeAppearanceOverlay="@style/rounded_corners"/>
 
-    <ImageButton
-        android:id="@+id/list_item_package_delete_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_weight="0"
-        android:src="@drawable/ic_delete"
-        style="@style/pv.button.image_button"/>
+        <TextView
+            android:id="@+id/list_item_package_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/default_margin"
+            android:text="@string/app_name"
+            style="@style/pv.text"/>
+
+        <ImageButton
+            android:id="@+id/list_item_package_delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0"
+            android:src="@drawable/ic_delete"
+            style="@style/pv.button.image_button"/>
+
+    </LinearLayout>
+
+    <View style="@style/divider"/>
 
 </LinearLayout>

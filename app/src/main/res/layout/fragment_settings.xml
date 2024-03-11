@@ -172,20 +172,20 @@
                     style="@style/divider"/>
 
                 <LinearLayout
+                    android:id="@+id/settings_security_backup_clickable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="@dimen/default_padding"
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:id="@+id/settings_security_backup_clickable"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/default_padding"
-                        android:orientation="vertical"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -217,20 +217,20 @@
                     style="@style/divider"/>
 
                 <LinearLayout
+                    android:id="@+id/settings_security_restore"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="@dimen/default_padding"
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:id="@+id/settings_security_restore"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/default_padding"
-                        android:orientation="vertical"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -333,19 +333,19 @@
                 style="@style/background">
 
                 <LinearLayout
+                    android:id="@+id/settings_html_export_clickable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="@dimen/default_padding"
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:id="@+id/settings_html_export_clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/default_padding"
                         android:orientation="vertical"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
                         android:layout_weight="1">
 
                         <TextView

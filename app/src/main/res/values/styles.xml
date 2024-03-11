@@ -82,7 +82,8 @@
     <style name="divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
-        <item name="android:background">@color/on_background_variant</item>
+        <item name="android:background">@color/pv_theme_outlineVariant</item>
+        <item name="android:layout_marginHorizontal">@dimen/default_padding</item>
     </style>
 
     <!-- Style for backgrounds -->
