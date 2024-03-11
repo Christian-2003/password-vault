@@ -120,7 +120,7 @@
     <!-- Packages activity -->
     <string name="packages_title">Apps</string>
     <string name="packages_list_title">Installierte Apps</string>
-    <string name="packages_selected_title">Ausgewählte apps</string>
+    <string name="packages_selected_title">Ausgewählte Apps</string>
     <string name="packages_selected_none">Keine ausgewählt</string>
     <string name="packages_list_none">Keine Verfügbar</string>
 

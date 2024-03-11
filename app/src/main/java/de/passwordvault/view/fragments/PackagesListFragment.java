@@ -7,13 +7,16 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
 import de.passwordvault.model.packages.Package;
 import de.passwordvault.model.packages.PackagesManager;
+import de.passwordvault.view.activities.PackagesActivity;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
+import de.passwordvault.view.utils.adapters.PackagesFragmentStateAdapter;
 import de.passwordvault.view.utils.adapters.PackagesRecyclerViewAdapter;
 import de.passwordvault.viewmodel.activities.PackagesViewModel;
 
@@ -69,6 +72,10 @@ public class PackagesListFragment extends Fragment implements OnRecyclerItemClic
     public void onItemClick(Package item, int position) {
         if (!viewModel.getPackages().containsPackageName(item.getPackageName())) {
             viewModel.getPackages().add(item);
+            FragmentActivity activity = requireActivity();
+            if (activity instanceof PackagesActivity) {
+                ((PackagesActivity)activity).notifyPackageAdded();
+            }
         }
     }
 

@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import de.passwordvault.R;
 import de.passwordvault.model.packages.SerializablePackageCollection;
+import de.passwordvault.view.fragments.PackagesSelectedFragment;
 import de.passwordvault.view.utils.adapters.PackagesFragmentStateAdapter;
 import de.passwordvault.viewmodel.activities.PackagesViewModel;
 
@@ -35,6 +37,11 @@ public class PackagesActivity extends AppCompatActivity {
      */
     private PackagesViewModel viewModel;
 
+    /**
+     * Attribute stores the adapter for the view pager displaying the tabs.
+     */
+    private PackagesFragmentStateAdapter adapter;
+
 
     /**
      * Method is called whenever a new view is created.
@@ -56,7 +63,7 @@ public class PackagesActivity extends AppCompatActivity {
 
         findViewById(R.id.packages_back_button).setOnClickListener(view -> finish());
 
-        PackagesFragmentStateAdapter adapter = new PackagesFragmentStateAdapter(this);
+        adapter = new PackagesFragmentStateAdapter(this);
         ViewPager2 viewPager = findViewById(R.id.packages_view_pager);
         viewPager.setAdapter(adapter);
 
@@ -75,6 +82,17 @@ public class PackagesActivity extends AppCompatActivity {
         intent.putExtra(PackagesActivity.KEY_PACKAGES, packages);
         setResult(RESULT_OK, intent);
         super.finish();
+    }
+
+
+    /**
+     * Method notifies the first fragment of changes to the items.
+     */
+    public void notifyPackageAdded() {
+        Fragment fragment = adapter.getItemAt(0);
+        if (fragment instanceof PackagesSelectedFragment) {
+            ((PackagesSelectedFragment)fragment).notifyPackageAdded();
+        }
     }
 
 }

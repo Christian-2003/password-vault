@@ -72,12 +72,20 @@ public class PackagesSelectedFragment extends Fragment implements OnRecyclerItem
     @Override
     public void onItemClick(Package item, int position) {
         try {
-            viewModel.getPackages().remove(position);
-            adapter.notifyItemRemoved(position);
+            viewModel.getPackages().remove(item);
+            adapter.notifyDataSetChanged();
         }
         catch (IndexOutOfBoundsException e) {
             //This should not be triggered. Better be safe than sorry...
         }
+    }
+
+
+    /**
+     * Method informs the adapter of the fragment, that a package was added to the selected packages.
+     */
+    public void notifyPackageAdded() {
+        adapter.notifyItemInserted(adapter.getItemCount());
     }
 
 }

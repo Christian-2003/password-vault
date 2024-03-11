@@ -20,7 +20,13 @@ public class PackagesFragmentStateAdapter extends FragmentStateAdapter {
     /**
      * Field stores the number of pages that the adapter can handle.
      */
-    private static final int PAGE_COUNT = 3;
+    private static final int PAGE_COUNT = 2;
+
+
+    /**
+     * Attribute stores the fragments that are displayed by the view pager of this adapter.
+     */
+    private Fragment[] fragments;
 
 
     /**
@@ -31,6 +37,7 @@ public class PackagesFragmentStateAdapter extends FragmentStateAdapter {
      */
     public PackagesFragmentStateAdapter(AppCompatActivity context) {
         super(context);
+        fragments = new Fragment[PAGE_COUNT];
     }
 
 
@@ -46,11 +53,16 @@ public class PackagesFragmentStateAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 1:
-                return new PackagesListFragment();
+                if (fragments[position] == null) {
+                    fragments[position] = new PackagesListFragment();
+                }
             case 0:
             default:
-                return new PackagesSelectedFragment();
+                if (fragments[position] == null) {
+                    fragments[position] = new PackagesSelectedFragment();
+                }
         }
+        return fragments[position];
     }
 
     /**
@@ -61,6 +73,22 @@ public class PackagesFragmentStateAdapter extends FragmentStateAdapter {
     @Override
     public int getItemCount() {
         return PAGE_COUNT;
+    }
+
+
+    /**
+     * Method returns the fragment at the specified position. If the fragment at the specified
+     * position has not been instantiated yet, {@code null} is returned.
+     *
+     * @param position                      Position of the fragment to return.
+     * @return                              Fragment at the specified position.
+     * @throws IndexOutOfBoundsException    The specified position is out of bounds.
+     */
+    public Fragment getItemAt(int position) throws IndexOutOfBoundsException {
+        if (position < 0 || position >= PAGE_COUNT) {
+            throw new IndexOutOfBoundsException();
+        }
+        return fragments[position];
     }
 
 }

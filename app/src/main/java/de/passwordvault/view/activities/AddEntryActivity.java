@@ -38,6 +38,7 @@ import de.passwordvault.model.tags.TagManager;
 import de.passwordvault.view.dialogs.EditTagDialog;
 import de.passwordvault.view.utils.DetailsItemMoveCallback;
 import de.passwordvault.view.utils.adapters.DetailsRecyclerViewAdapter;
+import de.passwordvault.view.utils.adapters.PackagesLogoRecyclerViewAdapter;
 import de.passwordvault.viewmodel.activities.AddEntryViewModel;
 import de.passwordvault.model.detail.Detail;
 import de.passwordvault.view.dialogs.ConfirmDeleteDetailDialog;
@@ -113,10 +114,11 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
                 Bundle results = result.getData().getExtras();
                 if (results != null && results.containsKey(PackagesActivity.KEY_PACKAGES)) {
                     try {
-                        SerializablePackageCollection packages = (SerializablePackageCollection)results.getSerializable(PackagesActivity.KEY_PACKAGES);
-                        viewModel.getEntry().setPackages(packages.toPackageCollection());
+                        ArrayList<SerializablePackage> packages = (ArrayList<SerializablePackage>)results.getSerializable(PackagesActivity.KEY_PACKAGES);
+                        viewModel.getEntry().setPackages(new SerializablePackageCollection(packages).toPackageCollection());
                     }
                     catch (Exception e) {
+                        Log.d("AddEntryActivity", e.getMessage());
                         return;
                     }
                     setupPackage();
@@ -299,23 +301,16 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
      * Method initializes the UI to display the package of the entry.
      */
     private void setupPackage() {
-        LinearLayout selectedPackage = findViewById(R.id.add_entry_package_selected);
-        /*
-        selectedPackage.setVisibility(viewModel.getEntry().getAnchorPackageName() == null ? View.GONE : View.VISIBLE);
-        findViewById(R.id.add_entry_package_none).setVisibility(viewModel.getEntry().getAnchorPackageName() == null ? View.VISIBLE : View.GONE);
-        if (viewModel.getEntry().getAnchorPackageName() != null) {
-            Package p = PackagesManager.getInstance().getPackage(viewModel.getEntry().getAnchorPackageName());
-            if (p == null) {
-                ((TextView)selectedPackage.findViewById(R.id.list_item_package_name)).setText(viewModel.getEntry().getAnchorPackageName());
-                return;
-            }
-            ((TextView)selectedPackage.findViewById(R.id.list_item_package_name)).setText(p.getAppName());
-            if (p.getLogo() != null) {
-                ((ShapeableImageView)selectedPackage.findViewById(R.id.list_item_package_logo)).setImageDrawable(p.getLogo());
-            }
+        PackageCollection packages = viewModel.getEntry().getPackages();
+
+        findViewById(R.id.add_entry_package_none).setVisibility(packages.isEmpty() ? View.VISIBLE : View.GONE);
+
+        RecyclerView recyclerView = findViewById(R.id.add_entry_package_recycler_view);
+        recyclerView.setVisibility(packages.isEmpty() ? View.GONE : View.VISIBLE);
+        if (!packages.isEmpty()) {
+            PackagesLogoRecyclerViewAdapter adapter = new PackagesLogoRecyclerViewAdapter(viewModel.getEntry().getPackages());
+            recyclerView.setAdapter(adapter);
         }
-        */
-        //TODO: Show multiple packages...
     }
 
 
