@@ -64,6 +64,16 @@ public class Detail implements Identifiable, Storable, Serializable {
      */
     protected boolean visible;
 
+    /**
+     * Attribute stores whether the detail shall be used as password for the password manager.
+     */
+    protected boolean password;
+
+    /**
+     * Attribute stores whether the detail shall be used as username for the password manager.
+     */
+    protected boolean username;
+
 
     /**
      * Constructor instantiates a new Detail with a random type 4 UUID, and no contents.
@@ -77,6 +87,8 @@ public class Detail implements Identifiable, Storable, Serializable {
         type = DetailType.UNDEFINED;
         visible = true;
         obfuscated = false;
+        password = false;
+        username = false;
     }
 
     /**
@@ -89,7 +101,16 @@ public class Detail implements Identifiable, Storable, Serializable {
         if (detail == null) {
             throw new NullPointerException();
         }
-        copyAttributesFromDetail(detail);
+        this.uuid = detail.getUuid();
+        this.name = detail.getName();
+        this.content = detail.getContent();
+        this.created = detail.getCreated();
+        this.changed = detail.getChanged();
+        this.type = detail.getType();
+        this.visible = detail.isVisible();
+        this.obfuscated = detail.isObfuscated();
+        this.password = detail.isPassword();
+        this.username = detail.isUsername();
     }
 
     /**
@@ -269,6 +290,42 @@ public class Detail implements Identifiable, Storable, Serializable {
         this.visible = visible;
     }
 
+    /**
+     * Method returns whether the detail is used as password by the password manager.
+     *
+     * @return  Whether the detail is used as password by the password manager.
+     */
+    public boolean isPassword() {
+        return password;
+    }
+
+    /**
+     * Method changes whether the detail is used as password by the password manager.
+     *
+     * @param password  Whether the detail is used as password by the password manager.
+     */
+    public void setPassword(boolean password) {
+        this.password = password;
+    }
+
+    /**
+     * Method returns whether the detail is used as username by the password manager.
+     *
+     * @return  Whether the detail is used as username by the password manager.
+     */
+    public boolean isUsername() {
+        return username;
+    }
+
+    /**
+     * Method changes whether the detail is used as username by the password manager.
+     *
+     * @param username  Whether the detail is used as username by the password manager.
+     */
+    public void setUsername(boolean username) {
+        this.username = username;
+    }
+
 
     /**
      * Method tests whether the UUID of the passed detail is identical to the UUID of this detail.
@@ -297,23 +354,6 @@ public class Detail implements Identifiable, Storable, Serializable {
      */
     public void notifyDataChange() {
         changed = Calendar.getInstance();
-    }
-
-
-    /**
-     * Method copies all attributes from the passed {@link Detail} to this instance.
-     *
-     * @param detail    Detail whose attributes shall be copied to this instance.
-     */
-    private void copyAttributesFromDetail(@NonNull Detail detail) {
-        this.uuid = detail.getUuid();
-        this.name = detail.getName();
-        this.content = detail.getContent();
-        this.created = detail.getCreated();
-        this.changed = detail.getChanged();
-        this.type = detail.getType();
-        this.visible = detail.isVisible();
-        this.obfuscated = detail.isObfuscated();
     }
 
 
@@ -368,6 +408,8 @@ public class Detail implements Identifiable, Storable, Serializable {
         builder.append(type.getPersistentId());
         builder.append(visible);
         builder.append(obfuscated);
+        builder.append(username);
+        builder.append(password);
 
         return builder.toString();
     }
@@ -424,6 +466,12 @@ public class Detail implements Identifiable, Storable, Serializable {
                         break;
                     case 7:
                         setObfuscated(Boolean.parseBoolean(cell));
+                        break;
+                    case 8:
+                        setUsername(Boolean.parseBoolean(cell));
+                        break;
+                    case 9:
+                        setPassword(Boolean.parseBoolean(cell));
                         break;
                 }
             }

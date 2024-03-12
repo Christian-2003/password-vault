@@ -14,7 +14,8 @@ Major visual enhancements regarding boundaries of clickable contents.
 * Moved padding from container to views.
 * Added clipping child-views to container bounds.
 * Selectable item backgrounds now fill entire parent-container.
-* Enhanced boundaries for swipe action backgrounds in `AddEntryActivity`
+* Enhanced boundaries for swipe action backgrounds in `AddEntryActivity`.
+* Users can select details as password / username for the autofill service.
 
 <br>
 

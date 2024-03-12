@@ -3,7 +3,7 @@
 <resources>
 
     <!-- Top-level style which applies to all components of the application -->
-    <style name="pv"></style>
+    <style name="pv"/>
 
 
 
@@ -33,7 +33,7 @@
 
 
     <!-- Styles for buttons -->
-    <style name="pv.button"></style>
+    <style name="pv.button"/>
 
     <style name="pv.button.image_button">
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
@@ -63,11 +63,23 @@
 
 
 
+    <!-- Style for icons -->
+    <style name="pv.icon">
+        <item name="android:layout_height">@dimen/pin_icon_size</item>
+        <item name="android:layout_width">@dimen/pin_icon_size</item>
+    </style>
+
+    <style name="pv.icon.pin" parent="pv.icon">
+        <item name="android:tint">@color/on_background_variant</item>
+    </style>
+
+
+
     <!-- Style for eyecatcher -->
     <style name="pv.eyecatcher">
         <item name="android:background">@drawable/shape_important</item>
-        <item name="android:layout_height">14dp</item>
-        <item name="android:layout_width">14dp</item>
+        <item name="android:layout_height">@dimen/pin_icon_size</item>
+        <item name="android:layout_width">@dimen/pin_icon_size</item>
     </style>
 
     <style name="pv.eyecatcher.pill">

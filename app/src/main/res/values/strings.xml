@@ -152,6 +152,8 @@
     <string name="detail_dialog_obfuscated">Obfuscated</string>
     <string name="detail_dialog_encrypted">Encrypted</string>
     <string name="detail_dialog_visible">Visible</string>
+    <string name="detail_dialog_username">Use as username for autofill</string>
+    <string name="detail_dialog_password">Use as password for autofill</string>
 
 
     <!-- Tag dialog -->

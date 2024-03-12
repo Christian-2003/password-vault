@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -58,6 +59,11 @@ public class DetailsRecyclerViewAdapter extends RecyclerView.Adapter<DetailsRecy
         public ImageButton obfuscateButton;
 
         /**
+         * Attribute stores the icon indicating the state for the password manager.
+         */
+        public ImageView icon;
+
+        /**
          * Attribute stores the inflated view that is being modeled by this view holder.
          */
         public View itemView;
@@ -73,6 +79,7 @@ public class DetailsRecyclerViewAdapter extends RecyclerView.Adapter<DetailsRecy
             name = itemView.findViewById(R.id.entry_detail_item_name);
             content = itemView.findViewById(R.id.entry_detail_item_content);
             obfuscateButton = itemView.findViewById(R.id.entry_detail_show_button);
+            icon = itemView.findViewById(R.id.entry_detail_item_icon);
             this.itemView = itemView;
         }
 
@@ -215,6 +222,13 @@ public class DetailsRecyclerViewAdapter extends RecyclerView.Adapter<DetailsRecy
         else {
             holder.obfuscateButton.setVisibility(View.GONE);
             holder.content.setText(detail.getContent());
+        }
+        holder.icon.setVisibility(detail.isUsername() || detail.isPassword() ? View.VISIBLE : View.GONE);
+        if (detail.isUsername()) {
+            holder.icon.setImageDrawable(AppCompatResources.getDrawable(holder.icon.getContext(), R.drawable.ic_email));
+        }
+        else if(detail.isPassword()) {
+            holder.icon.setImageDrawable(AppCompatResources.getDrawable(holder.icon.getContext(), R.drawable.ic_password));
         }
         if (itemLongPressClickListener != null) {
             holder.itemView.setOnLongClickListener(view -> {

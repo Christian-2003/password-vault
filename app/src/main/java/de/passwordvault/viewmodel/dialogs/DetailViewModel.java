@@ -25,7 +25,7 @@ import de.passwordvault.view.utils.DialogCallbackListener;
  * Class implements the {@linkplain ViewModel} for the {@link DetailDialog}-class.
  *
  * @author  Christian-2003
- * @version 3.3.0
+ * @version 3.5.0
  */
 public class DetailViewModel extends ViewModel {
 
@@ -139,6 +139,11 @@ public class DetailViewModel extends ViewModel {
         }
         detailTypeTextView.setAdapter(new ArrayAdapter<>(view.getContext(), android.R.layout.simple_spinner_dropdown_item, Detail.getTypes()));
 
+        CheckBox usernameCheckbox = view.findViewById(R.id.detail_dialog_username);
+        usernameCheckbox.setChecked(detail.isUsername());
+        CheckBox passwordCheckbox = view.findViewById(R.id.detail_dialog_password);
+        passwordCheckbox.setChecked(detail.isPassword());
+
         obfuscatedCheckBox.setOnClickListener(view1 -> obfuscatedEnteredAutomatically = false);
 
         //Make EditText for content obfuscated when CheckBox is checked:
@@ -247,6 +252,10 @@ public class DetailViewModel extends ViewModel {
         boolean obfuscated = obfuscatedCheckBox.isChecked();
         CheckBox visibleCheckBox = view.findViewById(R.id.detail_dialog_visible);
         boolean visible = visibleCheckBox.isChecked();
+        CheckBox usernameCheckbox = view.findViewById(R.id.detail_dialog_username);
+        boolean username = usernameCheckbox.isChecked();
+        CheckBox passwordCheckbox = view.findViewById(R.id.detail_dialog_password);
+        boolean password = passwordCheckbox.isChecked();
 
         boolean inputCorrect = true;
 
@@ -276,13 +285,15 @@ public class DetailViewModel extends ViewModel {
         }
 
         //Test whether anything was changed at all:
-        if (!detail.getName().equals(name) || !detail.getContent().equals(content) || detail.getType() != detailType || detail.isObfuscated() != obfuscated || detail.isVisible() != visible) {
+        if (!detail.getName().equals(name) || !detail.getContent().equals(content) || detail.getType() != detailType || detail.isObfuscated() != obfuscated || detail.isVisible() != visible || detail.isUsername() != username || detail.isPassword() != password) {
             detail.notifyDataChange();
             detail.setName(name);
             detail.setContent(content);
             detail.setType(detailType);
             detail.setObfuscated(obfuscated);
             detail.setVisible(visible);
+            detail.setUsername(username);
+            detail.setPassword(password);
         }
         return true;
     }

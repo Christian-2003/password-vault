@@ -14,6 +14,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="image_button_width">48dp</dimen>
     <dimen name="image_button_height">48dp</dimen>
+    <dimen name="pin_icon_size">16dp</dimen>
 
     <dimen name="progress_bar_thickness">9dp</dimen>
 

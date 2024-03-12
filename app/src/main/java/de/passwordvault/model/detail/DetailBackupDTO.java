@@ -102,6 +102,8 @@ public class DetailBackupDTO extends Detail {
         builder.append(type.getPersistentId());
         builder.append(visible);
         builder.append(obfuscated);
+        builder.append(username);
+        builder.append(password);
 
         return builder.toString();
     }
@@ -189,6 +191,8 @@ public class DetailBackupDTO extends Detail {
         builder.append("TypeID");
         builder.append("IsVisible");
         builder.append("IsObfuscated");
+        builder.append("IsUsername");
+        builder.append("IsPassword");
 
         return builder.toString();
     }

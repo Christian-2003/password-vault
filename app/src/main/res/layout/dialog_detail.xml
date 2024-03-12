@@ -70,6 +70,22 @@ class.
             android:checked="true"
             style="@style/pv.text"/>
 
+        <CheckBox
+            android:id="@+id/detail_dialog_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/detail_dialog_username"
+            android:checked="false"
+            style="@style/pv.text"/>
+
+        <CheckBox
+            android:id="@+id/detail_dialog_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/detail_dialog_password"
+            android:checked="false"
+            style="@style/pv.text"/>
+
     </LinearLayout>
 
 </ScrollView>

@@ -148,6 +148,8 @@
     <string name="detail_dialog_obfuscated">Unkenntlich</string>
     <string name="detail_dialog_encrypted">Verschlüsselt</string>
     <string name="detail_dialog_visible">Sichtbar</string>
+    <string name="detail_dialog_username">Als Benutzernamen für automatisches Ausfüllen verwenden</string>
+    <string name="detail_dialog_password">Als Passwort für automatisches Ausfüllen verwenden</string>
 
 
     <!-- Tag dialog -->
