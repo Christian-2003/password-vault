@@ -1,8 +1,11 @@
 package de.passwordvault.viewmodel.fragments;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.service.autofill.AutofillService;
 import android.util.Log;
+import android.view.autofill.AutofillManager;
 import android.widget.Toast;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
@@ -268,6 +271,17 @@ public class SettingsViewModel extends ViewModel {
      */
     public boolean useBiometrics() {
         return Account.getInstance().useBiometrics();
+    }
+
+
+    /**
+     * Method tests whether the app is used as the autofill manager.
+     *
+     * @return  Whether Password Vault is used as autofill manager.
+     */
+    public boolean useAutofillService() {
+        AutofillManager manager = (AutofillManager)App.getContext().getSystemService(AutofillManager.class);
+        return manager != null && manager.hasEnabledAutofillServices();
     }
 
 }

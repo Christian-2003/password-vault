@@ -19,6 +19,9 @@ Major visual enhancements regarding boundaries of clickable contents.
 * Added security policy.
 * Added issue-template.
 * Fixed bug where the color of checkmarks for tags was not correct.
+* Users can enable Password Vault as autofill service from settings.
+* Users can enable / disable caching for autofill service.
+* Fixed a bug where the most recently edited entries were not calculated correctly.
 
 <br>
 

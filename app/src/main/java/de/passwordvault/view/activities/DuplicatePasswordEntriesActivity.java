@@ -73,7 +73,6 @@ public class DuplicatePasswordEntriesActivity extends AppCompatActivity implemen
         EntriesRecyclerViewAdapter adapter = new EntriesRecyclerViewAdapter(entries, this);
         RecyclerView recyclerView = findViewById(R.id.duplicate_password_entries_recycler_view);
         recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
     }
 
 

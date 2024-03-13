@@ -60,6 +60,14 @@
     <string name="settings_security_password_analysis">Password security analysis</string>
     <string name="settings_security_password_analysis_info">Perform a security analysis for all passwords</string>
 
+    <string name="settings_autofill">Autofill</string>
+    <string name="settings_autofill_enable">Enable autofill service</string>
+    <string name="settings_autofill_enable_info">Use app to autofill userdata</string>
+    <string name="settings_autofill_enable_info_extended">Autofill enables a quick way of autofilling userdata (such as usernames or passwords) with the data that is provided in this app.</string>
+    <string name="settings_autofill_enable_error">Cannot enable autofill service</string>
+    <string name="settings_autofill_caching">Use caching</string>
+    <string name="settings_autofill_caching_info">Accelerate autofill by caching data</string>
+
     <string name="settings_export">Export</string>
     <string name="settings_export_html">Export data</string>
     <string name="settings_export_html_info">Export to readable HTML format</string>

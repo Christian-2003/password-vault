@@ -18,7 +18,7 @@ import de.passwordvault.model.storage.encryption.EncryptionException;
  * retrieved through {@link #getInstance()}.
  *
  * @author  Christian-2003
- * @version 3.4.0
+ * @version 3.5.0
  */
 public class EntryManager implements CachableManager<EntryExtended>, Observable<ArrayList<EntryAbbreviated>>, PersistableManager {
 
@@ -540,7 +540,7 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
         }
         mostRecentlyEditedEntriesCache.clear();
         EntryAbbreviated mostRecentlyChanged = abbreviatedEntriesArrayListCache.get(0);
-        for (int i = 1; i < abbreviatedEntriesArrayListCache.size(); i++) {
+        for (int i = 0; i < abbreviatedEntriesArrayListCache.size(); i++) {
             if (abbreviatedEntriesArrayListCache.get(i).getChanged().compareTo(mostRecentlyChanged.getChanged()) > 0) {
                 mostRecentlyChanged = abbreviatedEntriesArrayListCache.get(i);
             }
@@ -548,7 +548,16 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
         mostRecentlyEditedEntriesCache.add(mostRecentlyChanged);
 
         for (int i = 0; i < NUMBER_OF_RECENTLY_EDITED_ENTRIES - 1; i++) {
-            EntryAbbreviated newMostRecentlyChanged = abbreviatedEntriesArrayListCache.get(0);
+            EntryAbbreviated newMostRecentlyChanged = null;
+            for (int j = 0; j < abbreviatedEntriesArrayListCache.size(); j++) {
+                if (abbreviatedEntriesArrayListCache.get(j).getChanged().compareTo(mostRecentlyChanged.getChanged()) < 0) {
+                    newMostRecentlyChanged = abbreviatedEntriesArrayListCache.get(j);
+                    break;
+                }
+            }
+            if (newMostRecentlyChanged == null) {
+                break;
+            }
             for (int j = 1; j < abbreviatedEntriesArrayListCache.size(); j++) {
                 if (abbreviatedEntriesArrayListCache.get(j).getChanged().compareTo(newMostRecentlyChanged.getChanged()) > 0 && abbreviatedEntriesArrayListCache.get(j).getChanged().compareTo(mostRecentlyChanged.getChanged()) < 0) {
                     newMostRecentlyChanged = abbreviatedEntriesArrayListCache.get(j);

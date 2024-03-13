@@ -59,6 +59,14 @@
     <string name="settings_security_password_analysis">Passwortsicherheitsanalyse</string>
     <string name="settings_security_password_analysis_info">Sicherheit sämtlicher Passwörter analysieren</string>
 
+    <string name="settings_autofill">Automatisches Ausfüllen</string>
+    <string name="settings_autofill_enable">Automatisches Ausfüllen aktivieren</string>
+    <string name="settings_autofill_enable_info">Verwende die App zum Ausfüllen von Benutzerdaten</string>
+    <string name="settings_autofill_enable_info_extended">Automatisches Ausfüllen ermöglicht ein schnelleres Ausfüllen von Benutzerdaten (beispielsweise Benutzernamen und Passwörter) durch die Daten die in dieser App hinterlegt sind.</string>
+    <string name="settings_autofill_enable_error">Automatisches Ausfüllen kann nicht aktiviert werden</string>
+    <string name="settings_autofill_caching">Caching verwenden</string>
+    <string name="settings_autofill_caching_info">Automatisches Ausfüllen durch Caches beschleunigen</string>
+
     <string name="settings_export">Exportieren</string>
     <string name="settings_export_html">Daten exportieren</string>
     <string name="settings_export_html_info">Daten in ein lesbares HTML-Format exportieren</string>

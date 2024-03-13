@@ -23,6 +23,11 @@ public class Configuration {
     private static final String KEY_CONVERTED_STORAGE_1 = "converted_storage_1";
 
     /**
+     * Field stores the key with which to store whether autofill shall use caching.
+     */
+    private static final String KEY_AUTOFILL_CACHING = "autofill_caching";
+
+    /**
      * Field stores the shared preferences instance from which to retrieve data.
      */
     private static final SharedPreferences preferences = App.getContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
@@ -46,6 +51,26 @@ public class Configuration {
      */
     public static boolean getConvertedStorage1() {
         return preferences.getBoolean(KEY_CONVERTED_STORAGE_1, false);
+    }
+
+    /**
+     * Method changes whether the autofill service shall use caching.
+     *
+     * @param autofillCaching   Whether the autofill service shall use caching.
+     */
+    public static void setUseAutofillCaching(boolean autofillCaching) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(KEY_AUTOFILL_CACHING, autofillCaching);
+        editor.apply();
+    }
+
+    /**
+     * Method returns whether the autofill service uses caching.
+     *
+     * @return  Whether the autofill service uses caching.
+     */
+    public static boolean useAutofillCaching() {
+        return preferences.getBoolean(KEY_AUTOFILL_CACHING, true);
     }
 
 }

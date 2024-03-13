@@ -1,6 +1,9 @@
 package de.passwordvault.view.fragments;
 
 import android.app.Activity;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
@@ -12,19 +15,27 @@ import androidx.biometric.BiometricPrompt;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import java.io.Serializable;
 import java.util.Objects;
+
+import de.passwordvault.App;
 import de.passwordvault.BuildConfig;
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.Account;
+import de.passwordvault.model.storage.Configuration;
 import de.passwordvault.model.storage.backup.XmlBackupRestorer;
 import de.passwordvault.view.activities.PasswordAnalysisActivity;
 import de.passwordvault.view.activities.QualityGatesActivity;
@@ -82,12 +93,19 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
      */
     private View view;
 
+    /**
+     * Attribute stores the activity result launcher to activate the autofill-service.
+     */
+    private final ActivityResultLauncher<Intent> autofillActivityLauncher;
+
 
     /**
      * Default constructor instantiates a new SettingsFragment.
      */
     public SettingsFragment() {
-        // Required empty public constructor
+        autofillActivityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            setupAutofill();
+        });
     }
 
 
@@ -157,6 +175,8 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         view.findViewById(R.id.settings_html_export_clickable).setOnClickListener(view -> createFile(SELECT_FILE_TO_EXPORT_TO_HTML, "text/html", getString(R.string.settings_export_file)));
         view.findViewById(R.id.settings_html_export_info).setOnClickListener(view -> showInfoDialog(R.string.settings_export_html, R.string.settings_export_html_info_extended));
         view.findViewById(R.id.settings_data_delete_clickable).setOnClickListener(view -> deleteData());
+
+        setupAutofill();
 
         biometricPrompt = new BiometricPrompt(requireActivity(), viewModel.getExecutor(), new BiometricPrompt.AuthenticationCallback() {
             @Override
@@ -408,6 +428,31 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
 
 
     /**
+     * Method sets up the autofill container for the fragment.
+     */
+    private void setupAutofill() {
+        view.findViewById(R.id.settings_autofill_enable_button).setOnClickListener(view -> showInfoDialog(R.string.settings_autofill_enable, R.string.settings_autofill_enable_info_extended));
+        LinearLayout autofillEnableContainer = view.findViewById(R.id.settings_autofill_enable_clickable);
+        autofillEnableContainer.setVisibility(viewModel.useAutofillService() ? View.GONE : View.VISIBLE);
+        autofillEnableContainer.setOnClickListener(view -> {
+            Intent intent = new Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE, Uri.parse("package: " + App.getContext().getPackageName()));
+            try {
+                autofillActivityLauncher.launch(intent);
+            }
+            catch (Exception e) {
+                Toast.makeText(getContext(), R.string.settings_autofill_enable_error, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        view.findViewById(R.id.settings_autofill_enabled_container).setVisibility(viewModel.useAutofillService() ? View.VISIBLE : View.GONE);
+
+        MaterialSwitch cachingSwitch = view.findViewById(R.id.settings_autofill_caching_switch);
+        cachingSwitch.setChecked(Configuration.useAutofillCaching());
+        cachingSwitch.setOnCheckedChangeListener((view, checked) -> Configuration.setUseAutofillCaching(checked));
+    }
+
+
+    /**
      * Method opens the device's default file explorer to select a directory.
      *
      * @param requestCode   Request code to be used when choosing a directory.
@@ -532,6 +577,12 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         Account.getInstance().save();
         this.view.findViewById(R.id.settings_security_password_container).setVisibility(View.GONE);
         this.view.findViewById(R.id.settings_security_biometrics_container).setVisibility(View.GONE);
+    }
+
+
+    private void changeAutofillService() {
+        Intent intent = new Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE, Uri.parse("package:" + App.getContext().getPackageName()));
+        startActivity(intent);
     }
 
 }
