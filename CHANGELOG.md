@@ -16,6 +16,9 @@ Major visual enhancements regarding boundaries of clickable contents.
 * Selectable item backgrounds now fill entire parent-container.
 * Enhanced boundaries for swipe action backgrounds in `AddEntryActivity`.
 * Users can select details as password / username for the autofill service.
+* Added security policy.
+* Added issue-template.
+* Fixed bug where the color of checkmarks for tags was not correct.
 
 <br>
 

@@ -10,8 +10,10 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -266,7 +268,11 @@ public class AddEntryActivity extends AppCompatActivity implements DialogCallbac
             Chip chip = new Chip(this);
             chip.setText(tag.getName());
             chip.setCheckable(true);
-            chip.setCheckedIcon(AppCompatResources.getDrawable(this, R.drawable.ic_check));
+            Drawable checkedIcon = AppCompatResources.getDrawable(this, R.drawable.ic_check);
+            if (checkedIcon != null) {
+                checkedIcon.setTint(getResources().getColor(R.color.pv_theme_onBackground));
+            }
+            chip.setCheckedIcon(checkedIcon);
             chip.setCheckedIconVisible(true);
 
             for (Tag entryTag : viewModel.getTags()) {

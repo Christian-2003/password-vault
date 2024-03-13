@@ -29,6 +29,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
+                <!-- Image view displays the state of the detail regarding the autofill service -->
                 <ImageView
                     android:id="@+id/entry_detail_item_icon"
                     android:layout_gravity="start|center"
