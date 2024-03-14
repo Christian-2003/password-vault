@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -158,6 +159,7 @@ public class EntriesFragment extends Fragment implements OnRecyclerItemClickList
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        Log.d("EntriesFragment", "Removed observer");
         EntryManager.getInstance().removeObserver(this);
     }
 
@@ -233,6 +235,7 @@ public class EntriesFragment extends Fragment implements OnRecyclerItemClickList
         if (o == null) {
             throw new NullPointerException("Null is invalid Observable");
         }
+        Log.d("EntriesFragment", "Observer updated");
         adapter.notifyDataSetChanged();
     }
 

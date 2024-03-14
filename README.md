@@ -28,7 +28,7 @@ PasswordVault allows you to securely store your most sensitive account data on y
 ###### Used Technologies
 The application is developed with Java and XML through the Android Studio IDE. Therefore, the app is built using Gradle.
 
-The app uses Google's Material Design to impement a comfortable and visually pleasing design, that users can intuitively work with.
+The app uses Google's Material Design to implement a comfortable and visually pleasing design, that users can intuitively work with.
 
 Furthermore, all data is encrypted through the Advanced Encryption Standard (AES) with Galois / Counter Mode (GCM) with a key size of 256 bits.
 
@@ -44,7 +44,7 @@ The project contains a [changelog](CHANGELOG.md) which documents all changes tha
 ###### Install the App
 If you want to use the app, you can download the APK file [here](https://github.com/Christian-2003/password-vault/releases/latest). For further details about the installation as well as system requirements, take a look at the [installation guide](docs/manual/Install%20and%20Run%20the%20App.md).
 
-Information about app updates an be found in the installation guide as well. Keep in mind that updating from version 3.1.0 or lower requries special attention as described [here](docs/manual/Update%20to%20Version%203.2.0.md).
+Information about app updates can be found in the installation guide as well. Keep in mind that updating from version 3.1.0 or lower requries special attention as described [here](docs/manual/Update%20to%20Version%203.2.0.md).
 
 Steps to build and run the project through the Android Studio IDE are covered within the installation guide as well: [Cloning This Repository](docs/manual/Install%20and%20Run%20the%20App.md#cloning-this-repository).
 

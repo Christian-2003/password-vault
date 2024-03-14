@@ -31,7 +31,7 @@ import de.passwordvault.model.tags.TagManager;
  * handled entries with the restored entries!!!
  *
  * @author  Christian-2003
- * @version 3.3.0
+ * @version 3.5.0
  */
 public class XmlBackupRestorer extends XmlBackupConfiguration{
 
@@ -247,6 +247,11 @@ public class XmlBackupRestorer extends XmlBackupConfiguration{
         //Ignore last line in for-loop, as it only contains spacing for the closing tag!
         for (String s : lines) {
             EntryAbbreviated abbreviated = new EntryAbbreviated();
+            if (s.isEmpty() || s == lines[lines.length - 1]) {
+                //Comparison by reference in condition above is wanted!
+                //Ignore last line since last line only contains the spaces to the "</entries>"-tag:
+                continue;
+            }
             try {
                 abbreviated.fromStorable(decrypt(s));
             }

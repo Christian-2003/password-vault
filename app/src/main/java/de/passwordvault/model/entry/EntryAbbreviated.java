@@ -1,5 +1,7 @@
 package de.passwordvault.model.entry;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -352,6 +354,7 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
         if (s == null) {
             throw new NullPointerException();
         }
+        Log.d("Entries", "Restoring entry:" + s);
         CsvParser parser = new CsvParser(s);
         ArrayList<String> cells = parser.parseCsv();
 

@@ -16,12 +16,12 @@ The minimum required Android version to run PasswordVault is **Android 12L** (SD
 
 Android Version 12 consists of two feature releases, 12 and 12L respectively. PasswordVault requires the feature release 12L from March 2022. Read more about Android releases [here](https://developer.android.com/tools/releases/platforms).
 
-IF you do not know which Android version is installed on your device, got to **Settings > About phone > Software information > Android version**. If this does not work on your device, please consolidate your device's manual in order to find your current Android version.
+If you do not know which Android version is installed on your device, go to **Settings > About phone > Software information > Android version**. If this does not work on your device, please consolidate your device's manual in order to find your current Android version.
 
 <br>
 
 ## Install the Release APK
-The recommended way to install PasswordVault, is to simply download the release APK file from GitHub. To do so, follow these steps:
+The recommended way to install PasswordVault is to simply download the release APK file from GitHub. To do so, follow these steps:
 
 ###### Download the Release APK
 You can download the newest release from the GitHub [releases](https://github.com/Christian-2003/password-vault/releases/latest)-page. We recommend to always download the newest release, as this contains all features and security updates. However, you can also download a previous release from [here](https://github.com/Christian-2003/password-vault/releases).
@@ -59,7 +59,7 @@ After cloning the repository, you can open the project in Android Studio and run
 Alternatively, you can build your own release with the newly developed features.
 
 ###### General Info for Running the Project
-Please not that many features within the repository are being developed. Such features may not work (correctly) to some extend and can even break your entire installation. Therefore, be cautious when doing this, we do not take any responsibility for any damage that might occur!
+Please note that many features within the repository are being developed. Such features may not work (correctly) to some extend and can even break your entire installation. Therefore, be cautious when doing this, we do not take any responsibility for any damage that might occur!
 
 Furthermore, features may be changed or removed which could result in a complete loss of your data.
 

@@ -63,6 +63,9 @@ public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecy
      */
     private final ArrayList<EntryAbbreviated> data;
 
+    /**
+     * Attribute stores the filtered data which is being displayed.
+     */
     private ArrayList<EntryAbbreviated> filteredData;
 
     /**
@@ -78,7 +81,7 @@ public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecy
      * @param clickListener         Item click listener which is called when an item is clicked.
      * @throws NullPointerException The passed array list is {@code null}.
      */
-    public  EntriesRecyclerViewAdapter(ArrayList<EntryAbbreviated> data, OnRecyclerItemClickListener<EntryAbbreviated> clickListener) throws NullPointerException {
+    public EntriesRecyclerViewAdapter(ArrayList<EntryAbbreviated> data, OnRecyclerItemClickListener<EntryAbbreviated> clickListener) throws NullPointerException {
         if (data == null) {
             throw new NullPointerException();
         }

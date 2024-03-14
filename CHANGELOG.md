@@ -22,6 +22,7 @@ Major visual enhancements regarding boundaries of clickable contents.
 * Users can enable Password Vault as autofill service from settings.
 * Users can enable / disable caching for autofill service.
 * Fixed a bug where the most recently edited entries were not calculated correctly.
+* Fixed a bug where restoring an encrypted backup created two empty accounts.
 
 <br>
 

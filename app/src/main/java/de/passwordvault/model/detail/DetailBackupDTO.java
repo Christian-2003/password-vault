@@ -164,6 +164,12 @@ public class DetailBackupDTO extends Detail {
                     case 8:
                         setObfuscated(Boolean.parseBoolean(cell));
                         break;
+                    case 9:
+                        setUsername(Boolean.parseBoolean(cell));
+                        break;
+                    case 10:
+                        setPassword(Boolean.parseBoolean(cell));
+                        break;
                 }
             }
             catch (Exception e) {
