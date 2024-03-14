@@ -159,7 +159,6 @@ public class EntriesFragment extends Fragment implements OnRecyclerItemClickList
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.d("EntriesFragment", "Removed observer");
         EntryManager.getInstance().removeObserver(this);
     }
 
@@ -235,8 +234,7 @@ public class EntriesFragment extends Fragment implements OnRecyclerItemClickList
         if (o == null) {
             throw new NullPointerException("Null is invalid Observable");
         }
-        Log.d("EntriesFragment", "Observer updated");
-        adapter.notifyDataSetChanged();
+        adapter.getFilter().filter(((TextInputEditText)view.findViewById(R.id.entries_search_bar)).getText());
     }
 
 }

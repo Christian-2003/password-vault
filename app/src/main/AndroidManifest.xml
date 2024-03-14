@@ -34,7 +34,7 @@
 
         <!-- Autofill Service for password manager -->
         <service
-            android:name=".model.autofill.PasswordVaultAutofillService"
+            android:name=".service.autofill.PasswordVaultAutofillService"
             android:exported="true"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_AUTOFILL_SERVICE">
