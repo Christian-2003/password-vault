@@ -1,9 +1,7 @@
 <img src="../img/icon.png" height="150" align="right"/>
 
-# Update to Version 3.2.0
-This page explains how to update to the newest version of PasswordVault, version 3.2.0 . You can [download it here](https://github.com/Christian-2003/password-vault/releases/tag/v3.2.0) or update inside PasswordVault by clicking **Settings > Software Update**.
-
-If you update from version 3.1.0 or lower to any other version, please follow the [update instructions](#update-from-version-310-or-lower).
+# Update from Version 3.1.0
+This page describes how to update from version 3.1.0 or lower to the newer versions of Password Vault, since this requires special steps that you need to take in order to keep your data.
 
 <br>
 
@@ -30,30 +28,6 @@ You have successfully updated PasswordVault to version 3.2.0 or higher. Thank yo
 
 <br>
 
-## New Features and Improvements
-The following new features and improvements are included in version 3.2.0 and onwards:
-
-###### Optional Login
-To further increase the safety of your data within PasswordVault, you can now require login to the application. Activate the login by clicking **Settings > Require login** and enter a password which will be used for authentication whenever you want to open the app.
-
-You can easily reset your password by clicking **Settings > Change password**.
-
-If your device supports biometric authentication (class 3), you can add biometric login to the application. Simply click **Settings > Use biometrics**. Please note that this will only work if biometrics are already configured on your device. If you have done this, whenever you want to open the app, you can login using your preferred biometric authentication method.
-
-If class 3 biometrics are not available on your device, the respecitve options will not be shown within the application.
-
-
-###### Optionally Encrypted Backup
-In order to ensure maximum security when you backup your data, backups can be encrypted. To do so, click **Settings > Create backup** and enter a password afterwards. If you do not enter a password, the backup will be unencrypted.
-
-Once you want to restore an encrypted backup, click **Settings > Restore backup**. The application prompts you to enter the password which was used for encryption. If you entered the correct password, the encrypted backup will be restored.
-
-
-###### Changes to UI
-To meet the Material Design 3 standards, changes were made to multiple UI elements.
-
-<br>
-
 ***
-2024-02-23  
+2024-03-15  
 &copy; Christian-2003
