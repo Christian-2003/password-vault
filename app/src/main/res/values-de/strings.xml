@@ -61,7 +61,7 @@
 
     <string name="settings_autofill">Automatisches Ausfüllen</string>
     <string name="settings_autofill_enable">Automatisches Ausfüllen aktivieren</string>
-    <string name="settings_autofill_enable_info">Verwende die App zum Ausfüllen von Benutzerdaten</string>
+    <string name="settings_autofill_enable_info">App zum automatischen Ausfüllen von Benutzerdaten verwenden</string>
     <string name="settings_autofill_enable_info_extended">Automatisches Ausfüllen ermöglicht ein schnelleres Ausfüllen von Benutzerdaten (beispielsweise Benutzernamen und Passwörter) durch die Daten die in dieser App hinterlegt sind.</string>
     <string name="settings_autofill_enable_error">Automatisches Ausfüllen kann nicht aktiviert werden</string>
     <string name="settings_autofill_caching">Caching verwenden</string>

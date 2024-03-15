@@ -4,7 +4,8 @@
 
 ## 3.5.0 (XXXX-XX-XX)
 ###### Release Highlights
-Major visual enhancements regarding boundaries of clickable contents.
+Major visual enhancements regarding boundaries of clickable contents. Furthermore, the app can be used as autofill service providing suggestions for
+data (e.g. usernames, passwords or email addresses) to the user of other apps.
 
 ###### Features
 * Fixed a bug within HTML exprots, where `<h2>`-elements were not correctly closed.
@@ -23,6 +24,7 @@ Major visual enhancements regarding boundaries of clickable contents.
 * Users can enable / disable caching for autofill service.
 * Fixed a bug where the most recently edited entries were not calculated correctly.
 * Fixed a bug where restoring an encrypted backup created two empty accounts.
+* App can be used as autofill service.
 
 <br>
 
