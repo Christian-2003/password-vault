@@ -250,4 +250,9 @@
     <!-- HTML export -->
     <string name="html_export_document_title">Exportierte Daten</string>
 
+
+    <!-- Autofill service -->
+    <string name="autofill_username_presentation">{value}</string>
+    <string name="autofill_password_presentation">Password für {value}</string>
+
 </resources>

@@ -1,6 +1,7 @@
 package de.passwordvault.service.autofill;
 
 import android.app.assist.AssistStructure;
+import android.content.res.Resources;
 import android.os.CancellationSignal;
 import android.service.autofill.AutofillService;
 import android.service.autofill.Dataset;
@@ -14,6 +15,7 @@ import android.widget.RemoteViews;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import de.passwordvault.R;
 import de.passwordvault.model.detail.Detail;
 import de.passwordvault.model.detail.DetailType;
 import de.passwordvault.model.entry.EntryAbbreviated;
@@ -36,16 +38,6 @@ public class FillRequestHandler {
      * Attribute stores the autofill service for which the handler is created.
      */
     private final AutofillService autofillService;
-
-    /**
-     * Attribute stores the view which is used to present the username to the app calling the service.
-     */
-    private RemoteViews usernamePresentation;
-
-    /**
-     * Attribute stores the view which is used to present the password to the app calling the service.
-     */
-    private RemoteViews passwordPresentation;
 
 
     /**
@@ -74,11 +66,6 @@ public class FillRequestHandler {
         AssistStructure structure = contexts.get(contexts.size() - 1).getStructure();
         ParsedStructure parsedStructure = parseStructure(structure);
         ArrayList<UserData> userData = fetchData(parsedStructure.getPackageName());
-
-        usernamePresentation = new RemoteViews(autofillService.getPackageName(), android.R.layout.simple_list_item_1);
-        usernamePresentation.setTextViewText(android.R.id.text1, "my_username");
-        passwordPresentation = new RemoteViews(autofillService.getPackageName(), android.R.layout.simple_list_item_1);
-        passwordPresentation.setTextViewText(android.R.id.text1, "Password for my_username");
 
         try {
             FillResponse response = buildFillResponse(userData, parsedStructure);
@@ -111,7 +98,7 @@ public class FillRequestHandler {
      * @return          Generated fill response.
      */
     private FillResponse buildFillResponse(ArrayList<UserData> userData, ParsedStructure structure) {
-        FillResponse.Builder builder = new FillResponse.Builder();
+        FillResponse.Builder responseBuilder = new FillResponse.Builder();
 
         for (UserData data : userData) {
             if (data.getUsername() == null && data.getPassword() == null) {
@@ -119,15 +106,41 @@ public class FillRequestHandler {
             }
             Dataset.Builder datasetBuilder = new Dataset.Builder();
             if (structure.getUsernameId() != null && data.getUsername() != null) {
-                datasetBuilder.setValue(structure.getUsernameId(), AutofillValue.forText(data.getUsername()), usernamePresentation);
+                datasetBuilder.setValue(structure.getUsernameId(), AutofillValue.forText(data.getUsername()), generatePresentation(data.getUsername(), false));
             }
             if (structure.getPasswordId() != null && data.getPassword() != null) {
-                datasetBuilder.setValue(structure.getPasswordId(), AutofillValue.forText(data.getPassword()), passwordPresentation);
+                datasetBuilder.setValue(structure.getPasswordId(), AutofillValue.forText(data.getPassword()), generatePresentation(data.getUsername(), true));
             }
-            builder.addDataset(datasetBuilder.build());
+            responseBuilder.addDataset(datasetBuilder.build());
         }
 
-        return builder.build();
+        return responseBuilder.build();
+    }
+
+
+    /**
+     * Method generates a remote view which can be used to display the autofill dataset to the user
+     * within another application.
+     *
+     * @param value                 Value to indicate the dataset. This is usually the username.
+     * @param password              Flag indicates whether the generated presentation is used to
+     *                              present a password (= {@code true}) or not (= {@code false}).
+     * @return                      Generated remote view for presentation.
+     * @throws NullPointerException The passed value is {@code null}.
+     */
+    private RemoteViews generatePresentation(String value, boolean password) throws NullPointerException {
+        if (value == null) {
+            throw new NullPointerException();
+        }
+        RemoteViews presentation = new RemoteViews(autofillService.getPackageName(), R.layout.list_item_autofill);
+        Resources resources = autofillService.getBaseContext().getResources();
+        if (password) {
+            presentation.setTextViewText(R.id.list_item_autofill_text, resources.getString(R.string.autofill_password_presentation).replace("{value}", value));
+        }
+        else {
+            presentation.setTextViewText(R.id.list_item_autofill_text, resources.getString(R.string.autofill_username_presentation).replace("{value}", value));
+        }
+        return presentation;
     }
 
 

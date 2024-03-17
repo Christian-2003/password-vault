@@ -356,6 +356,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     </string>
 
 
+    <!-- Autofill service -->
+    <string name="autofill_username_presentation">{value}</string>
+    <string name="autofill_password_presentation">Password for {value}</string>
+
+
     <!--
     ================================================================================================
     ATTENTION:
