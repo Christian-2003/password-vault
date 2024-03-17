@@ -1,6 +1,6 @@
 package de.passwordvault.model.entry;
 
-import android.util.Log;
+import android.graphics.drawable.Drawable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Objects;
 import java.util.UUID;
 import de.passwordvault.model.Identifiable;
+import de.passwordvault.model.packages.Package;
 import de.passwordvault.model.packages.PackageCollection;
 import de.passwordvault.model.storage.app.Storable;
 import de.passwordvault.model.storage.app.StorageException;
@@ -277,6 +278,22 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
 
 
     /**
+     * Method returns the first available logo from the list of packages.
+     *
+     * @return  First available logo from the packages.
+     */
+    public Drawable getLogo() {
+        for (Package p : packages) {
+            Drawable logo = p.getLogo();
+            if (logo != null) {
+                return logo;
+            }
+        }
+        return null;
+    }
+
+
+    /**
      * Notifies this Entry that some of its data was changed. This will update the value of
      * {@linkplain #changed} to the current date and time.
      */
@@ -354,7 +371,6 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
         if (s == null) {
             throw new NullPointerException();
         }
-        Log.d("Entries", "Restoring entry:" + s);
         CsvParser parser = new CsvParser(s);
         ArrayList<String> cells = parser.parseCsv();
 

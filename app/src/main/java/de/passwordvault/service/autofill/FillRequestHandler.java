@@ -109,7 +109,7 @@ public class FillRequestHandler {
                 datasetBuilder.setValue(structure.getUsernameId(), AutofillValue.forText(data.getUsername()), generatePresentation(data.getUsername(), false));
             }
             if (structure.getPasswordId() != null && data.getPassword() != null) {
-                datasetBuilder.setValue(structure.getPasswordId(), AutofillValue.forText(data.getPassword()), generatePresentation(data.getUsername(), true));
+                datasetBuilder.setValue(structure.getPasswordId(), AutofillValue.forText(data.getPassword()), generatePresentation(data.getUsername() == null ? data.getEntryName() : data.getUsername(), true));
             }
             responseBuilder.addDataset(datasetBuilder.build());
         }
@@ -219,7 +219,7 @@ public class FillRequestHandler {
             }
         }
 
-        return new UserData(username, password);
+        return new UserData(entry.getName(), username, password);
     }
 
 }

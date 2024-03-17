@@ -51,6 +51,22 @@ public class Package extends SerializablePackage {
         logoLoaded = false;
     }
 
+    /**
+     * Constructor instantiates a new package only with the package name. Use of this constructor is
+     * intended for apps that were installed once but have been uninstalled afterwards. Therefore,
+     * no {@linkplain ApplicationInfo} is available for these packages.
+     *
+     * @param packageName           Name of the package (e.g. 'com.example.app').
+     * @throws NullPointerException The passed package name is {@code null}.
+     */
+    public Package(String packageName) throws NullPointerException {
+        super(packageName);
+        applicationInfo = null;
+        appName = null;
+        logo = null;
+        logoLoaded = true;
+    }
+
 
     /**
      * Method returns the name of the package.
@@ -68,6 +84,9 @@ public class Package extends SerializablePackage {
      */
     public String getAppName() {
         if (appName == null) {
+            if (applicationInfo == null) {
+                return "";
+            }
             appName = PackagesManager.getInstance().getApplicationName(applicationInfo);
             if (appName == null) {
                 appName = "";

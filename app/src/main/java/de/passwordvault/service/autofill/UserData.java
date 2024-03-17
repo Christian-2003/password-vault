@@ -10,6 +10,11 @@ package de.passwordvault.service.autofill;
 public class UserData {
 
     /**
+     * Attribute stores the name of the entry from which the user data was extracted.
+     */
+    private final String entryName;
+
+    /**
      * Attribute stores the username of the user data.
      * This does not necessarily need to be a username and can be an email address or whatever is
      * used for identification.
@@ -26,14 +31,31 @@ public class UserData {
      * Constructor instantiates a new user data instance with the passed username and password. Both
      * values can explicitly be {@code null}.
      *
-     * @param username  Username for the user data.
-     * @param password  Password for the user data.
+     * @param entryName             Name of the entry from which the data was extracted. This cannot
+     *                              be {@code null}.
+     * @param username              Username for the user data.
+     * @param password              Password for the user data.
+     * @throws NullPointerException The passed entry name is {@code null}.
      */
-    public UserData(String username, String password) {
+    public UserData(String entryName, String username, String password) throws NullPointerException {
+        if (entryName == null) {
+            throw new NullPointerException();
+        }
+        this.entryName = entryName;
         this.username = username;
         this.password = password;
     }
 
+
+    /**
+     * Method returns the name of the entry from which the data was extracted. This can never be
+     * {@code null}.
+     *
+     * @return  Name of the entry from which the data was retrieved.
+     */
+    public String getEntryName() {
+        return entryName;
+    }
 
     /**
      * Method returns the username of the user data. This can return {@code null}.

@@ -130,7 +130,7 @@ public class PackagesRecyclerViewAdapter extends RecyclerView.Adapter<PackagesRe
         if (p.getLogo() != null) {
             holder.logo.setImageDrawable(p.getLogo());
         }
-        holder.name.setText(p.getAppName());
+        holder.name.setText(p.getAppName() == null || p.getAppName().isEmpty() ? p.getPackageName() : p.getAppName());
         if (clickListener != null) {
             holder.itemView.setOnClickListener(view -> clickListener.onItemClick(p, position));
         }

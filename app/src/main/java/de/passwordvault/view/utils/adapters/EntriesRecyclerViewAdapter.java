@@ -1,5 +1,6 @@
 package de.passwordvault.view.utils.adapters;
 
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,9 @@ import android.widget.Filterable;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.imageview.ShapeableImageView;
+
 import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.model.entry.EntryAbbreviated;
@@ -18,7 +22,7 @@ import de.passwordvault.view.utils.OnRecyclerItemClickListener;
  * Class implements an adapter for a recycler view which can display abbreviated entries.
  *
  * @author  Christian-2003
- * @version 3.4.0
+ * @version 3.5.0
  */
 public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecyclerViewAdapter.ViewHolder> implements Filterable {
 
@@ -42,6 +46,11 @@ public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecy
          */
         public View itemView;
 
+        /**
+         * Attribute stores the image view displaying the logo.
+         */
+        public ShapeableImageView logo;
+
 
         /**
          * Constructor instantiates a new view holder for the passed inflated view.
@@ -52,6 +61,7 @@ public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecy
             super(itemView);
             this.name = itemView.findViewById(R.id.entries_list_item_name);
             this.description = itemView.findViewById(R.id.entries_list_item_description);
+            this.logo = itemView.findViewById(R.id.entries_list_item_logo);
             this.itemView = itemView;
         }
 
@@ -120,6 +130,10 @@ public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecy
         holder.description.setText(entry.getDescription());
         if (clickListener != null) {
             holder.itemView.setOnClickListener(view -> clickListener.onItemClick(entry, position));
+        }
+        Drawable logo = entry.getLogo();
+        if (logo != null) {
+            holder.logo.setImageDrawable(logo);
         }
     }
 

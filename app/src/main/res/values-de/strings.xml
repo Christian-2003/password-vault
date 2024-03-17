@@ -253,6 +253,6 @@
 
     <!-- Autofill service -->
     <string name="autofill_username_presentation">{value}</string>
-    <string name="autofill_password_presentation">Password für {value}</string>
+    <string name="autofill_password_presentation">Passwort für {value}</string>
 
 </resources>

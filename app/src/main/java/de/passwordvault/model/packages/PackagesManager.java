@@ -79,7 +79,8 @@ public class PackagesManager {
 
     /**
      * Method returns the package with the specified package name. If the passed package name does
-     * not exist, {@code null} is returned.
+     * not exist, a package without {@linkplain ApplicationInfo} which only contains the passed
+     * package name is returned.
      *
      * @param packageName           Name whose package to return.
      * @return                      Package of the passed name.
@@ -97,7 +98,7 @@ public class PackagesManager {
                 return p;
             }
         }
-        return null;
+        return new Package(packageName);
     }
 
 

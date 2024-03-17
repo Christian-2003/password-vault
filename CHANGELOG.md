@@ -25,6 +25,7 @@ data (e.g. usernames, passwords or email addresses) to the user of other apps.
 * Fixed a bug where the most recently edited entries were not calculated correctly.
 * Fixed a bug where restoring an encrypted backup created two empty accounts.
 * App can be used as autofill service.
+* Show logo of associated app within the list of entries.
 
 <br>
 
