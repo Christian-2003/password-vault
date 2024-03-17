@@ -180,6 +180,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:nestedScrollingEnabled="false"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 style="@style/background"/>
 
@@ -288,8 +289,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    style="@style/background"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    style="@style/background"/>
 
             </LinearLayout>
 

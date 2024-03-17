@@ -29,27 +29,29 @@ public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecy
     /**
      * Class implements a view holder for an abbreviated entry.
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         /**
          * Attribute stores the text view which displays the name of the entry.
          */
-        public TextView name;
+        public final TextView name;
 
         /**
          * Attribute stores the text view which displays the description of the entry.
          */
-        public TextView description;
+        public final TextView description;
 
         /**
          * Attribute stores the view of a list item.
          */
-        public View itemView;
+        public final View itemView;
 
         /**
          * Attribute stores the image view displaying the logo.
          */
-        public ShapeableImageView logo;
+        public final ShapeableImageView logo;
+
+        public Drawable logoDrawable;
 
 
         /**
@@ -131,9 +133,9 @@ public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecy
         if (clickListener != null) {
             holder.itemView.setOnClickListener(view -> clickListener.onItemClick(entry, position));
         }
-        Drawable logo = entry.getLogo();
-        if (logo != null) {
-            holder.logo.setImageDrawable(logo);
+        holder.logoDrawable = entry.getLogo();
+        if (holder.logoDrawable != null) {
+            holder.logo.setImageDrawable(holder.logoDrawable);
         }
     }
 

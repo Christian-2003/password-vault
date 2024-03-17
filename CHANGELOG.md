@@ -8,7 +8,7 @@ Major visual enhancements regarding boundaries of clickable contents. Furthermor
 data (e.g. usernames, passwords or email addresses) to the user of other apps.
 
 ###### Features
-* Fixed a bug within HTML exprots, where `<h2>`-elements were not correctly closed.
+* Fixed a bug within HTML exports, where `<h2>`-elements were not correctly closed.
 * Manifest cleanup.
 * Fixed app name from "PasswordVault" to "Password Vault".
 * Users can select installed apps that shall be associated with an entry for the password manager.
@@ -25,7 +25,10 @@ data (e.g. usernames, passwords or email addresses) to the user of other apps.
 * Fixed a bug where the most recently edited entries were not calculated correctly.
 * Fixed a bug where restoring an encrypted backup created two empty accounts.
 * App can be used as autofill service.
-* Show logo of associated app within the list of entries.
+* Logos of associated entries are shown in list of entries.
+* Reintroduced scrollbars since they were lost in the last update.
+* Fixed scroll behaviours of details in `AddEntryActivity` and `EntryActivity`.
+* Fixed scroll behaviours of entries in `HomeFragment`.
 
 <br>
 
