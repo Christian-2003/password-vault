@@ -29,6 +29,7 @@ data (e.g. usernames, passwords or email addresses) to the user of other apps.
 * Reintroduced scrollbars since they were lost in the last update.
 * Fixed scroll behaviours of details in `AddEntryActivity` and `EntryActivity`.
 * Fixed scroll behaviours of entries in `HomeFragment`.
+* Added optional authentication for autofill service.
 
 <br>
 

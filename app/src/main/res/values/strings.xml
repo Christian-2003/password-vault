@@ -67,6 +67,8 @@
     <string name="settings_autofill_enable_error">Cannot enable autofill service</string>
     <string name="settings_autofill_caching">Use caching</string>
     <string name="settings_autofill_caching_info">Accelerate autofill by caching data</string>
+    <string name="settings_autofill_authentication">Require authentication</string>
+    <string name="settings_autofill_authentication_info">Increase security by requiring authentication prior to accessing data</string>
 
     <string name="settings_export">Export</string>
     <string name="settings_export_html">Export data</string>
@@ -151,6 +153,12 @@
     <string name="data_conversion_error">Error</string>
 
 
+    <!-- AutofillAuthentication activity -->
+    <string name="autofill_authentication_title">Authentication</string>
+    <string name="autofill_authentication_hint">Authentication required for autofill</string>
+    <string name="autofill_authentication_biometrics_title">Biometric Authentication</string>
+
+
     <!-- Detail dialog -->
     <string name="detail_dialog_title_edit">Edit Detail</string>
     <string name="detail_dialog_title_add">Add Detail</string>
@@ -187,6 +195,7 @@
     <string name="button_add_tag">Add Tag</string>
     <string name="button_continue_without_converting">Continue without Converting</string>
     <string name="button_remove_package">Remove app</string>
+    <string name="button_authenticate">Authenticate</string>
 
 
     <!-- Placeholder -->
@@ -359,6 +368,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <!-- Autofill service -->
     <string name="autofill_username_presentation">{value}</string>
     <string name="autofill_password_presentation">Password for {value}</string>
+    <string name="autofill_authentication_presentation">Authenticate for {value}</string>
 
 
     <!--

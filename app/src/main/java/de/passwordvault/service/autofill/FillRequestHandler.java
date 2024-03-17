@@ -1,6 +1,9 @@
 package de.passwordvault.service.autofill;
 
+import android.app.PendingIntent;
 import android.app.assist.AssistStructure;
+import android.content.Intent;
+import android.content.IntentSender;
 import android.content.res.Resources;
 import android.os.CancellationSignal;
 import android.service.autofill.AutofillService;
@@ -10,6 +13,7 @@ import android.service.autofill.FillContext;
 import android.service.autofill.FillRequest;
 import android.service.autofill.FillResponse;
 import android.util.Log;
+import android.view.autofill.AutofillId;
 import android.view.autofill.AutofillValue;
 import android.widget.RemoteViews;
 import java.util.ArrayList;
@@ -21,9 +25,11 @@ import de.passwordvault.model.detail.DetailType;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.model.packages.Package;
+import de.passwordvault.model.storage.Configuration;
 import de.passwordvault.model.storage.app.StorageManager;
 import de.passwordvault.service.autofill.structureparser.AssistStructureParser;
 import de.passwordvault.service.autofill.structureparser.ParsedStructure;
+import de.passwordvault.view.activities.AutofillAuthenticationActivity;
 
 
 /**
@@ -68,7 +74,7 @@ public class FillRequestHandler {
         ArrayList<UserData> userData = fetchData(parsedStructure.getPackageName());
 
         try {
-            FillResponse response = buildFillResponse(userData, parsedStructure);
+            FillResponse response = generateBuildResponse(userData, parsedStructure);
             callback.onSuccess(response);
         }
         catch (Exception e) {
@@ -97,9 +103,14 @@ public class FillRequestHandler {
      * @param structure Parsed structure for which the fill response shall be generated.
      * @return          Generated fill response.
      */
-    private FillResponse buildFillResponse(ArrayList<UserData> userData, ParsedStructure structure) {
+    private FillResponse generateBuildResponse(ArrayList<UserData> userData, ParsedStructure structure) {
         FillResponse.Builder responseBuilder = new FillResponse.Builder();
+        if (userData.isEmpty()) {
+            return responseBuilder.build();
+        }
 
+        //Generate the datasets:
+        ArrayList<Dataset> datasets = new ArrayList<>();
         for (UserData data : userData) {
             if (data.getUsername() == null && data.getPassword() == null) {
                 continue;
@@ -111,7 +122,40 @@ public class FillRequestHandler {
             if (structure.getPasswordId() != null && data.getPassword() != null) {
                 datasetBuilder.setValue(structure.getPasswordId(), AutofillValue.forText(data.getPassword()), generatePresentation(data.getUsername() == null ? data.getEntryName() : data.getUsername(), true));
             }
-            responseBuilder.addDataset(datasetBuilder.build());
+            datasets.add(datasetBuilder.build());
+        }
+
+        if (Configuration.useAutofillAuthentication()) {
+            //Prompt the user to authenticate:
+            Intent authenticationIntent = new Intent(autofillService, AutofillAuthenticationActivity.class);
+            authenticationIntent.putExtra(AutofillAuthenticationActivity.KEY_DATASETS, datasets);
+            IntentSender intentSender = PendingIntent.getActivity(autofillService, 1001, authenticationIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE).getIntentSender();
+
+            AutofillId[] autofillIds;
+            if (structure.getUsernameId() != null && structure.getPasswordId() != null) {
+                autofillIds = new AutofillId[2];
+                autofillIds[0] = structure.getUsernameId();
+                autofillIds[1] = structure.getPasswordId();
+            }
+            else if (structure.getUsernameId() != null) {
+                autofillIds = new AutofillId[1];
+                autofillIds[0] = structure.getUsernameId();
+            }
+            else if (structure.getPasswordId() != null) {
+                autofillIds = new AutofillId[1];
+                autofillIds[0] = structure.getPasswordId();
+            }
+            else {
+                autofillIds = new AutofillId[0];
+            }
+
+            responseBuilder.setAuthentication(autofillIds, intentSender, generateAuthenticationPresentation(userData.get(0).getEntryName()));
+        }
+        else {
+            //Authentication not activated:
+            for (Dataset dataset : datasets) {
+                responseBuilder.addDataset(dataset);
+            }
         }
 
         return responseBuilder.build();
@@ -140,6 +184,23 @@ public class FillRequestHandler {
         else {
             presentation.setTextViewText(R.id.list_item_autofill_text, resources.getString(R.string.autofill_username_presentation).replace("{value}", value));
         }
+        return presentation;
+    }
+
+    /**
+     * Method generates the presentation that prompts the user to authenticate before they can access
+     * the data.
+     *
+     * @param value                 Value to indicate the dataset. This is usually the username.
+     * @return                      Generated remote view for presentation.
+     * @throws NullPointerException The passed value is {@code null}.
+     */
+    private RemoteViews generateAuthenticationPresentation(String value) throws NullPointerException {
+        if (value == null) {
+            throw new NullPointerException();
+        }
+        RemoteViews presentation = new RemoteViews(autofillService.getPackageName(), R.layout.autofill_authentication_presentation);
+        presentation.setTextViewText(R.id.autofill_authentication_presentation_text, autofillService.getBaseContext().getResources().getString(R.string.autofill_authentication_presentation).replace("{value}", value));
         return presentation;
     }
 

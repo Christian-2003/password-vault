@@ -55,7 +55,7 @@ import de.passwordvault.view.activities.MainActivity;
  * {@linkplain MainActivity}.
  *
  * @author  Christian-2003
- * @version 3.4.0
+ * @version 3.5.0
  */
 public class SettingsFragment extends Fragment implements DialogCallbackListener, Serializable, CompoundButton.OnCheckedChangeListener {
 
@@ -337,6 +337,7 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
             if (viewModel.areBiometricsAvailable()) {
                 view.findViewById(R.id.settings_security_biometrics_container).setVisibility(View.VISIBLE);
             }
+            view.findViewById(R.id.settings_autofill_authentication_container).setVisibility(View.VISIBLE);
         }
         else if (fragment instanceof EnterPasswordDialog) {
             if (viewModel.getCurrentAction() == SettingsViewModel.ACTION_DELETE_DATA) {
@@ -448,7 +449,14 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
 
         MaterialSwitch cachingSwitch = view.findViewById(R.id.settings_autofill_caching_switch);
         cachingSwitch.setChecked(Configuration.useAutofillCaching());
-        cachingSwitch.setOnCheckedChangeListener((view, checked) -> Configuration.setUseAutofillCaching(checked));
+        cachingSwitch.setOnCheckedChangeListener((view, checked) -> Configuration.setAutofillCaching(checked));
+
+        view.findViewById(R.id.settings_autofill_authentication_container).setVisibility(viewModel.useAppLogin() ? View.VISIBLE : View.GONE);
+        if (viewModel.useAppLogin()) {
+            MaterialSwitch authenticationSwitch = view.findViewById(R.id.settings_autofill_authentication_switch);
+            authenticationSwitch.setChecked(Configuration.useAutofillAuthentication());
+            authenticationSwitch.setOnCheckedChangeListener((view, checked) -> Configuration.setAutofillAuthentication(checked));
+        }
     }
 
 
@@ -519,6 +527,9 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
     }
 
 
+    /**
+     * Method deletes all data from the app.
+     */
     private void deleteData() {
         viewModel.setCurrentAction(SettingsViewModel.ACTION_DELETE_DATA);
         if (viewModel.useAppLogin()) {
@@ -577,12 +588,7 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         Account.getInstance().save();
         this.view.findViewById(R.id.settings_security_password_container).setVisibility(View.GONE);
         this.view.findViewById(R.id.settings_security_biometrics_container).setVisibility(View.GONE);
-    }
-
-
-    private void changeAutofillService() {
-        Intent intent = new Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE, Uri.parse("package:" + App.getContext().getPackageName()));
-        startActivity(intent);
+        view.findViewById(R.id.settings_autofill_authentication_container).setVisibility(View.GONE);
     }
 
 }

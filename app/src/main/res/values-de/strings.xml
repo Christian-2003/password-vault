@@ -66,6 +66,8 @@
     <string name="settings_autofill_enable_error">Automatisches Ausfüllen kann nicht aktiviert werden</string>
     <string name="settings_autofill_caching">Caching verwenden</string>
     <string name="settings_autofill_caching_info">Automatisches Ausfüllen durch Caches beschleunigen</string>
+    <string name="settings_autofill_authentication">Verlange Authentifizierung</string>
+    <string name="settings_autofill_authentication_info">Erhöhe die Sicherheit durch eine Authentifizierung vor dem Zugriff auf App-Daten</string>
 
     <string name="settings_export">Exportieren</string>
     <string name="settings_export_html">Daten exportieren</string>
@@ -147,6 +149,12 @@
     <string name="data_conversion_error">Fehler</string>
 
 
+    <!-- AutofillAuthentication activity -->
+    <string name="autofill_authentication_title">Authentifizierung</string>
+    <string name="autofill_authentication_hint">Authentifizierung zum automatischen Ausfüllen benötigt</string>
+    <string name="autofill_authentication_biometrics_title">Biometrische Authentifizierung</string>
+
+
     <!-- Detail dialog -->
     <string name="detail_dialog_title_edit">Information bearbeiten</string>
     <string name="detail_dialog_title_add">Information hinzufügen</string>
@@ -183,6 +191,7 @@
     <string name="button_add_tag">Tag Hinzufügen</string>
     <string name="button_continue_without_converting">Ohne Konvertierung Fortfahren</string>
     <string name="button_remove_package">App entfernen</string>
+    <string name="button_authenticate">Authentifizieren</string>
 
 
     <!-- Placeholder -->
@@ -254,5 +263,6 @@
     <!-- Autofill service -->
     <string name="autofill_username_presentation">{value}</string>
     <string name="autofill_password_presentation">Passwort für {value}</string>
+    <string name="autofill_authentication_presentation">Authentifizieren für {value}</string>
 
 </resources>

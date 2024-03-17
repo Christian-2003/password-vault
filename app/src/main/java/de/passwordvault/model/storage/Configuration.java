@@ -2,10 +2,7 @@ package de.passwordvault.model.storage;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import java.util.ArrayList;
 import de.passwordvault.App;
-import de.passwordvault.model.storage.csv.CsvBuilder;
-import de.passwordvault.model.storage.csv.CsvParser;
 
 
 /**
@@ -13,7 +10,7 @@ import de.passwordvault.model.storage.csv.CsvParser;
  * to (unencrypted) shared preferences for configuration purposes.
  *
  * @author  Christian-2003
- * @version 3.3.0
+ * @version 3.5.0
  */
 public class Configuration {
 
@@ -26,6 +23,11 @@ public class Configuration {
      * Field stores the key with which to store whether autofill shall use caching.
      */
     private static final String KEY_AUTOFILL_CACHING = "autofill_caching";
+
+    /**
+     * Field stores the key with which to store whether autofill shall require authentication.
+     */
+    private static final String KEY_AUTOFILL_AUTHENTICATION = "autofill_authentication";
 
     /**
      * Field stores the shared preferences instance from which to retrieve data.
@@ -58,7 +60,7 @@ public class Configuration {
      *
      * @param autofillCaching   Whether the autofill service shall use caching.
      */
-    public static void setUseAutofillCaching(boolean autofillCaching) {
+    public static void setAutofillCaching(boolean autofillCaching) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(KEY_AUTOFILL_CACHING, autofillCaching);
         editor.apply();
@@ -71,6 +73,26 @@ public class Configuration {
      */
     public static boolean useAutofillCaching() {
         return preferences.getBoolean(KEY_AUTOFILL_CACHING, true);
+    }
+
+    /**
+     * Method changes whether the autofill service shall require authentication.
+     *
+     * @param autofillAuthentication    Whether the autofill service shall require authentication.
+     */
+    public static void setAutofillAuthentication(boolean autofillAuthentication) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(KEY_AUTOFILL_AUTHENTICATION, autofillAuthentication);
+        editor.apply();
+    }
+
+    /**
+     * Method returns whether the autofill service requires authentication.
+     *
+     * @return  Whether the autofill service requires authentication.
+     */
+    public static boolean useAutofillAuthentication() {
+        return preferences.getBoolean(KEY_AUTOFILL_AUTHENTICATION, true);
     }
 
 }

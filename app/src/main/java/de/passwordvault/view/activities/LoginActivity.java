@@ -169,4 +169,5 @@ public class LoginActivity extends AppCompatActivity {
         viewModel.setBiometricAuthenticationCancelled(false);
         biometricPrompt.authenticate(viewModel.getBiometricPromptInfo());
     }
+
 }
