@@ -3,6 +3,7 @@ package de.passwordvault.view.utils;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -16,7 +17,7 @@ import de.passwordvault.model.analysis.QualityGateManager;
  * necessary to implement each of the provided methods with it's own class.
  *
  * @author  Christian-2003
- * @version 3.4.0
+ * @version 3.5.0
  */
 public class Utils {
 
@@ -83,6 +84,25 @@ public class Utils {
         ClipboardManager clipboard = (ClipboardManager)App.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("Copied Text", s);
         clipboard.setPrimaryClip(clip);
+    }
+
+
+    /**
+     * Method reads a raw resource file and returns it's content as string.
+     *
+     * @param id    ID of the resource file to read.
+     * @return      Content of the resource file as string.
+     */
+    public static String readRawResource(int id) {
+        byte[] content;
+        try (InputStream inputStream = App.getContext().getResources().openRawResource(id)) {
+            content = new byte[inputStream.available()];
+            inputStream.read(content);
+        }
+        catch (Exception e) {
+            return null;
+        }
+        return new String(content);
     }
 
 }

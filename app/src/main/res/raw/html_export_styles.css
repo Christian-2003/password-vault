@@ -1,0 +1,72 @@
+:root {
+    --background-color: #F6F6F8;
+    --container-color: #FCFCFE;
+    --content-color: #F2F2F2;
+    --primary-text-color: #010101;
+    --secondary-text-color: #8D8C91;
+    --default-margin: 5px;
+    --default-padding: 10px;
+    --container-corner-radius: 20px;
+    --text-size: 18px;
+    --header-size: 21px;
+    --app-bar-text-size: 26px;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    background-color: var(--background-color);
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--primary-text-color);
+}
+
+#main-container {
+    width: max(50vw, 500px);
+}
+
+.container {
+    background-color: var(--container-color);
+    border-radius: var(--container-corner-radius);
+    padding: var(--default-padding);
+}
+
+.container p {
+    color: var(--primary-text-color);
+    margin: var(--default-margin) 0px var(--default-margin) 0px;
+}
+
+    .detail-container {
+    background-color: var(--content-color);
+    border-radius: var(--container-corner-radius);
+    padding: var(--default-padding);
+    margin-top: var(--default-margin);
+    margin-bottom: var(--default-margin);
+}
+
+.detail-container:last-child {
+    margin-bottom: 0px;
+}
+
+.detail-container p {
+    color: var(--secondary-text-color);
+    margin: 0px 0px var(--default-margin) 0px;
+    padding: 0px;
+}
+
+.detail-container p + p {
+    color: var(--primary-text-color);
+    margin: 0px;
+}
+
+p {
+    font-size: var(--text-size);
+}
+
+h1 {
+    font-size: var(--app-bar-text-size);
+}
+
+h2 {
+    font-size: var(--header-size);
+    margin: var(--default-padding) 0px var(--default-margin) 0px;
+}

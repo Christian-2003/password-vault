@@ -14,6 +14,7 @@ import de.passwordvault.model.detail.Detail;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.model.entry.EntryManager;
+import de.passwordvault.view.utils.Utils;
 
 
 /**
@@ -21,7 +22,7 @@ import de.passwordvault.model.entry.EntryManager;
  * readable HTML format.
  *
  * @author  Christian-2003
- * @version 3.3.0
+ * @version 3.5.0
  */
 public class ExportToHtml {
 
@@ -41,6 +42,11 @@ public class ExportToHtml {
     private final String dom;
 
     /**
+     * Attribute stores the CSS stylesheet for the document.
+     */
+    private final String css;
+
+    /**
      * Attribute stores the URI to which the HTML shall be exported.
      */
     private final Uri uri;
@@ -58,9 +64,10 @@ public class ExportToHtml {
             throw new NullPointerException("Null is invalid URI");
         }
         this.uri = uri;
-        detailContainer = App.getContext().getString(R.string.html_export_detail_container);
-        entryContainer = App.getContext().getString(R.string.html_export_entry_container);
-        dom = App.getContext().getString(R.string.html_export_dom);
+        detailContainer = Utils.readRawResource(R.raw.html_export_detail_container);
+        entryContainer = Utils.readRawResource(R.raw.html_export_entry_container);
+        dom = Utils.readRawResource(R.raw.html_export_file);
+        css = Utils.readRawResource(R.raw.html_export_styles);
     }
 
 
@@ -108,6 +115,7 @@ public class ExportToHtml {
             entryHtml.append(generateEntryHtml(extended));
         }
         String html = dom.replace("{document_title}", App.getContext().getString(R.string.html_export_document_title));
+        html = html.replace("{css}", css);
         return html.replace("{entries}", entryHtml.toString());
     }
 

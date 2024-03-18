@@ -30,6 +30,8 @@ data (e.g. usernames, passwords or email addresses) to the user of other apps.
 * Fixed scroll behaviours of details in `AddEntryActivity` and `EntryActivity`.
 * Fixed scroll behaviours of entries in `HomeFragment`.
 * Added optional authentication for autofill service.
+* Moved MIT license from string resource into raw resource file.
+* Moved templates for HTML export from string resource into raw resource files.
 
 <br>
 

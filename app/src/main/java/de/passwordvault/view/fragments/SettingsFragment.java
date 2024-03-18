@@ -43,6 +43,7 @@ import de.passwordvault.view.dialogs.CreateBackupDialog;
 import de.passwordvault.view.dialogs.EnterPasswordDialog;
 import de.passwordvault.view.dialogs.RestoreBackupDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
+import de.passwordvault.view.utils.Utils;
 import de.passwordvault.viewmodel.fragments.SettingsViewModel;
 import de.passwordvault.view.activities.MainActivity;
 
@@ -165,7 +166,7 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         view.findViewById(R.id.settings_security_quality_gates).setOnClickListener(view -> startActivity(new Intent(getActivity(), QualityGatesActivity.class)));
         view.findViewById(R.id.settings_security_password_analysis_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), PasswordAnalysisActivity.class)));
         view.findViewById(R.id.settings_used_software_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), OssLicensesMenuActivity.class)));
-        view.findViewById(R.id.settings_license_clickable).setOnClickListener(view -> showInfoDialog(R.string.settings_about_license, R.string.app_license));
+        view.findViewById(R.id.settings_license_clickable).setOnClickListener(view -> showInfoDialog(R.string.settings_about_license, Utils.readRawResource(R.raw.license)));
         view.findViewById(R.id.settings_open_source_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_about_github_link)));
         view.findViewById(R.id.settings_bug_report_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_about_bug_link)));
         view.findViewById(R.id.settings_update_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_about_update_link)));
@@ -505,9 +506,22 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
      * @param messageId Id if the resource-string for the dialog message.
      */
     private void showInfoDialog(int titleId, int messageId) {
+        showInfoDialog(titleId, getString(messageId));
+    }
+
+    /**
+     * Method displays an information dialog. If the passed message is {@code null}, an empty dialog
+     * is shown.
+     *
+     * @param titleId   Id of the resource-string for the dialog title.
+     * @param message   Message to be displayed.
+     */
+    private void showInfoDialog(int titleId, String message) {
         AlertDialog dialog = new MaterialAlertDialogBuilder(requireActivity()).create();
         dialog.setTitle(getString(titleId));
-        dialog.setMessage(getString(messageId));
+        if (message != null) {
+            dialog.setMessage(message);
+        }
         dialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.button_ok), (dialogInterface, i) -> dialogInterface.dismiss());
         dialog.show();
     }
