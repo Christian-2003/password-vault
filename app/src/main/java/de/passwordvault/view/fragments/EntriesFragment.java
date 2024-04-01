@@ -44,7 +44,7 @@ import de.passwordvault.view.activities.MainActivity;
  * within the {@linkplain MainActivity}.
  *
  * @author  Christian-2003
- * @version 3.3.0
+ * @version 3.5.0
  */
 public class EntriesFragment extends Fragment implements OnRecyclerItemClickListener<EntryAbbreviated>, PopupMenu.OnMenuItemClickListener, Observer<ArrayList<EntryAbbreviated>> {
 
@@ -98,8 +98,14 @@ public class EntriesFragment extends Fragment implements OnRecyclerItemClickList
         view = inflater.inflate(R.layout.fragment_entries, container, false);
 
         adapter = new EntriesRecyclerViewAdapter(EntryManager.getInstance().getData(), this);
-        RecyclerView recyclerView = view.findViewById(R.id.abbreviated_entries);
-        recyclerView.setAdapter(adapter);
+        if (EntryManager.getInstance().getData().isEmpty()) {
+            view.findViewById(R.id.entries_container_none).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.abbreviated_entries).setVisibility(View.GONE);
+        }
+        else {
+            RecyclerView recyclerView = view.findViewById(R.id.abbreviated_entries);
+            recyclerView.setAdapter(adapter);
+        }
 
         //Setup button to sort the entries:
         ImageButton sortButton = view.findViewById(R.id.entries_sort_button);

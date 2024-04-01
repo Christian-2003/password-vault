@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +28,7 @@ import de.passwordvault.view.utils.OnRecyclerItemClickListener;
  * used within the {@linkplain MainActivity}.
  *
  * @author  Christian-2003
- * @version 3.4.0
+ * @version 3.5.0
  */
 public class HomeFragment extends Fragment implements Observer<ArrayList<EntryAbbreviated>>, OnRecyclerItemClickListener<EntryAbbreviated> {
 
@@ -91,9 +90,15 @@ public class HomeFragment extends Fragment implements Observer<ArrayList<EntryAb
             }
         });
 
-        adapter = new EntriesRecyclerViewAdapter(EntryManager.getInstance().getMostRecentlyEditedEntries(), this);
-        RecyclerView recyclerView = view.findViewById(R.id.home_recently_changed_container);
-        recyclerView.setAdapter(adapter);
+        if (EntryManager.getInstance().getMostRecentlyEditedEntries().isEmpty()) {
+            view.findViewById(R.id.home_recently_changed_none).setVisibility(View.VISIBLE);
+        }
+        else {
+            adapter = new EntriesRecyclerViewAdapter(EntryManager.getInstance().getMostRecentlyEditedEntries(), this);
+            RecyclerView recyclerView = view.findViewById(R.id.home_recently_changed_container);
+            recyclerView.setAdapter(adapter);
+        }
+
         return view;
     }
 

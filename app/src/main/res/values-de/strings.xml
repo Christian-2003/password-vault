@@ -27,6 +27,11 @@
     <string name="home_button_view_accounts">Konten anzeigen</string>
     <string name="home_button_add_account">Konto hinzufügen</string>
     <string name="home_recently_edited_title">Zuletzt geändert</string>
+    <string name="home_recently_edited_none">Keine</string>
+
+
+    <!-- Entries fragment -->
+    <string name="entries_none">Keine</string>
 
 
     <!-- Settings -->

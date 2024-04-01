@@ -28,6 +28,11 @@
     <string name="home_button_view_accounts">Show Accounts</string>
     <string name="home_button_add_account">Add Account</string>
     <string name="home_recently_edited_title">Recently changed</string>
+    <string name="home_recently_edited_none">None</string>
+
+
+    <!-- Entries fragment -->
+    <string name="entries_none">None</string>
 
 
     <!-- Settings -->
