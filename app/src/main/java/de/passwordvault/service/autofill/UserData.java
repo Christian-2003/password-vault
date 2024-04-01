@@ -15,6 +15,11 @@ public class UserData {
     private final String entryName;
 
     /**
+     * Attribute stores the UUID of the entry from which the user data was extracted.
+     */
+    private final String entryUuid;
+
+    /**
      * Attribute stores the username of the user data.
      * This does not necessarily need to be a username and can be an email address or whatever is
      * used for identification.
@@ -33,15 +38,18 @@ public class UserData {
      *
      * @param entryName             Name of the entry from which the data was extracted. This cannot
      *                              be {@code null}.
+     * @param entryUuid             UUID of the entry from which the data was extracted. This cannot
+     *                              be {@code null}.
      * @param username              Username for the user data.
      * @param password              Password for the user data.
      * @throws NullPointerException The passed entry name is {@code null}.
      */
-    public UserData(String entryName, String username, String password) throws NullPointerException {
-        if (entryName == null) {
+    public UserData(String entryName, String entryUuid, String username, String password) throws NullPointerException {
+        if (entryName == null || entryUuid == null) {
             throw new NullPointerException();
         }
         this.entryName = entryName;
+        this.entryUuid = entryUuid;
         this.username = username;
         this.password = password;
     }
@@ -55,6 +63,16 @@ public class UserData {
      */
     public String getEntryName() {
         return entryName;
+    }
+
+    /**
+     * Method returns the UUID of the entry from which the data was extracted. This can never be
+     * {@code null}.
+     *
+     * @return  UUID of the entry from which the data was retrieved.
+     */
+    public String getEntryUuid() {
+        return entryUuid;
     }
 
     /**

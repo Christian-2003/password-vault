@@ -27,6 +27,12 @@ import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.model.packages.Package;
 import de.passwordvault.model.storage.Configuration;
 import de.passwordvault.model.storage.app.StorageManager;
+import de.passwordvault.service.autofill.caching.ContentCache;
+import de.passwordvault.service.autofill.caching.ContentCacheItem;
+import de.passwordvault.service.autofill.caching.InvalidationCache;
+import de.passwordvault.service.autofill.caching.InvalidationCacheItem;
+import de.passwordvault.service.autofill.caching.MappingCache;
+import de.passwordvault.service.autofill.caching.MappingCacheItem;
 import de.passwordvault.service.autofill.structureparser.AssistStructureParser;
 import de.passwordvault.service.autofill.structureparser.ParsedStructure;
 import de.passwordvault.view.activities.AutofillAuthenticationActivity;
@@ -45,6 +51,11 @@ public class FillRequestHandler {
      */
     private final AutofillService autofillService;
 
+    /**
+     * Attribute stores the data fetcher used to fetch the data for the fill request.
+     */
+    private DataFetcher fetcher;
+
 
     /**
      * Constructor instantiates a new fill request handler for the passed autofill service.
@@ -57,6 +68,7 @@ public class FillRequestHandler {
             throw new NullPointerException();
         }
         this.autofillService = autofillService;
+        fetcher = new DataFetcher();
     }
 
 
@@ -71,7 +83,66 @@ public class FillRequestHandler {
         List<FillContext> contexts = request.getFillContexts();
         AssistStructure structure = contexts.get(contexts.size() - 1).getStructure();
         ParsedStructure parsedStructure = parseStructure(structure);
-        ArrayList<UserData> userData = fetchData(parsedStructure.getPackageName());
+
+        ArrayList<UserData> userData;
+        if (Configuration.useAutofillCaching()) {
+            //Use caching:
+            MappingCacheItem mappingCacheItem = (MappingCacheItem)MappingCache.getInstance().getItem(parsedStructure.getPackageName());
+            if (mappingCacheItem == null) {
+                userData = fetcher.fetchUserDataForPackage(parsedStructure.getPackageName());
+                if (!userData.isEmpty()) {
+                    String[] uuids = new String[userData.size()];
+                    for (int i = 0; i < userData.size(); i++) {
+                        uuids[i] = userData.get(i).getEntryUuid();
+                    }
+                    MappingCache.getInstance().putItem(new MappingCacheItem(parsedStructure.getPackageName(), uuids));
+                    for (UserData item : userData) {
+                        ContentCache.getInstance().putItem(new ContentCacheItem(item.getEntryUuid(), item.getUsername(), item.getPassword(), item.getEntryName()));
+                    }
+                }
+            }
+            else {
+                userData = new ArrayList<>();
+                String[] uuids = mappingCacheItem.getUuids();
+                for (String uuid : uuids) {
+                    InvalidationCacheItem invalidationCacheItem = (InvalidationCacheItem)InvalidationCache.getInstance().getItem(uuid);
+                    if (invalidationCacheItem == null) {
+                        ContentCacheItem contentCacheItem = (ContentCacheItem)ContentCache.getInstance().getItem(uuid);
+                        if (contentCacheItem == null) {
+                            UserData data = fetcher.fetchUserDataForUuid(uuid);
+                            if (data == null) {
+                                mappingCacheItem.removeUuid(uuid);
+                                MappingCache.getInstance().putItem(mappingCacheItem);
+                            }
+                            else {
+                                userData.add(data);
+                            }
+                            continue;
+                        }
+                        userData.add(new UserData(contentCacheItem.getEntryName(), contentCacheItem.getIdentifier(), contentCacheItem.getUsername(), contentCacheItem.getPassword()));
+                    }
+                    else {
+                        UserData data = fetcher.fetchUserDataForUuid(uuid);
+                        if (data == null) {
+                            ContentCache.getInstance().removeItem(uuid);
+                            mappingCacheItem.removeUuid(uuid);
+                            MappingCache.getInstance().putItem(mappingCacheItem);
+                        }
+                        else {
+                            ContentCacheItem contentCacheItem = (ContentCacheItem)ContentCache.getInstance().getItem(uuid);
+                            contentCacheItem.setCredentials(data.getUsername() == null ? "" : data.getUsername(), data.getPassword() == null ? "" : data.getPassword(), data.getEntryName());
+                            ContentCache.getInstance().putItem(contentCacheItem);
+                            userData.add(data);
+                        }
+                        InvalidationCache.getInstance().removeItem(uuid);
+                    }
+                }
+            }
+        }
+        else {
+            //Do not use caching:
+            userData = fetcher.fetchUserDataForPackage(parsedStructure.getPackageName());
+        }
 
         try {
             FillResponse response = generateBuildResponse(userData, parsedStructure);
@@ -202,85 +273,6 @@ public class FillRequestHandler {
         RemoteViews presentation = new RemoteViews(autofillService.getPackageName(), R.layout.autofill_authentication_presentation);
         presentation.setTextViewText(R.id.autofill_authentication_presentation_text, autofillService.getBaseContext().getResources().getString(R.string.autofill_authentication_presentation).replace("{value}", value));
         return presentation;
-    }
-
-
-    /**
-     * Method fetches a list of UserData instances that contain information for autofill based on the
-     * passed package name.
-     *
-     * @param packageName           Name of the package for which data shall be fetched.
-     * @return                      List of fetched user data.
-     * @throws NullPointerException The passed package name is {@code null}.
-     */
-    private ArrayList<UserData> fetchData(String packageName) throws NullPointerException {
-        if (packageName == null) {
-            throw new NullPointerException();
-        }
-        ArrayList<UserData> fetchedData = new ArrayList<>();
-        StorageManager manager = new StorageManager();
-        HashMap<String, EntryAbbreviated> entries;
-        try {
-            entries = manager.loadAbbreviatedEntries();
-        }
-        catch (Exception e) {
-            return fetchedData;
-        }
-        for (EntryAbbreviated abbreviated : entries.values()) {
-            for (Package p : abbreviated.getPackages()) {
-                if (p.getPackageName().equals(packageName)) {
-                    //Found entry:
-                    EntryExtended extended;
-                    try {
-                        extended = manager.loadExtendedEntry(abbreviated);
-                        fetchedData.add(generateUserDataForEntry(extended));
-                    }
-                    catch (Exception e) {
-                        //Ignore...
-                    }
-                }
-            }
-        }
-        return fetchedData;
-    }
-
-
-    /**
-     * Method generates a UserData-instance for the passed extended entry.
-     *
-     * @param entry                 Entry for which to generate an instance of UserData.
-     * @return                      Generated UserData-instance.
-     * @throws NullPointerException The passed entry is {@code null}.
-     */
-    private UserData generateUserDataForEntry(EntryExtended entry) throws NullPointerException {
-        if (entry == null) {
-            throw new NullPointerException();
-        }
-        String username = null;
-        String password = null;
-
-        for (Detail detail : entry.getDetails()) {
-            if (username == null && detail.isUsername()) {
-                username = detail.getContent();
-            }
-            else if (password == null && detail.isPassword()) {
-                password = detail.getContent();
-            }
-        }
-
-        //If username or password were not specified, try to find next best option:
-        if (username == null || password == null) {
-            for (Detail detail : entry.getDetails()) {
-                if (username == null && detail.getType() == DetailType.EMAIL) {
-                    username = detail.getContent();
-                }
-                if (password == null && detail.getType() == DetailType.PASSWORD) {
-                    password = detail.getContent();
-                }
-            }
-        }
-
-        return new UserData(entry.getName(), username, password);
     }
 
 }

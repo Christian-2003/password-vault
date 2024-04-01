@@ -32,7 +32,7 @@ public class InvalidationCache extends Cache {
      * Constructor instantiates a new invalidation cache.
      */
     private InvalidationCache() {
-        super(new File(App.getContext().getFilesDir(), "/autofill/mapping.cache").getPath());
+        super(new File(App.getContext().getFilesDir(), "/autofill/invalidation.cache").getPath());
     }
 
 

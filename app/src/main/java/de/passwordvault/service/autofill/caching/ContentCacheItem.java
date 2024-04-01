@@ -29,6 +29,11 @@ public class ContentCacheItem extends CacheItem {
      */
     private String password;
 
+    /**
+     * Attribute stores the name of the entry whose data is stored within this cache item.
+     */
+    private String entryName;
+
 
     /**
      * Constructor instantiates a new cache item for the passed identifier and content.
@@ -54,6 +59,29 @@ public class ContentCacheItem extends CacheItem {
         super(s);
         username = null;
         password = null;
+        entryName = null;
+    }
+
+    /**
+     * Constructor instantiates a new cache item from the passed identifier, username and password.
+     * Username and password can be {@code null}, in which case they will be set to an empty string
+     * internally.
+     *
+     * @param identifier            Identifier for the cache item.
+     * @param username              Username for the cache item.
+     * @param password              Password for the cache item.
+     * @param entryName             Name of the entry whose data is being stored in this cache item.
+     * @throws NullPointerException The passed identifier or entry name is {@code null}.
+     */
+    public ContentCacheItem(String identifier, String username, String password, String entryName) throws NullPointerException {
+        super(identifier, "");
+        if (entryName == null) {
+            throw new NullPointerException();
+        }
+        this.username = username == null ? "" : username;
+        this.password = password == null ? "" : password;
+        this.entryName = entryName;
+        encryptCredentials();
     }
 
 
@@ -79,6 +107,13 @@ public class ContentCacheItem extends CacheItem {
             parseCredentials();
         }
         return username;
+    }
+
+    public String getEntryName() {
+        if (entryName == null) {
+            parseCredentials();
+        }
+        return entryName;
     }
 
     /**
@@ -110,18 +145,35 @@ public class ContentCacheItem extends CacheItem {
     }
 
     /**
-     * Method changes the credentials (i.e. username and password) of the cache item.
+     * Method changes the name of the entry whose data is stored in this cache item.
+     *
+     * @param entryName             New entry name for the cache item.
+     * @throws NullPointerException The passed entry name is {@code null}.
+     */
+    public void setEntryName(String entryName) throws NullPointerException {
+        if (entryName == null) {
+            throw new NullPointerException();
+        }
+        this.entryName = entryName;
+        encryptCredentials();
+    }
+
+    /**
+     * Method changes the credentials (i.e. username and password), as well as the name of the entry
+     * whose data is being stored, of the cache item.
      *
      * @param username              New username for the cache item.
      * @param password              New password for the cache item.
+     * @param entryName             New entry name for the cache item.
      * @throws NullPointerException The passed username or password is {@code null}.
      */
-    public void setCredentials(String username, String password) throws NullPointerException {
-        if (username == null || password == null) {
+    public void setCredentials(String username, String password, String entryName) throws NullPointerException {
+        if (username == null || password == null || entryName == null) {
             throw new NullPointerException();
         }
         this.username = username;
         this.password = password;
+        this.entryName = entryName;
         encryptCredentials();
     }
 
@@ -131,12 +183,13 @@ public class ContentCacheItem extends CacheItem {
      * content. If either username or password are {@code null}, the old value is used instead.
      */
     public void encryptCredentials() {
-        if (username == null && password == null) {
+        if (username == null && password == null && entryName == null) {
             return;
         }
-        if (username == null || password == null) {
+        if (username == null || password == null || entryName == null) {
             String oldUsername = username;
             String oldPassword = password;
+            String oldEntryName = entryName;
             parseCredentials();
             if (oldUsername != null) {
                 username = oldUsername;
@@ -144,11 +197,15 @@ public class ContentCacheItem extends CacheItem {
             if (oldPassword != null) {
                 password = oldPassword;
             }
+            if (oldEntryName != null) {
+                entryName = oldEntryName;
+            }
         }
         AES aes = new AES();
+        String decryptedCredentials = username + ',' + password + ',' + entryName;
         String encryptedCredentials = "";
         try {
-            encryptedCredentials = aes.encrypt(encryptedCredentials);
+            encryptedCredentials = aes.encrypt(decryptedCredentials);
         }
         catch (EncryptionException e) {
             return;
@@ -171,13 +228,15 @@ public class ContentCacheItem extends CacheItem {
             //Ignore...
         }
         String[] parts = decryptedCredentials.split(",");
-        if (parts.length >= 2) {
+        if (parts.length >= 3) {
             username = parts[0];
             password = parts[1];
+            entryName = parts[3];
         }
         else {
             username = "";
             password = "";
+            entryName = "";
         }
     }
 

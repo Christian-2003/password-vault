@@ -1,12 +1,16 @@
 package de.passwordvault.service.autofill.caching;
 
 import android.content.Context;
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import de.passwordvault.App;
 
 
@@ -17,6 +21,12 @@ import de.passwordvault.App;
  * @version 3.5.0
  */
 public abstract class Cache {
+
+    /**
+     * Field stores the tag used for debugging messages.
+     */
+    protected static final String TAG = "Cache";
+
 
     /**
      * Attribute stores the cache items that were read from the cache.
@@ -63,6 +73,7 @@ public abstract class Cache {
         if (identifier == null) {
             throw new NullPointerException();
         }
+        ArrayList<CacheItem> items;
         for (CacheItem item : cacheItems) {
             if (item.getIdentifier().equals(identifier)) {
                 return item;
@@ -124,21 +135,27 @@ public abstract class Cache {
      * happens.
      */
     public void save() {
+        Log.d(TAG, "Begin saving cache " + filename);
         if (!changesMadeToDataset) {
+            Log.d(TAG, "Cancelled saving cache " + filename + ", since no changes were made");
             return;
         }
         File file = new File(filename);
         if (!file.exists()) {
             try {
                 file.createNewFile();
+                Log.d(TAG, "Created new cache file");
             }
             catch (IOException e) {
+                Log.w(TAG, "Could not create new cache file: " + e.getMessage());
+                e.printStackTrace();
                 return;
             }
         }
 
         StringBuilder builder = new StringBuilder();
         for (CacheItem item : cacheItems) {
+            Log.d(TAG, "Saving cache item '" + item.toString() + "'");
             builder.append(item.toString());
         }
 
@@ -146,8 +163,11 @@ public abstract class Cache {
             os.write(builder.toString().getBytes());
         }
         catch (IOException e) {
+            Log.w(TAG, "Could not save cache file: " + e.getMessage());
+            e.printStackTrace();
             //Ignore...
         }
+        Log.d(TAG, "Finished saving cache " + filename);
     }
 
 
@@ -164,16 +184,21 @@ public abstract class Cache {
      * Method reads the entire cache.
      */
     private void readCache() {
+        Log.d(TAG, "Begin reading cache " + filename);
         cacheItems = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(App.getContext().openFileInput(filename)))) {
             String line = reader.readLine();
             while (line != null && !line.isEmpty()) {
                 cacheItems.add(generateCacheItem(line));
+                Log.d(TAG, "Read cache item '" + line + "'");
             }
         }
         catch (IOException e) {
             //Ignore...
+            Log.w(TAG, "Error reading cache: " + e.getMessage());
+            e.printStackTrace();
         }
+        Log.d(TAG, "Finished reading cache " + filename);
     }
 
 }

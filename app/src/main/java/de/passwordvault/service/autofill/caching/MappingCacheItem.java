@@ -45,6 +45,29 @@ public class MappingCacheItem extends CacheItem {
         uuids = null;
     }
 
+    /**
+     * Constructor instantiates a new cache item from the passed identifier and list of UUIDs.
+     *
+     * @param identifier            Identifier for the cache item.
+     * @param uuids                 Array of UUIDs for the cache item.
+     * @throws NullPointerException One of the passed arguments is {@code null}.
+     */
+    public MappingCacheItem(String identifier, String[] uuids) throws NullPointerException {
+        super(identifier, "");
+        if (uuids == null) {
+            throw new NullPointerException();
+        }
+        this.uuids = uuids;
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < uuids.length; i++) {
+            builder.append(uuids[i]);
+            if (i < uuids.length - 1) {
+                builder.append(',');
+            }
+        }
+        setContent(builder.toString());
+    }
+
 
     /**
      * Method returns a list of UUIDs

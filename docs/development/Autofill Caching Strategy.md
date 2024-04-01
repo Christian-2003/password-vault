@@ -38,26 +38,26 @@ com.companyname.test;29911ca7-2c1e-49c2-a346-6089dc3692ed,19cb7668-f16a-4780-81f
 ```
 
 ###### Content Cache
-The `ContentCache` stores _username_ and _password_ for an account, which is represented through it's _UUID_ within the cache. The cache is stored in the file _/autofill/content.cache_ within the internal app storage.
+The `ContentCache` stores _username_, _password_ and _entry name_ for an account, which is represented through it's _UUID_ within the cache. The cache is stored in the file _/autofill/content.cache_ within the internal app storage.
 
 The content cache looks as follows:
 ```csv
-<uuid1>;<username1>,<password1>
-<uuid2>;<username2>,<password2>
-<uuid3>;<username3>,<password3>
+<uuid1>;<username1>,<password1>,<entry1>
+<uuid2>;<username2>,<password2>,<entry2>
+<uuid3>;<username3>,<password3>,<entry3>
 ...
 ```
 
 An example might be:
 ```csv
-bd4fc592-f9c9-4d39-8705-164789a2df32;test123@gmail.com,helloworld
-932714cc-5bc0-4656-b709-5070ae596d8a;UserId1,
-19cb7668-f16a-4780-81f8-ea55b1bb8d7a;,abc123
+bd4fc592-f9c9-4d39-8705-164789a2df32;test123@gmail.com,helloworld,PasswordVault Account
+932714cc-5bc0-4656-b709-5070ae596d8a;UserId1,,Login Account
+19cb7668-f16a-4780-81f8-ea55b1bb8d7a;,abc123,Test Account
 ```
 
-Please note that username and password are encrypted through AES the same way that normal app storage is encrypted.
+Please note that username, password and entry name are encrypted through AES the same way that normal app storage is encrypted.
 
-If no password or username is available with an account, the respective column is simply left empty.
+If no password or username is available with an account, the respective column is simply left empty. The name of the entry must always be set.
 
 ###### Invalidation Cache
 The `InvalidationCache` stores the _UUID_ of each entry that has been changed by the user and is no longer valid.
