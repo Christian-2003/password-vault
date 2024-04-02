@@ -23,7 +23,10 @@ Before releasing a new version, make sure that the entire software works as inte
 <br>
 
 ## Preparing for a New Release
-In preparation for a new release, make sure that the version number both within the [VERSION.txt](../../VERSION.txt) and [build.gradle](../../app/build.gradle) files are correct. Determine the accurat version number as defined by the guidelines from [semver](https://semver.org/). An example for version numbers within the mentioned files could be as follows:
+Before releasing, a few files used for documentation and build purposes need to be updated.
+
+###### Version Numbers
+In preparation for a new release, make sure that the version numbers both within the [VERSION.txt](../../VERSION.txt) and [build.gradle](../../app/build.gradle) files are correct. Determine the accurat version number as defined by the guidelines from [semver](https://semver.org/). An example for version numbers within the mentioned files could be as follows:
 
 _VERSION.txt_
 ```
@@ -87,11 +90,28 @@ class ExampleClass {
 }
 ```
 
+###### Security Policy
+Please add the current version number to the table [Data Encryption](../../SECURITY.md#data-encryption) and add the respective information:
+
+_SECURITY.md_
+```markdown
+...
+
+Version | Data | Backup | User Password
+--- | --- | --- | ---
+3.2.1 | :white_check_mark: | :white_check_mark: | :white_check_mark:
+
+...
+```
+
+If any security-related features are added within the release, add a column to indicate the feature.
+
 ###### Checklist
 * Version number changed in _VERSION.txt_
 * Version number changed in _build.gradle_
 * Updated _CHANGELOG.md_
 * Updated all Java classes
+* Updated _SECURITY.md_
 
 <br>
 
@@ -195,6 +215,7 @@ This is a complete checklist of all steps that need to be taken to release a new
     * Version number changed in _build.gradle_
     * Updated _CHANGELOG.md_
     * Updated all Java classes
+    * Updated _SECURITY.md_
 3. [Building a New Release](#building-a-new-release)
     * Generated signed APK file with the release certificate
     * Changed name of APK file
@@ -208,5 +229,5 @@ This is a complete checklist of all steps that need to be taken to release a new
 <br>
 
 ***
-2024-02-23  
+2024-04-02  
 &copy; Christian-2003
