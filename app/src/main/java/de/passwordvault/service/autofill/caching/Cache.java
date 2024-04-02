@@ -2,15 +2,12 @@ package de.passwordvault.service.autofill.caching;
 
 import android.content.Context;
 import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-
 import de.passwordvault.App;
 
 
@@ -140,23 +137,12 @@ public abstract class Cache {
             Log.d(TAG, "Cancelled saving cache " + filename + ", since no changes were made");
             return;
         }
-        File file = new File(filename);
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-                Log.d(TAG, "Created new cache file");
-            }
-            catch (IOException e) {
-                Log.w(TAG, "Could not create new cache file: " + e.getMessage());
-                e.printStackTrace();
-                return;
-            }
-        }
 
         StringBuilder builder = new StringBuilder();
         for (CacheItem item : cacheItems) {
             Log.d(TAG, "Saving cache item '" + item.toString() + "'");
             builder.append(item.toString());
+            builder.append(System.lineSeparator());
         }
 
         try (FileOutputStream os = App.getContext().openFileOutput(filename, Context.MODE_PRIVATE)) {
@@ -185,12 +171,34 @@ public abstract class Cache {
      */
     private void readCache() {
         Log.d(TAG, "Begin reading cache " + filename);
+
+        File file = new File(App.getContext().getFilesDir(), filename);
+        if (!file.exists()) {
+            try {
+                boolean created = file.createNewFile();
+                if (!created) {
+                    Log.d(TAG, "Could not create new cache file");
+                    return;
+                }
+            }
+            catch (SecurityException | IOException e) {
+                Log.w(TAG, "Cannot create cache file and associated parent directories: " + e.getMessage());
+                e.printStackTrace();
+                return;
+            }
+            Log.d(TAG, "Created new cache file");
+        }
+        else {
+            Log.d(TAG, "Cache file exists");
+        }
+
         cacheItems = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(App.getContext().openFileInput(filename)))) {
             String line = reader.readLine();
             while (line != null && !line.isEmpty()) {
                 cacheItems.add(generateCacheItem(line));
                 Log.d(TAG, "Read cache item '" + line + "'");
+                line = reader.readLine();
             }
         }
         catch (IOException e) {

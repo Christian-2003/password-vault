@@ -29,7 +29,7 @@ public class MappingCache extends Cache {
      * Constructor instantiates a new mapping cache.
      */
     private MappingCache() {
-        super(new File(App.getContext().getFilesDir(), "/autofill/mapping.cache").getPath());
+        super("autofill_mapping.cache");
     }
 
 

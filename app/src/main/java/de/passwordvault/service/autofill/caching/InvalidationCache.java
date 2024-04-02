@@ -32,7 +32,7 @@ public class InvalidationCache extends Cache {
      * Constructor instantiates a new invalidation cache.
      */
     private InvalidationCache() {
-        super(new File(App.getContext().getFilesDir(), "/autofill/invalidation.cache").getPath());
+        super("autofill_invalidation.cache");
     }
 
 
@@ -46,6 +46,15 @@ public class InvalidationCache extends Cache {
             singleton = new InvalidationCache();
         }
         return singleton;
+    }
+
+    /**
+     * Method returns whether the invalidation cache is loaded.
+     *
+     * @return  Whether the invalidation cache is loaded.
+     */
+    public static boolean isLoaded() {
+        return singleton != null;
     }
 
 

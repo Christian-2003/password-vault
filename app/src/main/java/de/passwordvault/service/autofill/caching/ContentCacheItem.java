@@ -231,7 +231,7 @@ public class ContentCacheItem extends CacheItem {
         if (parts.length >= 3) {
             username = parts[0];
             password = parts[1];
-            entryName = parts[3];
+            entryName = parts[2];
         }
         else {
             username = "";

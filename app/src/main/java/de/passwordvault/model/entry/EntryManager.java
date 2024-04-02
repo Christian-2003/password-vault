@@ -10,6 +10,8 @@ import de.passwordvault.model.PersistableManager;
 import de.passwordvault.model.storage.app.StorageException;
 import de.passwordvault.model.storage.app.StorageManager;
 import de.passwordvault.model.storage.encryption.EncryptionException;
+import de.passwordvault.service.autofill.caching.InvalidationCache;
+import de.passwordvault.service.autofill.caching.InvalidationCacheItem;
 
 
 /**

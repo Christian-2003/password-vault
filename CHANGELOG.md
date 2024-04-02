@@ -33,6 +33,7 @@ data (e.g. usernames, passwords or email addresses) to the user of other apps.
 * Moved MIT license from string resource into raw resource file.
 * Moved templates for HTML export from string resource into raw resource files.
 * Added special display for recently changed entries in `HomeFragment` and list of entries in `EntriesFragment` for when no entries are available to display.
+* Implemented caches to accelerate access to autofill data that is often used.
 
 <br>
 

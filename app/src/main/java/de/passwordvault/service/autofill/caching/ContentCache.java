@@ -33,7 +33,7 @@ public class ContentCache extends Cache {
      * Constructor instantiates a new content cache.
      */
     private ContentCache() {
-        super(new File(App.getContext().getFilesDir(), "/autofill/content.cache").getPath());
+        super("autofill_content.cache");
     }
 
 

@@ -47,6 +47,12 @@ import de.passwordvault.view.activities.AutofillAuthenticationActivity;
 public class FillRequestHandler {
 
     /**
+     * Field stores the tag used for debugging messages.
+     */
+    private static final String TAG = "FillRequestHandler";
+
+
+    /**
      * Attribute stores the autofill service for which the handler is created.
      */
     private final AutofillService autofillService;
@@ -80,6 +86,7 @@ public class FillRequestHandler {
      * @param callback      Callback for the fill request.
      */
     public void onFillRequest(FillRequest request, CancellationSignal cancelSignal, FillCallback callback) {
+        Log.d(TAG, "Begin fill request");
         List<FillContext> contexts = request.getFillContexts();
         AssistStructure structure = contexts.get(contexts.size() - 1).getStructure();
         ParsedStructure parsedStructure = parseStructure(structure);
@@ -87,8 +94,10 @@ public class FillRequestHandler {
         ArrayList<UserData> userData;
         if (Configuration.useAutofillCaching()) {
             //Use caching:
+            Log.d(TAG, "Use autofill caching");
             MappingCacheItem mappingCacheItem = (MappingCacheItem)MappingCache.getInstance().getItem(parsedStructure.getPackageName());
             if (mappingCacheItem == null) {
+                Log.d(TAG, "Item for fill request not in cache");
                 userData = fetcher.fetchUserDataForPackage(parsedStructure.getPackageName());
                 if (!userData.isEmpty()) {
                     String[] uuids = new String[userData.size()];
@@ -99,20 +108,31 @@ public class FillRequestHandler {
                     for (UserData item : userData) {
                         ContentCache.getInstance().putItem(new ContentCacheItem(item.getEntryUuid(), item.getUsername(), item.getPassword(), item.getEntryName()));
                     }
+                    MappingCache.getInstance().save();
+                    ContentCache.getInstance().save();
+                    Log.d(TAG, "Updated MappingCache");
+                    Log.d(TAG, "Updated ContentCache");
+                }
+                else {
+                    Log.d(TAG, "Did not update caches");
                 }
             }
             else {
+                Log.d(TAG, "Item for fill request in cache");
                 userData = new ArrayList<>();
                 String[] uuids = mappingCacheItem.getUuids();
                 for (String uuid : uuids) {
                     InvalidationCacheItem invalidationCacheItem = (InvalidationCacheItem)InvalidationCache.getInstance().getItem(uuid);
                     if (invalidationCacheItem == null) {
+                        Log.d(TAG, "Item valid");
                         ContentCacheItem contentCacheItem = (ContentCacheItem)ContentCache.getInstance().getItem(uuid);
                         if (contentCacheItem == null) {
+                            Log.d(TAG, "Item not in ContentCache");
                             UserData data = fetcher.fetchUserDataForUuid(uuid);
                             if (data == null) {
                                 mappingCacheItem.removeUuid(uuid);
                                 MappingCache.getInstance().putItem(mappingCacheItem);
+                                Log.d(TAG, "Updated MappingCache with removed ID");
                             }
                             else {
                                 userData.add(data);
@@ -122,11 +142,14 @@ public class FillRequestHandler {
                         userData.add(new UserData(contentCacheItem.getEntryName(), contentCacheItem.getIdentifier(), contentCacheItem.getUsername(), contentCacheItem.getPassword()));
                     }
                     else {
+                        Log.d(TAG, "Item invalid");
                         UserData data = fetcher.fetchUserDataForUuid(uuid);
+                        Log.d(TAG, "Loaded item from app storage");
                         if (data == null) {
                             ContentCache.getInstance().removeItem(uuid);
                             mappingCacheItem.removeUuid(uuid);
                             MappingCache.getInstance().putItem(mappingCacheItem);
+                            Log.d(TAG, "Updated MappingCache with removed ID");
                         }
                         else {
                             ContentCacheItem contentCacheItem = (ContentCacheItem)ContentCache.getInstance().getItem(uuid);
@@ -136,6 +159,11 @@ public class FillRequestHandler {
                         }
                         InvalidationCache.getInstance().removeItem(uuid);
                     }
+                }
+                MappingCache.getInstance().save();
+                ContentCache.getInstance().save();
+                if (InvalidationCache.isLoaded()) {
+                    InvalidationCache.getInstance().save();
                 }
             }
         }
