@@ -2,7 +2,7 @@
 
 # Changelog
 
-## 3.5.0 (XXXX-XX-XX)
+## 3.5.0 (2024-04-03)
 ###### Release Highlights
 Major visual enhancements regarding boundaries of clickable contents. Furthermore, the app can be used as autofill service providing suggestions for
 data (e.g. usernames, passwords or email addresses) to the user of other apps.
