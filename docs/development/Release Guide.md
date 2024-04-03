@@ -11,7 +11,7 @@ This document describes the process of releasing a new version of the PasswordVa
 5. [Publish a New Release](#publish-a-new-release)
 6. [Complete Checklist](#complete-checklist)
 
-<br>
+<br/>
 
 ## Before Releasing a New Version
 Before releasing a new version, make sure that the entire software works as intended. New functionalities must not prevent any functionalities that were introduced in previous versions from working properly. Make sure that all unit tests are passed before releasing.
@@ -20,7 +20,7 @@ Before releasing a new version, make sure that the entire software works as inte
 * Software works as intended
 * Previous fetures work as intended
 
-<br>
+<br/>
 
 ## Preparing for a New Release
 Before releasing, a few files used for documentation and build purposes need to be updated.
@@ -113,7 +113,7 @@ If any security-related features are added within the release, add a column to i
 * Updated all Java classes
 * Updated _SECURITY.md_
 
-<br>
+<br/>
 
 ## Building a New Release
 The next step is building the new release within Android Studio. This can only be done by the head developer [Christian-2003](https://github.com/Christian-2003) since he contains the certificate to generate a signed APK file. In order to build a new release, follow the steps mentioned below.
@@ -138,7 +138,7 @@ password-vault-v3.2.1.apk
 * Generated signed APK file with the release certificate
 * Changed name of APK file
 
-<br>
+<br/>
 
 ## Commit Changes to GitHub
 Before publishing a new release, please commit all changes that were done to the repository (including the already mentioned changes within this guide) to the GitHub repository.
@@ -152,7 +152,7 @@ For the commit description, always choose the following:
 ###### Checklist
 * Committed all changes to GitHub
 
-<br>
+<br/>
 
 ## Publish a New Release
 The next step is publishing the relase to GitHub, which can be done on [this](https://github.com/Christian-2003/password-vault/releases) page.
@@ -202,7 +202,7 @@ After that, you may publish the release to GitHub.
 * Created new tag
 * Created description
 
-<br>
+<br/>
 
 ## Complete Checklist
 This is a complete checklist of all steps that need to be taken to release a new version:
@@ -226,7 +226,7 @@ This is a complete checklist of all steps that need to be taken to release a new
     * Created new tag
     * Created description
 
-<br>
+<br/>
 
 ***
 2024-04-02  

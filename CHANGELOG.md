@@ -2,6 +2,15 @@
 
 # Changelog
 
+## 3.5.1 (XXXX-XX-XX)
+###### Release Highlights
+N/A
+
+###### Features
+* Fixed a bug where an (incorrect) app icon is shown for an entry that should not have an icon at all.
+
+<br/>
+
 ## 3.5.0 (2024-04-03)
 ###### Release Highlights
 Major visual enhancements regarding boundaries of clickable contents. Furthermore, the app can be used as autofill service providing suggestions for
@@ -35,7 +44,7 @@ data (e.g. usernames, passwords or email addresses) to the user of other apps.
 * Added special display for recently changed entries in `HomeFragment` and list of entries in `EntriesFragment` for when no entries are available to display.
 * Implemented caches to accelerate access to autofill data that is often used.
 
-<br>
+<br/>
 
 ## 3.4.0 (2024-03-09)
 ###### Release Highlights
@@ -55,7 +64,7 @@ finds duplicate passwords.
 * Added extensive password security analysis for all passwords to the app.
 * Content of details can be copied to the clipboard through long press on the detail.
 
-<br>
+<br/>
 
 ## 3.3.0 (2024-02-22)
 ###### Release Highlights
@@ -77,7 +86,7 @@ Added custom quality gates for password security which can be changed in setting
 * UUID of entries is no longer shown in `EntryActivity`, since this is very useless for the user.
 * `EntriesFragment` shows current sorting of entries in popup menu.
 
-<br>
+<br/>
 
 ## 3.2.1 (2024-02-02)
 ###### Release Highlights
@@ -94,7 +103,7 @@ Changes to app UI as well as some quality of life changes. Added PIN code as a t
 * Content input within `DetailDialog` is now obfuscated when obfuscate-checkbox is checked.
 * Added custom landscape layout for `MainActivity` in which the navigation bar is located at the leading side instead of the bottom.
 
-<br>
+<br/>
 
 ## 3.2.0 (2024-01-19)
 ###### Release Highlights
@@ -116,7 +125,7 @@ Backups can now be encrypted through a password. To increase data security, an o
 * Added buttons to all password inputs, to toggle password visibility.
 * Added _class 3_ biometric login.
 
-<br>
+<br/>
 
 ## 3.1.0 (2023-12-31)
 ###### Release Highlights
@@ -139,7 +148,7 @@ Account data can now be exported into readable HTML-format. Furthermore, account
 * Added `ExportToHtml`-class to export account data to readable HTML format.
 * Added `ExportException`-class which can be thrown when errors regarding an export were encountered.
 
-<br>
+<br/>
 
 ## 3.0.0 (2023-12-28)
 ###### Release Highlights
@@ -158,7 +167,7 @@ Major overhaul of the data handling results in backwards-compatibility break. Ad
 * Added classes to build and parse CSV.
 * Added classes which will be used in the next updates to generate data backups.
 
-<br>
+<br/>
 
 ## 2.2.1 (2023-10-13)
 ###### Release Highlights
@@ -173,7 +182,7 @@ Major security overhaul: All entries are now being encrypted through an AES/GCM-
 * Added slide in and slide out animations for search bar in `EntriesFragment`.
 * All entries are encrypted through an AES-algorithm.
 
-<br>
+<br/>
 
 ## 2.2.0 (2023-10-10)
 ###### Release Highlights
@@ -184,7 +193,7 @@ Major design overhaul: The Material Design 3 has been partially incorporated int
 * Created App-icon.
 * Partial incorporation of Material Design 3.
 
-<br>
+<br/>
 
 ## 2.1.0 (2023-10-09)
 ###### Release Highlights
@@ -197,7 +206,7 @@ Entries can now be sorted according to some categories.
 * Implemented `GenericComparator<T>`-class, which implements `Comparator<T>`-interface to provide information on reverse sorting for subclasses.
 * Implemented `LexicographicComparator` and `TimeComparator` to sort `Entry`-instances according to the categories listed above.
 
-<br>
+<br/>
 
 ## 2.0.0 (2023-10-04)
 ###### Release Highlights
@@ -212,7 +221,7 @@ Backwards-compatibility breaking changes to the handling of entries within the b
 * Added `FileAccessor`, `FileReader`, `FileWriter` and `GenericSecurityException` classes to handle access to encrypted files. These classes are currently unused and will be implemented into the code later.
 * Added exceptions to `Entry` classes for better security.
 
-<br>
+<br/>
 
 ## 1.0.1 (2023-09-23)
 ###### Release Highlighs
@@ -226,7 +235,7 @@ Added WISHLIST.md and VERSION.txt to project files. Bugfixes.
 * Fixed typos and links in README.md.
 * Moved implementation for interface ListItemSelectionListener into EntriesFragment.
 
-<br>
+<br/>
 
 ## 1.0.0 (2023-09-23)
 ###### Release Highlights

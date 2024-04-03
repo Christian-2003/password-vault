@@ -51,8 +51,6 @@ public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecy
          */
         public final ShapeableImageView logo;
 
-        public Drawable logoDrawable;
-
 
         /**
          * Constructor instantiates a new view holder for the passed inflated view.
@@ -133,10 +131,7 @@ public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecy
         if (clickListener != null) {
             holder.itemView.setOnClickListener(view -> clickListener.onItemClick(entry, position));
         }
-        holder.logoDrawable = entry.getLogo();
-        if (holder.logoDrawable != null) {
-            holder.logo.setImageDrawable(holder.logoDrawable);
-        }
+        holder.logo.setImageDrawable(entry.getLogo());
     }
 
 
