@@ -8,6 +8,7 @@ N/A
 
 ###### Features
 * Fixed a bug where an (incorrect) app icon is shown for an entry that should not have an icon at all.
+* Added setting to manually change between dark / light mode.
 
 <br/>
 

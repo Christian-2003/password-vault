@@ -2,7 +2,6 @@ package de.passwordvault.view.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -16,16 +15,10 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import java.io.File;
 import java.util.Objects;
-
-import de.passwordvault.App;
 import de.passwordvault.R;
 import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.storage.Configuration;
-import de.passwordvault.model.storage.app.StorageException;
-import de.passwordvault.model.storage.encryption.EncryptionException;
-import de.passwordvault.model.storage.file.EncryptedFileWriter;
-import de.passwordvault.viewmodel.activities.DataConversionViewModel;
 import de.passwordvault.viewmodel.activities.LoginViewModel;
 
 
@@ -56,6 +49,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Configuration.applyDarkmode();
+
         if (!Account.getInstance().hasPassword()) {
             //No login required:
             continueToMainActivity();

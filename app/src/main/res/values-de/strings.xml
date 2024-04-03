@@ -35,6 +35,13 @@
 
 
     <!-- Settings -->
+    <string name="settings_appearance">Ansicht</string>
+    <string name="settings_appearance_darkmode">Nachtmodus</string>
+    <string name="settings_appearance_darkmode_info">Ändere Nachtmodus-Einstellungen</string>
+    <string name="settings_appearance_darkmode_light">Hell</string>
+    <string name="settings_appearance_darkmode_dark">Dunkel</string>
+    <string name="settings_appearance_darkmode_system">Wie System</string>
+
     <string name="settings_security">Sicherheit</string>
     <string name="settings_security_login">App-Login</string>
     <string name="settings_security_login_info">Verlange Passwort zum Öffnen der App</string>

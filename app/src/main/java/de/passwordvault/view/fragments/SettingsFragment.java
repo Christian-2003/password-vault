@@ -27,7 +27,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import java.io.Serializable;
 import java.util.Objects;
-
 import de.passwordvault.App;
 import de.passwordvault.BuildConfig;
 import de.passwordvault.R;
@@ -40,6 +39,7 @@ import de.passwordvault.view.dialogs.ChangePasswordDialog;
 import de.passwordvault.view.dialogs.ConfigureLoginDialog;
 import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
 import de.passwordvault.view.dialogs.CreateBackupDialog;
+import de.passwordvault.view.dialogs.DarkmodeDialog;
 import de.passwordvault.view.dialogs.EnterPasswordDialog;
 import de.passwordvault.view.dialogs.RestoreBackupDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
@@ -53,7 +53,7 @@ import de.passwordvault.view.activities.MainActivity;
  * {@linkplain MainActivity}.
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.5.1
  */
 public class SettingsFragment extends Fragment implements DialogCallbackListener, Serializable, CompoundButton.OnCheckedChangeListener {
 
@@ -157,6 +157,7 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
             ((TextView)view.findViewById(R.id.settings_version)).setText(BuildConfig.VERSION_NAME);
         }
 
+        view.findViewById(R.id.settings_appearance_darkmode_clickable).setOnClickListener(view -> changeDarkmode());
         view.findViewById(R.id.settings_security_password_clickable).setOnClickListener(view -> changePassword());
         view.findViewById(R.id.settings_security_backup_clickable).setOnClickListener(view -> selectDirectory(SELECT_DIRECTORY_TO_CREATE_BACKUP));
         view.findViewById(R.id.settings_security_backup_button).setOnClickListener(view -> showInfoDialog(R.string.settings_security_backup, R.string.settings_security_backup_info_extended));
@@ -600,6 +601,15 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         this.view.findViewById(R.id.settings_security_password_container).setVisibility(View.GONE);
         this.view.findViewById(R.id.settings_security_biometrics_container).setVisibility(View.GONE);
         view.findViewById(R.id.settings_autofill_authentication_container).setVisibility(View.GONE);
+    }
+
+
+    /**
+     * Method shows the dialog to change between dark / light mode.
+     */
+    private void changeDarkmode() {
+        DarkmodeDialog dialog = new DarkmodeDialog();
+        dialog.show(requireActivity().getSupportFragmentManager(), "");
     }
 
 }

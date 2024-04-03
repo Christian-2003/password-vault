@@ -19,6 +19,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.Objects;
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.Account;
+import de.passwordvault.model.storage.Configuration;
 import de.passwordvault.viewmodel.activities.AutofillAuthenticationViewModel;
 
 
@@ -70,6 +71,9 @@ public class AutofillAuthenticationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Configuration.applyDarkmode();
+
         if (!Account.getInstance().hasPassword()) {
             onFailure();
             return;

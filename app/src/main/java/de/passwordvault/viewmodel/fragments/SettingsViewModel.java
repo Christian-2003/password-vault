@@ -1,9 +1,7 @@
 package de.passwordvault.viewmodel.fragments;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.service.autofill.AutofillService;
 import android.util.Log;
 import android.view.autofill.AutofillManager;
 import android.widget.Toast;
@@ -11,7 +9,6 @@ import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModel;
-
 import java.util.concurrent.Executor;
 import de.passwordvault.App;
 import de.passwordvault.R;
@@ -282,6 +279,11 @@ public class SettingsViewModel extends ViewModel {
     public boolean useAutofillService() {
         AutofillManager manager = (AutofillManager)App.getContext().getSystemService(AutofillManager.class);
         return manager != null && manager.hasEnabledAutofillServices();
+    }
+
+
+    public void changeDarkMode(int mode) {
+
     }
 
 }

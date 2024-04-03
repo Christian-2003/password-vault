@@ -4,7 +4,8 @@
 LinearLayout models the structure for the custom layout of the DialogDetailFragment
 class.
 -->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/default_padding">

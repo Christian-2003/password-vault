@@ -36,6 +36,13 @@
 
 
     <!-- Settings -->
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_appearance_darkmode">Dark Mode</string>
+    <string name="settings_appearance_darkmode_info">Change dark mode settings</string>
+    <string name="settings_appearance_darkmode_light">Light</string>
+    <string name="settings_appearance_darkmode_dark">Dark</string>
+    <string name="settings_appearance_darkmode_system">Like system</string>
+
     <string name="settings_security">Security</string>
     <string name="settings_security_login">Require login</string>
     <string name="settings_security_login_info">Require password to open app</string>
