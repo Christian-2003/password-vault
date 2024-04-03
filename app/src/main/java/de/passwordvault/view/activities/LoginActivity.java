@@ -51,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Configuration.applyDarkmode();
+        Configuration.applyLanguage(this);
 
         if (!Account.getInstance().hasPassword()) {
             //No login required:

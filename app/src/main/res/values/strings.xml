@@ -42,6 +42,11 @@
     <string name="settings_appearance_darkmode_light">Light</string>
     <string name="settings_appearance_darkmode_dark">Dark</string>
     <string name="settings_appearance_darkmode_system">Like system</string>
+    <string name="settings_appearance_language">Language</string>
+    <string name="settings_appearance_language_info">Change the language of the app</string>
+    <string name="settings_appearance_language_english">English</string>
+    <string name="settings_appearance_language_german">German</string>
+    <string name="settings_appearance_language_system">Like system</string>
 
     <string name="settings_security">Security</string>
     <string name="settings_security_login">Require login</string>

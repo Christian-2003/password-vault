@@ -41,6 +41,11 @@
     <string name="settings_appearance_darkmode_light">Hell</string>
     <string name="settings_appearance_darkmode_dark">Dunkel</string>
     <string name="settings_appearance_darkmode_system">Wie System</string>
+    <string name="settings_appearance_language">Sprache</string>
+    <string name="settings_appearance_language_info">Ändere die Sprache der App</string>
+    <string name="settings_appearance_language_english">Englisch</string>
+    <string name="settings_appearance_language_german">Deutsch</string>
+    <string name="settings_appearance_language_system">Wie System</string>
 
     <string name="settings_security">Sicherheit</string>
     <string name="settings_security_login">App-Login</string>
