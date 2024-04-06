@@ -23,6 +23,12 @@ import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.fragments.SettingsViewModel;
 
 
+/**
+ * Class implements the settings data activity.
+ *
+ * @author  Christian-2003
+ * @version 3.5.1
+ */
 public class SettingsDataActivity extends PasswordVaultBaseActivity implements DialogCallbackListener, AuthenticationCallback {
 
     /**
@@ -237,7 +243,7 @@ public class SettingsDataActivity extends PasswordVaultBaseActivity implements D
             ConfirmDeleteDialog dialog = new ConfirmDeleteDialog();
             Bundle args = new Bundle();
             args.putSerializable(ConfirmDeleteDialog.KEY_CALLBACK_LISTENER, this);
-            args.putString(ConfirmDeleteDialog.KEY_OBJECT, getString(R.string.settings_data_delete_dialog_info));
+            args.putString(ConfirmDeleteDialog.KEY_OBJECT, getString(R.string.settings_data_delete_all));
             dialog.setArguments(args);
             dialog.show(getSupportFragmentManager(), "");
         }

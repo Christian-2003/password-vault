@@ -51,11 +51,24 @@
     <string name="settings_appearance_language_system">Like system</string>
 
     <string name="settings_security">Security</string>
-    <string name="settings_security_login">Require login</string>
+    <string name="settings_security_login">App login</string>
+    <string name="settings_security_login_app">Require login</string>
+    <string name="settings_security_login_app_info">Require master password to open the app</string>
+    <string name="settings_security_login_biometrics">Use biometrics</string>
+    <string name="settings_security_login_biometrics_info">Login with biometrics</string>
+    <string name="settings_security_login_password">Change password</string>
+    <string name="settings_security_login_password_info">Change master password</string>
+    <string name="settings_security_password">Password Security</string>
+    <string name="settings_security_password_qualitygates">Password quality gates</string>
+    <string name="settings_security_password_qualitygates_info">Change quality gates for password evaluation</string>
+    <string name="settings_security_password_analysis">Password analysis</string>
+    <string name="settings_security_password_analysis_info">Analyze password security</string>
+
+
+
     <string name="settings_security_login_info">Require password to open app</string>
     <string name="settings_security_disable_login_title">Disable Login</string>
     <string name="settings_security_disable_login_info">Enter Password to disable login.</string>
-    <string name="settings_security_password">Change password</string>
     <string name="settings_security_password_info">Change password for login</string>
     <string name="settings_security_biometrics">Use biometrics</string>
     <string name="settings_security_biometrics_info">Use biometrics for login</string>
@@ -76,8 +89,6 @@
     <string name="settings_security_restore_success">Successfully restored backup</string>
     <string name="settings_security_quality_gates">Password quality gates</string>
     <string name="settings_security_quality_gates_info">Edit quality gates for passwords</string>
-    <string name="settings_security_password_analysis">Password security analysis</string>
-    <string name="settings_security_password_analysis_info">Perform a security analysis for all passwords</string>
 
     <string name="settings_autofill">Autofill</string>
     <string name="settings_autofill_enable">Enable autofill service</string>
@@ -134,11 +145,6 @@
     <string name="settings_data_delete">Delete</string>
     <string name="settings_data_delete_all">Delete data</string>
     <string name="settings_data_delete_all_info">Delete all data irreversibly</string>
-
-
-    <string name="settings_data_delete_info">Irreversibly delete all data</string>
-    <string name="settings_data_delete_dialog_info">all data</string>
-    <string name="settings_data_delete_dialog_info_extended">Confirm password to delete all data irreversibly.</string>
 
 
     <!-- Entry activity -->

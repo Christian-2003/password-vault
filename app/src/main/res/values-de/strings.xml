@@ -51,10 +51,22 @@
 
     <string name="settings_security">Sicherheit</string>
     <string name="settings_security_login">App-Login</string>
+    <string name="settings_security_login_app">Login verwenden</string>
+    <string name="settings_security_login_app_info">Master-Password zum Öffnen der App verlangen</string>
+    <string name="settings_security_login_biometrics">Biometrie verwenden</string>
+    <string name="settings_security_login_biometrics_info">Biometrie zum Einloggen verwenden</string>
+    <string name="settings_security_login_password">Passwort ändern</string>
+    <string name="settings_security_login_password_info">Master-Passwort ändern</string>
+    <string name="settings_security_password">Passwortsicherheit</string>
+    <string name="settings_security_password_qualitygates">Sicherheitskriterien</string>
+    <string name="settings_security_password_qualitygates_info">Sicherheitskriterien für Passwortsicherheit bearbeiten</string>
+    <string name="settings_security_password_analysis">Passwortanalyse</string>
+    <string name="settings_security_password_analysis_info">Sicherheit sämtlicher Passwörter analysieren</string>
+
+
     <string name="settings_security_login_info">Verlange Passwort zum Öffnen der App</string>
     <string name="settings_security_disable_login_title">App-Login deaktivieren</string>
     <string name="settings_security_disable_login_info">Geben Sie Ihr Passwort ein, um den App-Login zu deaktivieren.</string>
-    <string name="settings_security_password">Passwort ändern</string>
     <string name="settings_security_password_info">Passwort zum Einloggen ändern</string>
     <string name="settings_security_biometrics">Biometrie verwenden</string>
     <string name="settings_security_biometrics_info">Biometrie zum Einloggen verwenden</string>
@@ -75,8 +87,6 @@
     <string name="settings_security_restore_success">Backup wurde erfolgreich wiederhergestellt</string>
     <string name="settings_security_quality_gates">Passwortsicherheits-Kriterien</string>
     <string name="settings_security_quality_gates_info">Passwortsicherheits-Kriterien bearbeiten</string>
-    <string name="settings_security_password_analysis">Passwortsicherheitsanalyse</string>
-    <string name="settings_security_password_analysis_info">Sicherheit sämtlicher Passwörter analysieren</string>
 
     <string name="settings_autofill">Automatisches Ausfüllen</string>
     <string name="settings_autofill_enable">Automatisches Ausfüllen aktivieren</string>
@@ -130,12 +140,6 @@
     <string name="settings_data_delete">Löschen</string>
     <string name="settings_data_delete_all">Daten löschen</string>
     <string name="settings_data_delete_all_info">Alle Daten unumkehrbar löschen</string>
-
-
-
-    <string name="settings_data_delete_info">Alle Daten unumkehrbar löschen</string>
-    <string name="settings_data_delete_dialog_info">sämtlichen Daten</string>
-    <string name="settings_data_delete_dialog_info_extended">Bestätigen Sie Ihr Passwort um alle Daten unumkehrbar zu löschen.</string>
 
 
     <!-- Entry activity -->
