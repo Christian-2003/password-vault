@@ -6,14 +6,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.activities.SettingsAboutActivity">
+    tools:context=".view.activities.SettingsDataActivity">
 
     <!-- Toolbar for the activity -->
     <com.google.android.material.appbar.AppBarLayout
         style="@style/pv.layout.app_bar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            app:title="@string/settings_about"
+            app:title="@string/settings_data"
             style="@style/pv.layout.app_bar.collapsing_toolbar">
 
             <androidx.appcompat.widget.Toolbar
@@ -50,11 +50,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Usage -->
+            <!-- Export -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_about_usage"
+                android:text="@string/settings_data_export"
                 android:layout_marginStart="@dimen/default_left_margin_outside_container"
                 style="@style/pv.text.highlight"/>
 
@@ -65,7 +65,7 @@
                 style="@style/background">
 
                 <LinearLayout
-                    android:id="@+id/settings_about_usage_license_container"
+                    android:id="@+id/settings_data_export_html_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
@@ -83,54 +83,13 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/settings_about_usage_license"
+                            android:text="@string/settings_data_export_html"
                             style="@style/pv.text"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/settings_about_usage_license_info"
-                            style="@style/pv.text.variant"/>
-
-                    </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_next"
-                        style="@style/pv.icon"/>
-
-                </LinearLayout>
-
-                <View style="@style/divider"/>
-
-                <LinearLayout
-                    android:id="@+id/settings_about_usage_dependencies_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_about_usage_dependencies"
-                            style="@style/pv.text"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_about_usage_dependencies_info"
+                            android:text="@string/settings_data_export_html_info"
                             style="@style/pv.text.variant"/>
 
                     </LinearLayout>
@@ -148,11 +107,11 @@
 
 
 
-            <!-- GitHub -->
+            <!-- Backup -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_about_github"
+                android:text="@string/settings_data_backup"
                 android:layout_marginStart="@dimen/default_left_margin_outside_container"
                 style="@style/pv.text.highlight"/>
 
@@ -163,7 +122,7 @@
                 style="@style/background">
 
                 <LinearLayout
-                    android:id="@+id/settings_about_github_repository_container"
+                    android:id="@+id/settings_data_backup_create_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
@@ -181,13 +140,13 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/settings_about_github_repo"
+                            android:text="@string/settings_data_backup_create"
                             style="@style/pv.text"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/settings_about_github_repo_info"
+                            android:text="@string/settings_data_backup_create_info"
                             style="@style/pv.text.variant"/>
 
                     </LinearLayout>
@@ -196,7 +155,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_external"
+                        android:src="@drawable/ic_next"
                         style="@style/pv.icon"/>
 
                 </LinearLayout>
@@ -204,11 +163,11 @@
                 <View style="@style/divider"/>
 
                 <LinearLayout
-                    android:id="@+id/settings_about_github_issues_container"
+                    android:id="@+id/settings_data_backup_restore_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
                     android:background="?attr/selectableItemBackground"
+                    android:padding="@dimen/default_padding"
                     android:clickable="true"
                     android:focusable="true"
                     android:orientation="horizontal">
@@ -222,13 +181,13 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/settings_about_github_issues"
+                            android:text="@string/settings_data_backup_restore"
                             style="@style/pv.text"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/settings_about_github_issues_info"
+                            android:text="@string/settings_data_backup_restore_info"
                             style="@style/pv.text.variant"/>
 
                     </LinearLayout>
@@ -237,7 +196,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_external"
+                        android:src="@drawable/ic_next"
                         style="@style/pv.icon"/>
 
                 </LinearLayout>
@@ -246,11 +205,11 @@
 
 
 
-            <!-- Software -->
+            <!-- Delete -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_about_software"
+                android:text="@string/settings_data_delete"
                 android:layout_marginStart="@dimen/default_left_margin_outside_container"
                 style="@style/pv.text.highlight"/>
 
@@ -261,11 +220,11 @@
                 style="@style/background">
 
                 <LinearLayout
-                    android:id="@+id/settings_about_software_update_container"
+                    android:id="@+id/settings_data_delete_all_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
                     android:background="?attr/selectableItemBackground"
+                    android:padding="@dimen/default_padding"
                     android:clickable="true"
                     android:focusable="true"
                     android:orientation="horizontal">
@@ -279,13 +238,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/settings_about_software_update"
+                            android:text="@string/settings_data_delete_all"
                             style="@style/pv.text"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/settings_about_software_update_info"
+                            android:text="@string/settings_data_delete_all_info"
+                            android:textColor="@color/red"
                             style="@style/pv.text.variant"/>
 
                     </LinearLayout>
@@ -294,31 +254,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_external"
+                        android:src="@drawable/ic_next"
                         style="@style/pv.icon"/>
-
-                </LinearLayout>
-
-                <View style="@style/divider"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_about_software_version"
-                        style="@style/pv.text"/>
-
-                    <TextView
-                        android:id="@+id/settings_about_software_version"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_about_software_version"
-                        style="@style/pv.text.variant"/>
 
                 </LinearLayout>
 

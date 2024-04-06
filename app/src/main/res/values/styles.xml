@@ -141,6 +141,7 @@
     <style name="pv.icon">
         <item name="android:layout_height">@dimen/pin_icon_size</item>
         <item name="android:layout_width">@dimen/pin_icon_size</item>
+        <item name="android:tint">@color/on_background_variant</item>
     </style>
 
     <style name="pv.icon.pin" parent="pv.icon">

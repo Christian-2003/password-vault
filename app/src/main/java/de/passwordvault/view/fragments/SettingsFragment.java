@@ -36,6 +36,7 @@ import de.passwordvault.model.storage.backup.XmlBackupRestorer;
 import de.passwordvault.view.activities.PasswordAnalysisActivity;
 import de.passwordvault.view.activities.QualityGatesActivity;
 import de.passwordvault.view.activities.SettingsAboutActivity;
+import de.passwordvault.view.activities.SettingsDataActivity;
 import de.passwordvault.view.dialogs.ChangePasswordDialog;
 import de.passwordvault.view.dialogs.ConfigureLoginDialog;
 import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
@@ -154,19 +155,13 @@ public class SettingsFragment extends PasswordVaultBaseFragment implements Dialo
         }
 
         view.findViewById(R.id.settings_about_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), SettingsAboutActivity.class)));
+        view.findViewById(R.id.settings_data_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), SettingsDataActivity.class)));
+
 
         view.findViewById(R.id.settings_appearance_darkmode_clickable).setOnClickListener(view -> changeDarkmode());
         view.findViewById(R.id.settings_security_password_clickable).setOnClickListener(view -> changePassword());
-        view.findViewById(R.id.settings_security_backup_clickable).setOnClickListener(view -> selectDirectory(SELECT_DIRECTORY_TO_CREATE_BACKUP));
-        view.findViewById(R.id.settings_security_backup_button).setOnClickListener(view -> showInfoDialog(R.string.settings_security_backup, R.string.settings_security_backup_info_extended));
-        //Require mime-type '*/*' to both restore text-backups (version 3.2.0 onwards) and binary-backups (version 3.1.0):
-        view.findViewById(R.id.settings_security_restore).setOnClickListener(view -> selectFile(SELECT_FILE_TO_RESTORE_BACKUP, "*/*"));
-        view.findViewById(R.id.settings_security_restore_button).setOnClickListener(view -> showInfoDialog(R.string.settings_security_restore, R.string.settings_security_restore_info_extended));
         view.findViewById(R.id.settings_security_quality_gates).setOnClickListener(view -> startActivity(new Intent(getActivity(), QualityGatesActivity.class)));
         view.findViewById(R.id.settings_security_password_analysis_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), PasswordAnalysisActivity.class)));
-        view.findViewById(R.id.settings_html_export_clickable).setOnClickListener(view -> createFile(SELECT_FILE_TO_EXPORT_TO_HTML, "text/html", getString(R.string.settings_export_file)));
-        view.findViewById(R.id.settings_html_export_info).setOnClickListener(view -> showInfoDialog(R.string.settings_export_html, R.string.settings_export_html_info_extended));
-        view.findViewById(R.id.settings_data_delete_clickable).setOnClickListener(view -> deleteData());
 
         setupAutofill();
 
@@ -254,76 +249,13 @@ public class SettingsFragment extends PasswordVaultBaseFragment implements Dialo
 
 
     /**
-     * Method is called whenever an activity has finished after being called through
-     * {@link #startActivityForResult(Intent, int)}
-     *
-     * @param requestCode   The integer request code originally supplied to
-     *                      startActivityForResult(), allowing you to identify who this
-     *                      result came from.
-     * @param resultCode    The integer result code returned by the child activity
-     *                      through its setResult().
-     * @param data          An Intent, which can return result data to the caller
-     *                      (various data can be attached to Intent "extras").
-     */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (resultCode != Activity.RESULT_OK || data == null) {
-            return;
-        }
-        switch (requestCode) {
-            case SELECT_DIRECTORY_TO_CREATE_BACKUP:
-                //Create backup:
-                CreateBackupDialog backupDialog = new CreateBackupDialog();
-                Bundle backupArgs = new Bundle();
-                backupArgs.putString(CreateBackupDialog.KEY_DIRECTORY, Objects.requireNonNull(data.getData()).toString());
-                backupArgs.putSerializable(CreateBackupDialog.KEY_CALLBACK_LISTENER, this);
-                backupDialog.setArguments(backupArgs);
-                backupDialog.show(requireActivity().getSupportFragmentManager(), "");
-                break;
-            case SELECT_FILE_TO_RESTORE_BACKUP:
-                //Restore backup:
-                try {
-                    if (!XmlBackupRestorer.isBackupEncrypted(data.getData())) {
-                        //Backup not encrypted:
-                        viewModel.restoreXmlBackup(data.getData(), null, getContext());
-                        return;
-                    }
-                    //Backup encrypted:
-                    RestoreBackupDialog restoreDialog = new RestoreBackupDialog();
-                    Bundle restoreArgs = new Bundle();
-                    restoreArgs.putString(RestoreBackupDialog.KEY_FILE, Objects.requireNonNull(data.getData()).toString());
-                    restoreArgs.putSerializable(RestoreBackupDialog.KEY_CALLBACK_LISTENER, this);
-                    restoreDialog.setArguments(restoreArgs);
-                    restoreDialog.show(requireActivity().getSupportFragmentManager(), "");
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            case SELECT_FILE_TO_EXPORT_TO_HTML:
-                //Export to HTML:
-                viewModel.exportToHtml(data.getData(), getContext());
-                break;
-        }
-    }
-
-
-    /**
      * Method is called whenever a positive dialog callback is initiated.
      *
      * @param fragment  Dialog which called the method.
      */
     @Override
     public void onPositiveCallback(DialogFragment fragment) {
-        if (fragment instanceof CreateBackupDialog) {
-            CreateBackupDialog dialog = (CreateBackupDialog)fragment;
-            viewModel.createXmlBackup(dialog.getDirectory(), dialog.getFilename(), dialog.getPassword(), getContext());
-        }
-        else if (fragment instanceof RestoreBackupDialog) {
-            RestoreBackupDialog dialog = (RestoreBackupDialog)fragment;
-            viewModel.restoreXmlBackup(dialog.getFile(), dialog.getPassword(), getContext());
-        }
-        else if (fragment instanceof ConfigureLoginDialog) {
+        if (fragment instanceof ConfigureLoginDialog) {
             Account.getInstance().save();
             view.findViewById(R.id.settings_security_password_container).setVisibility(View.VISIBLE);
             if (viewModel.areBiometricsAvailable()) {
@@ -338,9 +270,6 @@ public class SettingsFragment extends PasswordVaultBaseFragment implements Dialo
             else {
                 deactivateLogin();
             }
-        }
-        else if (fragment instanceof ConfirmDeleteDialog) {
-            viewModel.deleteAllData();
         }
     }
 
@@ -453,47 +382,6 @@ public class SettingsFragment extends PasswordVaultBaseFragment implements Dialo
 
 
     /**
-     * Method opens the device's default file explorer to select a directory.
-     *
-     * @param requestCode   Request code to be used when choosing a directory.
-     */
-    private void selectDirectory(int requestCode) {
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-        startActivityForResult(intent, SELECT_DIRECTORY_TO_CREATE_BACKUP);
-    }
-
-
-    /**
-     * Method opens the device's default file explorer to select a file.
-     *
-     * @param requestCode   Request code to be used when choosing a file.
-     * @param mimeType      MimeType of the file to be selected.
-     */
-    private void selectFile(int requestCode, String mimeType) {
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType(mimeType);
-        startActivityForResult(intent, requestCode);
-    }
-
-    /**
-     * Method opens the device's default file explorer to create a file.
-     *
-     * @param requestCode   Request code to be used when creating a file.
-     * @param mimeType      MimeType of the file to be created.
-     */
-    private void createFile(int requestCode, String mimeType, String fileName) {
-        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType(mimeType);
-        if (fileName != null) {
-            intent.putExtra(Intent.EXTRA_TITLE, fileName);
-        }
-        startActivityForResult(intent, requestCode);
-    }
-
-
-    /**
      * Method displays an information dialog.
      *
      * @param titleId   Id of the resource-string for the dialog title.
@@ -518,49 +406,6 @@ public class SettingsFragment extends PasswordVaultBaseFragment implements Dialo
         }
         dialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.button_ok), (dialogInterface, i) -> dialogInterface.dismiss());
         dialog.show();
-    }
-
-
-    /**
-     * Method opens the specified URL in the browser.
-     *
-     * @param url   URL to be opened.
-     */
-    private void openUrl(String url) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        startActivity(browserIntent);
-    }
-
-
-    /**
-     * Method deletes all data from the app.
-     */
-    private void deleteData() {
-        viewModel.setCurrentAction(SettingsViewModel.ACTION_DELETE_DATA);
-        if (viewModel.useAppLogin()) {
-            //Authenticate through app login:
-            if (viewModel.useBiometrics()) {
-                showBiometricAuthenticationDialog(SettingsViewModel.ACTION_DELETE_DATA);
-            }
-            else {
-                EnterPasswordDialog dialog = new EnterPasswordDialog();
-                Bundle args = new Bundle();
-                args.putSerializable(EnterPasswordDialog.KEY_CALLBACK_LISTENER, this);
-                args.putString(EnterPasswordDialog.KEY_TITLE, getString(R.string.settings_data_delete));
-                args.putString(EnterPasswordDialog.KEY_INFO, getString(R.string.settings_data_delete_dialog_info_extended));
-                dialog.setArguments(args);
-                dialog.show(requireActivity().getSupportFragmentManager(), "");
-            }
-        }
-        else {
-            //No app login:
-            ConfirmDeleteDialog dialog = new ConfirmDeleteDialog();
-            Bundle args = new Bundle();
-            args.putSerializable(ConfirmDeleteDialog.KEY_CALLBACK_LISTENER, this);
-            args.putString(ConfirmDeleteDialog.KEY_OBJECT, getString(R.string.settings_data_delete_dialog_info));
-            dialog.setArguments(args);
-            dialog.show(requireActivity().getSupportFragmentManager(), "");
-        }
     }
 
 

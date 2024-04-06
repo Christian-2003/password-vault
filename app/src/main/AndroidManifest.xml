@@ -32,6 +32,7 @@
         <activity android:name=".view.activities.DataConversionActivity" android:exported="false"/>
         <activity android:name=".view.activities.PackagesActivity" android:exported="false"/>
         <activity android:name=".view.activities.SettingsAboutActivity" android:exported="false"/>
+        <activity android:name=".view.activities.SettingsDataActivity" android:exported="false"/>
 
         <!-- Activity used for authentication with autofill requests -->
         <activity android:name=".view.activities.AutofillAuthenticationActivity" android:exported="false"/>

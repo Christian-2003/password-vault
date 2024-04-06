@@ -59,6 +59,32 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/settings_data_clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/default_padding"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Data"
+                    style="@style/pv.text"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Show 'Data page'"
+                    style="@style/pv.text.variant"/>
+
+            </LinearLayout>
+
+
+
             <!-- Appearance-related settings -->
             <TextView
                 android:layout_width="wrap_content"
@@ -243,98 +269,7 @@
 
                 </LinearLayout>
 
-                <View
-                    style="@style/divider"/>
-
-                <LinearLayout
-                    android:id="@+id/settings_security_backup_clickable"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:padding="@dimen/default_padding"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_security_backup"
-                            style="@style/pv.text"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_security_backup_info"
-                            style="@style/pv.text.variant"/>
-
-                    </LinearLayout>
-
-                    <ImageButton
-                        android:id="@+id/settings_security_backup_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_info"
-                        android:paddingStart="@dimen/default_padding"
-                        android:layout_weight="0"
-                        android:layout_gravity="center"
-                        style="@style/pv.button.image_button"/>
-
-                </LinearLayout>
-
-                <View
-                    style="@style/divider"/>
-
-                <LinearLayout
-                    android:id="@+id/settings_security_restore"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:padding="@dimen/default_padding"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_security_restore"
-                            style="@style/pv.text"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_security_restore_info"
-                            style="@style/pv.text.variant"/>
-
-                    </LinearLayout>
-
-                    <ImageButton
-                        android:id="@+id/settings_security_restore_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_info"
-                        android:paddingStart="@dimen/default_padding"
-                        android:layout_weight="0"
-                        android:layout_gravity="center"
-                        style="@style/pv.button.image_button"/>
-
-                </LinearLayout>
-
-                <View
-                    style="@style/divider"/>
+                <View style="@style/divider"/>
 
                 <LinearLayout
                     android:id="@+id/settings_security_quality_gates"
@@ -535,95 +470,6 @@
                         </LinearLayout>
 
                     </LinearLayout>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-
-
-            <!-- Export-related settings -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/default_left_margin_outside_container"
-                android:text="@string/settings_data"
-                style="@style/pv.text.highlight"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                style="@style/background">
-
-                <LinearLayout
-                    android:id="@+id/settings_html_export_clickable"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:padding="@dimen/default_padding"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_export_html"
-                            style="@style/pv.text"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_export_html_info"
-                            style="@style/pv.text.variant"/>
-
-                    </LinearLayout>
-
-                    <ImageButton
-                        android:id="@+id/settings_html_export_info"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_info"
-                        android:paddingStart="@dimen/default_padding"
-                        android:layout_weight="0"
-                        android:layout_gravity="center"
-                        style="@style/pv.button.image_button"/>
-
-                </LinearLayout>
-
-                <View
-                    style="@style/divider"/>
-
-                <LinearLayout
-                    android:id="@+id/settings_data_delete_clickable"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
-                    android:orientation="vertical"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_data_delete"
-                        style="@style/pv.text"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_data_delete_info"
-                        style="@style/pv.text.variant"
-                        android:textColor="@color/red"/>
 
                 </LinearLayout>
 

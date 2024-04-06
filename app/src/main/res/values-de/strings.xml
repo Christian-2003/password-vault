@@ -113,7 +113,26 @@
     <string name="settings_about_software_version">App-Version</string>
 
     <string name="settings_data">Daten</string>
-    <string name="settings_data_delete">Daten löschen</string>
+    <string name="settings_data_export">Export</string>
+    <string name="settings_data_export_html">Daten exportieren</string>
+    <string name="settings_data_export_html_info">Daten in unverschlüsselte, menschenlesbare HTML-Datei exportieren</string>
+    <string name="settings_data_export_html_error">Daten konnten nicht exportiert werden</string>
+    <string name="settings_data_export_html_success">Daten wurden exportiert</string>
+    <string name="settings_data_backup">Backup</string>
+    <string name="settings_data_backup_create">Backup erstellen</string>
+    <string name="settings_data_backup_create_info">(Verschlüsseltes) Backup erstellen</string>
+    <string name="settings_data_backup_create_error">Backup konnte nicht erstellt werden</string>
+    <string name="settings_data_backup_create_success">Backup wurde erstellt</string>
+    <string name="settings_data_backup_restore">Backup wiederherstellen</string>
+    <string name="settings_data_backup_restore_info">(Verschlüsseltes) Backup wiederherstellen</string>
+    <string name="settings_data_backup_restore_error">Backup konnte nicht wiederhergestellt werden</string>
+    <string name="settings_data_backup_restore_success">Backup wurde wiederhergestellt</string>
+    <string name="settings_data_delete">Löschen</string>
+    <string name="settings_data_delete_all">Daten löschen</string>
+    <string name="settings_data_delete_all_info">Alle Daten unumkehrbar löschen</string>
+
+
+
     <string name="settings_data_delete_info">Alle Daten unumkehrbar löschen</string>
     <string name="settings_data_delete_dialog_info">sämtlichen Daten</string>
     <string name="settings_data_delete_dialog_info_extended">Bestätigen Sie Ihr Passwort um alle Daten unumkehrbar zu löschen.</string>

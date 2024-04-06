@@ -117,7 +117,25 @@
     <string name="settings_about_update_link" translatable="false">https://github.com/Christian-2003/password-vault/releases/latest</string>
 
     <string name="settings_data">Data</string>
-    <string name="settings_data_delete">Delete Data</string>
+    <string name="settings_data_export">Export</string>
+    <string name="settings_data_export_html">Export data</string>
+    <string name="settings_data_export_html_info">Export the data into an unencrypted, human-readable HTML format</string>
+    <string name="settings_data_export_html_error">Cannot export data</string>
+    <string name="settings_data_export_html_success">Exported data to HTML</string>
+    <string name="settings_data_backup">Backup</string>
+    <string name="settings_data_backup_create">Create backup</string>
+    <string name="settings_data_backup_create_info">Create (encrypted) backup of your data</string>
+    <string name="settings_data_backup_create_error">Backup could not be created</string>
+    <string name="settings_data_backup_create_success">Created backup</string>
+    <string name="settings_data_backup_restore">Restore backup</string>
+    <string name="settings_data_backup_restore_info">Restore (encrypted) backup of your data</string>
+    <string name="settings_data_backup_restore_error">Backup could not be restored</string>
+    <string name="settings_data_backup_restore_success">Backup restored</string>
+    <string name="settings_data_delete">Delete</string>
+    <string name="settings_data_delete_all">Delete data</string>
+    <string name="settings_data_delete_all_info">Delete all data irreversibly</string>
+
+
     <string name="settings_data_delete_info">Irreversibly delete all data</string>
     <string name="settings_data_delete_dialog_info">all data</string>
     <string name="settings_data_delete_dialog_info_extended">Confirm password to delete all data irreversibly.</string>
