@@ -35,6 +35,8 @@
 
 
     <!-- Settings -->
+    <string name="settings">Einstellungen</string>
+
     <string name="settings_appearance">Ansicht</string>
     <string name="settings_appearance_darkmode">Nachtmodus</string>
     <string name="settings_appearance_darkmode_info">Ändere Nachtmodus-Einstellungen</string>
@@ -95,17 +97,20 @@
     <string name="settings_export_success">Daten wurde erfolgreich exportiert</string>
 
     <string name="settings_about">Über</string>
-    <string name="settings_about_license">MIT Lizenz</string>
-    <string name="settings_about_license_info">Lizenz anzeigen (Nur in Englisch)</string>
-    <string name="settings_about_dependencies">Verwendete Software</string>
-    <string name="settings_about_dependencies_info">Verwendete Software anzeigen</string>
+    <string name="settings_about_usage">Nutzungsbedingungen</string>
+    <string name="settings_about_usage_license">MIT Lizenz</string>
+    <string name="settings_about_usage_license_info">Lizenz anzeigen (Nur in Englisch)</string>
+    <string name="settings_about_usage_dependencies">Abhängigkeiten</string>
+    <string name="settings_about_usage_dependencies_info">Verwendete Software anzeigen</string>
     <string name="settings_about_github">GitHub</string>
-    <string name="settings_about_github_info">App auf GitHub öffnen</string>
-    <string name="settings_about_bug">Fehler melden</string>
-    <string name="settings_about_bug_info">Fehler auf GitHub melden</string>
-    <string name="settings_about_update">Software aktualisieren</string>
-    <string name="settings_about_update_info">Neueste Version herunterladen</string>
-    <string name="settings_about_version">App-Version</string>
+    <string name="settings_about_github_repo">Repository</string>
+    <string name="settings_about_github_repo_info">App auf GitHub anzeigen</string>
+    <string name="settings_about_github_issues">Fehler melden</string>
+    <string name="settings_about_github_issues_info">Fehler auf GitHub melden</string>
+    <string name="settings_about_software">Software</string>
+    <string name="settings_about_software_update">Software aktualisieren</string>
+    <string name="settings_about_software_update_info">Neueste Version herunterladen</string>
+    <string name="settings_about_software_version">App-Version</string>
 
     <string name="settings_data">Daten</string>
     <string name="settings_data_delete">Daten löschen</string>

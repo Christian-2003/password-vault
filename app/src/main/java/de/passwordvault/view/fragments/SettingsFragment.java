@@ -35,6 +35,7 @@ import de.passwordvault.model.storage.Configuration;
 import de.passwordvault.model.storage.backup.XmlBackupRestorer;
 import de.passwordvault.view.activities.PasswordAnalysisActivity;
 import de.passwordvault.view.activities.QualityGatesActivity;
+import de.passwordvault.view.activities.SettingsAboutActivity;
 import de.passwordvault.view.dialogs.ChangePasswordDialog;
 import de.passwordvault.view.dialogs.ConfigureLoginDialog;
 import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
@@ -151,12 +152,8 @@ public class SettingsFragment extends PasswordVaultBaseFragment implements Dialo
         else {
             view.findViewById(R.id.settings_security_biometrics_container).setVisibility(View.GONE);
         }
-        if (BuildConfig.DEBUG) {
-            ((TextView)view.findViewById(R.id.settings_version)).setText(BuildConfig.VERSION_NAME + " (Debug Build)");
-        }
-        else {
-            ((TextView)view.findViewById(R.id.settings_version)).setText(BuildConfig.VERSION_NAME);
-        }
+
+        view.findViewById(R.id.settings_about_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), SettingsAboutActivity.class)));
 
         view.findViewById(R.id.settings_appearance_darkmode_clickable).setOnClickListener(view -> changeDarkmode());
         view.findViewById(R.id.settings_security_password_clickable).setOnClickListener(view -> changePassword());
@@ -167,11 +164,6 @@ public class SettingsFragment extends PasswordVaultBaseFragment implements Dialo
         view.findViewById(R.id.settings_security_restore_button).setOnClickListener(view -> showInfoDialog(R.string.settings_security_restore, R.string.settings_security_restore_info_extended));
         view.findViewById(R.id.settings_security_quality_gates).setOnClickListener(view -> startActivity(new Intent(getActivity(), QualityGatesActivity.class)));
         view.findViewById(R.id.settings_security_password_analysis_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), PasswordAnalysisActivity.class)));
-        view.findViewById(R.id.settings_used_software_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), OssLicensesMenuActivity.class)));
-        view.findViewById(R.id.settings_license_clickable).setOnClickListener(view -> showInfoDialog(R.string.settings_about_license, Utils.readRawResource(R.raw.license)));
-        view.findViewById(R.id.settings_open_source_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_about_github_link)));
-        view.findViewById(R.id.settings_bug_report_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_about_bug_link)));
-        view.findViewById(R.id.settings_update_clickable).setOnClickListener(view -> openUrl(getString(R.string.settings_about_update_link)));
         view.findViewById(R.id.settings_html_export_clickable).setOnClickListener(view -> createFile(SELECT_FILE_TO_EXPORT_TO_HTML, "text/html", getString(R.string.settings_export_file)));
         view.findViewById(R.id.settings_html_export_info).setOnClickListener(view -> showInfoDialog(R.string.settings_export_html, R.string.settings_export_html_info_extended));
         view.findViewById(R.id.settings_data_delete_clickable).setOnClickListener(view -> deleteData());

@@ -35,6 +35,30 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:id="@+id/settings_about_clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/default_padding"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="About"
+                    style="@style/pv.text"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Show 'About page'"
+                    style="@style/pv.text.variant"/>
+
+            </LinearLayout>
+
             <!-- Appearance-related settings -->
             <TextView
                 android:layout_width="wrap_content"
@@ -600,180 +624,6 @@
                         android:text="@string/settings_data_delete_info"
                         style="@style/pv.text.variant"
                         android:textColor="@color/red"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-
-
-            <!-- Legal-related settings -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/default_left_margin_outside_container"
-                android:text="@string/settings_about"
-                style="@style/pv.text.highlight"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                style="@style/background">
-
-                <LinearLayout
-                    android:id="@+id/settings_license_clickable"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
-                    android:orientation="vertical"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_about_license"
-                        style="@style/pv.text"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_about_license_info"
-                        style="@style/pv.text.variant"/>
-
-                </LinearLayout>
-
-                <View
-                    style="@style/divider"/>
-
-                <LinearLayout
-                    android:id="@+id/settings_used_software_clickable"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
-                    android:orientation="vertical"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_about_dependencies"
-                        style="@style/pv.text"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_about_dependencies_info"
-                        style="@style/pv.text.variant"/>
-
-                </LinearLayout>
-
-                <View
-                    style="@style/divider"/>
-
-                <LinearLayout
-                    android:id="@+id/settings_open_source_clickable"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
-                    android:orientation="vertical"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_about_github"
-                        style="@style/pv.text"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_about_github_info"
-                        style="@style/pv.text.variant"/>
-
-                </LinearLayout>
-
-                <View
-                    style="@style/divider"/>
-
-                <LinearLayout
-                    android:id="@+id/settings_bug_report_clickable"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
-                    android:orientation="vertical"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_about_bug"
-                        style="@style/pv.text"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_about_bug_info"
-                        style="@style/pv.text.variant"/>
-
-                </LinearLayout>
-
-                <View
-                    style="@style/divider"/>
-
-                <LinearLayout
-                    android:id="@+id/settings_update_clickable"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
-                    android:orientation="vertical"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_about_update"
-                        style="@style/pv.text"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_about_update_info"
-                        style="@style/pv.text.variant"/>
-
-                </LinearLayout>
-
-                <View
-                    style="@style/divider"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_about_version"
-                        style="@style/pv.text"/>
-
-                    <TextView
-                        android:id="@+id/settings_version"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_about_version"
-                        style="@style/pv.text.variant"/>
 
                 </LinearLayout>
 
