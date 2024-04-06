@@ -15,6 +15,7 @@ import de.passwordvault.model.analysis.QualityGateManager;
 import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
 import de.passwordvault.view.activities.PasswordAnalysisActivity;
 import de.passwordvault.view.utils.Utils;
+import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
 import de.passwordvault.viewmodel.fragments.PasswordAnalysisGeneralViewModel;
 
 
@@ -25,7 +26,7 @@ import de.passwordvault.viewmodel.fragments.PasswordAnalysisGeneralViewModel;
  * @author  Christian-2003
  * @version 3.4.0
  */
-public class PasswordAnalysisGeneralFragment extends Fragment {
+public class PasswordAnalysisGeneralFragment extends PasswordVaultBaseFragment {
 
     /**
      * Attribute stores the view model of the fragment.

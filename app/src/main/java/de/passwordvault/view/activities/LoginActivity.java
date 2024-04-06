@@ -19,6 +19,7 @@ import de.passwordvault.R;
 import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.storage.Configuration;
+import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.activities.LoginViewModel;
 
 
@@ -28,7 +29,7 @@ import de.passwordvault.viewmodel.activities.LoginViewModel;
  * @author  Christian-2003
  * @version 3.3.0
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends PasswordVaultBaseActivity {
 
     /**
      * Attribute stores the {@link LoginViewModel} for the {@link LoginActivity}.
@@ -51,7 +52,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Configuration.applyDarkmode();
-        Configuration.applyLanguage(this);
 
         if (!Account.getInstance().hasPassword()) {
             //No login required:

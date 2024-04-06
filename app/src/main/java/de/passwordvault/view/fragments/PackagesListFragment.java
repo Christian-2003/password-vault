@@ -18,6 +18,7 @@ import de.passwordvault.view.activities.PackagesActivity;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
 import de.passwordvault.view.utils.adapters.PackagesFragmentStateAdapter;
 import de.passwordvault.view.utils.adapters.PackagesRecyclerViewAdapter;
+import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
 import de.passwordvault.viewmodel.activities.PackagesViewModel;
 
 
@@ -28,7 +29,7 @@ import de.passwordvault.viewmodel.activities.PackagesViewModel;
  * @author  Christian-2003
  * @version 3.5.0
  */
-public class PackagesListFragment extends Fragment implements OnRecyclerItemClickListener<Package> {
+public class PackagesListFragment extends PasswordVaultBaseFragment implements OnRecyclerItemClickListener<Package> {
 
     /**
      * Attribute stores the view model of the fragment and it's host activity.

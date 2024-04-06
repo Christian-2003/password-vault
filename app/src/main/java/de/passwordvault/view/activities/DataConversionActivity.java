@@ -17,6 +17,7 @@ import de.passwordvault.BuildConfig;
 import de.passwordvault.R;
 import de.passwordvault.model.storage.Configuration;
 import de.passwordvault.model.storage.app.ConverterException;
+import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.activities.DataConversionViewModel;
 
 
@@ -26,7 +27,7 @@ import de.passwordvault.viewmodel.activities.DataConversionViewModel;
  * @author  Christian-2003
  * @version 3.3.0
  */
-public class DataConversionActivity extends AppCompatActivity {
+public class DataConversionActivity extends PasswordVaultBaseActivity {
 
     /**
      * Attribute stores the view model of the activity.

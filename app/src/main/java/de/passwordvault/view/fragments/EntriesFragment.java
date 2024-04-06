@@ -29,6 +29,7 @@ import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.view.utils.adapters.EntriesRecyclerViewAdapter;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
+import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
 import de.passwordvault.viewmodel.fragments.EntriesViewModel;
 import de.passwordvault.view.activities.EntryActivity;
 import de.passwordvault.view.activities.MainActivity;
@@ -41,7 +42,7 @@ import de.passwordvault.view.activities.MainActivity;
  * @author  Christian-2003
  * @version 3.5.0
  */
-public class EntriesFragment extends Fragment implements OnRecyclerItemClickListener<EntryAbbreviated>, PopupMenu.OnMenuItemClickListener, Observer<ArrayList<EntryAbbreviated>> {
+public class EntriesFragment extends PasswordVaultBaseFragment implements OnRecyclerItemClickListener<EntryAbbreviated>, PopupMenu.OnMenuItemClickListener, Observer<ArrayList<EntryAbbreviated>> {
 
     /**
      * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} for this fragment.

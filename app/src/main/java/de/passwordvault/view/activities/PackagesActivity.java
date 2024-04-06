@@ -14,6 +14,7 @@ import de.passwordvault.R;
 import de.passwordvault.model.packages.SerializablePackageCollection;
 import de.passwordvault.view.fragments.PackagesSelectedFragment;
 import de.passwordvault.view.utils.adapters.PackagesFragmentStateAdapter;
+import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.activities.PackagesViewModel;
 
 
@@ -24,7 +25,7 @@ import de.passwordvault.viewmodel.activities.PackagesViewModel;
  * @author  Christian-2003
  * @version 3.5.0
  */
-public class PackagesActivity extends AppCompatActivity {
+public class PackagesActivity extends PasswordVaultBaseActivity {
 
     /**
      * Field stores the key that needs to be used when passing the selected package as argument.

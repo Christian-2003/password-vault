@@ -15,6 +15,7 @@ import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
 import de.passwordvault.view.activities.DuplicatePasswordEntriesActivity;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
 import de.passwordvault.view.utils.adapters.PasswordsRecyclerViewAdapter;
+import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
 import de.passwordvault.viewmodel.fragments.PasswordAnalysisDuplicatesViewModel;
 
 
@@ -24,7 +25,7 @@ import de.passwordvault.viewmodel.fragments.PasswordAnalysisDuplicatesViewModel;
  * @author  Christian-2003
  * @version 3.4.0
  */
-public class PasswordAnalysisDuplicatesFragment extends Fragment implements OnRecyclerItemClickListener<Password> {
+public class PasswordAnalysisDuplicatesFragment extends PasswordVaultBaseFragment implements OnRecyclerItemClickListener<Password> {
 
     /**
      * Attribute stores the view model of the fragment.

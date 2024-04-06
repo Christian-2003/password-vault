@@ -73,32 +73,6 @@
 
                 </LinearLayout>
 
-                <View style="@style/divider"/>
-
-                <LinearLayout
-                    android:id="@+id/settings_appearance_language_clickable"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="@dimen/default_padding"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:background="?attr/selectableItemBackground">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_appearance_language"
-                        style="@style/pv.text"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_appearance_language_info"
-                        style="@style/pv.text.variant"/>
-
-                </LinearLayout>
-
             </LinearLayout>
 
 

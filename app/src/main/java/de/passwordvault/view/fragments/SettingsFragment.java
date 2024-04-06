@@ -41,10 +41,10 @@ import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
 import de.passwordvault.view.dialogs.CreateBackupDialog;
 import de.passwordvault.view.dialogs.DarkmodeDialog;
 import de.passwordvault.view.dialogs.EnterPasswordDialog;
-import de.passwordvault.view.dialogs.LanguageDialog;
 import de.passwordvault.view.dialogs.RestoreBackupDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
 import de.passwordvault.view.utils.Utils;
+import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
 import de.passwordvault.viewmodel.fragments.SettingsViewModel;
 import de.passwordvault.view.activities.MainActivity;
 
@@ -56,7 +56,7 @@ import de.passwordvault.view.activities.MainActivity;
  * @author  Christian-2003
  * @version 3.5.1
  */
-public class SettingsFragment extends Fragment implements DialogCallbackListener, Serializable, CompoundButton.OnCheckedChangeListener {
+public class SettingsFragment extends PasswordVaultBaseFragment implements DialogCallbackListener, Serializable, CompoundButton.OnCheckedChangeListener {
 
     /**
      * Field stores the request code for when the user selects the directory into which an XML backup
@@ -159,7 +159,6 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         }
 
         view.findViewById(R.id.settings_appearance_darkmode_clickable).setOnClickListener(view -> changeDarkmode());
-        view.findViewById(R.id.settings_appearance_language_clickable).setOnClickListener(view -> changeLanguage());
         view.findViewById(R.id.settings_security_password_clickable).setOnClickListener(view -> changePassword());
         view.findViewById(R.id.settings_security_backup_clickable).setOnClickListener(view -> selectDirectory(SELECT_DIRECTORY_TO_CREATE_BACKUP));
         view.findViewById(R.id.settings_security_backup_button).setOnClickListener(view -> showInfoDialog(R.string.settings_security_backup, R.string.settings_security_backup_info_extended));
@@ -350,10 +349,6 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
         }
         else if (fragment instanceof ConfirmDeleteDialog) {
             viewModel.deleteAllData();
-        }
-        else if (fragment instanceof LanguageDialog) {
-            Configuration.applyLanguage(getActivity());
-            requireActivity().recreate();
         }
     }
 
@@ -615,18 +610,6 @@ public class SettingsFragment extends Fragment implements DialogCallbackListener
      */
     private void changeDarkmode() {
         DarkmodeDialog dialog = new DarkmodeDialog();
-        dialog.show(requireActivity().getSupportFragmentManager(), "");
-    }
-
-
-    /**
-     * Method shows the dialog to change the app language.
-     */
-    private void changeLanguage() {
-        LanguageDialog dialog = new LanguageDialog();
-        Bundle args = new Bundle();
-        args.putSerializable(LanguageDialog.KEY_CALLBACK_LISTENER, this);
-        dialog.setArguments(args);
         dialog.show(requireActivity().getSupportFragmentManager(), "");
     }
 

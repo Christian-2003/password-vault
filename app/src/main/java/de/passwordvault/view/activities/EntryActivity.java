@@ -20,6 +20,7 @@ import de.passwordvault.view.utils.adapters.DetailsRecyclerViewAdapter;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.view.utils.adapters.PackagesLogoRecyclerViewAdapter;
+import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.activities.EntryViewModel;
 import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
@@ -41,7 +42,7 @@ import java.io.Serializable;
  * @author  Christian-2003
  * @version 3.4.0
  */
-public class EntryActivity extends AppCompatActivity implements DialogCallbackListener, Serializable, OnRecyclerItemClickListener<Detail> {
+public class EntryActivity extends PasswordVaultBaseActivity implements DialogCallbackListener, Serializable, OnRecyclerItemClickListener<Detail> {
 
     /**
      * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} for the EntryActivity.

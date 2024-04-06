@@ -20,6 +20,7 @@ import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGate;
 import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
+import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.activities.QualityGateViewModel;
 
 
@@ -29,7 +30,7 @@ import de.passwordvault.viewmodel.activities.QualityGateViewModel;
  * @author  Christian-2003
  * @version 3.2.0
  */
-public class QualityGateActivity extends AppCompatActivity implements DialogCallbackListener, Serializable {
+public class QualityGateActivity extends PasswordVaultBaseActivity implements DialogCallbackListener, Serializable {
 
     /**
      * Field stores the key with which to pass a quality gate to edit as serializable.

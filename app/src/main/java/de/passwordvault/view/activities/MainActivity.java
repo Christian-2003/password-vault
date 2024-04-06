@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationBarView;
 import de.passwordvault.R;
 import de.passwordvault.model.entry.EntryManager;
+import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.activities.MainViewModel;
 
 
@@ -21,7 +22,7 @@ import de.passwordvault.viewmodel.activities.MainViewModel;
  * @author  Christian-2003
  * @version 3.3.0
  */
-public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
+public class MainActivity extends PasswordVaultBaseActivity implements NavigationBarView.OnItemSelectedListener {
 
     /**
      * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} for this activity.
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         //Add action listener to FAB:
         findViewById(R.id.main_fab).setOnClickListener(view -> startActivity(new Intent(MainActivity.this, AddEntryActivity.class)));
 
-        //Configure bottom navigation bar:
+        //Configure navigation bar:
         NavigationBarView navigationBarView = findViewById(R.id.main_navigation);
         navigationBarView.setOnItemSelectedListener(this);
         navigationBarView.setSelectedItemId(viewModel.getSelectedItem());

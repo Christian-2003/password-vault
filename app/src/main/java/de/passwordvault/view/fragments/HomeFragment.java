@@ -21,6 +21,7 @@ import de.passwordvault.view.activities.EntryActivity;
 import de.passwordvault.view.activities.MainActivity;
 import de.passwordvault.view.utils.adapters.EntriesRecyclerViewAdapter;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
+import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
 
 
 /**
@@ -30,7 +31,7 @@ import de.passwordvault.view.utils.OnRecyclerItemClickListener;
  * @author  Christian-2003
  * @version 3.5.0
  */
-public class HomeFragment extends Fragment implements Observer<ArrayList<EntryAbbreviated>>, OnRecyclerItemClickListener<EntryAbbreviated> {
+public class HomeFragment extends PasswordVaultBaseFragment implements Observer<ArrayList<EntryAbbreviated>>, OnRecyclerItemClickListener<EntryAbbreviated> {
 
     /**
      * Attribute stores the adapter for the recycler view displaying the most recently edited entries.

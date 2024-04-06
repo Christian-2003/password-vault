@@ -35,22 +35,6 @@ public class Configuration {
 
 
     /**
-     * Field stores a value indicating that the app uses the same language as the operating system.
-     */
-    public static final int LANGUAGE_SYSTEM = 0;
-
-    /**
-     * Field stores a value indicating the the app uses 'English' as language.
-     */
-    public static final int LANGUAGE_ENGLISH = 1;
-
-    /**
-     * Field stores a value indicating the the app uses 'German' as language.
-     */
-    public static final int LANGUAGE_GERMAN = 2;
-
-
-    /**
      * Field stores the key with which to store whether the data has been converted to version 3.3.0.
      */
     private static final String KEY_CONVERTED_STORAGE_1 = "converted_storage_1";
@@ -69,11 +53,6 @@ public class Configuration {
      * Field stores the key with which to store whether to use dark- / light-mode.
      */
     private static final String KEY_APPEARANCE_DARKMODE = "darkmode";
-
-    /**
-     * Field stores the key with which to store the used language.
-     */
-    private static final String KEY_APPEARANCE_LANGUAGE = "language";
 
     /**
      * Field stores the shared preferences instance from which to retrieve data.
@@ -166,27 +145,6 @@ public class Configuration {
 
 
     /**
-     * Method changes whether the used app language.
-     *
-     * @param language  Used app language
-     */
-    public static void setLanguage(int language) {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(KEY_APPEARANCE_LANGUAGE, language);
-        editor.apply();
-    }
-
-    /**
-     * Method returns the used app language.
-     *
-     * @return  Used app language.
-     */
-    public static int getLanguage() {
-        return preferences.getInt(KEY_APPEARANCE_LANGUAGE, LANGUAGE_SYSTEM);
-    }
-
-
-    /**
      * Method applies the darkmode setting to the app. This needs to be called whenever the darkmode
      * changes and when the app starts.
      */
@@ -203,34 +161,6 @@ public class Configuration {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
                 break;
         }
-    }
-
-    /**
-     * Method applies the language setting to the app. This needs to be called whenever the language
-     * changes an when the app starts.
-     *
-     * @param context   Context from which this method was called.
-     */
-    public static void applyLanguage(Context context) {
-        int language = getLanguage();
-        Locale locale;
-        switch (language) {
-            case LANGUAGE_ENGLISH:
-                locale = Locale.ENGLISH;
-                break;
-            case LANGUAGE_GERMAN:
-                locale = Locale.GERMAN;
-                break;
-            default:
-                locale = Resources.getSystem().getConfiguration().getLocales().get(0);
-                break;
-        }
-
-        Locale.setDefault(locale);
-        Resources resources = context.getResources();
-        android.content.res.Configuration config = resources.getConfiguration();
-        config.setLocale(locale);
-        resources.updateConfiguration(config, resources.getDisplayMetrics());
     }
 
 }

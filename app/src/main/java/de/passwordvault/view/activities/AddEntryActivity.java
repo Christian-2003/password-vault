@@ -41,6 +41,7 @@ import de.passwordvault.view.dialogs.EditTagDialog;
 import de.passwordvault.view.utils.DetailsItemMoveCallback;
 import de.passwordvault.view.utils.adapters.DetailsRecyclerViewAdapter;
 import de.passwordvault.view.utils.adapters.PackagesLogoRecyclerViewAdapter;
+import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.activities.AddEntryViewModel;
 import de.passwordvault.model.detail.Detail;
 import de.passwordvault.view.dialogs.ConfirmDeleteDetailDialog;
@@ -54,7 +55,7 @@ import de.passwordvault.view.utils.DialogCallbackListener;
  * @author  Christian-2003
  * @version 3.4.0
  */
-public class AddEntryActivity extends AppCompatActivity implements DialogCallbackListener, Observer<ArrayList<Tag>> {
+public class AddEntryActivity extends PasswordVaultBaseActivity implements DialogCallbackListener, Observer<ArrayList<Tag>> {
 
     /**
      * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} of this activity.

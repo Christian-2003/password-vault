@@ -15,10 +15,11 @@ import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.view.utils.adapters.EntriesRecyclerViewAdapter;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
+import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.activities.DuplicatePasswordEntriesViewModel;
 
 
-public class DuplicatePasswordEntriesActivity extends AppCompatActivity implements OnRecyclerItemClickListener<EntryAbbreviated> {
+public class DuplicatePasswordEntriesActivity extends PasswordVaultBaseActivity implements OnRecyclerItemClickListener<EntryAbbreviated> {
 
     /**
      * Field stores the key that needs to be used when passing the list of passwords whose entries

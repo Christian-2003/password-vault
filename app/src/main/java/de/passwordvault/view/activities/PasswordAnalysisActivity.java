@@ -18,6 +18,7 @@ import de.passwordvault.model.Observer;
 import de.passwordvault.model.analysis.passwords.Password;
 import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
 import de.passwordvault.view.utils.adapters.PasswordAnalysisFragmentStateAdapter;
+import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.activities.PasswordAnalysisViewModel;
 
 
@@ -27,7 +28,7 @@ import de.passwordvault.viewmodel.activities.PasswordAnalysisViewModel;
  * @author  Christian-2003
  * @version 3.4.0
  */
-public class PasswordAnalysisActivity extends AppCompatActivity implements Observer<ArrayList<Password>> {
+public class PasswordAnalysisActivity extends PasswordVaultBaseActivity implements Observer<ArrayList<Password>> {
 
     /**
      * Attribute stores the view model of the activity.

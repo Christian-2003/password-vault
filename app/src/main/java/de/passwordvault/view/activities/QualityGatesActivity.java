@@ -14,6 +14,7 @@ import de.passwordvault.model.Observer;
 import de.passwordvault.model.analysis.QualityGate;
 import de.passwordvault.model.analysis.QualityGateManager;
 import de.passwordvault.view.utils.adapters.QualityGatesListAdapter;
+import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.activities.QualityGatesViewModel;
 
 
@@ -23,7 +24,7 @@ import de.passwordvault.viewmodel.activities.QualityGatesViewModel;
  * @author  Christian-2003
  * @version 3.2.0
  */
-public class QualityGatesActivity extends AppCompatActivity implements Observer<ArrayList<QualityGate>> {
+public class QualityGatesActivity extends PasswordVaultBaseActivity implements Observer<ArrayList<QualityGate>> {
 
     /**
      * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} of this activity.

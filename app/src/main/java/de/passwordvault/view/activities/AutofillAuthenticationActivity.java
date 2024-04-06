@@ -20,6 +20,7 @@ import java.util.Objects;
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.storage.Configuration;
+import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.activities.AutofillAuthenticationViewModel;
 
 
@@ -33,7 +34,7 @@ import de.passwordvault.viewmodel.activities.AutofillAuthenticationViewModel;
  * @author  Christian-2003
  * @version 3.5.0
  */
-public class AutofillAuthenticationActivity extends AppCompatActivity {
+public class AutofillAuthenticationActivity extends PasswordVaultBaseActivity {
 
     /**
      * Field stores the key that must be used when passing a list of datasets that shall be displayed
@@ -73,7 +74,6 @@ public class AutofillAuthenticationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Configuration.applyDarkmode();
-        Configuration.applyLanguage(this);
 
         if (!Account.getInstance().hasPassword()) {
             onFailure();
