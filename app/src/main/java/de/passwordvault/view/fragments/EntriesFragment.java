@@ -104,7 +104,7 @@ public class EntriesFragment extends PasswordVaultBaseFragment implements OnRecy
         }
 
         //Setup button to sort the entries:
-        ImageButton sortButton = view.findViewById(R.id.entries_sort_button);
+        ImageButton sortButton = view.findViewById(R.id.button_sort);
         sortButton.setOnClickListener(view -> {
             Context wrapper = new ContextThemeWrapper(EntriesFragment.this.getContext(), R.style.popup_menu);
             PopupMenu popup = new PopupMenu(wrapper, sortButton);
@@ -117,7 +117,7 @@ public class EntriesFragment extends PasswordVaultBaseFragment implements OnRecy
 
         //Setup button to show / hide search bar:
         TextInputLayout searchBarLayout = view.findViewById(R.id.entries_search_bar_container);
-        ImageButton searchButton = view.findViewById(R.id.entries_search_button);
+        ImageButton searchButton = view.findViewById(R.id.button_search);
         searchButton.setOnClickListener(view -> {
             if (viewModel.isSearchBarVisible()) {
                 viewModel.setSearchBarVisible(false);

@@ -1,108 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".view.fragments.EntriesFragment">
 
     <!-- Toolbar for the fragment -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/entries_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/app_bar_height"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        style="@style/pv.app_bar">
+    <com.google.android.material.appbar.AppBarLayout
+        style="@style/pv.layout.app_bar">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center"
-            android:text="@string/bottom_navigation_entries"
-            style="@style/pv.text.app_bar"/>
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            app:title="@string/bottom_navigation_entries"
+            style="@style/pv.layout.app_bar.collapsing_toolbar">
 
-        <ImageButton
-            android:id="@+id/entries_sort_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center"
-            android:paddingStart="@dimen/default_padding"
-            android:paddingEnd="@dimen/default_padding"
-            android:src="@drawable/ic_sort"
-            style="@style/pv.button.image_button.app_bar"/>
+            <androidx.appcompat.widget.Toolbar
+                style="@style/pv.layout.app_bar.collapsing_toolbar.toolbar"/>
 
-        <ImageButton
-            android:id="@+id/entries_search_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center"
-            android:paddingStart="@dimen/default_padding"
-            android:paddingEnd="@dimen/default_padding"
-            android:src="@drawable/ic_search"
-            style="@style/pv.button.image_button.app_bar"/>
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="end|bottom">
 
-    </androidx.appcompat.widget.Toolbar>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
-    <!-- Searchbar for the fragment -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/entries_search_bar_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/hint_search"
-        android:layout_margin="@dimen/default_margin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/entries_toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:endIconMode="clear_text"
-        app:endIconDrawable="@drawable/ic_cancel">
+                    <ImageButton
+                        android:id="@+id/button_search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_search"
+                        android:layout_gravity="center"
+                        style="@style/pv.button.image_button.app_bar"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/entries_search_bar"
+                    <ImageButton
+                        android:id="@+id/button_sort"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_sort"
+                        android:layout_gravity="center"
+                        style="@style/pv.button.image_button.app_bar"/>
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+
+    <!-- Content for the fragment -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        style="@style/pv.layout.nested_scroll_view">
+
+        <!-- Searchbar for the fragment -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/entries_search_bar_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true"/>
+            android:hint="@string/hint_search"
+            android:layout_margin="@dimen/default_margin"
+            app:endIconMode="clear_text"
+            app:endIconDrawable="@drawable/ic_cancel">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/entries_search_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-    <LinearLayout
-        android:id="@+id/entries_container_none"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/default_padding"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/entries_search_bar_container"
-        style="@style/pv.container">
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/entries_container_none"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/entries_none"
-            style="@style/pv.text.variant"/>
+            android:orientation="vertical"
+            android:padding="@dimen/default_padding"
+            android:visibility="gone"
+            style="@style/pv.container">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/entries_none"
+                style="@style/pv.text.variant"/>
+
+        </LinearLayout>
+
+
+        <!-- ListView for the fragment -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/abbreviated_entries"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            style="@style/pv.container"/>
 
     </LinearLayout>
 
-
-    <!-- ListView for the fragment -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/abbreviated_entries"
-        style="@style/pv.container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:scrollbars="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/entries_search_bar_container"
-        app:layout_constraintVertical_bias="0.0" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

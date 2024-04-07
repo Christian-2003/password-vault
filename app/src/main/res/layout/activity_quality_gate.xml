@@ -54,8 +54,6 @@
                         android:layout_gravity="center"
                         style="@style/pv.button.image_button.app_bar"/>
 
-
-
                     <ImageButton
                         android:id="@+id/button_delete"
                         android:layout_width="wrap_content"
