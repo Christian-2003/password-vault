@@ -11,6 +11,10 @@ N/A
 * Added setting to manually change between dark / light mode.
 * Generalized authentication through master password or biometrics to 'Authenticator'-class.
 * Current date is automatically appended to the default file name when a new backup is created.
+* Split all settings into different activities.
+* Reworked `SettingsFragment`.
+* Partial introduction of collapsable toolbars.
+* Improvements to maintainability regarding string-resources.
 
 <br/>
 

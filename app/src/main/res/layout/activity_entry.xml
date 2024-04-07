@@ -55,7 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                style="@style/background">
+                style="@style/pv.container">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -188,7 +188,7 @@
                 android:orientation="vertical"
                 android:nestedScrollingEnabled="false"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                style="@style/background"/>
+                style="@style/pv.container"/>
 
 
             <!-- ConstraintLayout contains centered button -->
@@ -231,7 +231,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    style="@style/background">
+                    style="@style/pv.container">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -297,7 +297,7 @@
                     android:orientation="vertical"
                     android:nestedScrollingEnabled="false"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    style="@style/background"/>
+                    style="@style/pv.container"/>
 
             </LinearLayout>
 

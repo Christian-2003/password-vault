@@ -79,7 +79,7 @@
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/entries_search_bar_container"
-        style="@style/background">
+        style="@style/pv.container">
 
         <TextView
             android:layout_width="wrap_content"
@@ -93,7 +93,7 @@
     <!-- ListView for the fragment -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/abbreviated_entries"
-        style="@style/background"
+        style="@style/pv.container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:scrollbars="vertical"

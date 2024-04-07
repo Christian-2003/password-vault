@@ -184,6 +184,10 @@ public class SettingsDataActivity extends PasswordVaultBaseActivity implements D
 
         //Delete:
         findViewById(R.id.settings_data_delete_all_container).setOnClickListener(view -> deleteAllData());
+
+        //Search:
+        findViewById(R.id.button_search_qualitygates).setOnClickListener(view -> startActivity(new Intent(this, QualityGatesActivity.class)));
+        findViewById(R.id.button_search_masterpassword).setOnClickListener(view -> startActivity(new Intent(this, SettingsSecurityActivity.class)));
     }
 
 

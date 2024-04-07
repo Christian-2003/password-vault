@@ -62,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                style="@style/background">
+                style="@style/pv.container">
 
                 <LinearLayout
                     android:id="@+id/settings_customization_appearance_darkmode_conatainer"

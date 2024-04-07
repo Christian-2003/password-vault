@@ -150,6 +150,25 @@
 
 
 
+    <!-- Style for container -->
+    <style name="pv.container">
+        <item name="android:background">@drawable/background</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:layout_margin">@dimen/default_margin</item>
+        <item name="android:clipToOutline">true</item>
+    </style>
+
+    <!-- Style for highlighted container -->
+    <style name="pv.container.highlight">
+        <item name="android:background">@drawable/background</item>
+        <item name="android:backgroundTint">@color/pv_theme_secondaryContainer</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:layout_margin">@dimen/default_margin</item>
+        <item name="android:clipToOutline">true</item>
+    </style>
+
+
+
     <!-- Style for eyecatcher -->
     <style name="pv.eyecatcher">
         <item name="android:background">@drawable/shape_important</item>
@@ -171,14 +190,6 @@
         <item name="android:layout_height">1dp</item>
         <item name="android:background">@color/pv_theme_outlineVariant</item>
         <item name="android:layout_marginHorizontal">@dimen/default_padding</item>
-    </style>
-
-    <!-- Style for backgrounds -->
-    <style name="background">
-        <item name="android:background">@drawable/background</item>
-        <item name="android:padding">0dp</item>
-        <item name="android:layout_margin">@dimen/default_margin</item>
-        <item name="android:clipToOutline">true</item>
     </style>
 
     <!-- Style for popup menus -->

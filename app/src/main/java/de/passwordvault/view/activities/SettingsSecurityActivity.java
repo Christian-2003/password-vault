@@ -181,6 +181,10 @@ public class SettingsSecurityActivity extends PasswordVaultBaseActivity implemen
         //Passwords:
         findViewById(R.id.settings_security_password_qualitygates_container).setOnClickListener(view -> startActivity(new Intent(this, QualityGatesActivity.class)));
         findViewById(R.id.settings_security_password_analysis_container).setOnClickListener(view -> startActivity(new Intent(this, PasswordAnalysisActivity.class)));
+
+        //Search:
+        findViewById(R.id.button_search_backup).setOnClickListener(view -> startActivity(new Intent(this, SettingsDataActivity.class)));
+        findViewById(R.id.button_search_autofillauthentication).setOnClickListener(view -> startActivity(new Intent(this, SettingsAutofillActivity.class)));
     }
 
 

@@ -25,6 +25,80 @@
 
 
 
+
+
+    <!--
+    ================================================================================================
+    The following section contains styles for the general layout of activities / fragments
+    ================================================================================================
+    -->
+
+    <!-- Parent style for all page layouts -->
+    <style name="pv.layout"/>
+
+    <!-- Style for AppBarLayout -->
+    <style name="pv.layout.app_bar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">176dp</item>
+        <item name="android:theme">@style/ThemeOverlay.AppCompat.ActionBar</item>
+    </style>
+
+    <!-- Style for CollapsingToolbarLayout -->
+    <style name="pv.layout.app_bar.collapsing_toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:background">@color/pv_theme_surface</item>
+        <item name="contentScrim">@color/pv_theme_surface</item>
+        <item name="statusBarScrim">@color/pv_theme_surface</item>
+        <item name="layout_scrollFlags">scroll|exitUntilCollapsed</item>
+        <item name="titleCollapseMode">scale</item>
+        <item name="expandedTitleGravity">center_vertical|center_horizontal</item>
+        <item name="collapsedTitleTextColor">@color/pv_theme_onSurface</item>
+        <item name="expandedTitleTextColor">@color/pv_theme_onSurface</item>
+        <item name="collapsedTitleTextAppearance">@style/pv.layout.app_bar.collapsing_toolbar.collapsed_title</item>
+        <item name="expandedTitleTextAppearance">@style/pv.layout.app_bar.collapsing_toolbar.expanded_title</item>
+    </style>
+
+    <!-- Style for Toolbar -->
+    <style name="pv.layout.app_bar.collapsing_toolbar.collapsed_title" parent="@style/TextAppearance.AppCompat">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/app_bar_text_size</item>
+        <item name="maxLines">1</item>
+    </style>
+
+    <!-- Style for CollapsingToolbarLayout.expandedTitleTextAppearance -->
+    <style name="pv.layout.app_bar.collapsing_toolbar.expanded_title" parent="@style/TextAppearance.AppCompat">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/app_bar_text_size</item>
+        <item name="maxLines">2</item>
+    </style>
+
+    <!-- Style for CollapsingToolbarLayout.collapsedTitleTextAppearance -->
+    <style name="pv.layout.app_bar.collapsing_toolbar.toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="layout_collapseMode">pin</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
+    </style>
+
+    <!-- Style for NestedScrollView which contains the content of a page below an AppBarLayout -->
+    <style name="pv.layout.nested_scroll_view">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="layout_behavior">@string/appbar_scrolling_view_behavior</item>
+    </style>
+
+
+
+
+
+    <!--
+    ================================================================================================
+    The following section contains styles for icons
+    ================================================================================================
+    -->
+
     <!-- Style for image buttons -->
     <style name="pv.button.image_button.app_bar" parent="pv.button.image_button">
         <item name="android:tint">@color/pv_theme_onSurface</item>

@@ -33,125 +33,189 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            style="@style/pv.container">
 
+            <!-- Customization -->
             <LinearLayout
-                android:id="@+id/settings_about_clickable"
+                android:id="@+id/settings_customization_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:padding="@dimen/default_padding"
                 android:clickable="true"
                 android:focusable="true"
-                android:background="?attr/selectableItemBackground">
+                android:background="?attr/selectableItemBackground"
+                android:orientation="horizontal">
 
-                <TextView
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="About"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_edit"
+                    style="@style/pv.icon"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/settings_customization"
+                    android:padding="@dimen/default_padding"
                     style="@style/pv.text"/>
 
-                <TextView
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Show 'About page'"
-                    style="@style/pv.text.variant"/>
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_next"
+                    style="@style/pv.icon"/>
 
             </LinearLayout>
 
+            <View style="@style/divider"/>
+
+            <!-- Security -->
             <LinearLayout
-                android:id="@+id/settings_data_clickable"
+                android:id="@+id/settings_security_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:padding="@dimen/default_padding"
                 android:clickable="true"
                 android:focusable="true"
-                android:background="?attr/selectableItemBackground">
+                android:background="?attr/selectableItemBackground"
+                android:orientation="horizontal">
 
-                <TextView
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Data"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_lock"
+                    style="@style/pv.icon"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/settings_security"
+                    android:padding="@dimen/default_padding"
                     style="@style/pv.text"/>
 
-                <TextView
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Show 'Data page'"
-                    style="@style/pv.text.variant"/>
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_next"
+                    style="@style/pv.icon"/>
 
             </LinearLayout>
 
+            <View style="@style/divider"/>
+
+            <!-- Data -->
             <LinearLayout
-                android:id="@+id/settings_security_clickable"
+                android:id="@+id/settings_data_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:padding="@dimen/default_padding"
                 android:clickable="true"
                 android:focusable="true"
-                android:background="?attr/selectableItemBackground">
+                android:background="?attr/selectableItemBackground"
+                android:orientation="horizontal">
 
-                <TextView
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Security"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_list"
+                    style="@style/pv.icon"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/settings_data"
+                    android:padding="@dimen/default_padding"
                     style="@style/pv.text"/>
 
-                <TextView
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Show 'Security page'"
-                    style="@style/pv.text.variant"/>
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_next"
+                    style="@style/pv.icon"/>
 
             </LinearLayout>
 
+            <View style="@style/divider"/>
+
+            <!-- Autofill -->
             <LinearLayout
-                android:id="@+id/settings_autofill_clickable"
+                android:id="@+id/settings_autofill_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:padding="@dimen/default_padding"
                 android:clickable="true"
                 android:focusable="true"
-                android:background="?attr/selectableItemBackground">
+                android:background="?attr/selectableItemBackground"
+                android:orientation="horizontal">
 
-                <TextView
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Autofill"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_password"
+                    style="@style/pv.icon"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/settings_autofill"
+                    android:padding="@dimen/default_padding"
                     style="@style/pv.text"/>
 
-                <TextView
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Show 'Autofill page'"
-                    style="@style/pv.text.variant"/>
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_next"
+                    style="@style/pv.icon"/>
 
             </LinearLayout>
 
+            <View style="@style/divider"/>
+
+            <!-- Autofill -->
             <LinearLayout
-                android:id="@+id/settings_customization_clickable"
+                android:id="@+id/settings_about_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:padding="@dimen/default_padding"
                 android:clickable="true"
                 android:focusable="true"
-                android:background="?attr/selectableItemBackground">
+                android:background="?attr/selectableItemBackground"
+                android:orientation="horizontal">
 
-                <TextView
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Customization"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_info"
+                    style="@style/pv.icon"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/settings_about"
+                    android:padding="@dimen/default_padding"
                     style="@style/pv.text"/>
 
-                <TextView
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Show 'Customization page'"
-                    style="@style/pv.text.variant"/>
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_next"
+                    style="@style/pv.icon"/>
 
             </LinearLayout>
 

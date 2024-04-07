@@ -62,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                style="@style/background">
+                style="@style/pv.container">
 
                 <LinearLayout
                     android:id="@+id/settings_about_usage_license_container"
@@ -160,7 +160,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                style="@style/background">
+                style="@style/pv.container">
 
                 <LinearLayout
                     android:id="@+id/settings_about_github_repository_container"
@@ -258,7 +258,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                style="@style/background">
+                style="@style/pv.container">
 
                 <LinearLayout
                     android:id="@+id/settings_about_software_update_container"

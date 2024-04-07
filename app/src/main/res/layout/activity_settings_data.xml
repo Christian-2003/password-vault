@@ -62,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                style="@style/background">
+                style="@style/pv.container">
 
                 <LinearLayout
                     android:id="@+id/settings_data_export_html_container"
@@ -119,7 +119,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                style="@style/background">
+                style="@style/pv.container">
 
                 <LinearLayout
                     android:id="@+id/settings_data_backup_create_container"
@@ -217,7 +217,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                style="@style/background">
+                style="@style/pv.container">
 
                 <LinearLayout
                     android:id="@+id/settings_data_delete_all_container"
@@ -258,6 +258,39 @@
                         style="@style/pv.icon"/>
 
                 </LinearLayout>
+
+            </LinearLayout>
+
+
+
+            <!-- Search -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_search"
+                android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                style="@style/pv.text.highlight"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/default_padding"
+                style="@style/pv.container.highlight">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_search_qualitygates"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_search_qualitygates"
+                    style="@style/Widget.Material3.Button.TextButton"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_search_masterpassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_search_masterpassword"
+                    style="@style/Widget.Material3.Button.TextButton"/>
 
             </LinearLayout>
 

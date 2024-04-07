@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/default_padding"
                 android:orientation="vertical"
-                style="@style/background">
+                style="@style/pv.container">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/quality_gate_description_hint"
@@ -106,7 +106,7 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/default_padding"
                 android:orientation="vertical"
-                style="@style/background">
+                style="@style/pv.container">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/quality_gate_regex_test_hint"

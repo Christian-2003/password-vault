@@ -37,6 +37,12 @@
     <!-- Settings -->
     <string name="settings">Einstellungen</string>
 
+    <string name="settings_search">Suche nach etwas Anderem?</string>
+    <string name="settings_search_qualitygates">Sicherheitskriterien</string>
+    <string name="settings_search_masterpassword">Master-Passwort</string>
+    <string name="settings_search_backup">Backup</string>
+    <string name="settings_search_autofillauthentication">Autom. Ausfüllen Authentifizierung</string>
+
     <string name="settings_customization">Personalisierung</string>
     <string name="settings_customization_appearance">Ansicht</string>
     <string name="settings_customization_appearance_darkmode">Nachtmodus</string>

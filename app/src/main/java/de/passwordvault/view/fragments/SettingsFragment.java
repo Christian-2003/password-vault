@@ -98,12 +98,11 @@ public class SettingsFragment extends PasswordVaultBaseFragment implements Seria
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_settings, container, false);
 
-
-        view.findViewById(R.id.settings_about_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), SettingsAboutActivity.class)));
-        view.findViewById(R.id.settings_data_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), SettingsDataActivity.class)));
-        view.findViewById(R.id.settings_security_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), SettingsSecurityActivity.class)));
-        view.findViewById(R.id.settings_autofill_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), SettingsAutofillActivity.class)));
-        view.findViewById(R.id.settings_customization_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), SettingsCustomizationActivity.class)));
+        view.findViewById(R.id.settings_customization_container).setOnClickListener(view -> startActivity(new Intent(getActivity(), SettingsCustomizationActivity.class)));
+        view.findViewById(R.id.settings_security_container).setOnClickListener(view -> startActivity(new Intent(getActivity(), SettingsSecurityActivity.class)));
+        view.findViewById(R.id.settings_data_container).setOnClickListener(view -> startActivity(new Intent(getActivity(), SettingsDataActivity.class)));
+        view.findViewById(R.id.settings_autofill_container).setOnClickListener(view -> startActivity(new Intent(getActivity(), SettingsAutofillActivity.class)));
+        view.findViewById(R.id.settings_about_container).setOnClickListener(view -> startActivity(new Intent(getActivity(), SettingsAboutActivity.class)));
 
         return view;
     }
