@@ -75,7 +75,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/settings_security_backup_password_info"
+            android:text="@string/settings_data_backup_create_info"
             style="@style/pv.text.variant"
             android:layout_marginTop="@dimen/default_margin"/>
 

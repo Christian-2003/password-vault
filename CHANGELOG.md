@@ -10,6 +10,7 @@ N/A
 * Fixed a bug where an (incorrect) app icon is shown for an entry that should not have an icon at all.
 * Added setting to manually change between dark / light mode.
 * Generalized authentication through master password or biometrics to 'Authenticator'-class.
+* Current date is automatically appended to the default file name when a new backup is created.
 
 <br/>
 

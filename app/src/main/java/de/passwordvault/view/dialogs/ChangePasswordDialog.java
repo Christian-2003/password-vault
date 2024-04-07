@@ -54,7 +54,7 @@ public class ChangePasswordDialog extends DialogFragment {
         view = requireActivity().getLayoutInflater().inflate(R.layout.dialog_change_password, null);
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity());
-        builder.setTitle(getString(R.string.settings_security_password));
+        builder.setTitle(getString(R.string.settings_security_login_password));
         builder.setView(view);
 
         builder.setPositiveButton(R.string.button_ok, (dialog, id) -> {

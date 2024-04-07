@@ -95,7 +95,7 @@ public class RestoreBackupDialog extends DialogFragment {
         view = requireActivity().getLayoutInflater().inflate(R.layout.dialog_restore_backup, null);
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity());
-        builder.setTitle(getString(R.string.settings_security_restore));
+        builder.setTitle(getString(R.string.settings_data_backup_restore));
         builder.setView(view);
 
         builder.setPositiveButton(R.string.button_ok, (dialog, id) -> {

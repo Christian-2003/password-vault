@@ -34,6 +34,8 @@
         <activity android:name=".view.activities.SettingsAboutActivity" android:exported="false"/>
         <activity android:name=".view.activities.SettingsDataActivity" android:exported="false"/>
         <activity android:name=".view.activities.SettingsSecurityActivity" android:exported="false"/>
+        <activity android:name=".view.activities.SettingsAutofillActivity" android:exported="false"/>
+        <activity android:name=".view.activities.SettingsCustomizationActivity" android:exported="false"/>
 
         <!-- Activity used for authentication with autofill requests -->
         <activity android:name=".view.activities.AutofillAuthenticationActivity" android:exported="false"/>

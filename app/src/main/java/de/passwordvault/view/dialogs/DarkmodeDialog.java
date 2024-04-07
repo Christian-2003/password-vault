@@ -42,7 +42,7 @@ public class DarkmodeDialog extends DialogFragment {
         view = requireActivity().getLayoutInflater().inflate(R.layout.dialog_darkmode, null);
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity());
-        builder.setTitle(R.string.settings_appearance_darkmode);
+        builder.setTitle(R.string.settings_customization_appearance_darkmode);
         builder.setView(view);
 
         builder.setNegativeButton(R.string.button_cancel, (dialog, id) -> {

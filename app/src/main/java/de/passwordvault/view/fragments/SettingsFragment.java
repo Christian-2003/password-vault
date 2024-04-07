@@ -36,6 +36,8 @@ import de.passwordvault.model.storage.backup.XmlBackupRestorer;
 import de.passwordvault.view.activities.PasswordAnalysisActivity;
 import de.passwordvault.view.activities.QualityGatesActivity;
 import de.passwordvault.view.activities.SettingsAboutActivity;
+import de.passwordvault.view.activities.SettingsAutofillActivity;
+import de.passwordvault.view.activities.SettingsCustomizationActivity;
 import de.passwordvault.view.activities.SettingsDataActivity;
 import de.passwordvault.view.activities.SettingsSecurityActivity;
 import de.passwordvault.view.dialogs.ChangePasswordDialog;
@@ -71,21 +73,6 @@ public class SettingsFragment extends PasswordVaultBaseFragment implements Seria
      */
     private View view;
 
-    /**
-     * Attribute stores the activity result launcher to activate the autofill-service.
-     */
-    private final ActivityResultLauncher<Intent> autofillActivityLauncher;
-
-
-    /**
-     * Default constructor instantiates a new SettingsFragment.
-     */
-    public SettingsFragment() {
-        autofillActivityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            setupAutofill();
-        });
-    }
-
 
     /**
      * Method is called whenever the SettingsFragment is created or recreated.
@@ -115,83 +102,10 @@ public class SettingsFragment extends PasswordVaultBaseFragment implements Seria
         view.findViewById(R.id.settings_about_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), SettingsAboutActivity.class)));
         view.findViewById(R.id.settings_data_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), SettingsDataActivity.class)));
         view.findViewById(R.id.settings_security_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), SettingsSecurityActivity.class)));
-
-
-
-        view.findViewById(R.id.settings_appearance_darkmode_clickable).setOnClickListener(view -> changeDarkmode());
-
-        setupAutofill();
+        view.findViewById(R.id.settings_autofill_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), SettingsAutofillActivity.class)));
+        view.findViewById(R.id.settings_customization_clickable).setOnClickListener(view -> startActivity(new Intent(getActivity(), SettingsCustomizationActivity.class)));
 
         return view;
-    }
-
-
-    /**
-     * Method sets up the autofill container for the fragment.
-     */
-    private void setupAutofill() {
-        view.findViewById(R.id.settings_autofill_enable_button).setOnClickListener(view -> showInfoDialog(R.string.settings_autofill_enable, R.string.settings_autofill_enable_info_extended));
-        LinearLayout autofillEnableContainer = view.findViewById(R.id.settings_autofill_enable_clickable);
-        autofillEnableContainer.setVisibility(viewModel.useAutofillService() ? View.GONE : View.VISIBLE);
-        autofillEnableContainer.setOnClickListener(view -> {
-            Intent intent = new Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE, Uri.parse("package: " + App.getContext().getPackageName()));
-            try {
-                autofillActivityLauncher.launch(intent);
-            }
-            catch (Exception e) {
-                Toast.makeText(getContext(), R.string.settings_autofill_enable_error, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        view.findViewById(R.id.settings_autofill_enabled_container).setVisibility(viewModel.useAutofillService() ? View.VISIBLE : View.GONE);
-
-        MaterialSwitch cachingSwitch = view.findViewById(R.id.settings_autofill_caching_switch);
-        cachingSwitch.setChecked(Configuration.useAutofillCaching());
-        cachingSwitch.setOnCheckedChangeListener((view, checked) -> Configuration.setAutofillCaching(checked));
-
-        view.findViewById(R.id.settings_autofill_authentication_container).setVisibility(viewModel.useAppLogin() ? View.VISIBLE : View.GONE);
-        if (viewModel.useAppLogin()) {
-            MaterialSwitch authenticationSwitch = view.findViewById(R.id.settings_autofill_authentication_switch);
-            authenticationSwitch.setChecked(Configuration.useAutofillAuthentication());
-            authenticationSwitch.setOnCheckedChangeListener((view, checked) -> Configuration.setAutofillAuthentication(checked));
-        }
-    }
-
-
-    /**
-     * Method displays an information dialog.
-     *
-     * @param titleId   Id of the resource-string for the dialog title.
-     * @param messageId Id if the resource-string for the dialog message.
-     */
-    private void showInfoDialog(int titleId, int messageId) {
-        showInfoDialog(titleId, getString(messageId));
-    }
-
-    /**
-     * Method displays an information dialog. If the passed message is {@code null}, an empty dialog
-     * is shown.
-     *
-     * @param titleId   Id of the resource-string for the dialog title.
-     * @param message   Message to be displayed.
-     */
-    private void showInfoDialog(int titleId, String message) {
-        AlertDialog dialog = new MaterialAlertDialogBuilder(requireActivity()).create();
-        dialog.setTitle(getString(titleId));
-        if (message != null) {
-            dialog.setMessage(message);
-        }
-        dialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.button_ok), (dialogInterface, i) -> dialogInterface.dismiss());
-        dialog.show();
-    }
-
-
-    /**
-     * Method shows the dialog to change between dark / light mode.
-     */
-    private void changeDarkmode() {
-        DarkmodeDialog dialog = new DarkmodeDialog();
-        dialog.show(requireActivity().getSupportFragmentManager(), "");
     }
 
 }

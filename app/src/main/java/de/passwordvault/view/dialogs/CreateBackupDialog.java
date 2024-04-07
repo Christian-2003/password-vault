@@ -14,7 +14,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import de.passwordvault.R;
+import de.passwordvault.view.utils.Utils;
 import de.passwordvault.viewmodel.dialogs.CreateBackupViewModel;
 
 
@@ -102,12 +106,13 @@ public class CreateBackupDialog extends DialogFragment {
             //must surely be the stupidest decision made in this project so far...
             throw new ClassCastException(e.getMessage());
         }
-        viewModel.setFilename(getString(R.string.settings_security_backup_file));
+
+        viewModel.setFilename(getString(R.string.settings_data_backup_file).replace("{date}", Utils.formatDate(Calendar.getInstance(), "yyyy-MM-dd")));
 
         view = requireActivity().getLayoutInflater().inflate(R.layout.dialog_create_backup, null);
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity());
-        builder.setTitle(getString(R.string.settings_security_backup));
+        builder.setTitle(getString(R.string.settings_data_backup_create));
         builder.setView(viewModel.createView(view));
 
         builder.setPositiveButton(R.string.button_ok, (dialog, id) -> {

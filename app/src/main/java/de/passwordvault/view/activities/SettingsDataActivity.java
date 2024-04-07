@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import java.util.Calendar;
 import java.util.Objects;
 import de.passwordvault.R;
 import de.passwordvault.model.security.authentication.AuthenticationCallback;
@@ -19,6 +21,7 @@ import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
 import de.passwordvault.view.dialogs.CreateBackupDialog;
 import de.passwordvault.view.dialogs.RestoreBackupDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
+import de.passwordvault.view.utils.Utils;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.fragments.SettingsViewModel;
 
@@ -188,7 +191,7 @@ public class SettingsDataActivity extends PasswordVaultBaseActivity implements D
      * Method starts the process of creating an HTML export.
      */
     private void htmlExport() {
-        String fileName = getString(R.string.settings_export_file);
+        String fileName = getString(R.string.settings_data_export_file).replace("{date}", Utils.formatDate(Calendar.getInstance(), "yyyy-MM-dd"));
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/html");

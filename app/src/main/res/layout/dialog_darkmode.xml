@@ -15,19 +15,19 @@
             android:id="@+id/dialog_darkmode_radio_button_light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/settings_appearance_darkmode_light"/>
+            android:text="@string/settings_customization_appearance_darkmode_light"/>
 
         <RadioButton
             android:id="@+id/dialog_darkmode_radio_button_dark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/settings_appearance_darkmode_dark"/>
+            android:text="@string/settings_customization_appearance_darkmode_dark"/>
 
         <RadioButton
             android:id="@+id/dialog_darkmode_radio_button_system"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/settings_appearance_darkmode_system"/>
+            android:text="@string/settings_customization_appearance_darkmode_system"/>
 
     </RadioGroup>
 

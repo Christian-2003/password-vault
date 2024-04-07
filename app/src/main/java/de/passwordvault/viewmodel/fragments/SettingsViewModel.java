@@ -163,9 +163,9 @@ public class SettingsViewModel extends ViewModel {
             xmlBackupCreator.createBackup();
         }
         catch (BackupException e) {
-            Toast.makeText(context, context.getString(R.string.settings_security_backup_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.settings_data_backup_create_error), Toast.LENGTH_SHORT).show();
         }
-        Toast.makeText(context, context.getString(R.string.settings_security_backup_success), Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, context.getString(R.string.settings_data_backup_create_success), Toast.LENGTH_SHORT).show();
     }
 
 
@@ -207,10 +207,10 @@ public class SettingsViewModel extends ViewModel {
         }
         catch (ExportException e) {
             e.printStackTrace();
-            Toast.makeText(context, context.getString(R.string.settings_export_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.settings_data_export_html_error), Toast.LENGTH_LONG).show();
             return;
         }
-        Toast.makeText(context, context.getString(R.string.settings_export_success), Toast.LENGTH_LONG).show();
+        Toast.makeText(context, context.getString(R.string.settings_data_export_html_success), Toast.LENGTH_LONG).show();
     }
 
 
@@ -243,21 +243,21 @@ public class SettingsViewModel extends ViewModel {
         }
         catch (BackupException e) {
             e.printStackTrace();
-            Toast.makeText(context, context.getString(R.string.settings_security_restore_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.settings_data_backup_restore_error), Toast.LENGTH_LONG).show();
             return;
         }
         catch (XmlException e) {
             e.printStackTrace();
-            Toast.makeText(context, context.getString(R.string.settings_security_restore_error_xml), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.settings_data_backup_restore_error_xml), Toast.LENGTH_LONG).show();
             return;
         }
         catch (EncryptionException e) {
             Log.d("RESTORE", "Invalid password: " + e.getMessage());
             e.printStackTrace();
-            Toast.makeText(context, context.getString(R.string.settings_security_restore_error_encryption), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.settings_data_backup_restore_error_password), Toast.LENGTH_LONG).show();
             return;
         }
-        Toast.makeText(context, context.getString(R.string.settings_security_restore_success), Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, context.getString(R.string.settings_data_backup_restore_success), Toast.LENGTH_SHORT).show();
     }
 
 
@@ -279,11 +279,6 @@ public class SettingsViewModel extends ViewModel {
     public boolean useAutofillService() {
         AutofillManager manager = (AutofillManager)App.getContext().getSystemService(AutofillManager.class);
         return manager != null && manager.hasEnabledAutofillServices();
-    }
-
-
-    public void changeDarkMode(int mode) {
-
     }
 
 }

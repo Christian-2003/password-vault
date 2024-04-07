@@ -37,17 +37,13 @@
     <!-- Settings -->
     <string name="settings">Einstellungen</string>
 
-    <string name="settings_appearance">Ansicht</string>
-    <string name="settings_appearance_darkmode">Nachtmodus</string>
-    <string name="settings_appearance_darkmode_info">Ändere Nachtmodus-Einstellungen</string>
-    <string name="settings_appearance_darkmode_light">Hell</string>
-    <string name="settings_appearance_darkmode_dark">Dunkel</string>
-    <string name="settings_appearance_darkmode_system">Wie System</string>
-    <string name="settings_appearance_language">Sprache</string>
-    <string name="settings_appearance_language_info">Ändere die Sprache der App</string>
-    <string name="settings_appearance_language_english">Englisch</string>
-    <string name="settings_appearance_language_german">Deutsch</string>
-    <string name="settings_appearance_language_system">Wie System</string>
+    <string name="settings_customization">Personalisierung</string>
+    <string name="settings_customization_appearance">Ansicht</string>
+    <string name="settings_customization_appearance_darkmode">Nachtmodus</string>
+    <string name="settings_customization_appearance_darkmode_info">Nachtmodus-Einstellungen ändern</string>
+    <string name="settings_customization_appearance_darkmode_light">Hell</string>
+    <string name="settings_customization_appearance_darkmode_dark">Dunkel</string>
+    <string name="settings_customization_appearance_darkmode_system">Wie System</string>
 
     <string name="settings_security">Sicherheit</string>
     <string name="settings_security_login">App-Login</string>
@@ -63,48 +59,16 @@
     <string name="settings_security_password_analysis">Passwortanalyse</string>
     <string name="settings_security_password_analysis_info">Sicherheit sämtlicher Passwörter analysieren</string>
 
-
-    <string name="settings_security_login_info">Verlange Passwort zum Öffnen der App</string>
-    <string name="settings_security_disable_login_title">App-Login deaktivieren</string>
-    <string name="settings_security_disable_login_info">Geben Sie Ihr Passwort ein, um den App-Login zu deaktivieren.</string>
-    <string name="settings_security_password_info">Passwort zum Einloggen ändern</string>
-    <string name="settings_security_biometrics">Biometrie verwenden</string>
-    <string name="settings_security_biometrics_info">Biometrie zum Einloggen verwenden</string>
-    <string name="settings_security_backup">Backup erstellen</string>
-    <string name="settings_security_backup_info">(Verschlüsseltes) Backup erstellen</string>
-    <string name="settings_security_backup_info_extended">Erstellen Sie ein (optional verschlüsseltes) Backup Ihrer Daten. Das Backup wird nicht gelöscht, wenn die App deinstalliert wird.</string>
-    <string name="settings_security_backup_password_info">Wenn Sie ein Passwort eingeben, wird das Backup verschlüsselt. In diesem Fall wird das eingegebene Passwort für die Wiederherstellung benötigt.</string>
-    <string name="settings_security_backup_file">pv_backup.txt</string>
-    <string name="settings_security_backup_error">Backup konnte nicht erstellt werden</string>
-    <string name="settings_security_backup_success">Backup wurde erfolgreich erstellt</string>
-    <string name="settings_security_restore">Backup wiederherstellen</string>
-    <string name="settings_security_restore_info">(Verschlüsseltes) Backup wiederherstellen</string>
-    <string name="settings_security_restore_info_extended">Stellen Sie ein (optional verschlüsseltes) Backup Ihrer Daten wieder her.</string>
-    <string name="settings_security_restore_password_info">Bitte geben Sie das Passwort ein, was zum Verschlüsseln des Backups verwendet wurde.</string>
-    <string name="settings_security_restore_error">Das Backup konnte nicht wiederhergestellt werden</string>
-    <string name="settings_security_restore_error_xml">Backup-Datei korrput</string>
-    <string name="settings_security_restore_error_encryption">Ungültiges Passwort</string>
-    <string name="settings_security_restore_success">Backup wurde erfolgreich wiederhergestellt</string>
-    <string name="settings_security_quality_gates">Passwortsicherheits-Kriterien</string>
-    <string name="settings_security_quality_gates_info">Passwortsicherheits-Kriterien bearbeiten</string>
-
     <string name="settings_autofill">Automatisches Ausfüllen</string>
-    <string name="settings_autofill_enable">Automatisches Ausfüllen aktivieren</string>
-    <string name="settings_autofill_enable_info">App zum automatischen Ausfüllen von Benutzerdaten verwenden</string>
-    <string name="settings_autofill_enable_info_extended">Automatisches Ausfüllen ermöglicht ein schnelleres Ausfüllen von Benutzerdaten (beispielsweise Benutzernamen und Passwörter) durch die Daten die in dieser App hinterlegt sind.</string>
-    <string name="settings_autofill_enable_error">Automatisches Ausfüllen kann nicht aktiviert werden</string>
-    <string name="settings_autofill_caching">Caching verwenden</string>
-    <string name="settings_autofill_caching_info">Automatisches Ausfüllen durch Caches beschleunigen</string>
-    <string name="settings_autofill_authentication">Verlange Authentifizierung</string>
-    <string name="settings_autofill_authentication_info">Erhöhe die Sicherheit durch eine Authentifizierung vor dem Zugriff auf App-Daten</string>
-
-    <string name="settings_export">Exportieren</string>
-    <string name="settings_export_html">Daten exportieren</string>
-    <string name="settings_export_html_info">Daten in ein lesbares HTML-Format exportieren</string>
-    <string name="settings_export_html_info_extended">Exportieren Sie Ihre Daten in ein lesbares (unverschlüsseltes) HTML-Format.</string>
-    <string name="settings_export_file">kontodaten.html</string>
-    <string name="settings_export_error">Daten konnten nicht exportiert werden</string>
-    <string name="settings_export_success">Daten wurde erfolgreich exportiert</string>
+    <string name="settings_autofill_toggle">Automatisches Ausfüllen aktivieren</string>
+    <string name="settings_autofill_toggle_info">Automatisches Ausfüllen in den Einstellungen aktivieren</string>
+    <string name="settings_autofill_toggle_error">Automatisches Ausfüllen kann nicht aktiviert werden</string>
+    <string name="settings_autofill_cache">Cache</string>
+    <string name="settings_autofill_cache_toggle">Caching verwenden</string>
+    <string name="settings_autofill_cache_toggle_info">Automatisches Ausfüllen durch Caches beschleunigen</string>
+    <string name="settings_autofill_authentication">Authentifizierung</string>
+    <string name="settings_autofill_authentication_toggle">Verlange Authentifizierung</string>
+    <string name="settings_autofill_authentication_toggle_info">Datensicherheit durch Authentifizierung vor dem Zugriff auf App-Daten erhöhen</string>
 
     <string name="settings_about">Über</string>
     <string name="settings_about_usage">Nutzungsbedingungen</string>
@@ -124,6 +88,7 @@
 
     <string name="settings_data">Daten</string>
     <string name="settings_data_export">Export</string>
+    <string name="settings_data_export_file">kontodaten_{date}.html</string>
     <string name="settings_data_export_html">Daten exportieren</string>
     <string name="settings_data_export_html_info">Daten in unverschlüsselte, menschenlesbare HTML-Datei exportieren</string>
     <string name="settings_data_export_html_error">Daten konnten nicht exportiert werden</string>
@@ -136,6 +101,8 @@
     <string name="settings_data_backup_restore">Backup wiederherstellen</string>
     <string name="settings_data_backup_restore_info">(Verschlüsseltes) Backup wiederherstellen</string>
     <string name="settings_data_backup_restore_error">Backup konnte nicht wiederhergestellt werden</string>
+    <string name="settings_data_backup_restore_error_xml">Backup korrupt</string>
+    <string name="settings_data_backup_restore_error_password">Falsches Passwort</string>
     <string name="settings_data_backup_restore_success">Backup wurde wiederhergestellt</string>
     <string name="settings_data_delete">Löschen</string>
     <string name="settings_data_delete_all">Daten löschen</string>
