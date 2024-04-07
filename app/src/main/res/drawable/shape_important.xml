@@ -5,6 +5,6 @@
     android:shape="oval">
 
     <solid
-        android:color="@color/pv_theme_primary"/>
+        android:color="@color/pv_primary"/>
 
 </shape>

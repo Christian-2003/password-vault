@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/default_padding"
-    android:background="@color/pv_theme_background"
+    android:background="@color/pv_background"
     android:orientation="horizontal">
 
     <ImageView
@@ -28,6 +28,6 @@
         android:layout_height="@dimen/image_button_height"
         android:layout_gravity="center"
         android:src="@drawable/ic_biometrics"
-        app:tint="@color/pv_theme_onBackground" />
+        app:tint="@color/pv_text" />
 
 </LinearLayout>

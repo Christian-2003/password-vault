@@ -218,7 +218,7 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
             Paint paint = new Paint();
             Bitmap icon;
             if (dX > 1) {
-                paint.setColor(App.getContext().getColor(R.color.pv_theme_primary));
+                paint.setColor(App.getContext().getColor(R.color.pv_primary));
                 icon = getBitmap(R.drawable.ic_edit);
                 canvas.drawRect((float)itemView.getLeft(), (float)itemView.getTop(), dX, (float)itemView.getBottom(), paint);
                 if (icon != null) {
@@ -226,7 +226,7 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
                 }
             }
             else if (dX < -1) {
-                paint.setColor(App.getContext().getColor(R.color.red));
+                paint.setColor(App.getContext().getColor(R.color.pv_red));
                 icon = getBitmap(R.drawable.ic_delete);
                 canvas.drawRect((float)itemView.getRight() + dX, (float)itemView.getTop(), (float)itemView.getRight(), (float)itemView.getBottom(), paint);
                 if (icon != null) {
@@ -264,7 +264,7 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
         if (drawable == null) {
             return null;
         }
-        drawable.setTint(App.getContext().getColor(R.color.pv_theme_swipe_image_color));
+        drawable.setTint(App.getContext().getColor(R.color.pv_container));
         Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());

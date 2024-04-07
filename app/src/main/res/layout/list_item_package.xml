@@ -20,7 +20,7 @@
             android:layout_height="@dimen/image_button_height"
             android:layout_marginEnd="@dimen/default_margin"
             android:layout_weight="0"
-            android:background="@color/pv_theme_inverseOnSurface"
+            android:background="@color/pv_container_detail"
             app:shapeAppearanceOverlay="@style/rounded_corners"/>
 
         <TextView

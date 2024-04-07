@@ -271,7 +271,7 @@ public class AddEntryActivity extends PasswordVaultBaseActivity implements Dialo
             chip.setCheckable(true);
             Drawable checkedIcon = AppCompatResources.getDrawable(this, R.drawable.ic_check);
             if (checkedIcon != null) {
-                checkedIcon.setTint(getResources().getColor(R.color.pv_theme_onBackground));
+                checkedIcon.setTint(getResources().getColor(R.color.pv_text));
             }
             chip.setCheckedIcon(checkedIcon);
             chip.setCheckedIconVisible(true);

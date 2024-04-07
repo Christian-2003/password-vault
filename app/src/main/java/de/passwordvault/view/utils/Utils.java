@@ -64,13 +64,13 @@ public class Utils {
     public static int getPasswordSecurityScoreColor(int score) {
         double securityScorePercentage = (double)score / (double)QualityGateManager.getInstance().numberOfQualityGates();
         if (securityScorePercentage < 0.33) {
-            return App.getContext().getColor(R.color.red);
+            return App.getContext().getColor(R.color.pv_red);
         }
         else if (securityScorePercentage > 0.67) {
-            return App.getContext().getColor(R.color.green);
+            return App.getContext().getColor(R.color.pv_green);
         }
         else {
-            return App.getContext().getColor(R.color.yellow);
+            return App.getContext().getColor(R.color.pv_yellow);
         }
     }
 

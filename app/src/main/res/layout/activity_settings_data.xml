@@ -245,7 +245,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/settings_data_delete_all_info"
-                            android:textColor="@color/red"
+                            android:textColor="@color/pv_red"
                             style="@style/pv.text.variant"/>
 
                     </LinearLayout>

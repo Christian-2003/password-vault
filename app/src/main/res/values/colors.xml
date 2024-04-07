@@ -1,52 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <color name="seed">#1D7874</color>
-    <color name="pv_theme_primary">#006A66</color>
-    <color name="pv_theme_onPrimary">#FFFFFF</color>
-    <color name="pv_theme_primaryContainer">#70F7F0</color>
-    <color name="pv_theme_onPrimaryContainer">#00201E</color>
-    <color name="pv_theme_secondary">#4A6361</color>
-    <color name="pv_theme_onSecondary">#FFFFFF</color>
-    <color name="pv_theme_secondaryContainer">#CCE8E5</color>
-    <color name="pv_theme_onSecondaryContainer">#051F1E</color>
-    <color name="pv_theme_tertiary">#49607B</color>
-    <color name="pv_theme_onTertiary">#FFFFFF</color>
-    <color name="pv_theme_tertiaryContainer">#D0E4FF</color>
-    <color name="pv_theme_onTertiaryContainer">#011D34</color>
-    <color name="pv_theme_error">#BA1A1A</color>
-    <color name="pv_theme_errorContainer">#FFDAD6</color>
-    <color name="pv_theme_onError">#FFFFFF</color>
-    <color name="pv_theme_onErrorContainer">#410002</color>
-    <color name="pv_theme_background">#F6F6F8</color>
-    <color name="pv_theme_onBackground">#010101</color>
-    <color name="pv_theme_surface">#F6F6F8</color>
-    <color name="pv_theme_onSurface">#010101</color>
-    <color name="pv_theme_surfaceVariant">#FCFCFE</color>
-    <color name="pv_theme_onSurfaceVariant">#8D8C91</color>
-    <color name="pv_theme_outline">#6F7978</color>
-    <color name="pv_theme_inverseOnSurface">#F2F2F2</color>
-    <color name="pv_theme_inverseSurface">#2D3131</color>
-    <color name="pv_theme_inversePrimary">#4EDAD4</color>
-    <color name="pv_theme_shadow">#000000</color>
-    <color name="pv_theme_surfaceTint">#006A66</color>
-    <color name="pv_theme_outlineVariant">#BEC9C7</color>
-    <color name="pv_theme_scrim">#000000</color>
-    <color name="pv_theme_popup_surface">#FCFCFE</color>
-    <color name="pv_theme_swipe_image_color">@color/pv_theme_surfaceVariant</color>
+    <color name="pv_primary">#1D7874</color>
+    <color name="pv_background">#F6F6F8</color>
 
+    <color name="pv_container">#FCFCFE</color>
+    <color name="pv_container_highlight">#7DB4B2</color>
+    <color name="pv_container_detail">#F2F2F2</color>
 
-    <!-- The following colors are only present to preserve backwards compatibility! -->
-    <color name="primary">@color/pv_theme_primaryContainer</color>
-    <color name="primary_variant">@color/pv_theme_primary</color>
-    <color name="on_primary">@color/pv_theme_onPrimary</color>
+    <color name="pv_text">#000000</color>
+    <color name="pv_text_secondary">#8D8C91</color>
+    <color name="pv_text_primary">#1D7874</color>
 
-    <color name="background">@color/pv_theme_surface</color>
-    <color name="background_variant">@color/pv_theme_surfaceVariant</color>
-    <color name="on_background">@color/pv_theme_onSurface</color>
-    <color name="on_background_variant">@color/pv_theme_onSurfaceVariant</color>
-
-    <color name="red">#FB5F2E</color>
-    <color name="green">#03D58A</color>
-    <color name="yellow">#F0C430</color>
+    <color name="pv_red">#FB5F2E</color>
+    <color name="pv_green">#03D58A</color>
+    <color name="pv_yellow">#F0C430</color>
 </resources>

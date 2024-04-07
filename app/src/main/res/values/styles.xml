@@ -10,11 +10,11 @@
     <!-- Text styles -->
     <style name="pv.text">
         <item name="android:textSize">@dimen/default_text_size</item>
-        <item name="android:textColor">@color/on_background</item>
+        <item name="android:textColor">@color/pv_text</item>
     </style>
 
     <style name="pv.text.variant" parent="pv.text">
-        <item name="android:textColor">@color/on_background_variant</item>
+        <item name="android:textColor">@color/pv_text_secondary</item>
     </style>
 
     <style name="pv.text.highlight" parent="pv.text">
@@ -39,18 +39,30 @@
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
         <item name="android:minWidth">@dimen/image_button_width</item>
         <item name="android:minHeight">@dimen/image_button_height</item>
-        <item name="android:tint">@color/pv_theme_onSurfaceVariant</item>
+        <item name="android:tint">@color/pv_text_secondary</item>
     </style>
 
     <style name="pv.button.image_button.app_bar" parent="pv.button.image_button">
-        <item name="android:tint">@color/pv_theme_onPrimary</item>
+        <item name="android:tint">@color/pv_text</item>
     </style>
 
 
 
     <!-- Styles for the app bar -->
-    <style name="pv.menu_bar">
-        <item name="android:background">@color/pv_theme_surface</item>
+    <style name="pv.menu_bar" parent="Widget.Material3.BottomNavigationView">
+        <item name="android:background">@color/pv_container</item>
+        <item name="itemIconTint">@color/pv_text</item>
+        <item name="itemTextColor">@color/pv_text</item>
+        <item name="itemActiveIndicatorStyle">@style/pv.menu_bar.activeitem</item>
+        <item name="itemTextAppearanceActive">@style/pv.menu_bar.activeitem.text</item>
+    </style>
+
+    <style name="pv.menu_bar.activeitem" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/pv_container_detail</item>
+    </style>
+
+    <style name="pv.menu_bar.activeitem.text" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:textStyle">bold</item>
     </style>
 
     <!-- Style for an AppBar which cannot be collapsed -->
@@ -92,8 +104,8 @@
         <item name="layout_scrollFlags">scroll|exitUntilCollapsed</item>
         <item name="titleCollapseMode">scale</item>
         <item name="expandedTitleGravity">center_vertical|center_horizontal</item>
-        <item name="collapsedTitleTextColor">@color/pv_theme_onPrimary</item>
-        <item name="expandedTitleTextColor">@color/pv_theme_onPrimary</item>
+        <item name="collapsedTitleTextColor">@color/pv_text</item>
+        <item name="expandedTitleTextColor">@color/pv_text</item>
         <item name="collapsedTitleTextAppearance">@style/pv.layout.app_bar.collapsing_toolbar.collapsed_title</item>
         <item name="expandedTitleTextAppearance">@style/pv.layout.app_bar.collapsing_toolbar.expanded_title</item>
     </style>
@@ -141,11 +153,11 @@
     <style name="pv.icon">
         <item name="android:layout_height">@dimen/pin_icon_size</item>
         <item name="android:layout_width">@dimen/pin_icon_size</item>
-        <item name="android:tint">@color/on_background_variant</item>
+        <item name="android:tint">@color/pv_text_secondary</item>
     </style>
 
     <style name="pv.icon.pin" parent="pv.icon">
-        <item name="android:tint">@color/on_background_variant</item>
+        <item name="android:tint">@color/pv_text_secondary</item>
     </style>
 
 
@@ -161,7 +173,7 @@
     <!-- Style for highlighted container -->
     <style name="pv.container.highlight">
         <item name="android:background">@drawable/background</item>
-        <item name="android:backgroundTint">@color/pv_theme_secondaryContainer</item>
+        <item name="android:backgroundTint">@color/pv_container_highlight</item>
         <item name="android:padding">0dp</item>
         <item name="android:layout_margin">@dimen/default_margin</item>
         <item name="android:clipToOutline">true</item>
@@ -178,7 +190,7 @@
 
     <style name="pv.eyecatcher.pill">
         <item name="android:background">@drawable/pill</item>
-        <item name="android:backgroundTint">@color/pv_theme_inverseOnSurface</item>
+        <item name="android:backgroundTint">@color/pv_container_detail</item>
         <item name="android:padding">@dimen/default_padding</item>
     </style>
 
@@ -188,15 +200,15 @@
     <style name="divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
-        <item name="android:background">@color/pv_theme_outlineVariant</item>
+        <item name="android:background">@color/pv_text_secondary</item>
         <item name="android:layout_marginHorizontal">@dimen/default_padding</item>
     </style>
 
     <!-- Style for popup menus -->
     <style name="popup_menu" parent="@android:style/Widget.PopupMenu">
-        <item name="android:backgroundTint">@color/pv_theme_popup_surface</item>
-        <item name="android:iconTint">@color/on_background</item>
-        <item name="android:textColor">@color/on_background</item>
+        <item name="android:backgroundTint">@color/pv_container</item>
+        <item name="android:iconTint">@color/pv_text</item>
+        <item name="android:textColor">@color/pv_text</item>
     </style>
 
     <!-- Style to make the login image rounded -->

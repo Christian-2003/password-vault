@@ -15,6 +15,7 @@ N/A
 * Reworked `SettingsFragment`.
 * Partial introduction of collapsable toolbars.
 * Improvements to maintainability regarding string-resources.
+* Added custom style for bottom navigation bar.
 
 <br/>
 

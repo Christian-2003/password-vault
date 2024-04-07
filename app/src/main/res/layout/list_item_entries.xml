@@ -21,7 +21,7 @@
             android:layout_marginEnd="@dimen/default_margin"
             android:layout_weight="0"
             android:layout_gravity="center"
-            android:background="@color/pv_theme_inverseOnSurface"
+            android:background="@color/pv_container_detail"
             app:shapeAppearanceOverlay="@style/rounded_corners"/>
 
         <LinearLayout
