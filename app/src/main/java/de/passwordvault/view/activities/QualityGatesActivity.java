@@ -67,8 +67,8 @@ public class QualityGatesActivity extends PasswordVaultBaseActivity implements O
 
         //QualityGateManager.getInstance().clearQualityGates();
 
-        findViewById(R.id.quality_gates_back_button).setOnClickListener(view -> finish());
-        findViewById(R.id.quality_gate_button_add).setOnClickListener(view -> startActivity(new Intent(QualityGatesActivity.this, QualityGateActivity.class)));
+        findViewById(R.id.button_back).setOnClickListener(view -> finish());
+        findViewById(R.id.button_add).setOnClickListener(view -> startActivity(new Intent(QualityGatesActivity.this, QualityGateActivity.class)));
 
         ListView listView = findViewById(R.id.quality_gates_list_view);
         listAdapter = new QualityGatesListAdapter(QualityGateManager.getInstance().getData(), this);

@@ -80,7 +80,13 @@ public class PasswordAnalysisGeneralFragment extends PasswordVaultBaseFragment {
         animator.addUpdateListener(animation -> securityBar.setProgress((int) animation.getAnimatedValue()));
         animator.start();
 
-        String duplicates = view.getContext().getString(R.string.password_results_general_duplicates_hint).replace("{arg}", "" + PasswordSecurityAnalysis.getInstance().getIdenticalPasswords().size());
+        String duplicates;
+        if (PasswordSecurityAnalysis.getInstance().getIdenticalPasswords().size() == 1) {
+            duplicates = view.getContext().getString(R.string.password_results_general_duplicates_hint_singular).replace("{arg}", "" + PasswordSecurityAnalysis.getInstance().getIdenticalPasswords().size());
+        }
+        else {
+            duplicates = view.getContext().getString(R.string.password_results_general_duplicates_hint).replace("{arg}", "" + PasswordSecurityAnalysis.getInstance().getIdenticalPasswords().size());
+        }
         ((TextView)view.findViewById(R.id.password_analysis_general_duplicates)).setText(duplicates);
         view.findViewById(R.id.password_analysis_duplicates_clickable).setOnClickListener(view -> showDuplicatePasswords());
 

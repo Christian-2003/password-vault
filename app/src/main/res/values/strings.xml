@@ -145,6 +145,7 @@
     <string name="password_results_general_average_score">Average security score</string>
     <string name="password_results_general_duplicates">Duplicate passwords</string>
     <string name="password_results_general_duplicates_hint">Show {arg} duplicate passwords</string>
+    <string name="password_results_general_duplicates_hint_singular">Show {arg} duplicate password</string>
     <string name="password_results_general_duplicates_none">No duplicate passwords</string>
     <string name="password_results_list_title">Analyzed Passwords</string>
     <string name="password_results_list_none">No passwords</string>

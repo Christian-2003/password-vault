@@ -57,8 +57,8 @@ public class PasswordAnalysisActivity extends PasswordVaultBaseActivity implemen
         setContentView(R.layout.activity_password_analysis);
         viewModel = new ViewModelProvider(this).get(PasswordAnalysisViewModel.class);
 
-        findViewById(R.id.password_analysis_back_button).setOnClickListener(view -> finish());
-        findViewById(R.id.password_analysis_reload_button).setOnClickListener(view -> restartAnalysis());
+        findViewById(R.id.button_back).setOnClickListener(view -> finish());
+        findViewById(R.id.button_reload).setOnClickListener(view -> restartAnalysis());
         showAnalysisResults(PasswordSecurityAnalysis.getInstance().isAnalysisCompleted());
         PasswordSecurityAnalysis.getInstance().addObserver(this);
         if (!PasswordSecurityAnalysis.getInstance().isAnalysisCompleted() && !PasswordSecurityAnalysis.getInstance().isAnalysisRunning()) {

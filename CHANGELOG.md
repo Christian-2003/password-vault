@@ -16,6 +16,7 @@ N/A
 * Partial introduction of collapsable toolbars.
 * Improvements to maintainability regarding string-resources.
 * Added custom style for bottom navigation bar.
+* Replaced buttons to save and delete custom password quality gates with image buttons.
 
 <br/>
 

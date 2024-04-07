@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
@@ -82,7 +83,7 @@ public class QualityGateActivity extends PasswordVaultBaseActivity implements Di
         CheckBox enabledCheckBox = findViewById(R.id.quality_gate_checkbox_enabled);
         enabledCheckBox.setChecked(viewModel.getQualityGate().isEnabled());
 
-        MaterialButton deleteButton = findViewById(R.id.quality_gate_button_delete);
+        ImageButton deleteButton = findViewById(R.id.button_delete);
         if (viewModel.getIndexOfQualityGate() == -1) {
             deleteButton.setVisibility(View.GONE);
         }
@@ -98,9 +99,9 @@ public class QualityGateActivity extends PasswordVaultBaseActivity implements Di
             dialog.show(getSupportFragmentManager(), null);
         });
 
-        findViewById(R.id.quality_gate_back_button).setOnClickListener(view -> finish());
+        findViewById(R.id.button_back).setOnClickListener(view -> finish());
 
-        findViewById(R.id.quality_gate_button_save).setOnClickListener(view -> {
+        findViewById(R.id.button_save).setOnClickListener(view -> {
             if (viewModel.processUserInput(QualityGateActivity.this)) {
                 finish();
             }
