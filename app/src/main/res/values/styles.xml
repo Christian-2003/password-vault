@@ -265,6 +265,17 @@
         <item name="android:textColorHint">@color/pv_text_secondary</item>
     </style>
 
+    <!-- Style for 'com.google.android.material.materialswitch.MaterialSwitch' -->
+    <style name="pv.material.switch" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="thumbTint">@color/switch_thumb</item>
+    </style>
+
+    <!-- Style for 'com.google.android.material.floatingactionbutton.FloatingActionButton' -->
+    <style name="pv.material.fab" parent="Widget.Material3.FloatingActionButton.Primary">
+        <item name="tint">@color/pv_text_onPrimary</item>
+    </style>
+
+
 
 
 
