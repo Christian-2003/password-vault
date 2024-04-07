@@ -41,7 +41,7 @@
     <string name="settings_search_qualitygates">Sicherheitskriterien</string>
     <string name="settings_search_masterpassword">Master-Passwort</string>
     <string name="settings_search_backup">Backup</string>
-    <string name="settings_search_autofillauthentication">Autom. Ausfüllen Authentifizierung</string>
+    <string name="settings_search_autofillauthentication">Authentifizierung für autom. Ausfüllen</string>
 
     <string name="settings_customization">Personalisierung</string>
     <string name="settings_customization_appearance">Ansicht</string>

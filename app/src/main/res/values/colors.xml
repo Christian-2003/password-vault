@@ -11,6 +11,7 @@
     <color name="pv_text">#000000</color>
     <color name="pv_text_secondary">#8D8C91</color>
     <color name="pv_text_primary">#1D7874</color>
+    <color name="pv_text_onPrimary">#FAFAFA</color>
 
     <color name="pv_red">#FB5F2E</color>
     <color name="pv_green">#03D58A</color>

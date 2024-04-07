@@ -3,16 +3,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Theme.PasswordVault" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Default app colors -->
         <item name="colorPrimary">@color/pv_primary</item>
         <item name="colorOnPrimary">@color/pv_text</item>
         <item name="colorPrimaryContainer">@color/pv_primary</item>
         <item name="colorOnPrimaryContainer">@color/pv_primary</item>
-
         <item name="colorError">#BA1A1A</item>
         <item name="colorErrorContainer">#FFDAD6</item>
         <item name="colorOnError">#FFFFFF</item>
         <item name="colorOnErrorContainer">#410002</item>
-
         <item name="android:colorBackground">@color/pv_background</item>
         <item name="colorOnBackground">@color/pv_text</item>
         <item name="colorSurface">@color/pv_background</item>
@@ -20,6 +19,11 @@
         <item name="colorSurfaceVariant">@color/pv_background</item>
         <item name="colorOnSurfaceVariant">@color/pv_background</item>
         <item name="colorOutline">@color/pv_text_secondary</item>
+
+        <item name="android:colorBackgroundFloating">@color/pv_container</item>
+
+        <!-- Default styles for material components -->
+        <item name="textInputStyle">@style/pv.material.text_input_layout</item>
     </style>
 
 </resources>
