@@ -62,7 +62,7 @@ public class PackagesActivity extends PasswordVaultBaseActivity {
             return;
         }
 
-        findViewById(R.id.packages_back_button).setOnClickListener(view -> finish());
+        findViewById(R.id.button_back).setOnClickListener(view -> finish());
 
         adapter = new PackagesFragmentStateAdapter(this);
         ViewPager2 viewPager = findViewById(R.id.packages_view_pager);

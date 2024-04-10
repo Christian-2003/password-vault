@@ -1,6 +1,7 @@
 package de.passwordvault.view.utils.adapters;
 
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -132,6 +133,7 @@ public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecy
             holder.itemView.setOnClickListener(view -> clickListener.onItemClick(entry, position));
         }
         holder.logo.setImageDrawable(entry.getLogo());
+        Log.d("ERVA", "Bound ViewHolder" + position + " for " + entry.getName());
     }
 
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,34 +9,55 @@
     android:orientation="vertical"
     tools:context=".view.activities.PackagesActivity">
 
-    <!-- Toolbar -->
-    <androidx.appcompat.widget.Toolbar
-        style="@style/pv.app_bar">
+    <!-- Toolbar for the activity -->
+    <com.google.android.material.appbar.AppBarLayout
+        style="@style/pv.layout.app_bar">
 
-        <ImageButton
-            android:id="@+id/packages_back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_back"
-            style="@style/pv.button.image_button.app_bar"/>
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            app:title="@string/packages_title"
+            style="@style/pv.layout.app_bar.collapsing_toolbar">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/packages_title"
-            style="@style/pv.text.app_bar"/>
+            <androidx.appcompat.widget.Toolbar
+                app:contentInsetStart="?attr/actionBarSize"
+                style="@style/pv.layout.app_bar.collapsing_toolbar.toolbar"/>
 
-    </androidx.appcompat.widget.Toolbar>
+            <FrameLayout
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="start|bottom">
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/packages_tabs"
+                <ImageButton
+                    android:id="@+id/button_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_back"
+                    android:layout_gravity="center"
+                    style="@style/pv.button.image_button.app_bar"/>
+
+            </FrameLayout>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/pv.tab_layout"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        style="@style/pv.layout.nested_scroll_view">
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/packages_view_pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/packages_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/pv.tab_layout"/>
 
-</LinearLayout>
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/packages_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
