@@ -19,6 +19,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -91,7 +93,7 @@ public class AddEntryActivity extends PasswordVaultBaseActivity implements Dialo
                 viewModel.setEntry(EntryManager.getInstance().get(bundle.getString("entry")));
                 viewModel.setTags(new TagCollection(viewModel.getEntry().getTags()));
             }
-            ((TextView)findViewById(R.id.add_entry_title)).setText(viewModel.getEntry().getName());
+            ((CollapsingToolbarLayout)findViewById(R.id.collapsing_toolbar_layout)).setTitle(viewModel.getEntry().getName());
             ((TextView)findViewById(R.id.add_entry_name)).setText(viewModel.getEntry().getName());
             ((TextView)findViewById(R.id.add_entry_description)).setText(viewModel.getEntry().getDescription());
         }
@@ -138,11 +140,7 @@ public class AddEntryActivity extends PasswordVaultBaseActivity implements Dialo
         });
 
         //Add ClickListeners to close the activity:
-        findViewById(R.id.add_entry_button_back).setOnClickListener(view -> AddEntryActivity.this.finish());
-        findViewById(R.id.add_entry_button_cancel).setOnClickListener(view -> {
-            setResult(RESULT_CANCELED, getIntent());
-            AddEntryActivity.this.finish();
-        });
+        findViewById(R.id.button_back).setOnClickListener(view -> AddEntryActivity.this.finish());
 
         //Add ClickListener to add new detail:
         findViewById(R.id.add_entry_button_add_detail).setOnClickListener(view -> {
@@ -154,7 +152,7 @@ public class AddEntryActivity extends PasswordVaultBaseActivity implements Dialo
         });
 
         //Add ClickListener to save the edited entry:
-        findViewById(R.id.add_entry_button_save).setOnClickListener(view -> {
+        findViewById(R.id.button_save).setOnClickListener(view -> {
             if (!processUserInput()) {
                 //Some data was not entered:
                 return;
