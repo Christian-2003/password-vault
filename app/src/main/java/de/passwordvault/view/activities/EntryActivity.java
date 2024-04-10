@@ -20,6 +20,7 @@ import de.passwordvault.view.utils.adapters.DetailsRecyclerViewAdapter;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.view.utils.adapters.PackagesLogoRecyclerViewAdapter;
+import de.passwordvault.view.utils.components.CtActivity;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.activities.EntryViewModel;
 import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
@@ -30,6 +31,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import java.io.Serializable;
@@ -42,7 +45,7 @@ import java.io.Serializable;
  * @author  Christian-2003
  * @version 3.4.0
  */
-public class EntryActivity extends PasswordVaultBaseActivity implements DialogCallbackListener, Serializable, OnRecyclerItemClickListener<Detail> {
+public class EntryActivity extends CtActivity implements DialogCallbackListener, Serializable, OnRecyclerItemClickListener<Detail> {
 
     /**
      * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} for the EntryActivity.
@@ -137,7 +140,7 @@ public class EntryActivity extends PasswordVaultBaseActivity implements DialogCa
      */
     private void drawActivity() {
         //Add ClickListener to exit the activity:
-        findViewById(R.id.entry_back_button).setOnClickListener(view -> EntryActivity.this.finish());
+        findViewById(R.id.button_back).setOnClickListener(view -> EntryActivity.this.finish());
 
         //Add ClickListener to show / hide the extended information:
         findViewById(R.id.entry_button_show_more).setOnClickListener(view -> {
@@ -146,7 +149,7 @@ public class EntryActivity extends PasswordVaultBaseActivity implements DialogCa
         });
 
         //Add ClickListener to delete the entry:
-        findViewById(R.id.entry_button_delete).setOnClickListener(view -> {
+        findViewById(R.id.button_delete).setOnClickListener(view -> {
             ConfirmDeleteDialog dialog = new ConfirmDeleteDialog();
             Bundle dialogArgs = new Bundle();
             dialogArgs.putString(ConfirmDeleteDialog.KEY_OBJECT, viewModel.getEntry().getName());
@@ -156,7 +159,7 @@ public class EntryActivity extends PasswordVaultBaseActivity implements DialogCa
         });
 
         //Add ClickListener to edit the entry:
-        findViewById(R.id.entry_button_edit).setOnClickListener(view -> {
+        findViewById(R.id.button_edit).setOnClickListener(view -> {
             Intent intent = new Intent(EntryActivity.this, AddEntryActivity.class);
             intent.putExtra("entry", viewModel.getEntry().getUuid());
             EntryActivity.this.startActivityForResult(intent, 1);
@@ -167,7 +170,6 @@ public class EntryActivity extends PasswordVaultBaseActivity implements DialogCa
             finish();
             return;
         }
-        ((TextView)findViewById(R.id.entry_title)).setText(entry.getName());
         ((TextView)findViewById(R.id.entry_name)).setText(entry.getName());
         if (entry.getDescription().isEmpty()) {
             findViewById(R.id.entry_description_container).setVisibility(View.GONE);

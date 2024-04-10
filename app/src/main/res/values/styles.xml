@@ -147,7 +147,7 @@
         <item name="expandedTitleTextAppearance">@style/pv.layout.app_bar.collapsing_toolbar.expanded_title</item>
     </style>
 
-    <!-- Style for Toolbar -->
+    <!-- Style for CollapsingToolbarLayout.collapsedTitleTextAppearance -->
     <style name="pv.layout.app_bar.collapsing_toolbar.collapsed_title" parent="@style/TextAppearance.AppCompat">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/app_bar_text_size</item>
@@ -161,7 +161,7 @@
         <item name="maxLines">2</item>
     </style>
 
-    <!-- Style for CollapsingToolbarLayout.collapsedTitleTextAppearance -->
+    <!-- Style for Toolbar -->
     <style name="pv.layout.app_bar.collapsing_toolbar.toolbar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
