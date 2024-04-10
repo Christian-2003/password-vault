@@ -1,13 +1,10 @@
 package de.passwordvault.view.activities;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
-
 import de.passwordvault.R;
 import de.passwordvault.model.detail.Detail;
 import de.passwordvault.model.entry.EntryExtended;
@@ -20,7 +17,6 @@ import de.passwordvault.view.utils.adapters.DetailsRecyclerViewAdapter;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.view.utils.adapters.PackagesLogoRecyclerViewAdapter;
-import de.passwordvault.view.utils.components.CtActivity;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.activities.EntryViewModel;
 import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
@@ -45,7 +41,7 @@ import java.io.Serializable;
  * @author  Christian-2003
  * @version 3.4.0
  */
-public class EntryActivity extends CtActivity implements DialogCallbackListener, Serializable, OnRecyclerItemClickListener<Detail> {
+public class EntryActivity extends PasswordVaultBaseActivity implements DialogCallbackListener, Serializable, OnRecyclerItemClickListener<Detail> {
 
     /**
      * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} for the EntryActivity.
@@ -96,6 +92,8 @@ public class EntryActivity extends CtActivity implements DialogCallbackListener,
             }
             viewModel.setEntry(entry);
         }
+
+        ((CollapsingToolbarLayout)findViewById(R.id.collapsing_toolbar_layout)).setTitle(viewModel.getEntry().getName());
 
         drawActivity();
     }
