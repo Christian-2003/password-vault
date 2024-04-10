@@ -275,6 +275,12 @@
         <item name="tint">@color/pv_text_onPrimary</item>
     </style>
 
+    <!-- Style for Alert dialog -->
+    <style name="pv.material.dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="materialAlertDialogBodyTextStyle">@style/pv.text</item>
+        <item name="android:background">@color/pv_container</item>
+    </style>
+
 
 
 

@@ -26,6 +26,7 @@
         <item name="textInputStyle">@style/pv.material.text_input_layout</item>
         <item name="materialSwitchStyle">@style/pv.material.switch</item>
         <item name="floatingActionButtonStyle">@style/pv.material.fab</item>
+        <item name="materialAlertDialogTheme">@style/pv.material.dialog</item>
     </style>
 
 </resources>

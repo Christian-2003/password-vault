@@ -18,6 +18,7 @@ N/A
 * Added custom style for bottom navigation bar.
 * Replaced buttons to save and delete custom password quality gates with image buttons.
 * Added `CtActivity` and `CtContainer` class for easier integration of collapsing toolbars with image buttons.
+* Changed dialog background color and text appearance.
 
 <br/>
 
