@@ -28,12 +28,19 @@ public class PackagesViewModel extends ViewModel {
      */
     private PackageCollection packages;
 
+    /**
+     * Attribute stores whether the search bar of the {@link de.passwordvault.view.fragments.PackagesListFragment}
+     * is visible.
+     */
+    private boolean searchBarVisible;
+
 
     /**
      * Constructor instantiates a new view model for the {@link PackagesActivity} and it's fragments.
      */
     public PackagesViewModel() {
         packages = null;
+        searchBarVisible = false;
     }
 
 
@@ -58,6 +65,24 @@ public class PackagesViewModel extends ViewModel {
             throw new NullPointerException();
         }
         this.packages = packages;
+    }
+
+    /**
+     * Method returns whether the search bar is visible.
+     *
+     * @return  Whether the search bar is visible.
+     */
+    public boolean isSearchBarVisible() {
+        return searchBarVisible;
+    }
+
+    /**
+     * Method changes whether the search bar is visible.
+     *
+     * @param searchBarVisible  Whether the search bar is visible.
+     */
+    public void setSearchBarVisible(boolean searchBarVisible) {
+        this.searchBarVisible = searchBarVisible;
     }
 
 

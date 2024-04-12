@@ -18,8 +18,11 @@
             style="@style/pv.layout.app_bar.collapsing_toolbar">
 
             <androidx.appcompat.widget.Toolbar
-                app:contentInsetStart="?attr/actionBarSize"
-                style="@style/pv.layout.app_bar.collapsing_toolbar.toolbar"/>
+                style="@style/pv.layout.app_bar.collapsing_toolbar.toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                app:contentInsetEnd="?attr/actionBarSize"
+                app:contentInsetStart="?attr/actionBarSize" />
 
             <FrameLayout
                 android:layout_width="?attr/actionBarSize"
@@ -31,6 +34,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_back"
+                    android:layout_gravity="center"
+                    style="@style/pv.button.image_button.app_bar"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="end|bottom">
+
+                <ImageButton
+                    android:id="@+id/button_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_search"
                     android:layout_gravity="center"
                     style="@style/pv.button.image_button.app_bar"/>
 

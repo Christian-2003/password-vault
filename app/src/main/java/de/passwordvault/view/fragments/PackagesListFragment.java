@@ -1,9 +1,13 @@
 package de.passwordvault.view.fragments;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.widget.SearchView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
@@ -33,6 +37,13 @@ public class PackagesListFragment extends PasswordVaultBaseFragment implements O
      */
     private PackagesViewModel viewModel;
 
+    private PackagesRecyclerViewAdapter adapter;
+
+    /**
+     * Attribute stores the search bar.
+     */
+    private SearchView searchBar;
+
 
     /**
      * Method is called whenever the fragment view is created.
@@ -50,10 +61,26 @@ public class PackagesListFragment extends PasswordVaultBaseFragment implements O
 
         view.findViewById(R.id.packages_selected_none).setVisibility(PackagesManager.getInstance().getPackages().size() == 0 ? View.VISIBLE : View.GONE);
 
-        PackagesRecyclerViewAdapter adapter = new PackagesRecyclerViewAdapter(PackagesManager.getInstance().getSortedPackages(), this, null);
+        adapter = new PackagesRecyclerViewAdapter(PackagesManager.getInstance().getSortedPackages(), this, null);
         RecyclerView recyclerView = view.findViewById(R.id.packages_list_recycler_view);
-        view.findViewById(R.id.packages_list_recycler_view_container).setVisibility(PackagesManager.getInstance().getPackages().size() == 0 ? View.GONE : View.VISIBLE);
+        recyclerView.setVisibility(PackagesManager.getInstance().getPackages().size() == 0 ? View.GONE : View.VISIBLE);
         recyclerView.setAdapter(adapter);
+
+        searchBar = view.findViewById(R.id.search_bar);
+        searchBar.setVisibility(viewModel.isSearchBarVisible() ? View.VISIBLE : View.GONE);
+        searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                adapter.getFilter().filter(s);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                adapter.getFilter().filter(s);
+                return true;
+            }
+        });
 
         return view;
     }
@@ -73,6 +100,22 @@ public class PackagesListFragment extends PasswordVaultBaseFragment implements O
             if (activity instanceof PackagesActivity) {
                 ((PackagesActivity)activity).notifyPackageAdded();
             }
+        }
+    }
+
+
+    /**
+     * Method is called by the host activity when the search button is clicked.
+     */
+    public void searchButtonClicked() {
+        viewModel.setSearchBarVisible(!viewModel.isSearchBarVisible());
+        if (viewModel.isSearchBarVisible()) {
+            searchBar.setVisibility(View.VISIBLE);
+            searchBar.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left));
+        }
+        else {
+            searchBar.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_left));
+            searchBar.postDelayed(() -> searchBar.setVisibility(View.GONE), getResources().getInteger(R.integer.default_anim_duration));
         }
     }
 

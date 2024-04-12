@@ -316,6 +316,14 @@
         <item name="buttonIconTint">@color/checkbox_icon</item>
     </style>
 
+    <!-- Style for 'SearchView' -->
+    <style name="pv.material.search_view">
+        <item name="android:background">@drawable/background_search_bar</item>
+        <item name="android:queryHint">@string/hint_search</item>
+        <item name="android:searchIcon">@drawable/ic_search</item>
+        <item name="android:queryBackground">@null</item>
+    </style>
+
 
 
 

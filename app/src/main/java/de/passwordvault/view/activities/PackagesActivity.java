@@ -3,8 +3,10 @@ package de.passwordvault.view.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
@@ -12,6 +14,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import de.passwordvault.R;
 import de.passwordvault.model.packages.SerializablePackageCollection;
+import de.passwordvault.view.fragments.PackagesListFragment;
 import de.passwordvault.view.fragments.PackagesSelectedFragment;
 import de.passwordvault.view.utils.adapters.PackagesFragmentStateAdapter;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
@@ -23,7 +26,7 @@ import de.passwordvault.viewmodel.activities.PackagesViewModel;
  * which the user can select one.
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.5.1
  */
 public class PackagesActivity extends PasswordVaultBaseActivity {
 
@@ -57,7 +60,6 @@ public class PackagesActivity extends PasswordVaultBaseActivity {
 
         Bundle args = getIntent().getExtras();
         if (!viewModel.processArguments(args)) {
-            Log.d("PA", "ProcessArguments returned false");
             finish();
             return;
         }
@@ -68,8 +70,28 @@ public class PackagesActivity extends PasswordVaultBaseActivity {
         ViewPager2 viewPager = findViewById(R.id.packages_view_pager);
         viewPager.setAdapter(adapter);
 
+        ImageButton searchButton = findViewById(R.id.button_search);
+        searchButton.setOnClickListener(this::searchButtonClicked);
+
         TabLayout tabs = findViewById(R.id.packages_tabs);
         new TabLayoutMediator(tabs, viewPager, (tab, position) -> PackagesActivity.this.viewModel.updateTabName(tab, position)).attach();
+        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                searchButton.setVisibility(tab.getPosition() == 1 ? View.VISIBLE : View.GONE);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        searchButton.setVisibility(tabs.getSelectedTabPosition() == 1 ? View.VISIBLE : View.GONE);
     }
 
 
@@ -93,6 +115,20 @@ public class PackagesActivity extends PasswordVaultBaseActivity {
         Fragment fragment = adapter.getItemAt(0);
         if (fragment instanceof PackagesSelectedFragment) {
             ((PackagesSelectedFragment)fragment).notifyPackageAdded();
+        }
+    }
+
+
+    /**
+     * Method is called whenever the search-button is clicked.
+     *
+     * @param button    Button that was clicked.
+     */
+    private void searchButtonClicked(View button) {
+        Fragment fragment = adapter.getItemAt(1);
+        if (fragment instanceof PackagesListFragment) {
+            PackagesListFragment listFragment = (PackagesListFragment)fragment;
+            listFragment.searchButtonClicked();
         }
     }
 

@@ -9,6 +9,11 @@
     android:orientation="vertical"
     tools:context=".view.fragments.PackagesListFragment">
 
+    <SearchView
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,25 +36,12 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/packages_list_recycler_view_container"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/packages_list_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <com.google.android.material.search.SearchBar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_search"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/packages_list_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            style="@style/pv.container"/>
-
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        style="@style/pv.container"/>
 
 </LinearLayout>

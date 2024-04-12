@@ -3,6 +3,7 @@ package de.passwordvault.model.packages;
 import android.content.pm.ApplicationInfo;
 import android.graphics.drawable.Drawable;
 import de.passwordvault.model.Identifiable;
+import de.passwordvault.model.entry.EntryAbbreviated;
 
 
 /**
@@ -122,6 +123,18 @@ public class Package extends SerializablePackage implements Comparable<Package> 
     @Override
     public int compareTo(Package o) {
         return getAppName().compareTo(o.getAppName());
+    }
+
+
+    /**
+     * Method tests whether the passed argument is contained within the app name or
+     * package name of the {@link EntryAbbreviated}.
+     *
+     * @param s Substring to be tested if present anywhere in this entry.
+     * @return  Whether the passed string is contained within this instance.
+     */
+    public boolean matchesFilter(CharSequence s) {
+        return getAppName().toLowerCase().contains(s) || getPackageName().toLowerCase().contains(s);
     }
 
 }

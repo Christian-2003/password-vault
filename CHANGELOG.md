@@ -24,6 +24,7 @@ Improvements to the UI and UX as well as some bugfixes. Updated `com.google.andr
 * Changed style of buttons.
 * Fixed color for input hint of dropdown menu in `DetailDialog`.
 * List of installed apps is now sorted alphabetically.
+* Added search bar to search in installed apps.
 
 <br/>
 

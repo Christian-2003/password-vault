@@ -4,6 +4,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -19,9 +21,9 @@ import de.passwordvault.view.utils.OnRecyclerItemClickListener;
  * Class implements an adapter for a recycler view which can display {@link Package}-instances.
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.5.1
  */
-public class PackagesRecyclerViewAdapter extends RecyclerView.Adapter<PackagesRecyclerViewAdapter.ViewHolder> {
+public class PackagesRecyclerViewAdapter extends RecyclerView.Adapter<PackagesRecyclerViewAdapter.ViewHolder> implements Filterable {
 
     /**
      * Class models a view holder for the recycler view.
@@ -71,6 +73,11 @@ public class PackagesRecyclerViewAdapter extends RecyclerView.Adapter<PackagesRe
     private final ArrayList<Package> data;
 
     /**
+     * Attribute stores the filtered data which is being displayed.
+     */
+    private ArrayList<Package> filteredData;
+
+    /**
      * Attribute stores the click listener that shall be called when an item in the recycler view is
      * clicked.
      */
@@ -98,6 +105,7 @@ public class PackagesRecyclerViewAdapter extends RecyclerView.Adapter<PackagesRe
             throw new NullPointerException();
         }
         this.data = data;
+        filteredData = data;
         this.clickListener = clickListener;
         this.deleteButtonClickListener = deleteButtonClickListener;
     }
@@ -127,7 +135,7 @@ public class PackagesRecyclerViewAdapter extends RecyclerView.Adapter<PackagesRe
      */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Package p = data.get(position);
+        Package p = filteredData.get(position);
         if (p.getLogo() != null) {
             holder.logo.setImageDrawable(p.getLogo());
         }
@@ -151,7 +159,60 @@ public class PackagesRecyclerViewAdapter extends RecyclerView.Adapter<PackagesRe
      */
     @Override
     public int getItemCount() {
-        return data.size();
+        return filteredData.size();
+    }
+
+
+    /**
+     * Method returns a filter that can be used to filter the data that is being displayed by the
+     * recycler view.
+     *
+     * @return  Filter for filtering the displayed data.
+     */
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+
+            /**
+             * Method filters {@link PackagesRecyclerViewAdapter#data} according to the specified
+             * char sequence.
+             *
+             * @param s Filter to be applied to name or description of the entries.
+             * @return  Generated filter results.
+             */
+            @Override
+            protected FilterResults performFiltering(CharSequence s) {
+                FilterResults results = new FilterResults();
+                if (s == null || s.length() == 0) {
+                    results.count = data.size();
+                    results.values = data;
+                }
+                else {
+                    ArrayList<Package> filteredData = new ArrayList<>();
+                    s = s.toString().toLowerCase();
+                    for (Package p : data) {
+                        if (p.matchesFilter(s)) {
+                            filteredData.add(p);
+                        }
+                    }
+                    results.count = filteredData.size();
+                    results.values = filteredData;
+                }
+                return results;
+            }
+
+            /**
+             * Method applies the passed filter results to the recycler view.
+             *
+             * @param s             Filter which was applied to name and description of the entries.
+             * @param filterResults Filter results generated while filtering.
+             */
+            @Override
+            protected void publishResults(CharSequence s, FilterResults filterResults) {
+                PackagesRecyclerViewAdapter.this.filteredData = (ArrayList<Package>)filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
 }
