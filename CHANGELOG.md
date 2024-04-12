@@ -27,6 +27,7 @@ Improvements to the UI and UX as well as some bugfixes. Updated `com.google.andr
 * Added search bar to search in installed apps.
 * Fixed a bug in `EntryActivity` where the 'Details' headline was displayed when the entry does not have any details.
 * Fixed a bug in `AddEntryActivity` where the color of the swipe icon in the recycler view did not match night mode selected in the settings.
+* Fixed a bug where tags were not correctly restored with a backup.
 
 <br/>
 

@@ -33,7 +33,7 @@ import de.passwordvault.model.tags.TagManager;
  * @author  Christian-2003
  * @version 3.5.0
  */
-public class XmlBackupRestorer extends XmlBackupConfiguration{
+public class XmlBackupRestorer extends XmlBackupConfiguration {
 
     /**
      * Constructor instantiates a new {@link XmlBackupCreator} instance which can create a manual
@@ -120,6 +120,17 @@ public class XmlBackupRestorer extends XmlBackupConfiguration{
                 throw new BackupException("No encryption checksum provided.");
             }
         }
+
+        //Restore tags:
+        Node tagNode = xml.getElementsByTagName(TAG_TAGS).item(0);
+        if (tagNode != null) {
+            String content = tagNode.getTextContent();
+            if (content != null && !content.isEmpty()) {
+                TagManager.getInstance().fromCsv(content);
+                TagManager.getInstance().save(true);
+            }
+        }
+
         //Read the data:
         NodeList dataNodes = xml.getElementsByTagName(TAG_DATA).item(0).getChildNodes();
         ArrayList<EntryAbbreviated> entries = null;
@@ -140,16 +151,6 @@ public class XmlBackupRestorer extends XmlBackupConfiguration{
             catch (EncryptionException e) {
                 e.printStackTrace();
                 throw e;
-            }
-        }
-
-        //Restore tags:
-        Node tagNode = xml.getElementsByTagName(TAG_TAGS).item(0);
-        if (tagNode != null) {
-            String content = tagNode.getTextContent();
-            if (content != null && !content.isEmpty()) {
-                TagManager.getInstance().fromCsv(content);
-                TagManager.getInstance().save(true);
             }
         }
 
