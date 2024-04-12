@@ -27,6 +27,7 @@
         <item name="materialSwitchStyle">@style/pv.material.switch</item>
         <item name="floatingActionButtonStyle">@style/pv.material.fab</item>
         <item name="materialAlertDialogTheme">@style/pv.material.dialog</item>
+        <item name="materialButtonStyle">@style/pv.material.button</item>
     </style>
 
 </resources>

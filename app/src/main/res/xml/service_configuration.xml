@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <autofill-service
-    xmlns:android="http://schemas.android.com/apk/res/android"/>
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:settingsActivity="de.passwordvault.view.activities.SettingsAutofillActivity"/>

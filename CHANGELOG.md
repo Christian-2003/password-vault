@@ -4,7 +4,7 @@
 
 ## 3.5.1 (XXXX-XX-XX)
 ###### Release Highlights
-N/A
+Improvements to the UI and UX as well as some bugfixes.
 
 ###### Features
 * Fixed a bug where an (incorrect) app icon is shown for an entry that should not have an icon at all.
@@ -17,8 +17,12 @@ N/A
 * Improvements to maintainability regarding string-resources.
 * Added custom style for bottom navigation bar.
 * Replaced buttons to save and delete custom password quality gates with image buttons.
-* Added `CtActivity` and `CtContainer` class for easier integration of collapsing toolbars with image buttons.
+* Replaced buttons to edit and delete entries with image buttons.
+* Replaced button to save edited detail with image button.
+* Removed button to cancel changes to an edited detail.
 * Changed dialog background color and text appearance.
+* Changed style of buttons.
+* Fixed color for input hint of dropdown menu in `DetailDialog`.
 
 <br/>
 

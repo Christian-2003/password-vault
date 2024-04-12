@@ -265,6 +265,11 @@
         <item name="android:textColorHint">@color/pv_text_secondary</item>
     </style>
 
+    <!-- Style for 'com.google.android.material.textfield.TextInputLayout' with a dropdown menu -->
+    <style name="pv.material.text_input_layout.exposed_dropdown" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="android:textColorHint">@color/pv_text_secondary</item>
+    </style>
+
     <!-- Style for 'com.google.android.material.materialswitch.MaterialSwitch' -->
     <style name="pv.material.switch" parent="Widget.Material3.CompoundButton.MaterialSwitch">
         <item name="thumbTint">@color/switch_thumb</item>
@@ -279,6 +284,12 @@
     <style name="pv.material.dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="materialAlertDialogBodyTextStyle">@style/pv.text</item>
         <item name="android:background">@color/pv_container</item>
+    </style>
+
+    <!-- Style for buttons -->
+    <style name="pv.material.button" parent="Widget.Material3.Button">
+        <item name="android:textColor">@color/pv_text_onPrimary</item>
+        <item name="iconTint">@color/pv_text_onPrimary</item>
     </style>
 
 

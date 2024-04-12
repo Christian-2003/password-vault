@@ -16,7 +16,7 @@ class.
         android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            style="@style/pv.material.text_input_layout.exposed_dropdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/detail_dialog_type">
