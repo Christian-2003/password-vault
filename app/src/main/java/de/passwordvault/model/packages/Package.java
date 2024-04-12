@@ -12,9 +12,9 @@ import de.passwordvault.model.Identifiable;
  * {@linkplain ApplicationInfo}!</b>
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.5.1
  */
-public class Package extends SerializablePackage {
+public class Package extends SerializablePackage implements Comparable<Package> {
 
     /**
      * Attribute stores the application info from which the data of the package is loaded.
@@ -106,6 +106,22 @@ public class Package extends SerializablePackage {
             logoLoaded = true;
         }
         return logo;
+    }
+
+
+    /**
+     * Method compares this package to the passed package based on their app names ({@link #getAppName()})
+     * alphabetically.
+     *
+     * @param o                     Package to which this package shall be compared.
+     * @return                      A negative integer, zero or a positive integer as this package's
+     *                              name is alphabetically before, identical or after the app name of
+     *                              the passed package.
+     * @throws NullPointerException The passed package (or it's app name) is {@code null}.
+     */
+    @Override
+    public int compareTo(Package o) {
+        return getAppName().compareTo(o.getAppName());
     }
 
 }

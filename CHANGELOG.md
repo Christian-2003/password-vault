@@ -4,7 +4,7 @@
 
 ## 3.5.1 (XXXX-XX-XX)
 ###### Release Highlights
-Improvements to the UI and UX as well as some bugfixes.
+Improvements to the UI and UX as well as some bugfixes. Updated `com.google.android.material`-dependency from version _1.7.0_ to _1.9.0_, which is the last version that can compile against _SDK 32_. This upgrade has been done to introduce search bars to the app.
 
 ###### Features
 * Fixed a bug where an (incorrect) app icon is shown for an entry that should not have an icon at all.
@@ -23,6 +23,7 @@ Improvements to the UI and UX as well as some bugfixes.
 * Changed dialog background color and text appearance.
 * Changed style of buttons.
 * Fixed color for input hint of dropdown menu in `DetailDialog`.
+* List of installed apps is now sorted alphabetically.
 
 <br/>
 

@@ -292,6 +292,30 @@
         <item name="iconTint">@color/pv_text_onPrimary</item>
     </style>
 
+    <!-- Style for 'com.google.android.material.search.SearchBar' -->
+    <style name="pv.material.search_bar" parent="Widget.Material3.SearchBar">
+        <item name="android:backgroundTint">@color/pv_container</item>
+        <item name="android:textAppearance">@style/pv.material.search_bar.text</item>
+        <item name="navigationIcon">@drawable/ic_search</item>
+        <item name="navigationIconTint">@color/pv_text_secondary</item>
+    </style>
+
+    <!-- Style for the text of a search bar -->
+    <style name="pv.material.search_bar.text" parent="pv.text">
+        <item name="android:textColor">@color/pv_text_secondary</item>
+    </style>
+
+    <!-- Style for radio buttons -->
+    <style name="pv.material.radio_button" parent="Widget.Material3.CompoundButton.RadioButton">
+        <item name="buttonTint">@color/radio_button</item>
+    </style>
+
+    <!-- Style for checkboxes -->
+    <style name="pv.material.checkbox" parent="Widget.Material3.CompoundButton.CheckBox">
+        <item name="buttonTint">@color/radio_button</item>
+        <item name="buttonIconTint">@color/checkbox_icon</item>
+    </style>
+
 
 
 

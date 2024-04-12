@@ -12,7 +12,8 @@
         android:id="@+id/quality_gate_list_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start|center"/>
+        android:layout_gravity="start|center"
+        android:checked="true"/>
 
     <LinearLayout
         android:layout_width="wrap_content"

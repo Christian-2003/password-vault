@@ -6,17 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
 import de.passwordvault.model.packages.Package;
 import de.passwordvault.model.packages.PackagesManager;
 import de.passwordvault.view.activities.PackagesActivity;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
-import de.passwordvault.view.utils.adapters.PackagesFragmentStateAdapter;
 import de.passwordvault.view.utils.adapters.PackagesRecyclerViewAdapter;
 import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
 import de.passwordvault.viewmodel.activities.PackagesViewModel;
@@ -27,7 +24,7 @@ import de.passwordvault.viewmodel.activities.PackagesViewModel;
  * displays a list of all packages that are installed on the user's Android device.
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.5.1
  */
 public class PackagesListFragment extends PasswordVaultBaseFragment implements OnRecyclerItemClickListener<Package> {
 
@@ -53,9 +50,9 @@ public class PackagesListFragment extends PasswordVaultBaseFragment implements O
 
         view.findViewById(R.id.packages_selected_none).setVisibility(PackagesManager.getInstance().getPackages().size() == 0 ? View.VISIBLE : View.GONE);
 
-        PackagesRecyclerViewAdapter adapter = new PackagesRecyclerViewAdapter(PackagesManager.getInstance().getPackages(), this, null);
+        PackagesRecyclerViewAdapter adapter = new PackagesRecyclerViewAdapter(PackagesManager.getInstance().getSortedPackages(), this, null);
         RecyclerView recyclerView = view.findViewById(R.id.packages_list_recycler_view);
-        recyclerView.setVisibility(PackagesManager.getInstance().getPackages().size() == 0 ? View.GONE : View.VISIBLE);
+        view.findViewById(R.id.packages_list_recycler_view_container).setVisibility(PackagesManager.getInstance().getPackages().size() == 0 ? View.GONE : View.VISIBLE);
         recyclerView.setAdapter(adapter);
 
         return view;

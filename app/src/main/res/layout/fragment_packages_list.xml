@@ -31,12 +31,25 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/packages_list_recycler_view"
+    <LinearLayout
+        android:id="@+id/packages_list_recycler_view_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        style="@style/pv.container"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.search.SearchBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_search"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/packages_list_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            style="@style/pv.container"/>
+
+    </LinearLayout>
 
 </LinearLayout>

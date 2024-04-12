@@ -4,6 +4,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import de.passwordvault.App;
 
@@ -13,7 +14,7 @@ import de.passwordvault.App;
  * the Android device. The class is implemented through singleton-pattern.
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.5.1
  */
 public class PackagesManager {
 
@@ -31,14 +32,20 @@ public class PackagesManager {
     /**
      * Attribute stores the list of packages that are installed.
      */
-    private ArrayList<Package> packagesCache;
+    private ArrayList<Package> packages;
+
+    /**
+     * Attribute store all packages sorted alphabetically.
+     */
+    private ArrayList<Package> sortedPackagesCache;
 
 
     /**
      * Constructor instantiates a new package manager.
      */
     private PackagesManager() {
-        packagesCache = null;
+        packages = null;
+        sortedPackagesCache = null;
         packageManager = App.getContext().getPackageManager();
     }
 
@@ -62,18 +69,36 @@ public class PackagesManager {
      * @return  List of installed packages.
      */
     public ArrayList<Package> getPackages() {
-        if (packagesCache == null) {
-            packagesCache = new ArrayList<>();
+        if (packages == null) {
+            packages = new ArrayList<>();
             List<ApplicationInfo> apps = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
             for (ApplicationInfo app : apps) {
                 if ((app.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
                     //Ignore system packages:
                     continue;
                 }
-                packagesCache.add(new Package(app));
+                packages.add(new Package(app));
             }
         }
-        return packagesCache;
+        return packages;
+    }
+
+    /**
+     * Method returns a list of all packages that are sorted alphabetically. The sorted list is
+     * cached so that subsequent calls of this method are of {@code O(1)}-complexity.
+     *
+     * @return  Sorted list of packages.
+     */
+    public ArrayList<Package> getSortedPackages() {
+        if (sortedPackagesCache == null) {
+            sortedPackagesCache = new ArrayList<>();
+            if (packages == null) {
+                getPackages();
+            }
+            sortedPackagesCache.addAll(packages);
+            Collections.sort(sortedPackagesCache);
+        }
+        return sortedPackagesCache;
     }
 
 
@@ -90,10 +115,10 @@ public class PackagesManager {
         if (packageName == null) {
             throw new NullPointerException();
         }
-        if (packagesCache == null) {
+        if (packages == null) {
             getPackages();
         }
-        for (Package p : packagesCache) {
+        for (Package p : packages) {
             if (p.getPackageName().equals(packageName)) {
                 return p;
             }
