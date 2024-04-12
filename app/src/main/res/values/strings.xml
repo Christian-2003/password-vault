@@ -160,7 +160,7 @@
 
 
     <!-- Login activity -->
-    <string name="login_info">Login to the app</string>
+    <string name="login_info">Confirm identity through master password</string>
     <string name="login_biometrics_title">PasswordVault biometric login</string>
     <string name="login_biometrics_error">Authentication error</string>
     <string name="login_biometrics_fail">Authentication failed.</string>
@@ -198,7 +198,7 @@
 
 
     <!-- ConfirmDelete dialog -->
-    <string name="confirm_delete_dialog_confirm">Confirm deletion of</string>
+    <string name="confirm_delete_dialog_confirm">Are you sure you want to delete {arg}?</string>
 
 
     <!-- Buttons -->

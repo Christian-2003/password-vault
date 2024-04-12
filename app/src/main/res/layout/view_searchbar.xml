@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:background="@drawable/background_search_bar"
+    android:paddingStart="@dimen/default_padding"
+    android:paddingEnd="@dimen/default_padding"
+    tools:context=".view.utils.components.SearchBarView">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:src="@drawable/ic_search"
+        style="@style/pv.icon"/>
+
+    <EditText
+        android:id="@+id/input_query"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/default_margin"
+        android:textColorHint="@color/pv_text_secondary"
+        android:textColor="@color/pv_text"
+        android:textSize="@dimen/default_text_size"
+        android:maxLines="1"
+        android:hint="@string/hint_search"
+        android:background="@null"/>
+
+    <ImageButton
+        android:id="@+id/button_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_cancel"
+        style="@style/pv.button.image_button"/>
+
+</LinearLayout>

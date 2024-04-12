@@ -32,7 +32,6 @@
         <item name="materialSearchBarStyle">@style/pv.material.search_bar</item>
         <item name="radioButtonStyle">@style/pv.material.radio_button</item>
         <item name="checkboxStyle">@style/pv.material.checkbox</item>
-        <item name="android:searchViewStyle">@style/pv.material.search_view</item>
     </style>
 
 </resources>

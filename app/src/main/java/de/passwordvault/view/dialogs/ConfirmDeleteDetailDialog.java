@@ -1,6 +1,5 @@
 package de.passwordvault.view.dialogs;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -20,7 +19,7 @@ import de.passwordvault.viewmodel.dialogs.ConfirmDeleteDetailViewModel;
  * {@linkplain DialogCallbackListener}!
  *
  * @author  Christian-2003
- * @version 3.2.0
+ * @version 3.5.1
  */
 public class ConfirmDeleteDetailDialog extends DialogFragment {
 
@@ -85,7 +84,7 @@ public class ConfirmDeleteDetailDialog extends DialogFragment {
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity());
         builder.setTitle(R.string.button_delete);
-        builder.setMessage(requireContext().getString(R.string.confirm_delete_dialog_confirm) + " " + viewModel.getDetail().getName() + ".");
+        builder.setMessage(requireContext().getString(R.string.confirm_delete_dialog_confirm).replace("{arg}", viewModel.getDetail().getName()));
 
         builder.setPositiveButton(R.string.button_delete, (dialog, id) -> {
             //Delete button:

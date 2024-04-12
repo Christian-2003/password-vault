@@ -26,7 +26,7 @@
     <string name="home">Start</string>
     <string name="home_button_view_accounts">Konten anzeigen</string>
     <string name="home_button_add_account">Konto hinzufügen</string>
-    <string name="home_recently_edited_title">Zuletzt geändert</string>
+    <string name="home_recently_edited_title">Zuletzt bearbeitet</string>
     <string name="home_recently_edited_none">Keine</string>
 
 
@@ -135,7 +135,7 @@
     <string name="password_analysis_menu_list">Passwörter</string>
     <string name="password_analysis_menu_duplicates">Duplikate</string>
     <string name="password_analysis_title">Passwortanalyse</string>
-    <string name="password_analysis_hint">Passwörter werden analysiert. Dies kann eine Zeit in Anspruch nehmen, bitte gedulden Sie sich.</string>
+    <string name="password_analysis_hint">Passwörter werden analysiert. Dies kann eine Zeit in Anspruch nehmen.</string>
     <string name="password_results_general_title">Allgemein</string>
     <string name="password_results_general_average_score">Durchschnittliche Passwortsicherheit</string>
     <string name="password_results_general_duplicates">Doppelte Passwörter</string>
@@ -155,16 +155,16 @@
 
 
     <!-- Login activity -->
-    <string name="login_info">Melden Sie sich in der App an</string>
+    <string name="login_info">Identität mit Master-Passwort bestätigen</string>
     <string name="login_biometrics_title">PasswordVault biometrischer Login</string>
     <string name="login_biometrics_error">Authentifizierungsfehler</string>
-    <string name="login_biometrics_fail">Authentifizierung fehlgeschlagen.</string>
+    <string name="login_biometrics_fail">Authentifizierung fehlgeschlagen</string>
 
 
     <!-- DataConversion activity -->
     <string name="data_conversion_headline">Update Nachbearbeitung</string>
     <string name="data_conversion_subline">Aktualisiert auf Verision {version}</string>
-    <string name="data_conversion_info">Einige Vorbereitungen müssen durchgeführt werden, bevor Sie die App weiter benutzen können. Bitte seien Sie geduldig, dies wird nicht länger als eine Minute dauern.</string>
+    <string name="data_conversion_info">Einige Vorbereitungen müssen durchgeführt werden, bevor die App weiter verwendet werden kann. Dies wird nicht länger als eine Minute dauern.</string>
     <string name="data_conversion_error">Fehler</string>
 
 
@@ -193,7 +193,7 @@
 
 
     <!-- ConfirmDelete dialog -->
-    <string name="confirm_delete_dialog_confirm">Bestätige Löschung von</string>
+    <string name="confirm_delete_dialog_confirm">Soll {arg} wirklich gelöscht werden?</string>
 
 
     <!-- Buttons -->

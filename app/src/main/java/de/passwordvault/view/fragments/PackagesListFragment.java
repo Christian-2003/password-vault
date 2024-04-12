@@ -1,11 +1,13 @@
 package de.passwordvault.view.fragments;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
-import android.widget.SearchView;
+import androidx.appcompat.widget.SearchView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
@@ -18,6 +20,7 @@ import de.passwordvault.view.activities.PackagesActivity;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
 import de.passwordvault.view.utils.adapters.PackagesRecyclerViewAdapter;
 import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
+import de.passwordvault.view.utils.components.SearchBarView;
 import de.passwordvault.viewmodel.activities.PackagesViewModel;
 
 
@@ -43,7 +46,7 @@ public class PackagesListFragment extends PasswordVaultBaseFragment implements O
     /**
      * Attribute stores the search bar.
      */
-    private SearchView searchBar;
+    private SearchBarView searchBar;
 
 
     /**
@@ -69,17 +72,20 @@ public class PackagesListFragment extends PasswordVaultBaseFragment implements O
 
         searchBar = view.findViewById(R.id.search_bar);
         searchBar.setVisibility(viewModel.isSearchBarVisible() ? View.VISIBLE : View.GONE);
-        searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchBar.addTextChangeListener(new TextWatcher() {
             @Override
-            public boolean onQueryTextSubmit(String s) {
-                adapter.getFilter().filter(s);
-                return true;
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
             }
 
             @Override
-            public boolean onQueryTextChange(String s) {
-                adapter.getFilter().filter(s);
-                return true;
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                adapter.getFilter().filter(editable);
             }
         });
 

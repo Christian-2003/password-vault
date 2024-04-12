@@ -55,6 +55,7 @@
                     android:layout_gravity="center"
                     android:padding="@dimen/default_padding"
                     android:text="@string/login_info"
+                    android:textAlignment="center"
                     style="@style/pv.text.highlight"/>
 
                 <com.google.android.material.textfield.TextInputLayout
