@@ -1,8 +1,6 @@
 package de.passwordvault.view.fragments;
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +35,9 @@ public class PackagesListFragment extends PasswordVaultBaseFragment implements O
      */
     private PackagesViewModel viewModel;
 
+    /**
+     * Attribute stores the adapter to display installed packages.
+     */
     private PackagesRecyclerViewAdapter adapter;
 
     /**

@@ -193,6 +193,7 @@ public class EntryActivity extends PasswordVaultBaseActivity implements DialogCa
         ItemTouchHelper visibleDetailsTouchHelper = new ItemTouchHelper(visibleDetailsCallback);
         visibleDetailsTouchHelper.attachToRecyclerView(visibleDetailsContainer);
         visibleDetailsContainer.setAdapter(visibleDetailsAdapter);
+        findViewById(R.id.entry_details_container_title).setVisibility(entry.getVisibleDetails().isEmpty() ? View.GONE : View.VISIBLE);
 
         //Add hidden details:
         RecyclerView hiddenDetailsContainer = findViewById(R.id.entry_hidden_details_container);

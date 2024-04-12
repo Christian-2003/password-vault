@@ -25,6 +25,7 @@ Improvements to the UI and UX as well as some bugfixes. Updated `com.google.andr
 * Fixed color for input hint of dropdown menu in `DetailDialog`.
 * List of installed apps is now sorted alphabetically.
 * Added search bar to search in installed apps.
+* Fixed a bug in `EntryActivity` where the 'Details' headline was displayed when the entry does not have any details.
 
 <br/>
 
