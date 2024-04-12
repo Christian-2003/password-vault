@@ -1,5 +1,6 @@
 package de.passwordvault.view.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -20,7 +21,7 @@ import de.passwordvault.view.utils.adapters.DetailsRecyclerViewAdapter;
  * Class implements a callback for movement of details within a recycler view.
  *
  * @author  Christian-2003
- * @version 3.4.0
+ * @version 3.5.1
  */
 public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
 
@@ -29,6 +30,13 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
      * for the {@link DetailsItemMoveCallback} to work properly.
      */
     public interface ItemTouchHelperContract {
+
+        /**
+         * Method returns the context to use with this callback.
+         *
+         * @return  Context to use with the callback.
+         */
+        Context getContext();
 
         /**
          * Method is called when an item is moved between two positions within the recycler view.
@@ -218,7 +226,7 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
             Paint paint = new Paint();
             Bitmap icon;
             if (dX > 1) {
-                paint.setColor(App.getContext().getColor(R.color.pv_primary));
+                paint.setColor(adapter.getContext().getColor(R.color.pv_primary));
                 icon = getBitmap(R.drawable.ic_edit);
                 canvas.drawRect((float)itemView.getLeft(), (float)itemView.getTop(), dX, (float)itemView.getBottom(), paint);
                 if (icon != null) {
@@ -226,7 +234,7 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
                 }
             }
             else if (dX < -1) {
-                paint.setColor(App.getContext().getColor(R.color.pv_red));
+                paint.setColor(adapter.getContext().getColor(R.color.pv_red));
                 icon = getBitmap(R.drawable.ic_delete);
                 canvas.drawRect((float)itemView.getRight() + dX, (float)itemView.getTop(), (float)itemView.getRight(), (float)itemView.getBottom(), paint);
                 if (icon != null) {
@@ -264,7 +272,7 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
         if (drawable == null) {
             return null;
         }
-        drawable.setTint(App.getContext().getColor(R.color.pv_container));
+        drawable.setTint(adapter.getContext().getColor(R.color.pv_container));
         Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());

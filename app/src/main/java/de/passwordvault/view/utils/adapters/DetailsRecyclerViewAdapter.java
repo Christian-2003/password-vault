@@ -1,6 +1,7 @@
 package de.passwordvault.view.utils.adapters;
 
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +35,7 @@ import de.passwordvault.view.utils.Utils;
  * Class implements an adapter for a recycler view displaying {@link Detail}-instances for an entry.
  *
  * @author  Christian-2003
- * @version 3.4.0
+ * @version 3.5.1
  */
 public class DetailsRecyclerViewAdapter extends RecyclerView.Adapter<DetailsRecyclerViewAdapter.ViewHolder> implements DetailsItemMoveCallback.ItemTouchHelperContract {
 
@@ -332,4 +333,13 @@ public class DetailsRecyclerViewAdapter extends RecyclerView.Adapter<DetailsRecy
         }
     }
 
+    /**
+     * Method returns the context that shall be used with the item touch helper callback.
+     *
+     * @return  Context for the callback to use.
+     */
+    @Override
+    public Context getContext() {
+        return activity;
+    }
 }

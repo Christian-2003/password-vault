@@ -2,28 +2,21 @@ package de.passwordvault.view.activities;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputLayout;
 import java.util.ArrayList;
 import de.passwordvault.R;
@@ -31,9 +24,7 @@ import de.passwordvault.model.Observable;
 import de.passwordvault.model.Observer;
 import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.model.entry.EntryManager;
-import de.passwordvault.model.packages.Package;
 import de.passwordvault.model.packages.PackageCollection;
-import de.passwordvault.model.packages.PackagesManager;
 import de.passwordvault.model.packages.SerializablePackage;
 import de.passwordvault.model.packages.SerializablePackageCollection;
 import de.passwordvault.model.tags.Tag;
@@ -55,7 +46,7 @@ import de.passwordvault.view.utils.DialogCallbackListener;
  * Class implements an activity which can add (or edit) entries.
  *
  * @author  Christian-2003
- * @version 3.4.0
+ * @version 3.5.1
  */
 public class AddEntryActivity extends PasswordVaultBaseActivity implements DialogCallbackListener, Observer<ArrayList<Tag>> {
 
@@ -124,7 +115,7 @@ public class AddEntryActivity extends PasswordVaultBaseActivity implements Dialo
                         }
                     }
                     catch (Exception e) {
-                        Log.d("AddEntryActivity", e.getMessage());
+                        Log.d("AddEntryActivity", e.getMessage() == null ? "Unexpected error." : e.getMessage());
                         return;
                     }
                     setupPackage();
@@ -269,7 +260,7 @@ public class AddEntryActivity extends PasswordVaultBaseActivity implements Dialo
             chip.setCheckable(true);
             Drawable checkedIcon = AppCompatResources.getDrawable(this, R.drawable.ic_check);
             if (checkedIcon != null) {
-                checkedIcon.setTint(getResources().getColor(R.color.pv_text));
+                checkedIcon.setTint(getResources().getColor(R.color.pv_text, getTheme()));
             }
             chip.setCheckedIcon(checkedIcon);
             chip.setCheckedIconVisible(true);
