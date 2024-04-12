@@ -62,22 +62,11 @@
         style="@style/pv.layout.nested_scroll_view">
 
         <!-- Searchbar for the fragment -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/entries_search_bar_container"
+        <de.passwordvault.view.utils.components.SearchBarView
+            android:id="@+id/search_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_search"
-            android:layout_margin="@dimen/default_margin"
-            app:endIconMode="clear_text"
-            app:endIconDrawable="@drawable/ic_cancel">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/entries_search_bar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:singleLine="true"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
+            android:layout_margin="@dimen/default_margin"/>
 
 
         <LinearLayout

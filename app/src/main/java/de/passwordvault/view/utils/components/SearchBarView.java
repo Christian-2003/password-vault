@@ -1,6 +1,7 @@
 package de.passwordvault.view.utils.components;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -100,7 +101,9 @@ public class SearchBarView extends LinearLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         queryInput = findViewById(R.id.input_query);
-        queryInput.getTextCursorDrawable().setTint(getContext().getColor(R.color.pv_primary));
+        int primaryColor = getContext().getColor(R.color.pv_primary);
+        queryInput.getTextCursorDrawable().setTint(primaryColor);
+        queryInput.getTextSelectHandle().setTint(primaryColor);
         clearButton = findViewById(R.id.button_clear);
         clearButton.setOnClickListener(view -> queryInput.setText(""));
     }

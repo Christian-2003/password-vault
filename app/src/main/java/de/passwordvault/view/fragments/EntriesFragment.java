@@ -30,6 +30,7 @@ import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.view.utils.adapters.EntriesRecyclerViewAdapter;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
 import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
+import de.passwordvault.view.utils.components.SearchBarView;
 import de.passwordvault.viewmodel.fragments.EntriesViewModel;
 import de.passwordvault.view.activities.EntryActivity;
 import de.passwordvault.view.activities.MainActivity;
@@ -116,28 +117,22 @@ public class EntriesFragment extends PasswordVaultBaseFragment implements OnRecy
         });
 
         //Setup button to show / hide search bar:
-        TextInputLayout searchBarLayout = view.findViewById(R.id.entries_search_bar_container);
+        SearchBarView searchBar = view.findViewById(R.id.search_bar);
         ImageButton searchButton = view.findViewById(R.id.button_search);
         searchButton.setOnClickListener(view -> {
             if (viewModel.isSearchBarVisible()) {
                 viewModel.setSearchBarVisible(false);
-                searchBarLayout.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_left));
-                searchBarLayout.postDelayed(() -> searchBarLayout.setVisibility(View.GONE), getResources().getInteger(R.integer.default_anim_duration));
+                searchBar.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_left));
+                searchBar.postDelayed(() -> searchBar.setVisibility(View.GONE), getResources().getInteger(R.integer.default_anim_duration));
             }
             else {
                 viewModel.setSearchBarVisible(true);
-                searchBarLayout.setVisibility(View.VISIBLE);
-                searchBarLayout.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left));
+                searchBar.setVisibility(View.VISIBLE);
+                searchBar.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left));
             }
         });
-        if (viewModel.isSearchBarVisible()) {
-            searchBarLayout.setVisibility(View.VISIBLE);
-        }
-        else {
-            searchBarLayout.setVisibility(View.GONE);
-        }
-        TextInputEditText searchBar = view.findViewById(R.id.entries_search_bar);
-        searchBar.addTextChangedListener(new TextWatcher() {
+        searchBar.setVisibility(viewModel.isSearchBarVisible() ? View.VISIBLE : View.GONE);
+        searchBar.addTextChangeListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) {
                 //Do nothing...
@@ -236,7 +231,7 @@ public class EntriesFragment extends PasswordVaultBaseFragment implements OnRecy
         if (o == null) {
             throw new NullPointerException("Null is invalid Observable");
         }
-        adapter.getFilter().filter(((TextInputEditText)view.findViewById(R.id.entries_search_bar)).getText());
+        adapter.getFilter().filter(((SearchBarView)view.findViewById(R.id.search_bar)).getText());
     }
 
 }

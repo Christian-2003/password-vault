@@ -1,6 +1,5 @@
 package de.passwordvault.view.utils.adapters;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -149,7 +148,6 @@ public class PackagesRecyclerViewAdapter extends RecyclerView.Adapter<PackagesRe
         else {
             holder.deleteButton.setOnClickListener(view -> deleteButtonClickListener.onItemClick(p, position));
         }
-        Log.d("PRVA", "Bound ViewHolder" + position + " for " + p.getAppName());
     }
 
     /**
