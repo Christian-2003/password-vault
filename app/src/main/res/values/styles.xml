@@ -24,6 +24,7 @@
     <!-- Style for secondary text -->
     <style name="pv.text.variant" parent="pv.text">
         <item name="android:textColor">@color/pv_text_secondary</item>
+        <item name="android:textSize">@dimen/secondary_text_size</item>
     </style>
 
     <!-- Style for highlighted text -->
@@ -82,6 +83,7 @@
         <item name="android:background">@color/pv_container</item>
         <item name="itemIconTint">@color/pv_text</item>
         <item name="itemTextColor">@color/pv_text</item>
+        <item name="itemTextAppearanceInactive">@style/pv.menu_bar.text</item>
         <item name="itemActiveIndicatorStyle">@style/pv.menu_bar.activeitem</item>
         <item name="itemTextAppearanceActive">@style/pv.menu_bar.activeitem.text</item>
     </style>
@@ -94,6 +96,12 @@
     <!-- Style for the text of the active item of a navigation bar / navigation rail -->
     <style name="pv.menu_bar.activeitem.text" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
         <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/default_text_size</item>
+    </style>
+
+    <!-- Style for the text of the inactive item of a navigation bar / navigation rail -->
+    <style name="pv.menu_bar.text" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:textSize">@dimen/default_text_size</item>
     </style>
 
     <!-- Style for tab layouts -->
@@ -330,7 +338,7 @@
     <style name="divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
-        <item name="android:background">@color/pv_text_secondary</item>
+        <item name="android:background">@color/pv_container_detail</item>
         <item name="android:layout_marginHorizontal">@dimen/default_padding</item>
     </style>
 
