@@ -13,7 +13,7 @@
 
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/image_button_height"
         android:layout_gravity="center"
         android:layout_marginEnd="@dimen/default_margin"
         android:src="@drawable/ic_search"
@@ -39,6 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:src="@drawable/ic_cancel"
+        android:visibility="invisible"
         style="@style/pv.button.image_button"/>
 
 </LinearLayout>

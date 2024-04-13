@@ -1,13 +1,14 @@
 package de.passwordvault.view.utils.components;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import java.util.Objects;
 import de.passwordvault.R;
 
 
@@ -19,6 +20,62 @@ import de.passwordvault.R;
  * @version 3.5.1
  */
 public class SearchBarView extends LinearLayout {
+
+    /**
+     * Class implements a text watcher that handles all actions that need to be done when the text
+     * within the search bar view is edited.
+     */
+    private class SearchBarViewTextWatcher implements TextWatcher {
+
+        /**
+         * Method is called before the watched text is being changed.
+         *
+         * @param s     Text that is about to change.
+         * @param start Index of the first character to be changed.
+         * @param count Number of characters to be changed.
+         * @param after New length for the text.
+         */
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        /**
+         * Method is called after the watched text changed.
+         *
+         * @param s         Changed text.
+         * @param start     Index if the first character being replaced.
+         * @param before    Previous length of the watched text.
+         * @param count     Number of characters being changed.
+         */
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        /**
+         * Method is called after the watched text changed.
+         *
+         * @param s Changed text.
+         */
+        @Override
+        public void afterTextChanged(Editable s) {
+            int currentVisibility = SearchBarView.this.clearButton.getVisibility();
+            int newVisibility = s.toString().isEmpty() ? INVISIBLE : VISIBLE;
+            if (currentVisibility != newVisibility) {
+                if (newVisibility == INVISIBLE) {
+                    SearchBarView.this.clearButton.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_right));
+                    SearchBarView.this.clearButton.postDelayed(() -> SearchBarView.this.clearButton.setVisibility(INVISIBLE), getResources().getInteger(R.integer.default_anim_duration));
+                }
+                else  {
+                    SearchBarView.this.clearButton.setVisibility(VISIBLE);
+                    SearchBarView.this.clearButton.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_right));
+                }
+            }
+        }
+
+    }
+
 
     /**
      * Attribute stores the edit text used to enter a search query.
@@ -84,15 +141,6 @@ public class SearchBarView extends LinearLayout {
         queryInput.addTextChangedListener(watcher);
     }
 
-    /**
-     * Method removes the passed text change listener to the search bar.
-     *
-     * @param watcher   Text watcher to remove.
-     */
-    public void removeTextChangeListener(TextWatcher watcher) {
-        queryInput.removeTextChangedListener(watcher);
-    }
-
 
     /**
      * Method is called when the view finished inflating and configures all it's components.
@@ -102,10 +150,12 @@ public class SearchBarView extends LinearLayout {
         super.onFinishInflate();
         queryInput = findViewById(R.id.input_query);
         int primaryColor = getContext().getColor(R.color.pv_primary);
-        queryInput.getTextCursorDrawable().setTint(primaryColor);
-        queryInput.getTextSelectHandle().setTint(primaryColor);
+        Objects.requireNonNull(queryInput.getTextCursorDrawable()).setTint(primaryColor);
+        Objects.requireNonNull(queryInput.getTextSelectHandle()).setTint(primaryColor);
+        queryInput.addTextChangedListener(new SearchBarViewTextWatcher());
         clearButton = findViewById(R.id.button_clear);
         clearButton.setOnClickListener(view -> queryInput.setText(""));
+        clearButton.setVisibility(queryInput.getText().toString().isEmpty() ? GONE : VISIBLE);
     }
 
 
