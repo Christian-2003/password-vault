@@ -25,7 +25,7 @@ import de.passwordvault.viewmodel.dialogs.DetailViewModel;
  * {@linkplain DialogCallbackListener}!
  *
  * @author  Christian-2003
- * @version 3.2.0
+ * @version 3.5.1.
  */
 public class DetailDialog extends DialogFragment {
 
@@ -50,12 +50,17 @@ public class DetailDialog extends DialogFragment {
      */
     private View view;
 
+    /**
+     * Attribute stores whether the dialog is currently dismissing.
+     */
+    private boolean dismissing;
+
 
     /**
      * Constructor constructs a new {@link DetailDialog}-instance.
      */
     public DetailDialog() {
-        //Require empty constructor.
+        dismissing = false;
     }
 
 
@@ -127,16 +132,43 @@ public class DetailDialog extends DialogFragment {
                 //Some necessary data was not entered:
                 return;
             }
-            dismiss();
-            viewModel.getCallbackListener().onPositiveCallback(DetailDialog.this);
+            dismissPositive();
         });
 
         //Configure negative button:
         Button negativeButton = dialog.getButton(Dialog.BUTTON_NEGATIVE);
-        negativeButton.setOnClickListener(view -> {
-            dismiss();
-            viewModel.getCallbackListener().onNegativeCallback(DetailDialog.this);
-        });
+        negativeButton.setOnClickListener(view -> dismissNegative());
+    }
+
+
+    /**
+     * Method is called when the dialog is stopped.
+     */
+    @Override
+    public void onStop() {
+        if (!dismissing) {
+            dismissNegative();
+        }
+        super.onStop();
+    }
+
+
+    /**
+     * Method dismisses the dialog with a positive callback.
+     */
+    private void dismissPositive() {
+        viewModel.getCallbackListener().onPositiveCallback(DetailDialog.this);
+        dismissing = true;
+        dismiss();
+    }
+
+    /**
+     * Method dismisses the dialog with a negative callback.
+     */
+    private void dismissNegative() {
+        viewModel.getCallbackListener().onNegativeCallback(DetailDialog.this);
+        dismissing = true;
+        dismiss();
     }
 
 }

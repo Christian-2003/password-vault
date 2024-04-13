@@ -40,13 +40,18 @@ public class ConfirmDeleteDetailDialog extends DialogFragment {
      */
     private ConfirmDeleteDetailViewModel viewModel;
 
+    /**
+     * Attribute stores whether the dialog is currently dismissing.
+     */
+    private boolean dismissing;
+
 
     /**
      * Constructor constructs a new ConfirmDetailDeleteDialogFragment which allows the user to confirm
      * the deletion of the passed detail.
      */
     public ConfirmDeleteDetailDialog() {
-        //Required empty constructor.
+        dismissing = false;
     }
 
 
@@ -86,16 +91,39 @@ public class ConfirmDeleteDetailDialog extends DialogFragment {
         builder.setTitle(R.string.button_delete);
         builder.setMessage(requireContext().getString(R.string.confirm_delete_dialog_confirm).replace("{arg}", viewModel.getDetail().getName()));
 
-        builder.setPositiveButton(R.string.button_delete, (dialog, id) -> {
-            //Delete button:
-            viewModel.getCallbackListener().onPositiveCallback(ConfirmDeleteDetailDialog.this);
-        });
-        builder.setNegativeButton(R.string.button_cancel, (dialog, id) -> {
-            //Cancel button:
-            viewModel.getCallbackListener().onNegativeCallback(ConfirmDeleteDetailDialog.this);
-        });
+        builder.setPositiveButton(R.string.button_delete, (dialog, id) -> dismissPositive());
+        builder.setNegativeButton(R.string.button_cancel, (dialog, id) -> dismissNegative());
 
         return builder.create();
+    }
+
+
+    /**
+     * Method is called when the dialog is stopped.
+     */
+    @Override
+    public void onStop() {
+        if (!dismissing) {
+            dismissNegative();
+        }
+        super.onStop();
+    }
+
+
+    /**
+     * Method dismisses the dialog with a positive callback.
+     */
+    private void dismissPositive() {
+        viewModel.getCallbackListener().onPositiveCallback(ConfirmDeleteDetailDialog.this);
+        dismissing = true;
+    }
+
+    /**
+     * Method dismisses the dialog with a negative callback.
+     */
+    private void dismissNegative() {
+        viewModel.getCallbackListener().onNegativeCallback(ConfirmDeleteDetailDialog.this);
+        dismissing = true;
     }
 
 }

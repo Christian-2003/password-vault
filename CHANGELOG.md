@@ -30,6 +30,7 @@ Improvements to the UI and UX as well as some bugfixes. Updated `com.google.andr
 * Fixed a bug where tags were not correctly restored with a backup.
 * Small changes to app language.
 * Added custom `SearchBarView` since I cannot sufficiently style the default `SearchView`.
+* FIxed a bug in `AddEntryActivity` where a swiped detail was not shown after closing the corresponding dialog.
 
 <br/>
 
