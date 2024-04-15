@@ -2,9 +2,9 @@
 
 # Changelog
 
-## 3.5.1 (XXXX-XX-XX)
+## 3.5.1 (2024-04-15)
 ###### Release Highlights
-Improvements to the UI and UX as well as some bugfixes. Updated `com.google.android.material`-dependency from version _1.7.0_ to _1.9.0_, which is the last version that can compile against _SDK 32_. This upgrade has been done to introduce search bars to the app.
+Improvements to the UI and UX as well as some bugfixes. Updated `com.google.android.material`-dependency from version _1.7.0_ to _1.9.0_, which is the last version that can compile against _SDK 32_. This upgrade has been done to introduce search bars to the app as well as for general improvements regarding material components.
 
 ###### Features
 * Fixed a bug where an (incorrect) app icon is shown for an entry that should not have an icon at all.
