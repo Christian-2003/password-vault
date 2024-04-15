@@ -59,7 +59,7 @@ After cloning the repository, you can open the project in Android Studio and run
 Alternatively, you can build your own release with the newly developed features.
 
 ###### General Info for Running the Project
-Please note that many features within the repository are being developed. Such features may not work (correctly) to some extend and can even break your entire installation. Therefore, be cautious when doing this, we do not take any responsibility for any damage that might occur!
+Please note that many features within the repository are being developed. Such features may not work (correctly) to some extent and can even break your entire installation. Therefore, be cautious when doing this, we do not take any responsibility for any damage that might occur!
 
 Furthermore, features may be changed or removed which could result in a complete loss of your data.
 
