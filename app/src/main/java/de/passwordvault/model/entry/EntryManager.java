@@ -535,7 +535,9 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
      */
     private void generateMostRecentlyEditedEntriesArrayListCache() {
         if (abbreviatedEntriesArrayListCache.isEmpty()) {
+            mostRecentlyEditedEntriesCache.clear();
             return;
+
         }
         mostRecentlyEditedEntriesCache.clear();
         EntryAbbreviated mostRecentlyChanged = abbreviatedEntriesArrayListCache.get(0);

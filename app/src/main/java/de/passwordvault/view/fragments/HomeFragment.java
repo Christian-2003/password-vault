@@ -112,6 +112,19 @@ public class HomeFragment extends PasswordVaultBaseFragment implements Observer<
 
 
     /**
+     * Method is called whenever the fragment is shown on the display.
+     */
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (adapter != null) {
+            EntryManager.getInstance().getMostRecentlyEditedEntries();
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+
+    /**
      * Method informs the {@link Observer} that the observed data has been changed. The passed
      * {@link Observable} references the object which is being observed.
      *

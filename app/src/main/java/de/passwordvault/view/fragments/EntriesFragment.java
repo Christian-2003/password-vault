@@ -212,7 +212,9 @@ public class EntriesFragment extends PasswordVaultBaseFragment implements PopupM
 
 
     public void updateDataset() {
-        adapter.notifyDataSetChanged();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
 }
