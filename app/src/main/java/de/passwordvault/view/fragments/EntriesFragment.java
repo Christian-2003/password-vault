@@ -2,17 +2,13 @@ package de.passwordvault.view.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -22,7 +18,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.Toast;
 import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.model.Observable;
@@ -30,11 +25,9 @@ import de.passwordvault.model.Observer;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.view.utils.adapters.EntriesRecyclerViewAdapter;
-import de.passwordvault.view.utils.OnRecyclerItemClickListener;
 import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
 import de.passwordvault.view.utils.components.SearchBarView;
 import de.passwordvault.viewmodel.fragments.EntriesViewModel;
-import de.passwordvault.view.activities.EntryActivity;
 import de.passwordvault.view.activities.MainActivity;
 
 

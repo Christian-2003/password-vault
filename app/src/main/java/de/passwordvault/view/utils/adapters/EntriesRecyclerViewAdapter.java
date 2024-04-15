@@ -1,5 +1,6 @@
 package de.passwordvault.view.utils.adapters;
 
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,12 @@ public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecy
          */
         public final ShapeableImageView logo;
 
+        /**
+         * Attribute stores the text view that displays the acronym of the entry-name, if no logo is
+         * available.
+         */
+        public final TextView acronym;
+
 
         /**
          * Constructor instantiates a new view holder for the passed inflated view.
@@ -59,6 +66,7 @@ public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecy
             this.name = itemView.findViewById(R.id.entries_list_item_name);
             this.description = itemView.findViewById(R.id.entries_list_item_description);
             this.logo = itemView.findViewById(R.id.entries_list_item_logo);
+            this.acronym = itemView.findViewById(R.id.entry_acronym);
             this.itemView = itemView;
         }
 
@@ -125,10 +133,13 @@ public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecy
         EntryAbbreviated entry = filteredData.get(position);
         holder.name.setText(entry.getName());
         holder.description.setText(entry.getDescription());
+        holder.acronym.setText(entry.getName().isEmpty() ? "" : "" + entry.getName().charAt(0));
         if (clickListener != null) {
             holder.itemView.setOnClickListener(view -> clickListener.onItemClick(entry, position));
         }
-        holder.logo.setImageDrawable(entry.getLogo());
+        Drawable logo = entry.getLogo();
+        holder.logo.setImageDrawable(logo);
+        holder.acronym.setVisibility(logo == null ? View.VISIBLE : View.GONE);
     }
 
 

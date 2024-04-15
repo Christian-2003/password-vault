@@ -14,15 +14,37 @@
         android:padding="@dimen/default_padding"
         android:orientation="horizontal">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/entries_list_item_logo"
-            android:layout_width="@dimen/image_button_width"
-            android:layout_height="@dimen/image_button_height"
-            android:layout_marginEnd="@dimen/default_margin"
-            android:layout_weight="0"
-            android:layout_gravity="center"
-            android:background="@color/pv_container_detail"
-            app:shapeAppearanceOverlay="@style/rounded_corners"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_margin">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/entries_list_item_logo"
+                android:layout_width="@dimen/image_button_width"
+                android:layout_height="@dimen/image_button_height"
+                android:layout_weight="0"
+                android:layout_gravity="center"
+                android:background="@color/pv_container_detail"
+                app:shapeAppearanceOverlay="@style/rounded_corners"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <TextView
+                android:id="@+id/entry_acronym"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A"
+                android:textSize="22sp"
+                android:textColor="@color/pv_primary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

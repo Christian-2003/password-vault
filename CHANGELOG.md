@@ -34,6 +34,7 @@ Improvements to the UI and UX as well as some bugfixes. Updated `com.google.andr
 * Fixed a bug where changes within an entry were not immediately shown in recycler views of `MainActivity`. This includes editing and deleting entries.
 * Fixed a bug where deleting all entries through settings did not update recycler view in `HomeFragment`.
 * Fixed a bug where adding new entries did not immediately update recycler views in `MainActivity`.
+* Entries with no available app icon will have the first letter of their name shown in place of the app icon instead.
 
 <br/>
 
