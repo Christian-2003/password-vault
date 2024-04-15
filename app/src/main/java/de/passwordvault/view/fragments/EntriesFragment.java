@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,8 +21,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
+import android.widget.Toast;
 import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.model.Observable;
@@ -41,9 +42,9 @@ import de.passwordvault.view.activities.MainActivity;
  * within the {@linkplain MainActivity}.
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.5.1
  */
-public class EntriesFragment extends PasswordVaultBaseFragment implements OnRecyclerItemClickListener<EntryAbbreviated>, PopupMenu.OnMenuItemClickListener, Observer<ArrayList<EntryAbbreviated>> {
+public class EntriesFragment extends PasswordVaultBaseFragment implements PopupMenu.OnMenuItemClickListener, Observer<ArrayList<EntryAbbreviated>> {
 
     /**
      * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} for this fragment.
@@ -59,14 +60,6 @@ public class EntriesFragment extends PasswordVaultBaseFragment implements OnRecy
      * Attribute stores the view of the fragment.
      */
     private View view;
-
-
-    /**
-     * Default constructor instantiates a new EntriesFragment.
-     */
-    public EntriesFragment() {
-        // Required empty public constructor
-    }
 
 
     /**
@@ -94,7 +87,7 @@ public class EntriesFragment extends PasswordVaultBaseFragment implements OnRecy
         EntryManager.getInstance().addObserver(this);
         view = inflater.inflate(R.layout.fragment_entries, container, false);
 
-        adapter = new EntriesRecyclerViewAdapter(EntryManager.getInstance().getData(), this);
+        adapter = new EntriesRecyclerViewAdapter(EntryManager.getInstance().getData(), (MainActivity)requireActivity());
         if (EntryManager.getInstance().getData().isEmpty()) {
             view.findViewById(R.id.entries_container_none).setVisibility(View.VISIBLE);
             view.findViewById(R.id.abbreviated_entries).setVisibility(View.GONE);
@@ -161,23 +154,6 @@ public class EntriesFragment extends PasswordVaultBaseFragment implements OnRecy
 
 
     /**
-     * Method is called whenever an entry within the recycler view is clicked.
-     *
-     * @param item      Clicked item.
-     * @param position  Index of the clicked item.
-     */
-    @Override
-    public void onItemClick(EntryAbbreviated item, int position) {
-        String uuid = ((EntryAbbreviated)item).getUuid();
-        if (uuid != null) {
-            Intent intent = new Intent(getActivity(), EntryActivity.class);
-            intent.putExtra("uuid", uuid);
-            getActivity().startActivity(intent);
-        }
-    }
-
-
-    /**
      * Method is called whenever a menu item of the menu {@link R.menu#sort_entries_list} is clicked.
      * This will sort the {@linkplain ListView} which displays all {@link EntryAbbreviated}-instances according
      * to the clicked menu item.
@@ -232,6 +208,11 @@ public class EntriesFragment extends PasswordVaultBaseFragment implements OnRecy
             throw new NullPointerException("Null is invalid Observable");
         }
         adapter.getFilter().filter(((SearchBarView)view.findViewById(R.id.search_bar)).getText());
+    }
+
+
+    public void updateDataset() {
+        adapter.notifyDataSetChanged();
     }
 
 }

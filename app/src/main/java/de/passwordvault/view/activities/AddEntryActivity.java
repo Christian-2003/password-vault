@@ -65,6 +65,19 @@ public class AddEntryActivity extends PasswordVaultBaseActivity implements Dialo
      */
     private DetailsRecyclerViewAdapter adapter;
 
+    /**
+     * Attribute stores whether the user has finished editing the entry.
+     */
+    private boolean finishedEditing;
+
+
+    /**
+     * Constructor instantiates a new activity.
+     */
+    public AddEntryActivity() {
+        finishedEditing = false;
+    }
+
 
     /**
      * Method is called whenever the activity is created / recreated.
@@ -148,7 +161,8 @@ public class AddEntryActivity extends PasswordVaultBaseActivity implements Dialo
                 //Some data was not entered:
                 return;
             }
-            setResult(RESULT_OK, getIntent());
+            setResult(RESULT_OK);
+            finishedEditing = true;
             AddEntryActivity.this.finish();
         });
 
@@ -339,6 +353,19 @@ public class AddEntryActivity extends PasswordVaultBaseActivity implements Dialo
     protected void onPause() {
         super.onPause();
         TagManager.getInstance().removeObserver(this);
+    }
+
+
+    /**
+     * Method closes this activity. If the activity was not specifically closed with the 'save' button,
+     * the result code is set to {@linkplain #RESULT_CANCELED}.
+     */
+    @Override
+    public void finish() {
+        super.finish();
+        if (!finishedEditing) {
+            setResult(RESULT_CANCELED);
+        }
     }
 
 }

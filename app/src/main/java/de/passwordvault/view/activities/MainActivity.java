@@ -1,16 +1,22 @@
 package de.passwordvault.view.activities;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
+
 import com.google.android.material.navigation.NavigationBarView;
 import de.passwordvault.R;
+import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryManager;
+import de.passwordvault.view.utils.OnRecyclerItemClickListener;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.activities.MainViewModel;
 
@@ -22,32 +28,30 @@ import de.passwordvault.viewmodel.activities.MainViewModel;
  * @author  Christian-2003
  * @version 3.3.0
  */
-public class MainActivity extends PasswordVaultBaseActivity implements NavigationBarView.OnItemSelectedListener {
+public class MainActivity extends PasswordVaultBaseActivity implements NavigationBarView.OnItemSelectedListener, OnRecyclerItemClickListener<EntryAbbreviated> {
 
     /**
      * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} for this activity.
      */
     private MainViewModel viewModel;
 
+    /**
+     * Attribute stores the activity result launcher used to start the activity which shows an entry.
+     */
+    private final ActivityResultLauncher<Intent> showEntryLauncher;
+
 
     /**
-     * Method is called whenever the MainActivity is created or recreated.
-     *
-     * @param savedInstanceState    Previously saved state of the instance.
+     * Constructor instantiates a new activity.
      */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-
-        //Add action listener to FAB:
-        findViewById(R.id.main_fab).setOnClickListener(view -> startActivity(new Intent(MainActivity.this, AddEntryActivity.class)));
-
-        //Configure navigation bar:
-        NavigationBarView navigationBarView = findViewById(R.id.main_navigation);
-        navigationBarView.setOnItemSelectedListener(this);
-        navigationBarView.setSelectedItemId(viewModel.getSelectedItem());
+    public MainActivity() {
+        //Show entry:
+        showEntryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result != null && (result.getResultCode() == EntryActivity.RESULT_EDITED || result.getResultCode() == EntryActivity.RESULT_DELETED)) {
+                viewModel.getHomeFragment().update(EntryManager.getInstance());
+                viewModel.getEntriesFragment().updateDataset();
+            }
+        });
     }
 
 
@@ -75,6 +79,64 @@ public class MainActivity extends PasswordVaultBaseActivity implements Navigatio
      */
     public boolean switchToFragment(int id) {
         return switchToFragment(id, true);
+    }
+
+
+    /**
+     * Method is called whenever an entry within any recycler view is clicked.
+     *
+     * @param item      Clicked item.
+     * @param position  Index of the clicked item.
+     */
+    @Override
+    public void onItemClick(EntryAbbreviated item, int position) {
+        Intent intent = new Intent(this, EntryActivity.class);
+        intent.putExtra("uuid", item.getUuid());
+        try {
+            showEntryLauncher.launch(intent);
+        }
+        catch (Exception e) {
+            Toast.makeText(this, "Cannot show entry", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Method is called whenever the MainActivity is created or recreated.
+     *
+     * @param savedInstanceState    Previously saved state of the instance.
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+
+        //Add action listener to FAB:
+        findViewById(R.id.main_fab).setOnClickListener(view -> startActivity(new Intent(MainActivity.this, AddEntryActivity.class)));
+
+        //Add fragments to activity:
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        //Configure navigation bar:
+        NavigationBarView navigationBarView = findViewById(R.id.main_navigation);
+        navigationBarView.setOnItemSelectedListener(this);
+        navigationBarView.setSelectedItemId(viewModel.getSelectedItem());
+    }
+
+
+    /**
+     * Method is called whenever the MainActivity is destroyed. This is usually done whenever the
+     * application is closed.
+     */
+    @Override
+    protected void onStop() {
+        super.onStop();
+        try {
+            EntryManager.getInstance().save();
+        }
+        catch (Exception e) {
+            Log.d("EntryManager", "Could not save entries from MainActivity: " + e.getMessage());
+        }
     }
 
 
@@ -114,22 +176,6 @@ public class MainActivity extends PasswordVaultBaseActivity implements Navigatio
                 return true;
         }
         return false;
-    }
-
-
-    /**
-     * Method is called whenever the MainActivity is destroyed. This is usually done whenever the
-     * application is closed.
-     */
-    @Override
-    protected void onStop() {
-        super.onStop();
-        try {
-            EntryManager.getInstance().save();
-        }
-        catch (Exception e) {
-            Log.d("EntryManager", "Could not save entries from MainActivity: " + e.getMessage());
-        }
     }
 
 }

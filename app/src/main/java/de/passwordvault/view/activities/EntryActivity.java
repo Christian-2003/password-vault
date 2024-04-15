@@ -1,6 +1,7 @@
 package de.passwordvault.view.activities;
 
-import androidx.annotation.Nullable;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -23,6 +24,7 @@ import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -39,14 +41,45 @@ import java.io.Serializable;
  * {@linkplain de.passwordvault.model.entry.EntryAbbreviated}.
  *
  * @author  Christian-2003
- * @version 3.4.0
+ * @version 3.5.1
  */
 public class EntryActivity extends PasswordVaultBaseActivity implements DialogCallbackListener, Serializable, OnRecyclerItemClickListener<Detail> {
+
+    /**
+     * Field stores the result code returned if the displayed entry has been edited.
+     */
+    public static final int RESULT_EDITED = 314;
+
+    /**
+     * Field stores the result code returned if the displayed entry is deleted.
+     */
+    public static final int RESULT_DELETED = 315;
+
 
     /**
      * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} for the EntryActivity.
      */
     private EntryViewModel viewModel;
+
+    /**
+     * Attribute stores the activity result launcher used to edit the displayed entry.
+     */
+    private final ActivityResultLauncher<Intent> editEntryLauncher;
+
+
+    /**
+     * Constructor instantiates a new activity.
+     */
+    public EntryActivity() {
+        //Edit:
+        editEntryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == RESULT_OK) {
+                viewModel.setEntry(EntryManager.getInstance().get(viewModel.getEntry().getUuid()));
+                viewModel.setResultCode(RESULT_EDITED);
+                drawActivity();
+            }
+        });
+    }
 
 
     /**
@@ -58,6 +91,7 @@ public class EntryActivity extends PasswordVaultBaseActivity implements DialogCa
     public void onPositiveCallback(DialogFragment dialog) {
         //This entry shall be deleted:
         EntryManager.getInstance().remove(viewModel.getEntry().getUuid());
+        viewModel.setResultCode(RESULT_DELETED);
         EntryActivity.this.finish();
     }
 
@@ -69,6 +103,18 @@ public class EntryActivity extends PasswordVaultBaseActivity implements DialogCa
      */
     public void onNegativeCallback(DialogFragment dialog) {
 
+    }
+
+
+    /**
+     * Method is called when the item which is passed as argument is clicked by the user.
+     *
+     * @param item      Clicked item.
+     * @param position  Index of the clicked item.
+     */
+    @Override
+    public void onItemClick(Detail item, int position) {
+        Utils.copyToClipboard(item.getContent());
     }
 
 
@@ -93,50 +139,6 @@ public class EntryActivity extends PasswordVaultBaseActivity implements DialogCa
             viewModel.setEntry(entry);
         }
 
-        ((CollapsingToolbarLayout)findViewById(R.id.collapsing_toolbar_layout)).setTitle(viewModel.getEntry().getName());
-
-        drawActivity();
-    }
-
-
-    /**
-     * Method is called whenever any {@linkplain android.app.Activity} that was started by this
-     * Activity through {@linkplain #startActivityForResult(Intent, int, Bundle)} has finished.
-     * This is done to redraw this Activity with an edited / updated {@linkplain EntryExtended}.
-     *
-     * @param requestCode   Code that was requested from the started Activity.
-     * @param resultCode    Result code from the started Activity.
-     * @param data          Supplied data.
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK) {
-            return;
-        }
-        if (requestCode == 1) {
-            viewModel.setEntry(EntryManager.getInstance().get(viewModel.getEntry().getUuid()));
-            drawActivity(); //Redraw activity
-        }
-    }
-
-
-    /**
-     * Method is called when the item which is passed as argument is clicked by the user.
-     *
-     * @param item      Clicked item.
-     * @param position  Index of the clicked item.
-     */
-    @Override
-    public void onItemClick(Detail item, int position) {
-        Utils.copyToClipboard(item.getContent());
-    }
-
-
-    /**
-     * Method draws this {@linkplain android.app.Activity}.
-     */
-    private void drawActivity() {
         //Add ClickListener to exit the activity:
         findViewById(R.id.button_back).setOnClickListener(view -> EntryActivity.this.finish());
 
@@ -160,14 +162,38 @@ public class EntryActivity extends PasswordVaultBaseActivity implements DialogCa
         findViewById(R.id.button_edit).setOnClickListener(view -> {
             Intent intent = new Intent(EntryActivity.this, AddEntryActivity.class);
             intent.putExtra("entry", viewModel.getEntry().getUuid());
-            EntryActivity.this.startActivityForResult(intent, 1);
+            try {
+                editEntryLauncher.launch(intent);
+            }
+            catch (Exception e) {
+                Toast.makeText(this, "Cannot edit entry", Toast.LENGTH_SHORT).show();
+            }
         });
 
+        drawActivity();
+    }
+
+
+    /**
+     * Method is called when the activity is closed.
+     */
+    @Override
+    public void finish() {
+        setResult(viewModel.getResultCode());
+        super.finish();
+    }
+
+
+    /**
+     * Method draws this {@linkplain android.app.Activity}.
+     */
+    private void drawActivity() {
         EntryExtended entry = viewModel.getEntry();
         if (entry == null) {
             finish();
             return;
         }
+        ((CollapsingToolbarLayout)findViewById(R.id.collapsing_toolbar_layout)).setTitle(entry.getName());
         ((TextView)findViewById(R.id.entry_name)).setText(entry.getName());
         if (entry.getDescription().isEmpty()) {
             findViewById(R.id.entry_description_container).setVisibility(View.GONE);
@@ -239,6 +265,11 @@ public class EntryActivity extends PasswordVaultBaseActivity implements DialogCa
     }
 
 
+    /**
+     * Method populates the packages container.
+     *
+     * @param packages  Collection of packages with which to populate the container.
+     */
     private void populatePackagesContainer(PackageCollection packages) {
         if (packages.isEmpty()) {
             findViewById(R.id.entry_packages_container).setVisibility(View.GONE);

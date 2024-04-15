@@ -1,7 +1,5 @@
 package de.passwordvault.view.utils.adapters;
 
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +8,7 @@ import android.widget.Filterable;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.imageview.ShapeableImageView;
-
 import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.model.entry.EntryAbbreviated;
@@ -30,7 +26,7 @@ public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecy
     /**
      * Class implements a view holder for an abbreviated entry.
      */
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         /**
          * Attribute stores the text view which displays the name of the entry.
@@ -133,7 +129,6 @@ public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecy
             holder.itemView.setOnClickListener(view -> clickListener.onItemClick(entry, position));
         }
         holder.logo.setImageDrawable(entry.getLogo());
-        Log.d("ERVA", "Bound ViewHolder" + position + " for " + entry.getName());
     }
 
 

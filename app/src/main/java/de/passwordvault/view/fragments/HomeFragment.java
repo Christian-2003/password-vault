@@ -2,9 +2,14 @@ package de.passwordvault.view.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.LayoutRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,9 +34,9 @@ import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
  * used within the {@linkplain MainActivity}.
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.5.1
  */
-public class HomeFragment extends PasswordVaultBaseFragment implements Observer<ArrayList<EntryAbbreviated>>, OnRecyclerItemClickListener<EntryAbbreviated> {
+public class HomeFragment extends PasswordVaultBaseFragment implements Observer<ArrayList<EntryAbbreviated>> {
 
     /**
      * Attribute stores the adapter for the recycler view displaying the most recently edited entries.
@@ -42,14 +47,6 @@ public class HomeFragment extends PasswordVaultBaseFragment implements Observer<
      * Attribute stores the inflated view of the fragment.
      */
     private View view;
-
-
-    /**
-     * Default constructor instantiates a new HomeFragment.
-     */
-    public HomeFragment() {
-        // Required empty public constructor
-    }
 
 
     /**
@@ -95,7 +92,7 @@ public class HomeFragment extends PasswordVaultBaseFragment implements Observer<
             view.findViewById(R.id.home_recently_changed_none).setVisibility(View.VISIBLE);
         }
         else {
-            adapter = new EntriesRecyclerViewAdapter(EntryManager.getInstance().getMostRecentlyEditedEntries(), this);
+            adapter = new EntriesRecyclerViewAdapter(EntryManager.getInstance().getMostRecentlyEditedEntries(), (MainActivity)requireActivity());
             RecyclerView recyclerView = view.findViewById(R.id.home_recently_changed_container);
             recyclerView.setAdapter(adapter);
         }
@@ -126,20 +123,10 @@ public class HomeFragment extends PasswordVaultBaseFragment implements Observer<
         if (o == null) {
             throw new NullPointerException("Null is invalid Observable");
         }
-        adapter.notifyDataSetChanged();
-    }
-
-    /**
-     * Method is called whenever an item within the recycler view of this fragment is clicked.
-     *
-     * @param item      Clicked item.
-     * @param position  Index of the clicked item.
-     */
-    @Override
-    public void onItemClick(EntryAbbreviated item, int position) {
-        Intent intent = new Intent(getActivity(), EntryActivity.class);
-        intent.putExtra("uuid", item.getUuid());
-        getActivity().startActivity(intent);
+        if (adapter != null) {
+            EntryManager.getInstance().getMostRecentlyEditedEntries(); //Change dataset.
+            adapter.notifyDataSetChanged();
+        }
     }
 
 }

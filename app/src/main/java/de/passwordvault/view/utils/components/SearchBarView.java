@@ -155,7 +155,6 @@ public class SearchBarView extends LinearLayout {
         queryInput.addTextChangedListener(new SearchBarViewTextWatcher());
         clearButton = findViewById(R.id.button_clear);
         clearButton.setOnClickListener(view -> queryInput.setText(""));
-        clearButton.setVisibility(queryInput.getText().toString().isEmpty() ? GONE : VISIBLE);
     }
 
 

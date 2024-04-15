@@ -289,10 +289,7 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
      */
     @Override
     public EntryExtended remove(String uuid) throws NullPointerException {
-        EntryAbbreviated removedAbbreviated = abbreviatedEntries.remove(uuid);
-        if (removedAbbreviated == null) {
-            return null;
-        }
+        abbreviatedEntries.remove(uuid);
         extendedEntryCache.remove(uuid);
         storageManager.deleteExtendedEntry(uuid);
         changesMade = true;

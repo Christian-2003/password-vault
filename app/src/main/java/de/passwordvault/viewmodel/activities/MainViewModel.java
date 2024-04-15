@@ -1,7 +1,6 @@
 package de.passwordvault.viewmodel.activities;
 
 import androidx.lifecycle.ViewModel;
-
 import de.passwordvault.R;
 import de.passwordvault.view.activities.MainActivity;
 import de.passwordvault.view.fragments.EntriesFragment;
@@ -21,17 +20,17 @@ public class MainViewModel extends ViewModel {
     /**
      * Attribute stores the HomeFragment of the activity.
      */
-    private HomeFragment homeFragment;
+    private final HomeFragment homeFragment;
 
     /**
      * Attribute stores the EntriesFragment of the activity.
      */
-    private EntriesFragment entriesFragment;
+    private final EntriesFragment entriesFragment;
 
     /**
      * Attribute stores the SettingsFragment of the activity.
      */
-    private SettingsFragment settingsFragment;
+    private final SettingsFragment settingsFragment;
 
     /**
      * Attribute stores the ID of the item that was selected in the
@@ -51,34 +50,47 @@ public class MainViewModel extends ViewModel {
     }
 
 
+    /**
+     * Method returns the home fragment.
+     *
+     * @return  Home fragment.
+     */
     public HomeFragment getHomeFragment() {
         return homeFragment;
     }
 
-    public void setHomeFragment(HomeFragment homeFragment) {
-        this.homeFragment = homeFragment;
-    }
-
+    /**
+     * Method returns the entries fragment.
+     *
+     * @return  Entries fragment.
+     */
     public EntriesFragment getEntriesFragment() {
         return entriesFragment;
     }
 
-    public void setEntriesFragment(EntriesFragment entriesFragment) {
-        this.entriesFragment = entriesFragment;
-    }
-
+    /**
+     * Method returns the settings fragment.
+     *
+     * @return  Settings fragment.
+     */
     public SettingsFragment getSettingsFragment() {
         return settingsFragment;
     }
 
-    public void setSettingsFragment(SettingsFragment settingsFragment) {
-        this.settingsFragment = settingsFragment;
-    }
-
+    /**
+     * Method returns the index of the currently selected fragment.
+     *
+     * @return  Index of the currently selected fragment.
+     */
     public int getSelectedItem() {
         return selectedItem;
     }
 
+    /**
+     * Method changes the index of the currently selected fragment.
+     *
+     * @param selectedItem  Index of the new selected fragment.
+     */
     public void setSelectedItem(int selectedItem) {
         this.selectedItem = selectedItem;
     }
