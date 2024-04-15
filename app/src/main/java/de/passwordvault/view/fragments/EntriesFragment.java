@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -88,13 +89,11 @@ public class EntriesFragment extends PasswordVaultBaseFragment implements PopupM
         view = inflater.inflate(R.layout.fragment_entries, container, false);
 
         adapter = new EntriesRecyclerViewAdapter(EntryManager.getInstance().getData(), (MainActivity)requireActivity());
+        RecyclerView recyclerView = view.findViewById(R.id.abbreviated_entries);
+        recyclerView.setAdapter(adapter);
         if (EntryManager.getInstance().getData().isEmpty()) {
             view.findViewById(R.id.entries_container_none).setVisibility(View.VISIBLE);
             view.findViewById(R.id.abbreviated_entries).setVisibility(View.GONE);
-        }
-        else {
-            RecyclerView recyclerView = view.findViewById(R.id.abbreviated_entries);
-            recyclerView.setAdapter(adapter);
         }
 
         //Setup button to sort the entries:
@@ -211,10 +210,17 @@ public class EntriesFragment extends PasswordVaultBaseFragment implements PopupM
     }
 
 
+    /**
+     * Method updates the recycler view of the fragment.
+     */
     public void updateDataset() {
-        if (adapter != null) {
-            adapter.notifyDataSetChanged();
+        if (adapter == null) {
+            return;
         }
+        boolean currentlyEmpty = adapter.getItemCount() == 0;
+        view.findViewById(R.id.entries_container_none).setVisibility(currentlyEmpty ? View.VISIBLE : View.GONE);
+        view.findViewById(R.id.abbreviated_entries).setVisibility(currentlyEmpty ? View.GONE : View.VISIBLE);
+        adapter.notifyDataSetChanged();
     }
 
 }

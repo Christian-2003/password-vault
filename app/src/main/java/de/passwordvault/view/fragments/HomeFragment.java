@@ -1,15 +1,9 @@
 package de.passwordvault.view.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.LayoutRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +15,8 @@ import de.passwordvault.model.Observable;
 import de.passwordvault.model.Observer;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryManager;
-import de.passwordvault.view.activities.AddEntryActivity;
-import de.passwordvault.view.activities.EntryActivity;
 import de.passwordvault.view.activities.MainActivity;
 import de.passwordvault.view.utils.adapters.EntriesRecyclerViewAdapter;
-import de.passwordvault.view.utils.OnRecyclerItemClickListener;
 import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
 
 
@@ -74,7 +65,7 @@ public class HomeFragment extends PasswordVaultBaseFragment implements Observer<
         view = inflater.inflate(R.layout.fragment_home, container, false);
 
         Button addAccountButton = view.findViewById(R.id.home_add_account_button);
-        addAccountButton.setOnClickListener(view -> startActivity(new Intent(HomeFragment.this.getActivity(), AddEntryActivity.class)));
+        addAccountButton.setOnClickListener(view -> ((MainActivity)requireActivity()).addNewEntry());
 
         Button viewAccountsButton = view.findViewById(R.id.home_show_accounts_button);
         viewAccountsButton.setOnClickListener(view -> {
@@ -88,13 +79,12 @@ public class HomeFragment extends PasswordVaultBaseFragment implements Observer<
             }
         });
 
+        adapter = new EntriesRecyclerViewAdapter(EntryManager.getInstance().getMostRecentlyEditedEntries(), (MainActivity)requireActivity());
+        RecyclerView recyclerView = view.findViewById(R.id.home_recently_changed_container);
+        recyclerView.setAdapter(adapter);
+
         if (EntryManager.getInstance().getMostRecentlyEditedEntries().isEmpty()) {
             view.findViewById(R.id.home_recently_changed_none).setVisibility(View.VISIBLE);
-        }
-        else {
-            adapter = new EntriesRecyclerViewAdapter(EntryManager.getInstance().getMostRecentlyEditedEntries(), (MainActivity)requireActivity());
-            RecyclerView recyclerView = view.findViewById(R.id.home_recently_changed_container);
-            recyclerView.setAdapter(adapter);
         }
 
         return view;
@@ -136,10 +126,18 @@ public class HomeFragment extends PasswordVaultBaseFragment implements Observer<
         if (o == null) {
             throw new NullPointerException("Null is invalid Observable");
         }
-        if (adapter != null) {
-            EntryManager.getInstance().getMostRecentlyEditedEntries(); //Change dataset.
-            adapter.notifyDataSetChanged();
+        if (adapter == null) {
+            return;
         }
+        boolean currentlyEmpty = adapter.getItemCount() == 0;
+        boolean newEmpty = EntryManager.getInstance().getMostRecentlyEditedEntries().isEmpty();
+        if (currentlyEmpty && !newEmpty) {
+            view.findViewById(R.id.home_recently_changed_none).setVisibility(View.GONE);
+        }
+        else if (!currentlyEmpty && newEmpty) {
+            view.findViewById(R.id.home_recently_changed_none).setVisibility(View.VISIBLE);
+        }
+        adapter.notifyDataSetChanged();
     }
 
 }

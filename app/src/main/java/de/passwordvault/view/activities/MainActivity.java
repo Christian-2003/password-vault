@@ -26,7 +26,7 @@ import de.passwordvault.viewmodel.activities.MainViewModel;
  * point for the application and contains multiple fragments with different functionalities.
  *
  * @author  Christian-2003
- * @version 3.3.0
+ * @version 3.5.1
  */
 public class MainActivity extends PasswordVaultBaseActivity implements NavigationBarView.OnItemSelectedListener, OnRecyclerItemClickListener<EntryAbbreviated> {
 
@@ -40,6 +40,12 @@ public class MainActivity extends PasswordVaultBaseActivity implements Navigatio
      */
     private final ActivityResultLauncher<Intent> showEntryLauncher;
 
+    /**
+     * Attribute stores the activity result launcher used to start the activity through which to add
+     * a new entry.
+     */
+    private final ActivityResultLauncher<Intent> addEntryLauncher;
+
 
     /**
      * Constructor instantiates a new activity.
@@ -48,6 +54,15 @@ public class MainActivity extends PasswordVaultBaseActivity implements Navigatio
         //Show entry:
         showEntryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result != null && (result.getResultCode() == EntryActivity.RESULT_EDITED || result.getResultCode() == EntryActivity.RESULT_DELETED)) {
+                viewModel.getHomeFragment().update(EntryManager.getInstance());
+                viewModel.getEntriesFragment().updateDataset();
+            }
+        });
+
+        //Add entry:
+        addEntryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            Log.d("AddEntry", "MainActivity: ResultCode=" + result.getResultCode());
+            if (result != null && result.getResultCode() == RESULT_OK) {
                 viewModel.getHomeFragment().update(EntryManager.getInstance());
                 viewModel.getEntriesFragment().updateDataset();
             }
@@ -100,6 +115,21 @@ public class MainActivity extends PasswordVaultBaseActivity implements Navigatio
         }
     }
 
+
+    /**
+     * Method starts the activity which allows the user to add a new entry.
+     */
+    public void addNewEntry() {
+        Intent intent = new Intent(this, AddEntryActivity.class);
+        try {
+            addEntryLauncher.launch(intent);
+        }
+        catch (Exception e) {
+            Toast.makeText(this, "Cannot add new entry", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
     /**
      * Method is called whenever the MainActivity is created or recreated.
      *
@@ -112,10 +142,7 @@ public class MainActivity extends PasswordVaultBaseActivity implements Navigatio
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         //Add action listener to FAB:
-        findViewById(R.id.main_fab).setOnClickListener(view -> startActivity(new Intent(MainActivity.this, AddEntryActivity.class)));
-
-        //Add fragments to activity:
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        findViewById(R.id.main_fab).setOnClickListener(view -> addNewEntry());
 
         //Configure navigation bar:
         NavigationBarView navigationBarView = findViewById(R.id.main_navigation);

@@ -33,6 +33,7 @@ Improvements to the UI and UX as well as some bugfixes. Updated `com.google.andr
 * Fixed a bug in `AddEntryActivity` where a swiped detail was not shown after closing the corresponding dialog.
 * Fixed a bug where changes within an entry were not immediately shown in recycler views of `MainActivity`. This includes editing and deleting entries.
 * Fixed a bug where deleting all entries through settings did not update recycler view in `HomeFragment`.
+* Fixed a bug where adding new entries did not immediately update recycler views in `MainActivity`.
 
 <br/>
 
