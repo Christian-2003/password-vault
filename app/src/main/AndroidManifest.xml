@@ -22,7 +22,7 @@
         </activity>
 
         <!-- Other activities of the application -->
-        <activity android:name=".view.activities.MainActivity" android:exported="false"/>
+        <activity android:name=".view.activities.MainActivity" android:theme="@style/Theme.PasswordVault.ContainerNavBar" android:exported="false"/>
         <activity android:name=".view.activities.AddEntryActivity" android:exported="false"/>
         <activity android:name=".view.activities.EntryActivity" android:exported="false"/>
         <activity android:name=".view.activities.QualityGatesActivity" android:exported="false"/>

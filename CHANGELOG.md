@@ -7,7 +7,9 @@
 n/a
 
 ###### Features
-* n/a
+* Fixed a bug where all app data was permanently deleted when the app crashes.
+* Changed navigation bar color in `MainActivity` to match the color of the NavigationBarView.
+* Fixed a bug where rotating the app while the `DetailDialog` is open crashed the app and permanently deleted all app data.
 
 <br/>
 

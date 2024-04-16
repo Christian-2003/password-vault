@@ -158,11 +158,19 @@ public class MainActivity extends PasswordVaultBaseActivity implements Navigatio
     @Override
     protected void onStop() {
         super.onStop();
-        try {
-            EntryManager.getInstance().save();
-        }
-        catch (Exception e) {
-            Log.d("EntryManager", "Could not save entries from MainActivity: " + e.getMessage());
+        //Sometimes, when the app crashes (to me, this only happened during testing and development -
+        //never production!), all data is, for some strange reason that I do not comprehend or understand,
+        //deleted from the EntryManager. Therefore, all data would be lost when the app crashes. Not
+        //saving data when the EntryManager is empty prevents this from happening. However, this also
+        //prevents the user from manually deleting the last existing entry. As for now, I am willing
+        //to accept this drawback.
+        if (!EntryManager.getInstance().isEmpty()) {
+            try {
+                EntryManager.getInstance().save();
+            }
+            catch (Exception e) {
+                Log.d("EntryManager", "Could not save entries from MainActivity: " + e.getMessage());
+            }
         }
     }
 

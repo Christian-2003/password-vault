@@ -3,16 +3,16 @@ package de.passwordvault.view.dialogs;
 import android.annotation.SuppressLint;
 import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
 import de.passwordvault.R;
 import de.passwordvault.view.utils.DialogCallbackListener;
 import de.passwordvault.model.detail.Detail;
@@ -142,14 +142,18 @@ public class DetailDialog extends DialogFragment {
 
 
     /**
-     * Method is called when the dialog is stopped.
+     * Method is called when the dialog is cancelled either through clicking the cancel button or by
+     * clicking out of bounds of the dialog window.
+     *
+     * @param dialog    Dialog which is cancelled.
      */
     @Override
-    public void onStop() {
+    public void onCancel(@NonNull DialogInterface dialog) {
+        Log.d("DetailDialog", "onCancel called");
         if (!dismissing) {
             dismissNegative();
         }
-        super.onStop();
+        super.onCancel(dialog);
     }
 
 
