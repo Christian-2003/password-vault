@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import androidx.annotation.NonNull;
@@ -96,7 +97,7 @@ public class DetailDialog extends DialogFragment {
             throw new ClassCastException(e.getMessage());
         }
 
-        view = requireActivity().getLayoutInflater().inflate(R.layout.dialog_detail, null);
+        view = requireActivity().getLayoutInflater().inflate(R.layout.dialog_detail, null, false);
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity());
         builder.setTitle(viewModel.getDetail() == null ? R.string.detail_dialog_title_add : R.string.detail_dialog_title_edit);
@@ -149,7 +150,6 @@ public class DetailDialog extends DialogFragment {
      */
     @Override
     public void onCancel(@NonNull DialogInterface dialog) {
-        Log.d("DetailDialog", "onCancel called");
         if (!dismissing) {
             dismissNegative();
         }

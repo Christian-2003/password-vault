@@ -270,11 +270,13 @@
     <!-- Style for 'com.google.android.material.textfield.TextInputLayout' -->
     <style name="pv.material.text_input_layout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
         <item name="android:textColorHint">@color/pv_text_secondary</item>
+        <item name="endIconTint">@color/pv_text_secondary</item>
     </style>
 
     <!-- Style for 'com.google.android.material.textfield.TextInputLayout' with a dropdown menu -->
     <style name="pv.material.text_input_layout.exposed_dropdown" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
         <item name="android:textColorHint">@color/pv_text_secondary</item>
+        <item name="endIconTint">@color/pv_text_secondary</item>
     </style>
 
     <!-- Style for 'com.google.android.material.materialswitch.MaterialSwitch' -->
