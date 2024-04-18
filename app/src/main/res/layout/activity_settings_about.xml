@@ -270,6 +270,12 @@
                     android:focusable="true"
                     android:orientation="horizontal">
 
+                    <ImageView
+                        android:id="@+id/settings_about_software_update_eyecatcher"
+                        android:layout_marginEnd="@dimen/default_margin"
+                        android:visibility="gone"
+                        style="@style/pv.eyecatcher"/>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

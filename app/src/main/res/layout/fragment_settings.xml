@@ -201,13 +201,25 @@
                     android:src="@drawable/ic_info"
                     style="@style/pv.icon"/>
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/settings_about"
-                    android:padding="@dimen/default_padding"
-                    style="@style/pv.text"/>
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:visibility="gone"
+                        android:id="@+id/settings_about_eyecatcher"
+                        style="@style/pv.eyecatcher"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_about"
+                        android:padding="@dimen/default_padding"
+                        style="@style/pv.text"/>
+
+                </LinearLayout>
 
                 <ImageView
                     android:layout_width="wrap_content"

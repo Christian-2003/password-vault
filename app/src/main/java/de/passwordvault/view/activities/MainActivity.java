@@ -3,7 +3,6 @@ package de.passwordvault.view.activities;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -12,8 +11,12 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.navigation.NavigationBarView;
+import com.supersuman.apkupdater.ApkUpdater;
+
 import de.passwordvault.R;
+import de.passwordvault.model.UpdateManager;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
@@ -26,7 +29,7 @@ import de.passwordvault.viewmodel.activities.MainViewModel;
  * point for the application and contains multiple fragments with different functionalities.
  *
  * @author  Christian-2003
- * @version 3.5.1
+ * @version 3.5.2
  */
 public class MainActivity extends PasswordVaultBaseActivity implements NavigationBarView.OnItemSelectedListener, OnRecyclerItemClickListener<EntryAbbreviated> {
 
@@ -45,6 +48,11 @@ public class MainActivity extends PasswordVaultBaseActivity implements Navigatio
      * a new entry.
      */
     private final ActivityResultLauncher<Intent> addEntryLauncher;
+
+    /**
+     * Attribute stores the navigation bar / navigation rail of the activity.
+     */
+    private NavigationBarView navigationBarView;
 
 
     /**
@@ -145,9 +153,12 @@ public class MainActivity extends PasswordVaultBaseActivity implements Navigatio
         findViewById(R.id.main_fab).setOnClickListener(view -> addNewEntry());
 
         //Configure navigation bar:
-        NavigationBarView navigationBarView = findViewById(R.id.main_navigation);
+        navigationBarView = findViewById(R.id.main_navigation);
         navigationBarView.setOnItemSelectedListener(this);
         navigationBarView.setSelectedItemId(viewModel.getSelectedItem());
+
+        //Check for updates:
+        UpdateManager.getInstance(this, this::onUpdateStatusChanged);
     }
 
 
@@ -211,6 +222,19 @@ public class MainActivity extends PasswordVaultBaseActivity implements Navigatio
                 return true;
         }
         return false;
+    }
+
+
+    /**
+     * Method is called when the update state is registered the first time.
+     *
+     * @param updateAvailable   Whether an update is available.
+     */
+    private void onUpdateStatusChanged(boolean updateAvailable) {
+        if (updateAvailable) {
+            BadgeDrawable badge = navigationBarView.getOrCreateBadge(R.id.menu_settings);
+            badge.setNumber(1);
+        }
     }
 
 }

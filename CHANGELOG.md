@@ -12,6 +12,7 @@ n/a
 * Fixed a bug where rotating the app while the `DetailDialog` is open crashed the app and permanently deleted all app data.
 * Fixed a bug where the color of end icons within the `DetailDialog` was not correct.
 * Added option to change the number of the recently edited accounts on home page.
+* Added feature indicating a new app release to the user.
 
 <br/>
 
