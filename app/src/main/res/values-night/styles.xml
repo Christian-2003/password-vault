@@ -325,6 +325,12 @@
         <item name="buttonIconTint">@color/checkbox_icon</item>
     </style>
 
+    <!-- Style for badges -->
+    <style name="pv.material.badge" parent="Widget.MaterialComponents.Badge">
+        <item name="backgroundColor">@color/pv_primary</item>
+        <item name="badgeTextColor">@color/pv_text_onPrimary</item>
+    </style>
+
 
 
 
