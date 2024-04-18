@@ -21,8 +21,9 @@ import de.passwordvault.view.utils.Utils;
  * Class implements a functionality which allows the User to export the application's data to a
  * readable HTML format.
  *
- * @author  Christian-2003
- * @version 3.5.0
+ * @author      Christian-2003
+ * @version     3.5.0
+ * @deprecated  Use {@link ExportToHtml2} for the newer HTML export model.
  */
 public class ExportToHtml {
 

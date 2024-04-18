@@ -1,0 +1,139 @@
+/* CSS variables */
+:root {
+    --pv-color-primary: #1D7874;
+    --pv-color-background: #F6F6F8;
+    --pv-color-container: #FCFCFE;
+    --pv-color-container-highlight: #BFE3E2;
+    --pv-color-container-detail: #F2F2F2;
+    --pv-color-text: #000000;
+    --pv-color-text-secondary: #8D8C91;
+    --pv-color-text-primary: #1D7874;
+    --pv-color-text-onprimary: #FAFAFA;
+    --pv-corner-radius: 15px;
+    --pv-padding-default: 10px;
+    --pv-header-height: 64px;
+    --pv-footer-height: 64px;
+}
+
+/* Style for the body of the document */
+body {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 0px;
+    margin: 0px;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--pv-color-background);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Styles for the header */
+header {
+    display: flex;
+    align-items: center;
+    background-color: var(--pv-color-primary);
+    color: var(--pv-color-text-onprimary);
+    padding: 10px;
+    max-height: var(--pv-header-height);
+}
+header > h1 {
+    margin: 0px;
+    margin-right: auto;
+}
+
+/* Styles for the footer */
+footer {
+    background-color: var(--pv-color-container);
+    max-height: var(--pv-footer-height);
+    width: 100vw;
+}
+footer > p {
+    padding: 10px;
+}
+
+/* Styles for the main body of the document */
+main {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    height: calc(100vh - var(--pv-header-height) - var(--pv-footer-height));
+}
+
+/* Styles for the accounts list on the left side of the document */
+#account-list {
+    background-color: var(--pv-color-container);
+    border-radius: var(--pv-corner-radius);
+    overflow-y: scroll;
+    max-height: calc(100vh - var(--pv-header-height) - var(--pv-footer-height) - var(--pv-padding-default) * 2);
+    padding: 0px;
+    width: 25%;
+}
+#account-list > div {
+    cursor: pointer;
+    padding-left: var(--pv-padding-default);
+    padding-right: var(--pv-padding-default);
+    border-bottom: solid;
+    border-color: var(--pv-color-container-detail);
+    border-width: 1px;
+}
+#account-list > div:hover > p:first-child {
+    text-decoration: underline;
+}
+#account-list > div.selected {
+    background-color: var(--pv-color-container-detail);
+}
+#account-list > div > p {
+    padding: 4px;
+}
+#account-list > div > p:last-child {
+    color: var(--pv-color-text-secondary);
+}
+
+/* Styles for the content list on the right side of the document */
+#content-list {
+    width: 50%;
+}
+#content-list > div {
+    background-color: var(--pv-color-container);
+    border-radius: var(--pv-corner-radius);
+    overflow-y: auto;
+    max-height: calc(100vh - var(--pv-header-height) - var(--pv-footer-height) - var(--pv-padding-default) * 2);
+    margin-left: var(--pv-padding-default);
+    margin-right: var(--pv-padding-default);
+}
+#content-list > div > div {
+    border-bottom: solid;
+    border-color: var(--pv-color-container-detail);
+    border-width: 1px;
+    padding-left: var(--pv-padding-default);
+    padding-right: var(--pv-padding-default);
+}
+#content-list > div > div p {
+    padding: 4px;
+}
+#content-list > div > div p:first-of-type {
+    color: var(--pv-color-text-secondary);
+}
+
+/* Styles for passwords */
+.pw {
+    display: flex;
+}
+.pw > div {
+    margin-right: auto;
+}
+.pw > img {
+    cursor: pointer;
+}
+
+/* Other styles for the document */
+p {
+    margin: 0px;
+}
+.hidden {
+    display: none;
+}
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}

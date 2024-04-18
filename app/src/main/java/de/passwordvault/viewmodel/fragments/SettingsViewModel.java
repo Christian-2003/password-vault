@@ -23,6 +23,7 @@ import de.passwordvault.model.storage.backup.XmlException;
 import de.passwordvault.model.storage.encryption.EncryptionException;
 import de.passwordvault.model.storage.export.ExportException;
 import de.passwordvault.model.storage.export.ExportToHtml;
+import de.passwordvault.model.storage.export.ExportToHtml2;
 import de.passwordvault.model.tags.TagManager;
 import de.passwordvault.view.fragments.SettingsFragment;
 
@@ -201,7 +202,7 @@ public class SettingsViewModel extends ViewModel {
         if (uri == null) {
             throw new NullPointerException("Null is invalid URI");
         }
-        ExportToHtml htmlExporter = new ExportToHtml(uri);
+        ExportToHtml2 htmlExporter = new ExportToHtml2(uri);
         try {
             htmlExporter.export();
         }

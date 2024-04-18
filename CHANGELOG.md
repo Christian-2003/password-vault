@@ -13,6 +13,7 @@ n/a
 * Fixed a bug where the color of end icons within the `DetailDialog` was not correct.
 * Added option to change the number of the recently edited accounts on home page.
 * Added feature indicating a new app release to the user.
+* Complete overhaul of the HTML export file.
 
 <br/>
 
