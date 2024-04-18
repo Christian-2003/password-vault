@@ -50,6 +50,10 @@
     <string name="settings_customization_appearance_darkmode_light">Hell</string>
     <string name="settings_customization_appearance_darkmode_dark">Dunkel</string>
     <string name="settings_customization_appearance_darkmode_system">Wie System</string>
+    <string name="settings_customization_home">Startseite</string>
+    <string name="settings_customization_home_recentlyedited">Zuletzt bearbeitete Konten</string>
+    <string name="settings_customization_home_recentlyedited_info">Anzahl der zuletzt bearbeiteten Konten bearbeiten</string>
+    <string name="settings_customization_home_recentlyedited_number_option">{arg} Konten</string>
 
     <string name="settings_security">Sicherheit</string>
     <string name="settings_security_login">App-Login</string>
@@ -236,6 +240,7 @@
     <string name="hint_regex">RegEx</string>
     <string name="hint_regex_test">RegEx testen</string>
     <string name="hint_name">Name</string>
+    <string name="hint_recently_edited_accounts">Zuletzt bearbeitete Konten</string>
 
 
     <!-- Password / Passcode security -->

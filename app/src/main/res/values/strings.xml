@@ -51,6 +51,10 @@
     <string name="settings_customization_appearance_darkmode_light">Light</string>
     <string name="settings_customization_appearance_darkmode_dark">Dark</string>
     <string name="settings_customization_appearance_darkmode_system">Like system</string>
+    <string name="settings_customization_home">Home Page</string>
+    <string name="settings_customization_home_recentlyedited">Recently edited accounts</string>
+    <string name="settings_customization_home_recentlyedited_info">Change number of recently edited accounts on home page</string>
+    <string name="settings_customization_home_recentlyedited_number_option">{arg} accounts</string>
 
     <string name="settings_security">Security</string>
     <string name="settings_security_login">App login</string>
@@ -241,6 +245,7 @@
     <string name="hint_regex">RegEx</string>
     <string name="hint_regex_test">Test RegEx</string>
     <string name="hint_name">Name</string>
+    <string name="hint_recently_edited_accounts">Recently edited accounts</string>
 
 
     <!-- Password / Passcode security -->

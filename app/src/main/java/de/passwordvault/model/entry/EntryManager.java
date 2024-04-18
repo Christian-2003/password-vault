@@ -7,6 +7,7 @@ import de.passwordvault.model.CachableManager;
 import de.passwordvault.model.Observable;
 import de.passwordvault.model.Observer;
 import de.passwordvault.model.PersistableManager;
+import de.passwordvault.model.storage.Configuration;
 import de.passwordvault.model.storage.app.StorageException;
 import de.passwordvault.model.storage.app.StorageManager;
 import de.passwordvault.model.storage.encryption.EncryptionException;
@@ -28,11 +29,6 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
      * Field stores the singleton-instance of the entry manager.
      */
     private static EntryManager singleton;
-
-    /**
-     * Field stores how many most recently edited entries shall be generated.
-     */
-    private static final int NUMBER_OF_RECENTLY_EDITED_ENTRIES = 5;
 
 
     /**
@@ -548,7 +544,7 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
         }
         mostRecentlyEditedEntriesCache.add(mostRecentlyChanged);
 
-        for (int i = 0; i < NUMBER_OF_RECENTLY_EDITED_ENTRIES - 1; i++) {
+        for (int i = 0; i < Configuration.getNumberOfRecentlyEdited() - 1; i++) {
             EntryAbbreviated newMostRecentlyChanged = null;
             for (int j = 0; j < abbreviatedEntriesArrayListCache.size(); j++) {
                 if (abbreviatedEntriesArrayListCache.get(j).getChanged().compareTo(mostRecentlyChanged.getChanged()) < 0) {

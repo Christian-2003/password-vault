@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import de.passwordvault.R;
 import de.passwordvault.view.dialogs.DarkmodeDialog;
+import de.passwordvault.view.dialogs.RecentlyEditedDialog;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.fragments.SettingsViewModel;
 
@@ -13,7 +14,7 @@ import de.passwordvault.viewmodel.fragments.SettingsViewModel;
  * Class implements the activity which allows the user to customize the app.
  *
  * @author  Christian-2003
- * @version 3.5.1
+ * @version 3.5.2
  */
 public class SettingsCustomizationActivity extends PasswordVaultBaseActivity {
 
@@ -38,6 +39,9 @@ public class SettingsCustomizationActivity extends PasswordVaultBaseActivity {
 
         //Appearance:
         findViewById(R.id.settings_customization_appearance_darkmode_conatainer).setOnClickListener(view -> changeDarkmode());
+
+        //Home page:
+        findViewById(R.id.settings_customization_home_recentlyedited_conatainer).setOnClickListener(view -> changeNumberOfMostRecentlyEditedEntries());
     }
 
 
@@ -46,6 +50,15 @@ public class SettingsCustomizationActivity extends PasswordVaultBaseActivity {
      */
     private void changeDarkmode() {
         DarkmodeDialog dialog = new DarkmodeDialog();
+        dialog.show(getSupportFragmentManager(), "");
+    }
+
+    /**
+     * Method shows the dialog to change the number of most recently edited entries on the home
+     * fragment.
+     */
+    private void changeNumberOfMostRecentlyEditedEntries() {
+        RecentlyEditedDialog dialog = new RecentlyEditedDialog();
         dialog.show(getSupportFragmentManager(), "");
     }
 

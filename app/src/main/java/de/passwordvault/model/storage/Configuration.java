@@ -2,9 +2,7 @@ package de.passwordvault.model.storage;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import androidx.appcompat.app.AppCompatDelegate;
-import java.util.Locale;
 import de.passwordvault.App;
 
 
@@ -13,7 +11,7 @@ import de.passwordvault.App;
  * to (unencrypted) shared preferences for configuration purposes.
  *
  * @author  Christian-2003
- * @version 3.5.1
+ * @version 3.5.2
  */
 public class Configuration {
 
@@ -53,6 +51,12 @@ public class Configuration {
      * Field stores the key with which to store whether to use dark- / light-mode.
      */
     private static final String KEY_APPEARANCE_DARKMODE = "darkmode";
+
+    /**
+     * Field stores the key with which to store the number of the most recently edited entries on the
+     * home fragment.
+     */
+    private static final String KEY_NUM_RECENTLY_EDITED = "num_recently_edited";
 
     /**
      * Field stores the shared preferences instance from which to retrieve data.
@@ -141,6 +145,27 @@ public class Configuration {
      */
     public static int getDarkmode() {
         return preferences.getInt(KEY_APPEARANCE_DARKMODE, DARKMODE_SYSTEM);
+    }
+
+
+    /**
+     * Method changes the number of most recently edited entries shown on the home fragment.
+     *
+     * @param numberOfRecentlyEdited    Number of entries shown on the home fragment.
+     */
+    public static void setNumberOfRecentlyEdited(int numberOfRecentlyEdited) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(KEY_NUM_RECENTLY_EDITED, numberOfRecentlyEdited);
+        editor.apply();
+    }
+
+    /**
+     * Method returns the number of most recently edited entries shown on the home fragment.
+     *
+     * @return  Number of entries shown on the home fragment.
+     */
+    public static int getNumberOfRecentlyEdited() {
+        return preferences.getInt(KEY_NUM_RECENTLY_EDITED, 5);
     }
 
 
