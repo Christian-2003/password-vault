@@ -232,7 +232,7 @@ public class MainActivity extends PasswordVaultBaseActivity implements Navigatio
      */
     private void onUpdateStatusChanged(boolean updateAvailable) {
         if (updateAvailable) {
-            BadgeDrawable badge = navigationBarView.getOrCreateBadge(R.id.menu_settings);
+            navigationBarView.getOrCreateBadge(R.id.menu_settings);
         }
     }
 

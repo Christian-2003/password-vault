@@ -14,6 +14,7 @@ n/a
 * Added option to change the number of the recently edited accounts on home page.
 * Added feature indicating a new app release to the user.
 * Complete overhaul of the HTML export file.
+* Improvements to activity displaying duplicate passwords.
 
 <br/>
 
