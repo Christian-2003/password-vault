@@ -15,6 +15,7 @@ n/a
 * Added feature indicating a new app release to the user.
 * Complete overhaul of the HTML export file.
 * Improvements to activity displaying duplicate passwords.
+* Implemented integrity check when loading abbreviated entries: Abbreviated entries are not loaded if the corresponding extended entry does not exist.
 
 <br/>
 

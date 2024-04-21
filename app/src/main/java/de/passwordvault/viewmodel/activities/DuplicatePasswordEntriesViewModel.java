@@ -12,7 +12,7 @@ import de.passwordvault.model.entry.EntryManager;
  * {@link de.passwordvault.view.activities.DuplicatePasswordEntriesActivity}.
  *
  * @author  Christian-2003
- * @version 3.4.0
+ * @version 3.5.2
  */
 public class DuplicatePasswordEntriesViewModel extends ViewModel {
 

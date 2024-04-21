@@ -17,7 +17,7 @@ import de.passwordvault.model.storage.file.EncryptedFileWriter;
  * the managed entries. All data that is stored through this manager is being encrypted.
  *
  * @author  Christian-2003
- * @version 3.3.0
+ * @version 3.5.2
  */
 public class StorageManager {
 
@@ -75,7 +75,9 @@ public class StorageManager {
                 //Line is corrupt...
                 continue;
             }
-            entries.put(entry.getUuid(), entry);
+            if (existsExtendedEntry(entry)) {
+                entries.put(entry.getUuid(), entry);
+            }
         }
         return entries;
     }
@@ -160,6 +162,28 @@ public class StorageManager {
     public boolean deleteExtendedEntry(String uuid) throws NullPointerException {
         File file = new File(App.getContext().getFilesDir(), getFileName(uuid));
         return file.delete();
+    }
+
+
+    /**
+     * Method tests whether an extended entry exists for the specified abbreviated entry.
+     *
+     * @param entry                 Abbreviated entry for which to test whether a corresponding
+     *                              extended entry exists.
+     * @return                      Whether the corresponding extended entry exists.
+     * @throws NullPointerException The passed entry is {@code null}.
+     */
+    public boolean existsExtendedEntry(EntryAbbreviated entry) throws NullPointerException {
+        if (entry == null) {
+            throw new NullPointerException();
+        }
+        File file = new File(App.getContext().getFilesDir(), getFileName(entry.getUuid()));
+        try {
+            return file.exists();
+        }
+        catch (SecurityException e) {
+            return false;
+        }
     }
 
 

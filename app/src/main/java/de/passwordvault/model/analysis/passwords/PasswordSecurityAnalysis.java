@@ -247,6 +247,9 @@ public class PasswordSecurityAnalysis implements Observable<ArrayList<Password>>
         //Retrieve all passwords:
         for (EntryAbbreviated abbreviated : EntryManager.getInstance().getData()) {
             EntryExtended extended = EntryManager.getInstance().get(abbreviated.getUuid(), false);
+            if (extended == null) {
+                continue;
+            }
             for (Detail detail : extended.getDetails()) {
                 if (detail.getType() == DetailType.PASSWORD) {
                     passwords.add(new Password(detail.getContent(), extended.getUuid(), extended.getName()));
