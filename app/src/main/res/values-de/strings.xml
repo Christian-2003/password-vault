@@ -156,8 +156,8 @@
     <string name="password_results_general_problems">Probleme</string>
     <string name="password_results_list_title">Analysierte Passwörter</string>
     <string name="password_results_list_none">Keine Passwörter</string>
-    <string name="password_results_weak_title">Schwache Passwörter</string>
-    <string name="password_results_weak_none">Keine schwachen Passwörter</string>
+    <string name="password_results_weak_title">Einfache Passwörter</string>
+    <string name="password_results_weak_none">Keine einfachen Passwörter</string>
 
 
     <!-- Packages activity -->

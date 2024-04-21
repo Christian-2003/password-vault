@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Locale;
-
 import de.passwordvault.App;
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGateManager;
@@ -21,7 +20,7 @@ import de.passwordvault.model.analysis.QualityGateManager;
  * necessary to implement each of the provided methods with it's own class.
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.5.2
  */
 public class Utils {
 
@@ -47,6 +46,7 @@ public class Utils {
      */
     public static String formatNumber(double number) {
         NumberFormat formatter = DecimalFormat.getInstance(Locale.getDefault());
+        formatter.setMaximumFractionDigits(2);
         return formatter.format(number);
     }
 
