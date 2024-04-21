@@ -29,7 +29,7 @@ import de.passwordvault.viewmodel.activities.PackagesViewModel;
  * displays a list of all packages that are installed on the user's Android device.
  *
  * @author  Christian-2003
- * @version 3.5.1
+ * @version 3.5.2
  */
 public class PackagesListFragment extends PasswordVaultBaseFragment implements OnRecyclerItemClickListener<Package> {
 
@@ -65,7 +65,7 @@ public class PackagesListFragment extends PasswordVaultBaseFragment implements O
 
         view.findViewById(R.id.packages_selected_none).setVisibility(PackagesManager.getInstance().getPackages().size() == 0 ? View.VISIBLE : View.GONE);
 
-        adapter = new PackagesRecyclerViewAdapter(PackagesManager.getInstance().getSortedPackages(), this, null);
+        adapter = new PackagesRecyclerViewAdapter(PackagesManager.getInstance().getSortedPackages(), viewModel.getPackages(), this, null);
         RecyclerView recyclerView = view.findViewById(R.id.packages_list_recycler_view);
         recyclerView.setVisibility(PackagesManager.getInstance().getPackages().size() == 0 ? View.GONE : View.VISIBLE);
         recyclerView.setAdapter(adapter);
@@ -107,6 +107,7 @@ public class PackagesListFragment extends PasswordVaultBaseFragment implements O
             if (activity instanceof PackagesActivity) {
                 ((PackagesActivity)activity).notifyPackageAdded();
             }
+            adapter.notifyItemChanged(position);
         }
     }
 
@@ -123,6 +124,16 @@ public class PackagesListFragment extends PasswordVaultBaseFragment implements O
         else {
             searchBar.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_left));
             searchBar.postDelayed(() -> searchBar.setVisibility(View.GONE), getResources().getInteger(R.integer.default_anim_duration));
+        }
+    }
+
+
+    /**
+     * Method notifies the adapter that the data has been changed.
+     */
+    public void notifyPackageUnselected() {
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
         }
     }
 

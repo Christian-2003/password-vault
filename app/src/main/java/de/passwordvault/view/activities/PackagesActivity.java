@@ -26,7 +26,7 @@ import de.passwordvault.viewmodel.activities.PackagesViewModel;
  * which the user can select one.
  *
  * @author  Christian-2003
- * @version 3.5.1
+ * @version 3.5.2
  */
 public class PackagesActivity extends PasswordVaultBaseActivity {
 
@@ -115,6 +115,17 @@ public class PackagesActivity extends PasswordVaultBaseActivity {
         Fragment fragment = adapter.getItemAt(0);
         if (fragment instanceof PackagesSelectedFragment) {
             ((PackagesSelectedFragment)fragment).notifyPackageAdded();
+        }
+    }
+
+
+    /**
+     * Method notifies the second fragment of changes to the items.
+     */
+    public void notifyPackageUnselected() {
+        Fragment fragment = adapter.getItemAt(1);
+        if (fragment instanceof PackagesListFragment) {
+            ((PackagesListFragment)fragment).notifyPackageUnselected();
         }
     }
 

@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +21,7 @@ import de.passwordvault.view.utils.OnRecyclerItemClickListener;
  * Class implements an adapter for a recycler view which can display {@link Package}-instances.
  *
  * @author  Christian-2003
- * @version 3.5.1
+ * @version 3.5.2
  */
 public class PackagesRecyclerViewAdapter extends RecyclerView.Adapter<PackagesRecyclerViewAdapter.ViewHolder> implements Filterable {
 
@@ -49,6 +50,11 @@ public class PackagesRecyclerViewAdapter extends RecyclerView.Adapter<PackagesRe
          */
         public View itemView;
 
+        /**
+         * Attribute stores the image view displaying the checkmark indicating that an item is selected.
+         */
+        public ImageView checkImageView;
+
 
         /**
          * Constructor instantiates a new view holder for the passed view.
@@ -60,6 +66,7 @@ public class PackagesRecyclerViewAdapter extends RecyclerView.Adapter<PackagesRe
             logo = itemView.findViewById(R.id.list_item_package_logo);
             name = itemView.findViewById(R.id.list_item_package_name);
             deleteButton = itemView.findViewById(R.id.list_item_package_delete_button);
+            checkImageView= itemView.findViewById(R.id.list_item_package_check);
             this.itemView = itemView;
         }
 
@@ -75,6 +82,11 @@ public class PackagesRecyclerViewAdapter extends RecyclerView.Adapter<PackagesRe
      * Attribute stores the filtered data which is being displayed.
      */
     private ArrayList<Package> filteredData;
+
+    /**
+     * Attribute stores a list containing all selected packages. This can be {@code null}.
+     */
+    private ArrayList<Package> selectedItems;
 
     /**
      * Attribute stores the click listener that shall be called when an item in the recycler view is
@@ -105,6 +117,28 @@ public class PackagesRecyclerViewAdapter extends RecyclerView.Adapter<PackagesRe
         }
         this.data = data;
         filteredData = data;
+        this.clickListener = clickListener;
+        this.deleteButtonClickListener = deleteButtonClickListener;
+    }
+
+    /**
+     * Constructor instantiates a new adapter for a recycler view which can display packages. Pass
+     * {@code null} for deleteButtonClickListener to disable the delete button.
+     *
+     * @param data                      List of packages to be displayed.
+     * @param selectedItems             List of packages that are selected by the user.
+     * @param clickListener             Click listener that shall be called when an item is clicked.
+     * @param deleteButtonClickListener Click listener that shall be called when the delete button
+     *                                  of an item is clicked.
+     * @throws NullPointerException     The passed list of packages is {@code null}.
+     */
+    public PackagesRecyclerViewAdapter(ArrayList<Package> data, ArrayList<Package> selectedItems, OnRecyclerItemClickListener<Package> clickListener, OnRecyclerItemClickListener<Package> deleteButtonClickListener) throws NullPointerException {
+        if (data == null) {
+            throw new NullPointerException();
+        }
+        this.data = data;
+        filteredData = data;
+        this.selectedItems = selectedItems;
         this.clickListener = clickListener;
         this.deleteButtonClickListener = deleteButtonClickListener;
     }
@@ -147,6 +181,9 @@ public class PackagesRecyclerViewAdapter extends RecyclerView.Adapter<PackagesRe
         }
         else {
             holder.deleteButton.setOnClickListener(view -> deleteButtonClickListener.onItemClick(p, position));
+        }
+        if (selectedItems != null) {
+            holder.checkImageView.setVisibility(selectedItems.contains(p) ? View.VISIBLE : View.GONE);
         }
     }
 

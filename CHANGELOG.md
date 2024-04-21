@@ -4,7 +4,7 @@
 
 ## 3.5.2 (XXXX-XX-XX)
 ###### Release Highlights
-n/a
+General improvements and bugfixes. Completely changed HTML exports and introduced weak passwords to password security analysis.
 
 ###### Features
 * Fixed a bug where all app data was permanently deleted when the app crashes.
@@ -19,6 +19,7 @@ n/a
 * Added formatting of average password security score according to current app locale.
 * Added weak passwords to password security analysis.
 * Fixed color for navigation bar icons to match light / dark mode.
+* Added checkmark icon to packages fragment to indicate which packages have been selected by the user.
 
 <br/>
 

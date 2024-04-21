@@ -6,12 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
 import de.passwordvault.model.packages.Package;
+import de.passwordvault.view.activities.PackagesActivity;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
 import de.passwordvault.view.utils.adapters.PackagesRecyclerViewAdapter;
 import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
@@ -23,7 +22,7 @@ import de.passwordvault.viewmodel.activities.PackagesViewModel;
  * displays the packages that were selected by the user.
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.5.2
  */
 public class PackagesSelectedFragment extends PasswordVaultBaseFragment implements OnRecyclerItemClickListener<Package> {
 
@@ -78,6 +77,7 @@ public class PackagesSelectedFragment extends PasswordVaultBaseFragment implemen
                 //Removed last package:
                 setupList();
             }
+            ((PackagesActivity)requireActivity()).notifyPackageUnselected();
         }
         catch (IndexOutOfBoundsException e) {
             //This should not be triggered. Better be safe than sorry...
@@ -97,6 +97,9 @@ public class PackagesSelectedFragment extends PasswordVaultBaseFragment implemen
     }
 
 
+    /**
+     * Method sets up the recycler view displaying the packages.
+     */
     private void setupList() {
         view.findViewById(R.id.packages_selected_none).setVisibility(viewModel.getPackages().size() == 0 ? View.VISIBLE : View.GONE);
 

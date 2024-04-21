@@ -42,6 +42,15 @@
             android:src="@drawable/ic_delete"
             style="@style/pv.button.image_button"/>
 
+        <ImageView
+            android:id="@+id/list_item_package_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_check"
+            android:visibility="gone"
+            style="@style/pv.icon"/>
+
     </LinearLayout>
 
     <View style="@style/divider"/>
