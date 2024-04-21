@@ -16,6 +16,8 @@ n/a
 * Complete overhaul of the HTML export file.
 * Improvements to activity displaying duplicate passwords.
 * Implemented integrity check when loading abbreviated entries: Abbreviated entries are not loaded if the corresponding extended entry does not exist.
+* Added formatting of average password security score according to current app locale.
+* Added weak passwords to password security analysis.
 
 <br/>
 

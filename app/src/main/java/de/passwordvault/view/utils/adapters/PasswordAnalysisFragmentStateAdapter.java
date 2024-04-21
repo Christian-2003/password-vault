@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import de.passwordvault.view.fragments.PasswordAnalysisDuplicatesFragment;
 import de.passwordvault.view.fragments.PasswordAnalysisGeneralFragment;
-import de.passwordvault.view.fragments.PasswordAnalysisListFragment;
+import de.passwordvault.view.fragments.PasswordAnalysisWeakFragment;
 
 
 /**
@@ -14,7 +14,7 @@ import de.passwordvault.view.fragments.PasswordAnalysisListFragment;
  * {@link de.passwordvault.view.activities.PasswordAnalysisActivity}.
  *
  * @author  Christian-2003
- * @version 3.4.0
+ * @version 3.5.2
  */
 public class PasswordAnalysisFragmentStateAdapter extends FragmentStateAdapter {
 
@@ -49,8 +49,7 @@ public class PasswordAnalysisFragmentStateAdapter extends FragmentStateAdapter {
             case 2:
                 return new PasswordAnalysisDuplicatesFragment();
             case 1:
-                return new PasswordAnalysisListFragment();
-            case 0:
+                return new PasswordAnalysisWeakFragment();
             default:
                 return new PasswordAnalysisGeneralFragment();
         }

@@ -2,22 +2,62 @@ package de.passwordvault.viewmodel.activities;
 
 import androidx.lifecycle.ViewModel;
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.ArrayList;
+
 import de.passwordvault.R;
+import de.passwordvault.model.analysis.QualityGateManager;
+import de.passwordvault.model.analysis.passwords.Password;
+import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
 
 
 /**
  * Class implements a view model for the {@link de.passwordvault.view.activities.PasswordAnalysisActivity}.
  *
  * @author  Christian-2003
- * @version 3.4.0
+ * @version 3.5.2
  */
 public class PasswordAnalysisViewModel extends ViewModel {
+
+    /**
+     * Attribute stores a list of all weak passwords.
+     */
+    private ArrayList<Password> weakPasswords;
+
 
     /**
      * Constructor instantiates a new view model.
      */
     public PasswordAnalysisViewModel() {
+        weakPasswords = null;
+    }
 
+
+    /**
+     * Method returns a list with all weak passwords.
+     *
+     * @return  List with all weak passwords.
+     */
+    public ArrayList<Password> getWeakPasswords() {
+        if (weakPasswords == null) {
+            weakPasswords = new ArrayList<>();
+            calculateAllWeakPasswords();
+        }
+        return weakPasswords;
+    }
+
+    /**
+     * Method calculates which passwords are considered to be weak. These are all passwords which passed
+     * less than 50 % of all quality gates.
+     */
+    public void calculateAllWeakPasswords() {
+        weakPasswords.clear();
+        int requiredGatesToNotPass = (int)Math.round((double) QualityGateManager.getInstance().numberOfQualityGates() * 0.5D);
+        for (Password password : PasswordSecurityAnalysis.getInstance().getData()) {
+            if (password.getSecurityScore() <= requiredGatesToNotPass) {
+                weakPasswords.add(password);
+            }
+        }
     }
 
 
@@ -34,7 +74,7 @@ public class PasswordAnalysisViewModel extends ViewModel {
                 tab.setText(R.string.password_analysis_menu_general);
                 break;
             case 1:
-                tab.setText(R.string.password_analysis_menu_list);
+                tab.setText(R.string.password_analysis_menu_weak);
                 break;
             case 2:
                 tab.setText(R.string.password_analysis_menu_duplicates);

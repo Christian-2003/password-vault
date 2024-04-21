@@ -4,9 +4,13 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import java.io.InputStream;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.Locale;
+
 import de.passwordvault.App;
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGateManager;
@@ -32,6 +36,18 @@ public class Utils {
     public static String formatDate(Calendar date, String format) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
         return formatter.format(LocalDateTime.of(date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1, date.get(Calendar.DAY_OF_MONTH), date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE)));
+    }
+
+
+    /**
+     * Static method formats the passed number into the format of the current locale.
+     *
+     * @param number    Number to be formatted.
+     * @return          Formatted number.
+     */
+    public static String formatNumber(double number) {
+        NumberFormat formatter = DecimalFormat.getInstance(Locale.getDefault());
+        return formatter.format(number);
     }
 
 

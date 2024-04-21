@@ -136,6 +136,7 @@
 
     <!-- PasswordAnalysis activity -->
     <string name="password_analysis_menu_general">Allgemein</string>
+    <string name="password_analysis_menu_weak">Einfache Passwörter</string>
     <string name="password_analysis_menu_list">Passwörter</string>
     <string name="password_analysis_menu_duplicates">Duplikate</string>
     <string name="password_analysis_title">Passwortanalyse</string>
@@ -145,9 +146,18 @@
     <string name="password_results_general_duplicates">Doppelte Passwörter</string>
     <string name="password_results_general_duplicates_hint">{arg} doppelte Passwörter anzeigen</string>
     <string name="password_results_general_duplicates_hint_singular">{arg} doppeltes Passwort anzeigen</string>
+    <string name="password_results_general_weak">Einfache Passwörter</string>
+    <string name="password_results_general_weak_hint">{arg} einfache Passwörter anzeigen</string>
+    <string name="password_results_general_weak_hint_singular">{arg} einfaches Passwort anzeigen</string>
     <string name="password_results_general_duplicates_none">Keine doppelten Passwörter</string>
+    <string name="password_results_general_analyzed">Analysierte Passwörter</string>
+    <string name="password_results_general_analyzed_hint">{arg} analysierte Passwörter anzeigen</string>
+    <string name="password_results_general_analyzed_hint_singular">{arg} analysiertes Passwort anzeigen</string>
+    <string name="password_results_general_problems">Probleme</string>
     <string name="password_results_list_title">Analysierte Passwörter</string>
     <string name="password_results_list_none">Keine Passwörter</string>
+    <string name="password_results_weak_title">Schwache Passwörter</string>
+    <string name="password_results_weak_none">Keine schwachen Passwörter</string>
 
 
     <!-- Packages activity -->

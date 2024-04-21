@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.passwords.Password;
@@ -16,25 +14,24 @@ import de.passwordvault.view.activities.EntryActivity;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
 import de.passwordvault.view.utils.adapters.PasswordsRecyclerViewAdapter;
 import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
-import de.passwordvault.viewmodel.fragments.PasswordAnalysisListViewModel;
+import de.passwordvault.viewmodel.activities.PasswordAnalysisViewModel;
 
 
 /**
- * Class implements the fragment which shows a list of all passwords that were analyzed during the
- * password security analysis.
+ * Class implements the fragment used to display weak passwords to the user.
  *
  * @author  Christian-2003
- * @version 3.4.0
+ * @version 3.5.2
  */
-public class PasswordAnalysisListFragment extends PasswordVaultBaseFragment implements OnRecyclerItemClickListener<Password> {
+public class PasswordAnalysisWeakFragment extends PasswordVaultBaseFragment implements OnRecyclerItemClickListener<Password> {
 
     /**
-     * Attribute stores the view model of the fragment.
+     * Attribute stores the view model for the fragment.
      */
-    private PasswordAnalysisListViewModel viewModel;
+    private PasswordAnalysisViewModel viewModel;
 
     /**
-     * Attribute stores the inflated view of the fragment.
+     * Attribute stores the inflated view for the fragment.
      */
     private View view;
 
@@ -47,7 +44,7 @@ public class PasswordAnalysisListFragment extends PasswordVaultBaseFragment impl
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = new ViewModelProvider(requireActivity()).get(PasswordAnalysisListViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(PasswordAnalysisViewModel.class);
     }
 
 
@@ -66,13 +63,13 @@ public class PasswordAnalysisListFragment extends PasswordVaultBaseFragment impl
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_password_analysis_list, container, false);
+        view = inflater.inflate(R.layout.fragment_password_analysis_weak, container, false);
 
         boolean passwordsFound = PasswordSecurityAnalysis.getInstance().getData().size() != 0;
-        view.findViewById(R.id.password_analysis_list_none_container).setVisibility(passwordsFound ? View.GONE : View.VISIBLE);
+        view.findViewById(R.id.container_none).setVisibility(passwordsFound ? View.GONE : View.VISIBLE);
 
-        PasswordsRecyclerViewAdapter adapter = new PasswordsRecyclerViewAdapter(PasswordSecurityAnalysis.getInstance().getData(), this, true);
-        RecyclerView recyclerView = view.findViewById(R.id.password_analysis_recycler_view);
+        PasswordsRecyclerViewAdapter adapter = new PasswordsRecyclerViewAdapter(viewModel.getWeakPasswords(), this, true);
+        RecyclerView recyclerView = view.findViewById(R.id.passwords_recycler_view);
         recyclerView.setVisibility(passwordsFound ? View.VISIBLE : View.GONE);
         recyclerView.setAdapter(adapter);
 

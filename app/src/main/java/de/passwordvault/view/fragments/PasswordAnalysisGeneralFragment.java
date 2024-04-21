@@ -1,6 +1,7 @@
 package de.passwordvault.view.fragments;
 
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,15 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGateManager;
 import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
 import de.passwordvault.view.activities.PasswordAnalysisActivity;
+import de.passwordvault.view.activities.PasswordAnalysisListActivity;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
-import de.passwordvault.viewmodel.fragments.PasswordAnalysisGeneralViewModel;
+import de.passwordvault.viewmodel.activities.PasswordAnalysisViewModel;
 
 
 /**
@@ -24,14 +25,14 @@ import de.passwordvault.viewmodel.fragments.PasswordAnalysisGeneralViewModel;
  * security.
  *
  * @author  Christian-2003
- * @version 3.4.0
+ * @version 3.5.2
  */
 public class PasswordAnalysisGeneralFragment extends PasswordVaultBaseFragment {
 
     /**
      * Attribute stores the view model of the fragment.
      */
-    private PasswordAnalysisGeneralViewModel viewModel;
+    private PasswordAnalysisViewModel viewModel;
 
     /**
      * Attribute stores the inflated view of the fragment.
@@ -47,7 +48,7 @@ public class PasswordAnalysisGeneralFragment extends PasswordVaultBaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = new ViewModelProvider(requireActivity()).get(PasswordAnalysisGeneralViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(PasswordAnalysisViewModel.class);
     }
 
 
@@ -68,11 +69,13 @@ public class PasswordAnalysisGeneralFragment extends PasswordVaultBaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_password_analysis_general, container, false);
 
-        String securityScore = (Math.floor(PasswordSecurityAnalysis.getInstance().getAverageSecurityScore() * 100) / 100) + " / " + QualityGateManager.getInstance().numberOfQualityGates();
+        //Security score:
+        String securityScore = Utils.formatNumber(PasswordSecurityAnalysis.getInstance().getAverageSecurityScore()) + " / " + QualityGateManager.getInstance().numberOfQualityGates();
         TextView securityScoreTextView = view.findViewById(R.id.password_analysis_general_security_score);
         securityScoreTextView.setText(securityScore);
         securityScoreTextView.setTextColor(Utils.getPasswordSecurityScoreColor((int)PasswordSecurityAnalysis.getInstance().getAverageSecurityScore()));
 
+        //Security score bar:
         ProgressBar securityBar = view.findViewById(R.id.password_analysis_general_security_bar);
         securityBar.setMax(QualityGateManager.getInstance().numberOfQualityGates() * 1000);
         ValueAnimator animator = ValueAnimator.ofInt(0, (int)(PasswordSecurityAnalysis.getInstance().getAverageSecurityScore() * 1000));
@@ -80,6 +83,18 @@ public class PasswordAnalysisGeneralFragment extends PasswordVaultBaseFragment {
         animator.addUpdateListener(animation -> securityBar.setProgress((int) animation.getAnimatedValue()));
         animator.start();
 
+        //Analyzed passwords:
+        String analyzed;
+        if (PasswordSecurityAnalysis.getInstance().getData().size() == 1) {
+            analyzed = view.getContext().getString(R.string.password_results_general_analyzed_hint_singular).replace("{arg}", "" + PasswordSecurityAnalysis.getInstance().getData().size());
+        }
+        else {
+            analyzed = view.getContext().getString(R.string.password_results_general_analyzed_hint).replace("{arg}", "" + PasswordSecurityAnalysis.getInstance().getData().size());
+        }
+        ((TextView)view.findViewById(R.id.password_analysis_general_analyzed)).setText(analyzed);
+        view.findViewById(R.id.password_analysis_analyzed_clickable).setOnClickListener(view -> showAllPasswords());
+
+        //Duplicate passwords:
         String duplicates;
         if (PasswordSecurityAnalysis.getInstance().getIdenticalPasswords().size() == 1) {
             duplicates = view.getContext().getString(R.string.password_results_general_duplicates_hint_singular).replace("{arg}", "" + PasswordSecurityAnalysis.getInstance().getIdenticalPasswords().size());
@@ -90,12 +105,23 @@ public class PasswordAnalysisGeneralFragment extends PasswordVaultBaseFragment {
         ((TextView)view.findViewById(R.id.password_analysis_general_duplicates)).setText(duplicates);
         view.findViewById(R.id.password_analysis_duplicates_clickable).setOnClickListener(view -> showDuplicatePasswords());
 
+        //Weak passwords:
+        String weak;
+        if (viewModel.getWeakPasswords().size() == 1) {
+            weak = view.getContext().getString(R.string.password_results_general_weak_hint_singular).replace("{arg}", "" + viewModel.getWeakPasswords().size());
+        }
+        else {
+            weak = view.getContext().getString(R.string.password_results_general_weak_hint).replace("{arg}", "" + viewModel.getWeakPasswords().size());
+        }
+        ((TextView)view.findViewById(R.id.password_analysis_general_weak)).setText(weak);
+        view.findViewById(R.id.password_analysis_weak_clickable).setOnClickListener(view -> showWeakPasswords());
+
         return view;
     }
 
 
     /**
-     * Method shows the fragment in which the duplicate passwords are shown.
+     * Method shows the fragment in which the duplicate passwords are displayed.
      */
     private void showDuplicatePasswords() {
         try {
@@ -105,6 +131,29 @@ public class PasswordAnalysisGeneralFragment extends PasswordVaultBaseFragment {
         catch (ClassCastException e) {
             Log.d("PasswordAnalysisGeneralFragment", "Cannot cast FragmentActivity to PasswordAnalysisActivity");
         }
+    }
+
+
+    /**
+     * Method shows the fragment in which the weak passwords are displayed.
+     */
+    private void showWeakPasswords() {
+        try {
+            PasswordAnalysisActivity activity = (PasswordAnalysisActivity)requireActivity();
+            activity.showFragmentPage(1);
+        }
+        catch (ClassCastException e) {
+            Log.d("PasswordAnalysisGeneralFragment", "Cannot cast FragmentActivity to PasswordAnalysisActivity");
+        }
+    }
+
+
+    /**
+     * Method shows the activity which displays all analyzed passwords to the user.
+     */
+    private void showAllPasswords() {
+        Intent intent = new Intent(requireActivity(), PasswordAnalysisListActivity.class);
+        startActivity(intent);
     }
 
 }

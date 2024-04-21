@@ -141,6 +141,7 @@
 
     <!-- PasswordAnalysis activity -->
     <string name="password_analysis_menu_general">General</string>
+    <string name="password_analysis_menu_weak">Weak passwords</string>
     <string name="password_analysis_menu_list">Passwords</string>
     <string name="password_analysis_menu_duplicates">Duplicates</string>
     <string name="password_analysis_title">Password Analysis</string>
@@ -150,9 +151,18 @@
     <string name="password_results_general_duplicates">Duplicate passwords</string>
     <string name="password_results_general_duplicates_hint">Show {arg} duplicate passwords</string>
     <string name="password_results_general_duplicates_hint_singular">Show {arg} duplicate password</string>
+    <string name="password_results_general_weak">Weak passwords</string>
+    <string name="password_results_general_weak_hint">Show {arg} weak passwords</string>
+    <string name="password_results_general_weak_hint_singular">Show {arg} weak password</string>
     <string name="password_results_general_duplicates_none">No duplicate passwords</string>
+    <string name="password_results_general_analyzed">Analyzed passwords</string>
+    <string name="password_results_general_analyzed_hint">Show {arg} analyzed passwords</string>
+    <string name="password_results_general_analyzed_hint_singular">Show {arg} analyzed password</string>
+    <string name="password_results_general_problems">Problems</string>
     <string name="password_results_list_title">Analyzed Passwords</string>
     <string name="password_results_list_none">No passwords</string>
+    <string name="password_results_weak_title">Weak passwords</string>
+    <string name="password_results_weak_none">No weak passwords</string>
 
 
     <!-- Packages activity -->

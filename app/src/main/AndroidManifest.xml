@@ -28,6 +28,7 @@
         <activity android:name=".view.activities.QualityGatesActivity" android:exported="false"/>
         <activity android:name=".view.activities.QualityGateActivity" android:exported="false"/>
         <activity android:name=".view.activities.PasswordAnalysisActivity" android:exported="false"/>
+        <activity android:name=".view.activities.PasswordAnalysisListActivity" android:exported="false"/>
         <activity android:name=".view.activities.DuplicatePasswordEntriesActivity" android:exported="false"/>
         <activity android:name=".view.activities.DataConversionActivity" android:exported="false"/>
         <activity android:name=".view.activities.PackagesActivity" android:exported="false"/>
