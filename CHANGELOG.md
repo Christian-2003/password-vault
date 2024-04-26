@@ -2,7 +2,7 @@
 
 # Changelog
 
-## 3.5.2 (XXXX-XX-XX)
+## 3.5.2 (2024-04-26)
 ###### Release Highlights
 General improvements and bugfixes. Completely changed HTML exports and introduced weak passwords to password security analysis.
 

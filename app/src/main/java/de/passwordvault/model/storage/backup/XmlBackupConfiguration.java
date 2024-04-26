@@ -59,6 +59,11 @@ public abstract class XmlBackupConfiguration {
     protected static final String TAG_BACKUP_CREATED = "created";
 
     /**
+     * Field stores the XML tag which stores whether the backup was automatically created.
+     */
+    protected static final String TAG_AUTO_CREATED = "auto-created";
+
+    /**
      * Field stores the XML tag which encapsulates all data regarding the encryption.
      */
     protected static final String TAG_ENCRYPTION = "encryption";

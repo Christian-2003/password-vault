@@ -10,7 +10,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Calendar;
-
 import de.passwordvault.App;
 import de.passwordvault.BuildConfig;
 import de.passwordvault.model.detail.Detail;
@@ -37,6 +36,12 @@ public class XmlBackupCreator extends XmlBackupConfiguration {
      */
     private final String filename;
 
+    /**
+     * Attribute stores whether the backup is created automatically (= {@code true}) or manually by
+     * the use (= {@code false}).
+     */
+    private final boolean autoCreated;
+
 
     /**
      * Constructor instantiates a new {@link XmlBackupCreator}-instance. Please make sure that
@@ -56,6 +61,29 @@ public class XmlBackupCreator extends XmlBackupConfiguration {
             throw new NullPointerException("Null is invalid filename");
         }
         this.filename = filename;
+        this.autoCreated = false;
+    }
+
+    /**
+     * Constructor instantiates a new {@link XmlBackupCreator}-instance. Please make sure that
+     * the application has access (and permission) to the directory specified in the provided URI
+     * before calling. If the provided {@code encryptionKeySeed} is not {@code null}, the backup is
+     * considered to be encrypted. Otherwise, it is not encrypted.
+     *
+     * @param uri                   URI of the file to which the backup shall be created.
+     * @param filename              Name of the file into which the backup is stored.
+     * @param encryptionSeed        Seed for the key with which to encrypt the backup. Pass {@code null}
+     *                              if the backup shall not be encrypted.
+     * @param autoCreated           Indicates whether the backup is created automatically.s
+     * @throws NullPointerException The passed URI is {@code null}.
+     */
+    public XmlBackupCreator(Uri uri, String filename, String encryptionSeed, boolean autoCreated) throws NullPointerException {
+        super(uri, encryptionSeed);
+        if (filename == null) {
+            throw new NullPointerException("Null is invalid filename");
+        }
+        this.filename = filename;
+        this.autoCreated = autoCreated;
     }
 
 
@@ -122,6 +150,11 @@ public class XmlBackupCreator extends XmlBackupConfiguration {
         insertTag(writer, TAG_BACKUP_CREATED, 8, false, false);
         writer.write("" + Calendar.getInstance().getTimeInMillis());
         insertTag(writer, TAG_BACKUP_CREATED, 0, true, true);
+
+        //Add whether backup is automatically created:
+        insertTag(writer, TAG_AUTO_CREATED, 8, false, false);
+        writer.write("" + autoCreated);
+        insertTag(writer, TAG_AUTO_CREATED, 0, true, true);
 
         insertTag(writer, TAG_METADATA, 4, true, true);
 
