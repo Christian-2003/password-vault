@@ -78,7 +78,7 @@
     <string name="settings_autofill_cache_toggle">Caching verwenden</string>
     <string name="settings_autofill_cache_toggle_info">Automatisches Ausfüllen durch Caches beschleunigen</string>
     <string name="settings_autofill_cache_delete">Cache leeren</string>
-    <string name="settings_autofill_cache_delete_info">Alle Caches für autom. Ausfüllen leeren, falls nötig</string>
+    <string name="settings_autofill_cache_delete_info">Alle Caches für autom. Ausfüllen leeren</string>
     <string name="settings_autofill_cache_delete_success">Alle Caches gelöscht</string>
     <string name="settings_autofill_cache_delete_error">Caches konnten nicht gelöscht werden</string>
     <string name="settings_autofill_authentication">Authentifizierung</string>
