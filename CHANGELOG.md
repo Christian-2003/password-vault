@@ -9,6 +9,7 @@ n/a
 ###### Features
 * Added feature to delete all autofill caches.
 * Changes to `HomeFragment`.
+* Moved tags and assigned apps from "general" container to "additional" container in `EntryActivity`.
 
 <br/>
 
