@@ -85,6 +85,9 @@
     <string name="settings_autofill_authentication_toggle">Verlange Authentifizierung</string>
     <string name="settings_autofill_authentication_toggle_info">Datensicherheit durch Authentifizierung vor dem Zugriff auf App-Daten erhöhen</string>
 
+    <string name="settings_help">Hilfe</string>
+    <string name="settings_help_autofill_configuration">Automatisches Ausfüllen konfigurieren</string>
+
     <string name="settings_about">Über</string>
     <string name="settings_about_usage">Nutzungsbedingungen</string>
     <string name="settings_about_usage_license">MIT Lizenz</string>

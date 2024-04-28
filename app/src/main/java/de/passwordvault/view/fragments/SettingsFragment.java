@@ -9,10 +9,12 @@ import android.view.ViewGroup;
 import java.io.Serializable;
 import de.passwordvault.R;
 import de.passwordvault.model.UpdateManager;
+import de.passwordvault.view.activities.HelpActivity;
 import de.passwordvault.view.activities.SettingsAboutActivity;
 import de.passwordvault.view.activities.SettingsAutofillActivity;
 import de.passwordvault.view.activities.SettingsCustomizationActivity;
 import de.passwordvault.view.activities.SettingsDataActivity;
+import de.passwordvault.view.activities.SettingsHelpActivity;
 import de.passwordvault.view.activities.SettingsSecurityActivity;
 import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
 import de.passwordvault.view.activities.MainActivity;
@@ -23,7 +25,7 @@ import de.passwordvault.view.activities.MainActivity;
  * {@linkplain MainActivity}.
  *
  * @author  Christian-2003
- * @version 3.5.2
+ * @version 3.5.3
  */
 public class SettingsFragment extends PasswordVaultBaseFragment implements Serializable {
 
@@ -54,6 +56,8 @@ public class SettingsFragment extends PasswordVaultBaseFragment implements Seria
         view.findViewById(R.id.settings_security_container).setOnClickListener(view1 -> startActivity(new Intent(getActivity(), SettingsSecurityActivity.class)));
         view.findViewById(R.id.settings_data_container).setOnClickListener(view1 -> startActivity(new Intent(getActivity(), SettingsDataActivity.class)));
         view.findViewById(R.id.settings_autofill_container).setOnClickListener(view1 -> startActivity(new Intent(getActivity(), SettingsAutofillActivity.class)));
+
+        view.findViewById(R.id.settings_help_container).setOnClickListener(view1 -> startActivity(new Intent(getActivity(), SettingsHelpActivity.class)));
         view.findViewById(R.id.settings_about_container).setOnClickListener(view1 -> startActivity(new Intent(getActivity(), SettingsAboutActivity.class)));
 
         if (UpdateManager.getInstance(getActivity()).isUpdateAvailable()) {

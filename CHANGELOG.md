@@ -11,6 +11,8 @@ n/a
 * Changes to `HomeFragment`.
 * Moved tags and assigned apps from "general" container to "additional" container in `EntryActivity`.
 * Changed some drawable icons for their respective versions with rounded corners.
+* Added `LocalizedAssetManager` to load localized assets.
+* Added help to settings.
 
 <br/>
 

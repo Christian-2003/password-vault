@@ -32,201 +32,252 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            style="@style/pv.container">
+            android:orientation="vertical">
 
-            <!-- Customization -->
             <LinearLayout
-                android:id="@+id/settings_customization_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/default_padding"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                style="@style/pv.container">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_edit"
-                    style="@style/pv.icon"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/settings_customization"
-                    android:padding="@dimen/default_padding"
-                    style="@style/pv.text"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_next"
-                    style="@style/pv.icon"/>
-
-            </LinearLayout>
-
-            <View style="@style/divider"/>
-
-            <!-- Security -->
-            <LinearLayout
-                android:id="@+id/settings_security_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/default_padding"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_lock"
-                    style="@style/pv.icon"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/settings_security"
-                    android:padding="@dimen/default_padding"
-                    style="@style/pv.text"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_next"
-                    style="@style/pv.icon"/>
-
-            </LinearLayout>
-
-            <View style="@style/divider"/>
-
-            <!-- Data -->
-            <LinearLayout
-                android:id="@+id/settings_data_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/default_padding"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_list"
-                    style="@style/pv.icon"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/settings_data"
-                    android:padding="@dimen/default_padding"
-                    style="@style/pv.text"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_next"
-                    style="@style/pv.icon"/>
-
-            </LinearLayout>
-
-            <View style="@style/divider"/>
-
-            <!-- Autofill -->
-            <LinearLayout
-                android:id="@+id/settings_autofill_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/default_padding"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_password"
-                    style="@style/pv.icon"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/settings_autofill"
-                    android:padding="@dimen/default_padding"
-                    style="@style/pv.text"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_next"
-                    style="@style/pv.icon"/>
-
-            </LinearLayout>
-
-            <View style="@style/divider"/>
-
-            <!-- Autofill -->
-            <LinearLayout
-                android:id="@+id/settings_about_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/default_padding"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_info"
-                    style="@style/pv.icon"/>
-
+                <!-- Customization -->
                 <LinearLayout
+                    android:id="@+id/settings_customization_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:padding="@dimen/default_padding"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/settings_about"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_edit"
+                        style="@style/pv.icon"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/settings_customization"
                         android:padding="@dimen/default_padding"
                         style="@style/pv.text"/>
 
                     <ImageView
-                        android:id="@+id/settings_about_eyecatcher"
-                        android:visibility="gone"
-                        style="@style/pv.eyecatcher"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_next"
+                        style="@style/pv.icon"/>
 
                 </LinearLayout>
 
-                <ImageView
-                    android:layout_width="wrap_content"
+                <View style="@style/divider"/>
+
+                <!-- Security -->
+                <LinearLayout
+                    android:id="@+id/settings_security_container"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_next"
-                    style="@style/pv.icon"/>
+                    android:padding="@dimen/default_padding"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_lock"
+                        style="@style/pv.icon"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/settings_security"
+                        android:padding="@dimen/default_padding"
+                        style="@style/pv.text"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_next"
+                        style="@style/pv.icon"/>
+
+                </LinearLayout>
+
+                <View style="@style/divider"/>
+
+                <!-- Data -->
+                <LinearLayout
+                    android:id="@+id/settings_data_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/default_padding"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_list"
+                        style="@style/pv.icon"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/settings_data"
+                        android:padding="@dimen/default_padding"
+                        style="@style/pv.text"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_next"
+                        style="@style/pv.icon"/>
+
+                </LinearLayout>
+
+                <View style="@style/divider"/>
+
+                <!-- Autofill -->
+                <LinearLayout
+                    android:id="@+id/settings_autofill_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/default_padding"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_password"
+                        style="@style/pv.icon"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/settings_autofill"
+                        android:padding="@dimen/default_padding"
+                        style="@style/pv.text"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_next"
+                        style="@style/pv.icon"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                style="@style/pv.container">
+
+                <!-- Help -->
+                <LinearLayout
+                    android:id="@+id/settings_help_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/default_padding"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_help"
+                        style="@style/pv.icon"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/settings_help"
+                        android:padding="@dimen/default_padding"
+                        style="@style/pv.text"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_next"
+                        style="@style/pv.icon"/>
+
+                </LinearLayout>
+
+                <View style="@style/divider"/>
+
+                <!-- About -->
+                <LinearLayout
+                    android:id="@+id/settings_about_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/default_padding"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_info"
+                        style="@style/pv.icon"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_about"
+                            android:padding="@dimen/default_padding"
+                            style="@style/pv.text"/>
+
+                        <ImageView
+                            android:id="@+id/settings_about_eyecatcher"
+                            android:visibility="gone"
+                            style="@style/pv.eyecatcher"/>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_next"
+                        style="@style/pv.icon"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 

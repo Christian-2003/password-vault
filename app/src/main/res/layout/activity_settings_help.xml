@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.activities.SettingsHelpActivity">
+
+    <!-- Toolbar for the activity -->
+    <com.google.android.material.appbar.AppBarLayout
+        style="@style/pv.layout.app_bar">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            app:title="@string/settings_help"
+            style="@style/pv.layout.app_bar.collapsing_toolbar">
+
+            <androidx.appcompat.widget.Toolbar
+                app:contentInsetStart="?attr/actionBarSize"
+                style="@style/pv.layout.app_bar.collapsing_toolbar.toolbar"/>
+
+            <FrameLayout
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="start|bottom">
+
+                <ImageButton
+                    android:id="@+id/button_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_back"
+                    android:layout_gravity="center"
+                    style="@style/pv.button.image_button.app_bar"/>
+
+            </FrameLayout>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+
+    <!-- Content for the activity -->
+    <androidx.core.widget.NestedScrollView
+        style="@style/pv.layout.nested_scroll_view">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                style="@style/pv.container">
+
+                <LinearLayout
+                    android:id="@+id/settings_help_autofill_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="@dimen/default_padding"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/default_padding"
+                        android:text="@string/settings_help_autofill_configuration"
+                        style="@style/pv.text"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_next"
+                        style="@style/pv.icon"/>
+
+                </LinearLayout>
+
+                <View style="@style/divider"/>
+
+                <LinearLayout
+                    android:id="@+id/settings_help_placeholder_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/default_padding"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/default_padding"
+                        android:text="Placeholder"
+                        style="@style/pv.text"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_next"
+                        style="@style/pv.icon"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
