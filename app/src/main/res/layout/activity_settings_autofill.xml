@@ -129,6 +129,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:layout_gravity="center"
                             android:orientation="vertical">
 
                             <TextView
@@ -150,6 +151,40 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/settings_autofill_config_cache_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <View style="@style/divider"/>
+
+                        <LinearLayout
+                            android:id="@+id/settings_autofill_config_cache_delete_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackground"
+                            android:padding="@dimen/default_padding"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/settings_autofill_cache_delete"
+                                style="@style/pv.text"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/settings_autofill_cache_delete_info"
+                                style="@style/pv.text.variant"/>
+
+                        </LinearLayout>
 
                     </LinearLayout>
 

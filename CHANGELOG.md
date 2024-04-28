@@ -2,6 +2,15 @@
 
 # Changelog
 
+## 3.5.3 (XXXX-XX-XX)
+###### Release Highlights
+n/a
+
+###### Features
+* Added feature to delete all autofill caches.
+
+<br/>
+
 ## 3.5.2 (2024-04-26)
 ###### Release Highlights
 General improvements and bugfixes. Completely changed HTML exports and introduced weak passwords to password security analysis.

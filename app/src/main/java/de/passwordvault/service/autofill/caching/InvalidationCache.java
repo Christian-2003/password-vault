@@ -18,7 +18,7 @@ import de.passwordvault.App;
  * ---------<br/>
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.5.3
  */
 public class InvalidationCache extends Cache {
 
@@ -27,12 +27,17 @@ public class InvalidationCache extends Cache {
      */
     private static InvalidationCache singleton;
 
+    /**
+     * Field stores the name of the cache.
+     */
+    private static final String CACHE_NAME = "autofill_invalidation.cache";
+
 
     /**
      * Constructor instantiates a new invalidation cache.
      */
     private InvalidationCache() {
-        super("autofill_invalidation.cache");
+        super(CACHE_NAME);
     }
 
 
@@ -67,6 +72,16 @@ public class InvalidationCache extends Cache {
     @Override
     protected CacheItem generateCacheItem(String s) {
         return new InvalidationCacheItem(s);
+    }
+
+
+    /**
+     * Method permanently deletes the cache.
+     *
+     * @return  Whether the cache was deleted successfully.
+     */
+    public static boolean deleteCache() {
+        return deleteCache(CACHE_NAME);
     }
 
 }

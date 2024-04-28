@@ -1,9 +1,5 @@
 package de.passwordvault.service.autofill.caching;
 
-import java.io.File;
-
-import de.passwordvault.App;
-
 
 /**
  * Class models the content cache which stores the username and password for an instance of
@@ -19,7 +15,7 @@ import de.passwordvault.App;
  * ---------<br/>
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.5.3
  */
 public class ContentCache extends Cache {
 
@@ -28,12 +24,17 @@ public class ContentCache extends Cache {
      */
     private static ContentCache singleton;
 
+    /**
+     * Field stores the name of the cache.
+     */
+    private static final String CACHE_NAME = "autofill_content.cache";
+
 
     /**
      * Constructor instantiates a new content cache.
      */
     private ContentCache() {
-        super("autofill_content.cache");
+        super(CACHE_NAME);
     }
 
 
@@ -59,6 +60,16 @@ public class ContentCache extends Cache {
     @Override
     protected CacheItem generateCacheItem(String s) {
         return new ContentCacheItem(s);
+    }
+
+
+    /**
+     * Method permanently deletes the cache.
+     *
+     * @return  Whether the cache was deleted successfully.
+     */
+    public static boolean deleteCache() {
+        return deleteCache(CACHE_NAME);
     }
 
 }

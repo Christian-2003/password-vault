@@ -15,7 +15,7 @@ import de.passwordvault.App;
  * Class models a cache. Specific types of caches must extend this class.
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.5.3
  */
 public abstract class Cache {
 
@@ -207,6 +207,26 @@ public abstract class Cache {
             e.printStackTrace();
         }
         Log.d(TAG, "Finished reading cache " + filename);
+    }
+
+
+    /**
+     * Method deletes the file of the cache whose name is passed as argument.
+     *
+     * @param filename  Name of the cache file to delete.
+     * @return          Whether the cache file was deleted successfully.
+     */
+    protected static boolean deleteCache(String filename) {
+        File file = new File(App.getContext().getFilesDir(), filename);
+        if (file.exists()) {
+            try {
+                return file.delete();
+            }
+            catch (SecurityException e) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

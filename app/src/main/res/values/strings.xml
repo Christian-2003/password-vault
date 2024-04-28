@@ -77,6 +77,10 @@
     <string name="settings_autofill_cache">Cache</string>
     <string name="settings_autofill_cache_toggle">Use caching</string>
     <string name="settings_autofill_cache_toggle_info">Accelerate autofill by caching data</string>
+    <string name="settings_autofill_cache_delete">Clear cache</string>
+    <string name="settings_autofill_cache_delete_info">Clear all autofill caches if required</string>
+    <string name="settings_autofill_cache_delete_success">Deleted all caches</string>
+    <string name="settings_autofill_cache_delete_error">Could not delete all caches</string>
     <string name="settings_autofill_authentication">Authentication</string>
     <string name="settings_autofill_authentication_toggle">Require authentication</string>
     <string name="settings_autofill_authentication_toggle_info">Increase security by requiring authentication prior to accessing data</string>

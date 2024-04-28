@@ -20,6 +20,9 @@ import de.passwordvault.model.security.authentication.AuthenticationCallback;
 import de.passwordvault.model.security.authentication.AuthenticationFailure;
 import de.passwordvault.model.security.authentication.Authenticator;
 import de.passwordvault.model.storage.Configuration;
+import de.passwordvault.service.autofill.caching.ContentCache;
+import de.passwordvault.service.autofill.caching.InvalidationCache;
+import de.passwordvault.service.autofill.caching.MappingCache;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.fragments.SettingsViewModel;
 
@@ -28,7 +31,7 @@ import de.passwordvault.viewmodel.fragments.SettingsViewModel;
  * Class implements an activity which allows the user to configure the autofill service.
  *
  * @author  Christian-2003
- * @version 3.5.1
+ * @version 3.5.3
  */
 public class SettingsAutofillActivity extends PasswordVaultBaseActivity implements AuthenticationCallback, CompoundButton.OnCheckedChangeListener {
 
@@ -128,6 +131,10 @@ public class SettingsAutofillActivity extends PasswordVaultBaseActivity implemen
             }
             authenticator.authenticate(this);
         }
+        else if (button.getId() == R.id.settings_autofill_cache_toggle_switch) {
+            Configuration.setAutofillCaching(checked);
+            findViewById(R.id.settings_autofill_config_cache_container).setVisibility(checked ? View.VISIBLE : View.GONE);
+        }
     }
 
 
@@ -153,7 +160,11 @@ public class SettingsAutofillActivity extends PasswordVaultBaseActivity implemen
         //Caching:
         MaterialSwitch cacheSwitch = findViewById(R.id.settings_autofill_cache_toggle_switch);
         cacheSwitch.setChecked(Configuration.useAutofillCaching());
-        cacheSwitch.setOnCheckedChangeListener((view, checked) -> Configuration.setAutofillCaching(checked));
+        cacheSwitch.setOnCheckedChangeListener(this);
+
+        //Clear cache:
+        findViewById(R.id.settings_autofill_config_cache_container).setVisibility(Configuration.useAutofillCaching() ? View.VISIBLE : View.GONE);
+        findViewById(R.id.settings_autofill_config_cache_delete_container).setOnClickListener(view -> clearAutofillCaches());
 
         //Authentication:
         findViewById(R.id.settings_autofill_authentication_container).setVisibility(viewModel.useAppLogin() ? View.VISIBLE : View.GONE);
@@ -173,6 +184,26 @@ public class SettingsAutofillActivity extends PasswordVaultBaseActivity implemen
         }
         catch (Exception e) {
             Toast.makeText(this, R.string.settings_autofill_toggle_error, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    /**
+     * Method deletes all autofull caches.
+     */
+    private void clearAutofillCaches() {
+        boolean errorOccurred = !MappingCache.deleteCache();
+        if (!ContentCache.deleteCache()) {
+            errorOccurred = true;
+        }
+        if (!InvalidationCache.deleteCache()) {
+            errorOccurred = true;
+        }
+        if (errorOccurred) {
+            Toast.makeText(this, getString(R.string.settings_autofill_cache_delete_error), Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(this, getString(R.string.settings_autofill_cache_delete_success), Toast.LENGTH_SHORT).show();
         }
     }
 

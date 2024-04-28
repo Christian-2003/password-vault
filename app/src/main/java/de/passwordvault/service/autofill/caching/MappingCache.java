@@ -1,8 +1,5 @@
 package de.passwordvault.service.autofill.caching;
 
-import java.io.File;
-import de.passwordvault.App;
-
 
 /**
  * Class models the mapping cache which stores the mapping for package names (for any installed app)
@@ -16,6 +13,9 @@ import de.passwordvault.App;
  *     ...<br/>
  * </code>
  * ---------<br/>
+ *
+ * @author  Christian-2003
+ * @version 3.5.3
  */
 public class MappingCache extends Cache {
 
@@ -23,6 +23,11 @@ public class MappingCache extends Cache {
      * Field stores the singleton-instance of the mapping cache.
      */
     private static MappingCache singleton;
+
+    /**
+     * Field stores the name of the cache.
+     */
+    private static final String CACHE_NAME = "autofill_mapping.cache";
 
 
     /**
@@ -55,6 +60,16 @@ public class MappingCache extends Cache {
     @Override
     protected CacheItem generateCacheItem(String s) {
         return new MappingCacheItem(s);
+    }
+
+
+    /**
+     * Method permanently deletes the cache.
+     *
+     * @return  Whether the cache was deleted successfully.
+     */
+    public static boolean deleteCache() {
+        return deleteCache(CACHE_NAME);
     }
 
 }
