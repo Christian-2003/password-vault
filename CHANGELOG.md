@@ -8,6 +8,7 @@ n/a
 
 ###### Features
 * Added feature to delete all autofill caches.
+* Changes to `HomeFragment`.
 
 <br/>
 

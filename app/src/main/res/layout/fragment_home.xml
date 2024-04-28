@@ -37,7 +37,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/default_padding"
                 android:orientation="vertical"
                 style="@style/pv.container">
 
@@ -46,30 +45,98 @@
                     android:layout_height="wrap_content"
                     android:text="@string/app_description"
                     android:layout_marginBottom="@dimen/default_margin"
+                    android:padding="@dimen/default_padding"
                     style="@style/pv.text"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/home_show_accounts_button"
+                    <View style="@style/divider"/>
+
+                    <LinearLayout
+                        android:id="@+id/home_show_accounts_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="@dimen/default_margin"
-                        android:text="@string/home_button_view_accounts"
-                        app:icon="@drawable/ic_list"/>
+                        android:padding="@dimen/default_padding"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground"
+                        android:orientation="horizontal">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/home_add_account_button"
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_list"
+                            style="@style/pv.icon"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/home_button_view_accounts"
+                            android:padding="@dimen/default_padding"
+                            style="@style/pv.text"/>
+
+                    </LinearLayout>
+
+
+                    <View style="@style/divider"/>
+
+                    <LinearLayout
+                        android:id="@+id/home_add_account_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="@dimen/default_margin"
-                        android:text="@string/home_button_add_account"
-                        app:icon="@drawable/ic_add"/>
+                        android:padding="@dimen/default_padding"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_add"
+                            style="@style/pv.icon"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/home_button_add_account"
+                            android:padding="@dimen/default_padding"
+                            style="@style/pv.text"/>
+
+                    </LinearLayout>
+
+                    <View style="@style/divider"/>
+
+                    <LinearLayout
+                        android:id="@+id/home_analyze_passwords_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/default_padding"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_lock"
+                            style="@style/pv.icon"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/home_button_password_security"
+                            android:padding="@dimen/default_padding"
+                            style="@style/pv.text"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

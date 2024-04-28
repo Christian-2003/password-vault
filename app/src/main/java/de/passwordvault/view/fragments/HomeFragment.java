@@ -1,5 +1,6 @@
 package de.passwordvault.view.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -16,6 +17,7 @@ import de.passwordvault.model.Observer;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.view.activities.MainActivity;
+import de.passwordvault.view.activities.PasswordAnalysisActivity;
 import de.passwordvault.view.utils.adapters.EntriesRecyclerViewAdapter;
 import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
 
@@ -25,7 +27,7 @@ import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
  * used within the {@linkplain MainActivity}.
  *
  * @author  Christian-2003
- * @version 3.5.1
+ * @version 3.5.3
  */
 public class HomeFragment extends PasswordVaultBaseFragment implements Observer<ArrayList<EntryAbbreviated>> {
 
@@ -64,10 +66,10 @@ public class HomeFragment extends PasswordVaultBaseFragment implements Observer<
         EntryManager.getInstance().addObserver(this);
         view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        Button addAccountButton = view.findViewById(R.id.home_add_account_button);
+        View addAccountButton = view.findViewById(R.id.home_add_account_container);
         addAccountButton.setOnClickListener(view -> ((MainActivity)requireActivity()).addNewEntry());
 
-        Button viewAccountsButton = view.findViewById(R.id.home_show_accounts_button);
+        View viewAccountsButton = view.findViewById(R.id.home_show_accounts_container);
         viewAccountsButton.setOnClickListener(view -> {
             FragmentActivity fragmentActivity = HomeFragment.this.getActivity();
             if (fragmentActivity instanceof MainActivity) {
@@ -78,6 +80,9 @@ public class HomeFragment extends PasswordVaultBaseFragment implements Observer<
                 Toast.makeText(getContext(), "Error, AppCompatActivity not MainActivity class.", Toast.LENGTH_SHORT).show();
             }
         });
+
+        View analyzePasswordsButton = view.findViewById(R.id.home_analyze_passwords_container);
+        analyzePasswordsButton.setOnClickListener(view -> startActivity(new Intent(requireActivity(), PasswordAnalysisActivity.class)));
 
         adapter = new EntriesRecyclerViewAdapter(EntryManager.getInstance().getMostRecentlyEditedEntries(), (MainActivity)requireActivity());
         RecyclerView recyclerView = view.findViewById(R.id.home_recently_changed_container);
