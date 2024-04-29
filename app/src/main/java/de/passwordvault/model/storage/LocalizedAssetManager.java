@@ -110,7 +110,7 @@ public class LocalizedAssetManager {
             if (!usedLocale.equals(DEFAULT_LOCALE)) {
                 //Try to load file with default locale:
                 usedLocale = DEFAULT_LOCALE;
-                fileNotFound = containsFile(filename, usedLocale);
+                fileNotFound = !containsFile(filename, usedLocale);
             }
             if (fileNotFound) {
                 Log.e(TAG, "File '" + filename + "' does not exist within the folder '" + folder + "' with locale + '" + usedLocale + "'.");

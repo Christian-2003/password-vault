@@ -29,7 +29,7 @@ public class SettingsHelpActivity extends PasswordVaultBaseActivity {
         findViewById(R.id.button_back).setOnClickListener(view -> finish());
 
         //Help pages:
-        findViewById(R.id.settings_help_autofill_container).setOnClickListener(view -> showHelpPage("quickstart.html"));
+        findViewById(R.id.settings_help_autofill_container).setOnClickListener(view -> showHelpPage("configure_autofill.html"));
     }
 
 
