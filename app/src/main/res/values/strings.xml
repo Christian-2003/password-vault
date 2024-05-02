@@ -88,6 +88,7 @@
 
     <string name="settings_help">Help</string>
     <string name="settings_help_autofill_configuration">Configure autofill</string>
+    <string name="settings_help_login_configuration">Configure app login</string>
 
     <string name="settings_about">About</string>
     <string name="settings_about_usage">Usage</string>

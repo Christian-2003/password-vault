@@ -57,6 +57,36 @@
                 style="@style/pv.container">
 
                 <LinearLayout
+                    android:id="@+id/settings_help_login_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="@dimen/default_padding"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/default_padding"
+                        android:text="@string/settings_help_login_configuration"
+                        style="@style/pv.text"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_next"
+                        style="@style/pv.icon"/>
+
+                </LinearLayout>
+
+                <View style="@style/divider"/>
+
+                <LinearLayout
                     android:id="@+id/settings_help_autofill_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -73,36 +103,6 @@
                         android:layout_gravity="center"
                         android:padding="@dimen/default_padding"
                         android:text="@string/settings_help_autofill_configuration"
-                        style="@style/pv.text"/>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_next"
-                        style="@style/pv.icon"/>
-
-                </LinearLayout>
-
-                <View style="@style/divider"/>
-
-                <LinearLayout
-                    android:id="@+id/settings_help_placeholder_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:padding="@dimen/default_padding"
-                        android:text="Placeholder"
                         style="@style/pv.text"/>
 
                     <ImageView

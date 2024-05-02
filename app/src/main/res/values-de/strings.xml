@@ -87,6 +87,7 @@
 
     <string name="settings_help">Hilfe</string>
     <string name="settings_help_autofill_configuration">Automatisches Ausfüllen konfigurieren</string>
+    <string name="settings_help_login_configuration">App-Login konfigurieren</string>
 
     <string name="settings_about">Über</string>
     <string name="settings_about_usage">Nutzungsbedingungen</string>
