@@ -14,6 +14,7 @@ n/a
 * Added `LocalizedAssetManager` to load localized assets.
 * Added help to settings.
 * Added help page for configuring autofill service.
+* Added help page for configuring the app login.
 
 <br/>
 
