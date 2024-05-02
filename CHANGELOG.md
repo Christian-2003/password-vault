@@ -13,6 +13,7 @@ n/a
 * Changed some drawable icons for their respective versions with rounded corners.
 * Added `LocalizedAssetManager` to load localized assets.
 * Added help to settings.
+* Added help page for configuring autofill service.
 
 <br/>
 
