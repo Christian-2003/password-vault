@@ -1,14 +1,46 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
 <head>
-    <title>Quickstart</title>
+    <title>Configure Autofill</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../res/styles/default.css">
 </head>
 
 <body>
-<h1>Autostart Service</h1>
-<p>This service</p>
+<h1>Autofill Service</h1>
+<p>Increase your productivity by allowing Password Vault to automatically fill login data into other
+apps. This page contains information on how to configure this service.</p>
+
+<h2>Enable Autofill Service</h2>
+<p>In order to enable the autofill service, go to <b>Settings > Autofill</b>. If the autofill service
+is not yet enabled, the page will display a button <b>Enable autofill</b>:</p>
+<img src="../res/img/configure_autofill_enable_settings.png"/>
+<p>Click this button. This opens your Android device's settings. Within the settings, select Password
+Vault.</p>
+<img src="../res/img/configure_autofill_enable_system.png"/>
+<p>Afterwards, Password Vault is selected as autofill service.</p>
+
+<h2>Prepare Accounts for Autofill</h2>
+<p>In order to autofill, Password Vault needs to know which account to use for which of your installed
+apps. This can be configured when you edit the respective account.</p>
+<p>Click on the <b>edit</b>-button to select an installed app:</p>
+<img src="../res/img/configure_autofill_select_app.png"/>
+<p>Next, switch to <b>Installed apps</b> and select the apps which you want to autofill. You can
+select multiple apps if you want.</p>
+<img src="../res/img/configure_autofill_select_installed_app.png"/>
+<p>Afterwards, close the page. And click the <b>save</b>-button.</p>
+<img src="../res/img/configure_autofill_select_save.png"/>
+
+<h2>Which Details are Selected</h2>
+Usually, you need some sort of username and a password to login to an app. From all provided details,
+Password Vault automatically selects a suitable username and password to autofill. However, if you
+want to use a specific detail as username or password, you can select the respective option
+when editing the detail:
+<img src="../res/img/configure_autofill_detail_define.png"/>
+<p>A username selected in this manner is indicated through a small e-mail icon. A password selected
+this way is indicated through a small password icon.</p>
+<p>If you select multiple details as username or password, the first one will be used for autofill.</p>
 </body>
 </html>

@@ -1,0 +1,14 @@
+/*
+This file contains the default style for embedded help pages in Password Vault.
+*/
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+img {
+    max-width: min(80%, 256px);
+    height: auto;
+    align-self: center;
+}
