@@ -1,11 +1,11 @@
 <img src="docs/img/icon.png" height="150" align="right">
 
-# PasswordVault
+# Password Vault
 ![GitHub](https://img.shields.io/github/license/Christian-2003/password-vault?color=red)
 ![GitHub](https://img.shields.io/github/issues/Christian-2003/password-vault?color=purple)
 ![GitHub](https://img.shields.io/github/repo-size/Christian-2003/password-vault?color=blue)
 
-PasswordVault allows you to securely manage your most sensitive account data on your Android device locally.
+Securely manage all your most sensitive account data locally on your Android device.
 
 <div align="center">
     <img src="docs/img/preview_1.png" height="390">
