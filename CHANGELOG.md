@@ -15,6 +15,7 @@ n/a
 * Added help to settings.
 * Added help page for configuring autofill service.
 * Added help page for configuring the app login.
+* Added help page for managing backups.
 
 <br/>
 

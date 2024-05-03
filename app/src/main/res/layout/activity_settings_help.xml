@@ -114,6 +114,36 @@
 
                 </LinearLayout>
 
+                <View style="@style/divider"/>
+
+                <LinearLayout
+                    android:id="@+id/settings_help_backup_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="@dimen/default_padding"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/default_padding"
+                        android:text="@string/settings_help_backup"
+                        style="@style/pv.text"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_next"
+                        style="@style/pv.icon"/>
+
+                </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>

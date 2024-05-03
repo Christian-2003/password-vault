@@ -7,6 +7,17 @@ body {
     flex-direction: column;
 }
 
+div.centered {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+}
+
+div.centered > img {
+    margin: 5px;
+}
+
 img {
     max-width: min(80%, 256px);
     height: auto;

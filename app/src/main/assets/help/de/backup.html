@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html lang="de">
+<head>
+    <title>Backup</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../res/styles/default.css">
+</head>
+
+<body>
+<h1>Backups</h1>
+<p>Erstelle Backups um Daten aus Password Vault zwischen Geräten zu transferieren oder um deine Daten
+    auf ein anderes Gerät zu verschieben, falls du dein Android-Smartphone verlierst.</p>
+
+<h3>Inhaltsverzeichnis</h3>
+<ol>
+    <li><a href="#create-backup">Backup erstellen</a></li>
+    <li><a href="#encrypt-backup">Backup verschlüsseln</a></li>
+    <li><a href="#restore-backup">Backup wiederherstellen</a></li>
+</ol>
+
+<h2 id="create-backup">Backup erstellen</h2>
+<p>Um ein Backup zu erstellen, gehe zu <b>Einstellungen > Daten</b> und klicke auf den <b>Backup
+    erstellen</b>-Knopf:</p>
+<img src="../res/img/backup_create_button.png"/>
+<p>Danach öffnet sich der Dateiexplorer deines Android-Smartphones. Navigiere in den Ordner, in welchem
+    du das Backup speichern möchtest und klicke auf den <b>Diesen Ordner verwenden</b>-Knopf. Unter
+    Umständen musst du Password Vault genehmigen, die Inhalte dieses Ordners zu bearbeiten. Klicke in
+    diesem Fall dazu auf <b>Zulassen</b>:</p>
+<div class="centered">
+    <img src="../res/img/backup_create_folder.png"/>
+    <img src="../res/img/backup_create_permission.png"/>
+</div>
+<p>Danach öffnet sich ein Dialogfeld. Du kannst den Dateinamen für das Backup ändern. Klicke auf
+    <b>Okay</b> um das Backup zu speichern.</p>
+<img src="../res/img/backup_create_save.png"/>
+
+<h2 id="encrypt-backup">Backup verschlüsseln</h2>
+<p>Um ein Backup zu verschlüsseln, muss beim Erstellen des Backups ein Passwort angegeben werden:</p>
+<img src="../res/img/backup_encrypt_password.png"/>
+<p>Das Passwort wird verwendet, um das Backup zu verschlüsseln. Wenn das Backup wiederhergestellt
+    werden soll, muss dieses Passwort angegeben werden. Andernfalls kann das Backup nicht entschlüsselt
+    werden.</p>
+
+<h2 id="restore-backup">Backup wiederherstellen</h2>
+<p>Um ein Backup wiederherzustellen, gehe zu <b>Einstellungen > Daten</b> und klicke auf <b>Backup
+    wiederherstellen</b>:</p>
+<img src="../res/img/backup_restore_button.png"/>
+<p>Danach öffnet sich der Dateiexplorer deines Android-Gerätes. Navigiere zum Ordner, in welchem das
+    wiederherzustellende Backup gespeichert ist und klicke auf die entsprechende Datei:</p>
+<img src="../res/img/backup_restore_file.png"/>
+<p>Danach wird das Backup automatisch wiederhergestellt.</p>
+<p>Falls das Backup verschlüsselt war, öffnet sich ein Dialogfeld, in welchem das beim Erstellen
+    angegebene Passwort eingegeben werden muss. Gebe das Passwort ein und klicke <b>Okay</b>:</p>
+<img src="../res/img/backup_restore_password.png"/>
+<p>Wenn das eingegebene Passwort korrekt ist, dann wird das Backup entschlüsselt und wiederhergestellt.</p>
+</body>
+</html>

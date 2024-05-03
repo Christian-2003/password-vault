@@ -31,6 +31,7 @@ public class SettingsHelpActivity extends PasswordVaultBaseActivity {
         //Help pages:
         findViewById(R.id.settings_help_login_container).setOnClickListener(view -> showHelpPage("configure_login.html"));
         findViewById(R.id.settings_help_autofill_container).setOnClickListener(view -> showHelpPage("configure_autofill.html"));
+        findViewById(R.id.settings_help_backup_container).setOnClickListener(view -> showHelpPage("backup.html"));
     }
 
 
