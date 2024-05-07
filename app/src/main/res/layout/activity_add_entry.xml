@@ -19,7 +19,7 @@
 
             <androidx.appcompat.widget.Toolbar
                 app:contentInsetStart="?attr/actionBarSize"
-                app:contentInsetEnd="@dimen/image_button_width_2"
+                app:contentInsetEnd="@dimen/image_button_width"
                 style="@style/pv.layout.app_bar.collapsing_toolbar.toolbar"/>
 
             <FrameLayout
@@ -37,20 +37,13 @@
 
             </FrameLayout>
 
-            <FrameLayout
-                android:layout_width="@dimen/image_button_width"
+            <ImageButton
+                android:id="@+id/button_save"
+                android:layout_width="wrap_content"
                 android:layout_height="?attr/actionBarSize"
-                android:layout_gravity="end|bottom">
-
-                <ImageButton
-                    android:id="@+id/button_save"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_save"
-                    style="@style/pv.button.image_button.app_bar"/>
-
-            </FrameLayout>
+                android:layout_gravity="end|bottom"
+                android:src="@drawable/ic_save"
+                style="@style/pv.button.image_button.app_bar"/>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

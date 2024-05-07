@@ -17,6 +17,7 @@
             style="@style/pv.layout.app_bar.collapsing_toolbar">
 
             <androidx.appcompat.widget.Toolbar
+                app:contentInsetEnd="@dimen/image_button_width_2"
                 style="@style/pv.layout.app_bar.collapsing_toolbar.toolbar"/>
 
             <FrameLayout

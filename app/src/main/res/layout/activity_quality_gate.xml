@@ -19,6 +19,7 @@
 
             <androidx.appcompat.widget.Toolbar
                 app:contentInsetStart="?attr/actionBarSize"
+                app:contentInsetEnd="@dimen/image_button_width_2"
                 style="@style/pv.layout.app_bar.collapsing_toolbar.toolbar"/>
 
             <FrameLayout
