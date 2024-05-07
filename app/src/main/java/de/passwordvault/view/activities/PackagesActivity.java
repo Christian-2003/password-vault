@@ -141,6 +141,9 @@ public class PackagesActivity extends PasswordVaultBaseActivity {
             PackagesListFragment listFragment = (PackagesListFragment)fragment;
             listFragment.searchButtonClicked();
         }
+        else {
+            Log.e("PA", "No instance of PackagesListFragment");
+        }
     }
 
 }

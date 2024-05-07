@@ -18,11 +18,9 @@
             style="@style/pv.layout.app_bar.collapsing_toolbar">
 
             <androidx.appcompat.widget.Toolbar
-                style="@style/pv.layout.app_bar.collapsing_toolbar.toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="72dp"
                 app:contentInsetEnd="?attr/actionBarSize"
-                app:contentInsetStart="?attr/actionBarSize" />
+                app:contentInsetStart="?attr/actionBarSize"
+                style="@style/pv.layout.app_bar.collapsing_toolbar.toolbar"/>
 
             <FrameLayout
                 android:layout_width="?attr/actionBarSize"

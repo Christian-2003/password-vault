@@ -7,7 +7,7 @@ This file contains the default style for embedded help pages in Password Vault.
 /* Variables for the style */
 :root {
     --pv-primary: #1D7874;
-    --pv-background: #F6F6F8;
+    --pv-background: #FFFFFF; /* Background is white to hide "transparent" areas of JPG images */
     --pv-container: #FCFCFE;
     --pv-container-highlight: #BFE3E2;
     --pv-container-detail: #F2F2F2;
