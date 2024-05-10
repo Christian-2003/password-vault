@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -140,6 +139,9 @@ public class PackagesActivity extends PasswordVaultBaseActivity {
         if (fragment instanceof PackagesListFragment) {
             PackagesListFragment listFragment = (PackagesListFragment)fragment;
             listFragment.searchButtonClicked();
+        }
+        else if (fragment == null) {
+            Log.e("PA", "Instance null");
         }
         else {
             Log.e("PA", "No instance of PackagesListFragment");

@@ -18,6 +18,7 @@ n/a
 * Added help page for managing backups.
 * Fixed a bug where the title within the app bar of the PackagesActivity was not correctly aligned.
 * Improvements to content insets and image buttons of toolbars.
+* Fixed a bug where cancelling app login configuration did not update the corresponding switch.
 
 <br/>
 

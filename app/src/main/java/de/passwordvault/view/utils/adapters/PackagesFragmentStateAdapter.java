@@ -26,7 +26,7 @@ public class PackagesFragmentStateAdapter extends FragmentStateAdapter {
     /**
      * Attribute stores the fragments that are displayed by the view pager of this adapter.
      */
-    private Fragment[] fragments;
+    private final Fragment[] fragments;
 
 
     /**

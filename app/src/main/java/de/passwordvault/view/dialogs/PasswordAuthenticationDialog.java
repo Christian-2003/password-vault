@@ -2,6 +2,7 @@ package de.passwordvault.view.dialogs;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -21,7 +22,7 @@ import de.passwordvault.viewmodel.dialogs.PasswordAuthenticationViewModel;
  * This dialog is used by {@link de.passwordvault.model.security.authentication.Authenticator}.
  *
  * @author  Christian-2003
- * @version 3.5.1
+ * @version 3.5.3
  */
 public class PasswordAuthenticationDialog extends DialogFragment {
 
@@ -120,6 +121,19 @@ public class PasswordAuthenticationDialog extends DialogFragment {
             dismiss();
             viewModel.getCallbackListener().onNegativeCallback(PasswordAuthenticationDialog.this);
         });
+    }
+
+
+    /**
+     * Method is called whenever the dialog execution is cancelled (e.g. through clicking out of
+     * bounds of the dialog window).
+     *
+     * @param dialog    Dialog that is cancelled.
+     */
+    @Override
+    public void onCancel(@NonNull DialogInterface dialog) {
+        viewModel.getCallbackListener().onNegativeCallback(this);
+        super.onCancel(dialog);
     }
 
 }
