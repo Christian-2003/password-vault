@@ -2,9 +2,9 @@
 
 # Changelog
 
-## 3.5.3 (XXXX-XX-XX)
+## 3.5.3 (2024-05-10)
 ###### Release Highlights
-n/a
+Added help pages to the app, changed home page and fixed some bugs.
 
 ###### Features
 * Added feature to delete all autofill caches.
