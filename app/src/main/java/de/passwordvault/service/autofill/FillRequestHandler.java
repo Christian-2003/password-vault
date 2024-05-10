@@ -36,7 +36,7 @@ import de.passwordvault.view.activities.AutofillAuthenticationActivity;
  * Class models a handler which can handle an autofill request to fill in some remote view.
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.5.4
  */
 public class FillRequestHandler {
 
@@ -269,7 +269,7 @@ public class FillRequestHandler {
         if (value == null) {
             throw new NullPointerException();
         }
-        RemoteViews presentation = new RemoteViews(autofillService.getPackageName(), R.layout.list_item_autofill);
+        RemoteViews presentation = new RemoteViews(autofillService.getPackageName(), R.layout.autofill_item_presentation);
         Resources resources = autofillService.getBaseContext().getResources();
         if (password) {
             presentation.setTextViewText(R.id.list_item_autofill_text, resources.getString(R.string.autofill_password_presentation).replace("{value}", value));

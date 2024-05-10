@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<!--
-View resembles a horizontal divider. This view can be programmatically inflated
-through View.inflate(<context>, R.layout.divider_horizontal, <parentContainer>);
--->
-<View
-    style="@style/divider"/>

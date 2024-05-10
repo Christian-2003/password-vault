@@ -73,7 +73,7 @@ public class EnterPasswordDialog extends DialogFragment {
             throw new ClassCastException(e.getMessage());
         }
 
-        view = requireActivity().getLayoutInflater().inflate(R.layout.enter_password_dialog, null);
+        view = requireActivity().getLayoutInflater().inflate(R.layout.dialog_enter_password, null);
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity());
         builder.setTitle(viewModel.getTitle());

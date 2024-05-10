@@ -9,6 +9,8 @@ n/a
 ###### Features
 * Fixed a bug where autofill-authentication is always required, even if app login is deactivated or not configured.
 * Fixed a bug where the autofill suggestion only displayed "Password for" if no username was provided.
+* Refactored layout files that did not conform the naming conventions.
+* Fixed color for fingerprint in autofill authentication presentation.
 
 <br/>
 
