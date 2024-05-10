@@ -52,7 +52,9 @@ LocalizedAssetManager assetManager = new LocalizedAssetManager("help", Locale.ge
 String uri = assetManager.getFileUri("backup.html");
 ```
 
-This returns a file-URI to the asset file that shall be loaded. As an example, this URI could be passed to a web view rendering the HTML document:
+This returns a file-URI to the asset file that shall be loaded. From the [example](#example) above, this would return `file:///android_asset/help/en/backup.html` or `file:///android_asset/help/de/backup.html`, depending on the app locale.
+
+As an example, this URI could be passed to a web view rendering the HTML document:
 
 ```Java
 LocalizedAssetManager assetManager = new LocalizedAssetManager("help", Locale.getDefault());
