@@ -9,6 +9,17 @@ import de.passwordvault.model.storage.LocalizedAssetManager;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 
 
+/**
+ * Class implements an activity that can display a localized help page within a {@link WebView}.
+ *
+ * The filename of the asset that shall be displayed needs to be passed as extra with key
+ * {@link #KEY_PAGE}.
+ *
+ * For further information about localized assets, see {@link LocalizedAssetManager}.
+ *
+ * @author  Christian-2003
+ * @version 3.5.3
+ */
 public class HelpActivity extends PasswordVaultBaseActivity {
 
     /**
@@ -17,6 +28,11 @@ public class HelpActivity extends PasswordVaultBaseActivity {
     public static final String KEY_PAGE = "filename";
 
 
+    /**
+     * Method is called whenever the activity is created.
+     *
+     * @param savedInstanceState    Previously saved state of the instance.
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

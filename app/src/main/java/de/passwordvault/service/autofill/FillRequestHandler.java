@@ -17,16 +17,10 @@ import android.view.autofill.AutofillId;
 import android.view.autofill.AutofillValue;
 import android.widget.RemoteViews;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import de.passwordvault.R;
-import de.passwordvault.model.detail.Detail;
-import de.passwordvault.model.detail.DetailType;
-import de.passwordvault.model.entry.EntryAbbreviated;
-import de.passwordvault.model.entry.EntryExtended;
-import de.passwordvault.model.packages.Package;
+import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.storage.Configuration;
-import de.passwordvault.model.storage.app.StorageManager;
 import de.passwordvault.service.autofill.caching.ContentCache;
 import de.passwordvault.service.autofill.caching.ContentCacheItem;
 import de.passwordvault.service.autofill.caching.InvalidationCache;
@@ -216,15 +210,15 @@ public class FillRequestHandler {
             }
             Dataset.Builder datasetBuilder = new Dataset.Builder();
             if (structure.getUsernameId() != null && data.getUsername() != null) {
-                datasetBuilder.setValue(structure.getUsernameId(), AutofillValue.forText(data.getUsername()), generatePresentation(data.getUsername(), false));
+                datasetBuilder.setValue(structure.getUsernameId(), AutofillValue.forText(data.getUsername()), generatePresentation(data.getUsername() == null || data.getUsername().isEmpty() ? data.getEntryName() : data.getUsername(), false));
             }
             if (structure.getPasswordId() != null && data.getPassword() != null) {
-                datasetBuilder.setValue(structure.getPasswordId(), AutofillValue.forText(data.getPassword()), generatePresentation(data.getUsername() == null ? data.getEntryName() : data.getUsername(), true));
+                datasetBuilder.setValue(structure.getPasswordId(), AutofillValue.forText(data.getPassword()), generatePresentation(data.getUsername() == null || data.getUsername().isEmpty() ? data.getEntryName() : data.getUsername(), true));
             }
             datasets.add(datasetBuilder.build());
         }
 
-        if (Configuration.useAutofillAuthentication()) {
+        if (Configuration.useAutofillAuthentication() && Account.getInstance().hasPassword()) {
             //Prompt the user to authenticate:
             Intent authenticationIntent = new Intent(autofillService, AutofillAuthenticationActivity.class);
             authenticationIntent.putExtra(AutofillAuthenticationActivity.KEY_DATASETS, datasets);

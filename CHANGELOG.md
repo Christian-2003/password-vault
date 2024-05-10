@@ -7,7 +7,8 @@
 n/a
 
 ###### Features
-* n/a
+* Fixed a bug where autofill-authentication is always required, even if app login is deactivated or not configured.
+* Fixed a bug where the autofill suggestion only displayed "Password for" if no username was provided.
 
 <br/>
 
