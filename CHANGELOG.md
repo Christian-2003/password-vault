@@ -2,6 +2,15 @@
 
 # Changelog
 
+## 3.5.4 (XXXX-XX-XX)
+###### Release Highlights
+n/a
+
+###### Features
+* n/a
+
+<br/>
+
 ## 3.5.3 (2024-05-10)
 ###### Release Highlights
 Added help pages to the app, changed home page and fixed some bugs.
