@@ -13,6 +13,7 @@ import android.service.autofill.FillContext;
 import android.service.autofill.FillRequest;
 import android.service.autofill.FillResponse;
 import android.service.autofill.SaveInfo;
+import android.util.Log;
 import android.view.View;
 import android.view.autofill.AutofillId;
 import android.view.autofill.AutofillValue;
@@ -151,6 +152,7 @@ public class FillRequestHandler {
             callback.onSuccess(response);
         }
         catch (Exception e) {
+            Log.d("FillRequest", "Request cancelled: " + e.getMessage());
             callback.onFailure(e.getMessage());
         }
     }
@@ -177,6 +179,7 @@ public class FillRequestHandler {
      */
     private FillResponse generateBuildResponse(ArrayList<UserData> userData, ParsedStructure structure) {
         FillResponse.Builder responseBuilder = new FillResponse.Builder();
+        responseBuilder.setSaveInfo(generateSaveInfo(structure));
         if (userData.isEmpty()) {
             return responseBuilder.build();
         }
@@ -230,8 +233,6 @@ public class FillRequestHandler {
             }
         }
 
-        responseBuilder.setSaveInfo(generateSaveInfo(structure));
-
         return responseBuilder.build();
     }
 
@@ -245,20 +246,23 @@ public class FillRequestHandler {
      */
     private SaveInfo generateSaveInfo(ParsedStructure structure) {
         //Get the save data types to save:
-        int type = -1;
+        int type = 0;
+        boolean typeDefined = false;
         if (structure.getPasswordHint().equals(View.AUTOFILL_HINT_PASSWORD)) {
             type = SaveInfo.SAVE_DATA_TYPE_PASSWORD;
+            typeDefined = true;
         }
         if (structure.getUsernameHint().equals(View.AUTOFILL_HINT_USERNAME)) {
-            if (type == -1) {
+            if (!typeDefined) {
                 type = SaveInfo.SAVE_DATA_TYPE_USERNAME;
+                typeDefined = true;
             }
             else {
                 type = type | SaveInfo.SAVE_DATA_TYPE_USERNAME;
             }
         }
         if (structure.getUsernameHint().equals(View.AUTOFILL_HINT_EMAIL_ADDRESS)) {
-            if (type == -1) {
+            if (!typeDefined) {
                 type = SaveInfo.SAVE_DATA_TYPE_EMAIL_ADDRESS;
             }
             else {

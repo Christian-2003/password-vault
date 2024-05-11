@@ -4,6 +4,7 @@ import android.app.assist.AssistStructure;
 import android.service.autofill.FillContext;
 import android.service.autofill.SaveCallback;
 import android.service.autofill.SaveRequest;
+import android.util.Log;
 import android.view.View;
 import androidx.annotation.NonNull;
 import java.util.HashMap;
@@ -38,6 +39,7 @@ public class SaveRequestHandler {
      * @param callback  Callback for the request.
      */
     public void onSaveRequest(@NonNull SaveRequest request, @NonNull SaveCallback callback) {
+        Log.d("SaveRequest", "SaveRequest triggered");
         List<FillContext> fillContexts = request.getFillContexts();
         AssistStructure assistStructure = fillContexts.get(fillContexts.size() - 1).getStructure();
         AssistStructureParser parser = new AssistStructureParser();
@@ -58,7 +60,7 @@ public class SaveRequestHandler {
             storageManager.saveExtendedEntry(extended);
         }
         catch (EncryptionException e) {
-            callback.onFailure(e.getMessage());
+            callback.onFailure(e.getMessage() != null ? e.getMessage() : "No message provided.");
             return;
         }
 

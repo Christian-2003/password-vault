@@ -4,7 +4,7 @@
 
 ## 3.5.4 (XXXX-XX-XX)
 ###### Release Highlights
-n/a
+Users can now save login data to Password Vault after login to an app.
 
 ###### Features
 * Fixed a bug where autofill-authentication is always required, even if app login is deactivated or not configured.
