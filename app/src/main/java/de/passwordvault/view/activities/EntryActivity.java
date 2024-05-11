@@ -24,12 +24,10 @@ import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -211,6 +209,9 @@ public class EntryActivity extends PasswordVaultBaseActivity implements DialogCa
 
         //Add packages:
         populatePackagesContainer(entry.getPackages());
+
+        //Show whether entry was created automatically:
+        findViewById(R.id.entry_automatically_created).setVisibility(entry.isAddedAutomatically() ? View.VISIBLE : View.GONE);
 
         //Add visible details:
         RecyclerView visibleDetailsContainer = findViewById(R.id.entry_details_container);

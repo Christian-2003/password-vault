@@ -147,6 +147,7 @@
     <string name="entry_additional_info">Additional</string>
     <string name="entry_package">Apps</string>
     <string name="entry_package_none">None selected</string>
+    <string name="entry_automatically_created">This account was automatically created by the autofill service</string>
 
 
     <!-- PasswordAnalysis activity -->

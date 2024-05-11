@@ -250,6 +250,24 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/entry_automatically_created"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <View style="@style/divider"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/entry_automatically_created"
+                            android:padding="@dimen/default_padding"
+                            style="@style/pv.text.variant"/>
+
+                    </LinearLayout>
+
+                    <!-- Tags -->
+                    <LinearLayout
                         android:id="@+id/entry_tag_group"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -278,6 +296,7 @@
 
                     </LinearLayout>
 
+                    <!-- Selected apps -->
                     <LinearLayout
                         android:id="@+id/entry_packages_container"
                         android:layout_width="match_parent"

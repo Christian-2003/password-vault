@@ -78,15 +78,6 @@ public class SaveRequestHandler {
         EntryExtended extended = new EntryExtended();
 
         //Add details:
-        if (structure.getPasswordText() != null && !structure.getPasswordText().isEmpty()) {
-            Detail password = new Detail();
-            password.setType(DetailType.PASSWORD);
-            password.setPassword(true);
-            password.setObfuscated(true);
-            password.setContent(structure.getPasswordText());
-            password.setName(DetailType.PASSWORD.getDisplayName());
-            extended.add(password);
-        }
         if (structure.getUsernameText() != null && !structure.getUsernameText().isEmpty()) {
             Detail username = null;
             if (structure.getUsernameHint().equals(View.AUTOFILL_HINT_USERNAME)) {
@@ -104,6 +95,15 @@ public class SaveRequestHandler {
                 username.setContent(structure.getUsernameText());
                 extended.add(username);
             }
+        }
+        if (structure.getPasswordText() != null && !structure.getPasswordText().isEmpty()) {
+            Detail password = new Detail();
+            password.setType(DetailType.PASSWORD);
+            password.setPassword(true);
+            password.setObfuscated(true);
+            password.setContent(structure.getPasswordText());
+            password.setName(DetailType.PASSWORD.getDisplayName());
+            extended.add(password);
         }
 
         //Edit extended entry:
