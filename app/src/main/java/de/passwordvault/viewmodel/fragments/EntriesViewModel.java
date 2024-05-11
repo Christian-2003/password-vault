@@ -1,7 +1,6 @@
 package de.passwordvault.viewmodel.fragments;
 
 import androidx.lifecycle.ViewModel;
-
 import de.passwordvault.R;
 import de.passwordvault.view.fragments.EntriesFragment;
 

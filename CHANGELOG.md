@@ -12,6 +12,7 @@ Users can now save login data to Password Vault after login to an app.
 * Refactored layout files that did not conform the naming conventions.
 * Fixed color for fingerprint in autofill authentication presentation.
 * Added save requests to the autofill service.
+* Removed unused class and methods to improve maintainability.
 
 <br/>
 
