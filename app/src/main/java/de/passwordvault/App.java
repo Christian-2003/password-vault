@@ -24,19 +24,6 @@ public class App extends Application {
     @SuppressLint("StaticFieldLeak")
     private static Context context;
 
-    /**
-     * Attribute stores the executor service used for asynchronous operations.
-     */
-    private final ExecutorService executorService;
-
-
-    /**
-     * Constructor instantiates the app. This is called when the app starts.
-     */
-    public App() {
-        executorService = Executors.newFixedThreadPool(4);
-    }
-
 
     /**
      * Method is called whenever the application is created.

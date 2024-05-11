@@ -4,6 +4,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import de.passwordvault.model.Observable;
 import de.passwordvault.model.Observer;
+import de.passwordvault.model.analysis.QualityGateManager;
 import de.passwordvault.model.detail.Detail;
 import de.passwordvault.model.detail.DetailType;
 import de.passwordvault.model.entry.EntryAbbreviated;
@@ -284,7 +285,9 @@ public class PasswordSecurityAnalysis implements Observable<ArrayList<Password>>
                 }
             }
         }
-        averageSecurityScore = averageSecurityScore / passwords.size();
+        if (passwords.size() != 0) {
+            averageSecurityScore = averageSecurityScore / passwords.size();
+        }
         analysisCompleted = true;
         analysisRunning = false;
         notifyObservers();

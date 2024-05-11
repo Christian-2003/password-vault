@@ -14,6 +14,7 @@ Users can now save login data to Password Vault after login to an app.
 * Added save requests to the autofill service.
 * Removed unused class and methods to improve maintainability.
 * Loading (and sorting) packages in `PackagesActivity` no longer blocking main thread.
+* Fixed a bug where the password security analysis showed an average security score of "-NaN / 5", when no passwords were analyzed.
 
 <br/>
 

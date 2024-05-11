@@ -1,6 +1,5 @@
 package de.passwordvault.view.utils.adapters;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -170,7 +169,6 @@ public class PackagesRecyclerViewAdapter extends RecyclerView.Adapter<PackagesRe
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Package p = filteredData.get(position);
-        Log.w("PRVA", "Bound ViewHolder for package: " + p.getPackageName());
         if (p.getLogo() != null) {
             holder.logo.setImageDrawable(p.getLogo());
         }
