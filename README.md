@@ -19,8 +19,9 @@ Securely manage all your most sensitive account data locally on your Android dev
 3. [Contributors](#contributors)
 4. [License](#license)
 5. [How to contribute](#how-to-contribute)
+5. [Other Images](#other-images)
 
-<br>
+<br/>
 
 ## Description
 PasswordVault allows you to securely store your most sensitive account data on your device locally. You can add as many accounts to the app as you wish. Each account can contain as many details as you like, such as passwords, e-mail addresses, security questions, etc.
@@ -37,7 +38,7 @@ The version numbers for this project are determined based on the guidelines prov
 
 The project contains a [changelog](CHANGELOG.md) which documents all changes that were made to the application in between software versions.
 
-<br>
+<br/>
 
 ## Install and Use the Project
 
@@ -51,17 +52,17 @@ Steps to build and run the project through the Android Studio IDE are covered wi
 ###### How to Use the Application
 A detailed quickstart guide can be found [here](docs/manual/Quickstart%20Guide.md). This guide covers all steps to add a new account to the app.
 
-<br>
+<br/>
 
 ## Contributors
 Currently, I ([Christian-2003](https://github.com/Christian-2003)) am the only developer.
 
-<br>
+<br/>
 
 ## License
 The project is licensed under the terms and conditions of the MIT license. You can view a copy of the license [here](https://github.com/Christian-2003/password-vault/blob/master/LICENSE.txt).
 
-<br>
+<br/>
 
 ## How to Contribute
 If you want to contribute to this project, feel free to do so.
@@ -73,3 +74,19 @@ If you want to contribute to the code development, be a self respecting person a
 A few guides for development-purposes are published [here](docs/development/). If you are interested in contributing, this would be a good start.
 
 The project will be developed in English.
+
+<br/>
+
+## Other Images
+
+<div align="center">
+    <img src="docs/img/preview_3.png" height="390">
+    <img src="docs/img/preview_4.png" height="390">
+    <img src="docs/img/preview_5.png" height="390">
+</div>
+
+<br/>
+
+***
+2024-05-11  
+&copy; Christian-2003
