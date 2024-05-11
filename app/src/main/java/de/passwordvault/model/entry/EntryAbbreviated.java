@@ -65,6 +65,11 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
      */
     private PackageCollection packages;
 
+    /**
+     * Attribute stores whether the entry was automatically created by the autofill service.
+     */
+    private boolean addedAutomatically;
+
 
     /**
      * Constructor instantiates a new entry without any contents.
@@ -78,6 +83,7 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
         setChanged(getCreated());
         setTags(new TagCollection());
         setPackages(new PackageCollection());
+        setAddedAutomatically(false);
     }
 
     /**
@@ -99,6 +105,7 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
         setChanged(entry.getChanged());
         setTags(new TagCollection(entry.getTags()));
         setPackages(entry.getPackages());
+        setAddedAutomatically(entry.isAddedAutomatically());
     }
 
 
@@ -275,6 +282,24 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
         this.packages = new PackageCollection(packages);
     }
 
+    /**
+     * Method returns whether the entry was added automatically by the autofill service.
+     *
+     * @return  Whether the entry was added automatically.
+     */
+    public boolean isAddedAutomatically() {
+        return addedAutomatically;
+    }
+
+    /**
+     * Method changes whether the entry was added automatically by the autofill service.
+     *
+     * @param addedAutomatically    Whether the entry was added automatically.
+     */
+    public void setAddedAutomatically(boolean addedAutomatically) {
+        this.addedAutomatically = addedAutomatically;
+    }
+
 
     /**
      * Method returns the first available logo from the list of packages.
@@ -353,6 +378,7 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
         builder.append(visible);
         builder.append(tags.toCsv());
         builder.append(packages.toCsv());
+        builder.append(addedAutomatically);
 
         return builder.toString();
     }
@@ -405,6 +431,9 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
                     case 7:
                         setPackages(new PackageCollection(cell));
                         break;
+                    case 8:
+                        setAddedAutomatically(Boolean.parseBoolean(cell));
+                        break;
                 }
             }
             catch (NumberFormatException e) {
@@ -430,6 +459,7 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
         builder.append("IsVisible");
         builder.append("Tags");
         builder.append("Packages");
+        builder.append("AddedAutomatically");
 
         return builder.toString();
     }

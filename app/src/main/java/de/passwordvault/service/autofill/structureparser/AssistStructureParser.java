@@ -9,7 +9,7 @@ import android.view.View;
  * {@link ParsedStructure} as a result.
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.5.4
  */
 public class AssistStructureParser {
 
@@ -68,10 +68,20 @@ public class AssistStructureParser {
             for (String autofillHint : autofillHints) {
                 if (autofillHint.contains(View.AUTOFILL_HINT_PASSWORD)) {
                     result.setPasswordId(viewNode.getAutofillId());
+                    result.setPasswordHint(View.AUTOFILL_HINT_PASSWORD);
+                    result.setPasswordText(viewNode.getText() != null ? viewNode.getText().toString() : null);
                     break;
                 }
-                else if (autofillHint.contains(View.AUTOFILL_HINT_USERNAME) || autofillHint.contains(View.AUTOFILL_HINT_EMAIL_ADDRESS)) {
+                else if (autofillHint.contains(View.AUTOFILL_HINT_EMAIL_ADDRESS)) {
                     result.setUsernameId(viewNode.getAutofillId());
+                    result.setUsernameHint(View.AUTOFILL_HINT_EMAIL_ADDRESS);
+                    result.setUsernameText(viewNode.getText() != null ? viewNode.getText().toString() : null);
+                    break;
+                }
+                else if (autofillHint.contains(View.AUTOFILL_HINT_USERNAME)) {
+                    result.setUsernameId(viewNode.getAutofillId());
+                    result.setUsernameHint(View.AUTOFILL_HINT_USERNAME);
+                    result.setUsernameText(viewNode.getText() != null ? viewNode.getText().toString() : null);
                     break;
                 }
             }

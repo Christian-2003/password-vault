@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
  * routed through this class by the operating system.
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.5.4
  */
 public class PasswordVaultAutofillService extends AutofillService {
 
@@ -42,7 +42,8 @@ public class PasswordVaultAutofillService extends AutofillService {
      */
     @Override
     public void onSaveRequest(@NonNull SaveRequest request, @NonNull SaveCallback callback) {
-        callback.onFailure("Not implemented yet.");
+        SaveRequestHandler handler = new SaveRequestHandler();
+        handler.onSaveRequest(request, callback);
     }
 
 }

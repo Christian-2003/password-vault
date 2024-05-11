@@ -11,6 +11,7 @@ n/a
 * Fixed a bug where the autofill suggestion only displayed "Password for" if no username was provided.
 * Refactored layout files that did not conform the naming conventions.
 * Fixed color for fingerprint in autofill authentication presentation.
+* Added save requests to the autofill service.
 
 <br/>
 

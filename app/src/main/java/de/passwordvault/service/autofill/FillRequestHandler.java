@@ -12,7 +12,8 @@ import android.service.autofill.FillCallback;
 import android.service.autofill.FillContext;
 import android.service.autofill.FillRequest;
 import android.service.autofill.FillResponse;
-import android.util.Log;
+import android.service.autofill.SaveInfo;
+import android.view.View;
 import android.view.autofill.AutofillId;
 import android.view.autofill.AutofillValue;
 import android.widget.RemoteViews;
@@ -41,12 +42,6 @@ import de.passwordvault.view.activities.AutofillAuthenticationActivity;
 public class FillRequestHandler {
 
     /**
-     * Field stores the tag used for debugging messages.
-     */
-    private static final String TAG = "FillRequestHandler";
-
-
-    /**
      * Attribute stores the autofill service for which the handler is created.
      */
     private final AutofillService autofillService;
@@ -54,7 +49,7 @@ public class FillRequestHandler {
     /**
      * Attribute stores the data fetcher used to fetch the data for the fill request.
      */
-    private DataFetcher fetcher;
+    private final DataFetcher fetcher;
 
 
     /**
@@ -80,7 +75,6 @@ public class FillRequestHandler {
      * @param callback      Callback for the fill request.
      */
     public void onFillRequest(FillRequest request, CancellationSignal cancelSignal, FillCallback callback) {
-        Log.d(TAG, "Begin fill request");
         List<FillContext> contexts = request.getFillContexts();
         AssistStructure structure = contexts.get(contexts.size() - 1).getStructure();
         ParsedStructure parsedStructure = parseStructure(structure);
@@ -88,10 +82,8 @@ public class FillRequestHandler {
         ArrayList<UserData> userData;
         if (Configuration.useAutofillCaching()) {
             //Use caching:
-            Log.d(TAG, "Use autofill caching");
             MappingCacheItem mappingCacheItem = (MappingCacheItem)MappingCache.getInstance().getItem(parsedStructure.getPackageName());
             if (mappingCacheItem == null) {
-                Log.d(TAG, "Item for fill request not in cache");
                 userData = fetcher.fetchUserDataForPackage(parsedStructure.getPackageName());
                 if (!userData.isEmpty()) {
                     String[] uuids = new String[userData.size()];
@@ -104,29 +96,20 @@ public class FillRequestHandler {
                     }
                     MappingCache.getInstance().save();
                     ContentCache.getInstance().save();
-                    Log.d(TAG, "Updated MappingCache");
-                    Log.d(TAG, "Updated ContentCache");
-                }
-                else {
-                    Log.d(TAG, "Did not update caches");
                 }
             }
             else {
-                Log.d(TAG, "Item for fill request in cache");
                 userData = new ArrayList<>();
                 String[] uuids = mappingCacheItem.getUuids();
                 for (String uuid : uuids) {
                     InvalidationCacheItem invalidationCacheItem = (InvalidationCacheItem)InvalidationCache.getInstance().getItem(uuid);
                     if (invalidationCacheItem == null) {
-                        Log.d(TAG, "Item valid");
                         ContentCacheItem contentCacheItem = (ContentCacheItem)ContentCache.getInstance().getItem(uuid);
                         if (contentCacheItem == null) {
-                            Log.d(TAG, "Item not in ContentCache");
                             UserData data = fetcher.fetchUserDataForUuid(uuid);
                             if (data == null) {
                                 mappingCacheItem.removeUuid(uuid);
                                 MappingCache.getInstance().putItem(mappingCacheItem);
-                                Log.d(TAG, "Updated MappingCache with removed ID");
                             }
                             else {
                                 userData.add(data);
@@ -136,14 +119,11 @@ public class FillRequestHandler {
                         userData.add(new UserData(contentCacheItem.getEntryName(), contentCacheItem.getIdentifier(), contentCacheItem.getUsername(), contentCacheItem.getPassword()));
                     }
                     else {
-                        Log.d(TAG, "Item invalid");
                         UserData data = fetcher.fetchUserDataForUuid(uuid);
-                        Log.d(TAG, "Loaded item from app storage");
                         if (data == null) {
                             ContentCache.getInstance().removeItem(uuid);
                             mappingCacheItem.removeUuid(uuid);
                             MappingCache.getInstance().putItem(mappingCacheItem);
-                            Log.d(TAG, "Updated MappingCache with removed ID");
                         }
                         else {
                             ContentCacheItem contentCacheItem = (ContentCacheItem)ContentCache.getInstance().getItem(uuid);
@@ -171,7 +151,6 @@ public class FillRequestHandler {
             callback.onSuccess(response);
         }
         catch (Exception e) {
-            Log.d("AutofillService", e.getMessage() == null ? "No message provided" : e.getMessage());
             callback.onFailure(e.getMessage());
         }
     }
@@ -245,13 +224,68 @@ public class FillRequestHandler {
             responseBuilder.setAuthentication(autofillIds, intentSender, generateAuthenticationPresentation(userData.get(0).getEntryName()));
         }
         else {
-            //Authentication not activated:
+            //Authentication not required:
             for (Dataset dataset : datasets) {
                 responseBuilder.addDataset(dataset);
             }
         }
 
+        responseBuilder.setSaveInfo(generateSaveInfo(structure));
+
         return responseBuilder.build();
+    }
+
+
+    /**
+     * Method generates a {@linkplain SaveInfo}-instance that can be passed with a fill request
+     * in case the autofill does not work.
+     *
+     * @param structure Parsed structure for which to generate the SaveInfo-instance.
+     * @return          Generated SaveInfo-instance.
+     */
+    private SaveInfo generateSaveInfo(ParsedStructure structure) {
+        //Get the save data types to save:
+        int type = -1;
+        if (structure.getPasswordHint().equals(View.AUTOFILL_HINT_PASSWORD)) {
+            type = SaveInfo.SAVE_DATA_TYPE_PASSWORD;
+        }
+        if (structure.getUsernameHint().equals(View.AUTOFILL_HINT_USERNAME)) {
+            if (type == -1) {
+                type = SaveInfo.SAVE_DATA_TYPE_USERNAME;
+            }
+            else {
+                type = type | SaveInfo.SAVE_DATA_TYPE_USERNAME;
+            }
+        }
+        if (structure.getUsernameHint().equals(View.AUTOFILL_HINT_EMAIL_ADDRESS)) {
+            if (type == -1) {
+                type = SaveInfo.SAVE_DATA_TYPE_EMAIL_ADDRESS;
+            }
+            else {
+                type = type | SaveInfo.SAVE_DATA_TYPE_EMAIL_ADDRESS;
+            }
+        }
+
+        //Get an array of available autofill IDs:
+        int numberOfAutofillIds = 0;
+        if (structure.getPasswordId() != null) {
+            numberOfAutofillIds++;
+        }
+        if (structure.getUsernameId() != null) {
+            numberOfAutofillIds++;
+        }
+        AutofillId[] autofillIds = new AutofillId[numberOfAutofillIds];
+        int index = 0;
+        if (structure.getPasswordId() != null) {
+            autofillIds[index++] = structure.getPasswordId();
+        }
+        if (structure.getUsernameId() != null) {
+            autofillIds[index] = structure.getPasswordId();
+        }
+
+        //Generate the SaveInfo-instance:
+        SaveInfo.Builder builder = new SaveInfo.Builder(type, autofillIds);
+        return builder.build();
     }
 
 

@@ -282,6 +282,7 @@
     <string name="detail_password">Password</string>
     <string name="detail_url">URL</string>
     <string name="detail_pin">PIN code</string>
+    <string name="detail_username">Username</string>
 
 
     <!-- Error messages that are sent to the user -->
@@ -313,6 +314,7 @@
     <string name="autofill_username_presentation">{value}</string>
     <string name="autofill_password_presentation">Password for {value}</string>
     <string name="autofill_authentication_presentation">Authenticate for {value}</string>
+    <string name="autofill_save_request_description">Automatically added</string>
 
 
     <!--

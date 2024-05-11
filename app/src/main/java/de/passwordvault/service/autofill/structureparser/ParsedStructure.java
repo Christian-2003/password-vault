@@ -8,7 +8,7 @@ import android.view.autofill.AutofillId;
  * and password can be entered.
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.5.4
  */
 public class ParsedStructure {
 
@@ -23,9 +23,29 @@ public class ParsedStructure {
     private AutofillId usernameId;
 
     /**
+     * Attribute stores the autofill hint used for the text input with which the username is entered.
+     */
+    private String usernameHint;
+
+    /**
+     * Attribute stores the entered text from the node used to enter the username.
+     */
+    private String usernameText;
+
+    /**
      * Attribute stores the ID of thr view in which the password can be entered.
      */
     private AutofillId passwordId;
+
+    /**
+     * Attribute stores the autofill hint used for the text input with which the password is entered.
+     */
+    private String passwordHint;
+
+    /**
+     * Attribute stores the entered text from the node used to enter the password.
+     */
+    private String passwordText;
 
 
     /**
@@ -35,19 +55,10 @@ public class ParsedStructure {
         this.packageName = packageName == null ? "" : packageName;
         usernameId = null;
         passwordId = null;
-    }
-
-    /**
-     * Constructor instantiates a new parsed structure with the passed username and password IDs.
-     *
-     * @param packageName   Name of the package from which the assist structure originates.
-     * @param usernameId    ID for the view in which a username can be entered.
-     * @param passwordId    ID for the view in which a password can be entered.
-     */
-    public ParsedStructure(String packageName, AutofillId usernameId, AutofillId passwordId) {
-        this.packageName = packageName == null ? "" : packageName;
-        this.usernameId = usernameId;
-        this.passwordId = passwordId;
+        usernameHint = "";
+        passwordHint = "";
+        usernameText = null;
+        passwordText = null;
     }
 
 
@@ -81,6 +92,48 @@ public class ParsedStructure {
     }
 
     /**
+     * Method returns the autofill hint used for the text input with which the username
+     * is entered.
+     *
+     * @return  Autofill hint used to enter the username.
+     */
+    public String getUsernameHint() {
+        return usernameHint;
+    }
+
+    /**
+     * Method changes the autofill hint used for the text input with which the username
+     * is entered.
+     *
+     * @param usernameHint          Autofill hint used to enter the username.
+     * @throws NullPointerException The passed autofill hint is {@code null}.
+     */
+    public void setUsernameHint(String usernameHint) throws NullPointerException {
+        if (usernameHint == null) {
+            throw new NullPointerException();
+        }
+        this.usernameHint = usernameHint;
+    }
+
+    /**
+     * Method returns the text entered within the text input used to enter the username.
+     *
+     * @return  Entered username.
+     */
+    public String getUsernameText() {
+        return usernameText;
+    }
+
+    /**
+     * Method changes the text entered within the text input used to enter the password.
+     *
+     * @param usernameText  Entered username.
+     */
+    public void setUsernameText(String usernameText) {
+        this.usernameText = usernameText;
+    }
+
+    /**
      * Method returns the ID of the view in which a password can be entered. This can be {@code null}
      * if no view was found.
      *
@@ -97,6 +150,48 @@ public class ParsedStructure {
      */
     public void setPasswordId(AutofillId passwordId) {
         this.passwordId = passwordId;
+    }
+
+    /**
+     * Method returns the autofill hint used for the text input with which the password
+     * is entered.
+     *
+     * @return  Autofill hint used to enter the password.
+     */
+    public String getPasswordHint() {
+        return passwordHint;
+    }
+
+    /**
+     * Method changes the autofill hint used for the text input with which the password
+     * is entered.
+     *
+     * @param passwordHint          Autofill hint used to enter the password.
+     * @throws NullPointerException The passed autofill hint is {@code null}.
+     */
+    public void setPasswordHint(String passwordHint) throws NullPointerException {
+        if (passwordHint == null) {
+            throw new NullPointerException();
+        }
+        this.passwordHint = passwordHint;
+    }
+
+    /**
+     * Method returns the text entered within the text input used to enter the password.
+     *
+     * @return  Entered password.
+     */
+    public String getPasswordText() {
+        return passwordText;
+    }
+
+    /**
+     * Method changes the text entered within the text input used to enter the password.
+     *
+     * @param passwordText  Entered password.
+     */
+    public void setPasswordText(String passwordText) {
+        this.passwordText = passwordText;
     }
 
 }
