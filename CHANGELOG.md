@@ -13,6 +13,7 @@ Users can now save login data to Password Vault after login to an app.
 * Fixed color for fingerprint in autofill authentication presentation.
 * Added save requests to the autofill service.
 * Removed unused class and methods to improve maintainability.
+* Loading (and sorting) packages in `PackagesActivity` no longer blocking main thread.
 
 <br/>
 

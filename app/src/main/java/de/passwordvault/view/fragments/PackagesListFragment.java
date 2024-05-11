@@ -3,16 +3,24 @@ package de.passwordvault.view.fragments;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+
+import androidx.annotation.MainThread;
 import androidx.appcompat.widget.SearchView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 import de.passwordvault.R;
 import de.passwordvault.model.packages.Package;
 import de.passwordvault.model.packages.PackagesManager;
@@ -39,6 +47,11 @@ public class PackagesListFragment extends PasswordVaultBaseFragment implements O
     private PackagesViewModel viewModel;
 
     /**
+     * Attribute stores the view of the fragment.
+     */
+    private View view;
+
+    /**
      * Attribute stores the adapter to display installed packages.
      */
     private PackagesRecyclerViewAdapter adapter;
@@ -60,15 +73,8 @@ public class PackagesListFragment extends PasswordVaultBaseFragment implements O
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_packages_list, container, false);
+        view = inflater.inflate(R.layout.fragment_packages_list, container, false);
         viewModel = new ViewModelProvider(requireActivity()).get(PackagesViewModel.class);
-
-        view.findViewById(R.id.packages_selected_none).setVisibility(PackagesManager.getInstance().getPackages().size() == 0 ? View.VISIBLE : View.GONE);
-
-        adapter = new PackagesRecyclerViewAdapter(PackagesManager.getInstance().getSortedPackages(), viewModel.getPackages(), this, null);
-        RecyclerView recyclerView = view.findViewById(R.id.packages_list_recycler_view);
-        recyclerView.setVisibility(PackagesManager.getInstance().getPackages().size() == 0 ? View.GONE : View.VISIBLE);
-        recyclerView.setAdapter(adapter);
 
         searchBar = view.findViewById(R.id.search_bar);
         searchBar.setVisibility(viewModel.isSearchBarVisible() ? View.VISIBLE : View.GONE);
@@ -88,6 +94,8 @@ public class PackagesListFragment extends PasswordVaultBaseFragment implements O
                 adapter.getFilter().filter(editable);
             }
         });
+
+        loadData();
 
         return view;
     }
@@ -135,6 +143,46 @@ public class PackagesListFragment extends PasswordVaultBaseFragment implements O
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
+    }
+
+
+    private void loadData() {
+        View progressBarContainer = view.findViewById(R.id.container_progress_bar);
+        View contentContainer = view.findViewById(R.id.container_content);
+        progressBarContainer.setVisibility(View.VISIBLE);
+        contentContainer.setVisibility(View.GONE);
+
+        Thread thread = new Thread(() -> {
+            PackagesManager.getInstance().getSortedPackages();
+            try {
+                dataLoadedCallback();
+            }
+            catch (Exception e) {
+                //Cannot update UI (maybe, the activity no longer exists)...
+                Log.w("PackagesListFragment", "Thread finished when fragment nonexistent");
+            }
+        });
+        thread.start();
+    }
+
+
+    private void dataLoadedCallback() {
+        requireActivity().runOnUiThread(() -> {
+            View progressBarContainer = view.findViewById(R.id.container_progress_bar);
+            View contentContainer = view.findViewById(R.id.container_content);
+
+            if (adapter == null) {
+                adapter = new PackagesRecyclerViewAdapter(PackagesManager.getInstance().getSortedPackages(), viewModel.getPackages(), this, null);
+                RecyclerView recyclerView = view.findViewById(R.id.packages_list_recycler_view);
+                recyclerView.setAdapter(adapter);
+            }
+            else {
+                adapter.notifyDataSetChanged();
+            }
+
+            progressBarContainer.setVisibility(View.GONE);
+            contentContainer.setVisibility(View.VISIBLE);
+        });
     }
 
 }

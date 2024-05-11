@@ -177,6 +177,7 @@
     <string name="packages_selected_title">Ausgewählte Apps</string>
     <string name="packages_selected_none">Keine ausgewählt</string>
     <string name="packages_list_none">Keine Verfügbar</string>
+    <string name="packages_list_more">Weitere Apps anzeigen</string>
 
 
     <!-- Login activity -->

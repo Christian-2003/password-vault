@@ -20,6 +20,8 @@ import android.view.autofill.AutofillValue;
 import android.widget.RemoteViews;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.passwordvault.App;
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.storage.Configuration;
@@ -78,6 +80,12 @@ public class FillRequestHandler {
     public void onFillRequest(FillRequest request, CancellationSignal cancelSignal, FillCallback callback) {
         List<FillContext> contexts = request.getFillContexts();
         AssistStructure structure = contexts.get(contexts.size() - 1).getStructure();
+        if (structure.getActivityComponent().getPackageName().equals(App.getContext().getPackageName())) {
+            //Prevent Password Vault to request autofill data from itself:
+            callback.onFailure("Denied FillRequest for Password Vault.");
+            return;
+        }
+
         ParsedStructure parsedStructure = parseStructure(structure);
 
         ArrayList<UserData> userData;

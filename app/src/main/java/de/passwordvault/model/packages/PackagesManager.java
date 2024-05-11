@@ -14,7 +14,7 @@ import de.passwordvault.App;
  * the Android device. The class is implemented through singleton-pattern.
  *
  * @author  Christian-2003
- * @version 3.5.1
+ * @version 3.5.4
  */
 public class PackagesManager {
 
@@ -90,8 +90,10 @@ public class PackagesManager {
      * @return  Sorted list of packages.
      */
     public ArrayList<Package> getSortedPackages() {
-        if (sortedPackagesCache == null) {
-            sortedPackagesCache = new ArrayList<>();
+        if (sortedPackagesCache == null || sortedPackagesCache.isEmpty()) {
+            if (sortedPackagesCache == null) {
+                sortedPackagesCache = new ArrayList<>();
+            }
             if (packages == null) {
                 getPackages();
             }

@@ -9,6 +9,7 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.ArrayList;
 
 import de.passwordvault.R;
+import de.passwordvault.model.packages.Package;
 import de.passwordvault.model.packages.PackageCollection;
 import de.passwordvault.model.packages.SerializablePackage;
 import de.passwordvault.model.packages.SerializablePackageCollection;
@@ -34,6 +35,11 @@ public class PackagesViewModel extends ViewModel {
      */
     private boolean searchBarVisible;
 
+    /**
+     * Attribute stores all packages to be displayed by the activity.
+     */
+    private ArrayList<Package> allPackages;
+
 
     /**
      * Constructor instantiates a new view model for the {@link PackagesActivity} and it's fragments.
@@ -41,6 +47,7 @@ public class PackagesViewModel extends ViewModel {
     public PackagesViewModel() {
         packages = null;
         searchBarVisible = false;
+        allPackages = null;
     }
 
 

@@ -4,6 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 
 /**
  * This singleton class stores the global {@link Context} for the entire application. This is needed
@@ -15,10 +19,23 @@ import android.content.Context;
 public class App extends Application {
 
     /**
-     * Attribute stores the context from this {@link Application}.
+     * Field stores the context from this {@link Application}.
      */
     @SuppressLint("StaticFieldLeak")
     private static Context context;
+
+    /**
+     * Attribute stores the executor service used for asynchronous operations.
+     */
+    private final ExecutorService executorService;
+
+
+    /**
+     * Constructor instantiates the app. This is called when the app starts.
+     */
+    public App() {
+        executorService = Executors.newFixedThreadPool(4);
+    }
 
 
     /**
