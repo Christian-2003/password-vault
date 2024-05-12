@@ -19,6 +19,7 @@ Users can now save login data to Password Vault automatically after login to an 
 * Fixed a bug where the dialog to confirm deletion of all app data displayed an incorrect message.
 * `ConfirmDeleteDialog` can now display custom messages instead of a generic message.
 * Swipe actions for editing and deleting details can now be switched.
+* Activity displaying help pages now shows help page title in app bar.
 
 <br/>
 
