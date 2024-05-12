@@ -43,7 +43,7 @@
         <!-- Activity used for authentication with autofill requests -->
         <activity android:name=".view.activities.AutofillAuthenticationActivity" android:exported="false"/>
 
-        <!-- Autofill Service for password manager -->
+        <!-- Autofill service for password manager -->
         <service
             android:name=".service.autofill.PasswordVaultAutofillService"
             android:exported="true"

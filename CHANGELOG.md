@@ -4,7 +4,7 @@
 
 ## 3.5.4 (XXXX-XX-XX)
 ###### Release Highlights
-Users can now save login data to Password Vault after login to an app.
+Users can now save login data to Password Vault automatically after login to an app.
 
 ###### Features
 * Fixed a bug where autofill-authentication is always required, even if app login is deactivated or not configured.
@@ -12,9 +12,12 @@ Users can now save login data to Password Vault after login to an app.
 * Refactored layout files that did not conform the naming conventions.
 * Fixed color for fingerprint in autofill authentication presentation.
 * Added save requests to the autofill service.
+* Autofill service is no longer triggered by Password Vault itself.
 * Removed unused class and methods to improve maintainability.
 * Loading (and sorting) packages in `PackagesActivity` no longer blocking main thread.
 * Fixed a bug where the password security analysis showed an average security score of "-NaN / 5", when no passwords were analyzed.
+* Fixed a bug where the dialog to confirm deletion of all app data displayed an incorrect message.
+* `ConfirmDeleteDialog` can now display custom messages instead of a generic message.
 
 <br/>
 

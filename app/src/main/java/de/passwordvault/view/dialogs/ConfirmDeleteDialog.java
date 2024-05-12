@@ -18,14 +18,20 @@ import de.passwordvault.viewmodel.dialogs.ConfirmDeleteViewModel;
  * {@linkplain DialogCallbackListener}!
  *
  * @author  Christian-2003
- * @version 3.5.1
+ * @version 3.5.4
  */
 public class ConfirmDeleteDialog extends DialogFragment {
 
     /**
-     * Field contains the key that needs to be used when passing the detail as argument.
+     * Field contains the key that needs to be used when passing the name of the deleted object as
+     * argument.
      */
     public static final String KEY_OBJECT = "object";
+
+    /**
+     * Field contains the key that needs to be used when passing the message as argument.
+     */
+    public static final String KEY_MESSAGE = "message";
 
     /**
      * Field contains the key that needs to be used when passing a
@@ -73,7 +79,12 @@ public class ConfirmDeleteDialog extends DialogFragment {
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity());
         builder.setTitle(R.string.button_delete);
-        builder.setMessage(requireContext().getString(R.string.confirm_delete_dialog_confirm).replace("{arg}", viewModel.getDeletedObjectName()));
+        if (viewModel.getMessage() != null) {
+            builder.setMessage(viewModel.getMessage());
+        }
+        else {
+            builder.setMessage(requireContext().getString(R.string.confirm_delete_dialog_confirm).replace("{arg}", viewModel.getDeletedObjectName()));
+        }
 
         builder.setPositiveButton(R.string.button_delete, (dialog, id) -> {
             //Delete button:

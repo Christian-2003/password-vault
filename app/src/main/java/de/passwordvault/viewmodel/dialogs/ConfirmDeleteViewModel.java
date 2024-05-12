@@ -11,7 +11,7 @@ import de.passwordvault.view.utils.DialogCallbackListener;
  * Class implements the {@linkplain ViewModel} for the {@link ConfirmDeleteDialog}-class.
  *
  * @author  Christian-2003
- * @version 3.2.0
+ * @version 3.5.4
  */
 public class ConfirmDeleteViewModel extends ViewModel {
 
@@ -25,6 +25,13 @@ public class ConfirmDeleteViewModel extends ViewModel {
      * Attribute stores the name of the object which shall be deleted.
      */
     private String deletedObjectName;
+
+    /**
+     * Attribute stores the message to display to the user within the dialog. Instead of some generic
+     * message like "Are you sure you want to delete {deletedObjectName}?", this message can be shown
+     * instead. This is {@code null} if the generic message shall be displayed instead.
+     */
+    private String message;
 
 
     /**
@@ -59,16 +66,12 @@ public class ConfirmDeleteViewModel extends ViewModel {
     }
 
     /**
-     * Method changes the {@link #deletedObjectName} to the passed argument.
+     * Method returns the message to be displayed to the user instead of a generic message.
      *
-     * @param deletedObjectName     Name of the object which shall be deleted.
-     * @throws NullPointerException The passed argument is {@code null}.
+     * @return  Message to display to the user.
      */
-    public void setDeletedObjectName(String deletedObjectName) throws NullPointerException {
-        if (deletedObjectName == null) {
-            throw new NullPointerException("Null is invalid name for object");
-        }
-        this.deletedObjectName = deletedObjectName;
+    public String getMessage() {
+        return message;
     }
 
 
@@ -86,12 +89,15 @@ public class ConfirmDeleteViewModel extends ViewModel {
             throw new NullPointerException("Null is invalid bundle");
         }
 
-        //Process KEY_DETAIL:
+        //Process KEY_OBJECT or KEY_MESSAGE:
         if (args.containsKey(ConfirmDeleteDialog.KEY_OBJECT)) {
-            setDeletedObjectName(args.getString(ConfirmDeleteDialog.KEY_OBJECT));
+            deletedObjectName = args.getString(ConfirmDeleteDialog.KEY_OBJECT);
+        }
+        else if (args.containsKey(ConfirmDeleteDialog.KEY_MESSAGE)) {
+            this.message = args.getString(ConfirmDeleteDialog.KEY_MESSAGE);
         }
         else {
-            throw new DialogArgumentException("Missing argument KEY_OBJECT");
+            throw new DialogArgumentException("Missing argument KEY_OBJECT or KEY_MESSAGE");
         }
 
         //Process KEY_CALLBACK_LISTENER:
@@ -108,5 +114,6 @@ public class ConfirmDeleteViewModel extends ViewModel {
             throw new DialogArgumentException("Missing argument KEY_CALLBACK_LISTENER");
         }
     }
+
 
 }

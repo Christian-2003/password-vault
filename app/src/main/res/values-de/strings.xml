@@ -125,8 +125,9 @@
     <string name="settings_data_backup_restore_error_password">Falsches Passwort</string>
     <string name="settings_data_backup_restore_success">Backup wurde wiederhergestellt</string>
     <string name="settings_data_delete">Löschen</string>
-    <string name="settings_data_delete_all">Daten löschen</string>
+    <string name="settings_data_delete_all">Daten Löschen</string>
     <string name="settings_data_delete_all_info">Alle Daten unumkehrbar löschen</string>
+    <string name="settings_data_delete_all_info_dialog">Bist du sicher, dass alle Daten unumkehrbar gelöscht werden sollen?</string>
 
 
     <!-- Entry activity -->
@@ -177,7 +178,6 @@
     <string name="packages_selected_title">Ausgewählte Apps</string>
     <string name="packages_selected_none">Keine ausgewählt</string>
     <string name="packages_list_none">Keine Verfügbar</string>
-    <string name="packages_list_more">Weitere Apps anzeigen</string>
 
 
     <!-- Login activity -->

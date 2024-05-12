@@ -250,7 +250,7 @@ public class SettingsDataActivity extends PasswordVaultBaseActivity implements D
             ConfirmDeleteDialog dialog = new ConfirmDeleteDialog();
             Bundle args = new Bundle();
             args.putSerializable(ConfirmDeleteDialog.KEY_CALLBACK_LISTENER, this);
-            args.putString(ConfirmDeleteDialog.KEY_OBJECT, getString(R.string.settings_data_delete_all));
+            args.putString(ConfirmDeleteDialog.KEY_MESSAGE, getString(R.string.settings_data_delete_all_info_dialog));
             dialog.setArguments(args);
             dialog.show(getSupportFragmentManager(), "");
         }

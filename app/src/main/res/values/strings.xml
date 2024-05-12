@@ -132,6 +132,7 @@
     <string name="settings_data_delete">Delete</string>
     <string name="settings_data_delete_all">Delete data</string>
     <string name="settings_data_delete_all_info">Delete all data irreversibly</string>
+    <string name="settings_data_delete_all_info_dialog">Are you sure you want to delete all data irreversibly?</string>
 
 
     <!-- Entry activity -->
@@ -182,7 +183,6 @@
     <string name="packages_selected_title">Selected apps</string>
     <string name="packages_selected_none">None selected</string>
     <string name="packages_list_none">None available</string>
-    <string name="packages_list_more">Show more apps</string>
 
 
     <!-- Login activity -->

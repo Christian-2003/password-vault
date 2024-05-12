@@ -12,7 +12,7 @@ android {
         minSdk 32
         targetSdk 32
         versionCode 1
-        versionName "3.5.4-pre1"
+        versionName "3.5.4-pre2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
