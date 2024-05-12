@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import java.io.Serializable;
 import de.passwordvault.R;
 import de.passwordvault.model.UpdateManager;
-import de.passwordvault.view.activities.HelpActivity;
 import de.passwordvault.view.activities.SettingsAboutActivity;
 import de.passwordvault.view.activities.SettingsAutofillActivity;
 import de.passwordvault.view.activities.SettingsCustomizationActivity;

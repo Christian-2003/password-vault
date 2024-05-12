@@ -20,6 +20,7 @@ Users can now save login data to Password Vault automatically after login to an 
 * `ConfirmDeleteDialog` can now display custom messages instead of a generic message.
 * Swipe actions for editing and deleting details can now be switched.
 * Activity displaying help pages now shows help page title in app bar.
+* Added privacy policy.
 
 <br/>
 

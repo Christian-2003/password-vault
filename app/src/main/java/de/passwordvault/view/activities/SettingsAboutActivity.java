@@ -17,7 +17,7 @@ import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
  * Class implements the activity which shows the user information about the application.
  *
  * @author  Christian-2003
- * @version 3.5.2
+ * @version 3.5.4
  */
 public class SettingsAboutActivity extends PasswordVaultBaseActivity {
 
@@ -36,6 +36,7 @@ public class SettingsAboutActivity extends PasswordVaultBaseActivity {
         //Usage
         findViewById(R.id.settings_about_usage_license_container).setOnClickListener(view -> showInfoDialog(R.string.settings_about_usage_license, Utils.readRawResource(R.raw.license)));
         findViewById(R.id.settings_about_usage_dependencies_container).setOnClickListener(view -> startActivity(new Intent(this, OssLicensesMenuActivity.class)));
+        findViewById(R.id.settings_about_usage_privacypolicy_container).setOnClickListener(view -> showLegalPage("privacy_policy.html"));
 
         //GitHub
         findViewById(R.id.settings_about_github_repository_container).setOnClickListener(view -> openUrl(getString(R.string.settings_about_github_link)));
@@ -51,6 +52,19 @@ public class SettingsAboutActivity extends PasswordVaultBaseActivity {
         if (UpdateManager.getInstance(this).isUpdateAvailable()) {
             findViewById(R.id.settings_about_software_update_eyecatcher).setVisibility(View.VISIBLE);
         }
+    }
+
+
+    /**
+     * Method hows the legal page with the specified name to the user.
+     *
+     * @param name  Name of the page (e.g. "privacy_policy.html") to show to the user.
+     */
+    private void showLegalPage(String name) {
+        Intent intent = new Intent(this, LocalizedAssetViewerActivity.class);
+        intent.putExtra(LocalizedAssetViewerActivity.KEY_PAGE, name);
+        intent.putExtra(LocalizedAssetViewerActivity.KEY_FOLDER, "legal");
+        startActivity(intent);
     }
 
 }

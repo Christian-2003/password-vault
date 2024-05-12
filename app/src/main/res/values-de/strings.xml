@@ -98,11 +98,13 @@
     <string name="settings_help_backup">Backups verwalten</string>
 
     <string name="settings_about">Über</string>
-    <string name="settings_about_usage">Nutzungsbedingungen</string>
+    <string name="settings_about_usage">Rechtliches</string>
     <string name="settings_about_usage_license">MIT Lizenz</string>
     <string name="settings_about_usage_license_info">Lizenz anzeigen (Nur in Englisch)</string>
     <string name="settings_about_usage_dependencies">Abhängigkeiten</string>
     <string name="settings_about_usage_dependencies_info">Verwendete Software anzeigen</string>
+    <string name="settings_about_usage_privacypolicy">Datenschutzerklärung</string>
+    <string name="settings_about_usage_privacypolicy_info">Datenschutzerklärung anzeigen</string>
     <string name="settings_about_github">GitHub</string>
     <string name="settings_about_github_repo">Repository</string>
     <string name="settings_about_github_repo_info">App auf GitHub anzeigen</string>

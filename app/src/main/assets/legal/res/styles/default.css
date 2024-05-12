@@ -1,0 +1,64 @@
+/*
+This file contains the default style for embedded legal pages in Password Vault.
+*/
+
+
+
+/* Variables for the style */
+:root {
+    --pv-primary: #1D7874;
+    --pv-background: #FFFFFF;
+    --pv-container: #FCFCFE;
+    --pv-container-highlight: #BFE3E2;
+    --pv-container-detail: #F2F2F2;
+    --pv-text: #000000;
+    --pv-text-secondary: #8D8C91;
+    --pv-text-primary: #1D7874;
+    --pv-text-onprimary: #FAFAFA;
+}
+
+
+
+/* Default styles for elements */
+body {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--pv-background);
+    color: var(--pv-text);
+}
+
+a {
+    color: var(--pv-text-primary);
+}
+a:visited {
+    color: var(--pv-text-primary);
+}
+
+img {
+    max-width: min(80%, 256px);
+    height: auto;
+    align-self: center;
+}
+
+h1 {
+    margin: 0px;
+}
+
+h2 {
+    margin: 20px 0px 0px 0px;
+}
+
+h3 {
+    margin: 15px 0px 0px 0px;
+}
+
+p {
+    margin: 10px 0px 10px 0px;
+}
+
+ol {
+    margin: 10px 0px 10px 0px;
+}
+ol > li {
+    margin: 5px 0px 5px 0px;
+}

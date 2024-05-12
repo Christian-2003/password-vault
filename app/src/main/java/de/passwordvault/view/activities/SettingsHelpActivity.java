@@ -41,8 +41,9 @@ public class SettingsHelpActivity extends PasswordVaultBaseActivity {
      * @param name  Name of the page (e.g. "help.html") to show to the user.
      */
     private void showHelpPage(String name) {
-        Intent intent = new Intent(this, HelpActivity.class);
-        intent.putExtra(HelpActivity.KEY_PAGE, name);
+        Intent intent = new Intent(this, LocalizedAssetViewerActivity.class);
+        intent.putExtra(LocalizedAssetViewerActivity.KEY_PAGE, name);
+        intent.putExtra(LocalizedAssetViewerActivity.KEY_FOLDER, "help");
         startActivity(intent);
     }
 

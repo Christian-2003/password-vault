@@ -144,6 +144,47 @@
 
                 </LinearLayout>
 
+                <View style="@style/divider"/>
+
+                <LinearLayout
+                    android:id="@+id/settings_about_usage_privacypolicy_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/default_padding"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_about_usage_privacypolicy"
+                            style="@style/pv.text"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_about_usage_privacypolicy_info"
+                            style="@style/pv.text.variant"/>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_next"
+                        style="@style/pv.icon"/>
+
+                </LinearLayout>
+
             </LinearLayout>
 
 
