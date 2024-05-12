@@ -18,6 +18,7 @@ Users can now save login data to Password Vault automatically after login to an 
 * Fixed a bug where the password security analysis showed an average security score of "-NaN / 5", when no passwords were analyzed.
 * Fixed a bug where the dialog to confirm deletion of all app data displayed an incorrect message.
 * `ConfirmDeleteDialog` can now display custom messages instead of a generic message.
+* Swipe actions for editing and deleting details can now be switched.
 
 <br/>
 

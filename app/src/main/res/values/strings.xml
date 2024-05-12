@@ -56,6 +56,13 @@
     <string name="settings_customization_home_recentlyedited">Recently edited accounts</string>
     <string name="settings_customization_home_recentlyedited_info">Change number of recently edited accounts on home page</string>
     <string name="settings_customization_home_recentlyedited_number_option">{arg} accounts</string>
+    <string name="settings_customization_details">Details</string>
+    <string name="settings_customization_details_swipe">Swipe actions</string>
+    <string name="settings_customization_details_swipe_info">Change swipe actions for details</string>
+    <string name="settings_customization_details_swipe_left">Left swipe action</string>
+    <string name="settings_customization_details_swipe_right">Right swipe action</string>
+    <string name="settings_customization_details_swipe_delete">Delete detail</string>
+    <string name="settings_customization_details_swipe_edit">Edit detail</string>
 
     <string name="settings_security">Security</string>
     <string name="settings_security_login">App login</string>

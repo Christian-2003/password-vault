@@ -22,8 +22,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGateManager;
 import de.passwordvault.model.detail.Detail;
+import de.passwordvault.model.detail.DetailSwipeAction;
 import de.passwordvault.model.detail.DetailType;
+import de.passwordvault.model.storage.Configuration;
 import de.passwordvault.view.dialogs.ConfirmDeleteDetailDialog;
+import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
 import de.passwordvault.view.dialogs.DetailDialog;
 import de.passwordvault.view.utils.DetailsItemMoveCallback;
 import de.passwordvault.view.utils.DialogCallbackListener;
@@ -35,7 +38,7 @@ import de.passwordvault.view.utils.Utils;
  * Class implements an adapter for a recycler view displaying {@link Detail}-instances for an entry.
  *
  * @author  Christian-2003
- * @version 3.5.1
+ * @version 3.5.4
  */
 public class DetailsRecyclerViewAdapter extends RecyclerView.Adapter<DetailsRecyclerViewAdapter.ViewHolder> implements DetailsItemMoveCallback.ItemTouchHelperContract {
 
@@ -316,20 +319,22 @@ public class DetailsRecyclerViewAdapter extends RecyclerView.Adapter<DetailsRecy
     @Override
     public void onRowSwiped(DetailsRecyclerViewAdapter.ViewHolder viewHolder, int direction) {
         if (direction == ItemTouchHelper.LEFT) {
-            ConfirmDeleteDetailDialog dialog = new ConfirmDeleteDetailDialog();
-            Bundle dialogArgs = new Bundle();
-            dialogArgs.putSerializable(ConfirmDeleteDetailDialog.KEY_CALLBACK_LISTENER, callbackListener);
-            dialogArgs.putSerializable(ConfirmDeleteDetailDialog.KEY_DETAIL, data.get(viewHolder.getAdapterPosition()));
-            dialog.setArguments(dialogArgs);
-            dialog.show(activity.getSupportFragmentManager(), null);
+            DetailSwipeAction swipeAction = Configuration.getDetailLeftSwipeAction();
+            if (swipeAction == DetailSwipeAction.DELETE) {
+                deleteDetail(viewHolder.getAdapterPosition());
+            }
+            else {
+                editDetail(viewHolder.getAdapterPosition());
+            }
         }
         else if (direction == ItemTouchHelper.RIGHT) {
-            DetailDialog dialog = new DetailDialog();
-            Bundle dialogArgs = new Bundle();
-            dialogArgs.putSerializable(DetailDialog.KEY_CALLBACK_LISTENER, callbackListener);
-            dialogArgs.putSerializable(DetailDialog.KEY_DETAIL, data.get(viewHolder.getAdapterPosition()));
-            dialog.setArguments(dialogArgs);
-            dialog.show(activity.getSupportFragmentManager(), "");
+            DetailSwipeAction swipeAction = Configuration.getDetailRightSwipeAction();
+            if (swipeAction == DetailSwipeAction.DELETE) {
+                deleteDetail(viewHolder.getAdapterPosition());
+            }
+            else {
+                editDetail(viewHolder.getAdapterPosition());
+            }
         }
     }
 
@@ -342,4 +347,34 @@ public class DetailsRecyclerViewAdapter extends RecyclerView.Adapter<DetailsRecy
     public Context getContext() {
         return activity;
     }
+
+
+    /**
+     * Method prompts the user to delete the detail at the specified adapter position.
+     *
+     * @param adapterPosition   Position of the detail to delete.
+     */
+    private void deleteDetail(int adapterPosition) {
+        ConfirmDeleteDetailDialog dialog = new ConfirmDeleteDetailDialog();
+        Bundle dialogArgs = new Bundle();
+        dialogArgs.putSerializable(ConfirmDeleteDetailDialog.KEY_CALLBACK_LISTENER, callbackListener);
+        dialogArgs.putSerializable(ConfirmDeleteDetailDialog.KEY_DETAIL, data.get(adapterPosition));
+        dialog.setArguments(dialogArgs);
+        dialog.show(activity.getSupportFragmentManager(), null);
+    }
+
+    /**
+     * Method prompts the user to edit the detail at the specified adapter position.
+     *
+     * @param adapterPosition   Position of the detail to edit.
+     */
+    private void editDetail(int adapterPosition) {
+        DetailDialog dialog = new DetailDialog();
+        Bundle dialogArgs = new Bundle();
+        dialogArgs.putSerializable(DetailDialog.KEY_CALLBACK_LISTENER, callbackListener);
+        dialogArgs.putSerializable(DetailDialog.KEY_DETAIL, data.get(adapterPosition));
+        dialog.setArguments(dialogArgs);
+        dialog.show(activity.getSupportFragmentManager(), "");
+    }
+
 }

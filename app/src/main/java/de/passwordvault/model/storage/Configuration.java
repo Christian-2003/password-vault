@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.appcompat.app.AppCompatDelegate;
 import de.passwordvault.App;
+import de.passwordvault.model.detail.DetailSwipeAction;
 
 
 /**
@@ -11,7 +12,7 @@ import de.passwordvault.App;
  * to (unencrypted) shared preferences for configuration purposes.
  *
  * @author  Christian-2003
- * @version 3.5.2
+ * @version 3.5.4
  */
 public class Configuration {
 
@@ -57,6 +58,16 @@ public class Configuration {
      * home fragment.
      */
     private static final String KEY_NUM_RECENTLY_EDITED = "num_recently_edited";
+
+    /**
+     * Field stores the key with which to store the left swipe action for details.
+     */
+    private static final String KEY_DETAIL_LEFT_SWIPE_ACTION = "detail_left_swipe";
+
+    /**
+     * Field stores the key with which to store the right swipe action for details.
+     */
+    private static final String KEY_DETAIL_RIGHT_SWIPE_ACTION = "detail_right_swipe";
 
     /**
      * Field stores the shared preferences instance from which to retrieve data.
@@ -166,6 +177,54 @@ public class Configuration {
      */
     public static int getNumberOfRecentlyEdited() {
         return preferences.getInt(KEY_NUM_RECENTLY_EDITED, 5);
+    }
+
+
+    /**
+     * Method changes the left swipe action for when a detail is swiped.
+     *
+     * @param swipeAction   New swipe action.
+     */
+    public static void setDetailLeftSwipeAction(DetailSwipeAction swipeAction) {
+        if (swipeAction != null) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(KEY_DETAIL_LEFT_SWIPE_ACTION, swipeAction.getPreferencesValue());
+            editor.apply();
+        }
+    }
+
+    /**
+     * Method returns the left swipe action for when a detail is swiped.
+     *
+     * @return  Swipe action.
+     */
+    public static DetailSwipeAction getDetailLeftSwipeAction() {
+        String swipeAction = preferences.getString(KEY_DETAIL_LEFT_SWIPE_ACTION, DetailSwipeAction.DELETE.getPreferencesValue());
+        return DetailSwipeAction.fromPreferencesValue(swipeAction);
+    }
+
+
+    /**
+     * Method changes the right swipe action for when a detail is swiped.
+     *
+     * @param swipeAction   New swipe action.
+     */
+    public static void setDetailRightSwipeAction(DetailSwipeAction swipeAction) {
+        if (swipeAction != null) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(KEY_DETAIL_RIGHT_SWIPE_ACTION, swipeAction.getPreferencesValue());
+            editor.apply();
+        }
+    }
+
+    /**
+     * Method returns the right swipe action for when a detail is swiped.
+     *
+     * @return  Swipe action.
+     */
+    public static DetailSwipeAction getDetailRightSwipeAction() {
+        String swipeAction = preferences.getString(KEY_DETAIL_RIGHT_SWIPE_ACTION, DetailSwipeAction.EDIT.getPreferencesValue());
+        return DetailSwipeAction.fromPreferencesValue(swipeAction);
     }
 
 

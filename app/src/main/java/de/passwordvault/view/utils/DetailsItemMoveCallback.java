@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.App;
 import de.passwordvault.R;
+import de.passwordvault.model.detail.DetailSwipeAction;
+import de.passwordvault.model.storage.Configuration;
 import de.passwordvault.view.utils.adapters.DetailsRecyclerViewAdapter;
 
 
@@ -226,16 +228,30 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
             Paint paint = new Paint();
             Bitmap icon;
             if (dX > 1) {
-                paint.setColor(adapter.getContext().getColor(R.color.pv_primary));
-                icon = getBitmap(R.drawable.ic_edit);
+                DetailSwipeAction swipeAction = Configuration.getDetailRightSwipeAction();
+                if (swipeAction == DetailSwipeAction.DELETE) {
+                    paint.setColor(adapter.getContext().getColor(R.color.pv_red));
+                    icon = getBitmap(R.drawable.ic_delete);
+                }
+                else {
+                    paint.setColor(adapter.getContext().getColor(R.color.pv_primary));
+                    icon = getBitmap(R.drawable.ic_edit);
+                }
                 canvas.drawRect((float)itemView.getLeft(), (float)itemView.getTop(), dX, (float)itemView.getBottom(), paint);
                 if (icon != null) {
                     canvas.drawBitmap(icon, (float) itemView.getLeft() + convertDpToPx(16), (float) itemView.getTop() + ((float) itemView.getBottom() - (float) itemView.getTop() - icon.getHeight()) / 2, paint);
                 }
             }
             else if (dX < -1) {
-                paint.setColor(adapter.getContext().getColor(R.color.pv_red));
-                icon = getBitmap(R.drawable.ic_delete);
+                DetailSwipeAction swipeAction = Configuration.getDetailLeftSwipeAction();
+                if (swipeAction == DetailSwipeAction.DELETE) {
+                    paint.setColor(adapter.getContext().getColor(R.color.pv_red));
+                    icon = getBitmap(R.drawable.ic_delete);
+                }
+                else {
+                    paint.setColor(adapter.getContext().getColor(R.color.pv_primary));
+                    icon = getBitmap(R.drawable.ic_edit);
+                }
                 canvas.drawRect((float)itemView.getRight() + dX, (float)itemView.getTop(), (float)itemView.getRight(), (float)itemView.getBottom(), paint);
                 if (icon != null) {
                     canvas.drawBitmap(icon, (float)itemView.getRight() - convertDpToPx(16) - icon.getWidth(), (float)itemView.getTop() + ((float)itemView.getBottom() - (float)itemView.getTop() - icon.getHeight()) / 2, paint);
