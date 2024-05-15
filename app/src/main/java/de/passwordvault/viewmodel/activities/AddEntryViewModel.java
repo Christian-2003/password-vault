@@ -2,7 +2,6 @@ package de.passwordvault.viewmodel.activities;
 
 import androidx.lifecycle.ViewModel;
 import de.passwordvault.model.entry.EntryExtended;
-import de.passwordvault.model.tags.TagCollection;
 import de.passwordvault.view.activities.AddEntryActivity;
 
 
@@ -11,7 +10,7 @@ import de.passwordvault.view.activities.AddEntryActivity;
  * relevant data that shall be persistent throughout activity changes.
  *
  * @author  Christian-2003
- * @version 3.3.0
+ * @version 3.5.4
  */
 public class AddEntryViewModel extends ViewModel {
 
@@ -19,11 +18,6 @@ public class AddEntryViewModel extends ViewModel {
      * Attribute stores the entry that is currently being created / edited.
      */
     private EntryExtended entry;
-
-    /**
-     * Attribute stores the tags of the entry that are being edited.
-     */
-    private TagCollection tags;
 
 
     /**
@@ -34,23 +28,23 @@ public class AddEntryViewModel extends ViewModel {
     }
 
 
+    /**
+     * Method returns the entry that is being edited.
+     *
+     * @return  Entry that is being edited.
+     */
     public EntryExtended getEntry() {
         return entry;
     }
 
+    /**
+     * Method changes the entry that is being edited. The entry is copied through it's copy-constructor.
+     * Therefore, changes do not automatically apply to the {@link de.passwordvault.model.entry.EntryManager}.
+     *
+     * @param entry Entry to edit.
+     */
     public void setEntry(EntryExtended entry) {
-        this.entry = entry;
-    }
-
-    public TagCollection getTags() {
-        return tags;
-    }
-
-    public void setTags(TagCollection tags) throws NullPointerException {
-        if (tags == null) {
-            throw new NullPointerException();
-        }
-        this.tags = tags;
+        this.entry = new EntryExtended(entry);
     }
 
 }

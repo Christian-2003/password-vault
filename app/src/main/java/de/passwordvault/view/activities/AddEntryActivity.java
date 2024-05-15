@@ -28,7 +28,6 @@ import de.passwordvault.model.packages.PackageCollection;
 import de.passwordvault.model.packages.SerializablePackage;
 import de.passwordvault.model.packages.SerializablePackageCollection;
 import de.passwordvault.model.tags.Tag;
-import de.passwordvault.model.tags.TagCollection;
 import de.passwordvault.model.tags.TagManager;
 import de.passwordvault.view.dialogs.EditTagDialog;
 import de.passwordvault.view.utils.DetailsItemMoveCallback;
@@ -46,7 +45,7 @@ import de.passwordvault.view.utils.DialogCallbackListener;
  * Class implements an activity which can add (or edit) entries.
  *
  * @author  Christian-2003
- * @version 3.5.1
+ * @version 3.5.4
  */
 public class AddEntryActivity extends PasswordVaultBaseActivity implements DialogCallbackListener, Observer<ArrayList<Tag>> {
 
@@ -56,9 +55,9 @@ public class AddEntryActivity extends PasswordVaultBaseActivity implements Dialo
     private AddEntryViewModel viewModel;
 
     /**
-     * Attribute stores the activity result launcher used for launching an activity.
+     * Attribute stores the activity result launcher used for editing the packages.
      */
-    private ActivityResultLauncher<Intent> activityLauncher;
+    private final ActivityResultLauncher<Intent> editPackagesLauncher;
 
     /**
      * Attribute stores the adapter for the recycler view displaying all details.
@@ -76,6 +75,26 @@ public class AddEntryActivity extends PasswordVaultBaseActivity implements Dialo
      */
     public AddEntryActivity() {
         finishedEditing = false;
+
+        //Edit packages:
+        editPackagesLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                Bundle results = result.getData().getExtras();
+                if (results != null && results.containsKey(PackagesActivity.KEY_PACKAGES)) {
+                    try {
+                        ArrayList<SerializablePackage> packages = (ArrayList<SerializablePackage>)results.getSerializable(PackagesActivity.KEY_PACKAGES);
+                        if (packages != null) {
+                            viewModel.getEntry().setPackages(new SerializablePackageCollection(packages).toPackageCollection());
+                        }
+                    }
+                    catch (Exception e) {
+                        Log.d("AddEntryActivity", e.getMessage() == null ? "Unexpected error." : e.getMessage());
+                        return;
+                    }
+                    setupPackage();
+                }
+            }
+        });
     }
 
 
@@ -95,7 +114,6 @@ public class AddEntryActivity extends PasswordVaultBaseActivity implements Dialo
             //Activity shall be used to edit an entry:
             if (viewModel.getEntry() == null) {
                 viewModel.setEntry(EntryManager.getInstance().get(bundle.getString("entry")));
-                viewModel.setTags(new TagCollection(viewModel.getEntry().getTags()));
             }
             ((CollapsingToolbarLayout)findViewById(R.id.collapsing_toolbar_layout)).setTitle(viewModel.getEntry().getName());
             ((TextView)findViewById(R.id.add_entry_name)).setText(viewModel.getEntry().getName());
@@ -104,7 +122,6 @@ public class AddEntryActivity extends PasswordVaultBaseActivity implements Dialo
         else if (viewModel.getEntry() == null){
             //Activity shall be used to create a new entry:
             viewModel.setEntry(new EntryExtended());
-            viewModel.setTags(new TagCollection());
         }
 
         RecyclerView detailsContainer = findViewById(R.id.add_entry_details_container);
@@ -117,30 +134,11 @@ public class AddEntryActivity extends PasswordVaultBaseActivity implements Dialo
         setupTags();
         setupPackage();
 
-        activityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                Bundle results = result.getData().getExtras();
-                if (results != null && results.containsKey(PackagesActivity.KEY_PACKAGES)) {
-                    try {
-                        ArrayList<SerializablePackage> packages = (ArrayList<SerializablePackage>)results.getSerializable(PackagesActivity.KEY_PACKAGES);
-                        if (packages != null) {
-                            viewModel.getEntry().setPackages(new SerializablePackageCollection(packages).toPackageCollection());
-                        }
-                    }
-                    catch (Exception e) {
-                        Log.d("AddEntryActivity", e.getMessage() == null ? "Unexpected error." : e.getMessage());
-                        return;
-                    }
-                    setupPackage();
-                }
-            }
-        });
-
         findViewById(R.id.add_entry_package_edit_button).setOnClickListener(view -> {
             Intent intent = new Intent(AddEntryActivity.this, PackagesActivity.class);
             SerializablePackageCollection packages = new SerializablePackageCollection(viewModel.getEntry().getPackages());
             intent.putExtra(PackagesActivity.KEY_PACKAGES, packages);
-            activityLauncher.launch(intent);
+            editPackagesLauncher.launch(intent);
         });
 
         //Add ClickListeners to close the activity:
@@ -161,6 +159,7 @@ public class AddEntryActivity extends PasswordVaultBaseActivity implements Dialo
                 //Some data was not entered:
                 return;
             }
+            EntryManager.getInstance().set(viewModel.getEntry(), viewModel.getEntry().getUuid());
             setResult(RESULT_OK);
             finishedEditing = true;
             AddEntryActivity.this.finish();
@@ -256,7 +255,7 @@ public class AddEntryActivity extends PasswordVaultBaseActivity implements Dialo
         viewModel.getEntry().setName(name);
         viewModel.getEntry().setDescription(description);
         viewModel.getEntry().notifyDataChange();
-        viewModel.getEntry().setTags(viewModel.getTags());
+        viewModel.getEntry().setTags(viewModel.getEntry().getTags());
         EntryManager.getInstance().set(viewModel.getEntry(), viewModel.getEntry().getUuid());
         return true;
     }
@@ -279,7 +278,7 @@ public class AddEntryActivity extends PasswordVaultBaseActivity implements Dialo
             chip.setCheckedIcon(checkedIcon);
             chip.setCheckedIconVisible(true);
 
-            for (Tag entryTag : viewModel.getTags()) {
+            for (Tag entryTag : viewModel.getEntry().getTags()) {
                 if (tag.equals(entryTag)) {
                     chip.setChecked(true);
                 }
@@ -296,10 +295,10 @@ public class AddEntryActivity extends PasswordVaultBaseActivity implements Dialo
 
             chip.setOnClickListener(view -> {
                 if (chip.isChecked()) {
-                    viewModel.getTags().add(tag);
+                    viewModel.getEntry().getTags().add(tag);
                 }
                 else {
-                    viewModel.getTags().remove(tag);
+                    viewModel.getEntry().getTags().remove(tag);
                 }
             });
 

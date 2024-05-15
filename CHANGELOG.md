@@ -21,6 +21,7 @@ Users can now save login data to Password Vault automatically after login to an 
 * Swipe actions for editing and deleting details can now be switched.
 * Activity displaying help pages now shows help page title in app bar.
 * Added privacy policy.
+* Fixed a bug where changes in the selected apps for an account were always saved.
 
 <br/>
 

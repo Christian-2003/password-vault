@@ -57,7 +57,7 @@
     <string name="settings_customization_home_recentlyedited_number_option">{arg} Konten</string>
     <string name="settings_customization_details">Kontoinformationen</string>
     <string name="settings_customization_details_swipe">Wischgesten</string>
-    <string name="settings_customization_details_swipe_info">Aktionen beim wischen von Kontoinformationen ändern</string>
+    <string name="settings_customization_details_swipe_info">Aktionen beim Wischen von Kontoinformationen bearbeiten</string>
     <string name="settings_customization_details_swipe_left">Nach links Wischen</string>
     <string name="settings_customization_details_swipe_right">Nach rechts Wischen</string>
     <string name="settings_customization_details_swipe_delete">Information löschen</string>
