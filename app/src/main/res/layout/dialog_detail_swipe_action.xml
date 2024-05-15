@@ -3,7 +3,8 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/pv_container">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,21 +23,73 @@
                 android:text="@string/settings_customization_details_swipe_left"
                 style="@style/pv.text.highlight"/>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:backgroundTint="@color/pv_background"
+                style="@style/pv.container">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/default_padding">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/default_padding"
+                        android:layout_marginEnd="@dimen/default_padding"
+                        android:background="@drawable/pill"
+                        android:backgroundTint="@color/pv_container"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/default_padding"
+                        android:layout_marginTop="@dimen/default_padding"
+                        android:background="@drawable/pill"
+                        android:backgroundTint="@color/pv_container"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/left_swipe_image_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/default_padding"
+                    android:background="@color/pv_red">
+
+                    <ImageView
+                        android:id="@+id/left_swipe_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/default_padding"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_delete"
+                        android:tint="@color/pv_background"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
             <RadioGroup
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-            <RadioButton
-                android:id="@+id/radio_left_swipe_edit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/settings_customization_details_swipe_edit"/>
+                <RadioButton
+                    android:id="@+id/radio_left_swipe_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_customization_details_swipe_edit"/>
 
-            <RadioButton
-                android:id="@+id/radio_left_swipe_delete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/settings_customization_details_swipe_delete"/>
+                <RadioButton
+                    android:id="@+id/radio_left_swipe_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_customization_details_swipe_delete"/>
 
             </RadioGroup>
 
@@ -55,6 +108,58 @@
                 android:layout_height="wrap_content"
                 android:text="@string/settings_customization_details_swipe_right"
                 style="@style/pv.text.highlight"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:backgroundTint="@color/pv_background"
+                style="@style/pv.container">
+
+                <LinearLayout
+                    android:id="@+id/right_swipe_image_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/default_padding"
+                    android:background="@color/pv_primary">
+
+                    <ImageView
+                        android:id="@+id/right_swipe_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/default_padding"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_edit"
+                        android:tint="@color/pv_background"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/default_padding">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/default_padding"
+                        android:layout_marginEnd="@dimen/default_padding"
+                        android:background="@drawable/pill"
+                        android:backgroundTint="@color/pv_container"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/default_padding"
+                        android:layout_marginTop="@dimen/default_padding"
+                        android:background="@drawable/pill"
+                        android:backgroundTint="@color/pv_container"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <RadioGroup
                 android:layout_width="match_parent"

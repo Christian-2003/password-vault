@@ -4,9 +4,12 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -53,24 +56,39 @@ public class DetailSwipeActionDialog extends DialogFragment {
             dismiss();
         });
 
+        //Setup left swipe action:
         RadioButton deleteLeftSwipeRadioButton = view.findViewById(R.id.radio_left_swipe_delete);
         RadioButton editLeftSwipeRadioButton = view.findViewById(R.id.radio_left_swipe_edit);
-        RadioButton deleteRightSwipeRadioButton = view.findViewById(R.id.radio_right_swipe_delete);
-        RadioButton editRightSwipeRadioButton = view.findViewById(R.id.radio_right_swipe_edit);
+        ImageView leftSwipeImageView = view.findViewById(R.id.left_swipe_image);
+        LinearLayout leftSwipeImageContainer = view.findViewById(R.id.left_swipe_image_container);
         switch (viewModel.getLeftSwipeAction()) {
             case EDIT:
                 editLeftSwipeRadioButton.setChecked(true);
+                leftSwipeImageView.setImageResource(R.drawable.ic_edit);
+                leftSwipeImageContainer.setBackgroundColor(requireContext().getColor(R.color.pv_primary));
                 break;
             case DELETE:
                 deleteLeftSwipeRadioButton.setChecked(true);
+                leftSwipeImageView.setImageResource(R.drawable.ic_delete);
+                leftSwipeImageContainer.setBackgroundColor(requireContext().getColor(R.color.pv_red));
                 break;
         }
+
+        //Setup right swipe action:
+        RadioButton deleteRightSwipeRadioButton = view.findViewById(R.id.radio_right_swipe_delete);
+        RadioButton editRightSwipeRadioButton = view.findViewById(R.id.radio_right_swipe_edit);
+        ImageView rightSwipeImageView = view.findViewById(R.id.right_swipe_image);
+        LinearLayout rightSwipeImageContainer = view.findViewById(R.id.right_swipe_image_container);
         switch (viewModel.getRightSwipeAction()) {
             case EDIT:
                 editRightSwipeRadioButton.setChecked(true);
+                rightSwipeImageView.setImageResource(R.drawable.ic_edit);
+                rightSwipeImageContainer.setBackgroundColor(requireContext().getColor(R.color.pv_primary));
                 break;
             case DELETE:
                 deleteRightSwipeRadioButton.setChecked(true);
+                rightSwipeImageView.setImageResource(R.drawable.ic_delete);
+                rightSwipeImageContainer.setBackgroundColor(requireContext().getColor(R.color.pv_red));
                 break;
         }
 
