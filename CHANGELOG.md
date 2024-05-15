@@ -22,6 +22,7 @@ Users can now save login data to Password Vault automatically after login to an 
 * Activity displaying help pages now shows help page title in app bar.
 * Added privacy policy.
 * Fixed a bug where changes in the selected apps for an account were always saved.
+* Visual enhancements within the dialog to change between light and dark mode.
 
 <br/>
 

@@ -1,15 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/pv_container"
     android:padding="@dimen/default_padding">
 
-    <RadioGroup
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/default_padding"
+            android:backgroundTint="@color/pv_background_light"
+            style="@style/pv.container">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="@dimen/default_padding"
+                    android:background="@drawable/pill"
+                    android:backgroundTint="@color/pv_container_highlight_light"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_padding"
+                    android:layout_marginStart="@dimen/default_padding"
+                    android:layout_gravity="center"
+                    android:background="@drawable/pill"
+                    android:backgroundTint="@color/pv_container_light"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="@dimen/default_padding"
+                    android:background="@drawable/pill"
+                    android:backgroundTint="@color/pv_container_highlight_light"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_padding"
+                    android:layout_marginStart="@dimen/default_padding"
+                    android:layout_gravity="center"
+                    android:background="@drawable/pill"
+                    android:backgroundTint="@color/pv_container_light"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <RadioButton
             android:id="@+id/dialog_darkmode_radio_button_light"
@@ -17,11 +74,123 @@
             android:layout_height="wrap_content"
             android:text="@string/settings_customization_appearance_darkmode_light"/>
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/default_padding"
+            android:backgroundTint="@color/pv_background_dark"
+            style="@style/pv.container">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="@dimen/default_padding"
+                    android:background="@drawable/pill"
+                    android:backgroundTint="@color/pv_container_highlight_dark"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_padding"
+                    android:layout_marginStart="@dimen/default_padding"
+                    android:layout_gravity="center"
+                    android:background="@drawable/pill"
+                    android:backgroundTint="@color/pv_container_dark"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="@dimen/default_padding"
+                    android:background="@drawable/pill"
+                    android:backgroundTint="@color/pv_container_highlight_dark"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_padding"
+                    android:layout_marginStart="@dimen/default_padding"
+                    android:layout_gravity="center"
+                    android:background="@drawable/pill"
+                    android:backgroundTint="@color/pv_container_dark"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
         <RadioButton
             android:id="@+id/dialog_darkmode_radio_button_dark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/settings_customization_appearance_darkmode_dark"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/default_padding"
+            android:backgroundTint="@color/pv_background"
+            style="@style/pv.container">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="@dimen/default_padding"
+                    android:background="@drawable/pill"
+                    android:backgroundTint="@color/pv_container_highlight"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_padding"
+                    android:layout_marginStart="@dimen/default_padding"
+                    android:layout_gravity="center"
+                    android:background="@drawable/pill"
+                    android:backgroundTint="@color/pv_container"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="@dimen/default_padding"
+                    android:background="@drawable/pill"
+                    android:backgroundTint="@color/pv_container_highlight"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_padding"
+                    android:layout_marginStart="@dimen/default_padding"
+                    android:layout_gravity="center"
+                    android:background="@drawable/pill"
+                    android:backgroundTint="@color/pv_container"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <RadioButton
             android:id="@+id/dialog_darkmode_radio_button_system"
@@ -29,6 +198,6 @@
             android:layout_height="wrap_content"
             android:text="@string/settings_customization_appearance_darkmode_system"/>
 
-    </RadioGroup>
+    </LinearLayout>
 
-</LinearLayout>
+</ScrollView>
