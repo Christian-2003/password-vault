@@ -8,7 +8,7 @@ import de.passwordvault.model.storage.encryption.AES;
  * Class contains the configuration for the XML backup.
  *
  * @author  Christian-2003
- * @version 3.3.0
+ * @version 3.5.4
  */
 public abstract class XmlBackupConfiguration {
 
@@ -23,10 +23,15 @@ public abstract class XmlBackupConfiguration {
          * <b>IMPORTANT: Update this to the newest version number every time a new version is
          * introduced!</b>
          */
-        public static final String VERSION_LATEST = "1";
+        public static final String VERSION_LATEST = "2";
 
         /**
-         * Field stores the version number for the first XML backup.
+         * Field stores the version number for the second generation of XML backups.
+         */
+        public static final String VERSION_2 = "2";
+
+        /**
+         * Field stores the version number for the first generation of XML backups.
          */
         public static final String VERSION_1 = "1";
 
@@ -61,7 +66,7 @@ public abstract class XmlBackupConfiguration {
     /**
      * Field stores the XML tag which stores whether the backup was automatically created.
      */
-    protected static final String TAG_AUTO_CREATED = "auto-created";
+    protected static final String TAG_AUTO_CREATED = "auto_created";
 
     /**
      * Field stores the XML tag which encapsulates all data regarding the encryption.
@@ -144,8 +149,32 @@ public abstract class XmlBackupConfiguration {
             encryptionAlgorithm = new AES(this.encryptionKeySeed);
         }
         else {
-            this.encryptionAlgorithm = null;
+            encryptionAlgorithm = null;
         }
+    }
+
+
+    /**
+     * Constructor instantiates a new instance. Please make sure that the application has access
+     * (and permission) to write to that file, before calling.
+     *
+     * @param uri                   URI of the file for the backup.
+     * @param encrypt               Whether the backup shall be encrypted. If this is {@code true},
+     *                              the backup is encrypted with the default key used for the app.
+     * @throws NullPointerException The passed URI is {@code null}.
+     */
+    protected XmlBackupConfiguration(Uri uri, boolean encrypt) throws NullPointerException {
+        if (uri == null) {
+            throw new NullPointerException();
+        }
+        this.uri = uri;
+        if (encrypt) {
+            encryptionAlgorithm = new AES();
+        }
+        else {
+            encryptionAlgorithm = null;
+        }
+        encryptionKeySeed = null;
     }
 
 }

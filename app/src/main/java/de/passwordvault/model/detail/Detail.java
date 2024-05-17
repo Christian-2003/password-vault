@@ -1,6 +1,5 @@
 package de.passwordvault.model.detail;
 
-import androidx.annotation.NonNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;

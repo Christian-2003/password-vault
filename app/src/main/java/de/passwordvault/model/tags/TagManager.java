@@ -22,7 +22,7 @@ import de.passwordvault.model.storage.csv.CsvParser;
  * shared preferences. Tags must be saved manually through {@link #save()}.
  *
  * @author  Christian-2003
- * @version 3.3.0
+ * @version 3.5.4
  */
 public class TagManager extends GenericManager<Tag> implements PersistableManager {
 
@@ -188,6 +188,17 @@ public class TagManager extends GenericManager<Tag> implements PersistableManage
             }
         });
         deleteThread.start();
+    }
+
+
+    /**
+     * Method returns the header that describes the columns for the CSV generated when calling
+     * {@link #toCsv()}.
+     *
+     * @return  Header for the CSV-representation of the tags.
+     */
+    public static String getStorableAttributes() {
+        return "UUID,Name";
     }
 
 }
