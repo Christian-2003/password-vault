@@ -1,13 +1,27 @@
 package de.passwordvault.model.storage.backup;
 
 import android.net.Uri;
+import android.os.ParcelFileDescriptor;
+import android.util.Log;
+
+import androidx.documentfile.provider.DocumentFile;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import java.util.ArrayList;
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileOutputStream;
 import java.util.Calendar;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import de.passwordvault.App;
 import de.passwordvault.BuildConfig;
 import de.passwordvault.model.analysis.QualityGate;
 import de.passwordvault.model.analysis.QualityGateManager;
@@ -22,6 +36,12 @@ import de.passwordvault.model.storage.encryption.EncryptionException;
 import de.passwordvault.model.tags.TagManager;
 
 
+/**
+ * Class implements the XML backup creator which can create XML backups of version 2.
+ *
+ * @author  Christian-2003
+ * @version 3.5.4
+ */
 public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
 
     /**
@@ -88,6 +108,11 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
 
 
     /**
+     * Attribute stores the name of the file for the backup.
+     */
+    private String filename;
+
+    /**
      * Attribute stores the XML document.
      */
     private Document xmlDocument;
@@ -109,11 +134,16 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
      * The backup will be encrypted with the default key used by the app.
      * This constructor is intended to be used by the automatic backup creation.
      *
-     * @param uri                   URI of the backup file.
+     * @param directory             URI of the directory, in which to create the backup file.
+     * @param filename              Name of the backup file.
      * @throws NullPointerException The passed URI is {@code null}.
      */
-    public XmlBackupCreator2(Uri uri) throws NullPointerException {
-        super(uri, true);
+    public XmlBackupCreator2(Uri directory, String filename) throws NullPointerException {
+        super(directory, true);
+        if (filename == null) {
+            throw new NullPointerException();
+        }
+        this.filename = filename;
         autoCreated = true;
     }
 
@@ -123,16 +153,29 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
      * a key with which to encrypt the backup. Otherwise, the backup is not encrypted.
      * This constructor is intended to be used when creating backups manually.
      *
-     * @param uri                   URI of the backup file.
+     * @param directory             URI of the directory, in which to create the backup file.
+     * @param filename              Name of the backup file.
      * @param encryptionSeed        Seed for the encryption key or {@code null}.
      * @throws NullPointerException The passed URI is {@code null}.
      */
-    public XmlBackupCreator2(Uri uri, String encryptionSeed) throws NullPointerException {
-        super(uri, encryptionSeed);
+    public XmlBackupCreator2(Uri directory, String filename, String encryptionSeed) throws NullPointerException {
+        super(directory, encryptionSeed);
+        if (filename == null) {
+            throw new NullPointerException();
+        }
+        this.filename = filename;
         autoCreated = false;
     }
 
 
+    /**
+     * Method creates the XML backup for the passed configuration. If {@code null} is passed, the
+     * default configuration is used.
+     *
+     * @param config                Configuration for the backup of {@code null}.
+     * @throws BackupException      The backup cannot be created.
+     * @throws EncryptionException  The backup data cannot be encrypted.
+     */
     public void createBackup(BackupConfig config) throws BackupException, EncryptionException {
         if (config == null) {
             this.config = new BackupConfig();
@@ -141,6 +184,49 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
             this.config = config;
         }
         createDocument();
+
+        Element rootElement = createRootElement();
+        xmlDocument.appendChild(rootElement);
+
+        try {
+            TransformerFactory factory = TransformerFactory.newInstance();
+            Transformer transformer = factory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+            DOMSource source = new DOMSource(xmlDocument);
+            if (uri.getPath() == null) {
+                Log.e("XML", "Invalid file");
+                throw new BackupException("Invalid file");
+            }
+
+            DocumentFile directory = DocumentFile.fromTreeUri(App.getContext(), uri);
+            DocumentFile file = directory.createFile("text/plain", filename);
+            Uri fileUri = file.getUri();
+
+            ParcelFileDescriptor xml = App.getContext().getContentResolver().openFileDescriptor(fileUri, "w");
+            FileDescriptor fs = xml.getFileDescriptor();
+
+            Log.d("XML", "2");
+            StreamResult result = new StreamResult(new FileOutputStream(fs));
+            Log.d("XML", "3");
+            transformer.transform(source, result);
+            Log.d("XML", "Saved backup");
+            xml.close();
+        }
+        catch (Exception e) {
+            Log.e("XML", e.getMessage() == null ? "No message provided." : e.getMessage());
+            throw new BackupException(e.getMessage());
+        }
+    }
+
+
+    /**
+     * Method generates the root element for the XML.
+     *
+     * @return                      Root element.
+     * @throws EncryptionException  The data could not be encrypted.
+     */
+    private Element createRootElement() throws EncryptionException {
         Element rootElement = xmlDocument.createElement(TAG_PASSWORD_VAULT);
 
         Element metadataElement = createMetadataElement();
@@ -148,6 +234,13 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
 
         Element dataElement = createDataElement();
         rootElement.appendChild(dataElement);
+
+        if (this.config.getIncludeSettings() || this.config.getIncludeQualityGates()) {
+            Element settingsElement = createSettingsElement();
+            rootElement.appendChild(settingsElement);
+        }
+
+        return rootElement;
     }
 
 
@@ -161,7 +254,7 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
 
         Element versionElement = xmlDocument.createElement(TAG_VERSION);
         versionElement.setTextContent(Versions.VERSION_LATEST);
-        metadataElement.appendChild(metadataElement);
+        metadataElement.appendChild(versionElement);
 
         Element appVersionElement = xmlDocument.createElement(TAG_APP_VERSION);
         appVersionElement.setTextContent(BuildConfig.VERSION_NAME);
@@ -277,11 +370,17 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
     }
 
 
+    /**
+     * Method generates the element which contains all settings.
+     *
+     * @return  Element containing all settings.
+     */
     private Element createSettingsElement() {
         Element settingsElement = xmlDocument.createElement(TAG_SETTINGS);
 
         if (config.getIncludeQualityGates()) {
-
+            Element qualityGatesElement = createQualityGatesElement();
+            settingsElement.appendChild(qualityGatesElement);
         }
 
         if (config.getIncludeSettings()) {
@@ -320,6 +419,11 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
     }
 
 
+    /**
+     * Method generates the element which contains all custom quality gates.
+     *
+     * @return  Element containing all custom quality gates.
+     */
     private Element createQualityGatesElement() {
         Element qualityGatesElement = xmlDocument.createElement(TAG_QUALITY_GATES);
 
@@ -328,8 +432,13 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
             if (!gate.isEditable()) {
                 continue;
             }
+            builder.append(gate.toStorable());
+        }
+        if (builder.length() > 1) {
+            builder.deleteCharAt(builder.length() - 1);
         }
 
+        qualityGatesElement.setTextContent(builder.toString());
         return qualityGatesElement;
     }
 

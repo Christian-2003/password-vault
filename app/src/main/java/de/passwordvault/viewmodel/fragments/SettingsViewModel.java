@@ -15,6 +15,7 @@ import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.storage.app.StorageException;
 import de.passwordvault.model.storage.backup.BackupException;
 import de.passwordvault.model.storage.backup.XmlBackupCreator;
+import de.passwordvault.model.storage.backup.XmlBackupCreator2;
 import de.passwordvault.model.storage.backup.XmlBackupRestorer;
 import de.passwordvault.model.storage.backup.XmlException;
 import de.passwordvault.model.storage.encryption.EncryptionException;
@@ -65,12 +66,17 @@ public class SettingsViewModel extends ViewModel {
         if (filename == null) {
             throw new NullPointerException("Null is invalid filename");
         }
-        XmlBackupCreator xmlBackupCreator = new XmlBackupCreator(directory, filename, password);
+        XmlBackupCreator2 xmlBackupCreator = new XmlBackupCreator2(directory, filename, password);
         try {
-            xmlBackupCreator.createBackup();
+            XmlBackupCreator2.BackupConfig config = new XmlBackupCreator2.BackupConfig();
+            config.setIncludeSettings(true);
+            config.setIncludeQualityGates(true);
+            xmlBackupCreator.createBackup(config);
         }
-        catch (BackupException e) {
+        catch (BackupException | EncryptionException e) {
+            Log.e("XML", e.getMessage() != null ? e.getMessage() : "No message provided.");
             Toast.makeText(context, context.getString(R.string.settings_data_backup_create_error), Toast.LENGTH_SHORT).show();
+            return;
         }
         Toast.makeText(context, context.getString(R.string.settings_data_backup_create_success), Toast.LENGTH_SHORT).show();
     }

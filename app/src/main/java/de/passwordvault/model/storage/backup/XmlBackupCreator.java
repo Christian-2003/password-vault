@@ -26,8 +26,9 @@ import de.passwordvault.model.tags.TagManager;
  * Class implements a functionality which creates an XML backup to the shared storage of the user's
  * Android device.
  *
- * @author  Christian-2003
- * @version 3.3.0
+ * @author      Christian-2003
+ * @version     3.3.0
+ * @deprecated  Use {@link XmlBackupCreator2} instead.
  */
 public class XmlBackupCreator extends XmlBackupConfiguration {
 
