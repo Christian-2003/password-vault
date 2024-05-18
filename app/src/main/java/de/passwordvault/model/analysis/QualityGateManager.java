@@ -7,6 +7,7 @@ import de.passwordvault.App;
 import de.passwordvault.R;
 import de.passwordvault.model.Observable;
 import de.passwordvault.model.Observer;
+import de.passwordvault.model.storage.app.StorageException;
 import de.passwordvault.model.storage.csv.CsvBuilder;
 import de.passwordvault.model.storage.csv.CsvParser;
 
@@ -18,7 +19,7 @@ import de.passwordvault.model.storage.csv.CsvParser;
  * automatically loaded from shared preferences.
  *
  * @author  Christian-2003
- * @version 3.3.0
+ * @version 3.5.4
  */
 public class QualityGateManager implements Observable<ArrayList<QualityGate>> {
 
@@ -258,20 +259,14 @@ public class QualityGateManager implements Observable<ArrayList<QualityGate>> {
                     //Ignore last row (which is always empty)
                     continue;
                 }
-                CsvParser parser = new CsvParser(csvRow);
-                ArrayList<String> row = parser.parseCsv();
-                if (row.size() != 3) {
-                    //CSV line is corrupt...
+                QualityGate qualityGate = new QualityGate();
+                try {
+                    qualityGate.fromStorable(csvRow);
+                }
+                catch (StorageException e) {
                     continue;
                 }
-                boolean enabled = true;
-                try {
-                    enabled = Boolean.parseBoolean(row.get(2));
-                }
-                catch (Exception e) {
-                    //Ignore...
-                }
-                qualityGates.add(new QualityGate(row.get(0), row.get(1), enabled, true));
+                qualityGates.add(qualityGate);
             }
         }
     }
@@ -293,13 +288,12 @@ public class QualityGateManager implements Observable<ArrayList<QualityGate>> {
             }
             else {
                 //Custom quality gate:
-                CsvBuilder builder = new CsvBuilder();
-                builder.append(qualityGate.getRegex());
-                builder.append(qualityGate.getDescription());
-                builder.append(qualityGate.isEnabled());
-                customQualityGates.append(builder.toString());
+                customQualityGates.append(qualityGate.toStorable());
                 customQualityGates.append("\n");
             }
+        }
+        if (customQualityGates.length() > 1) {
+            customQualityGates.deleteCharAt(customQualityGates.length() - 1);
         }
 
         editor.putString(App.getContext().getString(R.string.preferences_quality_gates_default), defaultQualityGates.toString());
