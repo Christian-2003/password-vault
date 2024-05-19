@@ -132,6 +132,11 @@
     <string name="settings_data_backup_create_info">Create (encrypted) backup of your data</string>
     <string name="settings_data_backup_create_error">Backup could not be created</string>
     <string name="settings_data_backup_create_success">Created backup</string>
+    <string name="settings_data_backup_create_general">General</string>
+    <string name="settings_data_backup_create_general_include_settings">Include Settings</string>
+    <string name="settings_data_backup_create_general_include_quality_gates">Include Quality Gates</string>
+    <string name="settings_data_backup_create_encryption">Encryption</string>
+    <string name="settings_data_backup_create_encryption_toggle">Encrypt Backup</string>
     <string name="settings_data_backup_restore">Restore backup</string>
     <string name="settings_data_backup_restore_info">Restore (encrypted) backup of your data</string>
     <string name="settings_data_backup_restore_error">Backup could not be restored</string>
@@ -251,6 +256,7 @@
     <string name="button_continue_without_converting">Continue without Converting</string>
     <string name="button_remove_package">Remove app</string>
     <string name="button_authenticate">Authenticate</string>
+    <string name="button_create_backup">Create Backup</string>
 
 
     <!-- Placeholder -->

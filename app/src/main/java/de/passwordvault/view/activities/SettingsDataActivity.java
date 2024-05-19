@@ -179,7 +179,7 @@ public class SettingsDataActivity extends PasswordVaultBaseActivity implements D
         findViewById(R.id.settings_data_export_html_container).setOnClickListener(view -> htmlExport());
 
         //Backup:
-        findViewById(R.id.settings_data_backup_create_container).setOnClickListener(view -> createXmlBackup());
+        findViewById(R.id.settings_data_backup_create_container).setOnClickListener(view -> startActivity(new Intent(this, CreateBackupActivity.class)));
         findViewById(R.id.settings_data_backup_restore_container).setOnClickListener(view -> restoreXmlBackup());
 
         //Delete:

@@ -23,6 +23,8 @@ Users can now save login data to Password Vault automatically after login to an 
 * Added privacy policy.
 * Fixed a bug where changes in the selected apps for an account were always saved.
 * Visual enhancements within the dialog to change between light and dark mode.
+* Added new backups which can store settings and quality gates.
+* Added new screen to configure and create backups.
 
 <br/>
 

@@ -127,6 +127,11 @@
     <string name="settings_data_backup_create_info">(Verschlüsseltes) Backup erstellen</string>
     <string name="settings_data_backup_create_error">Backup konnte nicht erstellt werden</string>
     <string name="settings_data_backup_create_success">Backup wurde erstellt</string>
+    <string name="settings_data_backup_create_general">Allgemein</string>
+    <string name="settings_data_backup_create_general_include_settings">Einstellungen sichern</string>
+    <string name="settings_data_backup_create_general_include_quality_gates">Sicherheitskriterien sichern</string>
+    <string name="settings_data_backup_create_encryption">Verschlüsselung</string>
+    <string name="settings_data_backup_create_encryption_toggle">Backup verschlüsseln</string>
     <string name="settings_data_backup_restore">Backup wiederherstellen</string>
     <string name="settings_data_backup_restore_info">(Verschlüsseltes) Backup wiederherstellen</string>
     <string name="settings_data_backup_restore_error">Backup konnte nicht wiederhergestellt werden</string>
@@ -246,6 +251,7 @@
     <string name="button_continue_without_converting">Ohne Konvertierung Fortfahren</string>
     <string name="button_remove_package">App entfernen</string>
     <string name="button_authenticate">Authentifizieren</string>
+    <string name="button_create_backup">Backup erstellen</string>
 
 
     <!-- Placeholder -->

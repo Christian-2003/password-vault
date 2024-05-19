@@ -2,13 +2,9 @@ package de.passwordvault.model.storage.backup;
 
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
-import android.util.Log;
-
 import androidx.documentfile.provider.DocumentFile;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.util.Calendar;
@@ -20,7 +16,6 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
 import de.passwordvault.App;
 import de.passwordvault.BuildConfig;
 import de.passwordvault.model.analysis.QualityGate;
@@ -110,7 +105,7 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
     /**
      * Attribute stores the name of the file for the backup.
      */
-    private String filename;
+    private final String filename;
 
     /**
      * Attribute stores the XML document.
@@ -195,26 +190,29 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
             DOMSource source = new DOMSource(xmlDocument);
             if (uri.getPath() == null) {
-                Log.e("XML", "Invalid file");
                 throw new BackupException("Invalid file");
             }
 
             DocumentFile directory = DocumentFile.fromTreeUri(App.getContext(), uri);
+            if (directory == null) {
+                throw new BackupException("Invalid directory");
+            }
             DocumentFile file = directory.createFile("text/plain", filename);
+            if (file == null) {
+                throw new BackupException("Invalid backup file");
+            }
             Uri fileUri = file.getUri();
-
             ParcelFileDescriptor xml = App.getContext().getContentResolver().openFileDescriptor(fileUri, "w");
+            if (xml == null) {
+                throw new BackupException("Invalid ParcelFileDescriptor for backup");
+            }
             FileDescriptor fs = xml.getFileDescriptor();
 
-            Log.d("XML", "2");
             StreamResult result = new StreamResult(new FileOutputStream(fs));
-            Log.d("XML", "3");
             transformer.transform(source, result);
-            Log.d("XML", "Saved backup");
             xml.close();
         }
         catch (Exception e) {
-            Log.e("XML", e.getMessage() == null ? "No message provided." : e.getMessage());
             throw new BackupException(e.getMessage());
         }
     }
