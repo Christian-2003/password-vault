@@ -411,6 +411,21 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
             detailSwipeRightElement.setAttribute(ATTRIBUTE_SETTINGS_NAME, SETTING_DETAIL_SWIPE_RIGHT);
             detailSwipeRightElement.setAttribute(ATTRIBUTE_SETTINGS_VALUE, Configuration.getDetailRightSwipeAction().getPreferencesValue());
             settingsElement.appendChild(detailSwipeRightElement);
+
+            Element backupIncludeSettingsElement = xmlDocument.createElement(TAG_SETTINGS_ITEM);
+            backupIncludeSettingsElement.setAttribute(ATTRIBUTE_SETTINGS_NAME, SETTING_BACKUP_INCLUDE_SETTINGS);
+            backupIncludeSettingsElement.setAttribute(ATTRIBUTE_SETTINGS_VALUE, "" + Configuration.getBackupIncludeSettings());
+            settingsElement.appendChild(backupIncludeSettingsElement);
+
+            Element backupIncludeQualityGatesElement = xmlDocument.createElement(TAG_SETTINGS_ITEM);
+            backupIncludeQualityGatesElement.setAttribute(ATTRIBUTE_SETTINGS_NAME, SETTING_BACKUP_INCLUDE_QUALITY_GATES);
+            backupIncludeQualityGatesElement.setAttribute(ATTRIBUTE_SETTINGS_VALUE, "" + Configuration.getBackupIncludeQualityGates());
+            settingsElement.appendChild(backupIncludeQualityGatesElement);
+
+            Element backupEncryptElement = xmlDocument.createElement(TAG_SETTINGS_ITEM);
+            backupEncryptElement.setAttribute(ATTRIBUTE_SETTINGS_NAME, SETTING_BACKUP_ENCRYPT);
+            backupEncryptElement.setAttribute(ATTRIBUTE_SETTINGS_VALUE, "" + Configuration.getBackupEncrypted());
+            settingsElement.appendChild(backupEncryptElement);
         }
 
         return settingsElement;

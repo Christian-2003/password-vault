@@ -54,9 +54,9 @@ public class CreateBackupActivity extends PasswordVaultBaseActivity {
     public CreateBackupActivity() {
         chooseDirectoryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK && result.getData() != null && result.getData().getData() != null) {
-                viewModel.setBackupPath(result.getData().getData());
+                viewModel.setBackupDirectory(result.getData().getData());
                 TextInputEditText directoryEditText = findViewById(R.id.input_directory);
-                directoryEditText.setText(viewModel.getBackupPath().getPath());
+                directoryEditText.setText(viewModel.getBackupDirectory().getPath());
             }
         });
     }
@@ -100,7 +100,7 @@ public class CreateBackupActivity extends PasswordVaultBaseActivity {
         filenameEditText.setText(viewModel.getFilename());
 
         TextInputEditText directoryEditText = findViewById(R.id.input_directory);
-        directoryEditText.setText(viewModel.getBackupPath() != null ? viewModel.getBackupPath().getPath() : "");
+        directoryEditText.setText(viewModel.getBackupDirectory() != null ? viewModel.getBackupDirectory().getPath() : "");
         directoryEditText.setOnClickListener(view -> chooseDirectory());
     }
 
@@ -109,7 +109,7 @@ public class CreateBackupActivity extends PasswordVaultBaseActivity {
         //Check data validity:
         boolean errorsDetected = false;
         TextInputLayout directoryLayout = findViewById(R.id.container_directory);
-        if (viewModel.getBackupPath() == null) {
+        if (viewModel.getBackupDirectory() == null) {
             directoryLayout.setError(getString(R.string.error_empty_input));
             errorsDetected = true;
         }
@@ -167,6 +167,8 @@ public class CreateBackupActivity extends PasswordVaultBaseActivity {
         findViewById(R.id.container_content).setVisibility(View.GONE);
         findViewById(R.id.progress_bar).setVisibility(View.VISIBLE);
 
+        viewModel.storeSettings();
+
         //Create backup:
         TextInputEditText filenameEditText = findViewById(R.id.input_filename);
         String filename = Objects.requireNonNull(filenameEditText.getText()).toString();
@@ -192,6 +194,7 @@ public class CreateBackupActivity extends PasswordVaultBaseActivity {
                 else {
                     Toast.makeText(CreateBackupActivity.this, CreateBackupActivity.this.getString(R.string.settings_data_backup_create_success), Toast.LENGTH_SHORT).show();
                 }
+                CreateBackupActivity.this.finish();
             });
         });
     }

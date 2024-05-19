@@ -70,6 +70,21 @@ public class Configuration {
     private static final String KEY_DETAIL_RIGHT_SWIPE_ACTION = "detail_right_swipe";
 
     /**
+     * Field stores the key with which to store whether to include settings with backups.
+     */
+    private static final String KEY_BACKUP_INCLUDE_SETTINGS = "backup_include_settings";
+
+    /**
+     * Field stores the key with which to store whether to include quality gates with backups.
+     */
+    private static final String KEY_BACKUP_INCLUDE_QUALITY_GATES = "backup_include_quality_gates";
+
+    /**
+     * Field stores the key with which to store whether to encrypt backups.
+     */
+    private static final String KEY_BACKUP_ENCRYPT = "backup_encrypt";
+
+    /**
      * Field stores the shared preferences instance from which to retrieve data.
      */
     private static final SharedPreferences preferences = App.getContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
@@ -225,6 +240,69 @@ public class Configuration {
     public static DetailSwipeAction getDetailRightSwipeAction() {
         String swipeAction = preferences.getString(KEY_DETAIL_RIGHT_SWIPE_ACTION, DetailSwipeAction.EDIT.getPreferencesValue());
         return DetailSwipeAction.fromPreferencesValue(swipeAction);
+    }
+
+
+    /**
+     * Method changes whether backups shall include settings.
+     *
+     * @param includeSettings   Whether backups include settings.
+     */
+    public static void setBackupIncludeSettings(boolean includeSettings) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(KEY_BACKUP_INCLUDE_SETTINGS, includeSettings);
+        editor.apply();
+    }
+
+    /**
+     * Method returns whether backups include settings.
+     *
+     * @return  Whether backups include settings.
+     */
+    public static boolean getBackupIncludeSettings() {
+        return preferences.getBoolean(KEY_BACKUP_INCLUDE_SETTINGS, false);
+    }
+
+
+    /**
+     * Method changes whether backups shall include quality gates.
+     *
+     * @param includeQualityGates   Whether backups include quality gates.
+     */
+    public static void setBackupIncludeQualityGates(boolean includeQualityGates) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(KEY_BACKUP_INCLUDE_QUALITY_GATES, includeQualityGates);
+        editor.apply();
+    }
+
+    /**
+     * Method returns whether backups include quality gates.
+     *
+     * @return  Whether backups include quality gates.
+     */
+    public static boolean getBackupIncludeQualityGates() {
+        return preferences.getBoolean(KEY_BACKUP_INCLUDE_QUALITY_GATES, false);
+    }
+
+
+    /**
+     * Method changes whether backups shall be encrypted.
+     *
+     * @param encryptBackup Whether backups are encrypted.
+     */
+    public static void setBackupEncrypted(boolean encryptBackup) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(KEY_BACKUP_ENCRYPT, encryptBackup);
+        editor.apply();
+    }
+
+    /**
+     * Method returns whether backups are encrypted.
+     *
+     * @return  Whether backups are encrypted.
+     */
+    public static boolean getBackupEncrypted() {
+        return preferences.getBoolean(KEY_BACKUP_ENCRYPT, false);
     }
 
 

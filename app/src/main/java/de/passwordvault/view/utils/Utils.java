@@ -3,6 +3,10 @@ package de.passwordvault.view.utils;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.util.Log;
+
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;

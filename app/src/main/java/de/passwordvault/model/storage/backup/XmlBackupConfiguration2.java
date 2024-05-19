@@ -78,6 +78,22 @@ public class XmlBackupConfiguration2 extends XmlBackupConfiguration {
      */
     protected static final String SETTING_DETAIL_SWIPE_RIGHT = "detail_swipe_right";
 
+    /**
+     * Field stores the name for the setting regarding whether backups should include settings.
+     */
+    protected static final String SETTING_BACKUP_INCLUDE_SETTINGS = "backup_include_settings";
+
+    /**
+     * Field stores the name for the setting regarding whether backups should include quality
+     * gates.
+     */
+    protected static final String SETTING_BACKUP_INCLUDE_QUALITY_GATES = "backup_include_quality_gates";
+
+    /**
+     * Field stores the name for the setting regarding whether backups should be encrypted.
+     */
+    protected static final String SETTING_BACKUP_ENCRYPT = "backup_encrypt";
+
 
     /**
      * Constructor instantiates a new {@link XmlBackupConfiguration}-instance. Please make sure that

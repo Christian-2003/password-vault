@@ -1,10 +1,16 @@
 package de.passwordvault.viewmodel.activities;
 
 import android.net.Uri;
+import android.util.Log;
+
 import androidx.lifecycle.ViewModel;
+
+import de.passwordvault.App;
+import de.passwordvault.model.storage.Configuration;
 import de.passwordvault.model.storage.backup.BackupException;
 import de.passwordvault.model.storage.backup.XmlBackupCreator2;
 import de.passwordvault.model.storage.encryption.EncryptionException;
+import de.passwordvault.view.utils.Utils;
 
 
 /**
@@ -18,7 +24,7 @@ public class CreateBackupViewModel extends ViewModel {
     /**
      * Attribute stores the path to the directory in which the backup shall be created.
      */
-    private Uri backupPath;
+    private Uri backupDirectory;
 
     /**
      * Attribute stores the backup filename.
@@ -40,10 +46,12 @@ public class CreateBackupViewModel extends ViewModel {
      * Constructor instantiates a new view model.
      */
     public CreateBackupViewModel() {
-        backupPath = null;
+        backupDirectory = null;
         filename = null;
         config = new XmlBackupCreator2.BackupConfig();
-        backupEncrypted = false;
+        config.setIncludeSettings(Configuration.getBackupIncludeSettings());
+        config.setIncludeQualityGates(Configuration.getBackupIncludeQualityGates());
+        backupEncrypted = Configuration.getBackupEncrypted();
     }
 
 
@@ -52,21 +60,21 @@ public class CreateBackupViewModel extends ViewModel {
      *
      * @return  Path for the directory.
      */
-    public Uri getBackupPath() {
-        return backupPath;
+    public Uri getBackupDirectory() {
+        return backupDirectory;
     }
 
     /**
      * Method changes the path for the directory.
      *
-     * @param backupPath            New path for the directory.
+     * @param backupDirectory       New path for the directory.
      * @throws NullPointerException The passed argument is {@code null}.
      */
-    public void setBackupPath(Uri backupPath) throws NullPointerException {
-        if (backupPath == null) {
+    public void setBackupDirectory(Uri backupDirectory) throws NullPointerException {
+        if (backupDirectory == null) {
             throw new NullPointerException();
         }
-        this.backupPath = backupPath;
+        this.backupDirectory = backupDirectory;
     }
 
     /**
@@ -154,8 +162,18 @@ public class CreateBackupViewModel extends ViewModel {
      * @throws EncryptionException  The data could not be encrypted.
      */
     public void createBackup(String password) throws BackupException, EncryptionException {
-        XmlBackupCreator2 backupCreator2 = new XmlBackupCreator2(backupPath, filename, password);
+        XmlBackupCreator2 backupCreator2 = new XmlBackupCreator2(backupDirectory, filename, password);
         backupCreator2.createBackup(config);
+    }
+
+
+    /**
+     * Method saves the configured settings for the backup to the {@link Configuration}.
+     */
+    public void storeSettings() {
+        Configuration.setBackupIncludeSettings(config.getIncludeSettings());
+        Configuration.setBackupIncludeQualityGates(config.getIncludeQualityGates());
+        Configuration.setBackupEncrypted(backupEncrypted);
     }
 
 }
