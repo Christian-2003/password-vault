@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
-
 import java.util.Calendar;
 import java.util.Objects;
 import de.passwordvault.R;
@@ -18,7 +17,6 @@ import de.passwordvault.model.security.authentication.AuthenticationFailure;
 import de.passwordvault.model.security.authentication.Authenticator;
 import de.passwordvault.model.storage.backup.XmlBackupRestorer;
 import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
-import de.passwordvault.view.dialogs.CreateBackupDialog;
 import de.passwordvault.view.dialogs.RestoreBackupDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
 import de.passwordvault.view.utils.Utils;
@@ -30,7 +28,7 @@ import de.passwordvault.viewmodel.fragments.SettingsViewModel;
  * Class implements the settings data activity.
  *
  * @author  Christian-2003
- * @version 3.5.1
+ * @version 3.5.4
  */
 public class SettingsDataActivity extends PasswordVaultBaseActivity implements DialogCallbackListener, AuthenticationCallback {
 
@@ -51,11 +49,6 @@ public class SettingsDataActivity extends PasswordVaultBaseActivity implements D
     private final ActivityResultLauncher<Intent> htmlExportLauncher;
 
     /**
-     * Attribute stores the activity result launcher for selecting a directory to create an XML backup.
-     */
-    private final ActivityResultLauncher<Intent> createXmlBackupLauncher;
-
-    /**
      * Attribute stores the activity result launcher for selecting a file from which to restore an
      * XML backup.
      */
@@ -70,18 +63,6 @@ public class SettingsDataActivity extends PasswordVaultBaseActivity implements D
         htmlExportLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                 viewModel.exportToHtml(result.getData().getData(), SettingsDataActivity.this);
-            }
-        });
-
-        //XML backup:
-        createXmlBackupLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                CreateBackupDialog dialog = new CreateBackupDialog();
-                Bundle args = new Bundle();
-                args.putString(CreateBackupDialog.KEY_DIRECTORY, Objects.requireNonNull(result.getData().getData()).toString());
-                args.putSerializable(CreateBackupDialog.KEY_CALLBACK_LISTENER, SettingsDataActivity.this);
-                dialog.setArguments(args);
-                dialog.show(getSupportFragmentManager(), "");
             }
         });
 
@@ -111,11 +92,7 @@ public class SettingsDataActivity extends PasswordVaultBaseActivity implements D
      */
     @Override
     public void onPositiveCallback(DialogFragment fragment) {
-        if (fragment instanceof CreateBackupDialog) {
-            CreateBackupDialog dialog = (CreateBackupDialog)fragment;
-            viewModel.createXmlBackup(dialog.getDirectory(), dialog.getFilename(), dialog.getPassword(), this);
-        }
-        else if (fragment instanceof RestoreBackupDialog) {
+        if (fragment instanceof RestoreBackupDialog) {
             RestoreBackupDialog dialog = (RestoreBackupDialog)fragment;
             viewModel.restoreXmlBackup(dialog.getFile(), dialog.getPassword(), this);
         }
@@ -205,19 +182,6 @@ public class SettingsDataActivity extends PasswordVaultBaseActivity implements D
         }
         catch (Exception e) {
             Toast.makeText(this, getString(R.string.settings_data_export_html_error), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    /**
-     * Method starts the process of creating an XML backup.
-     */
-    private void createXmlBackup() {
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-        try {
-            createXmlBackupLauncher.launch(intent);
-        }
-        catch (Exception e) {
-            Toast.makeText(this, getString(R.string.settings_data_backup_create_error), Toast.LENGTH_SHORT).show();
         }
     }
 
