@@ -446,6 +446,7 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
                 continue;
             }
             builder.append(gate.toStorable());
+            builder.append("" + CsvConfiguration.ROW_DIVIDER);
         }
         if (builder.length() > 1) {
             builder.deleteCharAt(builder.length() - 1);
