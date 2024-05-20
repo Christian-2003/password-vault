@@ -37,7 +37,7 @@ import de.passwordvault.model.tags.TagManager;
  * @author  Christian-2003
  * @version 3.5.4
  */
-public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
+public class XmlBackupCreator2 extends XmlBackupConfiguration {
 
     /**
      * Class models a configuration for the backup creator.
@@ -225,7 +225,7 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
      * @throws EncryptionException  The data could not be encrypted.
      */
     private Element createRootElement() throws EncryptionException {
-        Element rootElement = xmlDocument.createElement(TAG_PASSWORD_VAULT);
+        Element rootElement = xmlDocument.createElement(XmlConfiguration.TAG_PASSWORD_VAULT.getValue());
 
         Element metadataElement = createMetadataElement();
         rootElement.appendChild(metadataElement);
@@ -248,21 +248,21 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
      * @return  Element containing all data.
      */
     private Element createMetadataElement() {
-        Element metadataElement = xmlDocument.createElement(TAG_METADATA);
+        Element metadataElement = xmlDocument.createElement(XmlConfiguration.TAG_METADATA.getValue());
 
-        Element versionElement = xmlDocument.createElement(TAG_VERSION);
-        versionElement.setTextContent(Versions.VERSION_LATEST);
+        Element versionElement = xmlDocument.createElement(XmlConfiguration.TAG_VERSION.getValue());
+        versionElement.setTextContent(XmlConfiguration.VERSION_LATEST.getValue());
         metadataElement.appendChild(versionElement);
 
-        Element appVersionElement = xmlDocument.createElement(TAG_APP_VERSION);
+        Element appVersionElement = xmlDocument.createElement(XmlConfiguration.TAG_APP_VERSION.getValue());
         appVersionElement.setTextContent(BuildConfig.VERSION_NAME);
         metadataElement.appendChild(appVersionElement);
 
-        Element createdElement = xmlDocument.createElement(TAG_BACKUP_CREATED);
+        Element createdElement = xmlDocument.createElement(XmlConfiguration.TAG_BACKUP_CREATED.getValue());
         createdElement.setTextContent("" + Calendar.getInstance().getTimeInMillis());
         metadataElement.appendChild(createdElement);
 
-        Element autoCreatedElement = xmlDocument.createElement(TAG_AUTO_CREATED);
+        Element autoCreatedElement = xmlDocument.createElement(XmlConfiguration.TAG_AUTO_CREATED.getValue());
         autoCreatedElement.setTextContent("" + autoCreated);
         metadataElement.appendChild(autoCreatedElement);
 
@@ -277,11 +277,11 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
      * @throws EncryptionException  The data could not be encrypted.
      */
     private Element createDataElement() throws EncryptionException {
-        Element dataElement = xmlDocument.createElement(TAG_DATA);
+        Element dataElement = xmlDocument.createElement(XmlConfiguration.TAG_DATA.getValue());
 
         if (encryptionAlgorithm != null && !autoCreated && encryptionKeySeed != null) {
             String encryptedSeed = encryptIfNecessary(encryptionKeySeed);
-            dataElement.setAttribute(ATTRIBUTE_CHECKSUM, encryptedSeed);
+            dataElement.setAttribute(XmlConfiguration.ATTRIBUTE_CHECKSUM.getValue(), encryptedSeed);
         }
 
         Element tagsElement = createTagsElement();
@@ -304,8 +304,8 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
      * @throws EncryptionException  The entries could not be encrypted.
      */
     private Element createEntriesElement() throws EncryptionException {
-        Element entriesElement = xmlDocument.createElement(TAG_ENTRIES);
-        entriesElement.setAttribute(ATTRIBUTE_HEADER, EntryAbbreviated.getStorableAttributes());
+        Element entriesElement = xmlDocument.createElement(XmlConfiguration.TAG_ENTRIES.getValue());
+        entriesElement.setAttribute(XmlConfiguration.ATTRIBUTE_HEADER.getValue(), EntryAbbreviated.getStorableAttributes());
 
         StringBuilder builder = new StringBuilder();
         for (EntryAbbreviated entry : EntryManager.getInstance().getData()) {
@@ -329,8 +329,8 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
      * @throws EncryptionException  The details could not be encrypted.
      */
     private Element createDetailsElement() throws EncryptionException {
-        Element detailsElement = xmlDocument.createElement(TAG_DETAILS);
-        detailsElement.setAttribute(ATTRIBUTE_HEADER, DetailBackupDTO.getStorableAttributes());
+        Element detailsElement = xmlDocument.createElement(XmlConfiguration.TAG_DETAILS.getValue());
+        detailsElement.setAttribute(XmlConfiguration.ATTRIBUTE_HEADER.getValue(), DetailBackupDTO.getStorableAttributes());
 
         StringBuilder builder = new StringBuilder();
         for (EntryAbbreviated abbreviated : EntryManager.getInstance().getData()) {
@@ -361,8 +361,8 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
      * @throws EncryptionException  The tags could not be encrypted.
      */
     private Element createTagsElement() throws EncryptionException {
-        Element tagsElement = xmlDocument.createElement(TAG_TAGS);
-        tagsElement.setAttribute(ATTRIBUTE_HEADER, TagManager.getStorableAttributes());
+        Element tagsElement = xmlDocument.createElement(XmlConfiguration.TAG_TAGS.getValue());
+        tagsElement.setAttribute(XmlConfiguration.ATTRIBUTE_HEADER.getValue(), TagManager.getStorableAttributes());
         tagsElement.setTextContent(encryptIfNecessary(TagManager.getInstance().toCsv()));
         return tagsElement;
     }
@@ -374,7 +374,7 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
      * @return  Element containing all settings.
      */
     private Element createSettingsElement() {
-        Element settingsElement = xmlDocument.createElement(TAG_SETTINGS);
+        Element settingsElement = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS.getValue());
 
         if (config.getIncludeQualityGates()) {
             Element qualityGatesElement = createQualityGatesElement();
@@ -382,49 +382,49 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
         }
 
         if (config.getIncludeSettings()) {
-            Element autofillCachingElement = xmlDocument.createElement(TAG_SETTINGS_ITEM);
-            autofillCachingElement.setAttribute(ATTRIBUTE_SETTINGS_NAME, SETTING_AUTOFILL_CACHING);
-            autofillCachingElement.setAttribute(ATTRIBUTE_SETTINGS_VALUE, "" + Configuration.useAutofillCaching());
+            Element autofillCachingElement = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS_ITEM.getValue());
+            autofillCachingElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), XmlConfiguration.SETTING_AUTOFILL_CACHING.getValue());
+            autofillCachingElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), "" + Configuration.useAutofillCaching());
             settingsElement.appendChild(autofillCachingElement);
 
-            Element autofillAuthenticationElement = xmlDocument.createElement(TAG_SETTINGS_ITEM);
-            autofillAuthenticationElement.setAttribute(ATTRIBUTE_SETTINGS_NAME, SETTING_AUTOFILL_AUTHENTICATION);
-            autofillAuthenticationElement.setAttribute(ATTRIBUTE_SETTINGS_VALUE, "" + Configuration.useAutofillAuthentication());
+            Element autofillAuthenticationElement = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS_ITEM.getValue());
+            autofillAuthenticationElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), XmlConfiguration.SETTING_AUTOFILL_AUTHENTICATION.getValue());
+            autofillAuthenticationElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), "" + Configuration.useAutofillAuthentication());
             settingsElement.appendChild(autofillAuthenticationElement);
 
-            Element darkmodeElement = xmlDocument.createElement(TAG_SETTINGS_ITEM);
-            darkmodeElement.setAttribute(ATTRIBUTE_SETTINGS_NAME, SETTING_DARKMODE);
-            darkmodeElement.setAttribute(ATTRIBUTE_SETTINGS_VALUE, "" + Configuration.getDarkmode());
+            Element darkmodeElement = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS_ITEM.getValue());
+            darkmodeElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), XmlConfiguration.SETTING_DARKMODE.getValue());
+            darkmodeElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), "" + Configuration.getDarkmode());
             settingsElement.appendChild(darkmodeElement);
 
-            Element recentlyEditedElement = xmlDocument.createElement(TAG_SETTINGS_ITEM);
-            recentlyEditedElement.setAttribute(ATTRIBUTE_SETTINGS_NAME, SETTING_NUM_RECENTLY_EDITED);
-            recentlyEditedElement.setAttribute(ATTRIBUTE_SETTINGS_VALUE, "" + Configuration.getNumberOfRecentlyEdited());
+            Element recentlyEditedElement = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS_ITEM.getValue());
+            recentlyEditedElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), XmlConfiguration.SETTING_NUM_RECENTLY_EDITED.getValue());
+            recentlyEditedElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), "" + Configuration.getNumberOfRecentlyEdited());
             settingsElement.appendChild(recentlyEditedElement);
 
-            Element detailSwipeLeftElement = xmlDocument.createElement(TAG_SETTINGS_ITEM);
-            detailSwipeLeftElement.setAttribute(ATTRIBUTE_SETTINGS_NAME, SETTING_DETAIL_SWIPE_LEFT);
-            detailSwipeLeftElement.setAttribute(ATTRIBUTE_SETTINGS_VALUE, Configuration.getDetailLeftSwipeAction().getPreferencesValue());
+            Element detailSwipeLeftElement = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS_ITEM.getValue());
+            detailSwipeLeftElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), XmlConfiguration.SETTING_DETAIL_SWIPE_LEFT.getValue());
+            detailSwipeLeftElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), Configuration.getDetailLeftSwipeAction().getPreferencesValue());
             settingsElement.appendChild(detailSwipeLeftElement);
 
-            Element detailSwipeRightElement = xmlDocument.createElement(TAG_SETTINGS_ITEM);
-            detailSwipeRightElement.setAttribute(ATTRIBUTE_SETTINGS_NAME, SETTING_DETAIL_SWIPE_RIGHT);
-            detailSwipeRightElement.setAttribute(ATTRIBUTE_SETTINGS_VALUE, Configuration.getDetailRightSwipeAction().getPreferencesValue());
+            Element detailSwipeRightElement = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS_ITEM.getValue());
+            detailSwipeRightElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), XmlConfiguration.SETTING_DETAIL_SWIPE_RIGHT.getValue());
+            detailSwipeRightElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), Configuration.getDetailRightSwipeAction().getPreferencesValue());
             settingsElement.appendChild(detailSwipeRightElement);
 
-            Element backupIncludeSettingsElement = xmlDocument.createElement(TAG_SETTINGS_ITEM);
-            backupIncludeSettingsElement.setAttribute(ATTRIBUTE_SETTINGS_NAME, SETTING_BACKUP_INCLUDE_SETTINGS);
-            backupIncludeSettingsElement.setAttribute(ATTRIBUTE_SETTINGS_VALUE, "" + Configuration.getBackupIncludeSettings());
+            Element backupIncludeSettingsElement = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS_ITEM.getValue());
+            backupIncludeSettingsElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), XmlConfiguration.SETTING_BACKUP_INCLUDE_SETTINGS.getValue());
+            backupIncludeSettingsElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), "" + Configuration.getBackupIncludeSettings());
             settingsElement.appendChild(backupIncludeSettingsElement);
 
-            Element backupIncludeQualityGatesElement = xmlDocument.createElement(TAG_SETTINGS_ITEM);
-            backupIncludeQualityGatesElement.setAttribute(ATTRIBUTE_SETTINGS_NAME, SETTING_BACKUP_INCLUDE_QUALITY_GATES);
-            backupIncludeQualityGatesElement.setAttribute(ATTRIBUTE_SETTINGS_VALUE, "" + Configuration.getBackupIncludeQualityGates());
+            Element backupIncludeQualityGatesElement = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS_ITEM.getValue());
+            backupIncludeQualityGatesElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), XmlConfiguration.SETTING_BACKUP_INCLUDE_QUALITY_GATES.getValue());
+            backupIncludeQualityGatesElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), "" + Configuration.getBackupIncludeQualityGates());
             settingsElement.appendChild(backupIncludeQualityGatesElement);
 
-            Element backupEncryptElement = xmlDocument.createElement(TAG_SETTINGS_ITEM);
-            backupEncryptElement.setAttribute(ATTRIBUTE_SETTINGS_NAME, SETTING_BACKUP_ENCRYPT);
-            backupEncryptElement.setAttribute(ATTRIBUTE_SETTINGS_VALUE, "" + Configuration.getBackupEncrypted());
+            Element backupEncryptElement = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS_ITEM.getValue());
+            backupEncryptElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), XmlConfiguration.SETTING_BACKUP_ENCRYPT.getValue());
+            backupEncryptElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), "" + Configuration.getBackupEncrypted());
             settingsElement.appendChild(backupEncryptElement);
         }
 
@@ -438,7 +438,7 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration2 {
      * @return  Element containing all custom quality gates.
      */
     private Element createQualityGatesElement() {
-        Element qualityGatesElement = xmlDocument.createElement(TAG_QUALITY_GATES);
+        Element qualityGatesElement = xmlDocument.createElement(XmlConfiguration.TAG_QUALITY_GATES.getValue());
 
         StringBuilder builder = new StringBuilder();
         for (QualityGate gate : QualityGateManager.getInstance().getData()) {

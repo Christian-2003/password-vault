@@ -134,47 +134,47 @@ public class XmlBackupCreator extends XmlBackupConfiguration {
         writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
         insertTopComment(writer);
 
-        insertTag(writer, TAG_PASSWORD_VAULT, 0, false, true);
-        insertTag(writer, TAG_METADATA, 4, false, true);
+        insertTag(writer, XmlConfiguration.TAG_PASSWORD_VAULT.getValue(), 0, false, true);
+        insertTag(writer, XmlConfiguration.TAG_METADATA.getValue(), 4, false, true);
 
         //Add version number:
-        insertTag(writer, TAG_VERSION, 8, false, false);
-        writer.write(Versions.VERSION_LATEST);
-        insertTag(writer, TAG_VERSION, 0, true, true);
+        insertTag(writer, XmlConfiguration.TAG_VERSION.getValue(), 8, false, false);
+        writer.write(XmlConfiguration.VERSION_LATEST.getValue());
+        insertTag(writer, XmlConfiguration.TAG_VERSION.getValue(), 0, true, true);
 
         //Add app version number:
-        insertTag(writer, TAG_APP_VERSION, 8, false, false);
+        insertTag(writer, XmlConfiguration.TAG_APP_VERSION.getValue(), 8, false, false);
         writer.write(BuildConfig.VERSION_NAME);
-        insertTag(writer, TAG_APP_VERSION, 0, true, true);
+        insertTag(writer, XmlConfiguration.TAG_APP_VERSION.getValue(), 0, true, true);
 
         //Add current date:
-        insertTag(writer, TAG_BACKUP_CREATED, 8, false, false);
+        insertTag(writer, XmlConfiguration.TAG_BACKUP_CREATED.getValue(), 8, false, false);
         writer.write("" + Calendar.getInstance().getTimeInMillis());
-        insertTag(writer, TAG_BACKUP_CREATED, 0, true, true);
+        insertTag(writer, XmlConfiguration.TAG_BACKUP_CREATED.getValue(), 0, true, true);
 
         //Add whether backup is automatically created:
-        insertTag(writer, TAG_AUTO_CREATED, 8, false, false);
+        insertTag(writer, XmlConfiguration.TAG_AUTO_CREATED.getValue(), 8, false, false);
         writer.write("" + autoCreated);
-        insertTag(writer, TAG_AUTO_CREATED, 0, true, true);
+        insertTag(writer, XmlConfiguration.TAG_AUTO_CREATED.getValue(), 0, true, true);
 
-        insertTag(writer, TAG_METADATA, 4, true, true);
+        insertTag(writer, XmlConfiguration.TAG_METADATA.getValue(), 4, true, true);
 
         //Add encryption-related data:
         if (encryptionAlgorithm != null) {
-            insertTag(writer, TAG_ENCRYPTION, 4, false, true);
+            insertTag(writer, XmlConfiguration.TAG_ENCRYPTION.getValue(), 4, false, true);
             //Do not put newLine with next tag to prevent 'Illegal base64 character'-exception when decrypting the checksum!
-            insertTag(writer, TAG_ENCRYPTION_CHECKSUM, 8, false, false);
+            insertTag(writer, XmlConfiguration.TAG_ENCRYPTION_CHECKSUM.getValue(), 8, false, false);
             writer.write(encrypt(encryptionKeySeed));
             //Use indentation=0 for next tag to put tag right behind checksum!
-            insertTag(writer, TAG_ENCRYPTION_CHECKSUM, 0, true, true);
-            insertTag(writer, TAG_ENCRYPTION, 4, true, true);
+            insertTag(writer, XmlConfiguration.TAG_ENCRYPTION_CHECKSUM.getValue(), 0, true, true);
+            insertTag(writer, XmlConfiguration.TAG_ENCRYPTION.getValue(), 4, true, true);
         }
 
-        insertTag(writer, TAG_DATA, 4, false, true);
-        insertTag(writer, TAG_ENTRIES_HEADER, 8, false, false);
+        insertTag(writer, XmlConfiguration.TAG_DATA.getValue(), 4, false, true);
+        insertTag(writer, XmlConfiguration.TAG_ENTRIES_HEADER.getValue(), 8, false, false);
         writer.write(EntryAbbreviated.getStorableAttributes());
-        insertTag(writer, TAG_ENTRIES_HEADER, 0, true, true);
-        insertTag(writer, TAG_ENTRIES, 8, false, true);
+        insertTag(writer, XmlConfiguration.TAG_ENTRIES_HEADER.getValue(), 0, true, true);
+        insertTag(writer, XmlConfiguration.TAG_ENTRIES.getValue(), 8, false, true);
 
         //Add all (optionally encrypted) entries:
         for (EntryAbbreviated abbreviated : EntryManager.getInstance().getData()) {
@@ -182,11 +182,11 @@ public class XmlBackupCreator extends XmlBackupConfiguration {
             writer.write("" + CsvConfiguration.ROW_DIVIDER);
         }
 
-        insertTag(writer, TAG_ENTRIES, 8, true, true);
-        insertTag(writer, TAG_DETAILS_HEADER, 8, false, false);
+        insertTag(writer, XmlConfiguration.TAG_ENTRIES.getValue(), 8, true, true);
+        insertTag(writer, XmlConfiguration.TAG_DETAILS_HEADER.getValue(), 8, false, false);
         writer.write(DetailBackupDTO.getStorableAttributes());
-        insertTag(writer, TAG_DETAILS_HEADER, 0, true, true);
-        insertTag(writer, TAG_DETAILS, 8, false, true);
+        insertTag(writer, XmlConfiguration.TAG_DETAILS_HEADER.getValue(), 0, true, true);
+        insertTag(writer, XmlConfiguration.TAG_DETAILS.getValue(), 8, false, true);
 
         //Add all (optionally encrypted) details:
         for (EntryAbbreviated abbreviated : EntryManager.getInstance().getData()) {
@@ -201,15 +201,15 @@ public class XmlBackupCreator extends XmlBackupConfiguration {
             }
         }
 
-        insertTag(writer, TAG_DETAILS, 8, true, true);
-        insertTag(writer, TAG_DATA, 4, true, true);
-        insertTag(writer, TAG_TAGS, 4, false, true);
+        insertTag(writer, XmlConfiguration.TAG_DETAILS.getValue(), 8, true, true);
+        insertTag(writer, XmlConfiguration.TAG_DATA.getValue(), 4, true, true);
+        insertTag(writer, XmlConfiguration.TAG_TAGS.getValue(), 4, false, true);
 
         //Add all tags:
         writer.write(TagManager.getInstance().toCsv());
 
-        insertTag(writer, TAG_TAGS, 4, true, true);
-        insertTag(writer, TAG_PASSWORD_VAULT, 0, true, true);
+        insertTag(writer, XmlConfiguration.TAG_TAGS.getValue(), 4, true, true);
+        insertTag(writer, XmlConfiguration.TAG_PASSWORD_VAULT.getValue(), 0, true, true);
     }
 
 

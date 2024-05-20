@@ -31,25 +31,12 @@ import de.passwordvault.model.tags.TagManager;
  * handled entries with the restored entries!!!
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.5.4
  */
 public class XmlBackupRestorer extends XmlBackupConfiguration {
 
     /**
-     * Constructor instantiates a new {@link XmlBackupCreator} instance which can create a manual
-     * disk backup of all data through the method {@link #restoreBackup()}  RestoreXmlBackup()}.
-     * The backup will be saved to the file of the passed URI. Please make sure that the application
-     * has access (and permission) to write to that file, before calling.
-     *
-     * @param uri                   URI of the file to which the backup shall be created.
-     * @throws NullPointerException The passed URI is {@code null}.
-     */
-    public XmlBackupRestorer(Uri uri) throws NullPointerException {
-        super(uri, null);
-    }
-
-    /**
-     * Constructor instantiates a new {@link XmlBackupCreator} instance which can create a manual
+     * Constructor instantiates a new {@link XmlBackupRestorer} instance which can restore
      * disk backup of all data through the method {@link #restoreBackup()}.
      * The backup will be saved to the file of the passed URI. Please make sure that the application
      * has access (and permission) to write to that file, before calling.
@@ -77,11 +64,8 @@ public class XmlBackupRestorer extends XmlBackupConfiguration {
         catch (BackupException | XmlException e) {
             return false;
         }
-        NodeList encryptionTags = xml.getElementsByTagName(TAG_ENCRYPTION);
-        if (encryptionTags != null && encryptionTags.getLength() != 0) {
-            return true;
-        }
-        return false;
+        NodeList encryptionTags = xml.getElementsByTagName(XmlConfiguration.TAG_ENCRYPTION.getValue());
+        return encryptionTags != null && encryptionTags.getLength() != 0;
     }
 
 
@@ -98,14 +82,14 @@ public class XmlBackupRestorer extends XmlBackupConfiguration {
 
         //Get encryption-related data:
         if (isBackupEncrypted(uri)) {
-            NodeList encryptionNodes = xml.getElementsByTagName(TAG_ENCRYPTION).item(0).getChildNodes();
+            NodeList encryptionNodes = xml.getElementsByTagName(XmlConfiguration.TAG_ENCRYPTION.getValue()).item(0).getChildNodes();
             boolean encryptionChecksumFound = false;
             for (int i = 0; i < encryptionNodes.getLength(); i++) {
                 Node currentEncryptionNode = encryptionNodes.item(i);
                 if (currentEncryptionNode == null) {
                     continue;
                 }
-                if (currentEncryptionNode.getNodeName().equals(TAG_ENCRYPTION_CHECKSUM)) {
+                if (currentEncryptionNode.getNodeName().equals(XmlConfiguration.TAG_ENCRYPTION_CHECKSUM.getValue())) {
                     String decryptedSeed = decrypt(currentEncryptionNode.getTextContent());
                     if (!decryptedSeed.equals(encryptionKeySeed)) {
                         //Incorrect seed provided:
@@ -122,7 +106,7 @@ public class XmlBackupRestorer extends XmlBackupConfiguration {
         }
 
         //Restore tags:
-        Node tagNode = xml.getElementsByTagName(TAG_TAGS).item(0);
+        Node tagNode = xml.getElementsByTagName(XmlConfiguration.TAG_TAGS.getValue()).item(0);
         if (tagNode != null) {
             String content = tagNode.getTextContent();
             if (content != null && !content.isEmpty()) {
@@ -132,7 +116,7 @@ public class XmlBackupRestorer extends XmlBackupConfiguration {
         }
 
         //Read the data:
-        NodeList dataNodes = xml.getElementsByTagName(TAG_DATA).item(0).getChildNodes();
+        NodeList dataNodes = xml.getElementsByTagName(XmlConfiguration.TAG_DATA.getValue()).item(0).getChildNodes();
         ArrayList<EntryAbbreviated> entries = null;
         ArrayList<DetailBackupDTO> details = null;
         for (int i = 0; i < dataNodes.getLength(); i++) {
@@ -141,10 +125,10 @@ public class XmlBackupRestorer extends XmlBackupConfiguration {
                 continue;
             }
             try {
-                if (currentDataNode.getNodeName().equals(TAG_ENTRIES)) {
+                if (currentDataNode.getNodeName().equals(XmlConfiguration.TAG_ENTRIES.getValue())) {
                     entries = getEntries(currentDataNode);
                 }
-                else if (currentDataNode.getNodeName().equals(TAG_DETAILS)) {
+                else if (currentDataNode.getNodeName().equals(XmlConfiguration.TAG_DETAILS.getValue())) {
                     details = getDetails(currentDataNode);
                 }
             }
@@ -178,6 +162,9 @@ public class XmlBackupRestorer extends XmlBackupConfiguration {
             throw new BackupException(e.getMessage());
         }
         try {
+            if (parcelFileDescriptor == null) {
+                throw new BackupException("Null is invalid ParcelFileDescriptor");
+            }
             FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
             if (fileDescriptor == null) {
                 throw new BackupException("Null is invalid FileDescriptor");
