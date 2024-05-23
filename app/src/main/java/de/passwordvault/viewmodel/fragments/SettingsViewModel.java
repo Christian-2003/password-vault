@@ -14,7 +14,6 @@ import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.storage.app.StorageException;
 import de.passwordvault.model.storage.backup.BackupException;
-import de.passwordvault.model.storage.backup.XmlBackupCreator;
 import de.passwordvault.model.storage.backup.XmlBackupCreator2;
 import de.passwordvault.model.storage.backup.XmlBackupRestorer;
 import de.passwordvault.model.storage.backup.XmlException;

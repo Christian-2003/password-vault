@@ -38,12 +38,10 @@ public class XmlBackupRestorer extends XmlBackupConfiguration {
     /**
      * Constructor instantiates a new {@link XmlBackupRestorer} instance which can restore
      * disk backup of all data through the method {@link #restoreBackup()}.
-     * The backup will be saved to the file of the passed URI. Please make sure that the application
-     * has access (and permission) to write to that file, before calling.
      *
      * @param uri                   URI of the file to which the backup shall be created.
-     * @param encryptionSeed        Seed for the key with which to encrypt the backup. Pass {@code null}
-     *                              if the backup shall not be encrypted.
+     * @param encryptionSeed        Seed for the key with which to decrypt the backup. Pass {@code null}
+     *                              if the backup is not be encrypted.
      * @throws NullPointerException The passed URI is {@code null}.
      */
     public XmlBackupRestorer(Uri uri, String encryptionSeed) throws NullPointerException {

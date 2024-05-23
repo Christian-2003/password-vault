@@ -266,6 +266,14 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration {
         autoCreatedElement.setTextContent("" + autoCreated);
         metadataElement.appendChild(autoCreatedElement);
 
+        Element settingsElement = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS.getValue());
+        settingsElement.setTextContent("" + config.getIncludeSettings());
+        metadataElement.appendChild(settingsElement);
+
+        Element qualityGatesElement = xmlDocument.createElement(XmlConfiguration.TAG_QUALITY_GATES.getValue());
+        qualityGatesElement.setTextContent("" + config.getIncludeQualityGates());
+        metadataElement.appendChild(qualityGatesElement);
+
         return metadataElement;
     }
 

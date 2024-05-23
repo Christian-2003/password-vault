@@ -20,7 +20,6 @@ import de.passwordvault.view.utils.Utils;
 
 /**
  * Class can export all entries into readable HTML format.
- * Previously, this was done through {@link ExportToHtml}.
  *
  * @author  Christian-2003
  * @version 3.5.2
@@ -102,6 +101,9 @@ public class ExportToHtml2 {
         }
         catch (FileNotFoundException e) {
             throw new ExportException(e.getMessage());
+        }
+        if (xml == null) {
+            throw new ExportException("Null is invalid parcel file descriptor");
         }
         FileDescriptor fs = xml.getFileDescriptor();
         if (fs == null) {
