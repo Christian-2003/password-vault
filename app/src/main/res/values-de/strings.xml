@@ -138,6 +138,17 @@
     <string name="settings_data_backup_restore_error_xml">Backup korrupt</string>
     <string name="settings_data_backup_restore_error_password">Falsches Passwort</string>
     <string name="settings_data_backup_restore_success">Backup wurde wiederhergestellt</string>
+    <string name="settings_data_backup_restore_metadata">Metadaten</string>
+    <string name="settings_data_backup_restore_metadata_filename">Dateiname</string>
+    <string name="settings_data_backup_restore_metadata_created">Erstellt</string>
+    <string name="settings_data_backup_restore_settings">Einstellungen</string>
+    <string name="settings_data_backup_restore_settings_override">Daten überschreiben</string>
+    <string name="settings_data_backup_restore_settings_override_delete">Alle vorhandenden Daten löschen</string>
+    <string name="settings_data_backup_restore_settings_override_replace">Duplikate überschreiben</string>
+    <string name="settings_data_backup_restore_settings_override_skip">Duplikate überspringen</string>
+    <string name="settings_data_backup_restore_settings_quality_gates">Sicherheitskriterien wiederherstellen</string>
+    <string name="settings_data_backup_restore_settings_settings">Einstellungen wiederherstellen</string>
+    <string name="settings_data_backup_restore_settings_encryption">Verschlüsselung</string>
     <string name="settings_data_delete">Löschen</string>
     <string name="settings_data_delete_all">Daten Löschen</string>
     <string name="settings_data_delete_all_info">Alle Daten unumkehrbar löschen</string>
@@ -252,6 +263,7 @@
     <string name="button_remove_package">App entfernen</string>
     <string name="button_authenticate">Authentifizieren</string>
     <string name="button_create_backup">Backup erstellen</string>
+    <string name="button_restore_backup">Backup wiederherstellen</string>
 
 
     <!-- Placeholder -->

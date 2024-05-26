@@ -68,18 +68,9 @@ public class SettingsDataActivity extends PasswordVaultBaseActivity implements D
 
         restoreXmlBackupLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                if (!XmlBackupRestorer.isBackupEncrypted(result.getData().getData())) {
-                    //Backup not encrypted:
-                    viewModel.restoreXmlBackup(result.getData().getData(), null, SettingsDataActivity.this);
-                    return;
-                }
-                //Backup encrypted:
-                RestoreBackupDialog dialog = new RestoreBackupDialog();
-                Bundle args = new Bundle();
-                args.putString(RestoreBackupDialog.KEY_FILE, Objects.requireNonNull(result.getData().getData()).toString());
-                args.putSerializable(RestoreBackupDialog.KEY_CALLBACK_LISTENER, SettingsDataActivity.this);
-                dialog.setArguments(args);
-                dialog.show(getSupportFragmentManager(), "");
+                Intent intent = new Intent(SettingsDataActivity.this, RestoreBackupActivity.class);
+                intent.putExtra(RestoreBackupActivity.KEY_URI, result.getData().getData());
+                startActivity(intent);
             }
         });
     }

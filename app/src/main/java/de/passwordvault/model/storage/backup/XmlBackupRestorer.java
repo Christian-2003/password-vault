@@ -29,6 +29,7 @@ import de.passwordvault.model.tags.TagManager;
  * Class implements a functionality which restores an XML backup from the shared storage of the user's
  * Android device. The restored backup cannot be encrypted! Furthermore, this will replace all
  * handled entries with the restored entries!!!
+ * This class can only restore version 1 backups. Use {@link Backup} to restore version 2 backups.
  *
  * @author  Christian-2003
  * @version 3.5.4

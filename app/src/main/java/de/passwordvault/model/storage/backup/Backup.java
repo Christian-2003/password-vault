@@ -2,8 +2,8 @@ package de.passwordvault.model.storage.backup;
 
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
-import android.util.Log;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -171,11 +171,6 @@ public class Backup {
 
 
     /**
-     * Field stores the tag used for logging.
-     */
-    private static final String TAG = "Backup";
-
-    /**
      * Field stores the key with which to retrieve the backup version through
      * {@link #getMetadata(String)}.
      */
@@ -198,6 +193,23 @@ public class Backup {
      * {@link #getMetadata(String)}.
      */
     public static final String AUTO_CREATED = XmlConfiguration.TAG_AUTO_CREATED.getValue();
+
+    /**
+     * Field stores the key with which to retrieve whether the backup contains settings through
+     * {@link #getMetadata(String)}.
+     */
+    public static final String INCLUDE_SETTINGS = XmlConfiguration.TAG_SETTINGS.getValue();
+
+    /**
+     * Field stores the key with which to retrieve whether the backup contains quality gates through
+     * {@link #getMetadata(String)}.
+     */
+    public static final String INCLUDE_QUALITY_GATES = XmlConfiguration.TAG_QUALITY_GATES.getValue();
+
+    /**
+     * Field stores the tag used for logging.
+     */
+    private static final String TAG = "Backup";
 
 
     /**
@@ -246,12 +258,13 @@ public class Backup {
      * @throws BackupException      The XML document which contains the backup cannot be retrieved.
      * @throws XmlException         Some error regarding the XML structure occurred.
      */
-    public Backup(String uri) throws NullPointerException, BackupException, XmlException {
+    public Backup(Uri uri) throws NullPointerException, BackupException, XmlException {
         if (uri == null) {
             throw new NullPointerException();
         }
-        this.uri = Uri.parse(uri);
-        filename = getFilename(uri);
+        this.uri = uri;
+        String path = uri.getPath();
+        filename = getFilename(path == null ? "" : path);
         metadata = null;
         encryptionChecksum = null;
         xmlDocument = getXmlDocument();
@@ -278,7 +291,7 @@ public class Backup {
         if (metadata == null) {
             readMetadata();
         }
-        return encryptionChecksum == null;
+        return encryptionChecksum != null;
     }
 
     /**
@@ -319,7 +332,9 @@ public class Backup {
         if (encryptionSeed == null) {
             return false;
         }
+        cipher = new AES(encryptionSeed);
         String decryptedChecksum = decryptIfNecessary(encryptionChecksum);
+        cipher = null;
         return encryptionSeed.equals(decryptedChecksum);
     }
 
@@ -430,9 +445,9 @@ public class Backup {
         metadata = new HashMap<>();
 
         NodeList rootNodes = xmlDocument.getElementsByTagName(XmlConfiguration.TAG_PASSWORD_VAULT.getValue());
-        Node root = null;
+        Element root = null;
         if (rootNodes.getLength() >= 1) {
-            root = rootNodes.item(0);
+            root = (Element)rootNodes.item(0);
         }
         if (root == null) {
             //For some reason, no root node is available:
@@ -465,8 +480,8 @@ public class Backup {
         NodeList childNodes = node.getChildNodes();
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node currentChild = childNodes.item(i);
-            if (currentChild.getChildNodes().getLength() == 0) {
-                metadata.put(currentChild.getNodeName(), currentChild.getNodeValue());
+            if (currentChild.getChildNodes().getLength() != 0) {
+                metadata.put(currentChild.getNodeName(), currentChild.getTextContent());
             }
         }
     }
@@ -735,12 +750,10 @@ public class Backup {
             throw new BackupException(e.getMessage());
         }
         if (pfd == null) {
-            Log.e(TAG, "No parcel file descriptor available");
             throw new BackupException("No parcel file descriptor available");
         }
         FileDescriptor fileDescriptor = pfd.getFileDescriptor();
         if (fileDescriptor == null) {
-            Log.e(TAG, "No file descriptor available");
             throw new BackupException("No file descriptor available");
         }
         Document xmlDocument;
