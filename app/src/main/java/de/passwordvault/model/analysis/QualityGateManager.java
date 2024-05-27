@@ -146,6 +146,25 @@ public class QualityGateManager implements Observable<ArrayList<QualityGate>> {
 
 
     /**
+     * Method replaces all existing quality gates with the passed list of new quality gates.
+     *
+     * @param qualityGates          List of new quality gates to add.
+     * @param loadDefault           Whether to additionally load the default quality gates.
+     * @throws NullPointerException The passed list of quality gates is {@code null}.
+     */
+    public void replaceQualityGates(ArrayList<QualityGate> qualityGates, boolean loadDefault) throws NullPointerException {
+        if (qualityGates == null) {
+            throw new NullPointerException();
+        }
+        clearQualityGates();
+        if (loadDefault) {
+            loadDefaultQualityGates();
+        }
+        this.qualityGates.addAll(qualityGates);
+    }
+
+
+    /**
      * Method calculates the number of quality gates that are applied to passwords.
      *
      * @return  Number of quality gates that are applied to passwords.

@@ -27,6 +27,7 @@ Users can now save login data to Password Vault automatically after login to an 
 * Added new screen to configure and create backups.
 * Removed dialog to create backups, since it has been replaced by a new activity.
 * Moved tags, attributes and setting-values from `XmlBackupConfiguration`- and `XmlBackupConfiguration2`- classes to `XmlConfiguration`-enum in order to be accessible from different classes.
+* Added new screen to restore backups.
 
 <br/>
 

@@ -12,12 +12,15 @@ import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import de.passwordvault.App;
+import de.passwordvault.model.analysis.QualityGate;
+import de.passwordvault.model.analysis.QualityGateManager;
 import de.passwordvault.model.detail.DetailBackupDTO;
 import de.passwordvault.model.detail.DetailSwipeAction;
 import de.passwordvault.model.entry.EntryAbbreviated;
@@ -404,8 +407,9 @@ public class Backup {
                     HashMap<String, String> settings = traverseSettingsNode(currentChild);
                     restoreSettings(settings);
                 }
-                if (this.config.getRestoreQualityGates()) {
-                    //TODO: Restore Quality Gates.
+                if (this.config.getRestoreQualityGates() && Boolean.parseBoolean(getMetadata(INCLUDE_QUALITY_GATES))) {
+                    ArrayList<QualityGate> qualityGates = traverseQualityGatesNode(currentChild);
+                    restoreQualityGates(qualityGates);
                 }
             }
         }
@@ -623,6 +627,42 @@ public class Backup {
 
 
     /**
+     * Method traverses the passed settings node and retrieves the quality gates.
+     *
+     * @param node  Settings node containing all settings (and quality gates).
+     * @return      List of quality gates.
+     */
+    private ArrayList<QualityGate> traverseQualityGatesNode(Node node) {
+        NodeList settingsNodes = node.getChildNodes();
+        ArrayList<QualityGate> qualityGates = new ArrayList<>();
+
+        for (int i = 0; i < settingsNodes.getLength(); i++) {
+            Node currentNode = settingsNodes.item(i);
+            if (currentNode.getNodeName().equals(XmlConfiguration.TAG_QUALITY_GATES.getValue())) {
+                String content = currentNode.getTextContent();
+                String[] rows = content.split("" + CsvConfiguration.ROW_DIVIDER);
+                for (String s : rows) {
+                    if (s.isEmpty()) {
+                        continue;
+                    }
+                    QualityGate qualityGate = new QualityGate();
+                    try {
+                        qualityGate.fromStorable(s);
+                    }
+                    catch (StorageException e) {
+                        continue;
+                    }
+                    qualityGates.add(qualityGate);
+                }
+                break; //Leave loop after quality gates were found.
+            }
+        }
+
+        return qualityGates;
+    }
+
+
+    /**
      * Method restores the passed entries and details to the {@link EntryManager} and saves the data
      * to persistent storage.
      *
@@ -715,6 +755,17 @@ public class Backup {
         catch (Exception e) {
             //Some data corrupted. Ignore...
         }
+    }
+
+
+    /**
+     * Method restores the quality gates from the passed list.
+     *
+     * @param qualityGates  List of quality gates to restore.
+     */
+    private void restoreQualityGates(ArrayList<QualityGate> qualityGates) {
+        QualityGateManager.getInstance().replaceQualityGates(qualityGates, true);
+        QualityGateManager.getInstance().saveAllQualityGates();
     }
 
 
