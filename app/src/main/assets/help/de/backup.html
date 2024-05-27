@@ -21,39 +21,60 @@
 </ol>
 
 <h2 id="create-backup">Backup erstellen</h2>
-<p>Um ein Backup zu erstellen, gehe zu <b>Einstellungen > Daten</b> und klicke auf den <b>Backup
+<p>Um ein Backup zu erstellen, gehe zu <b>Einstellungen > Daten </b> und klicke auf den <b>Backup
     erstellen</b>-Knopf:</p>
 <img src="../res/img/backup_create_button.jpg"/>
-<p>Danach öffnet sich der Dateiexplorer deines Android-Smartphones. Navigiere in den Ordner, in welchem
-    du das Backup speichern möchtest und klicke auf den <b>Diesen Ordner verwenden</b>-Knopf. Unter
-    Umständen musst du Password Vault genehmigen, die Inhalte dieses Ordners zu bearbeiten. Klicke in
-    diesem Fall dazu auf <b>Zulassen</b>:</p>
+<p>Danach öffnet sich ein neues Fenster, über welches das Backup konfiguriert werden kann. Klicke auf
+    das Eingabefeld "<b>Ordner</b>" in der oberen Hälfte des Bildschirmes um einen Ordner auszuwählen,
+    in welchem das Backup gespeichert werden soll:</p>
+<img src="../res/img/backup_create_select_folder.jpg"/>
+<p>Es öffnet sich der Dateiexplorer deines Smartphones. Navigiere zum Ordner, in welchem du das Backup
+    speichern möchtest und klicke auf den <b>Diesen Ordner verwenden</b>-Knopf. Unter Umständen musst
+    du Password Vault die Erlaubnis erteilen, um Dateien in dem ausgewählten Ordner zu erstellen.
+    Klicke dazu auf <b>Zulassen</b>:</p>
 <div class="centered">
     <img src="../res/img/backup_create_folder.jpg"/>
     <img src="../res/img/backup_create_permission.jpg"/>
 </div>
-<p>Danach öffnet sich ein Dialogfeld. Du kannst den Dateinamen für das Backup ändern. Klicke auf
-    <b>Okay</b> um das Backup zu speichern.</p>
-<img src="../res/img/backup_create_save.jpg"/>
+<p>Falls du die App-Einstellungen oder die Passwortsicherheitskritereien in dem Backup exportieren
+    möchtest, dann klicke auf die entsprechenden Schalter:</p>
+<img src="../res/img/backup_create_switches.jpg"/>
+<p>Klicke danachauf den <b>Backup erstellen</b>-Knopf:</p>
+<img src="../res/img/backup_create.jpg"/>
 
 <h2 id="encrypt-backup">Backup verschlüsseln</h2>
-<p>Um ein Backup zu verschlüsseln, muss beim Erstellen des Backups ein Passwort angegeben werden:</p>
+<p>Um ein Backup zu verschlüsseln, klicke auf den entsprechenden Schalter und gebe ein Password an:</p>
 <img src="../res/img/backup_encrypt_password.jpg"/>
 <p>Das Passwort wird verwendet, um das Backup zu verschlüsseln. Wenn das Backup wiederhergestellt
-    werden soll, muss dieses Passwort angegeben werden. Andernfalls kann das Backup nicht entschlüsselt
-    werden.</p>
+    werden soll, muss dieses Passwort angegeben werden. Andernfalls kann das Backup nicht
+    entschlüsselt werden.</p>
 
 <h2 id="restore-backup">Backup wiederherstellen</h2>
 <p>Um ein Backup wiederherzustellen, gehe zu <b>Einstellungen > Daten</b> und klicke auf <b>Backup
     wiederherstellen</b>:</p>
 <img src="../res/img/backup_restore_button.jpg"/>
-<p>Danach öffnet sich der Dateiexplorer deines Android-Gerätes. Navigiere zum Ordner, in welchem das
-    wiederherzustellende Backup gespeichert ist und klicke auf die entsprechende Datei:</p>
+<p>Danach öffnet sich der Dateiexplorer deines Android-Gerätes. Navigiere zum Ordner, in welchem
+    das wiederherzustellende Backup gespeichert ist und klicke auf die entsprechende Datei:</p>
 <img src="../res/img/backup_restore_file.jpg"/>
-<p>Danach wird das Backup automatisch wiederhergestellt.</p>
-<p>Falls das Backup verschlüsselt war, öffnet sich ein Dialogfeld, in welchem das beim Erstellen
-    angegebene Passwort eingegeben werden muss. Gebe das Passwort ein und klicke <b>Okay</b>:</p>
+<p>Es öffnet sich ein Fenster, über welches das Backup wiederhergestellt werden kann. Falls möglich,
+    wähe aus, was mit den bestehenden Daten in Password Vault durchgeführt werden soll.</p>
+<p>Folgende Möglichkeiten stehen zur Verfügung:</p>
+<ul>
+    <li><p><b>Alle vorhandenden Daten löschen:</b> Hierdurch werden alle Daten, die aktuell in
+        Password Vault gespeichert sind gelöscht. Danach wird das Backup wiederhergestellt.</p></li>
+    <li><p><b>Duplikate überschreiben:</b> Falls einige Daten bereits in Password Vault gespeichert
+        sind, werden diese durch die Daten im Backup überschrieben.</p></li>
+    <li><p><b>Duplikate überspringen:</b> Falls eine Daten bereits in Password Vault gespeichert
+        sind, werden die jeweiligen Daten aus dem Backup nicht wiederhergestellt.</p></li>
+</ul>
+<img src="../res/img/backup_restore_override.jpg"/>
+<p>Falls das Backup App-Einstellungen oder Passwortsicherheitskriterien enthält kannst du auswählen,
+    ob diese ebenfalls wiederhergestellt werden sollen:</p>
+<img src="../res/img/backup_restore_options.jpg"/>
+<p>Falls das Backup verschlüsselt ist, muss jetzt das Passwort angegeben werden, mit welchem das
+    Backup zuvor verschlüsselt wurde:</p>
 <img src="../res/img/backup_restore_password.jpg"/>
-<p>Wenn das eingegebene Passwort korrekt ist, dann wird das Backup entschlüsselt und wiederhergestellt.</p>
+<p>Klicke danach auf den <b>Backup wiederherstellen</b>-Knopf:</p>
+<img src="../res/img/backup_restore.jpg"/>
 </body>
 </html>

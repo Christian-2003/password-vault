@@ -23,19 +23,24 @@
 <h2 id="create-backup">Create Backup</h2>
 <p>In order to create a backup, go to <b>Settings > Data</b> and click the <b>Create backup</b>-button:</p>
 <img src="../res/img/backup_create_button.jpg"/>
-<p>Afterwards, the default file explorer of your Android device opens. Navigate to a directory in which
+<p>Afterwards, a new window opens through which you can configure the backup. Click in the
+    <b>Directory</b>-input at the top to select a folder in which to store the backup:</p>
+<img src="../res/img/backup_create_select_folder.jpg"/>
+<p>This opens the default file explorer of your Android device. Navigate to a directory in which
     you want to store your backup and click on the <b>Use this folder</b>-button. You may need to allow
     Password Vault to access files in the specified directory. In this case, click <b>Allow</b>:</p>
 <div class="centered">
     <img src="../res/img/backup_create_folder.jpg"/>
     <img src="../res/img/backup_create_permission.jpg"/>
 </div>
-<p>Afterwards, a dialog opens. You may change the filename of the backup. Click <b>Ok</b> to save the
-    backup.</p>
-<img src="../res/img/backup_create_save.jpg"/>
+<p>If you want to export your app settings or the password quality gates, click on the respective
+    switches to do so:</p>
+<img src="../res/img/backup_create_switches.jpg"/>
+<p>Finally, click on the <b>Create backup</b>-button to create the backup:</p>
+<img src="../res/img/backup_create.jpg"/>
 
 <h2 id="encrypt-backup">Encrypt Backup</h2>
-<p>In order to encrypt a backup, provide a password as follows:</p>
+<p>In order to encrypt a backup, click the respective switch and provide a password as follows:</p>
 <img src="../res/img/backup_encrypt_password.jpg"/>
 <p>The password is used to encrypt the backup. If you restore the backup, you will need to enter the
     password. Otherwise, the data cannot be decrypted.</p>
@@ -46,10 +51,24 @@
 <p>Afterwards, the default file explorer of your Android device opens. Navigate to the directory in
     which the backup is located and click on the backup file:</p>
 <img src="../res/img/backup_restore_file.jpg"/>
-<p>The backup is then restored automatically.</p>
-<p>If the backup is encrypted, a dialog opens in which you need to enter the password that was used
-    when creating the backup. Enter the password and click <b>Ok</b>:</p>
+<p>A window opens through which you can restore the backup. If possible, select what to do with
+    existing data in case you try to restore data that is already existing.</p>
+<p>The following options are available:</p>
+<ul>
+    <li><p><b>Delete all existing data:</b> This deletes all existing data from Password Vault before
+        restoring the data from the backup.</p></li>
+    <li><p><b>Replace duplicates:</b> In case some data is present in Password Vault, it gets replaced
+        by the data from the backup.</p></li>
+    <li><p><b>Skip duplicates:</b> In case some data is present in Password Vault, the respective data
+        from the backup is not restored.</p></li>
+</ul>
+<img src="../res/img/backup_restore_override.jpg"/>
+<p>If the backup contains any app settings or quality gates, select whether you want to restore
+    them as well:</p>
+<img src="../res/img/backup_restore_options.jpg"/>
+<p>If the backup is encrypted, provide the password that was used to create the backup:</p>
 <img src="../res/img/backup_restore_password.jpg"/>
-<p>If the entered password is correct, the backup is restored.</p>
+<p>Afterwards, click the <b>Restore backup</b>-button to restore the backup:</p>
+<img src="../res/img/backup_restore.jpg"/>
 </body>
 </html>
