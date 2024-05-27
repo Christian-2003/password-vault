@@ -16,13 +16,13 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import de.passwordvault.R;
 import de.passwordvault.model.storage.backup.Backup;
 import de.passwordvault.model.storage.backup.BackupException;
+import de.passwordvault.model.storage.backup.XmlConfiguration;
 import de.passwordvault.model.storage.encryption.EncryptionException;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
@@ -87,6 +87,11 @@ public class RestoreBackupActivity extends PasswordVaultBaseActivity {
         filenameTextView.setText(viewModel.getFilename());
         TextView createdTextView = findViewById(R.id.text_created);
         createdTextView.setText(Utils.formatDate(viewModel.getCreated(), getString(R.string.date_format)));
+
+        //Settings container:
+        LinearLayout generalSettingsContainer = findViewById(R.id.container_settings);
+        String version = viewModel.getVersion();
+        generalSettingsContainer.setVisibility(version == null || version.equals(XmlConfiguration.VERSION_1.getValue()) ? View.GONE : View.VISIBLE);
 
         //Override data options:
         RadioButton deleteRadioButton = findViewById(R.id.radio_delete);

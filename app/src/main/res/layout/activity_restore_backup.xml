@@ -85,6 +85,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/default_padding"
                         android:layout_marginEnd="@dimen/default_padding"
+                        android:layout_marginBottom="@dimen/default_padding"
                         android:text="@string/settings_data_backup_restore_metadata_filename"
                         style="@style/pv.text.variant"/>
 
@@ -94,6 +95,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/default_padding"
+                        android:layout_marginTop="@dimen/default_padding"
                         android:layout_marginEnd="@dimen/default_padding"
                         android:text="@string/settings_data_backup_restore_metadata_created"
                         style="@style/pv.text"/>

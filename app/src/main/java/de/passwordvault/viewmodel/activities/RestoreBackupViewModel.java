@@ -205,6 +205,18 @@ public class RestoreBackupViewModel extends ViewModel {
         config.setEncryptionKeySeed(password);
     }
 
+    /**
+     * Method returns the version number of the backup.
+     *
+     * @return  Version number.
+     */
+    public String getVersion() {
+        if (backup == null) {
+            return null;
+        }
+        return backup.getMetadata(Backup.BACKUP_VERSION);
+    }
+
 
     /**
      * Method tests whether the passed password is valid.

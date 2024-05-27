@@ -15,8 +15,6 @@ import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.storage.app.StorageException;
 import de.passwordvault.model.storage.backup.BackupException;
 import de.passwordvault.model.storage.backup.XmlBackupCreator2;
-import de.passwordvault.model.storage.backup.XmlBackupRestorer;
-import de.passwordvault.model.storage.backup.XmlException;
 import de.passwordvault.model.storage.encryption.EncryptionException;
 import de.passwordvault.model.storage.export.ExportException;
 import de.passwordvault.model.storage.export.ExportToHtml2;
@@ -132,43 +130,6 @@ public class SettingsViewModel extends ViewModel {
      */
     public boolean useAppLogin() {
         return Account.getInstance().hasPassword();
-    }
-
-
-    /**
-     * Method restores an XML backup at the specified URI.
-     *
-     * @param uri                   URI of the file containing the XML backup.
-     * @param password              Password as seed for key generation. Pass {@code null} if the
-     *                              backup is not encrypted.
-     * @param context               Context needed to display error messages to the user.
-     * @throws NullPointerException The passed URI is {@code null}.
-     */
-    public void restoreXmlBackup(Uri uri, String password, Context context) throws NullPointerException {
-        if (uri == null) {
-            throw new NullPointerException("Null is invalid URI");
-        }
-        XmlBackupRestorer xmlBackupRestorer = new XmlBackupRestorer(uri, password);
-        try {
-            xmlBackupRestorer.restoreBackup();
-        }
-        catch (BackupException e) {
-            e.printStackTrace();
-            Toast.makeText(context, context.getString(R.string.settings_data_backup_restore_error), Toast.LENGTH_LONG).show();
-            return;
-        }
-        catch (XmlException e) {
-            e.printStackTrace();
-            Toast.makeText(context, context.getString(R.string.settings_data_backup_restore_error_xml), Toast.LENGTH_LONG).show();
-            return;
-        }
-        catch (EncryptionException e) {
-            Log.d("RESTORE", "Invalid password: " + e.getMessage());
-            e.printStackTrace();
-            Toast.makeText(context, context.getString(R.string.settings_data_backup_restore_error_password), Toast.LENGTH_LONG).show();
-            return;
-        }
-        Toast.makeText(context, context.getString(R.string.settings_data_backup_restore_success), Toast.LENGTH_SHORT).show();
     }
 
 

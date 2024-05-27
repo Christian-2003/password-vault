@@ -10,14 +10,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import java.util.Calendar;
-import java.util.Objects;
+
 import de.passwordvault.R;
 import de.passwordvault.model.security.authentication.AuthenticationCallback;
 import de.passwordvault.model.security.authentication.AuthenticationFailure;
 import de.passwordvault.model.security.authentication.Authenticator;
-import de.passwordvault.model.storage.backup.XmlBackupRestorer;
 import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
-import de.passwordvault.view.dialogs.RestoreBackupDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
@@ -83,11 +81,7 @@ public class SettingsDataActivity extends PasswordVaultBaseActivity implements D
      */
     @Override
     public void onPositiveCallback(DialogFragment fragment) {
-        if (fragment instanceof RestoreBackupDialog) {
-            RestoreBackupDialog dialog = (RestoreBackupDialog)fragment;
-            viewModel.restoreXmlBackup(dialog.getFile(), dialog.getPassword(), this);
-        }
-        else if (fragment instanceof ConfirmDeleteDialog) {
+        if (fragment instanceof ConfirmDeleteDialog) {
             viewModel.deleteAllData();
         }
     }

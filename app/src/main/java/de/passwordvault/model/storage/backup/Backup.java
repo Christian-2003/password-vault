@@ -2,6 +2,7 @@ package de.passwordvault.model.storage.backup;
 
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
+import android.util.Log;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -12,7 +13,6 @@ import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.xml.parsers.DocumentBuilder;
@@ -355,6 +355,25 @@ public class Backup {
     public void restoreBackup(RestoreConfig config) throws NullPointerException, BackupException, EncryptionException {
         this.config = config != null ? config : new RestoreConfig();
 
+        String version = getMetadata(BACKUP_VERSION);
+        if (version == null || version.equals(XmlConfiguration.VERSION_1.getValue())) {
+            Log.d("Backup", "EncryptionKeySeed: " + this.config.getEncryptionKeySeed());
+            //Need to use old backup restorer:
+            XmlBackupRestorer restorer = new XmlBackupRestorer(uri, this.config.getEncryptionKeySeed());
+            try {
+                restorer.restoreBackup();
+            }
+            catch (XmlException e) {
+                Log.e("Backup", "Old Backup XML error: " + e.getMessage());
+                throw new BackupException(e.getMessage());
+            }
+            catch (BackupException | EncryptionException e) {
+                Log.e("Backup", "Old Backup error: " + e.getMessage());
+                throw e;
+            }
+            return;
+        }
+
         if (isEncrypted()) {
             if (this.config.getEncryptionKeySeed() == null) {
                 throw new NullPointerException("Backup to restore is encrypted, but no seed is provided.");
@@ -517,7 +536,8 @@ public class Backup {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node currentChild = childNodes.item(i);
             if (currentChild.getNodeName().equals(XmlConfiguration.TAG_ENCRYPTION_CHECKSUM.getValue())) {
-                encryptionChecksum = currentChild.getNodeValue();
+                encryptionChecksum = currentChild.getTextContent();
+                Log.d("Backup", "Retrieved old checksum: " + encryptionChecksum);
             }
         }
     }
