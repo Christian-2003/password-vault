@@ -22,6 +22,7 @@
 
         <item name="android:colorBackgroundFloating">@color/pv_container</item>
         <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:navigationBarColor">@color/pv_background</item>
 
         <!-- Default styles for material components -->
         <item name="textInputStyle">@style/pv.material.text_input_layout</item>

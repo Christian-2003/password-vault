@@ -2,6 +2,15 @@
 
 # Changelog
 
+## 3.5.5 (XXXX-XX-XX)
+###### Releae Highlights
+n/a
+
+###### Features
+* Fixed navigation bar color for all activities besides `MainActivity`.
+
+<br/>
+
 ## 3.5.4 (2024-05-27)
 ###### Release Highlights
 Users can now save login data to Password Vault automatically after login to an app. Furthermore, the backup creation and restoration is completely reworked, as well
