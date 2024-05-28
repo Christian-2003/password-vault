@@ -11,6 +11,7 @@ n/a
 * Fixed a bug where tags were not correctly restored from version 2 backups.
 * Fixed horizontal alignment of icons for entries within list items.
 * Added animations when toggeling backup encryption and showing / hiding extended account information.
+* Fixed a bug where the app crashed when a search query was provided and the sorting of the entries was changed in `EntriesFragment`.
 
 <br/>
 

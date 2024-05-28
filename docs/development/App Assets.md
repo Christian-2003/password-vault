@@ -6,6 +6,7 @@ This document contains information about the structure of the [app/src/main/asse
 ###### Table of Contents
 1. [Directory Structure](#directory-structure)
 2. [LocalizedAssetManager](#localizedassetmanager)
+3. [Asset Folders](#asset-folders)
 
 <br/>
 
@@ -28,6 +29,14 @@ assets
 |    |     +---- backup.html
 |    |     +---- configure_autofill.html
 |    |     +---- configure_login.html
+|    +---- res
+|          +---- style.css
+|          +---- ...
++---- legal
+|    +---- de
+|    |     +---- privacy_policy.html
+|    +---- en
+|    |     +---- privacy_policy.html
 |    +---- res
 |          +---- style.css
 |          +---- ...
@@ -68,6 +77,17 @@ Rendering a localized HTML document this way is recommended, since this allows t
 
 <br/>
 
+## Asset Folders
+The following asset folders exist within Password Vault:
+
+###### Help Folder
+The `help`-folder contains all assets used as help pages.
+
+###### Legal Folder
+The `legal`-folder contains all assets used as legal pages, such as the privacy policy.
+
+<br/>
+
 ***
-2024-05-10  
+2024-05-28  
 &copy; Christian-2003

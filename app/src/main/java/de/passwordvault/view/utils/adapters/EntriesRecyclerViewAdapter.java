@@ -20,7 +20,7 @@ import de.passwordvault.view.utils.OnRecyclerItemClickListener;
  * Class implements an adapter for a recycler view which can display abbreviated entries.
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.5.5
  */
 public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecyclerViewAdapter.ViewHolder> implements Filterable {
 
@@ -200,9 +200,13 @@ public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecy
              */
             @Override
             protected void publishResults(CharSequence s, FilterResults filterResults) {
-                EntriesRecyclerViewAdapter.this.filteredData = (ArrayList<EntryAbbreviated>)filterResults.values;
-                notifyDataSetChanged();
+                ArrayList<EntryAbbreviated> data = (ArrayList<EntryAbbreviated>)filterResults.values;
+                if (data != null) {
+                    EntriesRecyclerViewAdapter.this.filteredData = data;
+                    notifyDataSetChanged();
+                }
             }
+
         };
     }
 
