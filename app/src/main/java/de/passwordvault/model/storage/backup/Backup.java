@@ -549,7 +549,7 @@ public class Backup {
      * @param node  Tags node whose content resembles the tags data.
      */
     private void restoreTags(Node node) throws EncryptionException {
-        String value = node.getNodeValue();
+        String value = node.getTextContent();
         if (value != null && !value.isEmpty()) {
             TagManager.getInstance().fromCsv(decryptIfNecessary(value));
             TagManager.getInstance().save(true);

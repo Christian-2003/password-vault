@@ -8,6 +8,7 @@ n/a
 
 ###### Features
 * Fixed navigation bar color for all activities besides `MainActivity`.
+* Fixed a bug where tags were not correctly restored from version 2 backups.
 
 <br/>
 
