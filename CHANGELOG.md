@@ -10,6 +10,7 @@ n/a
 * Fixed navigation bar color for all activities besides `MainActivity`.
 * Fixed a bug where tags were not correctly restored from version 2 backups.
 * Fixed horizontal alignment of icons for entries within list items.
+* Added animations when toggeling backup encryption and showing / hiding extended account information.
 
 <br/>
 

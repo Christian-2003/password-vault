@@ -1,5 +1,6 @@
 package de.passwordvault.view.activities;
 
+import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -243,9 +244,12 @@ public class CreateBackupActivity extends PasswordVaultBaseActivity {
      * @param checked   Whether the switch is now checked.
      */
     private void encryptBackup(CompoundButton button, boolean checked) {
-        LinearLayout container = findViewById(R.id.container_encryption);
         viewModel.setBackupEncrypted(checked);
-        container.setVisibility(viewModel.isBackupEncrypted() ? View.VISIBLE : View.GONE);
+        LinearLayout contentContainer = findViewById(R.id.container_content);
+        LinearLayout encryptionContainer = findViewById(R.id.container_encryption);
+        LayoutTransition layoutTransition = contentContainer.getLayoutTransition();
+        layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
+        encryptionContainer.setVisibility(checked ? View.VISIBLE : View.GONE);
     }
 
 }
