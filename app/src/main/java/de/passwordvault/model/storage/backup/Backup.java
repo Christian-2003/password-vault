@@ -38,7 +38,7 @@ import de.passwordvault.model.tags.TagManager;
  * Class implements a backup that can be restored.
  *
  * @author  Christian-2003
- * @version 3.5.4
+ * @version 3.5.5
  */
 public class Backup {
 
