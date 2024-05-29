@@ -10,6 +10,7 @@ android {
     defaultConfig {
         applicationId "de.passwordvault"
         minSdk 32
+        //noinspection OldTargetApi
         targetSdk 32
         versionCode 1
         versionName "3.5.5-pre1"
@@ -35,10 +36,14 @@ android {
 
 dependencies {
 
+    //noinspection GradleDependency
     implementation 'androidx.appcompat:appcompat:1.5.1' //Use of older version to compile for Android SDK 32
+    //noinspection GradleDependency
     implementation 'com.google.android.material:material:1.9.0' //Use of older version to compile for Android SDK 32
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    //noinspection GradleDependency
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
+    //noinspection GradleDependency
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation 'com.github.supersu-man:apkupdater-library:v2.1.0'
 

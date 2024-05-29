@@ -29,9 +29,10 @@
 
     <!-- Style for highlighted text -->
     <style name="pv.text.highlight" parent="pv.text">
-        <item name="android:textSize">@dimen/highlight_text_size</item>
         <item name="android:layout_marginTop">@dimen/default_margin</item>
         <item name="android:layout_marginStart">@dimen/default_margin</item>
+        <item name="android:textColor">@color/pv_text_secondary</item>
+        <item name="android:textSize">@dimen/secondary_text_size</item>
         <item name="android:textStyle">bold</item>
     </style>
 
