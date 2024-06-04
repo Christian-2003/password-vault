@@ -4,7 +4,7 @@
 
 ## 3.5.5 (XXXX-XX-XX)
 ###### Releae Highlights
-n/a
+Bugfixes and quality of life changes as well as support for darkmode with help pages.
 
 ###### Features
 * Fixed navigation bar color for all activities besides `MainActivity`.
@@ -15,6 +15,8 @@ n/a
 * Changed styles for highlighted text.
 * Added darkmode for help and legal pages.
 * Replaced JPG images with PNG images within help pages to support transparent backgrounds.
+* Updated MIT license year from "2023" to "2023-2024".
+* Added progress bar to help page viewer for smoother web view loading.
 
 <br/>
 

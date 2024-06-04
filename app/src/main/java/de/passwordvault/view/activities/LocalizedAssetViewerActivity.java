@@ -1,8 +1,10 @@
 package de.passwordvault.view.activities;
 
 import android.os.Bundle;
+import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import java.util.Locale;
@@ -19,7 +21,7 @@ import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
  * For further information about localized assets, see {@link LocalizedAssetManager}.
  *
  * @author  Christian-2003
- * @version 3.5.4
+ * @version 3.5.5
  */
 public class LocalizedAssetViewerActivity extends PasswordVaultBaseActivity {
 
@@ -39,6 +41,8 @@ public class LocalizedAssetViewerActivity extends PasswordVaultBaseActivity {
             super.onPageFinished(view, url);
             TextView activityTitleTextView = LocalizedAssetViewerActivity.this.findViewById(R.id.title);
             activityTitleTextView.setText(view.getTitle());
+            LocalizedAssetViewerActivity.this.progressBar.setVisibility(View.GONE);
+            LocalizedAssetViewerActivity.this.webView.setVisibility(View.VISIBLE);
         }
 
     }
@@ -56,6 +60,17 @@ public class LocalizedAssetViewerActivity extends PasswordVaultBaseActivity {
 
 
     /**
+     * Attribute stores the progress bar displayed while the web page loads.
+     */
+    private ProgressBar progressBar;
+
+    /**
+     * Attribute stores the web view displaying the web page.
+     */
+    private WebView webView;
+
+
+    /**
      * Method is called whenever the activity is created.
      *
      * @param savedInstanceState    Previously saved state of the instance.
@@ -65,8 +80,9 @@ public class LocalizedAssetViewerActivity extends PasswordVaultBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_localized_asset_viewer);
 
-        //Back button:
         findViewById(R.id.button_back).setOnClickListener(view -> finish());
+        progressBar = findViewById(R.id.progress_bar);
+        webView = findViewById(R.id.web_view);
 
         //Get filename:
         String filename = null;
@@ -85,17 +101,17 @@ public class LocalizedAssetViewerActivity extends PasswordVaultBaseActivity {
             return;
         }
 
+        progressBar.setVisibility(View.VISIBLE);
+        webView.setVisibility(View.GONE);
+
         //Load help page:
         try {
             LocalizedAssetManager assetManager = new LocalizedAssetManager(folder, Locale.getDefault());
-
-            WebView webView = findViewById(R.id.web_view);
             webView.setWebViewClient(new CustomWebViewClient());
             webView.loadUrl(assetManager.getFileUri(filename));
         }
         catch (Exception e) {
             finish();
-            return;
         }
     }
 
