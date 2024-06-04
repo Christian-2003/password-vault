@@ -22,7 +22,7 @@
     <EditText
         android:id="@+id/input_query"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:layout_gravity="center"
         android:layout_marginStart="@dimen/default_margin"
@@ -31,6 +31,7 @@
         android:textSize="@dimen/default_text_size"
         android:maxLines="1"
         android:hint="@string/hint_search"
+        android:inputType="text"
         android:background="@null"/>
 
     <ImageButton
