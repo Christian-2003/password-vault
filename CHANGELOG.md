@@ -17,6 +17,7 @@ Bugfixes and quality of life changes as well as support for darkmode with help p
 * Replaced JPG images with PNG images within help pages to support transparent backgrounds.
 * Updated MIT license year from "2023" to "2023-2024".
 * Added progress bar to help page viewer for smoother web view loading.
+* Fixed a bug where the OS provided a dialog to save autofill data to the user even if the entered data is already stored in Password Vault.
 
 <br/>
 

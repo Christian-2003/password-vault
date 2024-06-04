@@ -187,8 +187,8 @@ public class FillRequestHandler {
      */
     private FillResponse generateBuildResponse(ArrayList<UserData> userData, ParsedStructure structure) {
         FillResponse.Builder responseBuilder = new FillResponse.Builder();
-        responseBuilder.setSaveInfo(generateSaveInfo(structure));
         if (userData.isEmpty()) {
+            responseBuilder.setSaveInfo(generateSaveInfo(structure));
             return responseBuilder.build();
         }
 
