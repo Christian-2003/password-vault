@@ -11,6 +11,7 @@ This document describes the process of adding new help pages to the app.
 <br/>
 
 ## General Guidelines
+Generally, there are no rules that apply to all help pages. However, there are some rules to be followed.
 
 ###### When to Create Help Pages
 Help pages should always be useful to the user. Do not create help pages that are unnecessary.
@@ -22,6 +23,7 @@ However, whenever you create a help page, make sure to provide as many details a
 <br/>
 
 ## Structure for Help Pages
+Please use the following structure for help pages in order to keep them uniform.
 
 ###### Introduction
 Help pages should always include a topmost headline which contains the name for the help page. Afterwards, the page should contain a brief (but interesting) description of the page. The user should be able to decide whether the page is of actual help for his problem by reading this description. Please only provide truthful information within this chapter and do not try to lur the user into reading the help page. An example could be as follows:
@@ -135,7 +137,7 @@ If you use GIMP, click on **Image > Scale Image...**:
 A new popup-window appears. We recommend to reduce the image dimensions by 50%. In this example, the image width is _1.200 px_. Reduce this number to _600 px_ and click **Scale** afterwards:
 
 <div align="center">
-    <img src="./../img/development/create_help_image_resize.png" height="390"/>
+    <img src="./../img/development/create_help_image_resize.png" height="196"/>
 </div>
 
 This should reduce the image file size by approximately _75 %_. Afterwards, the image usually has a file size of around _170 kB_. Images of this size can be packaged within the APK file without causing much trouble.
