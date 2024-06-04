@@ -65,9 +65,13 @@
                 style="@style/pv.container">
 
                 <LinearLayout
+                    android:id="@+id/settings_security_login_app_clickable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/default_padding"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="?attr/selectableItemBackground"
                     android:orientation="horizontal">
 
                     <LinearLayout
@@ -109,6 +113,9 @@
                         android:id="@+id/settings_security_login_app_biometrics_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:background="?attr/selectableItemBackground"
                         android:orientation="vertical">
 
                         <View style="@style/divider"/>

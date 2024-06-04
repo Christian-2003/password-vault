@@ -85,14 +85,17 @@ public class CreateBackupActivity extends PasswordVaultBaseActivity {
         MaterialSwitch includeSettingsSwitch = findViewById(R.id.switch_include_settings);
         includeSettingsSwitch.setChecked(viewModel.includeSettings());
         includeSettingsSwitch.setOnCheckedChangeListener(this::includeSettings);
+        findViewById(R.id.include_settings_clickable).setOnClickListener(view -> includeSettingsSwitch.setChecked(!includeSettingsSwitch.isChecked()));
 
         MaterialSwitch includeQualityGatesSwitch = findViewById(R.id.switch_include_quality_gates);
         includeQualityGatesSwitch.setChecked(viewModel.includeQualityGates());
         includeQualityGatesSwitch.setOnCheckedChangeListener(this::includeQualityGates);
+        findViewById(R.id.include_quality_gates_clickable).setOnClickListener(view -> includeQualityGatesSwitch.setChecked(!includeQualityGatesSwitch.isChecked()));
 
         MaterialSwitch encryptBackupSwitch = findViewById(R.id.switch_encrypt_backup);
         encryptBackupSwitch.setChecked(viewModel.isBackupEncrypted());
         encryptBackupSwitch.setOnCheckedChangeListener(this::encryptBackup);
+        findViewById(R.id.encrypt_backup_clickable).setOnClickListener(view -> encryptBackupSwitch.setChecked(!encryptBackupSwitch.isChecked()));
 
         LinearLayout encryptionContainer = findViewById(R.id.container_encryption);
         encryptionContainer.setVisibility(viewModel.isBackupEncrypted() ? View.VISIBLE : View.GONE);

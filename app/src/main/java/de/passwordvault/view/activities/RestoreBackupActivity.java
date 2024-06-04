@@ -119,6 +119,7 @@ public class RestoreBackupActivity extends PasswordVaultBaseActivity {
             MaterialSwitch settingsSwitch = findViewById(R.id.switch_restore_settings);
             settingsSwitch.setChecked(viewModel.getRestoreSettings());
             settingsSwitch.setOnCheckedChangeListener(this::settingsSwitchChecked);
+            settingsContainer.setOnClickListener(view -> settingsSwitch.setChecked(!settingsSwitch.isChecked()));
         }
         else {
             settingsContainer.setVisibility(View.GONE);
@@ -131,6 +132,7 @@ public class RestoreBackupActivity extends PasswordVaultBaseActivity {
             MaterialSwitch qualityGatesSwitch = findViewById(R.id.switch_restore_quality_gates);
             qualityGatesSwitch.setChecked(viewModel.getRestoreQualityGates());
             qualityGatesSwitch.setOnCheckedChangeListener(this::qualityGatesSwitchChecked);
+            qualityGatesContainer.setOnClickListener(view -> qualityGatesSwitch.setChecked(!qualityGatesSwitch.isChecked()));
         }
         else {
             qualityGatesContainer.setVisibility(View.GONE);

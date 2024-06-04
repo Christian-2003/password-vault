@@ -120,9 +120,13 @@
                     style="@style/pv.container">
 
                     <LinearLayout
+                        android:id="@+id/settings_autofill_cache_toggle_clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/default_padding"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:background="?attr/selectableItemBackground"
                         android:orientation="horizontal">
 
                         <LinearLayout
@@ -213,9 +217,13 @@
                         style="@style/pv.container">
 
                         <LinearLayout
+                            android:id="@+id/settings_autofill_authentication_toggle_clickable"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="@dimen/default_padding"
+                            android:focusable="true"
+                            android:clickable="true"
+                            android:background="?attr/selectableItemBackground"
                             android:orientation="horizontal">
 
                             <LinearLayout

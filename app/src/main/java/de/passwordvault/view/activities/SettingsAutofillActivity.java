@@ -161,6 +161,7 @@ public class SettingsAutofillActivity extends PasswordVaultBaseActivity implemen
         MaterialSwitch cacheSwitch = findViewById(R.id.settings_autofill_cache_toggle_switch);
         cacheSwitch.setChecked(Configuration.useAutofillCaching());
         cacheSwitch.setOnCheckedChangeListener(this);
+        findViewById(R.id.settings_autofill_cache_toggle_clickable).setOnClickListener(view -> cacheSwitch.setChecked(!cacheSwitch.isChecked()));
 
         //Clear cache:
         findViewById(R.id.settings_autofill_config_cache_container).setVisibility(Configuration.useAutofillCaching() ? View.VISIBLE : View.GONE);
@@ -171,6 +172,7 @@ public class SettingsAutofillActivity extends PasswordVaultBaseActivity implemen
         MaterialSwitch authenticationSwitch = findViewById(R.id.settings_autofill_authentication_toggle_switch);
         authenticationSwitch.setChecked(Configuration.useAutofillAuthentication());
         authenticationSwitch.setOnCheckedChangeListener(this);
+        findViewById(R.id.settings_autofill_authentication_toggle_clickable).setOnClickListener(view -> authenticationSwitch.setChecked(!authenticationSwitch.isChecked()));
     }
 
 

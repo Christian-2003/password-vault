@@ -37,7 +37,6 @@ android {
 }
 
 dependencies {
-
     //noinspection GradleDependency
     implementation 'androidx.appcompat:appcompat:1.5.1' //Use of older version to compile for Android SDK 32
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -55,5 +54,4 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-
 }

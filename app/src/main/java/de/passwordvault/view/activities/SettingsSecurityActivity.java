@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -171,11 +173,14 @@ public class SettingsSecurityActivity extends PasswordVaultBaseActivity implemen
         MaterialSwitch loginSwitch = findViewById(R.id.settings_security_login_app_switch);
         loginSwitch.setChecked(viewModel.useAppLogin());
         loginSwitch.setOnCheckedChangeListener(this);
-        findViewById(R.id.settings_security_login_app_biometrics_container).setVisibility(viewModel.areBiometricsAvailable() ? View.VISIBLE : View.GONE);
+        findViewById(R.id.settings_security_login_app_clickable).setOnClickListener(view -> loginSwitch.setChecked(!loginSwitch.isChecked()));
         findViewById(R.id.settings_security_login_app_config_container).setVisibility(viewModel.useAppLogin() ? View.VISIBLE : View.GONE);
         MaterialSwitch biometricsSwitch = findViewById(R.id.settings_security_login_biometrics_switch);
         biometricsSwitch.setChecked(viewModel.useBiometrics());
         biometricsSwitch.setOnCheckedChangeListener(this);
+        LinearLayout biometricsContainer = findViewById(R.id.settings_security_login_app_biometrics_container);
+        biometricsContainer.setVisibility(viewModel.areBiometricsAvailable() ? View.VISIBLE : View.GONE);
+        biometricsContainer.setOnClickListener(view -> biometricsSwitch.setChecked(!biometricsSwitch.isChecked()));
         findViewById(R.id.settings_security_login_password_container).setOnClickListener(view -> changePassword());
 
         //Passwords:

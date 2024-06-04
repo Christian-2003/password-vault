@@ -22,6 +22,7 @@ Bugfixes and quality of life changes as well as support for darkmode with help p
 * Updated `com.google.android.gms:play-services-oss-licenses`-dependency from version _17.0.1_ to _17.1.0_.
 * Removed unused `androidx.lifecycle:lifecycle-livedata-ktx`-dependency.
 * Fixed a bug where some text inputs accepted multiple lines of text even if only a single line is desired.
+* Clicking on parent container of switch now triggers the switch.
 
 <br/>
 
