@@ -114,27 +114,37 @@ Images from within the app shall only be created through the emulator. To retain
 
 Create an image as follows:
 
-![Create help image button](./../img/development/create_help_image_button.png)
+<div align="center">
+    <img src="./../img/development/create_help_image_button.png" height="390"/>
+</div>
 
 Next, save the image. However, make sure that the device frame is included beforehand:
 
-![Create help image frame](./../img/development/create_help_image_frame.png)
+<div align="center">
+    <img src="./../img/development/create_help_image_frame.png" height="390"/>
+</div>
 
 Since these images are included within the APK file, make sure that the image size is relatively small. We need to keep the image as PNG file so that the background can be transparent. Reduce the file size reducing the image dimensions. To do so, open the image in an image editor like GIMP.
 
 If you use GIMP, click on **Image > Scale Image...**:
 
-![Create help image scale](./../img/development/create_help_image_scale.png)
+<div align="center">
+    <img src="./../img/development/create_help_image_scale.png" height="390"/>
+</div>
 
 A new popup-window appears. We recommend to reduce the image dimensions by 50%. In this example, the image width is _1.200 px_. Reduce this number to _600 px_ and click **Scale** afterwards:
 
-![Create help image resize](./../img/development/create_help_image_resize.png)
+<div align="center">
+    <img src="./../img/development/create_help_image_resize.png" height="390"/>
+</div>
 
 This should reduce the image file size by approximately _75 %_. Afterwards, the image usually has a file size of around _170 kB_. Images of this size can be packaged within the APK file without causing much trouble.
 
 Next, save the image by clicking **File > Ovewrite &lt;xyz&gt;.png**:
 
-![Create help image save](./../img/development/create_help_image_save.png)
+<div align="center">
+    <img src="./../img/development/create_help_image_save.png" height="390"/>
+</div>
 
 ###### Highlight Content on Images
 Sometimes, it might be useful to highlight some particular parts of an image to gain the user's attention. Please reduce the highlighted parts of any image as much as possible.
@@ -143,7 +153,9 @@ To highlight parts, we recommend to follow these steps:
 
 Firstly, open the image (whose size was already reduced as explained [here](#create-new-images)) with Paint. Select the square Shape and red color and highlight whatever you want:
 
-![Create help image paint](./../img/development/create_help_image_paint.png)
+<div align="center">
+    <img src="./../img/development/create_help_image_paint.png" height="390"/>
+</div>
 
 Afterwards, save the changes.
 
