@@ -61,7 +61,7 @@
                     android:gravity="center"
                     android:padding="@dimen/default_padding"
                     android:text="@string/autofill_authentication_hint"
-                    style="@style/pv.text.highlight"/>
+                    style="@style/pv.text"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/autofill_authentication_password_hint"
@@ -70,6 +70,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/default_margin"
                     app:passwordToggleEnabled="true"
+                    app:passwordToggleDrawable="@drawable/drawable_password"
                     android:hint="@string/hint_password">
 
                     <com.google.android.material.textfield.TextInputEditText

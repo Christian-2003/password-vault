@@ -23,6 +23,7 @@ Bugfixes and quality of life changes as well as support for darkmode with help p
 * Removed unused `androidx.lifecycle:lifecycle-livedata-ktx`-dependency.
 * Fixed a bug where some text inputs accepted multiple lines of text even if only a single line is desired.
 * Clicking on parent container of switch now triggers the switch.
+* Universally used the custom icon to toggle password visibility.
 
 <br/>
 

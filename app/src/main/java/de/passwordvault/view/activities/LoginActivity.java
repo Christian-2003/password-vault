@@ -5,10 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.textfield.TextInputEditText;
@@ -77,10 +75,6 @@ public class LoginActivity extends PasswordVaultBaseActivity {
                 super.onAuthenticationError(errorCode, errString);
                 if (errorCode == 13) {
                     viewModel.setBiometricAuthenticationCancelled(true);
-                }
-                if (errorCode != 13) {
-                    //errorCode == 13 indicates the biometric login was cancelled!
-                    Toast.makeText(getApplicationContext(), getString(R.string.login_biometrics_error) + ": " + errString, Toast.LENGTH_SHORT).show();
                 }
             }
 
