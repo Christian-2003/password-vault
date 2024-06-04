@@ -11,7 +11,7 @@ This document describes the process of adding new help pages to the app.
 <br/>
 
 ## General Guidelines
-Generally, there are no rules that apply to all help pages. However, there are some rules to be followed.
+Generally, there are no rules that apply to all help pages. However, there are some suggestions to which to pay attention.
 
 ###### When to Create Help Pages
 Help pages should always be useful to the user. Do not create help pages that are unnecessary.
@@ -20,13 +20,23 @@ Since help pages contribute to a large portion of the APK file size (due to imag
 
 However, whenever you create a help page, make sure to provide as many details as possible to make sure that every possible user can understand your help page.
 
+###### Where to Store Help Pages
+Help pages are stored as assets within the app. For further information about assets, read the documentation for [App Assets](App%20Assets.md).
+
+Furthermore, help pages are implemented using HTML. Within the app, a web view is used to load the web pages using the [`LocalizedAssetManager`](App%20Assets.md#localizedassetmanager).
+
+###### Locales
+The default locale for the app is **en** (English). Therefore, help pages must always be provided in english. Please consider to also translate the help pages into the other locales. Currntly, **de** (German) is the only other locale that is supported by the app.
+
+Resources (like images) do not need to be translated into different locales.
+
 <br/>
 
 ## Structure for Help Pages
 Please use the following structure for help pages in order to keep them uniform.
 
 ###### Introduction
-Help pages should always include a topmost headline which contains the name for the help page. Afterwards, the page should contain a brief (but interesting) description of the page. The user should be able to decide whether the page is of actual help for his problem by reading this description. Please only provide truthful information within this chapter and do not try to lur the user into reading the help page. An example could be as follows:
+Help pages should always include a topmost headline which contains the name for the help page. Afterwards, the page should contain a brief (but interesting) description of the page. The user should be able to decide whether the page is of actual help for his problem by reading this description. Please only provide truthful information within this chapter and do not try to lure the user into reading the help page. An example could be as follows:
 
 _backup.html_
 ```html
