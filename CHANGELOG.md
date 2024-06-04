@@ -13,6 +13,8 @@ n/a
 * Added animations when toggeling backup encryption and showing / hiding extended account information.
 * Fixed a bug where the app crashed when a search query was provided and the sorting of the entries was changed in `EntriesFragment`.
 * Changed styles for highlighted text.
+* Added darkmode for help and legal pages.
+* Replaced JPG images with PNG images within help pages to support transparent backgrounds.
 
 <br/>
 

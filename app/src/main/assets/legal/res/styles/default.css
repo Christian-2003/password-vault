@@ -7,7 +7,7 @@ This file contains the default style for embedded legal pages in Password Vault.
 /* Variables for the style */
 :root {
     --pv-primary: #1D7874;
-    --pv-background: #FFFFFF;
+    --pv-background: #F6F6F8;
     --pv-container: #FCFCFE;
     --pv-container-highlight: #BFE3E2;
     --pv-container-detail: #F2F2F2;
@@ -15,6 +15,21 @@ This file contains the default style for embedded legal pages in Password Vault.
     --pv-text-secondary: #8D8C91;
     --pv-text-primary: #1D7874;
     --pv-text-onprimary: #FAFAFA;
+}
+
+/* Variables for the style in dark mode */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --pv-primary: #29A7A1;
+        --pv-background: #000000;
+        --pv-container: #171719;
+        --pv-container-highlight: #5029A7A1;
+        --pv-container-detail: #2D2D2F;
+        --pv-text: #FAFAFA;
+        --pv-text-secondary: #8999999;
+        --pv-text-primary: #29A7A1;
+        --pv-text-onprimary: #FAFAFA;
+    }
 }
 
 
