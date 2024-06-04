@@ -19,7 +19,8 @@ Bugfixes and quality of life changes as well as support for darkmode with help p
 * Added progress bar to help page viewer for smoother web view loading.
 * Fixed a bug where the OS provided a dialog to save autofill data to the user even if the entered data is already stored in Password Vault.
 * Introduced `versionCode` to `build.gradle` to prevent downgrading the app.
-* Updated `com.google.android.gms:play-services-oss-licenses`-depedency from version _17.0.1_ to _17.1.0_.
+* Updated `com.google.android.gms:play-services-oss-licenses`-dependency from version _17.0.1_ to _17.1.0_.
+* Removed unused `androidx.lifecycle:lifecycle-livedata-ktx`-dependency
 
 <br/>
 

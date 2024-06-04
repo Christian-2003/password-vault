@@ -8,14 +8,14 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "de.passwordvault"
+        applicationId 'de.passwordvault'
         minSdk 32
         //noinspection OldTargetApi
         targetSdk 32
         versionCode 17
-        versionName "3.5.5-pre1"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        versionName '3.5.5-pre1'
+        setProperty('archivesBaseName', 'password-vault-v' + versionName)
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
     buildTypes {
@@ -25,12 +25,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     buildFeatures {
-        viewBinding true
+        viewBinding false
     }
 }
 
@@ -38,19 +40,17 @@ dependencies {
 
     //noinspection GradleDependency
     implementation 'androidx.appcompat:appcompat:1.5.1' //Use of older version to compile for Android SDK 32
-    //noinspection GradleDependency
-    implementation 'com.google.android.material:material:1.9.0' //Use of older version to compile for Android SDK 32
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     //noinspection GradleDependency
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
-    //noinspection GradleDependency
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
-    implementation 'com.github.supersu-man:apkupdater-library:v2.1.0'
+    implementation 'androidx.security:security-crypto:1.0.0'
+    implementation 'androidx.biometric:biometric:1.1.0'
 
-    implementation "androidx.security:security-crypto:1.0.0"
-    implementation "androidx.biometric:biometric:1.1.0"
-
+    //noinspection GradleDependency
+    implementation 'com.google.android.material:material:1.9.0' //Use of older version to compile for Android SDK 32
     implementation 'com.google.android.gms:play-services-oss-licenses:17.1.0'
+
+    implementation 'com.github.supersu-man:apkupdater-library:v2.1.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
