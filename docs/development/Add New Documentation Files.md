@@ -118,11 +118,11 @@ Before every `<h2>`-headline, add a `<br>`-element to further visually divide th
 ```
 
 ###### Top of The Document
-At the top of the document, add the PasswordVault logo to the right hand side. This can be done by using the following HTML in the first line of the markdown file:
+At the top of the document, add the Password Vault logo to the right hand side. This can be done by using the following HTML in the first line of the markdown file:
 ```html
 <img src="../img/icon.png" height="150" align="right"/>
 ```
-Replace `../img/icon.png` with the relative path to the PasswordVault icon.
+Replace `../img/icon.png` with the relative path to the Password Vault icon.
 
 Beneath this, add the main `<h1>`-headline which includes the document title. If you got some important badges for the document, you could also show them there.
 
@@ -179,7 +179,7 @@ Store important images, like the app icon within [docs/img/](../img/). Less impo
 
 Include images using the default markdown syntax whenever possible, e.g.:
 ```markdown
-![PasswordVault](../img/icon.png)
+![Password Vault](../img/icon.png)
 ```
 
 If you feel that an image is too large, use the HTML-method instead. With this method, provide height or width constraints to make the image smaller within your document, e.g.:

@@ -50,7 +50,7 @@ The content cache looks as follows:
 
 An example might be:
 ```csv
-bd4fc592-f9c9-4d39-8705-164789a2df32;test123@gmail.com,helloworld,PasswordVault Account
+bd4fc592-f9c9-4d39-8705-164789a2df32;test123@gmail.com,helloworld,Password Vault Account
 932714cc-5bc0-4656-b709-5070ae596d8a;UserId1,,Login Account
 19cb7668-f16a-4780-81f8-ea55b1bb8d7a;,abc123,Test Account
 ```

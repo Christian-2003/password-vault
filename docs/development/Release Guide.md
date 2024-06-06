@@ -1,7 +1,7 @@
 <img src="../img/icon.png" height="150" align="right"/>
 
 # Release Guide
-This document describes the process of releasing a new version of the PasswordVault application. It is aimed at developers to better undestand the release-process and to prevent any important steps from being accidentally skipped. Therefore, this guide contains a list of all steps that need to be taken in order to release a new version of the software.
+This document describes the process of releasing a new version of the Password Vault application. It is aimed at developers to better undestand the release-process and to prevent any important steps from being accidentally skipped. Therefore, this guide contains a list of all steps that need to be taken in order to release a new version of the software.
 
 ###### Table of Contents
 1. [Before Releasing a New Version](#before-releasing-a-new-version)

@@ -24,7 +24,7 @@ Securely manage all your most sensitive account data locally on your Android dev
 <br/>
 
 ## Description
-PasswordVault allows you to securely store your most sensitive account data on your device locally. You can add as many accounts to the app as you wish. Each account can contain as many details as you like, such as passwords, e-mail addresses, security questions, etc.
+Password Vault allows you to securely store your most sensitive account data on your device locally. You can add as many accounts to the app as you wish. Each account can contain as many details as you like, such as passwords, e-mail addresses, security questions, etc.
 
 ###### Used Technologies
 The application is developed with Java and XML through the Android Studio IDE. Therefore, the app is built using Gradle.

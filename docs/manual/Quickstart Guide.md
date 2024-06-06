@@ -1,26 +1,26 @@
 <img src="../img/icon.png" height="150" align="right"/>
 
 # Quickstart Guide
-This document contains a guide on how to use PasswordVault.
+This document contains a guide on how to use Password Vault.
 
-If you have not already installed PasswordVault, there is a [guide](Install%20and%20Run%20the%20App.md) that explains the installation process.
+If you have not already installed Password Vault, there is a [guide](Install%20and%20Run%20the%20App.md) that explains the installation process.
 
 ###### Table of Contents
-1. [What is PasswordVault](#what-is-passwordvault)
+1. [What is Password Vault](#what-is-password-vault)
 2. [Add New Accounts](#add-new-accounts)
 3. [View Your Accounts](#view-your-accounts)
 
 <br>
 
-## What is PasswordVault
-PasswordVault is an Android application through which you can store account information, such as passwords, e-mail addresses, pins, addresses and much more. The app allows you to centrally store all personal data that you provided to any number of accounts on your Android device locally.
+## What is Password Vault
+Password Vault is an Android application through which you can store account information, such as passwords, e-mail addresses, pins, addresses and much more. The app allows you to centrally store all personal data that you provided to any number of accounts on your Android device locally.
 
 In order to protect your data, the app employs the highest industrial encryption standards, which ensures data security and integrity. Furthermore, all data is stored locally on your phone. This prevents any sort of device synchronization but ensures that your data cannot be intercepted by anyone.
 
 <br>
 
 ## Add New Accounts
-Once you open PasswordVault, you are presented the home screen. In order to add a new account, you need to click the **+**-button at the bottom right corner of the screen. This will open a new screen through which you can configure the account.
+Once you open Password Vault, you are presented the home screen. In order to add a new account, you need to click the **+**-button at the bottom right corner of the screen. This will open a new screen through which you can configure the account.
 
 <div align="center">
     <img src="../img/manual/home_fab.png" height="390"/>
@@ -84,7 +84,7 @@ You can add as many details to an account as you like. Examples for details that
 ###### Save the Created Account
 If you are happy with the configuration of the account, click the **Save**-button at the bottom right corner of the screen.
 
-The next step shows you how to view the accounts that are configured within PasswordVault.
+The next step shows you how to view the accounts that are configured within Password Vault.
 
 <br>
 
