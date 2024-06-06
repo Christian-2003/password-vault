@@ -26,7 +26,7 @@ Before releasing a new version, make sure that the entire software works as inte
 Before releasing, a few files used for documentation and build purposes need to be updated.
 
 ###### Version Numbers
-In preparation for a new release, make sure that the version numbers both within the [VERSION.txt](../../VERSION.txt) and [build.gradle](../../app/build.gradle) files are correct. Determine the accurat version number as defined by the guidelines from [semver](https://semver.org/). An example for version numbers within the mentioned files could be as follows:
+In preparation for a new release, make sure that the version numbers both within the [VERSION.txt](../../VERSION.txt) and [build.gradle](../../app/build.gradle) files are correct. Determine the accurat version number as defined by the guidelines from [semver](https://semver.org/). Furthermore, make sure to increment the version code in build.gradle before every release. An example for version numbers within the mentioned files could be as follows:
 
 _VERSION.txt_
 ```
@@ -39,6 +39,7 @@ android {
     // ...
     defaultConfig {
         // ...
+        versionCode 10
         versionName "3.2.1"
     }
 }
@@ -229,5 +230,5 @@ This is a complete checklist of all steps that need to be taken to release a new
 <br/>
 
 ***
-2024-04-02  
+2024-06-06  
 &copy; Christian-2003
