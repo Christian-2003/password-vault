@@ -2,7 +2,7 @@
 
 # Changelog
 
-## 3.5.5 (XXXX-XX-XX)
+## 3.5.5 (2024-06-06)
 ###### Releae Highlights
 Bugfixes and quality of life changes as well as support for darkmode with help pages.
 

@@ -26,7 +26,7 @@ Help pages are stored as assets within the app. For further information about as
 Furthermore, help pages are implemented using HTML. Within the app, a web view is used to load the web pages using the [`LocalizedAssetManager`](App%20Assets.md#localizedassetmanager).
 
 ###### Locales
-The default locale for the app is **en** (English). Therefore, help pages must always be provided in english. Please consider to also translate the help pages into the other locales. Currntly, **de** (German) is the only other locale that is supported by the app.
+The default locale for the app is **en** (English). Therefore, help pages must always be provided in english. Please consider to also translate the help pages into the other locales. Currently, **de** (German) is the only other locale that is supported by the app.
 
 Resources (like images) do not need to be translated into different locales.
 
