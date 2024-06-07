@@ -2,7 +2,7 @@
 
 # Changelog
 
-## 3.5.6 (XXXX-XX-XX)
+## 3.6.0 (XXXX-XX-XX)
 ###### Releae Highlights
 n/a
 

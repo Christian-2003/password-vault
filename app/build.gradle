@@ -13,7 +13,7 @@ android {
         //noinspection OldTargetApi
         targetSdk 32
         versionCode 18
-        versionName '3.5.6-pre1'
+        versionName '3.6.0-pre1'
         setProperty('archivesBaseName', 'password-vault-v' + versionName)
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
