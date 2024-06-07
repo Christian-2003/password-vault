@@ -1,5 +1,7 @@
 package de.passwordvault.model.security.login;
 
+import androidx.annotation.IdRes;
+
 import java.util.ArrayList;
 import java.util.UUID;
 import de.passwordvault.model.Identifiable;
@@ -26,12 +28,18 @@ public class SecurityQuestion implements Identifiable, Storable {
     /**
      * Attribute stores the question of the security question.
      */
-    private String question;
+    private SecurityQuestions question;
 
     /**
      * Attribute stores the answer of the security question.
      */
     private String answer;
+
+    /**
+     * Attribute stores whether the security question is expanded while all security questions are
+     * being shown.
+     */
+    private boolean expanded;
 
 
     /**
@@ -39,8 +47,9 @@ public class SecurityQuestion implements Identifiable, Storable {
      */
     public SecurityQuestion() {
         uuid = UUID.randomUUID().toString();
-        question = "";
+        question = null;
         answer = "";
+        expanded = false;
     }
 
     /**
@@ -49,10 +58,11 @@ public class SecurityQuestion implements Identifiable, Storable {
      * @param question  Question.
      * @param answer    Answer.
      */
-    public SecurityQuestion(String question, String answer) {
+    public SecurityQuestion(SecurityQuestions question, String answer) {
         uuid = UUID.randomUUID().toString();
         this.question = question;
         this.answer = answer;
+        expanded = false;
     }
 
 
@@ -70,7 +80,7 @@ public class SecurityQuestion implements Identifiable, Storable {
      *
      * @return  Question.
      */
-    public String getQuestion() {
+    public SecurityQuestions getQuestion() {
         return question;
     }
 
@@ -80,7 +90,7 @@ public class SecurityQuestion implements Identifiable, Storable {
      * @param question              New question.
      * @throws NullPointerException The passed question is {@code null}.
      */
-    public void setQuestion(String question) throws NullPointerException {
+    public void setQuestion(SecurityQuestions question) throws NullPointerException {
         if (question == null) {
             throw new NullPointerException();
         }
@@ -111,6 +121,25 @@ public class SecurityQuestion implements Identifiable, Storable {
 
 
     /**
+     * Method returns whether the security question is expanded when shown during configuration.
+     *
+     * @return  Whether the question is expanded.
+     */
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    /**
+     * Method changes whether the security question is expanded when shown during configuration.
+     *
+     * @param expanded  Whether the question is expanded.
+     */
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
+    }
+
+
+    /**
      * Method tests whether the passed answer matches the answer of the security question.
      *
      * @param answer    Answer to be tested.
@@ -135,7 +164,12 @@ public class SecurityQuestion implements Identifiable, Storable {
     public String toStorable() {
         CsvBuilder builder = new CsvBuilder();
         builder.append(uuid);
-        builder.append(question);
+        if (question == null) {
+            builder.append("-1");
+        }
+        else {
+            builder.append(question.ordinal());
+        }
         builder.append(answer);
         return builder.toString();
     }
@@ -164,7 +198,15 @@ public class SecurityQuestion implements Identifiable, Storable {
                     uuid = columns.get(i);
                     break;
                 case 1:
-                    question = columns.get(i);
+                    try {
+                        int index = Integer.parseInt(columns.get(i));
+                        if (index >= 0 && index < SecurityQuestions.values().length) {
+                            question = SecurityQuestions.values()[index];
+                        }
+                    }
+                    catch (NumberFormatException e) {
+                        question = null;
+                    }
                     break;
                 case 2:
                     answer = columns.get(i);

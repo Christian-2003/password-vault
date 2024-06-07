@@ -69,9 +69,11 @@
                 style="@style/pv.text.highlight"/>
 
             <LinearLayout
+                android:id="@+id/container_security_questions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:animateLayoutChanges="true"
                 style="@style/pv.container">
 
                 <androidx.recyclerview.widget.RecyclerView
