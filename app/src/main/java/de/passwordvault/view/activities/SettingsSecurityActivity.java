@@ -182,6 +182,7 @@ public class SettingsSecurityActivity extends PasswordVaultBaseActivity implemen
         biometricsContainer.setVisibility(viewModel.areBiometricsAvailable() ? View.VISIBLE : View.GONE);
         biometricsContainer.setOnClickListener(view -> biometricsSwitch.setChecked(!biometricsSwitch.isChecked()));
         findViewById(R.id.settings_security_login_password_container).setOnClickListener(view -> changePassword());
+        findViewById(R.id.settings_security_login_recovery_container).setOnClickListener(view -> startActivity(new Intent(SettingsSecurityActivity.this, RecoveryActivity.class)));
 
         //Passwords:
         findViewById(R.id.settings_security_password_qualitygates_container).setOnClickListener(view -> startActivity(new Intent(this, QualityGatesActivity.class)));

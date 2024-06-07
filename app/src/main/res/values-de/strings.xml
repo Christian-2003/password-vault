@@ -71,6 +71,8 @@
     <string name="settings_security_login_biometrics_info">Biometrie zum Einloggen verwenden</string>
     <string name="settings_security_login_password">Passwort ändern</string>
     <string name="settings_security_login_password_info">Master-Passwort ändern</string>
+    <string name="settings_security_login_recovery">Master-Passwort Wiederherstellung</string>
+    <string name="settings_security_login_recovery_info">Einstellungen, falls das Master-Passwort vergessen wird</string>
     <string name="settings_security_password">Passwortsicherheit</string>
     <string name="settings_security_password_qualitygates">Sicherheitskriterien</string>
     <string name="settings_security_password_qualitygates_info">Sicherheitskriterien für Passwortsicherheit bearbeiten</string>
@@ -225,6 +227,11 @@
     <string name="autofill_authentication_biometrics_title">Biometrische Authentifizierung</string>
 
 
+    <!-- Recovery activity -->
+    <string name="recovery_info">Wähle mindestens fünf Sicherheitsfragen aus um dich in Password Vault anzumelden, falls du das Master-Passwort vergisst. Wenn du dich mit diesen Fragen anmeldest, dann musst du mindestens vier Fragen richtig beantworten. Andernfalls funktioniert der Login nicht.</string>
+    <string name="recovery_questions">Sicherheitsfragen</string>
+
+
     <!-- Detail dialog -->
     <string name="detail_dialog_title_edit">Information bearbeiten</string>
     <string name="detail_dialog_title_add">Information hinzufügen</string>
@@ -264,6 +271,7 @@
     <string name="button_authenticate">Authentifizieren</string>
     <string name="button_create_backup">Backup erstellen</string>
     <string name="button_restore_backup">Backup wiederherstellen</string>
+    <string name="button_security_question_add">Sicherheitsfrage hinzufügen</string>
 
 
     <!-- Placeholder -->
