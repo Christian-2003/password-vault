@@ -335,6 +335,22 @@
     <string name="quality_gate_4">Password contains capital letters.</string>
 
 
+    <!-- Security questions -->
+    <string name="security_question_1">What was the name of your first childhood friend?</string>
+    <string name="security_question_2">What was the name of your first school teacher?</string>
+    <string name="security_question_3">What is your grandmothers maiden name?</string>
+    <string name="security_question_4">In what city did you meet your spouse / significant other?</string>
+    <string name="security_question_5">What is the middle name of your youngest child?</string>
+    <string name="security_question_6">What was the name of your first stuffed animal?</string>
+    <string name="security_question_7">In what city did your mother and father meet?</string>
+    <string name="security_question_8">What was the first exam you failed?</string>
+    <string name="security_question_9">Where was the destination of your first school field trip?</string>
+    <string name="security_question_10">What was your driving instructor\'s first name?</string>
+    <string name="security_question_11">What is the first name of your oldest cousin?</string>
+    <string name="security_question_12">What was your favorite elementary school teacher's name?</string>
+    <string name="security_question_13">What was the name of your first pet?</string>
+
+
     <!-- HTML export -->
     <string name="html_export_document_title">Exported Data</string>
 

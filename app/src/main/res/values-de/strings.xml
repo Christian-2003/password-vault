@@ -330,6 +330,22 @@
     <string name="quality_gate_4">Passwort enthält Großbuchstaben.</string>
 
 
+    <!-- Security questions -->
+    <string name="security_question_1">Wie war der Name deines ersten Kindheitsfreundes?</string>
+    <string name="security_question_2">Wie war der Name deines ersten Lehrers in der Schule?</string>
+    <string name="security_question_3">Wie lautet der Mädchenname deiner Großmutter?</string>
+    <string name="security_question_4">In welcher Stadt hast du deinen Freund, deine Freundin oder deinen Ehepartner kennengelernt?</string>
+    <string name="security_question_5">Wie lautet der Zweitname deines jüngsten Kindes?</string>
+    <string name="security_question_6">Wie lautet der Name deines ersten Plüschtieres?</string>
+    <string name="security_question_7">In welcher Stadt haben sich deiner Eltern kennengelernt?</string>
+    <string name="security_question_8">Was war die erste Klausur, in der du durchgefallen bist?</string>
+    <string name="security_question_9">Was war das Ziel deines ersten Schulausfluges?</string>
+    <string name="security_question_10">Wie lautet der Vorname deines Fahrschullehrers?</string>
+    <string name="security_question_11">Wie lautet der Vorname deines ältesten Cousins?</string>
+    <string name="security_question_12">Wie lautet der Vorname deines Lieblingslehrers aus der Grundschule?</string>
+    <string name="security_question_13">Wie lautet der Name deines ersten Haustieres?</string>
+
+
     <!-- HTML export -->
     <string name="html_export_document_title">Exportierte Daten</string>
 
