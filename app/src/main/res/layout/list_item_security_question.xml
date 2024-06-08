@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/default_padding"
-        android:text="@string/security_question_1"
+        android:text="@string/recovery_question"
         style="@style/pv.text"/>
 
     <LinearLayout
@@ -31,7 +31,7 @@
             android:id="@+id/text_answer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/security_question_1"
+            android:text="@string/recovery_answer"
             style="@style/pv.text.variant"/>
 
     </LinearLayout>

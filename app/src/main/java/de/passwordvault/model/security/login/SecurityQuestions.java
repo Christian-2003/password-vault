@@ -1,6 +1,7 @@
 package de.passwordvault.model.security.login;
 
 import androidx.annotation.StringRes;
+import java.io.Serializable;
 import de.passwordvault.App;
 import de.passwordvault.R;
 
@@ -11,7 +12,7 @@ import de.passwordvault.R;
  * @author  Christian-2003
  * @version 3.6.0
  */
-public enum SecurityQuestions {
+public enum SecurityQuestions implements Serializable {
 
     /**
      * Field stores the 1st security question.

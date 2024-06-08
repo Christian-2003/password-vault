@@ -2,6 +2,7 @@ package de.passwordvault.model.security.login;
 
 import androidx.annotation.IdRes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
 import de.passwordvault.model.Identifiable;
@@ -18,7 +19,7 @@ import de.passwordvault.model.storage.csv.CsvParser;
  * @author  Christian-2003
  * @version 3.6.0
  */
-public class SecurityQuestion implements Identifiable, Storable {
+public class SecurityQuestion implements Identifiable, Storable, Serializable {
 
     /**
      * Attribute stores the UUID of the security question.

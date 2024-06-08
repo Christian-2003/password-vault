@@ -17,6 +17,8 @@
     <color name="pv_green">#03D58A</color>
     <color name="pv_yellow">#F0C430</color>
 
+    <color name="pv_icon_green">#1DA261</color>
+
     <!-- Light / dark variants needed for dialog to switch darkmode -->
     <color name="pv_background_light">#999fa3</color>
     <color name="pv_container_light">#d4d4d4</color>

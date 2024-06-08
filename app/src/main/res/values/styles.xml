@@ -207,6 +207,11 @@
         <item name="android:tint">@color/pv_text_secondary</item>
     </style>
 
+    <!-- Style for pin-icons -->
+    <style name="pv.icon.highlight" parent="pv.icon">
+        <item name="android:tint">@color/pv_icon_green</item>
+    </style>
+
 
 
 
