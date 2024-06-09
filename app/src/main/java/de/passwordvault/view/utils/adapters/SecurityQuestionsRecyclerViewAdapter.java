@@ -137,7 +137,7 @@ public class SecurityQuestionsRecyclerViewAdapter extends RecyclerView.Adapter<S
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         SecurityQuestion question = data.get(position);
-        holder.getQuestionTextView().setText(question.getQuestion().getQuestion());
+        holder.getQuestionTextView().setText(SecurityQuestion.getAllQuestions()[question.getQuestion()]);
         holder.getAnswerTextView().setText(question.getAnswer());
         holder.getAnswerContainer().setVisibility(question.isExpanded() ? View.VISIBLE : View.GONE);
         holder.itemView.setOnClickListener(view -> {

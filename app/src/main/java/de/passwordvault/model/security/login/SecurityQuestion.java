@@ -1,10 +1,10 @@
 package de.passwordvault.model.security.login;
 
-import androidx.annotation.IdRes;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
+import de.passwordvault.App;
+import de.passwordvault.R;
 import de.passwordvault.model.Identifiable;
 import de.passwordvault.model.storage.app.Storable;
 import de.passwordvault.model.storage.app.StorageException;
@@ -22,14 +22,21 @@ import de.passwordvault.model.storage.csv.CsvParser;
 public class SecurityQuestion implements Identifiable, Storable, Serializable {
 
     /**
+     * Field can be used to indicate that no question has been selected.
+     */
+    public static final int NO_QUESTION = -1;
+
+
+    /**
      * Attribute stores the UUID of the security question.
      */
     private String uuid;
 
     /**
-     * Attribute stores the question of the security question.
+     * Attribute stores the index of the security question within the array of available security
+     * questions.
      */
-    private SecurityQuestions question;
+    private int question;
 
     /**
      * Attribute stores the answer of the security question.
@@ -48,7 +55,7 @@ public class SecurityQuestion implements Identifiable, Storable, Serializable {
      */
     public SecurityQuestion() {
         uuid = UUID.randomUUID().toString();
-        question = null;
+        question = NO_QUESTION;
         answer = "";
         expanded = false;
     }
@@ -56,10 +63,10 @@ public class SecurityQuestion implements Identifiable, Storable, Serializable {
     /**
      * Constructor instantiates a new security question with the passed question and answer.
      *
-     * @param question  Question.
+     * @param question  Index of the question within the array of available questions.
      * @param answer    Answer.
      */
-    public SecurityQuestion(SecurityQuestions question, String answer) {
+    public SecurityQuestion(int question, String answer) {
         uuid = UUID.randomUUID().toString();
         this.question = question;
         this.answer = answer;
@@ -77,24 +84,20 @@ public class SecurityQuestion implements Identifiable, Storable, Serializable {
     }
 
     /**
-     * Method returns the question.
+     * Method returns the index of the question within the array of available questions.
      *
-     * @return  Question.
+     * @return  Index of the Question.
      */
-    public SecurityQuestions getQuestion() {
+    public int getQuestion() {
         return question;
     }
 
     /**
-     * Method changes the question.
+     * Method changes the index of the question to the passed index.
      *
-     * @param question              New question.
-     * @throws NullPointerException The passed question is {@code null}.
+     * @param question  New index of the question.
      */
-    public void setQuestion(SecurityQuestions question) throws NullPointerException {
-        if (question == null) {
-            throw new NullPointerException();
-        }
+    public void setQuestion(int question) {
         this.question = question;
     }
 
@@ -165,12 +168,7 @@ public class SecurityQuestion implements Identifiable, Storable, Serializable {
     public String toStorable() {
         CsvBuilder builder = new CsvBuilder();
         builder.append(uuid);
-        if (question == null) {
-            builder.append("-1");
-        }
-        else {
-            builder.append(question.ordinal());
-        }
+        builder.append(question);
         builder.append(answer);
         return builder.toString();
     }
@@ -200,13 +198,10 @@ public class SecurityQuestion implements Identifiable, Storable, Serializable {
                     break;
                 case 1:
                     try {
-                        int index = Integer.parseInt(columns.get(i));
-                        if (index >= 0 && index < SecurityQuestions.values().length) {
-                            question = SecurityQuestions.values()[index];
-                        }
+                        question = Integer.parseInt(columns.get(i));
                     }
                     catch (NumberFormatException e) {
-                        question = null;
+                        question = NO_QUESTION;
                     }
                     break;
                 case 2:
@@ -228,6 +223,16 @@ public class SecurityQuestion implements Identifiable, Storable, Serializable {
     @Override
     public boolean equals(Identifiable obj) {
         return obj != null && obj.getUuid().equals(uuid);
+    }
+
+
+    /**
+     * Method returns an array of all available security questions.
+     *
+     * @return  Array of all security questions.
+     */
+    public static String[] getAllQuestions() {
+        return App.getContext().getResources().getStringArray(R.array.security_questions);
     }
 
 }

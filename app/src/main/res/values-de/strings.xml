@@ -342,19 +342,21 @@
 
 
     <!-- Security questions -->
-    <string name="security_question_1">Wie war der Name deines ersten Kindheitsfreundes?</string>
-    <string name="security_question_2">Wie war der Name deines ersten Lehrers in der Schule?</string>
-    <string name="security_question_3">Wie lautet der Mädchenname deiner Großmutter?</string>
-    <string name="security_question_4">In welcher Stadt hast du deinen Freund, deine Freundin oder deinen Ehepartner kennengelernt?</string>
-    <string name="security_question_5">Wie lautet der Zweitname deines jüngsten Kindes?</string>
-    <string name="security_question_6">Wie lautet der Name deines ersten Plüschtieres?</string>
-    <string name="security_question_7">In welcher Stadt haben sich deiner Eltern kennengelernt?</string>
-    <string name="security_question_8">Was war die erste Klausur, in der du durchgefallen bist?</string>
-    <string name="security_question_9">Was war das Ziel deines ersten Schulausfluges?</string>
-    <string name="security_question_10">Wie lautet der Vorname deines Fahrschullehrers?</string>
-    <string name="security_question_11">Wie lautet der Vorname deines ältesten Cousins?</string>
-    <string name="security_question_12">Wie lautet der Vorname deines Lieblingslehrers aus der Grundschule?</string>
-    <string name="security_question_13">Wie lautet der Name deines ersten Haustieres?</string>
+    <string-array name="security_questions">
+        <item>Wie war der Name deines ersten Kindheitsfreundes?</item>
+        <item>Wie war der Name deines ersten Lehrers in der Schule?</item>
+        <item>Wie lautet der Mädchenname deiner Großmutter?</item>
+        <item>In welcher Stadt hast du deinen Freund, deine Freundin oder deinen Ehepartner kennengelernt?</item>
+        <item>Wie lautet der Zweitname deines jüngsten Kindes?</item>
+        <item>Wie lautet der Name deines ersten Plüschtieres?</item>
+        <item>In welcher Stadt haben sich deiner Eltern kennengelernt?</item>
+        <item>Was war die erste Klausur, in der du durchgefallen bist?</item>
+        <item>Was war das Ziel deines ersten Schulausfluges?</item>
+        <item>Wie lautet der Vorname deines Fahrschullehrers?</item>
+        <item>Wie lautet der Vorname deines ältesten Cousins?</item>
+        <item>Wie lautet der Vorname deines Lieblingslehrers aus der Grundschule?</item>
+        <item>Wie lautet der Name deines ersten Haustieres?</item>
+    </string-array>
 
 
     <!-- HTML export -->

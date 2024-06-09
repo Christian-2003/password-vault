@@ -2,18 +2,17 @@ package de.passwordvault.view.activities;
 
 import android.animation.LayoutTransition;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.security.login.SecurityQuestion;
-import de.passwordvault.model.security.login.SecurityQuestions;
 import de.passwordvault.view.dialogs.SecurityQuestionDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
@@ -117,10 +116,10 @@ public class RecoveryActivity extends PasswordVaultBaseActivity implements OnRec
         if (viewModel.getSecurityQuestions() == null) {
             viewModel.loadSecurityQuestions();
             if (viewModel.getSecurityQuestions().isEmpty()) {
-                SecurityQuestion q1 = new SecurityQuestion(SecurityQuestions.QUESTION_1, "Hello");
-                SecurityQuestion q2 = new SecurityQuestion(SecurityQuestions.QUESTION_2, "World");
-                SecurityQuestion q3 = new SecurityQuestion(SecurityQuestions.QUESTION_3, "Cool");
-                SecurityQuestion q4 = new SecurityQuestion(SecurityQuestions.QUESTION_4, "Month");
+                SecurityQuestion q1 = new SecurityQuestion(0, "Hello");
+                SecurityQuestion q2 = new SecurityQuestion(3, "World");
+                SecurityQuestion q3 = new SecurityQuestion(4, "Cool");
+                SecurityQuestion q4 = new SecurityQuestion(9, "Month");
                 viewModel.getSecurityQuestions().add(q1);
                 viewModel.getSecurityQuestions().add(q2);
                 viewModel.getSecurityQuestions().add(q3);
@@ -135,36 +134,35 @@ public class RecoveryActivity extends PasswordVaultBaseActivity implements OnRec
 
 
     private void addNewSecurityQuestion() {
-        if (viewModel.getSecurityQuestions().size() >= SecurityQuestions.values().length) {
+        if (viewModel.getSecurityQuestions().size() >= SecurityQuestion.getAllQuestions().length) {
             //No more questions available:
             return;
         }
 
         //Get available security questions that can be used:
-        int[] ordinals = new int[SecurityQuestions.values().length - viewModel.getSecurityQuestions().size()];
-        int j = 0;
-        for (int i = 0; i < ordinals.length; i++) {
-            SecurityQuestions question = SecurityQuestions.values()[j];
+        int numberOfAllQuestions = SecurityQuestion.getAllQuestions().length;
+        String[] availableQuestions = new String[numberOfAllQuestions - viewModel.getSecurityQuestions().size()];
+        Log.d("RA", "Created " + (numberOfAllQuestions - viewModel.getSecurityQuestions().size()) + " security questions.");
+
+        int k = 0;
+        for (int i = 0; i < numberOfAllQuestions; i++) {
             boolean questionUsed = false;
             for (SecurityQuestion usedQuestion : viewModel.getSecurityQuestions()) {
-                if (usedQuestion.getQuestion() != null && usedQuestion.getQuestion() == question) {
+                if (usedQuestion.getQuestion() == i) {
                     questionUsed = true;
                     break;
                 }
             }
-            if (!questionUsed) {
-                ordinals[i] = question.ordinal();
+            if (questionUsed) {
+                continue;
             }
-            else {
-                i--;
-            }
-            j++;
+            availableQuestions[k++] = SecurityQuestion.getAllQuestions()[i];
         }
 
         SecurityQuestionDialog dialog = new SecurityQuestionDialog();
         Bundle args = new Bundle();
         args.putSerializable(SecurityQuestionDialog.KEY_CALLBACK_LISTENER, this);
-        args.putIntArray(SecurityQuestionDialog.KEY_QUESTIONS, ordinals);
+        args.putStringArray(SecurityQuestionDialog.KEY_QUESTIONS, availableQuestions);
         dialog.setArguments(args);
 
         dialog.show(getSupportFragmentManager(), "");

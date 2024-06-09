@@ -19,6 +19,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import java.util.Objects;
 import de.passwordvault.R;
+import de.passwordvault.model.security.login.SecurityQuestion;
 import de.passwordvault.viewmodel.dialogs.SecurityQuestionViewModel;
 
 
@@ -153,17 +154,15 @@ public class SecurityQuestionDialog extends DialogFragment {
      */
     private View createView() {
         questionDropdown = view.findViewById(R.id.input_question);
-        String[] questionLabels = new String[viewModel.getAvailableQuestions().length];
         if (viewModel.getSelectedQuestionIndex() != -1) {
-            questionDropdown.setText(questionLabels[viewModel.getSelectedQuestionIndex()]);
+            //A question was manually selected by the user:
+            questionDropdown.setText(viewModel.getAvailableQuestions()[viewModel.getSelectedQuestionIndex()]);
         }
-        else if (viewModel.getSecurityQuestion() != null && viewModel.getSecurityQuestion().getQuestion() != null){
-            questionDropdown.setText(viewModel.getSecurityQuestion().getQuestion().getQuestion());
+        else if (viewModel.getSelectedQuestionIndex() == -1 && viewModel.getSecurityQuestion().getQuestion() != SecurityQuestion.NO_QUESTION) {
+            //The user is editing an existing question and has not changed the question itself:
+            questionDropdown.setText(viewModel.getAllQuestions()[viewModel.getSecurityQuestion().getQuestion()]);
         }
-        for (int i = 0; i < questionLabels.length; i++) {
-            questionLabels[i] = viewModel.getAvailableQuestions()[i].getQuestion();
-        }
-        questionDropdown.setAdapter(new ArrayAdapter<>(view.getContext(), android.R.layout.simple_spinner_dropdown_item, questionLabels));
+        questionDropdown.setAdapter(new ArrayAdapter<>(view.getContext(), android.R.layout.simple_spinner_dropdown_item, viewModel.getAvailableQuestions()));
         questionDropdown.setOnItemClickListener((parent, view, position, id) -> {
             viewModel.setSelectedQuestionIndex(position);
         });
@@ -183,39 +182,34 @@ public class SecurityQuestionDialog extends DialogFragment {
      * @return  Whether all inputs are valid.
      */
     private boolean processUserInput() {
-        int selectedItem = viewModel.getSelectedQuestionIndex();
-        boolean questionEnteredCorrectly = true;
-        if (selectedItem >= 0 && selectedItem < viewModel.getAvailableQuestions().length) {
-            //Question selected:
-            viewModel.getSecurityQuestion().setQuestion(viewModel.getAvailableQuestions()[selectedItem]);
-        }
-        else if (viewModel.getSecurityQuestion().getQuestion() == null || !questionDropdown.getText().toString().equals(viewModel.getSecurityQuestion().getQuestion().getQuestion())) {
-            questionEnteredCorrectly = false;
-        }
-        else {
-            questionEnteredCorrectly = false;
-        }
         if (questionContainer == null) {
             questionContainer = view.findViewById(R.id.container_question);
         }
-        if (!questionEnteredCorrectly) {
-            questionContainer.setError(getString(R.string.error_empty_input));
+        if (answerContainer == null) {
+            answerContainer = view.findViewById(R.id.container_answer);
+        }
+
+        int selectedQuestionIndex = viewModel.getIndexFromSelectedQuestion(viewModel.getSelectedQuestionIndex());
+        boolean questionEnteredCorrectly = true;
+        if (selectedQuestionIndex != SecurityQuestion.NO_QUESTION) {
+            //Question selected:
+            viewModel.getSecurityQuestion().setQuestion(selectedQuestionIndex);
+            questionContainer.setErrorEnabled(false);
         }
         else {
-            questionContainer.setErrorEnabled(false);
+            questionContainer.setError(getString(R.string.error_empty_input));
+            questionEnteredCorrectly = false;
         }
 
         String answer = Objects.requireNonNull(answerEditText.getText()).toString();
         boolean answerEnteredCorrectly = true;
-        if (answerContainer == null) {
-            answerContainer = view.findViewById(R.id.container_answer);
-        }
-        if (answer.isEmpty()) {
-            answerEnteredCorrectly = false;
-            answerContainer.setError(getString(R.string.error_empty_input));
+        if (!answer.isEmpty()) {
+            viewModel.getSecurityQuestion().setAnswer(answer);
+            answerContainer.setErrorEnabled(false);
         }
         else {
-            answerContainer.setErrorEnabled(false);
+            answerContainer.setError(getString(R.string.error_empty_input));
+            answerEnteredCorrectly = false;
         }
 
         Log.d("SQD", "Result=" + (questionEnteredCorrectly && answerEnteredCorrectly));

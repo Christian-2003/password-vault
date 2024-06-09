@@ -3,7 +3,6 @@ package de.passwordvault.viewmodel.dialogs;
 import android.os.Bundle;
 import androidx.lifecycle.ViewModel;
 import de.passwordvault.model.security.login.SecurityQuestion;
-import de.passwordvault.model.security.login.SecurityQuestions;
 import de.passwordvault.view.dialogs.SecurityQuestionDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
 
@@ -28,13 +27,20 @@ public class SecurityQuestionViewModel extends ViewModel {
     private SecurityQuestion securityQuestion;
 
     /**
-     * Attribute stores a list of all available security question. This should include all unused
-     * questions as well as the currently edited question.
+     * Attribute stores a list of all available security questions. This should include the question
+     * within {@link #securityQuestion}. However, all other security questions that are used should
+     * NOT be included in this array.
      */
-    private SecurityQuestions[] availableQuestions;
+    private String[] availableQuestions;
 
     /**
-     * Attribute stores the question that is currently selected by the user.
+     * Attribute stores a list of all security questions that exist.
+     */
+    private final String[] allQuestions;
+
+    /**
+     * Attribute stores the question that is currently selected by the user from
+     * {@link #availableQuestions}.
      */
     private int selectedQuestionIndex;
 
@@ -46,6 +52,7 @@ public class SecurityQuestionViewModel extends ViewModel {
         callbackListener = null;
         securityQuestion = null;
         availableQuestions = null;
+        allQuestions = SecurityQuestion.getAllQuestions();
         selectedQuestionIndex = -1;
     }
 
@@ -73,8 +80,17 @@ public class SecurityQuestionViewModel extends ViewModel {
      *
      * @return  Array of all available security questions.
      */
-    public SecurityQuestions[] getAvailableQuestions() {
+    public String[] getAvailableQuestions() {
         return availableQuestions;
+    }
+
+    /**
+     * Method returns an array containing all security questions.
+     *
+     * @return  Array containing all security questions.
+     */
+    public String[] getAllQuestions() {
+        return allQuestions;
     }
 
     /**
@@ -135,22 +151,14 @@ public class SecurityQuestionViewModel extends ViewModel {
 
         //Get available security questions:
         if (args.containsKey(SecurityQuestionDialog.KEY_QUESTIONS)) {
-            int[] ordinals;
             try {
-                ordinals = args.getIntArray(SecurityQuestionDialog.KEY_QUESTIONS);
+                availableQuestions = args.getStringArray(SecurityQuestionDialog.KEY_QUESTIONS);
+                if (availableQuestions == null) {
+                    return false;
+                }
             }
             catch (ClassCastException e) {
                 return false;
-            }
-            if (ordinals == null) {
-                return false;
-            }
-            availableQuestions = new SecurityQuestions[ordinals.length];
-            SecurityQuestions[] allQuestions = SecurityQuestions.values();
-            for (int i = 0; i < ordinals.length; i++) {
-                if (ordinals[i] >= 0 && ordinals[i] < allQuestions.length) {
-                    availableQuestions[i] = allQuestions[ordinals[i]];
-                }
             }
         }
         else {
@@ -158,6 +166,27 @@ public class SecurityQuestionViewModel extends ViewModel {
         }
 
         return true;
+    }
+
+
+    /**
+     * Method determines the index of the security question within {@link #allQuestions} based on the
+     * passed index of the selected question within {@link #availableQuestions}.
+     *
+     * @param index Index of the selected question in {@link #availableQuestions}.
+     * @return      Index of the selected question within {@link #allQuestions}.
+     */
+    public int getIndexFromSelectedQuestion(int index) {
+        if (index < 0 || index >= availableQuestions.length) {
+            return SecurityQuestion.NO_QUESTION;
+        }
+        String selectedQuestion = availableQuestions[index];
+        for (int i = 0; i < allQuestions.length; i++) {
+            if (allQuestions[i].equals(selectedQuestion)) {
+                return i;
+            }
+        }
+        return SecurityQuestion.NO_QUESTION;
     }
 
 }
