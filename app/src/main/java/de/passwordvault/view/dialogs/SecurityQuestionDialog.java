@@ -80,7 +80,22 @@ public class SecurityQuestionDialog extends DialogFragment {
     private TextInputLayout answerContainer;
 
 
+    /**
+     * Method returns the security question that was edited by the dialog.
+     *
+     * @return  Security question that was edited.
+     */
+    public SecurityQuestion getSecurityQuestion() {
+        return viewModel.getSecurityQuestion();
+    }
 
+
+    /**
+     * Method is called whenever the dialog is created.
+     *
+     * @param savedInstanceState    Previously saved state of the instance.
+     * @return                      Created dialog.
+     */
     @NonNull
     @Override
     @SuppressLint("InflateParams") //Ignore passing 'null' as root for the dialog's view.
@@ -141,11 +156,17 @@ public class SecurityQuestionDialog extends DialogFragment {
     }
 
 
+    /**
+     * Method is called whenever the dialog is cancelled.
+     *
+     * @param dialog    Cancelled dialog.
+     */
     @Override
     public void onCancel(@NonNull DialogInterface dialog) {
         super.onCancel(dialog);
         viewModel.getCallbackListener().onNegativeCallback(this);
     }
+
 
     /**
      * Method populates the view for the dialog.
@@ -163,9 +184,7 @@ public class SecurityQuestionDialog extends DialogFragment {
             questionDropdown.setText(viewModel.getAllQuestions()[viewModel.getSecurityQuestion().getQuestion()]);
         }
         questionDropdown.setAdapter(new ArrayAdapter<>(view.getContext(), android.R.layout.simple_spinner_dropdown_item, viewModel.getAvailableQuestions()));
-        questionDropdown.setOnItemClickListener((parent, view, position, id) -> {
-            viewModel.setSelectedQuestionIndex(position);
-        });
+        questionDropdown.setOnItemClickListener((parent, view, position, id) -> viewModel.setSelectedQuestionIndex(position));
 
         answerEditText = view.findViewById(R.id.input_answer);
         answerEditText.setText(viewModel.getSecurityQuestion().getAnswer());

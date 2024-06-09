@@ -206,7 +206,6 @@ public class Account {
     public void save() {
         SharedPreferences.Editor editor = App.getContext().getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE).edit();
         editor.putBoolean(KEY_BIOMETRICS, biometrics);
-        editor.apply();
         password.save();
         if (securityQuestions != null) {
             StringBuilder builder = new StringBuilder();
@@ -226,6 +225,7 @@ public class Account {
             }
             editor.putString(KEY_SECURITY_QUESTIONS, encryptedSecurityQuestion);
         }
+        editor.apply();
     }
 
 

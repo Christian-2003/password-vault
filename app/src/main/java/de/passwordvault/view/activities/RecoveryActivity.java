@@ -4,12 +4,10 @@ import android.animation.LayoutTransition;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
-
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
-
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.security.login.SecurityQuestion;
@@ -78,7 +76,22 @@ public class RecoveryActivity extends PasswordVaultBaseActivity implements OnRec
      */
     @Override
     public void onPositiveCallback(DialogFragment dialog) {
-
+        if (dialog instanceof SecurityQuestionDialog) {
+            SecurityQuestion question = ((SecurityQuestionDialog)dialog).getSecurityQuestion();
+            if (question.getQuestion() == SecurityQuestion.NO_QUESTION || question.getAnswer() == null || question.getAnswer().isEmpty()) {
+                //Question is invalid:
+                return;
+            }
+            for (int i = 0; i < viewModel.getSecurityQuestions().size(); i++) {
+                if (viewModel.getSecurityQuestions().get(i).equals(question)) {
+                    viewModel.getSecurityQuestions().set(i, question);
+                    adapter.notifyItemChanged(i);
+                    return;
+                }
+            }
+            viewModel.getSecurityQuestions().add(question);
+            adapter.notifyItemInserted(viewModel.getSecurityQuestions().size() - 1);
+        }
     }
 
 
@@ -115,16 +128,6 @@ public class RecoveryActivity extends PasswordVaultBaseActivity implements OnRec
 
         if (viewModel.getSecurityQuestions() == null) {
             viewModel.loadSecurityQuestions();
-            if (viewModel.getSecurityQuestions().isEmpty()) {
-                SecurityQuestion q1 = new SecurityQuestion(0, "Hello");
-                SecurityQuestion q2 = new SecurityQuestion(3, "World");
-                SecurityQuestion q3 = new SecurityQuestion(4, "Cool");
-                SecurityQuestion q4 = new SecurityQuestion(9, "Month");
-                viewModel.getSecurityQuestions().add(q1);
-                viewModel.getSecurityQuestions().add(q2);
-                viewModel.getSecurityQuestions().add(q3);
-                viewModel.getSecurityQuestions().add(q4);
-            }
         }
 
         adapter = new SecurityQuestionsRecyclerViewAdapter(viewModel.getSecurityQuestions(), this);
@@ -133,6 +136,9 @@ public class RecoveryActivity extends PasswordVaultBaseActivity implements OnRec
     }
 
 
+    /**
+     * Method starts a dialog to add a new security question.
+     */
     private void addNewSecurityQuestion() {
         if (viewModel.getSecurityQuestions().size() >= SecurityQuestion.getAllQuestions().length) {
             //No more questions available:
