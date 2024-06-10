@@ -7,7 +7,7 @@
 n/a
 
 ###### Features
-* n/a
+* Fixed typo in german help pages.
 
 <br/>
 
