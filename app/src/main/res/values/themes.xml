@@ -23,6 +23,8 @@
         <item name="android:colorBackgroundFloating">@color/pv_container</item>
         <item name="android:windowLightNavigationBar">true</item>
         <item name="android:navigationBarColor">@color/pv_background</item>
+        <item name="colorControlActivated">@color/pv_primary</item>
+        <item name="android:textColorHighlight">@color/pv_primary_translucent</item>
 
         <!-- Default styles for material components -->
         <item name="textInputStyle">@style/pv.material.text_input_layout</item>
@@ -34,6 +36,7 @@
         <item name="radioButtonStyle">@style/pv.material.radio_button</item>
         <item name="checkboxStyle">@style/pv.material.checkbox</item>
         <item name="badgeStyle">@style/pv.material.badge</item>
+        <item name="editTextStyle">@style/pv.material.edit_text</item>
     </style>
 
 

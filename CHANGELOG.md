@@ -9,6 +9,8 @@ n/a
 ###### Features
 * Fixed typo in german help pages.
 * Fixed `ERR_UNKNOWN_URL_SCHEME`-error in privacy policy when contact-email is clicked.
+* Fixed color for text selection handles.
+* Fixed color for selected text.
 
 <br/>
 
