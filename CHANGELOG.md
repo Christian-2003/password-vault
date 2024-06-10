@@ -11,6 +11,7 @@ n/a
 * Fixed `ERR_UNKNOWN_URL_SCHEME`-error in privacy policy when contact-email is clicked.
 * Fixed color for text selection handles.
 * Fixed color for selected text.
+* Fixed color for selected account tags.
 
 <br/>
 
