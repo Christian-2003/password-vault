@@ -1,7 +1,10 @@
 package de.passwordvault.view.activities;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
@@ -21,7 +24,7 @@ import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
  * For further information about localized assets, see {@link LocalizedAssetManager}.
  *
  * @author  Christian-2003
- * @version 3.5.5
+ * @version 3.5.6
  */
 public class LocalizedAssetViewerActivity extends PasswordVaultBaseActivity {
 
@@ -43,6 +46,28 @@ public class LocalizedAssetViewerActivity extends PasswordVaultBaseActivity {
             activityTitleTextView.setText(view.getTitle());
             LocalizedAssetViewerActivity.this.progressBar.setVisibility(View.GONE);
             LocalizedAssetViewerActivity.this.webView.setVisibility(View.VISIBLE);
+        }
+
+
+        /**
+         * Method is called whenever a URL from within the web view is loaded to determine, whether
+         * the WebView can load the URL or whether the app should start an intent to handle the URL.
+         *
+         * @param view      Web view from which the URL was loaded.
+         * @param request   Web request for which to determine, whether the web view or an intent
+         *                  shall be used.
+         * @return          Whether the web view can load the URL (= {@code true}) or whether an
+         *                  intent is required (= {@code false}).
+         */
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+            Uri url = request.getUrl();
+            if (url.getScheme().equals("mailto")) {
+                //Mailto:
+                view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, url));
+                return true;
+            }
+            return super.shouldOverrideUrlLoading(view, request);
         }
 
     }
