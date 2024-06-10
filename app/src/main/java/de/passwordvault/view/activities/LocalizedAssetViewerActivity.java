@@ -62,7 +62,8 @@ public class LocalizedAssetViewerActivity extends PasswordVaultBaseActivity {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
             Uri url = request.getUrl();
-            if (url.getScheme().equals("mailto")) {
+            String urlScheme = url.getScheme();
+            if (urlScheme != null && urlScheme.equals("mailto")) {
                 //Mailto:
                 view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, url));
                 return true;
