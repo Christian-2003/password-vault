@@ -38,6 +38,7 @@
         <item name="radioButtonStyle">@style/pv.material.radio_button</item>
         <item name="checkboxStyle">@style/pv.material.checkbox</item>
         <item name="badgeStyle">@style/pv.material.badge</item>
+        <item name="chipStyle">@style/pv.material.chip</item>
     </style>
 
 
