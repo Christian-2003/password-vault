@@ -4,7 +4,7 @@
 
 ## 3.5.6 (XXXX-XX-XX)
 ###### Releae Highlights
-n/a
+Bugfixes and quality of life changes.
 
 ###### Features
 * Fixed typo in german help pages.
@@ -12,6 +12,7 @@ n/a
 * Fixed color for text selection handles.
 * Fixed color for selected text.
 * Fixed color for selected account tags.
+* Changed contact e-mail address in privacy policy.
 
 <br/>
 
