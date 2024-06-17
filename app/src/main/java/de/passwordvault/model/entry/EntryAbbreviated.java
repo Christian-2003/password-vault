@@ -13,6 +13,7 @@ import de.passwordvault.model.storage.app.Storable;
 import de.passwordvault.model.storage.app.StorageException;
 import de.passwordvault.model.storage.csv.CsvBuilder;
 import de.passwordvault.model.storage.csv.CsvParser;
+import de.passwordvault.model.tags.Tag;
 import de.passwordvault.model.tags.TagCollection;
 
 
@@ -334,7 +335,14 @@ public class EntryAbbreviated implements Identifiable, Storable, Serializable {
      * @return  Whether the passed string is contained within this instance.
      */
     public boolean matchesFilter(CharSequence s) {
-        return name.toLowerCase().contains(s) || description.toLowerCase().contains(s);
+        boolean tagFound = false;
+        for (Tag tag : tags) {
+            if (tag.getName().equalsIgnoreCase(s.toString())) {
+                tagFound = true;
+                break;
+            }
+        }
+        return name.toLowerCase().contains(s) || description.toLowerCase().contains(s) || tagFound;
     }
 
 
