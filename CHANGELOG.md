@@ -15,6 +15,7 @@ Bugfixes and quality of life changes.
 * Changed contact e-mail address in privacy policy.
 * Changed display of security score for password-details from "x/y" to "x / y".
 * Reduced number of steps to fill password security score bar to increase performance.
+* Fixed alignment for back buttons in activities that cannot be collapsed.
 
 <br/>
 
