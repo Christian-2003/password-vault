@@ -13,6 +13,7 @@ Bugfixes and quality of life changes.
 * Fixed color for selected text.
 * Fixed color for selected account tags.
 * Changed contact e-mail address in privacy policy.
+* Changed display of security score for password-details from "x/y" to "x / y".
 
 <br/>
 

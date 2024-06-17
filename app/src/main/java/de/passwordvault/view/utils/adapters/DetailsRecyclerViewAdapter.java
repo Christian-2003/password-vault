@@ -26,7 +26,6 @@ import de.passwordvault.model.detail.DetailSwipeAction;
 import de.passwordvault.model.detail.DetailType;
 import de.passwordvault.model.storage.Configuration;
 import de.passwordvault.view.dialogs.ConfirmDeleteDetailDialog;
-import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
 import de.passwordvault.view.dialogs.DetailDialog;
 import de.passwordvault.view.utils.DetailsItemMoveCallback;
 import de.passwordvault.view.utils.DialogCallbackListener;
@@ -251,7 +250,7 @@ public class DetailsRecyclerViewAdapter extends RecyclerView.Adapter<DetailsRecy
             animator.addUpdateListener(animation -> viewHolder.securityBar.setProgress((int) animation.getAnimatedValue()));
             animator.start();
             viewHolder.securityBar.setProgress(securityScore * 1000);
-            String securityRating = securityScore + "/" + maxSecurityScore;
+            String securityRating = securityScore + " / " + maxSecurityScore;
             viewHolder.securityScore.setText(securityRating);
             viewHolder.securityScore.setTextColor(Utils.getPasswordSecurityScoreColor(securityScore));
         }
