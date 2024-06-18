@@ -326,6 +326,7 @@
     <string name="error_passwords_incorrect">Falsches Passwort.</string>
     <string name="error_passwords_not_matching">Passwörter stimmen nicht überein.</string>
     <string name="error_invalid_regex">RegEx ist inkorrekt.</string>
+    <string name="error_not_enough_security_questions">Du benötigst mindestens 5 Sicherheitsfragen.</string>
 
 
     <!-- Password quality gates -->

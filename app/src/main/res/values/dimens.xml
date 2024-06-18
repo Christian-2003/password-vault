@@ -19,5 +19,6 @@
     <dimen name="pin_icon_size">12dp</dimen>
 
     <dimen name="progress_bar_thickness">9dp</dimen>
+    <dimen name="progress_bar_thickness_large">34dp</dimen>
 
 </resources>

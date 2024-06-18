@@ -3,7 +3,11 @@ package de.passwordvault.view.activities;
 import android.animation.LayoutTransition;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -37,11 +41,27 @@ public class RecoveryActivity extends PasswordVaultBaseActivity implements OnRec
      */
     private SecurityQuestionsRecyclerViewAdapter adapter;
 
-
     /**
      * Attribute stores the linear layout which contains the security questions.
      */
     private LinearLayout securityQuestionsContainer;
+
+    /**
+     * Attribute stores the text view displaying the number of configured security questions.
+     */
+    private TextView scoreTextView;
+
+    /**
+     * Attribute stores the text view displaying an error message if less than five security
+     * questions are configured.
+     */
+    private TextView scoreErrorTextView;
+
+    /**
+     * Attribute stores the progress bar that visually displays how many security questions are
+     * configured.
+     */
+    private ProgressBar scoreProgressBar;
 
 
     /**
@@ -91,6 +111,7 @@ public class RecoveryActivity extends PasswordVaultBaseActivity implements OnRec
             }
             viewModel.getSecurityQuestions().add(question);
             adapter.notifyItemInserted(viewModel.getSecurityQuestions().size() - 1);
+            updateProgress();
         }
     }
 
@@ -133,6 +154,7 @@ public class RecoveryActivity extends PasswordVaultBaseActivity implements OnRec
         adapter = new SecurityQuestionsRecyclerViewAdapter(viewModel.getSecurityQuestions(), this);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setAdapter(adapter);
+        updateProgress();
     }
 
 
@@ -172,6 +194,27 @@ public class RecoveryActivity extends PasswordVaultBaseActivity implements OnRec
         dialog.setArguments(args);
 
         dialog.show(getSupportFragmentManager(), "");
+    }
+
+
+    /**
+     * Method updates the progress for the configured security questions.
+     */
+    private void updateProgress() {
+        if (scoreTextView == null) {
+            scoreTextView = findViewById(R.id.text_view_score);
+            scoreErrorTextView = findViewById(R.id.text_view_error);
+            scoreProgressBar = findViewById(R.id.progress_bar_score);
+        }
+        int score = 0;
+        if (viewModel.getSecurityQuestions() != null) {
+            score = viewModel.getSecurityQuestions().size();
+        }
+        String securityQuestions = score + " / " + Account.REQUIRED_SECURITY_QUESTIONS;
+        scoreTextView.setText(securityQuestions);
+        scoreErrorTextView.setVisibility(score >= Account.REQUIRED_SECURITY_QUESTIONS ? View.GONE : View.VISIBLE);
+        scoreProgressBar.setMax(Account.REQUIRED_SECURITY_QUESTIONS * 100);
+        scoreProgressBar.setProgress(score * 100, true);
     }
 
 }

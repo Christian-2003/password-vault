@@ -331,6 +331,7 @@
     <string name="error_passwords_incorrect">Incorrect password.</string>
     <string name="error_passwords_not_matching">Passwords are not identical.</string>
     <string name="error_invalid_regex">RegEx is invalid.</string>
+    <string name="error_not_enough_security_questions">You need to have at least 5 security questions.</string>
 
 
     <!-- Password quality gates -->

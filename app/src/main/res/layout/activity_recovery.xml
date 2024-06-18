@@ -58,7 +58,56 @@
                 android:layout_marginTop="@dimen/default_margin"
                 android:layout_marginBottom="@dimen/default_margin"
                 android:text="@string/recovery_info"
-                style="@style/pv.text"/>
+                style="@style/pv.text.info"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:animateLayoutChanges="true"
+                android:padding="@dimen/default_padding"
+                style="@style/pv.container">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/default_margin"
+                    android:orientation="vertical"
+                    style="@style/pv.eyecatcher.pill">
+
+                    <TextView
+                        android:id="@+id/text_view_score"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="0dp"
+                        android:paddingHorizontal="@dimen/default_left_margin_outside_container"
+                        android:text="@string/placeholder_security_score"
+                        android:textColor="@color/pv_primary"
+                        style="@style/pv.text.highlight"/>
+
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/progress_bar_score"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/progress_bar_thickness_large"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    android:progressDrawable="@drawable/multipurpose_bar"
+                    style="?android:attr/progressBarStyleHorizontal"/>
+
+                <TextView
+                    android:id="@+id/text_view_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/error_not_enough_security_questions"
+                    android:textColor="?attr/colorError"
+                    style="@style/pv.text"/>
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"

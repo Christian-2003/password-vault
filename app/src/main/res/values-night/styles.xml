@@ -27,6 +27,12 @@
         <item name="android:textSize">@dimen/secondary_text_size</item>
     </style>
 
+    <!-- Style for info text -->
+    <style name="pv.text.info" parent="pv.text">
+        <item name="android:textSize">@dimen/default_text_size</item>
+        <item name="android:textColor">@color/pv_text_secondary</item>
+    </style>
+
     <!-- Style for highlighted text -->
     <style name="pv.text.highlight" parent="pv.text">
         <item name="android:layout_marginTop">@dimen/default_margin</item>

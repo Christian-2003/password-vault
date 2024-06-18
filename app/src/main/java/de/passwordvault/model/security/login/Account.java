@@ -20,6 +20,13 @@ import de.passwordvault.model.storage.encryption.EncryptionException;
 public class Account {
 
     /**
+     * Attribute stores the number of security questions that are required to use master password
+     * recovery.
+     */
+    public static final int REQUIRED_SECURITY_QUESTIONS = 5;
+
+
+    /**
      * Attribute stores the instance of this account for the singleton-pattern.
      */
     private static Account singleton;
