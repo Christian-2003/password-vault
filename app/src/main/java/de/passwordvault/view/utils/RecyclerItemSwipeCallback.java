@@ -5,9 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-import android.util.DisplayMetrics;
 import android.view.View;
-
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
@@ -15,10 +13,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
-
 import de.passwordvault.App;
 import de.passwordvault.R;
 
+
+/**
+ * Class implements a swipe callback for recycler items.
+ *
+ * @param <T>   Data type for the items displayed in the recycler view.
+ * @author      Christian-2003
+ * @version     3.6.0
+ */
 public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
 
     /**
