@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -58,11 +57,6 @@ public class SecurityQuestionDialog extends DialogFragment {
      * Attribute stores the view for the dialog.
      */
     private View view;
-
-    /**
-     * Attribute stores the text view with the dropdown menu to select a question.
-     */
-    private AutoCompleteTextView questionDropdown;
 
     /**
      * Attribute stores the edit text to enter an answer.
@@ -174,7 +168,7 @@ public class SecurityQuestionDialog extends DialogFragment {
      * @return  View for the dialog.
      */
     private View createView() {
-        questionDropdown = view.findViewById(R.id.input_question);
+        AutoCompleteTextView questionDropdown = view.findViewById(R.id.input_question);
         if (viewModel.getSelectedQuestionIndex() != -1) {
             //A question was manually selected by the user:
             questionDropdown.setText(viewModel.getAvailableQuestions()[viewModel.getSelectedQuestionIndex()]);
@@ -183,7 +177,7 @@ public class SecurityQuestionDialog extends DialogFragment {
             //The user is editing an existing question and has not changed the question itself:
             questionDropdown.setText(viewModel.getAllQuestions()[viewModel.getSecurityQuestion().getQuestion()]);
         }
-        questionDropdown.setAdapter(new ArrayAdapter<>(view.getContext(), android.R.layout.simple_spinner_dropdown_item, viewModel.getAvailableQuestions()));
+        questionDropdown.setAdapter(new ArrayAdapter<>(view.getContext(), R.layout.list_item_dropdown, R.id.text_view, viewModel.getAvailableQuestions()));
         questionDropdown.setOnItemClickListener((parent, view, position, id) -> viewModel.setSelectedQuestionIndex(position));
 
         answerEditText = view.findViewById(R.id.input_answer);
@@ -231,7 +225,6 @@ public class SecurityQuestionDialog extends DialogFragment {
             answerEnteredCorrectly = false;
         }
 
-        Log.d("SQD", "Result=" + (questionEnteredCorrectly && answerEnteredCorrectly));
         return questionEnteredCorrectly && answerEnteredCorrectly;
     }
 
