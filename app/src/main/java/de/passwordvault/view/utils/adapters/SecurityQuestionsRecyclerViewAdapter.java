@@ -1,5 +1,6 @@
 package de.passwordvault.view.utils.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.SecurityQuestion;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
+import de.passwordvault.view.utils.RecyclerItemSwipeCallback;
 
 
 /**
@@ -19,7 +21,7 @@ import de.passwordvault.view.utils.OnRecyclerItemClickListener;
  * @author  Christian-2003
  * @version 3.6.0
  */
-public class SecurityQuestionsRecyclerViewAdapter extends RecyclerView.Adapter<SecurityQuestionsRecyclerViewAdapter.ViewHolder> {
+public class SecurityQuestionsRecyclerViewAdapter extends RecyclerView.Adapter<SecurityQuestionsRecyclerViewAdapter.ViewHolder> implements RecyclerItemSwipeCallback.ItemSwipeContract<SecurityQuestion> {
 
     /**
      * Class implements a view holder for the recycler view adapter.
@@ -178,6 +180,30 @@ public class SecurityQuestionsRecyclerViewAdapter extends RecyclerView.Adapter<S
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+
+    /**
+     * Method returns the context of the adapter.
+     *
+     * @return  Context of the adapter.
+     */
+    @Override
+    public Context getContext() {
+        return recyclerView.getContext();
+    }
+
+
+    /**
+     * Method is called whenever an item is being swiped.
+     *
+     * @param viewHolder    View holder of the swiped item.
+     * @param swipeAction   Swipe action to call when an item was swiped.
+     */
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, OnRecyclerItemClickListener<SecurityQuestion> swipeAction) {
+        int position = viewHolder.getAdapterPosition();
+        swipeAction.onItemClick(data.get(position), position);
     }
 
 }

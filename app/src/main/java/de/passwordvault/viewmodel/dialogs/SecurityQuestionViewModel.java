@@ -136,19 +136,6 @@ public class SecurityQuestionViewModel extends ViewModel {
             return false;
         }
 
-        //Get security question:
-        if (args.containsKey(SecurityQuestionDialog.KEY_QUESTION)) {
-            try {
-                securityQuestion = (SecurityQuestion)args.getSerializable(SecurityQuestionDialog.KEY_QUESTION);
-            }
-            catch (ClassCastException e) {
-                securityQuestion = new SecurityQuestion();
-            }
-        }
-        else {
-            securityQuestion = new SecurityQuestion();
-        }
-
         //Get available security questions:
         if (args.containsKey(SecurityQuestionDialog.KEY_QUESTIONS)) {
             try {
@@ -163,6 +150,31 @@ public class SecurityQuestionViewModel extends ViewModel {
         }
         else {
             return false;
+        }
+
+        //Get security question:
+        if (args.containsKey(SecurityQuestionDialog.KEY_QUESTION)) {
+            try {
+                securityQuestion = (SecurityQuestion)args.getSerializable(SecurityQuestionDialog.KEY_QUESTION);
+                if (securityQuestion == null) {
+                    return false;
+                }
+                if (securityQuestion.getQuestion() != SecurityQuestion.NO_QUESTION) {
+                    String question = allQuestions[securityQuestion.getQuestion()];
+                    for (int i = 0; i < availableQuestions.length; i++) {
+                        if (availableQuestions[i].equals(question)) {
+                            selectedQuestionIndex = i;
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (ClassCastException e) {
+                securityQuestion = new SecurityQuestion();
+            }
+        }
+        else {
+            securityQuestion = new SecurityQuestion();
         }
 
         return true;

@@ -233,6 +233,7 @@
     <string name="recovery_question">Frage</string>
     <string name="recovery_answer">Antwort</string>
     <string name="recovery_configure_question">Frage bearbeiten</string>
+    <string name="recovery_delete_message">Soll diese Sicherheitsfrage wirklich gelöscht werden?</string>
 
 
     <!-- Detail dialog -->

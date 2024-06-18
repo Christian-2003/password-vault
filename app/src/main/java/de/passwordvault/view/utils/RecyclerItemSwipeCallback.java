@@ -28,8 +28,10 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
 
     /**
      * Interface can be implemented by a recycler view adapter.
+     *
+     * @param <T>   Data type for the items displayed in the recycler view.
      */
-    public interface ItemSwipeContract {
+    public interface ItemSwipeContract<T> {
 
         /**
          * Method returns the context to use with this callback.
@@ -42,17 +44,28 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
          * Method is called whenever an item is being swiped.
          *
          * @param viewHolder    View holder of the swiped item.
-         * @param direction     Direction into which the item was swiped.
+         * @param swipeAction   Swipe action to call when an item was swiped.
          */
-        void onSwiped(RecyclerView.ViewHolder viewHolder, int direction);
+        void onSwiped(RecyclerView.ViewHolder viewHolder, OnRecyclerItemClickListener<T> swipeAction);
+
+        /**
+         * Method is called to return an item to it's original position after it was swiped left or
+         * right. This method is automatically provided by a recycler view adapter and does not need
+         * to be overridden manually.
+         *
+         * @param position  Position of the swiped item.
+         */
+        void notifyItemChanged(int position);
 
     }
 
 
     /**
      * Class models a swipe action which specifies attributes for item swipes.
+     *
+     * @param <T>   Data type for the items displayed in the recycler view.
      */
-    public class SwipeAction {
+    public static class SwipeAction<T> {
 
         /**
          * Attribute stores the drawable to be displayed when an item is swiped.
@@ -120,19 +133,19 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
     /**
      * Attribute stores the recycler view adapter.
      */
-    private final ItemSwipeContract adapter;
+    private final ItemSwipeContract<T> adapter;
 
     /**
      * Attribute stores the left swipe action.
      */
     @Nullable
-    private final SwipeAction leftSwipeAction;
+    private final SwipeAction<T> leftSwipeAction;
 
     /**
      * Attribute stores the right swipe action.
      */
     @Nullable
-    private final SwipeAction rightSwipeAction;
+    private final SwipeAction<T> rightSwipeAction;
 
 
     /**
@@ -143,7 +156,7 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
      * @param rightSwipeAction      Action for when an item is right swiped.
      * @throws NullPointerException The passed adapter is {@code null}.
      */
-    public RecyclerItemSwipeCallback(ItemSwipeContract adapter, @Nullable SwipeAction leftSwipeAction, @Nullable SwipeAction rightSwipeAction) throws NullPointerException {
+    public RecyclerItemSwipeCallback(ItemSwipeContract<T> adapter, @Nullable SwipeAction<T> leftSwipeAction, @Nullable SwipeAction<T> rightSwipeAction) throws NullPointerException {
         if (adapter == null) {
             throw new NullPointerException();
         }
@@ -172,7 +185,14 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
      */
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-        adapter.onSwiped(viewHolder, direction);
+        if (direction == ItemTouchHelper.LEFT && leftSwipeAction != null && leftSwipeAction.getSwipeListener() != null) {
+            adapter.onSwiped(viewHolder, leftSwipeAction.getSwipeListener());
+            adapter.notifyItemChanged(viewHolder.getAdapterPosition());
+        }
+        else if (direction == ItemTouchHelper.RIGHT && rightSwipeAction != null && rightSwipeAction.getSwipeListener() != null) {
+            adapter.onSwiped(viewHolder, rightSwipeAction.getSwipeListener());
+            adapter.notifyItemChanged(viewHolder.getAdapterPosition());
+        }
     }
 
     /**
@@ -234,14 +254,14 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
             View itemView = viewHolder.itemView;
             Paint paint = new Paint();
             Bitmap icon;
-            int iconSize = adapter.getContext().getResources().getDimensionPixelSize(R.dimen.image_button_height);
+            int iconOffset = adapter.getContext().getResources().getDimensionPixelSize(R.dimen.default_padding);
             if (dX > 1 && rightSwipeAction != null) {
                 //Right swipe:
                 paint.setColor(adapter.getContext().getColor(rightSwipeAction.getColorRes()));
                 icon = getBitmap(rightSwipeAction.getDrawableRes());
                 canvas.drawRect((float)itemView.getLeft(), (float)itemView.getTop(), dX, (float)itemView.getBottom(), paint);
                 if (icon != null) {
-                    canvas.drawBitmap(icon, (float) itemView.getLeft() + iconSize, (float) itemView.getTop() + ((float) itemView.getBottom() - (float) itemView.getTop() - icon.getHeight()) / 2, paint);
+                    canvas.drawBitmap(icon, (float) itemView.getLeft() + iconOffset, (float) itemView.getTop() + ((float) itemView.getBottom() - (float) itemView.getTop() - icon.getHeight()) / 2, paint);
                 }
             }
             else if (dX < -1 && leftSwipeAction != null) {
@@ -250,7 +270,7 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
                 icon = getBitmap(leftSwipeAction.getDrawableRes());
                 canvas.drawRect((float)itemView.getRight() + dX, (float)itemView.getTop(), (float)itemView.getRight(), (float)itemView.getBottom(), paint);
                 if (icon != null) {
-                    canvas.drawBitmap(icon, (float)itemView.getRight() - iconSize - icon.getWidth(), (float)itemView.getTop() + ((float)itemView.getBottom() - (float)itemView.getTop() - icon.getHeight()) / 2, paint);
+                    canvas.drawBitmap(icon, (float)itemView.getRight() - iconOffset - icon.getWidth(), (float)itemView.getTop() + ((float)itemView.getBottom() - (float)itemView.getTop() - icon.getHeight()) / 2, paint);
                 }
             }
             float alpha = 1F - Math.abs(dX) / (float)itemView.getWidth();

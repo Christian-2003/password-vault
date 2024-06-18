@@ -238,6 +238,7 @@
     <string name="recovery_question">Question</string>
     <string name="recovery_answer">Answer</string>
     <string name="recovery_configure_question">Configure Question</string>
+    <string name="recovery_delete_message">Do you want to delete this security question?</string>
 
 
     <!-- Detail dialog -->
