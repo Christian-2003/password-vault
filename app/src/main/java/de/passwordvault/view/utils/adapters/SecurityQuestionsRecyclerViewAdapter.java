@@ -95,6 +95,11 @@ public class SecurityQuestionsRecyclerViewAdapter extends RecyclerView.Adapter<S
      */
     private final OnRecyclerItemClickListener<SecurityQuestion> itemClickListener;
 
+    /**
+     * Attribute stores the recycler view.
+     */
+    private RecyclerView recyclerView;
+
 
     /**
      * Constructor instantiates a new recycler view adapter.
@@ -141,13 +146,27 @@ public class SecurityQuestionsRecyclerViewAdapter extends RecyclerView.Adapter<S
         holder.getAnswerTextView().setText(question.getAnswer());
         holder.getAnswerContainer().setVisibility(question.isExpanded() ? View.VISIBLE : View.GONE);
         holder.itemView.setOnClickListener(view -> {
-            question.setExpanded(!question.isExpanded());
-            holder.getAnswerContainer().setVisibility(question.isExpanded() ? View.VISIBLE : View.GONE);
-            if (itemClickListener != null) {
-                itemClickListener.onItemClick(question, position);
+            if (!recyclerView.isAnimating()) {
+                question.setExpanded(!question.isExpanded());
+                holder.getAnswerContainer().setVisibility(question.isExpanded() ? View.VISIBLE : View.GONE);
+                if (itemClickListener != null) {
+                    itemClickListener.onItemClick(question, position);
+                }
+                notifyItemChanged(position);
             }
-            notifyItemChanged(position);
         });
+    }
+
+
+    /**
+     * Method is called whenever the recycler view is attached to this adapter.
+     *
+     * @param recyclerView  The RecyclerView instance which started observing this adapter.
+     */
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView = recyclerView;
     }
 
 
