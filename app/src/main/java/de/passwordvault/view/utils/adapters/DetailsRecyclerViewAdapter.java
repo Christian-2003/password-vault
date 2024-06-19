@@ -26,7 +26,6 @@ import de.passwordvault.model.detail.DetailSwipeAction;
 import de.passwordvault.model.detail.DetailType;
 import de.passwordvault.model.storage.Configuration;
 import de.passwordvault.view.dialogs.ConfirmDeleteDetailDialog;
-import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
 import de.passwordvault.view.dialogs.DetailDialog;
 import de.passwordvault.view.utils.DetailsItemMoveCallback;
 import de.passwordvault.view.utils.DialogCallbackListener;
@@ -245,13 +244,13 @@ public class DetailsRecyclerViewAdapter extends RecyclerView.Adapter<DetailsRecy
             PasswordViewHolder viewHolder = (PasswordViewHolder)holder;
             int securityScore = QualityGateManager.getInstance().calculatePassedQualityGates(detail.getContent());
             int maxSecurityScore = QualityGateManager.getInstance().numberOfQualityGates();
-            viewHolder.securityBar.setMax(maxSecurityScore * 1000);
-            ValueAnimator animator = ValueAnimator.ofInt(0, securityScore * 1000);
+            viewHolder.securityBar.setMax(maxSecurityScore * 100);
+            ValueAnimator animator = ValueAnimator.ofInt(0, securityScore * 100);
             animator.setDuration(viewHolder.securityBar.getContext().getResources().getInteger(R.integer.default_anim_duration) * 5L);
             animator.addUpdateListener(animation -> viewHolder.securityBar.setProgress((int) animation.getAnimatedValue()));
             animator.start();
-            viewHolder.securityBar.setProgress(securityScore * 1000);
-            String securityRating = securityScore + "/" + maxSecurityScore;
+            viewHolder.securityBar.setProgress(securityScore * 100);
+            String securityRating = securityScore + " / " + maxSecurityScore;
             viewHolder.securityScore.setText(securityRating);
             viewHolder.securityScore.setTextColor(Utils.getPasswordSecurityScoreColor(securityScore));
         }

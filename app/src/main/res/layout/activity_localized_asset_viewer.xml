@@ -11,14 +11,23 @@
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:contentInsetStart="0dp"
         style="@style/pv.app_bar">
 
-        <ImageButton
-            android:id="@+id/button_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_back"
-            style="@style/pv.button.image_button.app_bar"/>
+        <FrameLayout
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="start|bottom">
+
+            <ImageButton
+                android:id="@+id/button_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back"
+                android:layout_gravity="center"
+                style="@style/pv.button.image_button.app_bar"/>
+
+        </FrameLayout>
 
         <TextView
             android:id="@+id/title"
