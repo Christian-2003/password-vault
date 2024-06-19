@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_selected="true">
+        <shape
+            android:shape="ring"
+            android:innerRadius="0dp"
+            android:thickness="@dimen/tab_icon_size"
+            android:useLevel="false">
+
+            <corners android:radius="100dp"/>
+            <solid android:color="@color/pv_primary"/>
+        </shape>
+    </item>
+
+    <item>
+        <shape
+            android:shape="ring"
+            android:innerRadius="0dp"
+            android:thickness="@dimen/tab_icon_size"
+            android:useLevel="false">
+
+            <corners android:radius="100dp"/>
+            <solid android:color="@color/pv_text_secondary"/>
+        </shape>
+    </item>
+
+</selector>

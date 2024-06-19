@@ -109,6 +109,9 @@ public class CreateBackupActivity extends PasswordVaultBaseActivity {
     }
 
 
+    /**
+     * Method creates the backup.
+     */
     private void createBackup() {
         //Check data validity:
         boolean errorsDetected = false;

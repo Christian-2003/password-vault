@@ -72,6 +72,8 @@
     <string name="settings_security_login_biometrics_info">Login with biometrics</string>
     <string name="settings_security_login_password">Change password</string>
     <string name="settings_security_login_password_info">Change master password</string>
+    <string name="settings_security_login_recovery">Master password recovery</string>
+    <string name="settings_security_login_recovery_info">Settings for when the master password is forgotten</string>
     <string name="settings_security_password">Password Security</string>
     <string name="settings_security_password_qualitygates">Password quality gates</string>
     <string name="settings_security_password_qualitygates_info">Change quality gates for password evaluation</string>
@@ -230,6 +232,18 @@
     <string name="autofill_authentication_biometrics_title">Biometric Authentication</string>
 
 
+    <!-- Recovery activity -->
+    <string name="recovery_info">Select at least five security questions that are used to login into Password Vault in case you forget the master password. When you login to the app with these questions, you need to answer at least four questions correctly. Otherwise, the login fails.</string>
+    <string name="recovery_questions">Security Questions</string>
+    <string name="recovery_question">Question</string>
+    <string name="recovery_answer">Answer</string>
+    <string name="recovery_configure_question">Configure Question</string>
+    <string name="recovery_delete_message">Do you want to delete this security question?</string>
+    <string name="recovery_password">Reset password</string>
+    <string name="recovery_success">Successfully changed password</string>
+    <string name="recovery_login_info">In order to recover the master password, you need to answer the security questions correctly.</string>
+
+
     <!-- Detail dialog -->
     <string name="detail_dialog_title_edit">Edit Detail</string>
     <string name="detail_dialog_title_add">Add Detail</string>
@@ -269,6 +283,11 @@
     <string name="button_authenticate">Authenticate</string>
     <string name="button_create_backup">Create Backup</string>
     <string name="button_restore_backup">Restore Backup</string>
+    <string name="button_security_question_add">Add Security Question</string>
+    <string name="button_next">Next</string>
+    <string name="button_previous">Previous</string>
+    <string name="button_forgot_password">Forgot password?</string>
+    <string name="button_recover_password">Recover master password</string>
 
 
     <!-- Placeholder -->
@@ -295,6 +314,7 @@
     <string name="hint_regex_test">Test RegEx</string>
     <string name="hint_name">Name</string>
     <string name="hint_recently_edited_accounts">Recently edited accounts</string>
+    <string name="hint_security_question_answer">Answer</string>
 
 
     <!-- Password / Passcode security -->
@@ -320,6 +340,8 @@
     <string name="error_passwords_incorrect">Incorrect password.</string>
     <string name="error_passwords_not_matching">Passwords are not identical.</string>
     <string name="error_invalid_regex">RegEx is invalid.</string>
+    <string name="error_not_enough_security_questions">You need to have at least 5 security questions.</string>
+    <string name="error_master_password_recovery">The entered answers are incorrect.</string>
 
 
     <!-- Password quality gates -->
@@ -333,6 +355,24 @@
     <string name="quality_gate_2">Password contains special characters.</string>
     <string name="quality_gate_3">Password contains numbers</string>
     <string name="quality_gate_4">Password contains capital letters.</string>
+
+
+    <!-- Security questions -->
+    <string-array name="security_questions">
+        <item>What was the name of your first childhood friend?</item>
+        <item>What was the name of your first school teacher?</item>
+        <item>What is your grandmothers maiden name?</item>
+        <item>In what city did you meet your spouse / significant other?</item>
+        <item>What is the middle name of your youngest child?</item>
+        <item>What was the name of your first stuffed animal?</item>
+        <item>In what city did your mother and father meet?</item>
+        <item>What was the first exam you failed?</item>
+        <item>Where was the destination of your first school field trip?</item>
+        <item>What was your driving instructor\'s first name?</item>
+        <item>What is the first name of your oldest cousin?</item>
+        <item>What was your favorite elementary school teacher\'s name?</item>
+        <item>What was the name of your first pet?</item>
+    </string-array>
 
 
     <!-- HTML export -->

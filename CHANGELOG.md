@@ -2,8 +2,17 @@
 
 # Changelog
 
+## 3.6.0 (XXXX-XX-XX)
+###### Release Highlights
+n/a
+
+###### Features
+* Implemented master password recovery through security questions.
+
+<br/>
+
 ## 3.5.6 (2024-06-20)
-###### Releae Highlights
+###### Release Highlights
 Bugfixes and quality of life changes.
 
 ###### Features
@@ -21,7 +30,7 @@ Bugfixes and quality of life changes.
 <br/>
 
 ## 3.5.5 (2024-06-06)
-###### Releae Highlights
+###### Release Highlights
 Bugfixes and quality of life changes as well as support for darkmode with help pages.
 
 ###### Features

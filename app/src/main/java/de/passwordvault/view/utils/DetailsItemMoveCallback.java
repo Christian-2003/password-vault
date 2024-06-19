@@ -66,7 +66,7 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
         /**
          * Method is called whenever an item is being swiped.
          *
-         * @param viewHolder    View holder if the swiped item.
+         * @param viewHolder    View holder of the swiped item.
          * @param direction     Direction into which the item was swiped.
          */
         void onRowSwiped(DetailsRecyclerViewAdapter.ViewHolder viewHolder, int direction);

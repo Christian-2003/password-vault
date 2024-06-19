@@ -71,6 +71,8 @@
     <string name="settings_security_login_biometrics_info">Biometrie zum Einloggen verwenden</string>
     <string name="settings_security_login_password">Passwort ändern</string>
     <string name="settings_security_login_password_info">Master-Passwort ändern</string>
+    <string name="settings_security_login_recovery">Master-Passwort Wiederherstellung</string>
+    <string name="settings_security_login_recovery_info">Einstellungen, falls das Master-Passwort vergessen wird</string>
     <string name="settings_security_password">Passwortsicherheit</string>
     <string name="settings_security_password_qualitygates">Sicherheitskriterien</string>
     <string name="settings_security_password_qualitygates_info">Sicherheitskriterien für Passwortsicherheit bearbeiten</string>
@@ -225,6 +227,18 @@
     <string name="autofill_authentication_biometrics_title">Biometrische Authentifizierung</string>
 
 
+    <!-- Recovery activity -->
+    <string name="recovery_info">Wähle mindestens fünf Sicherheitsfragen aus um dich in Password Vault anzumelden, falls du das Master-Passwort vergisst. Wenn du dich mit diesen Fragen anmeldest, dann musst du mindestens vier Fragen richtig beantworten. Andernfalls funktioniert der Login nicht.</string>
+    <string name="recovery_questions">Sicherheitsfragen</string>
+    <string name="recovery_question">Frage</string>
+    <string name="recovery_answer">Antwort</string>
+    <string name="recovery_configure_question">Frage bearbeiten</string>
+    <string name="recovery_delete_message">Soll diese Sicherheitsfrage wirklich gelöscht werden?</string>
+    <string name="recovery_password">Passwort zurücksetzen</string>
+    <string name="recovery_success">Passwort wurde erfolreich geändert.</string>
+    <string name="recovery_login_info">Um das Master Passwort zurückzusetzen, musst du die Sicherheitsfragen korrekt beantworten.</string>
+
+
     <!-- Detail dialog -->
     <string name="detail_dialog_title_edit">Information bearbeiten</string>
     <string name="detail_dialog_title_add">Information hinzufügen</string>
@@ -264,6 +278,11 @@
     <string name="button_authenticate">Authentifizieren</string>
     <string name="button_create_backup">Backup erstellen</string>
     <string name="button_restore_backup">Backup wiederherstellen</string>
+    <string name="button_security_question_add">Sicherheitsfrage hinzufügen</string>
+    <string name="button_next">Weiter</string>
+    <string name="button_previous">Zurück</string>
+    <string name="button_forgot_password">Passwort vergessen?</string>
+    <string name="button_recover_password">Master Passwort wiederherstellen</string>
 
 
     <!-- Placeholder -->
@@ -290,6 +309,7 @@
     <string name="hint_regex_test">RegEx testen</string>
     <string name="hint_name">Name</string>
     <string name="hint_recently_edited_accounts">Zuletzt bearbeitete Konten</string>
+    <string name="hint_security_question_answer">Antwort</string>
 
 
     <!-- Password / Passcode security -->
@@ -315,6 +335,8 @@
     <string name="error_passwords_incorrect">Falsches Passwort.</string>
     <string name="error_passwords_not_matching">Passwörter stimmen nicht überein.</string>
     <string name="error_invalid_regex">RegEx ist inkorrekt.</string>
+    <string name="error_not_enough_security_questions">Du benötigst mindestens 5 Sicherheitsfragen.</string>
+    <string name="error_master_password_recovery">Die eingegebenen Antworten sind inkorrekt.</string>
 
 
     <!-- Password quality gates -->
@@ -328,6 +350,24 @@
     <string name="quality_gate_2">Passwort enthält Sonderzeichen.</string>
     <string name="quality_gate_3">Passwort enthält Zahlen.</string>
     <string name="quality_gate_4">Passwort enthält Großbuchstaben.</string>
+
+
+    <!-- Security questions -->
+    <string-array name="security_questions">
+        <item>Wie war der Name deines ersten Kindheitsfreundes?</item>
+        <item>Wie war der Name deines ersten Lehrers in der Schule?</item>
+        <item>Wie lautet der Mädchenname deiner Großmutter?</item>
+        <item>In welcher Stadt hast du deinen Freund, deine Freundin oder deinen Ehepartner kennengelernt?</item>
+        <item>Wie lautet der Zweitname deines jüngsten Kindes?</item>
+        <item>Wie lautet der Name deines ersten Plüschtieres?</item>
+        <item>In welcher Stadt haben sich deiner Eltern kennengelernt?</item>
+        <item>Was war die erste Klausur, in der du durchgefallen bist?</item>
+        <item>Was war das Ziel deines ersten Schulausfluges?</item>
+        <item>Wie lautet der Vorname deines Fahrschullehrers?</item>
+        <item>Wie lautet der Vorname deines ältesten Cousins?</item>
+        <item>Wie lautet der Vorname deines Lieblingslehrers aus der Grundschule?</item>
+        <item>Wie lautet der Name deines ersten Haustieres?</item>
+    </string-array>
 
 
     <!-- HTML export -->

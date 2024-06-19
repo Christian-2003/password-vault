@@ -24,6 +24,11 @@ public class App extends Application {
     @SuppressLint("StaticFieldLeak")
     private static Context context;
 
+    /**
+     * Field stores the executor service used to asynchronously execute code.
+     */
+    private static final ExecutorService executorService = Executors.newFixedThreadPool(4);
+
 
     /**
      * Method is called whenever the application is created.
@@ -32,6 +37,16 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         context = this;
+    }
+
+
+    /**
+     * Method returns an executor which can be used to asynchronously execute code.
+     *
+     * @return  Executor for asynchronous code execution.
+     */
+    public static Executor getExecutor() {
+        return executorService;
     }
 
 

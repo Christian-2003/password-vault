@@ -17,7 +17,9 @@
     <dimen name="image_button_height">48dp</dimen>
     <dimen name="image_button_width_2">96dp</dimen> <!-- Twice the width of the image button -->
     <dimen name="pin_icon_size">12dp</dimen>
+    <dimen name="tab_icon_size">8dp</dimen>
 
     <dimen name="progress_bar_thickness">9dp</dimen>
+    <dimen name="progress_bar_thickness_large">34dp</dimen>
 
 </resources>
