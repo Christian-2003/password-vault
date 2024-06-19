@@ -68,6 +68,7 @@ public class LoginActivity extends PasswordVaultBaseActivity {
         });
 
         findViewById(R.id.login_button_continue).setOnClickListener(view -> login());
+        findViewById(R.id.button_forgot_password).setOnClickListener(view -> startActivity(new Intent(this, SecurityQuestionActivity.class)));
 
         biometricPrompt = new BiometricPrompt(LoginActivity.this, viewModel.getExecutor(), new BiometricPrompt.AuthenticationCallback() {
             @Override

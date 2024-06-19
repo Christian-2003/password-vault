@@ -281,6 +281,9 @@
     <string name="button_create_backup">Create Backup</string>
     <string name="button_restore_backup">Restore Backup</string>
     <string name="button_security_question_add">Add Security Question</string>
+    <string name="button_next">Next</string>
+    <string name="button_previous">Previous</string>
+    <string name="button_forgot_password">Forgot password?</string>
 
 
     <!-- Placeholder -->
@@ -307,6 +310,7 @@
     <string name="hint_regex_test">Test RegEx</string>
     <string name="hint_name">Name</string>
     <string name="hint_recently_edited_accounts">Recently edited accounts</string>
+    <string name="hint_security_question_answer">Answer</string>
 
 
     <!-- Password / Passcode security -->

@@ -276,6 +276,9 @@
     <string name="button_create_backup">Backup erstellen</string>
     <string name="button_restore_backup">Backup wiederherstellen</string>
     <string name="button_security_question_add">Sicherheitsfrage hinzufügen</string>
+    <string name="button_next">Weiter</string>
+    <string name="button_previous">Zurück</string>
+    <string name="button_forgot_password">Passwort vergessen?</string>
 
 
     <!-- Placeholder -->
@@ -302,6 +305,7 @@
     <string name="hint_regex_test">RegEx testen</string>
     <string name="hint_name">Name</string>
     <string name="hint_recently_edited_accounts">Zuletzt bearbeitete Konten</string>
+    <string name="hint_security_question_answer">Antwort</string>
 
 
     <!-- Password / Passcode security -->

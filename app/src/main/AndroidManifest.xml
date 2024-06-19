@@ -42,6 +42,7 @@
         <activity android:name=".view.activities.CreateBackupActivity" android:exported="false"/>
         <activity android:name=".view.activities.RestoreBackupActivity" android:exported="false"/>
         <activity android:name=".view.activities.RecoveryActivity" android:exported="false"/>
+        <activity android:name=".view.activities.SecurityQuestionActivity" android:exported="false"/>
 
         <!-- Activity used for authentication with autofill requests -->
         <activity android:name=".view.activities.AutofillAuthenticationActivity" android:exported="false"/>
