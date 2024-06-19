@@ -236,6 +236,7 @@
     <string name="recovery_delete_message">Soll diese Sicherheitsfrage wirklich gelöscht werden?</string>
     <string name="recovery_password">Passwort zurücksetzen</string>
     <string name="recovery_success">Passwort wurde erfolreich geändert.</string>
+    <string name="recovery_login_info">Um das Master Passwort zurückzusetzen, musst du die Sicherheitsfragen korrekt beantworten.</string>
 
 
     <!-- Detail dialog -->

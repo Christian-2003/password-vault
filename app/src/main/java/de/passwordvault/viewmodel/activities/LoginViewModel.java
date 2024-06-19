@@ -15,7 +15,7 @@ import de.passwordvault.model.security.login.Account;
  * {@link de.passwordvault.view.activities.LoginActivity}.
  *
  * @author  Christian-2003
- * @version 3.2.0
+ * @version 3.6.0
  */
 public class LoginViewModel extends ViewModel {
 
@@ -111,6 +111,16 @@ public class LoginViewModel extends ViewModel {
      */
     public boolean useBiometrics() {
         return Account.getInstance().useBiometrics() && areBiometricsAvailable();
+    }
+
+
+    /**
+     * Method tests whether the password recovery is enabled.
+     *
+     * @return  Whether the master password recovery is enabled.
+     */
+    public boolean usePasswordRecovery() {
+        return Account.getInstance().getSecurityQuestions().size() == Account.REQUIRED_SECURITY_QUESTIONS;
     }
 
 }

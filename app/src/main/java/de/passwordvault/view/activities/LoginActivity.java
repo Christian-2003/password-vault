@@ -25,7 +25,7 @@ import de.passwordvault.viewmodel.activities.LoginViewModel;
  * Class implements the {@link LoginActivity} which allows the user to login to the activity.
  *
  * @author  Christian-2003
- * @version 3.3.0
+ * @version 3.6.0
  */
 public class LoginActivity extends PasswordVaultBaseActivity {
 
@@ -68,7 +68,12 @@ public class LoginActivity extends PasswordVaultBaseActivity {
         });
 
         findViewById(R.id.login_button_continue).setOnClickListener(view -> login());
-        findViewById(R.id.button_forgot_password).setOnClickListener(view -> startActivity(new Intent(this, SecurityQuestionActivity.class)));
+        if (viewModel.usePasswordRecovery()) {
+            findViewById(R.id.button_forgot_password).setOnClickListener(view -> startActivity(new Intent(this, SecurityQuestionActivity.class)));
+        }
+        else {
+            findViewById(R.id.button_forgot_password).setVisibility(View.GONE);
+        }
 
         biometricPrompt = new BiometricPrompt(LoginActivity.this, viewModel.getExecutor(), new BiometricPrompt.AuthenticationCallback() {
             @Override
