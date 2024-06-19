@@ -343,6 +343,11 @@
         <item name="badgeTextColor">@color/pv_text_onPrimary</item>
     </style>
 
+    <!-- Style for chips -->
+    <style name="pv.material.chip" parent="Widget.Material3.Chip.Assist">
+        <item name="chipBackgroundColor">@color/chip</item>
+    </style>
+
 
 
 

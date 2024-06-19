@@ -3,7 +3,7 @@
 # Changelog
 
 ## 3.6.0 (XXXX-XX-XX)
-###### Releae Highlights
+###### Release Highlights
 n/a
 
 ###### Features
@@ -11,8 +11,26 @@ n/a
 
 <br/>
 
+## 3.5.6 (2024-06-20)
+###### Release Highlights
+Bugfixes and quality of life changes.
+
+###### Features
+* Fixed typo in german help pages.
+* Fixed `ERR_UNKNOWN_URL_SCHEME`-error in privacy policy when contact-email is clicked.
+* Fixed color for text selection handles.
+* Fixed color for selected text.
+* Fixed color for selected account tags.
+* Changed contact e-mail address in privacy policy.
+* Changed display of security score for password-details from "x/y" to "x / y".
+* Reduced number of steps to fill password security score bar to increase performance.
+* Fixed alignment for back buttons in activities that cannot be collapsed.
+* Tags of accounts are searched when account is searched through a search query.
+
+<br/>
+
 ## 3.5.5 (2024-06-06)
-###### Releae Highlights
+###### Release Highlights
 Bugfixes and quality of life changes as well as support for darkmode with help pages.
 
 ###### Features

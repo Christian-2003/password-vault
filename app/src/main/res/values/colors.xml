@@ -2,6 +2,7 @@
 
 <resources>
     <color name="pv_primary">#1D7874</color>
+    <color name="pv_primary_translucent">#991D7874</color>
     <color name="pv_background">#F6F6F8</color>
 
     <color name="pv_container">#FCFCFE</color>
