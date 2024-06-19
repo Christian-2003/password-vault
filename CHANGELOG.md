@@ -2,7 +2,7 @@
 
 # Changelog
 
-## 3.5.6 (XXXX-XX-XX)
+## 3.5.6 (2024-06-20)
 ###### Releae Highlights
 Bugfixes and quality of life changes.
 
