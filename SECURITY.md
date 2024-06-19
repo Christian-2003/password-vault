@@ -46,10 +46,10 @@ It is highly recommended for users of **Password Vault 1** and **Password Vault 
 <br/>
 
 ## Reporting a Vulnerability
-If you find any security-related bugs in our product, please open an issue and assign the **security** label.
+If you find any security-related bugs in our product, please notify our development team through [passwordvault@christian2003.de](mailto:passwordvault@christian2003.de) and provide as many details as possible, such as steps for reproduction.
 
 <br/>
 
 ***
-2024-05-27  
+2024-06-19  
 &copy; Christian-2003  
