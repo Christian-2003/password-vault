@@ -4,6 +4,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
@@ -11,6 +15,9 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import java.util.ArrayList;
 import de.passwordvault.R;
+import de.passwordvault.model.security.authentication.AuthenticationCallback;
+import de.passwordvault.model.security.authentication.AuthenticationFailure;
+import de.passwordvault.model.security.authentication.Authenticator;
 import de.passwordvault.view.utils.adapters.EnterSecurityAnswerRecyclerViewAdapter;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.activities.SecurityQuestionViewModel;
@@ -23,7 +30,7 @@ import de.passwordvault.viewmodel.activities.SecurityQuestionViewModel;
  * @author  Christian-2003
  * @version 3.6.0
  */
-public class SecurityQuestionActivity extends PasswordVaultBaseActivity {
+public class SecurityQuestionActivity extends PasswordVaultBaseActivity implements AuthenticationCallback {
 
     /**
      * Class implements a callback for when the displayed security question is changed.
@@ -107,6 +114,11 @@ public class SecurityQuestionActivity extends PasswordVaultBaseActivity {
      */
     private Button nextButton;
 
+    /**
+     * Attribute stores the text view displaying an error message.
+     */
+    private TextView errorTextView;
+
 
     /**
      * Method is called whenever the activity is created.
@@ -145,6 +157,58 @@ public class SecurityQuestionActivity extends PasswordVaultBaseActivity {
         previousButton.setOnClickListener(view -> viewPager.setCurrentItem(viewPager.getCurrentItem() - 1, true));
         nextButton = findViewById(R.id.button_next);
         nextButton.setOnClickListener(view -> viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true));
+
+        //Recover button:
+        findViewById(R.id.button_recover).setOnClickListener(view -> checkAnswerValidity());
+    }
+
+
+    /**
+     * Method is called when the authentication succeeds.
+     *
+     * @param tag   Tag that was passed with the authentication request.
+     */
+    @Override
+    public void onAuthenticationSuccess(@Nullable String tag) {
+        Toast.makeText(this, R.string.recovery_success, Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+
+    /**
+     * Method is called when the authentication fails.
+     *
+     * @param tag   Tag that was passed with the authentication request.
+     * @param code  Authentication failure code indicating why the authentication failed.
+     */
+    @Override
+    public void onAuthenticationFailure(@Nullable String tag, @NonNull AuthenticationFailure code) {
+
+    }
+
+
+    /**
+     * Method checks whether the entered answers are correct. If the answers are not correct, an error
+     * message is displayed. Otherwise, a dialog to change the password is displayed.
+     */
+    private void checkAnswerValidity() {
+        ArrayList<String> answers = new ArrayList<>();
+        for (int i = 0; i < adapter.getItemCount(); i++) {
+            answers.add(adapter.getAnswer(i));
+        }
+        if (viewModel.areAnswersValid(answers)) {
+            if (errorTextView != null) {
+                errorTextView.setVisibility(View.INVISIBLE);
+            }
+            Authenticator authenticator = new Authenticator(this, "", R.string.recovery_password);
+            authenticator.authenticate(this, Authenticator.AUTH_PASSWORD, Authenticator.TYPE_REGISTER);
+        }
+        else {
+            if (errorTextView == null) {
+                errorTextView = findViewById(R.id.text_view_error);
+            }
+            errorTextView.setVisibility(View.VISIBLE);
+        }
     }
 
 }

@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.textfield.TextInputEditText;
 import java.util.ArrayList;
+import java.util.Objects;
 import de.passwordvault.R;
 
 
@@ -74,6 +75,16 @@ public class EnterSecurityAnswerRecyclerViewAdapter extends RecyclerView.Adapter
      */
     private final ArrayList<String> data;
 
+    /**
+     * Attribute stores the view holders of the adapter.
+     */
+    private ViewHolder[] viewHolders;
+
+    /**
+     * Attribute stores the recycler view of the adapter.
+     */
+    private RecyclerView recyclerView;
+
 
     /**
      * Constructor instantiates a new recycler view adapter.
@@ -86,6 +97,7 @@ public class EnterSecurityAnswerRecyclerViewAdapter extends RecyclerView.Adapter
             throw new NullPointerException();
         }
         this.data = data;
+        viewHolders = new ViewHolder[this.data.size()];
     }
 
 
@@ -113,6 +125,7 @@ public class EnterSecurityAnswerRecyclerViewAdapter extends RecyclerView.Adapter
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.getQuestionTextView().setText(data.get(position));
+        viewHolders[position] = holder;
     }
 
 
@@ -124,6 +137,37 @@ public class EnterSecurityAnswerRecyclerViewAdapter extends RecyclerView.Adapter
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+
+    /**
+     * Method is called whenever the adapter is attached to a recycler view.
+     *
+     * @param recyclerView  The RecyclerView instance which started observing this adapter.
+     */
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView = recyclerView;
+    }
+
+
+    /**
+     * Method returns the entered answer for the security question at the specified position.
+     *
+     * @param position  Position of the security question whose answer to return.
+     * @return          Answer to the security question entered by the user at the specified
+     *                  position.
+     */
+    public String getAnswer(int position) {
+        if (position < 0 || position >= getItemCount()) {
+            return null;
+        }
+        ViewHolder holder = viewHolders[position];
+        if (holder != null) {
+            return Objects.requireNonNull(holder.getAnswerEditText().getText()).toString();
+        }
+        return null;
     }
 
 }

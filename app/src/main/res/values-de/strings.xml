@@ -234,6 +234,8 @@
     <string name="recovery_answer">Antwort</string>
     <string name="recovery_configure_question">Frage bearbeiten</string>
     <string name="recovery_delete_message">Soll diese Sicherheitsfrage wirklich gelöscht werden?</string>
+    <string name="recovery_password">Passwort zurücksetzen</string>
+    <string name="recovery_success">Passwort wurde erfolreich geändert.</string>
 
 
     <!-- Detail dialog -->
@@ -279,6 +281,7 @@
     <string name="button_next">Weiter</string>
     <string name="button_previous">Zurück</string>
     <string name="button_forgot_password">Passwort vergessen?</string>
+    <string name="button_recover_password">Master Passwort wiederherstellen</string>
 
 
     <!-- Placeholder -->
@@ -332,6 +335,7 @@
     <string name="error_passwords_not_matching">Passwörter stimmen nicht überein.</string>
     <string name="error_invalid_regex">RegEx ist inkorrekt.</string>
     <string name="error_not_enough_security_questions">Du benötigst mindestens 5 Sicherheitsfragen.</string>
+    <string name="error_master_password_recovery">Die eingegebenen Antworten sind inkorrekt.</string>
 
 
     <!-- Password quality gates -->

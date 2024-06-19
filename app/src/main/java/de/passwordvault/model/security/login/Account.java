@@ -25,6 +25,12 @@ public class Account {
      */
     public static final int REQUIRED_SECURITY_QUESTIONS = 5;
 
+    /**
+     * Attribute stores the number of correct answers that are required in order to recover the
+     * master password.
+     */
+    public static final int REQUIRED_CORRECT_ANSWERS = 4;
+
 
     /**
      * Attribute stores the instance of this account for the singleton-pattern.

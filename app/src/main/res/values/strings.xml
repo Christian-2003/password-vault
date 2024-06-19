@@ -239,6 +239,8 @@
     <string name="recovery_answer">Answer</string>
     <string name="recovery_configure_question">Configure Question</string>
     <string name="recovery_delete_message">Do you want to delete this security question?</string>
+    <string name="recovery_password">Reset password</string>
+    <string name="recovery_success">Successfully changed password</string>
 
 
     <!-- Detail dialog -->
@@ -284,6 +286,7 @@
     <string name="button_next">Next</string>
     <string name="button_previous">Previous</string>
     <string name="button_forgot_password">Forgot password?</string>
+    <string name="button_recover_password">Recover master password</string>
 
 
     <!-- Placeholder -->
@@ -337,6 +340,7 @@
     <string name="error_passwords_not_matching">Passwords are not identical.</string>
     <string name="error_invalid_regex">RegEx is invalid.</string>
     <string name="error_not_enough_security_questions">You need to have at least 5 security questions.</string>
+    <string name="error_master_password_recovery">The entered answers are incorrect.</string>
 
 
     <!-- Password quality gates -->

@@ -47,7 +47,7 @@
         style="@style/pv.layout.nested_scroll_view">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -87,6 +87,24 @@
                     style="@style/Widget.Material3.Button.TextButton"/>
 
             </LinearLayout>
+
+            <Button
+                android:id="@+id/button_recover"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/default_margin"
+                android:layout_gravity="center"
+                android:text="@string/button_recover_password"/>
+
+            <TextView
+                android:id="@+id/text_view_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                android:text="@string/error_master_password_recovery"
+                android:textColor="?attr/colorError"
+                style="@style/pv.text"/>
 
         </LinearLayout>
 

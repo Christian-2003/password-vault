@@ -7,7 +7,7 @@
 n/a
 
 ###### Features
-* n/a
+* Implemented master password recovery through security questions.
 
 <br/>
 
