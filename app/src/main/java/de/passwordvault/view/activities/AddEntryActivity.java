@@ -45,7 +45,7 @@ import de.passwordvault.view.utils.DialogCallbackListener;
  * Class implements an activity which can add (or edit) entries.
  *
  * @author  Christian-2003
- * @version 3.5.4
+ * @version 3.6.0
  */
 public class AddEntryActivity extends PasswordVaultBaseActivity implements DialogCallbackListener, Observer<ArrayList<Tag>> {
 
@@ -108,6 +108,7 @@ public class AddEntryActivity extends PasswordVaultBaseActivity implements Dialo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_entry);
         viewModel = new ViewModelProvider(this).get(AddEntryViewModel.class);
+        enableSecureModeIfRequired();
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null && bundle.containsKey("entry")) {

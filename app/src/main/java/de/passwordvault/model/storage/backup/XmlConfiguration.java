@@ -180,7 +180,13 @@ public enum XmlConfiguration {
     /**
      * Field stores the name for the setting regarding whether backups should be encrypted.
      */
-    SETTING_BACKUP_ENCRYPT("backup_encrypt");
+    SETTING_BACKUP_ENCRYPT("backup_encrypt"),
+
+    /**
+     * Field stores the name for the setting regarding whether screenshots of sensitive data can be
+     * created.
+     */
+    SETTING_PREVENT_SCREENSHOT("prevent_screenshot");
 
 
     /**

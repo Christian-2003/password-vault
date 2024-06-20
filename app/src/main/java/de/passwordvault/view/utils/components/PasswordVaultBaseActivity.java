@@ -3,17 +3,20 @@ package de.passwordvault.view.utils.components;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.view.WindowManager;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import de.passwordvault.R;
+import de.passwordvault.model.storage.Configuration;
 
 
 /**
  * Clas implements the base activity for all activities within the app.
  *
  * @author  Christian-2003
- * @version 3.5.1
+ * @version 3.6.0
  */
 public abstract class PasswordVaultBaseActivity extends AppCompatActivity {
 
@@ -53,6 +56,17 @@ public abstract class PasswordVaultBaseActivity extends AppCompatActivity {
     protected void openUrl(String url) {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(browserIntent);
+    }
+
+
+    /**
+     * Method enables secure mode for the activity, if set in settings. This prevents screenshots
+     * from being made.
+     */
+    protected void enableSecureModeIfRequired() {
+        if (Configuration.getPreventScreenshots()) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
     }
 
 }

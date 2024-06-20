@@ -79,6 +79,9 @@
     <string name="settings_security_password_qualitygates_info">Change quality gates for password evaluation</string>
     <string name="settings_security_password_analysis">Password analysis</string>
     <string name="settings_security_password_analysis_info">Analyze password security</string>
+    <string name="settings_security_data">Data Security</string>
+    <string name="settings_security_data_screenshot">Prevent Screenshots</string>
+    <string name="settings_security_data_screenshot_info">Prevent Screenshots of sensitive data from being created</string>
 
     <string name="settings_autofill">Autofill</string>
     <string name="settings_autofill_toggle">Enable autofill</string>

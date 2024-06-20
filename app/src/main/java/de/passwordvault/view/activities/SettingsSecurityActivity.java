@@ -15,6 +15,7 @@ import de.passwordvault.model.security.authentication.AuthenticationCallback;
 import de.passwordvault.model.security.authentication.AuthenticationFailure;
 import de.passwordvault.model.security.authentication.Authenticator;
 import de.passwordvault.model.security.login.Account;
+import de.passwordvault.model.storage.Configuration;
 import de.passwordvault.view.dialogs.ChangePasswordDialog;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.fragments.SettingsViewModel;
@@ -24,7 +25,7 @@ import de.passwordvault.viewmodel.fragments.SettingsViewModel;
  * Class implements an activity for security-related settings.
  *
  * @author  Christian-2003
- * @version 3.5.1
+ * @version 3.6.0
  */
 public class SettingsSecurityActivity extends PasswordVaultBaseActivity implements AuthenticationCallback, CompoundButton.OnCheckedChangeListener {
 
@@ -153,6 +154,9 @@ public class SettingsSecurityActivity extends PasswordVaultBaseActivity implemen
             }
             authenticator.authenticate(this, Authenticator.AUTH_BIOMETRICS, Authenticator.TYPE_AUTHENTICATE);
         }
+        else if (button.getId() == R.id.settings_security_data_screenshot_switch) {
+            Configuration.setPreventScreenshots(checked);
+        }
     }
 
 
@@ -183,6 +187,12 @@ public class SettingsSecurityActivity extends PasswordVaultBaseActivity implemen
         biometricsContainer.setOnClickListener(view -> biometricsSwitch.setChecked(!biometricsSwitch.isChecked()));
         findViewById(R.id.settings_security_login_password_container).setOnClickListener(view -> changePassword());
         findViewById(R.id.settings_security_login_recovery_container).setOnClickListener(view -> startActivity(new Intent(SettingsSecurityActivity.this, RecoveryActivity.class)));
+
+        //Data:
+        MaterialSwitch screenshotSwitch = findViewById(R.id.settings_security_data_screenshot_switch);
+        screenshotSwitch.setChecked(Configuration.getPreventScreenshots());
+        screenshotSwitch.setOnCheckedChangeListener(this);
+        findViewById(R.id.settings_security_data_screenshot_clickable).setOnClickListener(view -> screenshotSwitch.setChecked(!screenshotSwitch.isChecked()));
 
         //Passwords:
         findViewById(R.id.settings_security_password_qualitygates_container).setOnClickListener(view -> startActivity(new Intent(this, QualityGatesActivity.class)));

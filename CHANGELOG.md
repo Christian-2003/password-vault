@@ -8,6 +8,7 @@ n/a
 
 ###### Features
 * Implemented master password recovery through security questions.
+* Added setting to prevent screenshots of activities displaying sensitive data.
 
 <br/>
 

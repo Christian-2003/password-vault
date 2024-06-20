@@ -2,6 +2,8 @@ package de.passwordvault.view.activities;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ContentInfoCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -24,7 +26,9 @@ import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +43,7 @@ import java.io.Serializable;
  * {@linkplain de.passwordvault.model.entry.EntryAbbreviated}.
  *
  * @author  Christian-2003
- * @version 3.5.1
+ * @version 3.6.0
  */
 public class EntryActivity extends PasswordVaultBaseActivity implements DialogCallbackListener, Serializable, OnRecyclerItemClickListener<Detail> {
 
@@ -125,8 +129,9 @@ public class EntryActivity extends PasswordVaultBaseActivity implements DialogCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entry);
-
         viewModel = new ViewModelProvider(this).get(EntryViewModel.class);
+        enableSecureModeIfRequired();
+
         if (viewModel.getEntry() == null) {
             Bundle bundle = getIntent().getExtras();
             EntryExtended entry = EntryManager.getInstance().get((String)bundle.get("uuid"));

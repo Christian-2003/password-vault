@@ -78,6 +78,9 @@
     <string name="settings_security_password_qualitygates_info">Sicherheitskriterien für Passwortsicherheit bearbeiten</string>
     <string name="settings_security_password_analysis">Passwortanalyse</string>
     <string name="settings_security_password_analysis_info">Sicherheit sämtlicher Passwörter analysieren</string>
+    <string name="settings_security_data">Datensicherheit</string>
+    <string name="settings_security_data_screenshot">Screenshots verhindern</string>
+    <string name="settings_security_data_screenshot_info">Verhindern, dass Screenshots von sensiblen Daten angefertigt werden</string>
 
     <string name="settings_autofill">Automatisches Ausfüllen</string>
     <string name="settings_autofill_toggle">Automatisches Ausfüllen aktivieren</string>

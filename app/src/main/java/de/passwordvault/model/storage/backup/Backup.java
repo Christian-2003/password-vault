@@ -771,6 +771,11 @@ public class Backup {
             if (backupEncrypt != null) {
                 Configuration.setBackupEncrypted(Boolean.parseBoolean(backupEncrypt));
             }
+
+            String preventScreenshot = settings.get(XmlConfiguration.SETTING_PREVENT_SCREENSHOT.getValue());
+            if (preventScreenshot != null) {
+                Configuration.setPreventScreenshots(Boolean.parseBoolean(preventScreenshot));
+            }
         }
         catch (Exception e) {
             //Some data corrupted. Ignore...

@@ -85,6 +85,12 @@ public class Configuration {
     private static final String KEY_BACKUP_ENCRYPT = "backup_encrypt";
 
     /**
+     * Field stores the key with which to store whether to prevent taking screenshots from sensitive
+     * data.
+     */
+    private static final String KEY_PREVENT_SCREENSHOT = "prevent_screenshot";
+
+    /**
      * Field stores the shared preferences instance from which to retrieve data.
      */
     private static final SharedPreferences preferences = App.getContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
@@ -303,6 +309,27 @@ public class Configuration {
      */
     public static boolean getBackupEncrypted() {
         return preferences.getBoolean(KEY_BACKUP_ENCRYPT, false);
+    }
+
+
+    /**
+     * Method changes whether screenshots of sensitive data can be created.
+     *
+     * @param preventScreenshots    Whether screenshots of sensitive data can be created.
+     */
+    public static void setPreventScreenshots(boolean preventScreenshots) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(KEY_PREVENT_SCREENSHOT, preventScreenshots);
+        editor.apply();
+    }
+
+    /**
+     * Method returns whether screenshots of sensitive data can be created.
+     *
+     * @return  Whether screenshots of sensitive data can be created.
+     */
+    public static boolean getPreventScreenshots() {
+        return preferences.getBoolean(KEY_PREVENT_SCREENSHOT, true);
     }
 
 

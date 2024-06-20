@@ -143,7 +143,7 @@ public class SecurityQuestionActivity extends PasswordVaultBaseActivity implemen
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {}).attach();
 
         //Add spacing between dots below view pager:
-        int margin = getResources().getDimensionPixelSize(R.dimen.default_margin);
+        int margin = (int)(getResources().getDimensionPixelSize(R.dimen.tab_icon_size) / 2);
         for (int i = 0; i < tabLayout.getTabCount() - 1; i++) {
             View tab = ((ViewGroup)tabLayout.getChildAt(0)).getChildAt(i);
             ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams)tab.getLayoutParams();

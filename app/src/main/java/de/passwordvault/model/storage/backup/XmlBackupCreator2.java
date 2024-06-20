@@ -434,6 +434,11 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration {
             backupEncryptElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), XmlConfiguration.SETTING_BACKUP_ENCRYPT.getValue());
             backupEncryptElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), "" + Configuration.getBackupEncrypted());
             settingsElement.appendChild(backupEncryptElement);
+
+            Element preventScreenshotElement = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS_ITEM.getValue());
+            preventScreenshotElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), XmlConfiguration.SETTING_PREVENT_SCREENSHOT.getValue());
+            preventScreenshotElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), "" + Configuration.getPreventScreenshots());
+            settingsElement.appendChild(preventScreenshotElement);
         }
 
         return settingsElement;
