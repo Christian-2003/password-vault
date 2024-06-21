@@ -9,6 +9,8 @@ n/a
 ###### Features
 * Implemented master password recovery through security questions.
 * Added setting to prevent screenshots of activities displaying sensitive data.
+* Changed app icon background color to match new primary color.
+* Changed package name from `de.passwordvault` to `de.christian2003.passwordvault`.
 
 <br/>
 
