@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import java.io.Serializable;
 import de.passwordvault.R;
-import de.passwordvault.model.UpdateManager;
 import de.passwordvault.view.activities.SettingsAboutActivity;
 import de.passwordvault.view.activities.SettingsAutofillActivity;
 import de.passwordvault.view.activities.SettingsCustomizationActivity;
@@ -58,10 +57,6 @@ public class SettingsFragment extends PasswordVaultBaseFragment implements Seria
 
         view.findViewById(R.id.settings_help_container).setOnClickListener(view1 -> startActivity(new Intent(getActivity(), SettingsHelpActivity.class)));
         view.findViewById(R.id.settings_about_container).setOnClickListener(view1 -> startActivity(new Intent(getActivity(), SettingsAboutActivity.class)));
-
-        if (UpdateManager.getInstance(getActivity()).isUpdateAvailable()) {
-            view.findViewById(R.id.settings_about_eyecatcher).setVisibility(View.VISIBLE);
-        }
 
         return view;
     }

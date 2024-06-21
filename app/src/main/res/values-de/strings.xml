@@ -110,14 +110,7 @@
     <string name="settings_about_usage_dependencies_info">Verwendete Software anzeigen</string>
     <string name="settings_about_usage_privacypolicy">Datenschutzerklärung</string>
     <string name="settings_about_usage_privacypolicy_info">Datenschutzerklärung anzeigen</string>
-    <string name="settings_about_github">GitHub</string>
-    <string name="settings_about_github_repo">Repository</string>
-    <string name="settings_about_github_repo_info">App auf GitHub anzeigen</string>
-    <string name="settings_about_github_issues">Fehler melden</string>
-    <string name="settings_about_github_issues_info">Fehler auf GitHub melden</string>
     <string name="settings_about_software">Software</string>
-    <string name="settings_about_software_update">Software aktualisieren</string>
-    <string name="settings_about_software_update_info">Neueste Version herunterladen</string>
     <string name="settings_about_software_version">App-Version</string>
 
     <string name="settings_data">Daten</string>

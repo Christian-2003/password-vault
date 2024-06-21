@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import com.google.android.material.navigation.NavigationBarView;
 import de.passwordvault.R;
-import de.passwordvault.model.UpdateManager;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.view.utils.OnRecyclerItemClickListener;
@@ -152,9 +151,6 @@ public class MainActivity extends PasswordVaultBaseActivity implements Navigatio
         navigationBarView = findViewById(R.id.main_navigation);
         navigationBarView.setOnItemSelectedListener(this);
         navigationBarView.setSelectedItemId(viewModel.getSelectedItem());
-
-        //Check for updates:
-        UpdateManager.getInstance(this, this::onUpdateStatusChanged);
     }
 
 
@@ -218,18 +214,6 @@ public class MainActivity extends PasswordVaultBaseActivity implements Navigatio
                 return true;
         }
         return false;
-    }
-
-
-    /**
-     * Method is called when the update state is registered the first time.
-     *
-     * @param updateAvailable   Whether an update is available.
-     */
-    private void onUpdateStatusChanged(boolean updateAvailable) {
-        if (updateAvailable) {
-            navigationBarView.getOrCreateBadge(R.id.menu_settings);
-        }
     }
 
 }

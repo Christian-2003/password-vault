@@ -59,7 +59,7 @@
                         style="@style/pv.icon"/>
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/settings_customization"
@@ -96,7 +96,7 @@
                         style="@style/pv.icon"/>
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/settings_security"
@@ -133,7 +133,7 @@
                         style="@style/pv.icon"/>
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/settings_data"
@@ -170,7 +170,7 @@
                         style="@style/pv.icon"/>
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/settings_autofill"
@@ -214,7 +214,7 @@
                         style="@style/pv.icon"/>
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/settings_help"
@@ -250,25 +250,13 @@
                         android:src="@drawable/ic_info"
                         style="@style/pv.icon"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_about"
-                            android:padding="@dimen/default_padding"
-                            style="@style/pv.text"/>
-
-                        <ImageView
-                            android:id="@+id/settings_about_eyecatcher"
-                            android:visibility="gone"
-                            style="@style/pv.eyecatcher"/>
-
-                    </LinearLayout>
+                        android:text="@string/settings_about"
+                        android:padding="@dimen/default_padding"
+                        style="@style/pv.text"/>
 
                     <ImageView
                         android:layout_width="wrap_content"

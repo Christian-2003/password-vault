@@ -11,6 +11,9 @@ n/a
 * Added setting to prevent screenshots of activities displaying sensitive data.
 * Changed app icon background color to match new primary color.
 * Changed package name from `de.passwordvault` to `de.christian2003.passwordvault`.
+* Removed all references to the GitHub repository, since it is now private.
+* Removed `UpdateManager`-class, since updates are now handled by Google Play.
+* Removed `com.github.supersu-man:apkupdater-library:v2.1.0`-dependency, since updates are now handled by Google Play.
 
 <br/>
 

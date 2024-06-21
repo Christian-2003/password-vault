@@ -2,13 +2,11 @@ package de.passwordvault.view.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import de.passwordvault.BuildConfig;
 import de.passwordvault.R;
-import de.passwordvault.model.UpdateManager;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 
@@ -38,20 +36,12 @@ public class SettingsAboutActivity extends PasswordVaultBaseActivity {
         findViewById(R.id.settings_about_usage_dependencies_container).setOnClickListener(view -> startActivity(new Intent(this, OssLicensesMenuActivity.class)));
         findViewById(R.id.settings_about_usage_privacypolicy_container).setOnClickListener(view -> showLegalPage("privacy_policy.html"));
 
-        //GitHub
-        findViewById(R.id.settings_about_github_repository_container).setOnClickListener(view -> openUrl(getString(R.string.settings_about_github_link)));
-        findViewById(R.id.settings_about_github_issues_container).setOnClickListener(view -> openUrl(getString(R.string.settings_about_bug_link)));
-
         //Software
         String version = BuildConfig.VERSION_NAME;
         if (BuildConfig.DEBUG) {
             version += " (Debug Build)";
         }
         ((TextView)findViewById(R.id.settings_about_software_version)).setText(version);
-        findViewById(R.id.settings_about_software_update_container).setOnClickListener(view -> openUrl(getString(R.string.settings_about_update_link)));
-        if (UpdateManager.getInstance(this).isUpdateAvailable()) {
-            findViewById(R.id.settings_about_software_update_eyecatcher).setVisibility(View.VISIBLE);
-        }
     }
 
 
