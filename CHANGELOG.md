@@ -14,6 +14,8 @@ n/a
 * Removed all references to the GitHub repository, since it is now private.
 * Removed `UpdateManager`-class, since updates are now handled by Google Play.
 * Removed `com.github.supersu-man:apkupdater-library:v2.1.0`-dependency, since updates are now handled by Google Play.
+* Added Terms of Service.
+* Removed MIT License from within the app.
 
 <br/>
 

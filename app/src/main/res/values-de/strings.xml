@@ -104,8 +104,8 @@
 
     <string name="settings_about">Über</string>
     <string name="settings_about_usage">Rechtliches</string>
-    <string name="settings_about_usage_license">MIT Lizenz</string>
-    <string name="settings_about_usage_license_info">Lizenz anzeigen (Nur in Englisch)</string>
+    <string name="settings_about_usage_tos">Nutzungsbedingungen</string>
+    <string name="settings_about_usage_tos_info">Nutzungsbedingungen anzeigen</string>
     <string name="settings_about_usage_dependencies">Abhängigkeiten</string>
     <string name="settings_about_usage_dependencies_info">Verwendete Software anzeigen</string>
     <string name="settings_about_usage_privacypolicy">Datenschutzerklärung</string>

@@ -105,8 +105,8 @@
 
     <string name="settings_about">About</string>
     <string name="settings_about_usage">Legal</string>
-    <string name="settings_about_usage_license">MIT License</string>
-    <string name="settings_about_usage_license_info">Show license</string>
+    <string name="settings_about_usage_tos">Terms of Service</string>
+    <string name="settings_about_usage_tos_info">Show Terms of Service</string>
     <string name="settings_about_usage_dependencies">Dependencies</string>
     <string name="settings_about_usage_dependencies_info">Show used software</string>
     <string name="settings_about_usage_privacypolicy">Privacy Policy</string>

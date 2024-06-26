@@ -15,7 +15,7 @@ import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
  * Class implements the activity which shows the user information about the application.
  *
  * @author  Christian-2003
- * @version 3.5.4
+ * @version 3.6.0
  */
 public class SettingsAboutActivity extends PasswordVaultBaseActivity {
 
@@ -32,7 +32,7 @@ public class SettingsAboutActivity extends PasswordVaultBaseActivity {
         findViewById(R.id.button_back).setOnClickListener(view -> finish());
 
         //Usage
-        findViewById(R.id.settings_about_usage_license_container).setOnClickListener(view -> showInfoDialog(R.string.settings_about_usage_license, Utils.readRawResource(R.raw.license)));
+        findViewById(R.id.settings_about_usage_tos_container).setOnClickListener(view -> showLegalPage("terms_of_service.html"));
         findViewById(R.id.settings_about_usage_dependencies_container).setOnClickListener(view -> startActivity(new Intent(this, OssLicensesMenuActivity.class)));
         findViewById(R.id.settings_about_usage_privacypolicy_container).setOnClickListener(view -> showLegalPage("privacy_policy.html"));
 

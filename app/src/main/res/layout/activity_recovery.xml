@@ -104,6 +104,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/error_not_enough_security_questions"
+                    android:textAlignment="center"
                     android:textColor="?attr/colorError"
                     style="@style/pv.text"/>
 
