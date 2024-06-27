@@ -30,7 +30,6 @@
         <activity android:name=".view.activities.PasswordAnalysisActivity" android:exported="false"/>
         <activity android:name=".view.activities.PasswordAnalysisListActivity" android:exported="false"/>
         <activity android:name=".view.activities.DuplicatePasswordEntriesActivity" android:exported="false"/>
-        <activity android:name=".view.activities.DataConversionActivity" android:exported="false"/>
         <activity android:name=".view.activities.PackagesActivity" android:exported="false"/>
         <activity android:name=".view.activities.SettingsAboutActivity" android:exported="false"/>
         <activity android:name=".view.activities.SettingsDataActivity" android:exported="false"/>

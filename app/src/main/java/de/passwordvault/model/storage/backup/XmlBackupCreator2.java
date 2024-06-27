@@ -7,6 +7,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
+import java.lang.reflect.Field;
 import java.util.Calendar;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -25,9 +26,18 @@ import de.passwordvault.model.detail.DetailBackupDTO;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.model.entry.EntryManager;
-import de.passwordvault.model.storage.Configuration;
 import de.passwordvault.model.storage.csv.CsvConfiguration;
 import de.passwordvault.model.storage.encryption.EncryptionException;
+import de.passwordvault.model.storage.settings.Config;
+import de.passwordvault.model.storage.settings.NoBackup;
+import de.passwordvault.model.storage.settings.items.BooleanItem;
+import de.passwordvault.model.storage.settings.items.FloatItem;
+import de.passwordvault.model.storage.settings.items.GenericItem;
+import de.passwordvault.model.storage.settings.items.IntItem;
+import de.passwordvault.model.storage.settings.items.LongItem;
+import de.passwordvault.model.storage.settings.items.StringItem;
+import de.passwordvault.model.storage.settings.items.StringSetItem;
+import de.passwordvault.model.storage.settings.items.SwipeActionItem;
 import de.passwordvault.model.tags.TagManager;
 
 
@@ -35,7 +45,7 @@ import de.passwordvault.model.tags.TagManager;
  * Class implements the XML backup creator which can create XML backups of version 2.
  *
  * @author  Christian-2003
- * @version 3.5.4
+ * @version 3.6.0
  */
 public class XmlBackupCreator2 extends XmlBackupConfiguration {
 
@@ -390,55 +400,48 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration {
         }
 
         if (config.getIncludeSettings()) {
-            Element autofillCachingElement = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS_ITEM.getValue());
-            autofillCachingElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), XmlConfiguration.SETTING_AUTOFILL_CACHING.getValue());
-            autofillCachingElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), "" + Configuration.useAutofillCaching());
-            settingsElement.appendChild(autofillCachingElement);
-
-            Element autofillAuthenticationElement = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS_ITEM.getValue());
-            autofillAuthenticationElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), XmlConfiguration.SETTING_AUTOFILL_AUTHENTICATION.getValue());
-            autofillAuthenticationElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), "" + Configuration.useAutofillAuthentication());
-            settingsElement.appendChild(autofillAuthenticationElement);
-
-            Element darkmodeElement = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS_ITEM.getValue());
-            darkmodeElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), XmlConfiguration.SETTING_DARKMODE.getValue());
-            darkmodeElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), "" + Configuration.getDarkmode());
-            settingsElement.appendChild(darkmodeElement);
-
-            Element recentlyEditedElement = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS_ITEM.getValue());
-            recentlyEditedElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), XmlConfiguration.SETTING_NUM_RECENTLY_EDITED.getValue());
-            recentlyEditedElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), "" + Configuration.getNumberOfRecentlyEdited());
-            settingsElement.appendChild(recentlyEditedElement);
-
-            Element detailSwipeLeftElement = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS_ITEM.getValue());
-            detailSwipeLeftElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), XmlConfiguration.SETTING_DETAIL_SWIPE_LEFT.getValue());
-            detailSwipeLeftElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), Configuration.getDetailLeftSwipeAction().getPreferencesValue());
-            settingsElement.appendChild(detailSwipeLeftElement);
-
-            Element detailSwipeRightElement = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS_ITEM.getValue());
-            detailSwipeRightElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), XmlConfiguration.SETTING_DETAIL_SWIPE_RIGHT.getValue());
-            detailSwipeRightElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), Configuration.getDetailRightSwipeAction().getPreferencesValue());
-            settingsElement.appendChild(detailSwipeRightElement);
-
-            Element backupIncludeSettingsElement = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS_ITEM.getValue());
-            backupIncludeSettingsElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), XmlConfiguration.SETTING_BACKUP_INCLUDE_SETTINGS.getValue());
-            backupIncludeSettingsElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), "" + Configuration.getBackupIncludeSettings());
-            settingsElement.appendChild(backupIncludeSettingsElement);
-
-            Element backupIncludeQualityGatesElement = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS_ITEM.getValue());
-            backupIncludeQualityGatesElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), XmlConfiguration.SETTING_BACKUP_INCLUDE_QUALITY_GATES.getValue());
-            backupIncludeQualityGatesElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), "" + Configuration.getBackupIncludeQualityGates());
-            settingsElement.appendChild(backupIncludeQualityGatesElement);
-
-            Element backupEncryptElement = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS_ITEM.getValue());
-            backupEncryptElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), XmlConfiguration.SETTING_BACKUP_ENCRYPT.getValue());
-            backupEncryptElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), "" + Configuration.getBackupEncrypted());
-            settingsElement.appendChild(backupEncryptElement);
-
-            Element preventScreenshotElement = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS_ITEM.getValue());
-            preventScreenshotElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), XmlConfiguration.SETTING_PREVENT_SCREENSHOT.getValue());
-            preventScreenshotElement.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), "" + Configuration.getPreventScreenshots());
-            settingsElement.appendChild(preventScreenshotElement);
+            Config config = Config.getInstance();
+            Class<?> clazz = config.getClass();
+            for (Field field : clazz.getDeclaredFields()) {
+                if (field.isAnnotationPresent(NoBackup.class)) {
+                    //Create no backup of annotated settings:
+                    continue;
+                }
+                try {
+                    Element element = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS_ITEM.getValue());
+                    GenericItem<?> item = null;
+                    if (field.getType() == BooleanItem.class) {
+                        item = (BooleanItem)field.get(config);
+                    }
+                    else if (field.getType() == FloatItem.class) {
+                        item = (FloatItem)field.get(config);
+                    }
+                    else if (field.getType() == IntItem.class) {
+                        item = (IntItem)field.get(config);
+                    }
+                    else if (field.getType() == LongItem.class) {
+                        item = (LongItem)field.get(config);
+                    }
+                    else if (field.getType() == StringItem.class) {
+                        item = (StringItem)field.get(config);
+                    }
+                    else if (field.getType() == StringSetItem.class) {
+                        item = (StringSetItem)field.get(config);
+                    }
+                    else if (field.getType() == SwipeActionItem.class) {
+                        item = (SwipeActionItem)field.get(config);
+                    }
+                    if (item == null) {
+                        continue;
+                    }
+                    element.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), item.getKey());
+                    element.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), "" + item.get());
+                    settingsElement.appendChild(element);
+                }
+                catch (IllegalAccessException e) {
+                    continue;
+                }
+            }
         }
 
         return settingsElement;

@@ -11,7 +11,6 @@ import androidx.biometric.BiometricPrompt;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import java.io.File;
 import java.util.Objects;
 import de.passwordvault.R;
 import de.passwordvault.model.entry.EntryManager;
@@ -128,19 +127,9 @@ public class LoginActivity extends PasswordVaultBaseActivity {
 
 
     /**
-     * Method opens the {@link MainActivity} or the {@link DataConversionActivity} if data conversion
-     * is required.
+     * Method opens the {@link MainActivity}.
      */
     private void continueToMainActivity() {
-        //Convert data before continuing if necessary:
-        if (!Configuration.getConvertedStorage1() && (new File(getFilesDir(), "entries.csv").exists() || new File(getFilesDir(), "details.csv").exists())) {
-            Intent intent = new Intent(LoginActivity.this, DataConversionActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            finish();
-            startActivity(intent);
-            return;
-        }
-
         //Begin loading the data in a separate thread:
         Thread thread = new Thread(() -> {
             try {

@@ -16,6 +16,7 @@ n/a
 * Removed `com.github.supersu-man:apkupdater-library:v2.1.0`-dependency, since updates are now handled by Google Play.
 * Added Terms of Service.
 * Removed MIT License from within the app.
+* Implemented new system for the app configuration that is easier to extend in the future.
 
 <br/>
 
