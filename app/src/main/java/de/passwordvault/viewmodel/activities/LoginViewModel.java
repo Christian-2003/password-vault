@@ -120,7 +120,7 @@ public class LoginViewModel extends ViewModel {
      * @return  Whether the master password recovery is enabled.
      */
     public boolean usePasswordRecovery() {
-        return Account.getInstance().getSecurityQuestions().size() == Account.REQUIRED_SECURITY_QUESTIONS;
+        return Account.getInstance().getSecurityQuestions().size() >= Account.REQUIRED_SECURITY_QUESTIONS;
     }
 
 }
