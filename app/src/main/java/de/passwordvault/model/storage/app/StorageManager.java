@@ -17,7 +17,7 @@ import de.passwordvault.model.storage.file.EncryptedFileWriter;
  * the managed entries. All data that is stored through this manager is being encrypted.
  *
  * @author  Christian-2003
- * @version 3.5.2
+ * @version 3.6.0
  */
 public class StorageManager {
 
@@ -61,6 +61,9 @@ public class StorageManager {
      */
     public HashMap<String, EntryAbbreviated> loadAbbreviatedEntries() throws EncryptionException {
         String fileContent = fileReader.read(ABBREVIATED_ENTRIES_FILE);
+        if (fileContent == null) {
+            return new HashMap<>();
+        }
         String[] lines = fileContent.split("\n");
         HashMap<String, EntryAbbreviated> entries = new HashMap<>();
         for (String s : lines) {

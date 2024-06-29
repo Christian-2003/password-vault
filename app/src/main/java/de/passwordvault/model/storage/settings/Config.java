@@ -135,7 +135,7 @@ public class Config implements ConfigSettingContract {
     /**
      * Setting indicates whether to prevent screenshots of sensitive data.
      */
-    public final BooleanItem preventScreenshots = new BooleanItem(this, "prevent_screenshots", false);
+    public final BooleanItem preventScreenshots = new BooleanItem(this, "prevent_screenshots", true);
 
 
     /**

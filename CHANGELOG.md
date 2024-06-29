@@ -21,6 +21,7 @@ n/a
 * Backups now dynamically backup and restore settings.
 * Removed old class to create backup.
 * Removed old `Configuration` class as it is now replaced by `Config` class.
+* Fixed a bug where no autofill save request crashes the app when no app does not contain any account data.
 
 <br/>
 
