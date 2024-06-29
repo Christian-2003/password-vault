@@ -15,7 +15,7 @@ import de.passwordvault.model.security.authentication.AuthenticationCallback;
 import de.passwordvault.model.security.authentication.AuthenticationFailure;
 import de.passwordvault.model.security.authentication.Authenticator;
 import de.passwordvault.model.security.login.Account;
-import de.passwordvault.model.storage.Configuration;
+import de.passwordvault.model.storage.settings.Config;
 import de.passwordvault.view.dialogs.ChangePasswordDialog;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.fragments.SettingsViewModel;
@@ -155,7 +155,7 @@ public class SettingsSecurityActivity extends PasswordVaultBaseActivity implemen
             authenticator.authenticate(this, Authenticator.AUTH_BIOMETRICS, Authenticator.TYPE_AUTHENTICATE);
         }
         else if (button.getId() == R.id.settings_security_data_screenshot_switch) {
-            Configuration.setPreventScreenshots(checked);
+            Config.getInstance().preventScreenshots.set(checked);
         }
     }
 
@@ -190,7 +190,7 @@ public class SettingsSecurityActivity extends PasswordVaultBaseActivity implemen
 
         //Data:
         MaterialSwitch screenshotSwitch = findViewById(R.id.settings_security_data_screenshot_switch);
-        screenshotSwitch.setChecked(Configuration.getPreventScreenshots());
+        screenshotSwitch.setChecked(Config.getInstance().preventScreenshots.get());
         screenshotSwitch.setOnCheckedChangeListener(this);
         findViewById(R.id.settings_security_data_screenshot_clickable).setOnClickListener(view -> screenshotSwitch.setChecked(!screenshotSwitch.isChecked()));
 

@@ -3,6 +3,7 @@ package de.passwordvault.model.storage.settings;
 import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import java.lang.reflect.Field;
 import de.passwordvault.App;
 import de.passwordvault.model.detail.DetailSwipeAction;
@@ -22,6 +23,69 @@ import de.passwordvault.model.storage.settings.items.SwipeActionItem;
  * @version 3.6.0
  */
 public class Config implements ConfigSettingContract {
+
+    /**
+     * Class contains all constants that are being used with the config.
+     */
+    public static class Constants {
+
+        /**
+         * Field stores a value indicating that the app uses light- or dark mode depending on the system
+         * settings.
+         */
+        public static final int DARKMODE_SYSTEM = 0;
+
+        /**
+         * Field stores a value indicating that the app uses light mode.
+         */
+        public static final int DARKMODE_LIGHT = 1;
+
+        /**
+         * Field stores a value indicating that the app uses dark mode.
+         */
+        public static final int DARKMODE_DARK = 2;
+
+    }
+
+
+    /**
+     * Class contains all methods that are being used with the config.
+     */
+    public static class Methods {
+
+        /**
+         * Method applies the darkmode setting to the app. This needs to be called whenever the darkmode
+         * changes and when the app starts.
+         */
+        public static void applyDarkmode() {
+            int darkmode = Config.getInstance().darkmode.get();
+            switch (darkmode) {
+                case Constants.DARKMODE_LIGHT:
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    break;
+                case Constants.DARKMODE_DARK:
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    break;
+                default:
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                    break;
+            }
+        }
+
+
+        /**
+         * Method applies all settings to the app. This can be called whenever a large
+         * number of settings is changed (e.g. when a backup is restored).
+         */
+        public static void applyAllSettings() {
+            App.getContext().getMainExecutor().execute(() -> {
+                applyDarkmode();
+            });
+        }
+
+    }
+
+
 
     /**
      * Setting indicates whether to use autofill caching.
@@ -178,43 +242,38 @@ public class Config implements ConfigSettingContract {
      * @param item                      Item whose value to change.
      * @param value                     String-representation of the value to which the passed item
      *                                  shall be changed.
-     * @return                          GenericItem with changed value.
      * @throws ClassCastException       The passed GenericItem&lt;?&gt; cannot be cast to concrete
      *                                  instance.
      * @throws IllegalArgumentException The passed value cannot be parsed.
      */
-    public static GenericItem<?> changeItemValue(GenericItem<?> item, String value) throws ClassCastException, IllegalArgumentException {
+    public static void changeItemValue(GenericItem<?> item, String value) throws ClassCastException, IllegalArgumentException {
         try {
             if (item instanceof BooleanItem) {
                 ((BooleanItem)item).set(Boolean.parseBoolean(value));
-                return item;
             }
             else if (item instanceof FloatItem) {
                 ((FloatItem)item).set(Float.parseFloat(value));
-                return item;
             }
             else if (item instanceof IntItem) {
                 ((IntItem)item).set(Integer.parseInt(value));
-                return item;
             }
             else if (item instanceof LongItem) {
                 ((LongItem)item).set(Long.parseLong(value));
-                return item;
             }
             else if (item instanceof StringItem) {
                 ((StringItem)item).set(value);
-                return item;
             }
             else if (item instanceof SwipeActionItem) {
                 DetailSwipeAction action = DetailSwipeAction.fromPreferencesValue(value);
                 ((SwipeActionItem)item).set(action);
-                return item;
+            }
+            else {
+                throw new ClassCastException("Cannot cast abstract GenericItem<?> to concrete instance");
             }
         }
         catch (NumberFormatException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
-        throw new ClassCastException("Cannot cast abstract GenericItem<?> to concrete instance");
     }
 
 }

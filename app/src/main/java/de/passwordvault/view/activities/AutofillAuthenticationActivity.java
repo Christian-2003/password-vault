@@ -11,7 +11,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.textfield.TextInputEditText;
@@ -19,7 +18,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.Objects;
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.Account;
-import de.passwordvault.model.storage.Configuration;
+import de.passwordvault.model.storage.settings.Config;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.activities.AutofillAuthenticationViewModel;
 
@@ -73,7 +72,7 @@ public class AutofillAuthenticationActivity extends PasswordVaultBaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Configuration.applyDarkmode();
+        Config.Methods.applyDarkmode();
 
         if (!Account.getInstance().hasPassword()) {
             onFailure();

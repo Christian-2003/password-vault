@@ -7,12 +7,10 @@ import de.passwordvault.model.CachableManager;
 import de.passwordvault.model.Observable;
 import de.passwordvault.model.Observer;
 import de.passwordvault.model.PersistableManager;
-import de.passwordvault.model.storage.Configuration;
 import de.passwordvault.model.storage.app.StorageException;
 import de.passwordvault.model.storage.app.StorageManager;
 import de.passwordvault.model.storage.encryption.EncryptionException;
-import de.passwordvault.service.autofill.caching.InvalidationCache;
-import de.passwordvault.service.autofill.caching.InvalidationCacheItem;
+import de.passwordvault.model.storage.settings.Config;
 
 
 /**
@@ -544,7 +542,7 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
         }
         mostRecentlyEditedEntriesCache.add(mostRecentlyChanged);
 
-        for (int i = 0; i < Configuration.getNumberOfRecentlyEdited() - 1; i++) {
+        for (int i = 0; i < Config.getInstance().numRecentlyEdited.get() - 1; i++) {
             EntryAbbreviated newMostRecentlyChanged = null;
             for (int j = 0; j < abbreviatedEntriesArrayListCache.size(); j++) {
                 if (abbreviatedEntriesArrayListCache.get(j).getChanged().compareTo(mostRecentlyChanged.getChanged()) < 0) {

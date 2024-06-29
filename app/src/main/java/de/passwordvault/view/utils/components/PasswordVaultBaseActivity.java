@@ -9,7 +9,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import de.passwordvault.R;
-import de.passwordvault.model.storage.Configuration;
+import de.passwordvault.model.storage.settings.Config;
 
 
 /**
@@ -64,7 +64,7 @@ public abstract class PasswordVaultBaseActivity extends AppCompatActivity {
      * from being made.
      */
     protected void enableSecureModeIfRequired() {
-        if (Configuration.getPreventScreenshots()) {
+        if (Config.getInstance().preventScreenshots.get()) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         }
     }

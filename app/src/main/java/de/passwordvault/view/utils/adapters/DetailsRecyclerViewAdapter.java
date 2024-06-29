@@ -24,7 +24,7 @@ import de.passwordvault.model.analysis.QualityGateManager;
 import de.passwordvault.model.detail.Detail;
 import de.passwordvault.model.detail.DetailSwipeAction;
 import de.passwordvault.model.detail.DetailType;
-import de.passwordvault.model.storage.Configuration;
+import de.passwordvault.model.storage.settings.Config;
 import de.passwordvault.view.dialogs.ConfirmDeleteDetailDialog;
 import de.passwordvault.view.dialogs.DetailDialog;
 import de.passwordvault.view.utils.DetailsItemMoveCallback;
@@ -318,7 +318,7 @@ public class DetailsRecyclerViewAdapter extends RecyclerView.Adapter<DetailsRecy
     @Override
     public void onRowSwiped(DetailsRecyclerViewAdapter.ViewHolder viewHolder, int direction) {
         if (direction == ItemTouchHelper.LEFT) {
-            DetailSwipeAction swipeAction = Configuration.getDetailLeftSwipeAction();
+            DetailSwipeAction swipeAction = Config.getInstance().leftSwipeAction.get();
             if (swipeAction == DetailSwipeAction.DELETE) {
                 deleteDetail(viewHolder.getAdapterPosition());
             }
@@ -327,7 +327,7 @@ public class DetailsRecyclerViewAdapter extends RecyclerView.Adapter<DetailsRecy
             }
         }
         else if (direction == ItemTouchHelper.RIGHT) {
-            DetailSwipeAction swipeAction = Configuration.getDetailRightSwipeAction();
+            DetailSwipeAction swipeAction = Config.getInstance().rightSwipeAction.get();
             if (swipeAction == DetailSwipeAction.DELETE) {
                 deleteDetail(viewHolder.getAdapterPosition());
             }

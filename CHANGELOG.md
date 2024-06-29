@@ -16,7 +16,11 @@ n/a
 * Removed `com.github.supersu-man:apkupdater-library:v2.1.0`-dependency, since updates are now handled by Google Play.
 * Added Terms of Service.
 * Removed MIT License from within the app.
+* Fixed a bug where settings were not correctly restored.
 * Implemented new system for the app configuration that is easier to extend in the future.
+* Backups now dynamically backup and restore settings.
+* Removed old class to create backup.
+* Removed old `Configuration` class as it is now replaced by `Config` class.
 
 <br/>
 

@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.App;
 import de.passwordvault.R;
 import de.passwordvault.model.detail.DetailSwipeAction;
-import de.passwordvault.model.storage.Configuration;
+import de.passwordvault.model.storage.settings.Config;
 import de.passwordvault.view.utils.adapters.DetailsRecyclerViewAdapter;
 
 
@@ -228,7 +228,7 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
             Paint paint = new Paint();
             Bitmap icon;
             if (dX > 1) {
-                DetailSwipeAction swipeAction = Configuration.getDetailRightSwipeAction();
+                DetailSwipeAction swipeAction = Config.getInstance().rightSwipeAction.get();
                 if (swipeAction == DetailSwipeAction.DELETE) {
                     paint.setColor(adapter.getContext().getColor(R.color.pv_red));
                     icon = getBitmap(R.drawable.ic_delete);
@@ -243,7 +243,7 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
                 }
             }
             else if (dX < -1) {
-                DetailSwipeAction swipeAction = Configuration.getDetailLeftSwipeAction();
+                DetailSwipeAction swipeAction = Config.getInstance().leftSwipeAction.get();
                 if (swipeAction == DetailSwipeAction.DELETE) {
                     paint.setColor(adapter.getContext().getColor(R.color.pv_red));
                     icon = getBitmap(R.drawable.ic_delete);

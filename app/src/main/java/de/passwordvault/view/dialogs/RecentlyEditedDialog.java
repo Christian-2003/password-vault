@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -13,7 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import de.passwordvault.R;
-import de.passwordvault.model.storage.Configuration;
+import de.passwordvault.model.storage.settings.Config;
 
 
 /**
@@ -50,7 +49,7 @@ public class RecentlyEditedDialog extends DialogFragment {
         dropdown.setAdapter(new ArrayAdapter<>(view.getContext(), android.R.layout.simple_spinner_dropdown_item, getOptions(view.getContext())));
         dropdown.setOnItemClickListener((parent, view1, position, id) -> {
             if (position >= 0 && position < OPTIONS.length) {
-                Configuration.setNumberOfRecentlyEdited(OPTIONS[position]);
+                Config.getInstance().numRecentlyEdited.set(OPTIONS[position]);
                 dismiss();
             }
         });
@@ -73,7 +72,7 @@ public class RecentlyEditedDialog extends DialogFragment {
      * @return          Text for the selected option.
      */
     private static String getSelectedOption(Context context) {
-        return context.getString(R.string.settings_customization_home_recentlyedited_number_option).replace("{arg}", "" + Configuration.getNumberOfRecentlyEdited());
+        return context.getString(R.string.settings_customization_home_recentlyedited_number_option).replace("{arg}", "" + Config.getInstance().numRecentlyEdited.get());
     }
 
 

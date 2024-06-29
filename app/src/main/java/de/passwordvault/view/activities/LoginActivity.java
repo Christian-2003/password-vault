@@ -15,7 +15,7 @@ import java.util.Objects;
 import de.passwordvault.R;
 import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.security.login.Account;
-import de.passwordvault.model.storage.Configuration;
+import de.passwordvault.model.storage.settings.Config;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.activities.LoginViewModel;
 
@@ -48,7 +48,7 @@ public class LoginActivity extends PasswordVaultBaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Configuration.applyDarkmode();
+        Config.Methods.applyDarkmode();
 
         if (!Account.getInstance().hasPassword()) {
             //No login required:

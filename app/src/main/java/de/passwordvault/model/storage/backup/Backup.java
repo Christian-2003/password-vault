@@ -2,7 +2,6 @@ package de.passwordvault.model.storage.backup;
 
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
-import android.util.Log;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -211,11 +210,6 @@ public class Backup {
      */
     public static final String INCLUDE_QUALITY_GATES = XmlConfiguration.TAG_QUALITY_GATES.getValue();
 
-    /**
-     * Field stores the tag used for logging.
-     */
-    private static final String TAG = "Backup";
-
 
     /**
      * Attribute stores the URI to the backup file.
@@ -359,18 +353,15 @@ public class Backup {
 
         String version = getMetadata(BACKUP_VERSION);
         if (version == null || version.equals(XmlConfiguration.VERSION_1.getValue())) {
-            Log.d("Backup", "EncryptionKeySeed: " + this.config.getEncryptionKeySeed());
             //Need to use old backup restorer:
             XmlBackupRestorer restorer = new XmlBackupRestorer(uri, this.config.getEncryptionKeySeed());
             try {
                 restorer.restoreBackup();
             }
             catch (XmlException e) {
-                Log.e("Backup", "Old Backup XML error: " + e.getMessage());
                 throw new BackupException(e.getMessage());
             }
             catch (BackupException | EncryptionException e) {
-                Log.e("Backup", "Old Backup error: " + e.getMessage());
                 throw e;
             }
             return;
@@ -539,7 +530,6 @@ public class Backup {
             Node currentChild = childNodes.item(i);
             if (currentChild.getNodeName().equals(XmlConfiguration.TAG_ENCRYPTION_CHECKSUM.getValue())) {
                 encryptionChecksum = currentChild.getTextContent();
-                Log.d("Backup", "Retrieved old checksum: " + encryptionChecksum);
             }
         }
     }
@@ -637,7 +627,7 @@ public class Backup {
                 Node valueAttribute = attributes.getNamedItem(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue());
                 if (nameAttribute != null && valueAttribute != null) {
                     String name = nameAttribute.getNodeValue();
-                    String value = nameAttribute.getNodeValue();
+                    String value = valueAttribute.getNodeValue();
                     if (name != null && value != null && !name.isEmpty() && !value.isEmpty()) {
                         settings.put(name, value);
                     }
@@ -728,6 +718,8 @@ public class Backup {
      * @param settings  Settings to restore.
      */
     private void restoreSettings(HashMap<String, String> settings) {
+        for (String s : settings.values()) {
+        }
         Config config = Config.getInstance();
         Class<?> clazz = config.getClass();
         for (Field field : clazz.getDeclaredFields()) {
@@ -740,20 +732,18 @@ public class Backup {
                 if (item == null) {
                     continue;
                 }
-                String setting = settings.get(item.getKey());
-                if (setting == null) {
+                String setting = settings.getOrDefault(item.getKey(), null);
+                if (setting == null || setting.isEmpty()) {
                     continue;
                 }
-                item = Config.changeItemValue(item, setting);
+                Config.changeItemValue(item, setting);
                 field.set(config, item);
             }
-            catch (IllegalAccessException e) {
-                Log.d("Backup", "Cannot access item");
-            }
-            catch (ClassCastException | IllegalArgumentException e) {
-                Log.d("Backup", "Cannot change item value");
+            catch (Exception e) {
+                //Continue with next setting...
             }
         }
+        Config.Methods.applyAllSettings();
     }
 
 

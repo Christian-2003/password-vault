@@ -2,7 +2,6 @@ package de.passwordvault.view.activities;
 
 import android.animation.LayoutTransition;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -17,7 +16,7 @@ import de.passwordvault.R;
 import de.passwordvault.model.detail.DetailSwipeAction;
 import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.security.login.SecurityQuestion;
-import de.passwordvault.model.storage.Configuration;
+import de.passwordvault.model.storage.settings.Config;
 import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
 import de.passwordvault.view.dialogs.SecurityQuestionDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
@@ -298,7 +297,7 @@ public class RecoveryActivity extends PasswordVaultBaseActivity implements OnRec
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
 
         RecyclerItemSwipeCallback.SwipeAction<SecurityQuestion> leftSwipeCallback = null;
-        DetailSwipeAction leftSwipeAction = Configuration.getDetailLeftSwipeAction();
+        DetailSwipeAction leftSwipeAction = Config.getInstance().leftSwipeAction.get();
         if (leftSwipeAction == DetailSwipeAction.DELETE) {
             leftSwipeCallback = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_delete, R.color.pv_red, this::deleteSecurityQuestion);
         }
@@ -307,7 +306,7 @@ public class RecoveryActivity extends PasswordVaultBaseActivity implements OnRec
         }
 
         RecyclerItemSwipeCallback.SwipeAction<SecurityQuestion> rightSwipeCallback = null;
-        DetailSwipeAction rightSwipeAction = Configuration.getDetailRightSwipeAction();
+        DetailSwipeAction rightSwipeAction = Config.getInstance().rightSwipeAction.get();
         if (rightSwipeAction == DetailSwipeAction.DELETE) {
             rightSwipeCallback = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_delete, R.color.pv_red, this::editSecurityQuestion);
         }

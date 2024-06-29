@@ -2,7 +2,7 @@ package de.passwordvault.viewmodel.dialogs;
 
 import androidx.lifecycle.ViewModel;
 import de.passwordvault.model.detail.DetailSwipeAction;
-import de.passwordvault.model.storage.Configuration;
+import de.passwordvault.model.storage.settings.Config;
 
 
 /**
@@ -29,8 +29,8 @@ public class DetailSwipeActionViewModel extends ViewModel {
      * Constructor instantiates a new view model.
      */
     public DetailSwipeActionViewModel() {
-        leftSwipeAction = Configuration.getDetailLeftSwipeAction();
-        rightSwipeAction = Configuration.getDetailRightSwipeAction();
+        leftSwipeAction = Config.getInstance().leftSwipeAction.get();
+        rightSwipeAction = Config.getInstance().rightSwipeAction.get();
     }
 
 
@@ -57,10 +57,10 @@ public class DetailSwipeActionViewModel extends ViewModel {
         }
         if (rightSwipeAction == swipeAction) {
             rightSwipeAction = leftSwipeAction;
-            Configuration.setDetailRightSwipeAction(rightSwipeAction);
+            Config.getInstance().rightSwipeAction.set(rightSwipeAction);
         }
         leftSwipeAction = swipeAction;
-        Configuration.setDetailLeftSwipeAction(leftSwipeAction);
+        Config.getInstance().leftSwipeAction.set(leftSwipeAction);
     }
 
     /**
@@ -86,10 +86,10 @@ public class DetailSwipeActionViewModel extends ViewModel {
         }
         if (leftSwipeAction == swipeAction) {
             leftSwipeAction = rightSwipeAction;
-            Configuration.setDetailLeftSwipeAction(leftSwipeAction);
+            Config.getInstance().leftSwipeAction.set(leftSwipeAction);
         }
         rightSwipeAction = swipeAction;
-        Configuration.setDetailRightSwipeAction(rightSwipeAction);
+        Config.getInstance().rightSwipeAction.set(rightSwipeAction);
     }
 
 }

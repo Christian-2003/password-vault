@@ -19,7 +19,7 @@ import de.passwordvault.R;
 import de.passwordvault.model.security.authentication.AuthenticationCallback;
 import de.passwordvault.model.security.authentication.AuthenticationFailure;
 import de.passwordvault.model.security.authentication.Authenticator;
-import de.passwordvault.model.storage.Configuration;
+import de.passwordvault.model.storage.settings.Config;
 import de.passwordvault.service.autofill.caching.ContentCache;
 import de.passwordvault.service.autofill.caching.InvalidationCache;
 import de.passwordvault.service.autofill.caching.MappingCache;
@@ -80,10 +80,10 @@ public class SettingsAutofillActivity extends PasswordVaultBaseActivity implemen
             return;
         }
         if (tag.equals(TAG_AUTH_DEACTIVATE)) {
-            Configuration.setAutofillAuthentication(false);
+            Config.getInstance().useAutofillAuth.set(false);
         }
         else if (tag.equals(TAG_AUTH_ACTIVATE)) {
-            Configuration.setAutofillAuthentication(true);
+            Config.getInstance().useAutofillAuth.set(true);
         }
     }
 
@@ -132,7 +132,7 @@ public class SettingsAutofillActivity extends PasswordVaultBaseActivity implemen
             authenticator.authenticate(this);
         }
         else if (button.getId() == R.id.settings_autofill_cache_toggle_switch) {
-            Configuration.setAutofillCaching(checked);
+            Config.getInstance().useAutofillCaching.set(checked);
             findViewById(R.id.settings_autofill_config_cache_container).setVisibility(checked ? View.VISIBLE : View.GONE);
         }
     }
@@ -159,18 +159,18 @@ public class SettingsAutofillActivity extends PasswordVaultBaseActivity implemen
 
         //Caching:
         MaterialSwitch cacheSwitch = findViewById(R.id.settings_autofill_cache_toggle_switch);
-        cacheSwitch.setChecked(Configuration.useAutofillCaching());
+        cacheSwitch.setChecked(Config.getInstance().useAutofillCaching.get());
         cacheSwitch.setOnCheckedChangeListener(this);
         findViewById(R.id.settings_autofill_cache_toggle_clickable).setOnClickListener(view -> cacheSwitch.setChecked(!cacheSwitch.isChecked()));
 
         //Clear cache:
-        findViewById(R.id.settings_autofill_config_cache_container).setVisibility(Configuration.useAutofillCaching() ? View.VISIBLE : View.GONE);
+        findViewById(R.id.settings_autofill_config_cache_container).setVisibility(Config.getInstance().useAutofillCaching.get() ? View.VISIBLE : View.GONE);
         findViewById(R.id.settings_autofill_config_cache_delete_container).setOnClickListener(view -> clearAutofillCaches());
 
         //Authentication:
         findViewById(R.id.settings_autofill_authentication_container).setVisibility(viewModel.useAppLogin() ? View.VISIBLE : View.GONE);
         MaterialSwitch authenticationSwitch = findViewById(R.id.settings_autofill_authentication_toggle_switch);
-        authenticationSwitch.setChecked(Configuration.useAutofillAuthentication());
+        authenticationSwitch.setChecked(Config.getInstance().useAutofillAuth.get());
         authenticationSwitch.setOnCheckedChangeListener(this);
         findViewById(R.id.settings_autofill_authentication_toggle_clickable).setOnClickListener(view -> authenticationSwitch.setChecked(!authenticationSwitch.isChecked()));
     }

@@ -133,60 +133,7 @@ public enum XmlConfiguration {
     /**
      * Field stores the name of the attribute containing the value of a specific setting.
      */
-    ATTRIBUTE_SETTINGS_VALUE("value"),
-
-
-    /**
-     * Field stores the name for the setting regarding autofill caching.
-     */
-    SETTING_AUTOFILL_CACHING("autofill_caching"),
-
-    /**
-     * Field stores the name for the setting regarding autofill caching.
-     */
-    SETTING_AUTOFILL_AUTHENTICATION("autofill_authentication"),
-
-    /**
-     * Field stores the name for the setting regarding darkmode.
-     */
-    SETTING_DARKMODE("darkmode"),
-
-    /**
-     * Field stores the name for the setting regarding recently edited entries.
-     */
-    SETTING_NUM_RECENTLY_EDITED("recently_edited"),
-
-    /**
-     * Field stores the name for the setting regarding left swiping details.
-     */
-    SETTING_DETAIL_SWIPE_LEFT("detail_swipe_left"),
-
-    /**
-     * Field stores the name for the setting regarding right swiping details.
-     */
-    SETTING_DETAIL_SWIPE_RIGHT("detail_swipe_right"),
-
-    /**
-     * Field stores the name for the setting regarding whether backups should include settings.
-     */
-    SETTING_BACKUP_INCLUDE_SETTINGS("backup_include_settings"),
-
-    /**
-     * Field stores the name for the setting regarding whether backups should include quality
-     * gates.
-     */
-    SETTING_BACKUP_INCLUDE_QUALITY_GATES("backup_include_quality_gates"),
-
-    /**
-     * Field stores the name for the setting regarding whether backups should be encrypted.
-     */
-    SETTING_BACKUP_ENCRYPT("backup_encrypt"),
-
-    /**
-     * Field stores the name for the setting regarding whether screenshots of sensitive data can be
-     * created.
-     */
-    SETTING_PREVENT_SCREENSHOT("prevent_screenshot");
+    ATTRIBUTE_SETTINGS_VALUE("value");
 
 
     /**

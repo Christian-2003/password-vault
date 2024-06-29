@@ -4,10 +4,10 @@ import android.net.Uri;
 
 import androidx.lifecycle.ViewModel;
 
-import de.passwordvault.model.storage.Configuration;
 import de.passwordvault.model.storage.backup.BackupException;
 import de.passwordvault.model.storage.backup.BackupCreator;
 import de.passwordvault.model.storage.encryption.EncryptionException;
+import de.passwordvault.model.storage.settings.Config;
 
 
 /**
@@ -46,9 +46,9 @@ public class CreateBackupViewModel extends ViewModel {
         backupDirectory = null;
         filename = null;
         config = new BackupCreator.BackupConfig();
-        config.setIncludeSettings(Configuration.getBackupIncludeSettings());
-        config.setIncludeQualityGates(Configuration.getBackupIncludeQualityGates());
-        backupEncrypted = Configuration.getBackupEncrypted();
+        config.setIncludeSettings(Config.getInstance().backupIncludeSettings.get());
+        config.setIncludeQualityGates(Config.getInstance().backupIncludeQualityGates.get());
+        backupEncrypted = Config.getInstance().backupEncrypted.get();
     }
 
 
@@ -165,12 +165,12 @@ public class CreateBackupViewModel extends ViewModel {
 
 
     /**
-     * Method saves the configured settings for the backup to the {@link Configuration}.
+     * Method saves the configured settings for the backup to the {@link Config}.
      */
     public void storeSettings() {
-        Configuration.setBackupIncludeSettings(config.getIncludeSettings());
-        Configuration.setBackupIncludeQualityGates(config.getIncludeQualityGates());
-        Configuration.setBackupEncrypted(backupEncrypted);
+        Config.getInstance().backupIncludeSettings.set(config.getIncludeSettings());
+        Config.getInstance().backupIncludeQualityGates.set(config.getIncludeQualityGates());
+        Config.getInstance().backupEncrypted.set(backupEncrypted);
     }
 
 }

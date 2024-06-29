@@ -6,11 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioButton;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.DialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import de.passwordvault.R;
-import de.passwordvault.model.storage.Configuration;
+import de.passwordvault.model.storage.settings.Config;
 
 
 /**
@@ -52,11 +51,11 @@ public class DarkmodeDialog extends DialogFragment {
         RadioButton lightRadioButton = view.findViewById(R.id.dialog_darkmode_radio_button_light);
         RadioButton darkRadioButton = view.findViewById(R.id.dialog_darkmode_radio_button_dark);
         RadioButton systemRadioButton = view.findViewById(R.id.dialog_darkmode_radio_button_system);
-        switch (Configuration.getDarkmode()) {
-            case Configuration.DARKMODE_LIGHT:
+        switch (Config.getInstance().darkmode.get()) {
+            case Config.Constants.DARKMODE_LIGHT:
                 lightRadioButton.setChecked(true);
                 break;
-            case Configuration.DARKMODE_DARK:
+            case Config.Constants.DARKMODE_DARK:
                 darkRadioButton.setChecked(true);
                 break;
             default:
@@ -66,24 +65,24 @@ public class DarkmodeDialog extends DialogFragment {
 
         lightRadioButton.setOnCheckedChangeListener((button, checked) -> {
             if (checked) {
-                Configuration.setDarkmode(Configuration.DARKMODE_LIGHT);
-                Configuration.applyDarkmode();
+                Config.getInstance().darkmode.set(Config.Constants.DARKMODE_LIGHT);
+                Config.Methods.applyDarkmode();
                 dismiss();
             }
         });
 
         darkRadioButton.setOnCheckedChangeListener((button, checked) -> {
             if (checked) {
-                Configuration.setDarkmode(Configuration.DARKMODE_DARK);
-                Configuration.applyDarkmode();
+                Config.getInstance().darkmode.set(Config.Constants.DARKMODE_DARK);
+                Config.Methods.applyDarkmode();
                 dismiss();
             }
         });
 
         systemRadioButton.setOnCheckedChangeListener((button, checked) -> {
             if (checked) {
-                Configuration.setDarkmode(Configuration.DARKMODE_SYSTEM);
-                Configuration.applyDarkmode();
+                Config.getInstance().darkmode.set(Config.Constants.DARKMODE_SYSTEM);
+                Config.Methods.applyDarkmode();
                 dismiss();
             }
         });
