@@ -14,7 +14,7 @@ import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.storage.app.StorageException;
 import de.passwordvault.model.storage.backup.BackupException;
-import de.passwordvault.model.storage.backup.XmlBackupCreator2;
+import de.passwordvault.model.storage.backup.BackupCreator;
 import de.passwordvault.model.storage.encryption.EncryptionException;
 import de.passwordvault.model.storage.export.ExportException;
 import de.passwordvault.model.storage.export.ExportToHtml2;
@@ -63,9 +63,9 @@ public class SettingsViewModel extends ViewModel {
         if (filename == null) {
             throw new NullPointerException("Null is invalid filename");
         }
-        XmlBackupCreator2 xmlBackupCreator = new XmlBackupCreator2(directory, filename, password);
+        BackupCreator xmlBackupCreator = new BackupCreator(directory, filename, password);
         try {
-            XmlBackupCreator2.BackupConfig config = new XmlBackupCreator2.BackupConfig();
+            BackupCreator.BackupConfig config = new BackupCreator.BackupConfig();
             config.setIncludeSettings(true);
             config.setIncludeQualityGates(true);
             xmlBackupCreator.createBackup(config);

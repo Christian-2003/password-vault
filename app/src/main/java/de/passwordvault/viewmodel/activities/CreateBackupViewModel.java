@@ -1,16 +1,13 @@
 package de.passwordvault.viewmodel.activities;
 
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.lifecycle.ViewModel;
 
-import de.passwordvault.App;
 import de.passwordvault.model.storage.Configuration;
 import de.passwordvault.model.storage.backup.BackupException;
-import de.passwordvault.model.storage.backup.XmlBackupCreator2;
+import de.passwordvault.model.storage.backup.BackupCreator;
 import de.passwordvault.model.storage.encryption.EncryptionException;
-import de.passwordvault.view.utils.Utils;
 
 
 /**
@@ -34,7 +31,7 @@ public class CreateBackupViewModel extends ViewModel {
     /**
      * Attribute stores the backup config.
      */
-    private final XmlBackupCreator2.BackupConfig config;
+    private final BackupCreator.BackupConfig config;
 
     /**
      * Attribute stores whether the backup shall be encrypted.
@@ -48,7 +45,7 @@ public class CreateBackupViewModel extends ViewModel {
     public CreateBackupViewModel() {
         backupDirectory = null;
         filename = null;
-        config = new XmlBackupCreator2.BackupConfig();
+        config = new BackupCreator.BackupConfig();
         config.setIncludeSettings(Configuration.getBackupIncludeSettings());
         config.setIncludeQualityGates(Configuration.getBackupIncludeQualityGates());
         backupEncrypted = Configuration.getBackupEncrypted();
@@ -162,7 +159,7 @@ public class CreateBackupViewModel extends ViewModel {
      * @throws EncryptionException  The data could not be encrypted.
      */
     public void createBackup(String password) throws BackupException, EncryptionException {
-        XmlBackupCreator2 backupCreator2 = new XmlBackupCreator2(backupDirectory, filename, password);
+        BackupCreator backupCreator2 = new BackupCreator(backupDirectory, filename, password);
         backupCreator2.createBackup(config);
     }
 

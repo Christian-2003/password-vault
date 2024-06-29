@@ -13,6 +13,7 @@ import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.xml.parsers.DocumentBuilder;
@@ -22,15 +23,16 @@ import de.passwordvault.App;
 import de.passwordvault.model.analysis.QualityGate;
 import de.passwordvault.model.analysis.QualityGateManager;
 import de.passwordvault.model.detail.DetailBackupDTO;
-import de.passwordvault.model.detail.DetailSwipeAction;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.model.entry.EntryManager;
-import de.passwordvault.model.storage.Configuration;
 import de.passwordvault.model.storage.app.StorageException;
 import de.passwordvault.model.storage.csv.CsvConfiguration;
 import de.passwordvault.model.storage.encryption.AES;
 import de.passwordvault.model.storage.encryption.EncryptionException;
+import de.passwordvault.model.storage.settings.Config;
+import de.passwordvault.model.storage.settings.NoBackup;
+import de.passwordvault.model.storage.settings.items.GenericItem;
 import de.passwordvault.model.tags.TagManager;
 
 
@@ -38,7 +40,7 @@ import de.passwordvault.model.tags.TagManager;
  * Class implements a backup that can be restored.
  *
  * @author  Christian-2003
- * @version 3.5.5
+ * @version 3.6.0
  */
 public class Backup {
 
@@ -726,59 +728,31 @@ public class Backup {
      * @param settings  Settings to restore.
      */
     private void restoreSettings(HashMap<String, String> settings) {
-        try {
-            String autofillCaching = settings.get(XmlConfiguration.SETTING_AUTOFILL_CACHING.getValue());
-            if (autofillCaching != null) {
-                Configuration.setAutofillCaching(Boolean.parseBoolean(autofillCaching));
+        Config config = Config.getInstance();
+        Class<?> clazz = config.getClass();
+        for (Field field : clazz.getDeclaredFields()) {
+            if (field.isAnnotationPresent(NoBackup.class)) {
+                //Do not restore setting:
+                continue;
             }
-
-            String autofillAuthentication = settings.get(XmlConfiguration.SETTING_AUTOFILL_AUTHENTICATION.getValue());
-            if (autofillAuthentication != null) {
-                Configuration.setAutofillAuthentication(Boolean.parseBoolean(autofillAuthentication));
+            try {
+                GenericItem<?> item = (GenericItem<?>) field.get(config);
+                if (item == null) {
+                    continue;
+                }
+                String setting = settings.get(item.getKey());
+                if (setting == null) {
+                    continue;
+                }
+                item = Config.changeItemValue(item, setting);
+                field.set(config, item);
             }
-
-            String darkmode = settings.get(XmlConfiguration.SETTING_DARKMODE.getValue());
-            if (darkmode != null) {
-                Configuration.setDarkmode(Integer.parseInt(darkmode));
+            catch (IllegalAccessException e) {
+                Log.d("Backup", "Cannot access item");
             }
-
-            String recentlyEdited = settings.get(XmlConfiguration.SETTING_NUM_RECENTLY_EDITED.getValue());
-            if (recentlyEdited != null) {
-                Configuration.setNumberOfRecentlyEdited(Integer.parseInt(recentlyEdited));
+            catch (ClassCastException | IllegalArgumentException e) {
+                Log.d("Backup", "Cannot change item value");
             }
-
-            String detailSwipeLeft = settings.get(XmlConfiguration.SETTING_DETAIL_SWIPE_LEFT.getValue());
-            if (detailSwipeLeft != null) {
-                Configuration.setDetailLeftSwipeAction(DetailSwipeAction.fromPreferencesValue(detailSwipeLeft));
-            }
-
-            String detailSwipeRight = settings.get(XmlConfiguration.SETTING_DETAIL_SWIPE_RIGHT.getValue());
-            if (detailSwipeRight != null) {
-                Configuration.setDetailRightSwipeAction(DetailSwipeAction.fromPreferencesValue(detailSwipeRight));
-            }
-
-            String includeBackupSettings = settings.get(XmlConfiguration.SETTING_BACKUP_INCLUDE_SETTINGS.getValue());
-            if (includeBackupSettings != null) {
-                Configuration.setBackupIncludeSettings(Boolean.parseBoolean(includeBackupSettings));
-            }
-
-            String includeBackupQualityGates = settings.get(XmlConfiguration.SETTING_BACKUP_INCLUDE_QUALITY_GATES.getValue());
-            if (includeBackupQualityGates != null) {
-                Configuration.setBackupIncludeQualityGates(Boolean.parseBoolean(includeBackupQualityGates));
-            }
-
-            String backupEncrypt = settings.get(XmlConfiguration.SETTING_BACKUP_ENCRYPT.getValue());
-            if (backupEncrypt != null) {
-                Configuration.setBackupEncrypted(Boolean.parseBoolean(backupEncrypt));
-            }
-
-            String preventScreenshot = settings.get(XmlConfiguration.SETTING_PREVENT_SCREENSHOT.getValue());
-            if (preventScreenshot != null) {
-                Configuration.setPreventScreenshots(Boolean.parseBoolean(preventScreenshot));
-            }
-        }
-        catch (Exception e) {
-            //Some data corrupted. Ignore...
         }
     }
 

@@ -30,14 +30,7 @@ import de.passwordvault.model.storage.csv.CsvConfiguration;
 import de.passwordvault.model.storage.encryption.EncryptionException;
 import de.passwordvault.model.storage.settings.Config;
 import de.passwordvault.model.storage.settings.NoBackup;
-import de.passwordvault.model.storage.settings.items.BooleanItem;
-import de.passwordvault.model.storage.settings.items.FloatItem;
 import de.passwordvault.model.storage.settings.items.GenericItem;
-import de.passwordvault.model.storage.settings.items.IntItem;
-import de.passwordvault.model.storage.settings.items.LongItem;
-import de.passwordvault.model.storage.settings.items.StringItem;
-import de.passwordvault.model.storage.settings.items.StringSetItem;
-import de.passwordvault.model.storage.settings.items.SwipeActionItem;
 import de.passwordvault.model.tags.TagManager;
 
 
@@ -47,7 +40,7 @@ import de.passwordvault.model.tags.TagManager;
  * @author  Christian-2003
  * @version 3.6.0
  */
-public class XmlBackupCreator2 extends XmlBackupConfiguration {
+public class BackupCreator extends XmlBackupConfiguration {
 
     /**
      * Class models a configuration for the backup creator.
@@ -143,7 +136,7 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration {
      * @param filename              Name of the backup file.
      * @throws NullPointerException The passed URI is {@code null}.
      */
-    public XmlBackupCreator2(Uri directory, String filename) throws NullPointerException {
+    public BackupCreator(Uri directory, String filename) throws NullPointerException {
         super(directory, true);
         if (filename == null) {
             throw new NullPointerException();
@@ -163,7 +156,7 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration {
      * @param encryptionSeed        Seed for the encryption key or {@code null}.
      * @throws NullPointerException The passed URI is {@code null}.
      */
-    public XmlBackupCreator2(Uri directory, String filename, String encryptionSeed) throws NullPointerException {
+    public BackupCreator(Uri directory, String filename, String encryptionSeed) throws NullPointerException {
         super(directory, encryptionSeed);
         if (filename == null) {
             throw new NullPointerException();
@@ -407,40 +400,14 @@ public class XmlBackupCreator2 extends XmlBackupConfiguration {
                     //Create no backup of annotated settings:
                     continue;
                 }
-                try {
-                    Element element = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS_ITEM.getValue());
-                    GenericItem<?> item = null;
-                    if (field.getType() == BooleanItem.class) {
-                        item = (BooleanItem)field.get(config);
-                    }
-                    else if (field.getType() == FloatItem.class) {
-                        item = (FloatItem)field.get(config);
-                    }
-                    else if (field.getType() == IntItem.class) {
-                        item = (IntItem)field.get(config);
-                    }
-                    else if (field.getType() == LongItem.class) {
-                        item = (LongItem)field.get(config);
-                    }
-                    else if (field.getType() == StringItem.class) {
-                        item = (StringItem)field.get(config);
-                    }
-                    else if (field.getType() == StringSetItem.class) {
-                        item = (StringSetItem)field.get(config);
-                    }
-                    else if (field.getType() == SwipeActionItem.class) {
-                        item = (SwipeActionItem)field.get(config);
-                    }
-                    if (item == null) {
-                        continue;
-                    }
-                    element.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), item.getKey());
-                    element.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), "" + item.get());
-                    settingsElement.appendChild(element);
-                }
-                catch (IllegalAccessException e) {
+                Element element = xmlDocument.createElement(XmlConfiguration.TAG_SETTINGS_ITEM.getValue());
+                GenericItem<?> item = Config.getItemFromField(field);
+                if (item == null) {
                     continue;
                 }
+                element.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_NAME.getValue(), item.getKey());
+                element.setAttribute(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue(), "" + item.get());
+                settingsElement.appendChild(element);
             }
         }
 

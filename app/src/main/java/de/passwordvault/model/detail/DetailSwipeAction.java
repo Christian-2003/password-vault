@@ -1,11 +1,13 @@
 package de.passwordvault.model.detail;
 
+import androidx.annotation.NonNull;
+
 
 /**
  * Enum contains fields describing the available swipe actions for details, when they are swiped.
  *
  * @author  Christian-2003
- * @version 3.5.4
+ * @version 3.6.0
  */
 public enum DetailSwipeAction {
 
@@ -60,6 +62,19 @@ public enum DetailSwipeAction {
             }
         }
         return EDIT;
+    }
+
+
+    /**
+     * Method returns the preferences value as it determines which field of the enum
+     * is printed.
+     *
+     * @return  Preferences value.
+     */
+    @NonNull
+    @Override
+    public String toString() {
+        return preferencesValue;
     }
 
 }
