@@ -30,7 +30,7 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -48,6 +48,14 @@
                 android:layout_marginBottom="@dimen/default_margin"
                 android:text="@string/recovery_info"
                 style="@style/pv.text.info"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                android:layout_marginTop="@dimen/default_left_margin_outside_container"
+                android:text="@string/recovery_progress"
+                style="@style/pv.text.highlight"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -163,6 +171,6 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

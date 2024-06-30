@@ -227,6 +227,7 @@
 
     <!-- Recovery activity -->
     <string name="recovery_info">Select at least five security questions that are used to login into Password Vault in case you forget the master password. When you login to the app with these questions, you need to answer at least four questions correctly. Otherwise, the login fails.</string>
+    <string name="recovery_progress">Progress</string>
     <string name="recovery_questions">Security Questions</string>
     <string name="recovery_question">Question</string>
     <string name="recovery_answer">Answer</string>

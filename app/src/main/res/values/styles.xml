@@ -31,6 +31,7 @@
     <style name="pv.text.info" parent="pv.text">
         <item name="android:textSize">@dimen/default_text_size</item>
         <item name="android:textColor">@color/pv_text_secondary</item>
+        <item name="android:lineSpacingExtra">5sp</item>
     </style>
 
     <!-- Style for highlighted text -->
