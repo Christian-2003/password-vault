@@ -313,6 +313,13 @@
         <item name="iconTint">@color/pv_text_onPrimary</item>
     </style>
 
+    <!-- Style for buttons used with "Searching for something different" -->
+    <style name="pv.material.button.different" parent="Widget.Material3.Button.TextButton">
+        <item name="android:paddingStart">@dimen/default_padding</item>
+        <item name="android:paddingEnd">@dimen/default_padding</item>
+        <item name="android:textAlignment">textStart</item>
+    </style>
+
     <!-- Style for 'com.google.android.material.search.SearchBar' -->
     <style name="pv.material.search_bar" parent="Widget.Material3.SearchBar">
         <item name="android:backgroundTint">@color/pv_container</item>

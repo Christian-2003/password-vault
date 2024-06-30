@@ -413,7 +413,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/default_padding"
                 style="@style/pv.container.highlight">
 
                 <com.google.android.material.button.MaterialButton
@@ -421,14 +420,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_search_backup"
-                    style="@style/Widget.Material3.Button.TextButton"/>
+                    style="@style/pv.material.button.different"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_search_autofillauthentication"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_search_autofillauthentication"
-                    style="@style/Widget.Material3.Button.TextButton"/>
+                    style="@style/pv.material.button.different"/>
 
             </LinearLayout>
 

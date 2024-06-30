@@ -22,6 +22,7 @@ n/a
 * Removed old class to create backup.
 * Removed old `Configuration` class as it is now replaced by `Config` class.
 * Fixed a bug where no autofill save request crashes the app when no app does not contain any account data.
+* Fixed padding and alignment for text buttons within "Searching for something different?"-sections in settings to be left aligned with text of the entire activity.
 
 <br/>
 
