@@ -115,7 +115,7 @@
                 </LinearLayout>
 
                 <View
-                    style="@style/divider"/>
+                    style="@style/pv.divider"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -147,7 +147,7 @@
                 </LinearLayout>
 
                 <View
-                    style="@style/divider"/>
+                    style="@style/pv.divider"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"

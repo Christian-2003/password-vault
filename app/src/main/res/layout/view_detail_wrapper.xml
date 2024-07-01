@@ -72,6 +72,6 @@
 
     </LinearLayout>
 
-    <View style="@style/divider"/>
+    <View style="@style/pv.divider"/>
 
 </LinearLayout>

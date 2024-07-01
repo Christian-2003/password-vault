@@ -160,7 +160,7 @@
 
                 </LinearLayout>
 
-                <View style="@style/divider"/>
+                <View style="@style/pv.divider"/>
 
                 <LinearLayout
                     android:id="@+id/settings_data_backup_restore_container"

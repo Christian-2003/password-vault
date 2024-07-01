@@ -371,11 +371,11 @@
     -->
 
     <!-- Style for dividers -->
-    <style name="divider">
+    <style name="pv.divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
         <item name="android:background">@color/pv_container_detail</item>
-        <item name="android:layout_marginHorizontal">@dimen/default_padding</item>
+        <item name="android:layout_marginHorizontal">@dimen/padding_list_horizontal</item>
     </style>
 
     <!-- Style for popup menus -->

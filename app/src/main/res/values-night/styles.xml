@@ -366,7 +366,7 @@
     -->
 
     <!-- Style for dividers -->
-    <style name="divider">
+    <style name="pv.divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
         <item name="android:background">@color/pv_container_detail</item>

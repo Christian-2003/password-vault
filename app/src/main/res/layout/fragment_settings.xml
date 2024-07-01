@@ -75,7 +75,7 @@
 
                 </LinearLayout>
 
-                <View style="@style/divider"/>
+                <View style="@style/pv.divider"/>
 
                 <!-- Security -->
                 <LinearLayout
@@ -112,7 +112,7 @@
 
                 </LinearLayout>
 
-                <View style="@style/divider"/>
+                <View style="@style/pv.divider"/>
 
                 <!-- Data -->
                 <LinearLayout
@@ -149,7 +149,7 @@
 
                 </LinearLayout>
 
-                <View style="@style/divider"/>
+                <View style="@style/pv.divider"/>
 
                 <!-- Autofill -->
                 <LinearLayout
@@ -230,7 +230,7 @@
 
                 </LinearLayout>
 
-                <View style="@style/divider"/>
+                <View style="@style/pv.divider"/>
 
                 <!-- About -->
                 <LinearLayout

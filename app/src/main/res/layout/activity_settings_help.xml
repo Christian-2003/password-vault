@@ -84,7 +84,7 @@
 
                 </LinearLayout>
 
-                <View style="@style/divider"/>
+                <View style="@style/pv.divider"/>
 
                 <LinearLayout
                     android:id="@+id/settings_help_autofill_container"
@@ -114,7 +114,7 @@
 
                 </LinearLayout>
 
-                <View style="@style/divider"/>
+                <View style="@style/pv.divider"/>
 
                 <LinearLayout
                     android:id="@+id/settings_help_backup_container"

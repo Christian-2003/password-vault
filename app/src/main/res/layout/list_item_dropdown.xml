@@ -13,6 +13,6 @@
         android:padding="@dimen/default_padding"
         style="@style/pv.text"/>
 
-    <View style="@style/divider"/>
+    <View style="@style/pv.divider"/>
 
 </LinearLayout>

@@ -108,7 +108,7 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <View style="@style/divider"/>
+                    <View style="@style/pv.divider"/>
 
                     <LinearLayout
                         android:id="@+id/include_settings_clickable"
@@ -136,7 +136,7 @@
 
                     </LinearLayout>
 
-                    <View style="@style/divider"/>
+                    <View style="@style/pv.divider"/>
 
                     <LinearLayout
                         android:id="@+id/include_quality_gates_clickable"
@@ -214,7 +214,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <View style="@style/divider"/>
+                        <View style="@style/pv.divider"/>
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/container_password"

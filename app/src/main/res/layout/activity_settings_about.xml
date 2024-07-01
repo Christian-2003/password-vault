@@ -103,7 +103,7 @@
 
                 </LinearLayout>
 
-                <View style="@style/divider"/>
+                <View style="@style/pv.divider"/>
 
                 <LinearLayout
                     android:id="@+id/settings_about_usage_dependencies_container"
@@ -144,7 +144,7 @@
 
                 </LinearLayout>
 
-                <View style="@style/divider"/>
+                <View style="@style/pv.divider"/>
 
                 <LinearLayout
                     android:id="@+id/settings_about_usage_privacypolicy_container"
