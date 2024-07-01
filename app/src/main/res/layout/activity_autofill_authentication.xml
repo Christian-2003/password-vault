@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".view.activities.AutofillAuthenticationActivity">
+    tools:context=".view.authentication.activity_autofill_authentication.AutofillAuthenticationActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"

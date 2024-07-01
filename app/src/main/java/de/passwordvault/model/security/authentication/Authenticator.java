@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.concurrent.Executor;
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.Account;
-import de.passwordvault.view.dialogs.PasswordAuthenticationDialog;
+import de.passwordvault.view.authentication.dialog_authentication.PasswordAuthenticationDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
 
 

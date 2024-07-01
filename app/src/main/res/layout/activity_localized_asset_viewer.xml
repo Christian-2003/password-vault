@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".view.activities.LocalizedAssetViewerActivity">
+    tools:context=".view.settings.activity_localized_asset_viewer.LocalizedAssetViewerActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"

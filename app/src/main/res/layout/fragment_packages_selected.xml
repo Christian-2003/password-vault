@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".view.fragments.PackagesSelectedFragment">
+    tools:context=".view.entries.activity_packages.fragment_selected.PackagesSelectedFragment">
 
     <TextView
         android:layout_width="wrap_content"

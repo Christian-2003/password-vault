@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".view.fragments.PackagesListFragment">
+    tools:context=".view.entries.activity_packages.fragment_list.PackagesListFragment">
 
     <!-- Progress bar shown while packages load -->
     <androidx.constraintlayout.widget.ConstraintLayout

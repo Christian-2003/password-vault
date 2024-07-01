@@ -25,6 +25,7 @@ n/a
 * Fixed padding and alignment for text buttons within "Searching for something different?"-sections in settings to be left aligned with text of the entire activity.
 * Changes to activity displaying all password quality gates.
 * Added custom view for list bottom button.
+* Major refactoring of `view` and `viewmodel` packages to locate views, viewmodels and adapters closely together.
 
 <br/>
 

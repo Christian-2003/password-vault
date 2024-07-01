@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.activities.AddEntryActivity">
+    tools:context=".view.entries.activity_add_entry.AddEntryActivity">
 
     <!-- Toolbar for the activity -->
     <com.google.android.material.appbar.AppBarLayout

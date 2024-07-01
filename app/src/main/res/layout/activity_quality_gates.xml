@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".view.settings.security.quality_gates.QualityGatesActivity">
+    tools:context=".view.settings.activity_quality_gates.QualityGatesActivity">
 
     <!-- Toolbar for the activity -->
     <com.google.android.material.appbar.AppBarLayout

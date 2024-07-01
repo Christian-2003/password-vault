@@ -14,7 +14,7 @@
         android:name=".App">
 
         <!-- LoginActivity starts the entire application when opened through the launcher -->
-        <activity android:name=".view.activities.LoginActivity" android:exported="true">
+        <activity android:name=".view.authentication.activity_login.LoginActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -22,29 +22,29 @@
         </activity>
 
         <!-- Other activities of the application -->
-        <activity android:name=".view.activities.MainActivity" android:theme="@style/Theme.PasswordVault.ContainerNavBar" android:exported="false"/>
-        <activity android:name=".view.activities.AddEntryActivity" android:exported="false"/>
-        <activity android:name=".view.activities.EntryActivity" android:exported="false"/>
-        <activity android:name=".view.settings.security.quality_gates.QualityGatesActivity" android:exported="false"/>
-        <activity android:name=".view.settings.security.quality_gate.QualityGateActivity" android:exported="false"/>
-        <activity android:name=".view.activities.PasswordAnalysisActivity" android:exported="false"/>
-        <activity android:name=".view.activities.PasswordAnalysisListActivity" android:exported="false"/>
-        <activity android:name=".view.activities.DuplicatePasswordEntriesActivity" android:exported="false"/>
-        <activity android:name=".view.activities.PackagesActivity" android:exported="false"/>
-        <activity android:name=".view.activities.SettingsAboutActivity" android:exported="false"/>
-        <activity android:name=".view.activities.SettingsDataActivity" android:exported="false"/>
-        <activity android:name=".view.activities.SettingsSecurityActivity" android:exported="false"/>
-        <activity android:name=".view.activities.SettingsAutofillActivity" android:exported="false"/>
-        <activity android:name=".view.activities.SettingsCustomizationActivity" android:exported="false"/>
-        <activity android:name=".view.activities.SettingsHelpActivity" android:exported="false"/>
-        <activity android:name=".view.activities.LocalizedAssetViewerActivity" android:exported="false"/>
-        <activity android:name=".view.activities.CreateBackupActivity" android:exported="false"/>
-        <activity android:name=".view.activities.RestoreBackupActivity" android:exported="false"/>
-        <activity android:name=".view.activities.RecoveryActivity" android:exported="false"/>
-        <activity android:name=".view.activities.SecurityQuestionActivity" android:exported="false"/>
+        <activity android:name=".view.activity_main.MainActivity" android:theme="@style/Theme.PasswordVault.ContainerNavBar" android:exported="false"/>
+        <activity android:name=".view.entries.activity_add_entry.AddEntryActivity" android:exported="false"/>
+        <activity android:name=".view.entries.activity_entry.EntryActivity" android:exported="false"/>
+        <activity android:name=".view.settings.activity_quality_gates.QualityGatesActivity" android:exported="false"/>
+        <activity android:name=".view.settings.activity_quality_gate.QualityGateActivity" android:exported="false"/>
+        <activity android:name=".view.passwords.activity_analysis.PasswordAnalysisActivity" android:exported="false"/>
+        <activity android:name=".view.passwords.activity_list.PasswordAnalysisListActivity" android:exported="false"/>
+        <activity android:name=".view.passwords.activity_duplicates.DuplicatePasswordEntriesActivity" android:exported="false"/>
+        <activity android:name=".view.entries.activity_packages.PackagesActivity" android:exported="false"/>
+        <activity android:name=".view.settings.activity_about.SettingsAboutActivity" android:exported="false"/>
+        <activity android:name=".view.settings.activity_data.SettingsDataActivity" android:exported="false"/>
+        <activity android:name=".view.settings.activity_security.SettingsSecurityActivity" android:exported="false"/>
+        <activity android:name=".view.settings.activity_autofill.SettingsAutofillActivity" android:exported="false"/>
+        <activity android:name=".view.settings.activity_customization.SettingsCustomizationActivity" android:exported="false"/>
+        <activity android:name=".view.settings.activity_help.SettingsHelpActivity" android:exported="false"/>
+        <activity android:name=".view.settings.activity_localized_asset_viewer.LocalizedAssetViewerActivity" android:exported="false"/>
+        <activity android:name=".view.settings.activity_create_backup.CreateBackupActivity" android:exported="false"/>
+        <activity android:name=".view.settings.activity_restore_backup.RestoreBackupActivity" android:exported="false"/>
+        <activity android:name=".view.settings.activity_recovery.RecoveryActivity" android:exported="false"/>
+        <activity android:name=".view.authentication.activity_security_question.SecurityQuestionActivity" android:exported="false"/>
 
         <!-- Activity used for authentication with autofill requests -->
-        <activity android:name=".view.activities.AutofillAuthenticationActivity" android:exported="false"/>
+        <activity android:name=".view.authentication.activity_autofill_authentication.AutofillAuthenticationActivity" android:exported="false"/>
 
         <!-- Autofill service for password manager -->
         <service

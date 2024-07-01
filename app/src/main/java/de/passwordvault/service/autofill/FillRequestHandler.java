@@ -32,7 +32,7 @@ import de.passwordvault.service.autofill.caching.MappingCache;
 import de.passwordvault.service.autofill.caching.MappingCacheItem;
 import de.passwordvault.service.autofill.structureparser.AssistStructureParser;
 import de.passwordvault.service.autofill.structureparser.ParsedStructure;
-import de.passwordvault.view.activities.AutofillAuthenticationActivity;
+import de.passwordvault.view.authentication.activity_autofill_authentication.AutofillAuthenticationActivity;
 
 
 /**
