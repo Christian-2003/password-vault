@@ -1,4 +1,4 @@
-package de.passwordvault.viewmodel.activities;
+package de.passwordvault.view.settings.security.quality_gate;
 
 import android.widget.CheckBox;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,17 +8,15 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGate;
-import de.passwordvault.model.analysis.QualityGateManager;
 
 
 /**
- * Class implements a view model for {@link de.passwordvault.view.activities.QualityGateActivity}.
+ * Class implements a view model for {@link QualityGateActivity}.
  *
  * @author  Christian-2003
- * @version 3.3.0
+ * @version 3.6.0
  */
 public class QualityGateViewModel extends ViewModel {
 
@@ -85,21 +83,6 @@ public class QualityGateViewModel extends ViewModel {
 
 
     /**
-     * Method removes the quality gate being edited from the managed quality gates.
-     */
-    public void removeQualityGate() {
-        if (indexOfQualityGate != -1) {
-            try {
-                QualityGateManager.getInstance().removeQualityGate(indexOfQualityGate);
-            }
-            catch (Exception e) {
-                //Do nothing...
-            }
-        }
-    }
-
-
-    /**
      * Method processes the user inputs and applies them to the edited quality gate. If some
      * inputs are incorrect, the visuals of the activity are changed to inform the user about the
      * incorrect inputs and {@code false} is returned. If all inputs are correct and changes were
@@ -148,13 +131,6 @@ public class QualityGateViewModel extends ViewModel {
         qualityGate.setDescription(description);
         qualityGate.setRegex(regex);
         qualityGate.setEnabled(enabledCheckBox.isChecked());
-
-        if (indexOfQualityGate == -1) {
-            QualityGateManager.getInstance().addQualityGate(qualityGate);
-        }
-        else {
-            QualityGateManager.getInstance().setQualityGate(qualityGate, indexOfQualityGate);
-        }
 
         return true;
     }

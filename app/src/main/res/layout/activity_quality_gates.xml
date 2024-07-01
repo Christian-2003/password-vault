@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".view.activities.QualityGatesActivity">
+    tools:context=".view.settings.security.quality_gates.QualityGatesActivity">
 
     <!-- Toolbar for the activity -->
     <com.google.android.material.appbar.AppBarLayout
@@ -19,7 +19,6 @@
 
             <androidx.appcompat.widget.Toolbar
                 app:contentInsetStart="?attr/actionBarSize"
-                app:contentInsetEnd="@dimen/image_button_width"
                 style="@style/pv.layout.app_bar.collapsing_toolbar.toolbar"/>
 
             <FrameLayout
@@ -37,14 +36,6 @@
 
             </FrameLayout>
 
-            <ImageButton
-                android:id="@+id/button_add"
-                android:layout_width="wrap_content"
-                android:layout_height="?attr/actionBarSize"
-                android:src="@drawable/ic_add"
-                android:layout_gravity="end|bottom"
-                style="@style/pv.button.image_button.app_bar"/>
-
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -52,20 +43,125 @@
 
 
     <!-- Content for the activity -->
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:scrollbars="vertical"
+        style="@style/pv.layout.nested_scroll_view">
 
-        <!-- ListView to display the quality gates -->
-        <ListView
-            android:id="@+id/quality_gates_list_view"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="true"
-            style="@style/pv.container"/>
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/padding_list_vertical"
+                android:paddingHorizontal="@dimen/padding_list_horizontal"
+                android:text="@string/quality_gates_info"
+                style="@style/pv.text.info"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/padding_list_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/quality_gates_custom"
+                    style="@style/pv.text.highlight"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="@string/quality_gates_enabled"
+                    style="@style/pv.text.variant"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                style="@style/pv.container">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_custom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="vertical"
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+                <LinearLayout
+                    android:id="@+id/button_add"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="@dimen/padding_list_vertical_spacing"
+                    android:paddingHorizontal="@dimen/padding_list_horizontal"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="@dimen/padding_list_horizontal_spacing"
+                        android:src="@drawable/ic_add"
+                        style="@style/pv.icon.highlight"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/button_add_quality_gate"
+                        style="@style/pv.text"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/padding_list_horizontal"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/quality_gates_default"
+                    style="@style/pv.text.highlight"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="@string/quality_gates_enabled"
+                    style="@style/pv.text.variant"/>
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_default"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                android:nestedScrollingEnabled="false"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                style="@style/pv.container"/>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

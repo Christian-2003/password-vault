@@ -339,6 +339,11 @@
 
 
     <!-- Password quality gates -->
+    <string name="quality_gates">Quality Gates</string>
+    <string name="quality_gates_info">Specify quality gates to enhance the security of your passwords.</string>
+    <string name="quality_gates_custom">Custom quality gates</string>
+    <string name="quality_gates_default">Default quality gates</string>
+    <string name="quality_gates_enabled">Enabled</string>
     <string name="quality_gate_enabled">Enabled</string>
     <string name="quality_gate_configure">Configure quality gate</string>
     <string name="quality_gate_test">Test quality gate</string>

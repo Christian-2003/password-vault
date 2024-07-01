@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import androidx.annotation.ColorRes;
@@ -15,6 +16,9 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.App;
 import de.passwordvault.R;
+import de.passwordvault.model.analysis.QualityGate;
+import de.passwordvault.model.detail.DetailSwipeAction;
+import de.passwordvault.model.storage.settings.Config;
 
 
 /**
@@ -254,7 +258,7 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
             View itemView = viewHolder.itemView;
             Paint paint = new Paint();
             Bitmap icon;
-            int iconOffset = adapter.getContext().getResources().getDimensionPixelSize(R.dimen.default_padding);
+            int iconOffset = adapter.getContext().getResources().getDimensionPixelSize(R.dimen.padding_list_horizontal);
             if (dX > 1 && rightSwipeAction != null) {
                 //Right swipe:
                 paint.setColor(adapter.getContext().getColor(rightSwipeAction.getColorRes()));
@@ -294,12 +298,56 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
         if (drawable == null) {
             return null;
         }
-        drawable.setTint(adapter.getContext().getColor(R.color.pv_container));
+        drawable.setTint(adapter.getContext().getColor(R.color.pv_background));
         Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return bitmap;
+    }
+
+
+    /**
+     * Method makes the left swipe action (either to delete or edit) based on the configuration from
+     * {@link Config}.
+     *
+     * @param editListener      Listener to call when the item is edited.
+     * @param deleteListener    Listener to call when the item is deleted.
+     * @return                  Swipe action for when an item is swiped left.
+     * @param <T>               Generic type for the swipe action.
+     */
+    public static<T> RecyclerItemSwipeCallback.SwipeAction<T> makeLeftSwipeAction(OnRecyclerItemClickListener<T> editListener, OnRecyclerItemClickListener<T> deleteListener) {
+        RecyclerItemSwipeCallback.SwipeAction<T> swipeAction = null;
+        DetailSwipeAction action = Config.getInstance().leftSwipeAction.get();
+        if (action == DetailSwipeAction.DELETE) {
+            swipeAction = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_delete, R.color.pv_red, deleteListener);
+        }
+        else if (action == DetailSwipeAction.EDIT) {
+            swipeAction = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_edit, R.color.pv_primary, editListener);
+        }
+        return swipeAction;
+    }
+
+
+    /**
+     * Method makes the right swipe action (either to delete or edit) based on the configuration from
+     * {@link Config}.
+     *
+     * @param editListener      Listener to call when the item is edited.
+     * @param deleteListener    Listener to call when the item is deleted.
+     * @return                  Swipe action for when an item is swiped left.
+     * @param <T>               Generic type for the swipe action.
+     */
+    public static<T> RecyclerItemSwipeCallback.SwipeAction<T> makeRightSwipeAction(OnRecyclerItemClickListener<T> editListener, OnRecyclerItemClickListener<T> deleteListener) {
+        RecyclerItemSwipeCallback.SwipeAction<T> swipeAction = null;
+        DetailSwipeAction action = Config.getInstance().rightSwipeAction.get();
+        if (action == DetailSwipeAction.DELETE) {
+            swipeAction = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_delete, R.color.pv_red, deleteListener);
+        }
+        else if (action == DetailSwipeAction.EDIT) {
+            swipeAction = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_edit, R.color.pv_primary, editListener);
+        }
+        return swipeAction;
     }
 
 }

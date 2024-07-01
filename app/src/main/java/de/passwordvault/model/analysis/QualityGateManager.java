@@ -24,6 +24,12 @@ import de.passwordvault.model.storage.csv.CsvParser;
 public class QualityGateManager implements Observable<ArrayList<QualityGate>> {
 
     /**
+     * Field stores the number of default quality gates.
+     */
+    public static final int NUMBER_OF_DEFAULT_QUALITY_GATES = 5;
+
+
+    /**
      * Field stores the singleton-instance of the quality gate manager.
      */
     private static QualityGateManager singleton;

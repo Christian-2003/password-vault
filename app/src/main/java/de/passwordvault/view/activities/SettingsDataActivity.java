@@ -16,6 +16,7 @@ import de.passwordvault.model.security.authentication.AuthenticationCallback;
 import de.passwordvault.model.security.authentication.AuthenticationFailure;
 import de.passwordvault.model.security.authentication.Authenticator;
 import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
+import de.passwordvault.view.settings.security.quality_gates.QualityGatesActivity;
 import de.passwordvault.view.utils.DialogCallbackListener;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;

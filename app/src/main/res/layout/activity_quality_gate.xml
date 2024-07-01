@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".view.activities.QualityGateActivity">
+    tools:context=".view.settings.security.quality_gate.QualityGateActivity">
 
     <!-- Toolbar for the activity -->
     <com.google.android.material.appbar.AppBarLayout
@@ -19,7 +19,7 @@
 
             <androidx.appcompat.widget.Toolbar
                 app:contentInsetStart="?attr/actionBarSize"
-                app:contentInsetEnd="@dimen/image_button_width_2"
+                app:contentInsetEnd="@dimen/image_button_width"
                 style="@style/pv.layout.app_bar.collapsing_toolbar.toolbar"/>
 
             <FrameLayout
@@ -52,14 +52,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_save"
-                        android:layout_gravity="center"
-                        style="@style/pv.button.image_button.app_bar"/>
-
-                    <ImageButton
-                        android:id="@+id/button_delete"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_delete"
                         android:layout_gravity="center"
                         style="@style/pv.button.image_button.app_bar"/>
 

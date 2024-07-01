@@ -1,37 +1,31 @@
-package de.passwordvault.view.activities;
+package de.passwordvault.view.settings.security.quality_gate;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.TextView;
-
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
-
 import java.io.Serializable;
 import java.util.Objects;
-
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGate;
-import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
-import de.passwordvault.view.utils.DialogCallbackListener;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
-import de.passwordvault.viewmodel.activities.QualityGateViewModel;
 
 
 /**
- * Class implements an activity which can add (or edit) entries.
+ * Class implements an activity which can add (or edit) entries. If the quality gate is added / edited,
+ * the result code {@link #RESULT_EDITED} is used. Otherwise, {@link #RESULT_CANCELED} is used. If
+ * the result code is {@code RESULT_EDITED}, an extra {@link #KEY_INDEX} is passed containing the index
+ * of the edited / added detail and {@link #KEY_QUALITY_GATE} contains the edited / added quality gate.
  *
  * @author  Christian-2003
- * @version 3.2.0
+ * @version 3.6.0
  */
-public class QualityGateActivity extends PasswordVaultBaseActivity implements DialogCallbackListener, Serializable {
+public class QualityGateActivity extends PasswordVaultBaseActivity implements Serializable {
 
     /**
      * Field stores the key with which to pass a quality gate to edit as serializable.
@@ -42,6 +36,11 @@ public class QualityGateActivity extends PasswordVaultBaseActivity implements Di
      * Field stores the key with which to pass the index of the quality gate.
      */
     public static String KEY_INDEX = "index";
+
+    /**
+     * Field stores the result code for when the quality gate was edited / added.
+     */
+    public static int RESULT_EDITED = 69;
 
 
     /**
@@ -83,27 +82,11 @@ public class QualityGateActivity extends PasswordVaultBaseActivity implements Di
         CheckBox enabledCheckBox = findViewById(R.id.quality_gate_checkbox_enabled);
         enabledCheckBox.setChecked(viewModel.getQualityGate().isEnabled());
 
-        ImageButton deleteButton = findViewById(R.id.button_delete);
-        if (viewModel.getIndexOfQualityGate() == -1) {
-            deleteButton.setVisibility(View.GONE);
-        }
-        else {
-            deleteButton.setVisibility(View.VISIBLE);
-        }
-        deleteButton.setOnClickListener(view -> {
-            ConfirmDeleteDialog dialog = new ConfirmDeleteDialog();
-            Bundle args = new Bundle();
-            args.putSerializable(ConfirmDeleteDialog.KEY_CALLBACK_LISTENER, QualityGateActivity.this);
-            args.putString(ConfirmDeleteDialog.KEY_OBJECT, viewModel.getQualityGate().getDescription());
-            dialog.setArguments(args);
-            dialog.show(getSupportFragmentManager(), null);
-        });
-
-        findViewById(R.id.button_back).setOnClickListener(view -> finish());
+        findViewById(R.id.button_back).setOnClickListener(view -> finishCancel());
 
         findViewById(R.id.button_save).setOnClickListener(view -> {
             if (viewModel.processUserInput(QualityGateActivity.this)) {
-                finish();
+                finishOk();
             }
         });
 
@@ -139,25 +122,22 @@ public class QualityGateActivity extends PasswordVaultBaseActivity implements Di
 
 
     /**
-     * Method is called when a positive dialog callback is triggered.
-     *
-     * @param dialog    Dialog which called the method.
+     * Method finishes the activity with result code {@linkplain #RESULT_EDITED}.
      */
-    @Override
-    public void onPositiveCallback(DialogFragment dialog) {
-        viewModel.removeQualityGate();
+    private void finishOk() {
+        Intent data = new Intent();
+        data.putExtra(KEY_INDEX, viewModel.getIndexOfQualityGate());
+        data.putExtra(KEY_QUALITY_GATE, viewModel.getQualityGate());
+        setResult(RESULT_EDITED, data);
         finish();
     }
 
-
     /**
-     * Method is called when a negative dialog callback is triggered.
-     *
-     * @param dialog    Dialog which called the method.
+     * Method finishes the activity with result code {@linkplain #RESULT_CANCELED}.
      */
-    @Override
-    public void onNegativeCallback(DialogFragment dialog) {
-
+    private void finishCancel() {
+        setResult(RESULT_CANCELED);
+        finish();
     }
 
 }

@@ -25,8 +25,8 @@
         <activity android:name=".view.activities.MainActivity" android:theme="@style/Theme.PasswordVault.ContainerNavBar" android:exported="false"/>
         <activity android:name=".view.activities.AddEntryActivity" android:exported="false"/>
         <activity android:name=".view.activities.EntryActivity" android:exported="false"/>
-        <activity android:name=".view.activities.QualityGatesActivity" android:exported="false"/>
-        <activity android:name=".view.activities.QualityGateActivity" android:exported="false"/>
+        <activity android:name=".view.settings.security.quality_gates.QualityGatesActivity" android:exported="false"/>
+        <activity android:name=".view.settings.security.quality_gate.QualityGateActivity" android:exported="false"/>
         <activity android:name=".view.activities.PasswordAnalysisActivity" android:exported="false"/>
         <activity android:name=".view.activities.PasswordAnalysisListActivity" android:exported="false"/>
         <activity android:name=".view.activities.DuplicatePasswordEntriesActivity" android:exported="false"/>

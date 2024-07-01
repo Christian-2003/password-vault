@@ -36,11 +36,9 @@
 
     <!-- Style for highlighted text -->
     <style name="pv.text.highlight" parent="pv.text">
-        <item name="android:layout_marginTop">@dimen/default_margin</item>
-        <item name="android:layout_marginStart">@dimen/default_margin</item>
-        <item name="android:textColor">@color/pv_text_secondary</item>
-        <item name="android:textSize">@dimen/secondary_text_size</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/pv_text</item>
+        <item name="android:textSize">@dimen/highlight_text_size</item>
+        <item name="android:layout_marginTop">@dimen/padding_list_vertical_spacing</item>
     </style>
 
     <!-- Style for text within the app bar -->
@@ -233,7 +231,6 @@
     <style name="pv.container">
         <item name="android:background">@drawable/background</item>
         <item name="android:padding">0dp</item>
-        <item name="android:layout_margin">@dimen/default_margin</item>
         <item name="android:clipToOutline">true</item>
     </style>
 
@@ -242,7 +239,6 @@
         <item name="android:background">@drawable/background</item>
         <item name="android:backgroundTint">@color/pv_container_highlight</item>
         <item name="android:padding">0dp</item>
-        <item name="android:layout_margin">@dimen/default_margin</item>
         <item name="android:clipToOutline">true</item>
     </style>
 
@@ -355,6 +351,13 @@
     <!-- Style for chips -->
     <style name="pv.material.chip" parent="Widget.Material3.Chip.Assist">
         <item name="chipBackgroundColor">@color/chip</item>
+    </style>
+
+    <!-- Style for chips -->
+    <style name="pv.material.divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/pv_text_secondary</item>
     </style>
 
 

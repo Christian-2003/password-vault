@@ -17,6 +17,7 @@ import de.passwordvault.model.security.authentication.Authenticator;
 import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.storage.settings.Config;
 import de.passwordvault.view.dialogs.ChangePasswordDialog;
+import de.passwordvault.view.settings.security.quality_gates.QualityGatesActivity;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.viewmodel.fragments.SettingsViewModel;
 

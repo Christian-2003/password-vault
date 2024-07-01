@@ -22,4 +22,11 @@
     <dimen name="progress_bar_thickness">9dp</dimen>
     <dimen name="progress_bar_thickness_large">34dp</dimen>
 
+    <dimen name="checkbox_size">24dp</dimen>
+
+    <dimen name="padding_list_vertical">8dp</dimen>
+    <dimen name="padding_list_vertical_spacing">16dp</dimen>
+    <dimen name="padding_list_horizontal">24dp</dimen>
+    <dimen name="padding_list_horizontal_spacing">16dp</dimen>
+
 </resources>

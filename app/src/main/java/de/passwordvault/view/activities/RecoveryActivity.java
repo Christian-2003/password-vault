@@ -302,13 +302,13 @@ public class RecoveryActivity extends PasswordVaultBaseActivity implements OnRec
             leftSwipeCallback = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_delete, R.color.pv_red, this::deleteSecurityQuestion);
         }
         else if (leftSwipeAction == DetailSwipeAction.EDIT) {
-            leftSwipeCallback = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_edit, R.color.pv_primary, this::deleteSecurityQuestion);
+            leftSwipeCallback = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_edit, R.color.pv_primary, this::editSecurityQuestion);
         }
 
         RecyclerItemSwipeCallback.SwipeAction<SecurityQuestion> rightSwipeCallback = null;
         DetailSwipeAction rightSwipeAction = Config.getInstance().rightSwipeAction.get();
         if (rightSwipeAction == DetailSwipeAction.DELETE) {
-            rightSwipeCallback = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_delete, R.color.pv_red, this::editSecurityQuestion);
+            rightSwipeCallback = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_delete, R.color.pv_red, this::deleteSecurityQuestion);
         }
         else if (rightSwipeAction == DetailSwipeAction.EDIT) {
             rightSwipeCallback = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_edit, R.color.pv_primary, this::editSecurityQuestion);
