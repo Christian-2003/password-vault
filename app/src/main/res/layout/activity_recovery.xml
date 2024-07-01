@@ -142,32 +142,11 @@
                     android:nestedScrollingEnabled="false"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-                <LinearLayout
+                <de.passwordvault.view.utils.components.ListButtonView
                     android:id="@+id/button_add_question"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
-                    android:focusable="true"
-                    android:clickable="true"
-                    android:background="?attr/selectableItemBackground"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_add"
-                        style="@style/pv.icon.highlight"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:padding="@dimen/default_padding"
-                        android:text="@string/button_security_question_add"
-                        style="@style/pv.text"/>
-
-                </LinearLayout>
+                    app:text="@string/button_security_question_add"/>
 
             </LinearLayout>
 

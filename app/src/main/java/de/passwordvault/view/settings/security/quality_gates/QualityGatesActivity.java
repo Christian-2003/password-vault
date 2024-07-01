@@ -8,12 +8,15 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGate;
 import de.passwordvault.view.dialogs.ConfirmDeleteDialog;
 import de.passwordvault.view.settings.security.quality_gate.QualityGateActivity;
 import de.passwordvault.view.utils.DialogCallbackListener;
 import de.passwordvault.view.utils.RecyclerItemSwipeCallback;
+import de.passwordvault.view.utils.components.ListButtonView;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 
 
@@ -119,7 +122,12 @@ public class QualityGatesActivity extends PasswordVaultBaseActivity implements D
         findViewById(R.id.button_back).setOnClickListener(view -> finish());
 
         //Button to add quality gates:
-        findViewById(R.id.button_add).setOnClickListener(view -> qualityGatesResultLauncher.launch(new Intent(this, QualityGateActivity.class)));
+        ListButtonView addButton = findViewById(R.id.button_add);
+        addButton.setOnClickListener(view -> {
+            Log.d("QGA", "Add QG");
+            Intent intent = new Intent(QualityGatesActivity.this, QualityGateActivity.class);
+            qualityGatesResultLauncher.launch(intent);
+        });
 
         //Custom quality gates:
         RecyclerItemSwipeCallback.SwipeAction<QualityGate> leftSwipeAction = RecyclerItemSwipeCallback.makeLeftSwipeAction(this::editQualityGate, this::deleteQualityGate);
