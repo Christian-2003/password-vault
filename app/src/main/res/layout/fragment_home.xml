@@ -74,7 +74,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/home_button_view_accounts"
-                        android:paddingVertical="@dimen/space_vertical_between"
+                        android:paddingVertical="@dimen/space_vertical"
                         style="@style/pv.text"/>
 
                 </LinearLayout>
@@ -106,7 +106,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/home_button_add_account"
-                        android:paddingVertical="@dimen/space_vertical_between"
+                        android:paddingVertical="@dimen/space_vertical"
                         style="@style/pv.text"/>
 
                 </LinearLayout>
@@ -136,7 +136,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/home_button_password_security"
-                        android:paddingVertical="@dimen/space_vertical_between"
+                        android:paddingVertical="@dimen/space_vertical"
                         style="@style/pv.text"/>
 
                 </LinearLayout>

@@ -275,10 +275,10 @@
                 android:id="@+id/progress_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
+                android:layout_marginVertical="@dimen/space_vertical"
                 android:layout_gravity="center"
                 android:indeterminate="true"
-                android:padding="@dimen/default_padding"
-                android:layout_margin="@dimen/default_margin"
                 android:visibility="gone"/>
 
         </LinearLayout>

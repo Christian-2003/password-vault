@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
     android:background="@drawable/background_search_bar"
-    android:paddingStart="@dimen/default_padding"
-    android:paddingEnd="@dimen/default_padding"
+    android:orientation="horizontal"
+    android:paddingHorizontal="@dimen/space_horizontal"
     tools:context=".view.utils.components.SearchBarView">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="@dimen/image_button_height"
         android:layout_gravity="center"
+        android:baselineAligned="false"
         android:src="@drawable/ic_search"
+        tools:ignore="ContentDescription"
         style="@style/pv.icon"/>
 
     <EditText
         android:id="@+id/input_query"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:layout_gravity="center"
         android:layout_marginHorizontal="@dimen/space_horizontal_between"
-        android:textColorHint="@color/pv_text_secondary"
-        android:textColor="@color/pv_text"
-        android:textSize="@dimen/default_text_size"
-        android:maxLines="1"
+        android:layout_weight="1"
+        android:background="@null"
         android:hint="@string/hint_search"
         android:inputType="text"
-        android:background="@null"/>
+        android:maxLines="1"
+        android:textColor="@color/pv_text"
+        android:textColorHint="@color/pv_text_secondary"
+        android:textSize="@dimen/default_text_size"/>
 
     <ImageButton
         android:id="@+id/button_clear"
@@ -40,6 +40,7 @@
         android:layout_gravity="center"
         android:src="@drawable/ic_cancel"
         android:visibility="invisible"
+        tools:ignore="ContentDescription"
         style="@style/pv.button.image_button"/>
 
 </LinearLayout>

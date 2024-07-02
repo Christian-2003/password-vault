@@ -32,6 +32,7 @@ n/a
 * Introduced different margins / paddings for horizontal and vertical use.
 * Changed `layout_width` from `match_parent` to `0dp` for all layouts with `layout_weight="1"` to increase performance.
 * Background of radio buttons in `DetailSwipeActionDialog` can be clicked to change swipe action.
+* Removed dark mode styles that were identical to light mode.
 
 <br/>
 

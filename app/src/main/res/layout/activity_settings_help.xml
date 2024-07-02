@@ -73,7 +73,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_gravity="center"
-                        android:paddingVertical="@dimen/space_vertical_between"
+                        android:paddingVertical="@dimen/space_vertical"
                         android:text="@string/settings_help_login_configuration"
                         style="@style/pv.text"/>
 
@@ -106,7 +106,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_gravity="center"
-                        android:paddingVertical="@dimen/space_vertical_between"
+                        android:paddingVertical="@dimen/space_vertical"
                         android:text="@string/settings_help_autofill_configuration"
                         style="@style/pv.text"/>
 
@@ -139,7 +139,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_gravity="center"
-                        android:paddingVertical="@dimen/space_vertical_between"
+                        android:paddingVertical="@dimen/space_vertical"
                         android:text="@string/settings_help_backup"
                         style="@style/pv.text"/>
 

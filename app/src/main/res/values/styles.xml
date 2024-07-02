@@ -351,7 +351,7 @@
         <item name="chipBackgroundColor">@color/chip</item>
     </style>
 
-    <!-- Style for chips -->
+    <!-- Style for divider -->
     <style name="pv.material.divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
