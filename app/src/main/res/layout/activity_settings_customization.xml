@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_customization_appearance"
-                android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
                 style="@style/pv.text.highlight"/>
 
             <LinearLayout
@@ -69,13 +69,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
-                    android:padding="@dimen/default_padding"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
                     android:clickable="true"
                     android:focusable="true"
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
@@ -97,8 +98,10 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_horizontal_between"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_next"
+                        tools:ignore="ContentDescription"
                         style="@style/pv.icon"/>
 
                 </LinearLayout>
@@ -112,7 +115,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_customization_home"
-                android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
                 style="@style/pv.text.highlight"/>
 
             <LinearLayout
@@ -126,13 +129,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
-                    android:padding="@dimen/default_padding"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
                     android:clickable="true"
                     android:focusable="true"
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
@@ -154,8 +158,10 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_horizontal_between"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_next"
+                        tools:ignore="ContentDescription"
                         style="@style/pv.icon"/>
 
                 </LinearLayout>
@@ -169,7 +175,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_customization_details"
-                android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
                 style="@style/pv.text.highlight"/>
 
             <LinearLayout
@@ -183,13 +189,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
-                    android:padding="@dimen/default_padding"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
                     android:clickable="true"
                     android:focusable="true"
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
@@ -211,8 +218,10 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_horizontal_between"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_next"
+                        tools:ignore="ContentDescription"
                         style="@style/pv.icon"/>
 
                 </LinearLayout>

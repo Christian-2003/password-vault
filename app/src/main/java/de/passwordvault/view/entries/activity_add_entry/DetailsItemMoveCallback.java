@@ -227,6 +227,7 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
             View itemView = viewHolder.itemView;
             Paint paint = new Paint();
             Bitmap icon;
+            int iconMargin = adapter.getContext().getResources().getDimensionPixelSize(R.dimen.space_horizontal);
             if (dX > 1) {
                 DetailSwipeAction swipeAction = Config.getInstance().rightSwipeAction.get();
                 if (swipeAction == DetailSwipeAction.DELETE) {
@@ -239,7 +240,7 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
                 }
                 canvas.drawRect((float)itemView.getLeft(), (float)itemView.getTop(), dX, (float)itemView.getBottom(), paint);
                 if (icon != null) {
-                    canvas.drawBitmap(icon, (float) itemView.getLeft() + convertDpToPx(16), (float) itemView.getTop() + ((float) itemView.getBottom() - (float) itemView.getTop() - icon.getHeight()) / 2, paint);
+                    canvas.drawBitmap(icon, (float) itemView.getLeft() + iconMargin, (float) itemView.getTop() + ((float) itemView.getBottom() - (float) itemView.getTop() - icon.getHeight()) / 2, paint);
                 }
             }
             else if (dX < -1) {
@@ -254,7 +255,7 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
                 }
                 canvas.drawRect((float)itemView.getRight() + dX, (float)itemView.getTop(), (float)itemView.getRight(), (float)itemView.getBottom(), paint);
                 if (icon != null) {
-                    canvas.drawBitmap(icon, (float)itemView.getRight() - convertDpToPx(16) - icon.getWidth(), (float)itemView.getTop() + ((float)itemView.getBottom() - (float)itemView.getTop() - icon.getHeight()) / 2, paint);
+                    canvas.drawBitmap(icon, (float)itemView.getRight() - iconMargin - icon.getWidth(), (float)itemView.getTop() + ((float)itemView.getBottom() - (float)itemView.getTop() - icon.getHeight()) / 2, paint);
                 }
             }
             float alpha = 1F - Math.abs(dX) / (float)itemView.getWidth();
@@ -266,16 +267,6 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
         }
     }
 
-
-    /**
-     * Method converts dp into px.
-     *
-     * @param dp    Dp to be converted into px.
-     * @return      Px converted from the passed dp.
-     */
-    private int convertDpToPx(int dp) {
-        return Math.round(dp * (App.getContext().getResources().getDisplayMetrics().xdpi / DisplayMetrics.DENSITY_DEFAULT));
-    }
 
     /**
      * Method returns the passed drawable vector graphic as bitmap.

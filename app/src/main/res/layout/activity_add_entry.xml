@@ -31,8 +31,8 @@
                     android:id="@+id/button_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_back"
                     android:layout_gravity="center"
+                    android:src="@drawable/ic_back"
                     style="@style/pv.button.image_button.app_bar"/>
 
             </FrameLayout>
@@ -63,7 +63,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                android:layout_marginStart="@dimen/space_horizontal"
                 android:text="@string/entry_general_info"
                 style="@style/pv.text.highlight"/>
 
@@ -74,137 +74,120 @@
                 android:orientation="vertical"
                 style="@style/pv.container">
 
-                <LinearLayout
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/add_entry_name_hint"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
-                    android:orientation="vertical">
+                    android:layout_marginHorizontal="@dimen/space_horizontal"
+                    android:layout_marginTop="@dimen/space_vertical"
+                    android:hint="@string/entry_name">
 
-
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/add_entry_name_hint"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/add_entry_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/entry_name">
+                        android:maxLines="1"
+                        android:inputType="text"/>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/add_entry_name"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:maxLines="1"
-                            android:inputType="text"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/add_entry_description_hint"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/entry_description">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/add_entry_description"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:maxLines="1"
-                            android:inputType="text"/>
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </LinearLayout>
-
-                <View
-                    style="@style/pv.divider"/>
-
-                <LinearLayout
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/add_entry_description_hint"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
-                    android:orientation="vertical">
+                    android:layout_marginHorizontal="@dimen/space_horizontal"
+                    android:layout_marginBottom="@dimen/space_vertical"
+                    android:hint="@string/entry_description">
 
-                    <TextView
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/add_entry_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:inputType="text"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <View style="@style/pv.divider"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/entry_tags"
+                    android:layout_marginHorizontal="@dimen/space_horizontal"
+                    android:layout_marginTop="@dimen/space_vertical"
+                    style="@style/pv.text.variant"/>
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/add_entry_tag_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/space_horizontal"
+                    android:layout_marginBottom="@dimen/space_vertical">
+
+                    <ImageButton
+                        android:id="@+id/add_entry_button_add_tag"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/entry_tags"
-                        android:layout_marginTop="@dimen/default_margin"
-                        style="@style/pv.text.variant"/>
+                        android:src="@drawable/ic_add"
+                        style="@style/pv.button.image_button"/>
 
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/add_entry_tag_container"
-                        android:layout_width="match_parent"
+                </com.google.android.material.chip.ChipGroup>
+
+                <View style="@style/pv.divider"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/space_horizontal"
+                    android:layout_marginTop="@dimen/space_vertical"
+                    android:text="@string/entry_package"
+                    style="@style/pv.text.variant"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/space_horizontal"
+                    android:layout_marginBottom="@dimen/space_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/add_entry_package_none"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:text="@string/entry_package_none"
+                        style="@style/pv.text"/>
+
+                    <HorizontalScrollView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
 
-                        <ImageButton
-                            android:id="@+id/add_entry_button_add_tag"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_add"
-                            style="@style/pv.button.image_button"/>
+                            android:orientation="horizontal">
 
-                    </com.google.android.material.chip.ChipGroup>
-
-                </LinearLayout>
-
-                <View
-                    style="@style/pv.divider"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/entry_package"
-                        style="@style/pv.text.variant"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/add_entry_package_none"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_gravity="center"
-                            android:text="@string/entry_package_none"
-                            style="@style/pv.text"/>
-
-                        <HorizontalScrollView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
-                            <LinearLayout
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/add_entry_package_recycler_view"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                                android:layout_gravity="center"
+                                android:orientation="horizontal"
+                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-                                <androidx.recyclerview.widget.RecyclerView
-                                    android:id="@+id/add_entry_package_recycler_view"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:orientation="horizontal"
-                                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+                            <ImageButton
+                                android:id="@+id/add_entry_package_edit_button"
+                                android:layout_height="wrap_content"
+                                android:layout_width="wrap_content"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_edit"
+                                style="@style/pv.button.image_button"/>
 
-                                <ImageButton
-                                    android:id="@+id/add_entry_package_edit_button"
-                                    android:layout_height="wrap_content"
-                                    android:layout_width="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:src="@drawable/ic_edit"
-                                    style="@style/pv.button.image_button"/>
+                        </LinearLayout>
 
-                            </LinearLayout>
-
-                        </HorizontalScrollView>
-
-                    </LinearLayout>
+                    </HorizontalScrollView>
 
                 </LinearLayout>
                 
@@ -213,7 +196,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
                 android:text="@string/entry_details_info"
                 style="@style/pv.text.highlight"/>
 
@@ -235,13 +218,11 @@
                     android:nestedScrollingEnabled="false"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-                <com.google.android.material.button.MaterialButton
+                <de.passwordvault.view.utils.components.ListButtonView
                     android:id="@+id/add_entry_button_add_detail"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_add"
-                    android:layout_gravity="center"
-                    android:text="@string/detail_dialog_title_add"/>
+                    app:text="@string/detail_dialog_title_add"/>
 
             </LinearLayout>
 

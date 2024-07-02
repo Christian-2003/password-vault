@@ -15,7 +15,6 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/image_button_height"
         android:layout_gravity="center"
-        android:layout_marginEnd="@dimen/default_margin"
         android:src="@drawable/ic_search"
         style="@style/pv.icon"/>
 
@@ -25,7 +24,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:layout_gravity="center"
-        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginHorizontal="@dimen/space_horizontal_between"
         android:textColorHint="@color/pv_text_secondary"
         android:textColor="@color/pv_text"
         android:textSize="@dimen/default_text_size"

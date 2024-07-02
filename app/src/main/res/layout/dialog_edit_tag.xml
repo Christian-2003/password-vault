@@ -5,7 +5,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/default_padding">
+    android:paddingHorizontal="@dimen/space_horizontal"
+    android:paddingVertical="@dimen/space_vertical">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/edit_tag_name_hint"

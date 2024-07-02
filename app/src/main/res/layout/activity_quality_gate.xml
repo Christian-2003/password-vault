@@ -77,14 +77,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
                 android:text="@string/quality_gate_configure"
                 style="@style/pv.text.highlight"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/default_padding"
                 android:orientation="vertical"
                 style="@style/pv.container">
 
@@ -92,6 +91,8 @@
                     android:id="@+id/quality_gate_description_hint"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/space_horizontal"
+                    android:layout_marginTop="@dimen/space_vertical"
                     android:hint="@string/hint_description">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -107,6 +108,8 @@
                     android:id="@+id/quality_gate_regex_hint"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/space_horizontal"
+                    android:layout_marginBottom="@dimen/space_vertical"
                     android:hint="@string/hint_regex"
                     app:endIconMode="clear_text"
                     app:endIconDrawable="@drawable/ic_cancel">
@@ -121,11 +124,34 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <CheckBox
-                    android:id="@+id/quality_gate_checkbox_enabled"
-                    android:layout_width="wrap_content"
+                <View style="@style/pv.divider"/>
+
+                <LinearLayout
+                    android:id="@+id/checkbox_enabled_container"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/quality_gate_enabled"/>
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical_list_button"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/checkbox_enabled"
+                        android:layout_width="@dimen/checkbox_size"
+                        android:layout_height="@dimen/checkbox_size"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="@dimen/space_horizontal_between"
+                        android:layout_gravity="center"
+                        android:text="@string/quality_gate_enabled"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -133,14 +159,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
                 android:text="@string/quality_gate_test"
                 style="@style/pv.text.highlight"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/default_padding"
                 android:orientation="vertical"
                 style="@style/pv.container">
 
@@ -148,6 +173,8 @@
                     android:id="@+id/quality_gate_regex_test_hint"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/space_horizontal"
+                    android:layout_marginVertical="@dimen/space_vertical"
                     android:hint="@string/hint_regex_test"
                     app:endIconMode="clear_text"
                     app:endIconDrawable="@drawable/ic_cancel">
@@ -158,7 +185,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="textMultiLine"
                         android:lines="3"
-                        android:gravity="top|left"/>
+                        android:gravity="top|start"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -166,6 +193,8 @@
                     android:id="@+id/quality_gate_match_output"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/space_horizontal"
+                    android:layout_marginBottom="@dimen/space_vertical"
                     android:text="@string/quality_gate_input_no_match"
                     style="@style/pv.text"/>
 

@@ -26,6 +26,12 @@ n/a
 * Changes to activity displaying all password quality gates.
 * Added custom view for list bottom button.
 * Major refactoring of `view` and `viewmodel` packages to locate views, viewmodels and adapters closely together.
+* Fixed bug where the swipe icons for details were not correctly aligned.
+* Background of radio buttons in `RestoreBackupActivity` can be clicked to change selection.
+* Background of radio buttons in `DarkmodeDialog` can be clicked to darkmode.
+* Introduced different margins / paddings for horizontal and vertical use.
+* Changed `layout_width` from `match_parent` to `0dp` for all layouts with `layout_weight="1"` to increase performance.
+* Background of radio buttons in `DetailSwipeActionDialog` can be clicked to change swipe action.
 
 <br/>
 

@@ -5,13 +5,15 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/default_padding"
+    android:paddingHorizontal="@dimen/space_horizontal"
+    android:paddingVertical="@dimen/space_vertical"
     style="@style/pv.container">
 
     <TextView
         android:id="@+id/text_view_question"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/space_vertical_between"
         android:lines="3"
         android:gravity="center_vertical"
         android:text="@string/button_security_question_add"

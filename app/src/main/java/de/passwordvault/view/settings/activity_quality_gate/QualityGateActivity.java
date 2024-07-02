@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.google.android.material.textfield.TextInputEditText;
 import java.io.Serializable;
@@ -79,8 +80,10 @@ public class QualityGateActivity extends PasswordVaultBaseActivity implements Se
         descriptionEditText.setText(viewModel.getQualityGate().getDescription());
         TextInputEditText regexEditText = findViewById(R.id.quality_gate_regex);
         regexEditText.setText(viewModel.getQualityGate().getRegex());
-        CheckBox enabledCheckBox = findViewById(R.id.quality_gate_checkbox_enabled);
+        CheckBox enabledCheckBox = findViewById(R.id.checkbox_enabled);
         enabledCheckBox.setChecked(viewModel.getQualityGate().isEnabled());
+        LinearLayout enabledCheckBoxContainer = findViewById(R.id.checkbox_enabled_container);
+        enabledCheckBoxContainer.setOnClickListener(view -> enabledCheckBox.setChecked(!enabledCheckBox.isChecked()));
 
         findViewById(R.id.button_back).setOnClickListener(view -> finishCancel());
 

@@ -57,15 +57,15 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="@dimen/padding_list_vertical"
-                android:paddingHorizontal="@dimen/padding_list_horizontal"
+                android:paddingVertical="@dimen/space_vertical"
+                android:paddingHorizontal="@dimen/space_horizontal"
                 android:text="@string/quality_gates_info"
                 style="@style/pv.text.info"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/padding_list_horizontal"
+                android:paddingHorizontal="@dimen/space_horizontal"
                 android:orientation="horizontal">
 
                 <TextView
@@ -109,7 +109,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/padding_list_horizontal"
+                android:paddingHorizontal="@dimen/space_horizontal"
                 android:orientation="horizontal">
 
 

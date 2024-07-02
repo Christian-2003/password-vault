@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="@dimen/padding_list_vertical_spacing"
-    android:paddingHorizontal="@dimen/padding_list_horizontal"
+    android:paddingVertical="@dimen/space_vertical_list_button"
+    android:paddingHorizontal="@dimen/space_horizontal"
     android:background="?attr/selectableItemBackground"
     android:orientation="horizontal"
     tools:context=".view.utils.components.ListButtonView">
@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginEnd="@dimen/padding_list_horizontal_spacing"
+        android:layout_marginEnd="@dimen/space_horizontal_between"
         android:src="@drawable/ic_add"
         tools:ignore="ContentDescription"
         style="@style/pv.icon.highlight"/>

@@ -10,21 +10,18 @@
     tools:context=".view.entries.activity_packages.fragment_list.PackagesListFragment">
 
     <!-- Progress bar shown while packages load -->
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/container_progress_bar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/space_horizontal"
+        android:layout_marginVertical="@dimen/space_vertical"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
     <!-- Content shown after packages are loaded -->
@@ -37,15 +34,13 @@
             android:id="@+id/search_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/default_margin"
-            android:layout_marginEnd="@dimen/default_margin"
-            android:layout_marginBottom="@dimen/default_margin"/>
+            android:layout_marginVertical="@dimen/space_vertical"/>
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/default_left_margin_outside_container"
+            android:layout_marginHorizontal="@dimen/space_horizontal"
             android:layout_below="@id/search_bar"
             android:text="@string/packages_list_title"
             style="@style/pv.text.highlight"/>

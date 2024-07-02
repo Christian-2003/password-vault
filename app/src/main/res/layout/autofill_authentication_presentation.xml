@@ -10,9 +10,11 @@ changing this layout.
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/default_padding"
+    android:paddingHorizontal="@dimen/space_horizontal"
+    android:paddingVertical="@dimen/space_vertical"
     android:background="@color/pv_background"
     android:orientation="horizontal">
 
@@ -20,15 +22,19 @@ changing this layout.
         android:layout_width="@dimen/image_button_width"
         android:layout_height="@dimen/image_button_height"
         android:layout_gravity="center"
-        android:src="@mipmap/ic_launcher_round"/>
+        android:src="@mipmap/ic_launcher_round"
+        tools:ignore="ContentDescription"/>
 
     <TextView
         android:id="@+id/autofill_authentication_presentation_text"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="1"
-        android:paddingStart="@dimen/default_padding"
+        android:layout_marginHorizontal="@dimen/space_horizontal_between"
+        android:maxLines="2"
+        android:ellipsize="end"
+        tools:text="Authenticate for XYZ"
         style="@style/pv.text"/>
 
     <ImageView
@@ -36,6 +42,7 @@ changing this layout.
         android:layout_height="@dimen/image_button_height"
         android:layout_gravity="center"
         android:src="@drawable/ic_biometrics"
-        android:tint="@color/pv_text"/>
+        android:tint="@color/pv_text"
+        tools:ignore="ContentDescription"/>
 
 </LinearLayout>

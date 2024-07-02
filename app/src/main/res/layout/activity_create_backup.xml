@@ -61,7 +61,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                    android:layout_marginHorizontal="@dimen/space_horizontal"
                     android:text="@string/settings_data_backup_create_general"
                     style="@style/pv.text.highlight"/>
 
@@ -75,9 +75,8 @@
                         android:id="@+id/container_directory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingStart="@dimen/default_padding"
-                        android:paddingTop="@dimen/default_padding"
-                        android:paddingEnd="@dimen/default_padding"
+                        android:layout_marginHorizontal="@dimen/space_horizontal"
+                        android:layout_marginTop="@dimen/space_vertical"
                         android:focusable="false"
                         android:hint="@string/hint_directory">
 
@@ -94,9 +93,8 @@
                         android:id="@+id/container_filename"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingStart="@dimen/default_padding"
-                        android:paddingEnd="@dimen/default_padding"
-                        android:paddingBottom="@dimen/default_padding"
+                        android:layout_marginHorizontal="@dimen/space_horizontal"
+                        android:layout_marginBottom="@dimen/space_vertical"
                         android:hint="@string/hint_filename">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -114,7 +112,8 @@
                         android:id="@+id/include_settings_clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/default_padding"
+                        android:paddingHorizontal="@dimen/space_horizontal"
+                        android:paddingVertical="@dimen/space_vertical"
                         android:focusable="true"
                         android:clickable="true"
                         android:background="?attr/selectableItemBackground"
@@ -131,8 +130,9 @@
                         <com.google.android.material.materialswitch.MaterialSwitch
                             android:id="@+id/switch_include_settings"
                             android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_height="wrap_content"/>
+                            android:layout_marginStart="@dimen/space_horizontal_between"/>
 
                     </LinearLayout>
 
@@ -142,7 +142,8 @@
                         android:id="@+id/include_quality_gates_clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/default_padding"
+                        android:paddingHorizontal="@dimen/space_horizontal"
+                        android:paddingVertical="@dimen/space_vertical"
                         android:focusable="true"
                         android:clickable="true"
                         android:background="?attr/selectableItemBackground"
@@ -159,8 +160,9 @@
                         <com.google.android.material.materialswitch.MaterialSwitch
                             android:id="@+id/switch_include_quality_gates"
                             android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_height="wrap_content"/>
+                            android:layout_marginStart="@dimen/space_horizontal_between"/>
 
                     </LinearLayout>
 
@@ -171,7 +173,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                    android:layout_marginHorizontal="@dimen/space_horizontal"
                     android:text="@string/settings_data_backup_create_encryption"
                     style="@style/pv.text.highlight"/>
 
@@ -186,7 +188,8 @@
                         android:id="@+id/encrypt_backup_clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/default_padding"
+                        android:paddingHorizontal="@dimen/space_horizontal"
+                        android:paddingVertical="@dimen/space_vertical"
                         android:focusable="true"
                         android:clickable="true"
                         android:background="?attr/selectableItemBackground"
@@ -203,8 +206,9 @@
                         <com.google.android.material.materialswitch.MaterialSwitch
                             android:id="@+id/switch_encrypt_backup"
                             android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_height="wrap_content"/>
+                            android:layout_marginStart="@dimen/space_horizontal_between"/>
 
                     </LinearLayout>
 
@@ -220,9 +224,8 @@
                             android:id="@+id/container_password"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingStart="@dimen/default_padding"
-                            android:paddingTop="@dimen/default_padding"
-                            android:paddingEnd="@dimen/default_padding"
+                            android:layout_marginHorizontal="@dimen/space_horizontal"
+                            android:layout_marginTop="@dimen/space_vertical"
                             app:passwordToggleEnabled="true"
                             app:passwordToggleDrawable="@drawable/drawable_password"
                             android:hint="@string/hint_password">
@@ -239,9 +242,8 @@
                             android:id="@+id/container_confirm_password"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingStart="@dimen/default_padding"
-                            android:paddingEnd="@dimen/default_padding"
-                            android:paddingBottom="@dimen/default_padding"
+                            android:layout_marginHorizontal="@dimen/space_horizontal"
+                            android:layout_marginBottom="@dimen/space_vertical"
                             app:passwordToggleEnabled="true"
                             app:passwordToggleDrawable="@drawable/drawable_password"
                             android:hint="@string/hint_confirm_password">
@@ -263,7 +265,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_margin="@dimen/default_margin"
+                    android:layout_marginHorizontal="@dimen/space_horizontal"
+                    android:layout_marginVertical="@dimen/space_vertical"
                     android:text="@string/button_create_backup"/>
 
             </LinearLayout>

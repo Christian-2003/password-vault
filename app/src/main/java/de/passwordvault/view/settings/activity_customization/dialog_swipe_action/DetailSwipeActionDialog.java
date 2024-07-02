@@ -115,6 +115,15 @@ public class DetailSwipeActionDialog extends DialogFragment {
             }
         });
 
+        LinearLayout editLeftSwipeContainer = view.findViewById(R.id.container_left_swipe_edit);
+        LinearLayout deleteLeftSwipeContainer = view.findViewById(R.id.container_left_swipe_delete);
+        LinearLayout editRightSwipeContainer = view.findViewById(R.id.container_right_swipe_edit);
+        LinearLayout deleteRightSwipeContainer = view.findViewById(R.id.container_right_swipe_delete);
+        editLeftSwipeContainer.setOnClickListener(view1 -> editLeftSwipeRadioButton.setChecked(true));
+        deleteLeftSwipeContainer.setOnClickListener(view1 -> deleteLeftSwipeRadioButton.setChecked(true));
+        editRightSwipeContainer.setOnClickListener(view1 -> editRightSwipeRadioButton.setChecked(true));
+        deleteRightSwipeContainer.setOnClickListener(view1 -> deleteRightSwipeRadioButton.setChecked(true));
+
         return builder.create();
     }
 

@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/default_padding">
+    android:paddingHorizontal="@dimen/space_horizontal"
+    android:paddingVertical="@dimen/space_vertical">
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/pv.material.text_input_layout.exposed_dropdown"

@@ -127,7 +127,7 @@ public class QualityGateViewModel extends ViewModel {
             return false;
         }
 
-        CheckBox enabledCheckBox = activity.findViewById(R.id.quality_gate_checkbox_enabled);
+        CheckBox enabledCheckBox = activity.findViewById(R.id.checkbox_enabled);
         qualityGate.setDescription(description);
         qualityGate.setRegex(regex);
         qualityGate.setEnabled(enabledCheckBox.isChecked());

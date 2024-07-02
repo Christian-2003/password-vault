@@ -12,7 +12,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/default_left_margin_outside_container"
+        android:layout_marginHorizontal="@dimen/space_horizontal"
         android:text="@string/packages_selected_title"
         style="@style/pv.text.highlight"/>
 
@@ -25,7 +25,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/default_padding"
+            android:layout_marginHorizontal="@dimen/space_horizontal"
+            android:layout_marginVertical="@dimen/space_vertical"
             android:text="@string/packages_selected_none"
             style="@style/pv.text.variant"/>
 

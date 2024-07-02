@@ -2,6 +2,7 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,13 +11,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/default_padding"
+        android:paddingHorizontal="@dimen/space_horizontal"
+        android:paddingVertical="@dimen/space_vertical"
         android:orientation="horizontal">
 
         <!-- LinearLayout contains general info about the detail -->
         <LinearLayout
             android:id="@+id/entry_detail_view_container"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
@@ -33,7 +35,9 @@
                 <ImageView
                     android:id="@+id/entry_detail_item_icon"
                     android:layout_gravity="start|center"
-                    android:layout_marginEnd="@dimen/default_margin"
+                    android:layout_marginEnd="@dimen/space_horizontal_between"
+                    tools:src="@drawable/ic_password"
+                    tools:ignore="ContentDescription"
                     style="@style/pv.icon.pin"/>
 
                 <TextView
@@ -43,6 +47,8 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:text="@string/placeholder_name"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     style="@style/pv.text.variant"/>
 
             </LinearLayout>
@@ -66,9 +72,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@drawable/ic_show"
-            android:paddingStart="@dimen/default_padding"
-            style="@style/pv.button.image_button"
-            android:visibility="gone"/>
+            android:layout_marginStart="@dimen/space_horizontal_between"
+            android:visibility="gone"
+            tools:visibility="visible"
+            style="@style/pv.button.image_button"/>
 
     </LinearLayout>
 

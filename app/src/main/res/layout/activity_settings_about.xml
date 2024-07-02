@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_about_usage"
-                android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
                 style="@style/pv.text.highlight"/>
 
             <LinearLayout
@@ -69,7 +69,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
-                    android:padding="@dimen/default_padding"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
                     android:clickable="true"
                     android:focusable="true"
                     android:orientation="horizontal">
@@ -98,6 +99,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/space_horizontal_between"
                         android:src="@drawable/ic_next"
                         style="@style/pv.icon"/>
 
@@ -109,7 +111,8 @@
                     android:id="@+id/settings_about_usage_dependencies_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
@@ -139,6 +142,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/space_horizontal_between"
                         android:src="@drawable/ic_next"
                         style="@style/pv.icon"/>
 
@@ -150,7 +154,8 @@
                     android:id="@+id/settings_about_usage_privacypolicy_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
@@ -180,6 +185,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/space_horizontal_between"
                         android:src="@drawable/ic_next"
                         style="@style/pv.icon"/>
 
@@ -194,7 +200,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_about_software"
-                android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
                 style="@style/pv.text.highlight"/>
 
             <LinearLayout
@@ -206,7 +212,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
                     android:orientation="vertical">
 
                     <TextView
@@ -219,7 +226,7 @@
                         android:id="@+id/settings_about_software_version"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/settings_about_software_version"
+                        tools:text="1.2.3"
                         style="@style/pv.text.variant"/>
 
                 </LinearLayout>

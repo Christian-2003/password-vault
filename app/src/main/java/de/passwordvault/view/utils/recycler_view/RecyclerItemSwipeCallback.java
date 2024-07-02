@@ -256,7 +256,7 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
             View itemView = viewHolder.itemView;
             Paint paint = new Paint();
             Bitmap icon;
-            int iconOffset = adapter.getContext().getResources().getDimensionPixelSize(R.dimen.padding_list_horizontal);
+            int iconOffset = adapter.getContext().getResources().getDimensionPixelSize(R.dimen.space_horizontal);
             if (dX > 1 && rightSwipeAction != null) {
                 //Right swipe:
                 paint.setColor(adapter.getContext().getColor(rightSwipeAction.getColorRes()));

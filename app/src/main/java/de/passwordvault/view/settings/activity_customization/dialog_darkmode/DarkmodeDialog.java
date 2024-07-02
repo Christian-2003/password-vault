@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
@@ -16,7 +17,7 @@ import de.passwordvault.model.storage.settings.Config;
  * Class implements a dialog that is used to change between light and dark mode for the application.
  *
  * @author  Christian-2003
- * @version 3.5.1
+ * @version 3.6.0
  */
 public class DarkmodeDialog extends DialogFragment {
 
@@ -48,9 +49,9 @@ public class DarkmodeDialog extends DialogFragment {
             dismiss();
         });
 
-        RadioButton lightRadioButton = view.findViewById(R.id.dialog_darkmode_radio_button_light);
-        RadioButton darkRadioButton = view.findViewById(R.id.dialog_darkmode_radio_button_dark);
-        RadioButton systemRadioButton = view.findViewById(R.id.dialog_darkmode_radio_button_system);
+        RadioButton lightRadioButton = view.findViewById(R.id.radio_light);
+        RadioButton darkRadioButton = view.findViewById(R.id.radio_dark);
+        RadioButton systemRadioButton = view.findViewById(R.id.radio_system);
         switch (Config.getInstance().darkmode.get()) {
             case Config.Constants.DARKMODE_LIGHT:
                 lightRadioButton.setChecked(true);
@@ -86,6 +87,13 @@ public class DarkmodeDialog extends DialogFragment {
                 dismiss();
             }
         });
+
+        LinearLayout lightContainer = view.findViewById(R.id.container_light);
+        LinearLayout darkContainer = view.findViewById(R.id.container_dark);
+        LinearLayout systemContainer = view.findViewById(R.id.container_system);
+        lightContainer.setOnClickListener(view -> lightRadioButton.setChecked(true));
+        darkContainer.setOnClickListener(view -> darkRadioButton.setChecked(true));
+        systemContainer.setOnClickListener(view -> systemRadioButton.setChecked(true));
 
         return builder.create();
     }

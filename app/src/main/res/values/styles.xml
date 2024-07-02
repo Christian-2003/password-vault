@@ -38,7 +38,7 @@
     <style name="pv.text.highlight" parent="pv.text">
         <item name="android:textColor">@color/pv_text</item>
         <item name="android:textSize">@dimen/highlight_text_size</item>
-        <item name="android:layout_marginTop">@dimen/padding_list_vertical_spacing</item>
+        <item name="android:layout_marginTop">@dimen/space_vertical_title</item>
     </style>
 
     <!-- Style for text within the app bar -->
@@ -230,7 +230,6 @@
     <!-- Style for container -->
     <style name="pv.container">
         <item name="android:background">@drawable/background</item>
-        <item name="android:padding">0dp</item>
         <item name="android:clipToOutline">true</item>
     </style>
 
@@ -262,7 +261,6 @@
     <style name="pv.eyecatcher.pill">
         <item name="android:background">@drawable/pill</item>
         <item name="android:backgroundTint">@color/pv_container_detail</item>
-        <item name="android:padding">@dimen/default_padding</item>
     </style>
 
 
@@ -313,8 +311,8 @@
 
     <!-- Style for buttons used with "Searching for something different" -->
     <style name="pv.material.button.different" parent="Widget.Material3.Button.TextButton">
-        <item name="android:paddingStart">@dimen/default_padding</item>
-        <item name="android:paddingEnd">@dimen/default_padding</item>
+        <item name="android:paddingStart">@dimen/space_horizontal</item>
+        <item name="android:paddingEnd">@dimen/space_horizontal</item>
         <item name="android:textAlignment">textStart</item>
     </style>
 
@@ -375,7 +373,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
         <item name="android:background">@color/pv_container_detail</item>
-        <item name="android:layout_marginHorizontal">@dimen/padding_list_horizontal</item>
+        <item name="android:layout_marginHorizontal">@dimen/space_horizontal</item>
     </style>
 
     <!-- Style for popup menus -->

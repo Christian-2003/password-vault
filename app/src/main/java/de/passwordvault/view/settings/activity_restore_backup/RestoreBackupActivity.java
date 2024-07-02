@@ -33,7 +33,7 @@ import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
  * Pass the URI to the backup file as extra with key {@link #KEY_URI} when starting the activity.
  *
  * @author  Christian-2003
- * @version 3.5.4
+ * @version 3.6.0
  */
 public class RestoreBackupActivity extends PasswordVaultBaseActivity {
 
@@ -48,6 +48,11 @@ public class RestoreBackupActivity extends PasswordVaultBaseActivity {
      * Attribute stores the view model for the activity.
      */
     private RestoreBackupViewModel viewModel;
+
+
+    private RadioButton deleteRadioButton;
+    private RadioButton replaceRadioButton;
+    private RadioButton skipRadioButton;
 
 
     /**
@@ -93,9 +98,9 @@ public class RestoreBackupActivity extends PasswordVaultBaseActivity {
         generalSettingsContainer.setVisibility(version == null || version.equals(XmlConfiguration.VERSION_1.getValue()) ? View.GONE : View.VISIBLE);
 
         //Override data options:
-        RadioButton deleteRadioButton = findViewById(R.id.radio_delete);
-        RadioButton replaceRadioButton = findViewById(R.id.radio_replace);
-        RadioButton skipRadioButton = findViewById(R.id.radio_skip);
+        deleteRadioButton = findViewById(R.id.radio_delete);
+        replaceRadioButton = findViewById(R.id.radio_replace);
+        skipRadioButton = findViewById(R.id.radio_skip);
         switch (viewModel.getCurrentDataOption()) {
             case Backup.RestoreConfig.OVERWRITE_EXISTING_DATA:
                 replaceRadioButton.setChecked(true);
@@ -107,9 +112,16 @@ public class RestoreBackupActivity extends PasswordVaultBaseActivity {
                 deleteRadioButton.setChecked(true);
                 break;
         }
-        deleteRadioButton.setOnCheckedChangeListener((button, checked) -> viewModel.setCurrentDataOption(Backup.RestoreConfig.DELETE_ALL_DATA));
-        replaceRadioButton.setOnCheckedChangeListener((button, checked) -> viewModel.setCurrentDataOption(Backup.RestoreConfig.OVERWRITE_EXISTING_DATA));
-        skipRadioButton.setOnCheckedChangeListener((button, checked) -> viewModel.setCurrentDataOption(Backup.RestoreConfig.SKIP_EXISTING_DATA));
+        deleteRadioButton.setOnCheckedChangeListener((button, checked) -> radioButtonCheckedChange(Backup.RestoreConfig.DELETE_ALL_DATA, checked));
+        replaceRadioButton.setOnCheckedChangeListener((button, checked) -> radioButtonCheckedChange(Backup.RestoreConfig.OVERWRITE_EXISTING_DATA, checked));
+        skipRadioButton.setOnCheckedChangeListener((button, checked) -> radioButtonCheckedChange(Backup.RestoreConfig.SKIP_EXISTING_DATA, checked));
+
+        LinearLayout deleteRadioContainer = findViewById(R.id.container_radio_delete);
+        LinearLayout replaceRadioContainer = findViewById(R.id.container_radio_replace);
+        LinearLayout skipRadioContainer = findViewById(R.id.container_radio_skip);
+        deleteRadioContainer.setOnClickListener(view -> deleteRadioButton.setChecked(true));
+        replaceRadioContainer.setOnClickListener(view -> replaceRadioButton.setChecked(true));
+        skipRadioContainer.setOnClickListener(view -> skipRadioButton.setChecked(true));
 
         //Restore settings:
         LinearLayout settingsContainer = findViewById(R.id.container_settings_settings);
@@ -250,6 +262,34 @@ public class RestoreBackupActivity extends PasswordVaultBaseActivity {
                 RestoreBackupActivity.this.finish();
             });
         });
+    }
+
+
+    /**
+     * Method can be called by radio buttons when they are checked.
+     *
+     * @param dataOption    Data option.
+     * @param checked       Whether the radio button is checked.
+     */
+    private void radioButtonCheckedChange(int dataOption, boolean checked) {
+        if (!checked) {
+            return;
+        }
+        switch (dataOption) {
+            case Backup.RestoreConfig.OVERWRITE_EXISTING_DATA:
+                skipRadioButton.setChecked(false);
+                deleteRadioButton.setChecked(false);
+                break;
+            case Backup.RestoreConfig.SKIP_EXISTING_DATA:
+                replaceRadioButton.setChecked(false);
+                deleteRadioButton.setChecked(false);
+                break;
+            default:
+                replaceRadioButton.setChecked(false);
+                skipRadioButton.setChecked(false);
+                break;
+        }
+        viewModel.setCurrentDataOption(dataOption);
     }
 
 }

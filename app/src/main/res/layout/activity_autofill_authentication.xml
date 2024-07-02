@@ -32,9 +32,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/default_margin"
-        android:orientation="vertical"
-        android:padding="@dimen/default_padding">
+        android:layout_marginHorizontal="@dimen/space_horizontal"
+        android:layout_marginVertical="@dimen/space_vertical"
+        android:orientation="vertical">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -56,19 +56,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/default_margin"
+                    android:layout_marginVertical="@dimen/space_vertical_between"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:padding="@dimen/default_padding"
                     android:text="@string/autofill_authentication_hint"
                     style="@style/pv.text"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/autofill_authentication_password_hint"
-                    android:layout_marginBottom="@dimen/default_margin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/default_margin"
                     app:passwordToggleEnabled="true"
                     app:passwordToggleDrawable="@drawable/drawable_password"
                     android:hint="@string/hint_password">
@@ -81,22 +78,22 @@
                         android:inputType="textPassword"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
+
             </LinearLayout>
+
         </ScrollView>
 
         <Button
             android:id="@+id/autofill_authentication_authenticate_button"
-            android:layout_marginTop="@dimen/default_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/default_margin"
             android:text="@string/button_authenticate"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/autofill_authentication_biometrics_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/default_margin"
+            android:layout_marginTop="@dimen/space_vertical_between"
             android:text="@string/button_biometrics"
             app:icon="@drawable/ic_biometrics"
             style="@style/Widget.Material3.Button.OutlinedButton"/>
