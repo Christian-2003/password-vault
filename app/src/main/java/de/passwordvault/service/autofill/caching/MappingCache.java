@@ -27,14 +27,14 @@ public class MappingCache extends Cache {
     /**
      * Field stores the name of the cache.
      */
-    private static final String CACHE_NAME = "autofill_mapping.cache";
+    private static final String CACHE_NAME = "autofill/mapping.cache";
 
 
     /**
      * Constructor instantiates a new mapping cache.
      */
     private MappingCache() {
-        super("autofill_mapping.cache");
+        super(CACHE_NAME);
     }
 
 

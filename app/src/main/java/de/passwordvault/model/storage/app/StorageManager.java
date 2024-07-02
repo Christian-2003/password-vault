@@ -30,7 +30,7 @@ public class StorageManager {
      * Field stores the generic name of the file in which extended entries are stored. To get the
      * 'real' name for a file, replace "{id}" within this string with the ID of the entry.
      */
-    private static final String EXTENDED_ENTRIES_FILE = "entry_{id}.csv";
+    private static final String EXTENDED_ENTRIES_FILE = "entries/entry_{id}.csv";
 
 
     /**

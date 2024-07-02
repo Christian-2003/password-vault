@@ -35,6 +35,9 @@ n/a
 * Removed dark mode styles that were identical to light mode.
 * Added link to system settings from about-page.
 * Removed all placeholders and used `tools:text="XYZ"` instead to increase performance.
+* `EncrypedFileReader` and `EncryptedFileWriter` can now read from and write to subdirectories of `///data/de.christian2003.passwordvault/files`.
+* All entries are now stored in subdirectory `///data/de.christian2003.passwordvault/files/entries` instead of `///data/de.christian2003.passwordvault/files` to increase performance and clean app storage.
+* Autofill caches are moved to `///data/de.christian2003.passwordvault/files/autofill` to increase performance and clean app storage.
 
 <br/>
 

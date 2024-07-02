@@ -1,12 +1,11 @@
 package de.passwordvault.service.autofill.caching;
 
-import android.content.Context;
 import android.util.Log;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import de.passwordvault.App;
 
@@ -15,7 +14,7 @@ import de.passwordvault.App;
  * Class models a cache. Specific types of caches must extend this class.
  *
  * @author  Christian-2003
- * @version 3.5.3
+ * @version 3.6.0
  */
 public abstract class Cache {
 
@@ -145,7 +144,22 @@ public abstract class Cache {
             builder.append(System.lineSeparator());
         }
 
-        try (FileOutputStream os = App.getContext().openFileOutput(filename, Context.MODE_PRIVATE)) {
+        File file = new File(App.getContext().getFilesDir(), filename);
+        if (!file.exists()) {
+            try {
+                File parent = file.getParentFile();
+                if (parent != null && !parent.exists()) {
+                    parent.mkdirs();
+                }
+                file.createNewFile();
+            }
+            catch (IOException | SecurityException e) {
+                //Could not create file
+                return;
+            }
+        }
+
+        try (FileOutputStream os = new FileOutputStream(file)) {
             os.write(builder.toString().getBytes());
         }
         catch (IOException e) {
@@ -175,6 +189,10 @@ public abstract class Cache {
         File file = new File(App.getContext().getFilesDir(), filename);
         if (!file.exists()) {
             try {
+                File parent = file.getParentFile();
+                if (parent != null && !parent.exists()) {
+                    parent.mkdirs();
+                }
                 boolean created = file.createNewFile();
                 if (!created) {
                     Log.d(TAG, "Could not create new cache file");
@@ -193,7 +211,7 @@ public abstract class Cache {
         }
 
         cacheItems = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(App.getContext().openFileInput(filename)))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line = reader.readLine();
             while (line != null && !line.isEmpty()) {
                 cacheItems.add(generateCacheItem(line));
