@@ -1,7 +1,9 @@
 package de.passwordvault.view.settings.activity_about;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
@@ -42,6 +44,8 @@ public class SettingsAboutActivity extends PasswordVaultBaseActivity {
             version += " (Debug Build)";
         }
         ((TextView)findViewById(R.id.settings_about_software_version)).setText(version);
+
+        findViewById(R.id.settings_about_software_more_container).setOnClickListener(view -> showSettingsPage());
     }
 
 
@@ -54,6 +58,17 @@ public class SettingsAboutActivity extends PasswordVaultBaseActivity {
         Intent intent = new Intent(this, LocalizedAssetViewerActivity.class);
         intent.putExtra(LocalizedAssetViewerActivity.KEY_PAGE, name);
         intent.putExtra(LocalizedAssetViewerActivity.KEY_FOLDER, "legal");
+        startActivity(intent);
+    }
+
+
+    /**
+     * Method shows the app's page in the system settings.
+     */
+    private void showSettingsPage() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        intent.setData(uri);
         startActivity(intent);
     }
 

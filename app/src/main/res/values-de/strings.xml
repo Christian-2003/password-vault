@@ -57,11 +57,11 @@
     <string name="settings_customization_home_recentlyedited_number_option">{arg} Konten</string>
     <string name="settings_customization_details">Kontoinformationen</string>
     <string name="settings_customization_details_swipe">Wischgesten</string>
-    <string name="settings_customization_details_swipe_info">Aktionen beim Wischen von Kontoinformationen bearbeiten</string>
+    <string name="settings_customization_details_swipe_info">Aktionen beim Wischen bearbeiten</string>
     <string name="settings_customization_details_swipe_left">Nach links wischen</string>
     <string name="settings_customization_details_swipe_right">Nach rechts wischen</string>
-    <string name="settings_customization_details_swipe_delete">Information löschen</string>
-    <string name="settings_customization_details_swipe_edit">Information bearbeiten</string>
+    <string name="settings_customization_details_swipe_delete">Eintrag löschen</string>
+    <string name="settings_customization_details_swipe_edit">Eintrag bearbeiten</string>
 
     <string name="settings_security">Sicherheit</string>
     <string name="settings_security_login">App-Login</string>
@@ -112,6 +112,8 @@
     <string name="settings_about_usage_privacypolicy_info">Datenschutzerklärung anzeigen</string>
     <string name="settings_about_software">Software</string>
     <string name="settings_about_software_version">App-Version</string>
+    <string name="settings_about_software_more">Weitere Infos</string>
+    <string name="settings_about_software_more_info">Öffne die App in den Systemeinstellungen</string>
 
     <string name="settings_data">Daten</string>
     <string name="settings_data_export">Export</string>

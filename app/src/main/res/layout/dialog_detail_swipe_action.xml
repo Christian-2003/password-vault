@@ -27,6 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/space_horizontal"
+                android:layout_marginVertical="@dimen/space_vertical"
                 android:orientation="horizontal"
                 android:backgroundTint="@color/pv_background"
                 style="@style/pv.container">
@@ -153,6 +154,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/space_horizontal"
+                android:layout_marginVertical="@dimen/space_vertical"
                 android:orientation="horizontal"
                 android:backgroundTint="@color/pv_background"
                 android:baselineAligned="false"

@@ -101,6 +101,7 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="@dimen/space_horizontal_between"
                         android:src="@drawable/ic_next"
+                        tools:ignore="ContentDescription"
                         style="@style/pv.icon"/>
 
                 </LinearLayout>
@@ -144,6 +145,7 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="@dimen/space_horizontal_between"
                         android:src="@drawable/ic_next"
+                        tools:ignore="ContentDescription"
                         style="@style/pv.icon"/>
 
                 </LinearLayout>
@@ -187,6 +189,7 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="@dimen/space_horizontal_between"
                         android:src="@drawable/ic_next"
+                        tools:ignore="ContentDescription"
                         style="@style/pv.icon"/>
 
                 </LinearLayout>
@@ -228,6 +231,50 @@
                         android:layout_height="wrap_content"
                         tools:text="1.2.3"
                         style="@style/pv.text.variant"/>
+
+                </LinearLayout>
+
+                <View style="@style/pv.divider"/>
+
+                <LinearLayout
+                    android:id="@+id/settings_about_software_more_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_about_software_more"
+                            style="@style/pv.text"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_about_software_more_info"
+                            style="@style/pv.text.variant"/>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/space_horizontal_between"
+                        android:src="@drawable/ic_external"
+                        tools:ignore="ContentDescription"
+                        style="@style/pv.icon"/>
 
                 </LinearLayout>
 

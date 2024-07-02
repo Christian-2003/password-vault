@@ -58,11 +58,11 @@
     <string name="settings_customization_home_recentlyedited_number_option">{arg} accounts</string>
     <string name="settings_customization_details">Details</string>
     <string name="settings_customization_details_swipe">Swipe actions</string>
-    <string name="settings_customization_details_swipe_info">Change swipe actions for details</string>
+    <string name="settings_customization_details_swipe_info">Change swipe actions</string>
     <string name="settings_customization_details_swipe_left">Left swipe action</string>
     <string name="settings_customization_details_swipe_right">Right swipe action</string>
-    <string name="settings_customization_details_swipe_delete">Delete detail</string>
-    <string name="settings_customization_details_swipe_edit">Edit detail</string>
+    <string name="settings_customization_details_swipe_delete">Delete item</string>
+    <string name="settings_customization_details_swipe_edit">Edit item</string>
 
     <string name="settings_security">Security</string>
     <string name="settings_security_login">App login</string>
@@ -113,6 +113,8 @@
     <string name="settings_about_usage_privacypolicy_info">Show Privacy Policy</string>
     <string name="settings_about_software">Software</string>
     <string name="settings_about_software_version">App version</string>
+    <string name="settings_about_software_more">More info</string>
+    <string name="settings_about_software_more_info">Show app in system settings</string>
 
     <string name="settings_data">Data</string>
     <string name="settings_data_export">Export</string>
