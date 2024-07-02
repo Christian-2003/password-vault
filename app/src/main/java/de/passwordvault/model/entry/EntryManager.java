@@ -22,7 +22,7 @@ import de.passwordvault.service.autofill.caching.InvalidationCacheItem;
  * retrieved through {@link #getInstance()}.
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.6.0
  */
 public class EntryManager implements CachableManager<EntryExtended>, Observable<ArrayList<EntryAbbreviated>>, PersistableManager {
 
