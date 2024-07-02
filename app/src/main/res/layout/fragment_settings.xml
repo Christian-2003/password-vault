@@ -61,14 +61,27 @@
                         tools:ignore="ContentDescription"
                         style="@style/pv.icon"/>
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:layout_gravity="center"
                         android:layout_marginHorizontal="@dimen/space_horizontal_between"
-                        android:paddingVertical="@dimen/space_vertical"
-                        android:text="@string/settings_customization"
-                        style="@style/pv.text"/>
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_customization"
+                            style="@style/pv.text"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_customization_info"
+                            style="@style/pv.text.variant"/>
+
+                    </LinearLayout>
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -102,14 +115,27 @@
                         tools:ignore="ContentDescription"
                         style="@style/pv.icon"/>
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:layout_gravity="center"
                         android:layout_marginHorizontal="@dimen/space_horizontal_between"
-                        android:paddingVertical="@dimen/space_vertical"
-                        android:text="@string/settings_security"
-                        style="@style/pv.text"/>
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_security"
+                            style="@style/pv.text"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_security_info"
+                            style="@style/pv.text.variant"/>
+
+                    </LinearLayout>
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -143,14 +169,27 @@
                         tools:ignore="ContentDescription"
                         style="@style/pv.icon"/>
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:layout_gravity="center"
                         android:layout_marginHorizontal="@dimen/space_horizontal_between"
-                        android:paddingVertical="@dimen/space_vertical"
-                        android:text="@string/settings_data"
-                        style="@style/pv.text"/>
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_data"
+                            style="@style/pv.text"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_data_info"
+                            style="@style/pv.text.variant"/>
+
+                    </LinearLayout>
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -184,14 +223,27 @@
                         tools:ignore="ContentDescription"
                         style="@style/pv.icon"/>
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:layout_gravity="center"
                         android:layout_marginHorizontal="@dimen/space_horizontal_between"
-                        android:paddingVertical="@dimen/space_vertical"
-                        android:text="@string/settings_autofill"
-                        style="@style/pv.text"/>
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_autofill"
+                            style="@style/pv.text"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_autofill_info"
+                            style="@style/pv.text.variant"/>
+
+                    </LinearLayout>
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -232,14 +284,27 @@
                         tools:ignore="ContentDescription"
                         style="@style/pv.icon"/>
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:layout_gravity="center"
                         android:layout_marginHorizontal="@dimen/space_horizontal_between"
-                        android:paddingVertical="@dimen/space_vertical"
-                        android:text="@string/settings_help"
-                        style="@style/pv.text"/>
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_help"
+                            style="@style/pv.text"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_help_info"
+                            style="@style/pv.text.variant"/>
+
+                    </LinearLayout>
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -273,14 +338,27 @@
                         tools:ignore="ContentDescription"
                         style="@style/pv.icon"/>
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:layout_gravity="center"
                         android:layout_marginHorizontal="@dimen/space_horizontal_between"
-                        android:paddingVertical="@dimen/space_vertical"
-                        android:text="@string/settings_about"
-                        style="@style/pv.text"/>
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_about"
+                            style="@style/pv.text"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_about_info"
+                            style="@style/pv.text.variant"/>
+
+                    </LinearLayout>
 
                     <ImageView
                         android:layout_width="wrap_content"

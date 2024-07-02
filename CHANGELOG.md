@@ -34,6 +34,7 @@ n/a
 * Background of radio buttons in `DetailSwipeActionDialog` can be clicked to change swipe action.
 * Removed dark mode styles that were identical to light mode.
 * Added link to system settings from about-page.
+* Removed all placeholders and used `tools:text="XYZ"` instead to increase performance.
 
 <br/>
 

@@ -59,8 +59,10 @@
                 android:id="@+id/entries_list_item_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/placeholder_name"
                 android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:text="Name"
                 style="@style/pv.text"/>
 
             <TextView
@@ -68,7 +70,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:text="@string/placeholder_description"
+                android:maxLines="2"
+                android:ellipsize="end"
+                tools:text="Description"
                 style="@style/pv.text.variant"/>
 
             <com.google.android.material.chip.ChipGroup

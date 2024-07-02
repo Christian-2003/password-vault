@@ -54,13 +54,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_vertical_title"
                 style="@style/pv.container">
 
                 <LinearLayout
                     android:id="@+id/settings_autofill_toggle_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/space_vertical_title"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"

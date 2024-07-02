@@ -109,7 +109,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/space_horizontal"
                     android:layout_marginBottom="@dimen/space_vertical"
-                    android:text="@string/placeholder_name"
+                    tools:text="Account Name"
                     style="@style/pv.text"/>
 
                 <LinearLayout
@@ -134,7 +134,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/space_horizontal"
                         android:layout_marginBottom="@dimen/space_vertical"
-                        android:text="@string/placeholder_description"
+                        tools:text="Account Description"
                         style="@style/pv.text"/>
 
                 </LinearLayout>
@@ -211,7 +211,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/space_horizontal"
                         android:layout_marginBottom="@dimen/space_vertical"
-                        tools:text="@string/placeholder_date"
+                        tools:text="2000-01-01"
                         style="@style/pv.text"/>
 
                     <View style="@style/pv.divider"/>
@@ -230,7 +230,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/space_horizontal"
                         android:layout_marginBottom="@dimen/space_vertical"
-                        android:text="@string/placeholder_date"
+                        tools:text="2000-01-01"
                         style="@style/pv.text"/>
 
                     <LinearLayout

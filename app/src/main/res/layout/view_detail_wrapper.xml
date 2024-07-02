@@ -46,9 +46,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:text="@string/placeholder_name"
                     android:maxLines="1"
                     android:ellipsize="end"
+                    tools:text="Name"
                     style="@style/pv.text.variant"/>
 
             </LinearLayout>
@@ -57,7 +57,7 @@
                 android:id="@+id/entry_detail_item_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/placeholder_content"
+                tools:text="Content"
                 style="@style/pv.text"/>
 
             <!-- The 'custom' content (if present) for the view is added here programmatically. -->

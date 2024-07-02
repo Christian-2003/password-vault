@@ -45,6 +45,7 @@
     <string name="settings_search_autofillauthentication">Authentifizierung für autom. Ausfüllen</string>
 
     <string name="settings_customization">Personalisierung</string>
+    <string name="settings_customization_info">Nachtmodus • Wischgesten</string>
     <string name="settings_customization_appearance">Ansicht</string>
     <string name="settings_customization_appearance_darkmode">Nachtmodus</string>
     <string name="settings_customization_appearance_darkmode_info">Nachtmodus-Einstellungen ändern</string>
@@ -64,6 +65,7 @@
     <string name="settings_customization_details_swipe_edit">Eintrag bearbeiten</string>
 
     <string name="settings_security">Sicherheit</string>
+    <string name="settings_security_info">App-Login • Biometrie • Passwortsicherheit</string>
     <string name="settings_security_login">App-Login</string>
     <string name="settings_security_login_app">Login verwenden</string>
     <string name="settings_security_login_app_info">Master-Password zum Öffnen der App verlangen</string>
@@ -83,6 +85,7 @@
     <string name="settings_security_data_screenshot_info">Verhindern, dass Screenshots von sensiblen Daten angefertigt werden</string>
 
     <string name="settings_autofill">Automatisches Ausfüllen</string>
+    <string name="settings_autofill_info">Caching • Authentifizierung</string>
     <string name="settings_autofill_toggle">Automatisches Ausfüllen aktivieren</string>
     <string name="settings_autofill_toggle_info">Automatisches Ausfüllen in den Einstellungen aktivieren</string>
     <string name="settings_autofill_toggle_error">Automatisches Ausfüllen kann nicht aktiviert werden</string>
@@ -98,11 +101,13 @@
     <string name="settings_autofill_authentication_toggle_info">Datensicherheit durch Authentifizierung vor dem Zugriff auf App-Daten erhöhen</string>
 
     <string name="settings_help">Hilfe</string>
+    <string name="settings_help_info">Hilfeseiten • Anleitungen</string>
     <string name="settings_help_autofill_configuration">Automatisches Ausfüllen konfigurieren</string>
     <string name="settings_help_login_configuration">App-Login konfigurieren</string>
     <string name="settings_help_backup">Backups verwalten</string>
 
     <string name="settings_about">Über</string>
+    <string name="settings_about_info">Nutzungsbedingungen • Datenschutzerklärung • App-Infos</string>
     <string name="settings_about_usage">Rechtliches</string>
     <string name="settings_about_usage_tos">Nutzungsbedingungen</string>
     <string name="settings_about_usage_tos_info">Nutzungsbedingungen anzeigen</string>
@@ -116,6 +121,7 @@
     <string name="settings_about_software_more_info">Öffne die App in den Systemeinstellungen</string>
 
     <string name="settings_data">Daten</string>
+    <string name="settings_data_info">Backup • Export • Alle Daten Löschen</string>
     <string name="settings_data_export">Export</string>
     <string name="settings_data_export_file">kontodaten_{date}.html</string>
     <string name="settings_data_export_html">Daten exportieren</string>
@@ -282,15 +288,6 @@
     <string name="button_previous">Zurück</string>
     <string name="button_forgot_password">Passwort vergessen?</string>
     <string name="button_recover_password">Master Passwort wiederherstellen</string>
-
-
-    <!-- Placeholder -->
-    <string name="placeholder_name">Name</string>
-    <string name="placeholder_description">Beschreibung</string>
-    <string name="placeholder_uuid">00000000–0000–0000–0000–000000000000</string>
-    <string name="placeholder_date">01.01.1970</string>
-    <string name="placeholder_content">Inhalt</string>
-    <string name="placeholder_security_score">0/0</string>
 
 
     <!-- Input hints -->
