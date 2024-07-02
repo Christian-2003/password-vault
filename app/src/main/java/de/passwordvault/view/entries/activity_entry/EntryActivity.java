@@ -71,6 +71,7 @@ public class EntryActivity extends PasswordVaultBaseActivity implements DialogCa
         editEntryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK) {
                 viewModel.setEntry(EntryManager.getInstance().get(viewModel.getEntry().getUuid()));
+                viewModel.getEntry().setModified(true);
                 viewModel.setResultCode(RESULT_EDITED);
                 drawActivity();
             }

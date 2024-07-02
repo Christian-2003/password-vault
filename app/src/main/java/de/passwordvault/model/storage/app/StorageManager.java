@@ -10,6 +10,10 @@ import de.passwordvault.model.storage.csv.CsvConfiguration;
 import de.passwordvault.model.storage.encryption.EncryptionException;
 import de.passwordvault.model.storage.file.EncryptedFileReader;
 import de.passwordvault.model.storage.file.EncryptedFileWriter;
+import de.passwordvault.service.autofill.caching.ContentCache;
+import de.passwordvault.service.autofill.caching.InvalidationCache;
+import de.passwordvault.service.autofill.caching.InvalidationCacheItem;
+import de.passwordvault.service.autofill.caching.MappingCache;
 
 
 /**

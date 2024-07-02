@@ -38,6 +38,7 @@ n/a
 * `EncrypedFileReader` and `EncryptedFileWriter` can now read from and write to subdirectories of `///data/de.christian2003.passwordvault/files`.
 * All entries are now stored in subdirectory `///data/de.christian2003.passwordvault/files/entries` instead of `///data/de.christian2003.passwordvault/files` to increase performance and clean app storage.
 * Autofill caches are moved to `///data/de.christian2003.passwordvault/files/autofill` to increase performance and clean app storage.
+* Fixed a bug where autofill caches were not invalidated if entries changed.
 
 <br/>
 

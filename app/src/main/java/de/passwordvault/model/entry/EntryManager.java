@@ -11,6 +11,9 @@ import de.passwordvault.model.storage.app.StorageException;
 import de.passwordvault.model.storage.app.StorageManager;
 import de.passwordvault.model.storage.encryption.EncryptionException;
 import de.passwordvault.model.storage.settings.Config;
+import de.passwordvault.service.autofill.caching.ContentCache;
+import de.passwordvault.service.autofill.caching.InvalidationCache;
+import de.passwordvault.service.autofill.caching.InvalidationCacheItem;
 
 
 /**
@@ -422,14 +425,27 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
         catch (Exception e) {
             throw new StorageException(e.getMessage());
         }
+        boolean invalidationCacheModified = false;
         for (EntryExtended entry : extendedEntryCache.values()) {
             try {
                 storageManager.saveExtendedEntry(entry);
+                if (entry.isModified()) {
+                    //Invalidate cache if item is modified:
+                    if (ContentCache.getInstance().getItem(entry.getUuid()) != null) {
+                        InvalidationCache.getInstance().putItem(new InvalidationCacheItem(entry.getUuid()));
+                        invalidationCacheModified = true;
+                    }
+                }
             }
             catch (Exception e) {
-                e.printStackTrace();
+                if (invalidationCacheModified) {
+                    InvalidationCache.getInstance().save();
+                }
                 throw new StorageException(e.getMessage());
             }
+        }
+        if (invalidationCacheModified) {
+            InvalidationCache.getInstance().save();
         }
     }
 
