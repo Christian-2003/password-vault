@@ -2,12 +2,43 @@
 
 # Changelog
 
-## 3.6.0 (XXXX-XX-XX)
+## 3.6.0 (02-07-2024)
 ###### Release Highlights
-n/a
+Introduced security questions to reset master password if required as well as changes to UI. Furthermore, app changes were made to prepare the app for release on Google Play.
 
 ###### Features
 * Implemented master password recovery through security questions.
+* Added setting to prevent screenshots of activities displaying sensitive data.
+* Changed app icon background color to match new primary color.
+* Changed package name from `de.passwordvault` to `de.christian2003.passwordvault`.
+* Removed all references to the GitHub repository, since it is now private.
+* Removed `UpdateManager`-class, since updates are now handled by Google Play.
+* Removed `com.github.supersu-man:apkupdater-library:v2.1.0`-dependency, since updates are now handled by Google Play.
+* Added Terms of Service.
+* Removed MIT License from within the app.
+* Fixed a bug where settings were not correctly restored.
+* Implemented new system for the app configuration that is easier to extend in the future.
+* Backups now dynamically backup and restore settings.
+* Removed old class to create backup.
+* Removed old `Configuration` class as it is now replaced by `Config` class.
+* Fixed a bug where no autofill save request crashes the app when no app does not contain any account data.
+* Fixed padding and alignment for text buttons within "Searching for something different?"-sections in settings to be left aligned with text of the entire activity.
+* Changes to activity displaying all password quality gates.
+* Added custom view for list bottom button.
+* Major refactoring of `view` and `viewmodel` packages to locate views, viewmodels and adapters closely together.
+* Fixed bug where the swipe icons for details were not correctly aligned.
+* Background of radio buttons in `RestoreBackupActivity` can be clicked to change selection.
+* Background of radio buttons in `DarkmodeDialog` can be clicked to darkmode.
+* Introduced different margins / paddings for horizontal and vertical use.
+* Changed `layout_width` from `match_parent` to `0dp` for all layouts with `layout_weight="1"` to increase performance.
+* Background of radio buttons in `DetailSwipeActionDialog` can be clicked to change swipe action.
+* Removed dark mode styles that were identical to light mode.
+* Added link to system settings from about-page.
+* Removed all placeholders and used `tools:text="XYZ"` instead to increase performance.
+* `EncrypedFileReader` and `EncryptedFileWriter` can now read from and write to subdirectories of `///data/de.christian2003.passwordvault/files`.
+* All entries are now stored in subdirectory `///data/de.christian2003.passwordvault/files/entries` instead of `///data/de.christian2003.passwordvault/files` to increase performance and clean app storage.
+* Autofill caches are moved to `///data/de.christian2003.passwordvault/files/autofill` to increase performance and clean app storage.
+* Fixed a bug where autofill caches were not invalidated if entries changed.
 
 <br/>
 

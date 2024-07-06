@@ -20,11 +20,10 @@ import android.view.autofill.AutofillValue;
 import android.widget.RemoteViews;
 import java.util.ArrayList;
 import java.util.List;
-
 import de.passwordvault.App;
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.Account;
-import de.passwordvault.model.storage.Configuration;
+import de.passwordvault.model.storage.settings.Config;
 import de.passwordvault.service.autofill.caching.ContentCache;
 import de.passwordvault.service.autofill.caching.ContentCacheItem;
 import de.passwordvault.service.autofill.caching.InvalidationCache;
@@ -33,7 +32,7 @@ import de.passwordvault.service.autofill.caching.MappingCache;
 import de.passwordvault.service.autofill.caching.MappingCacheItem;
 import de.passwordvault.service.autofill.structureparser.AssistStructureParser;
 import de.passwordvault.service.autofill.structureparser.ParsedStructure;
-import de.passwordvault.view.activities.AutofillAuthenticationActivity;
+import de.passwordvault.view.authentication.activity_autofill_authentication.AutofillAuthenticationActivity;
 
 
 /**
@@ -89,7 +88,7 @@ public class FillRequestHandler {
         ParsedStructure parsedStructure = parseStructure(structure);
 
         ArrayList<UserData> userData;
-        if (Configuration.useAutofillCaching()) {
+        if (Config.getInstance().useAutofillCaching.get()) {
             //Use caching:
             MappingCacheItem mappingCacheItem = (MappingCacheItem)MappingCache.getInstance().getItem(parsedStructure.getPackageName());
             if (mappingCacheItem == null) {
@@ -208,7 +207,7 @@ public class FillRequestHandler {
             datasets.add(datasetBuilder.build());
         }
 
-        if (Configuration.useAutofillAuthentication() && Account.getInstance().hasPassword()) {
+        if (Config.getInstance().useAutofillAuth.get() && Account.getInstance().hasPassword()) {
             //Prompt the user to authenticate:
             Intent authenticationIntent = new Intent(autofillService, AutofillAuthenticationActivity.class);
             authenticationIntent.putExtra(AutofillAuthenticationActivity.KEY_DATASETS, datasets);

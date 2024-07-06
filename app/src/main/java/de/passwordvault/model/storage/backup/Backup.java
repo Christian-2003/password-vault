@@ -2,7 +2,6 @@ package de.passwordvault.model.storage.backup;
 
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
-import android.util.Log;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -13,6 +12,7 @@ import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.xml.parsers.DocumentBuilder;
@@ -22,15 +22,16 @@ import de.passwordvault.App;
 import de.passwordvault.model.analysis.QualityGate;
 import de.passwordvault.model.analysis.QualityGateManager;
 import de.passwordvault.model.detail.DetailBackupDTO;
-import de.passwordvault.model.detail.DetailSwipeAction;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.model.entry.EntryManager;
-import de.passwordvault.model.storage.Configuration;
 import de.passwordvault.model.storage.app.StorageException;
 import de.passwordvault.model.storage.csv.CsvConfiguration;
 import de.passwordvault.model.storage.encryption.AES;
 import de.passwordvault.model.storage.encryption.EncryptionException;
+import de.passwordvault.model.storage.settings.Config;
+import de.passwordvault.model.storage.settings.NoBackup;
+import de.passwordvault.model.storage.settings.items.GenericItem;
 import de.passwordvault.model.tags.TagManager;
 
 
@@ -38,7 +39,7 @@ import de.passwordvault.model.tags.TagManager;
  * Class implements a backup that can be restored.
  *
  * @author  Christian-2003
- * @version 3.5.5
+ * @version 3.6.0
  */
 public class Backup {
 
@@ -209,11 +210,6 @@ public class Backup {
      */
     public static final String INCLUDE_QUALITY_GATES = XmlConfiguration.TAG_QUALITY_GATES.getValue();
 
-    /**
-     * Field stores the tag used for logging.
-     */
-    private static final String TAG = "Backup";
-
 
     /**
      * Attribute stores the URI to the backup file.
@@ -357,18 +353,15 @@ public class Backup {
 
         String version = getMetadata(BACKUP_VERSION);
         if (version == null || version.equals(XmlConfiguration.VERSION_1.getValue())) {
-            Log.d("Backup", "EncryptionKeySeed: " + this.config.getEncryptionKeySeed());
             //Need to use old backup restorer:
             XmlBackupRestorer restorer = new XmlBackupRestorer(uri, this.config.getEncryptionKeySeed());
             try {
                 restorer.restoreBackup();
             }
             catch (XmlException e) {
-                Log.e("Backup", "Old Backup XML error: " + e.getMessage());
                 throw new BackupException(e.getMessage());
             }
             catch (BackupException | EncryptionException e) {
-                Log.e("Backup", "Old Backup error: " + e.getMessage());
                 throw e;
             }
             return;
@@ -537,7 +530,6 @@ public class Backup {
             Node currentChild = childNodes.item(i);
             if (currentChild.getNodeName().equals(XmlConfiguration.TAG_ENCRYPTION_CHECKSUM.getValue())) {
                 encryptionChecksum = currentChild.getTextContent();
-                Log.d("Backup", "Retrieved old checksum: " + encryptionChecksum);
             }
         }
     }
@@ -635,7 +627,7 @@ public class Backup {
                 Node valueAttribute = attributes.getNamedItem(XmlConfiguration.ATTRIBUTE_SETTINGS_VALUE.getValue());
                 if (nameAttribute != null && valueAttribute != null) {
                     String name = nameAttribute.getNodeValue();
-                    String value = nameAttribute.getNodeValue();
+                    String value = valueAttribute.getNodeValue();
                     if (name != null && value != null && !name.isEmpty() && !value.isEmpty()) {
                         settings.put(name, value);
                     }
@@ -726,55 +718,32 @@ public class Backup {
      * @param settings  Settings to restore.
      */
     private void restoreSettings(HashMap<String, String> settings) {
-        try {
-            String autofillCaching = settings.get(XmlConfiguration.SETTING_AUTOFILL_CACHING.getValue());
-            if (autofillCaching != null) {
-                Configuration.setAutofillCaching(Boolean.parseBoolean(autofillCaching));
+        for (String s : settings.values()) {
+        }
+        Config config = Config.getInstance();
+        Class<?> clazz = config.getClass();
+        for (Field field : clazz.getDeclaredFields()) {
+            if (field.isAnnotationPresent(NoBackup.class)) {
+                //Do not restore setting:
+                continue;
             }
-
-            String autofillAuthentication = settings.get(XmlConfiguration.SETTING_AUTOFILL_AUTHENTICATION.getValue());
-            if (autofillAuthentication != null) {
-                Configuration.setAutofillAuthentication(Boolean.parseBoolean(autofillAuthentication));
+            try {
+                GenericItem<?> item = (GenericItem<?>) field.get(config);
+                if (item == null) {
+                    continue;
+                }
+                String setting = settings.getOrDefault(item.getKey(), null);
+                if (setting == null || setting.isEmpty()) {
+                    continue;
+                }
+                Config.changeItemValue(item, setting);
+                field.set(config, item);
             }
-
-            String darkmode = settings.get(XmlConfiguration.SETTING_DARKMODE.getValue());
-            if (darkmode != null) {
-                Configuration.setDarkmode(Integer.parseInt(darkmode));
-            }
-
-            String recentlyEdited = settings.get(XmlConfiguration.SETTING_NUM_RECENTLY_EDITED.getValue());
-            if (recentlyEdited != null) {
-                Configuration.setNumberOfRecentlyEdited(Integer.parseInt(recentlyEdited));
-            }
-
-            String detailSwipeLeft = settings.get(XmlConfiguration.SETTING_DETAIL_SWIPE_LEFT.getValue());
-            if (detailSwipeLeft != null) {
-                Configuration.setDetailLeftSwipeAction(DetailSwipeAction.fromPreferencesValue(detailSwipeLeft));
-            }
-
-            String detailSwipeRight = settings.get(XmlConfiguration.SETTING_DETAIL_SWIPE_RIGHT.getValue());
-            if (detailSwipeRight != null) {
-                Configuration.setDetailRightSwipeAction(DetailSwipeAction.fromPreferencesValue(detailSwipeRight));
-            }
-
-            String includeBackupSettings = settings.get(XmlConfiguration.SETTING_BACKUP_INCLUDE_SETTINGS.getValue());
-            if (includeBackupSettings != null) {
-                Configuration.setBackupIncludeSettings(Boolean.parseBoolean(includeBackupSettings));
-            }
-
-            String includeBackupQualityGates = settings.get(XmlConfiguration.SETTING_BACKUP_INCLUDE_QUALITY_GATES.getValue());
-            if (includeBackupQualityGates != null) {
-                Configuration.setBackupIncludeQualityGates(Boolean.parseBoolean(includeBackupQualityGates));
-            }
-
-            String backupEncrypt = settings.get(XmlConfiguration.SETTING_BACKUP_ENCRYPT.getValue());
-            if (backupEncrypt != null) {
-                Configuration.setBackupEncrypted(Boolean.parseBoolean(backupEncrypt));
+            catch (Exception e) {
+                //Continue with next setting...
             }
         }
-        catch (Exception e) {
-            //Some data corrupted. Ignore...
-        }
+        Config.Methods.applyAllSettings();
     }
 
 

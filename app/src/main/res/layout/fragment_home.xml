@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.fragments.HomeFragment">
+    tools:context=".view.activity_main.fragment_home.HomeFragment">
 
     <!-- Toolbar for the fragment -->
     <com.google.android.material.appbar.AppBarLayout
@@ -44,99 +44,100 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/app_description"
-                    android:layout_marginBottom="@dimen/default_margin"
-                    android:padding="@dimen/default_padding"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
                     style="@style/pv.text"/>
 
+                <View style="@style/pv.divider"/>
+
                 <LinearLayout
+                    android:id="@+id/home_show_accounts_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:orientation="horizontal">
 
-                    <View style="@style/divider"/>
-
-                    <LinearLayout
-                        android:id="@+id/home_show_accounts_container"
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/default_padding"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:background="?attr/selectableItemBackground"
-                        android:orientation="horizontal">
+                        android:layout_marginEnd="@dimen/space_horizontal_between"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_list"
+                        tools:ignore="ContentDescription"
+                        style="@style/pv.icon"/>
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_list"
-                            style="@style/pv.icon"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/home_button_view_accounts"
-                            android:padding="@dimen/default_padding"
-                            style="@style/pv.text"/>
-
-                    </LinearLayout>
-
-
-                    <View style="@style/divider"/>
-
-                    <LinearLayout
-                        android:id="@+id/home_add_account_container"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/default_padding"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:background="?attr/selectableItemBackground"
-                        android:orientation="horizontal">
+                        android:text="@string/home_button_view_accounts"
+                        android:paddingVertical="@dimen/space_vertical"
+                        style="@style/pv.text"/>
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_add"
-                            style="@style/pv.icon"/>
+                </LinearLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/home_button_add_account"
-                            android:padding="@dimen/default_padding"
-                            style="@style/pv.text"/>
 
-                    </LinearLayout>
+                <View style="@style/pv.divider"/>
 
-                    <View style="@style/divider"/>
+                <LinearLayout
+                    android:id="@+id/home_add_account_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:id="@+id/home_analyze_passwords_container"
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/default_padding"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:background="?attr/selectableItemBackground"
-                        android:orientation="horizontal">
+                        android:layout_marginEnd="@dimen/space_horizontal_between"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_add"
+                        tools:ignore="ContentDescription"
+                        style="@style/pv.icon"/>
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_lock"
-                            style="@style/pv.icon"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/home_button_add_account"
+                        android:paddingVertical="@dimen/space_vertical"
+                        style="@style/pv.text"/>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/home_button_password_security"
-                            android:padding="@dimen/default_padding"
-                            style="@style/pv.text"/>
+                </LinearLayout>
 
-                    </LinearLayout>
+                <View style="@style/pv.divider"/>
+
+                <LinearLayout
+                    android:id="@+id/home_analyze_passwords_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/space_horizontal_between"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_lock"
+                        style="@style/pv.icon"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/home_button_password_security"
+                        android:paddingVertical="@dimen/space_vertical"
+                        style="@style/pv.text"/>
 
                 </LinearLayout>
 
@@ -147,7 +148,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
                 android:text="@string/home_recently_edited_title"
                 style="@style/pv.text.highlight"/>
 
@@ -156,8 +157,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/default_padding"
+                android:paddingHorizontal="@dimen/space_horizontal"
+                android:paddingVertical="@dimen/space_vertical"
                 android:visibility="gone"
+                tools:visibility="visible"
                 style="@style/pv.container">
 
                 <TextView

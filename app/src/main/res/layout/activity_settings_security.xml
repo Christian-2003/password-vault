@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.activities.SettingsSecurityActivity">
+    tools:context=".view.settings.activity_security.SettingsSecurityActivity">
 
     <!-- Toolbar for the activity -->
     <com.google.android.material.appbar.AppBarLayout
@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_security_login"
-                android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
                 style="@style/pv.text.highlight"/>
 
             <LinearLayout
@@ -68,14 +68,15 @@
                     android:id="@+id/settings_security_login_app_clickable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
                     android:focusable="true"
                     android:clickable="true"
                     android:background="?attr/selectableItemBackground"
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
@@ -99,6 +100,7 @@
                         android:id="@+id/settings_security_login_app_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_horizontal_between"
                         android:layout_gravity="center"/>
 
                 </LinearLayout>
@@ -118,16 +120,17 @@
                         android:background="?attr/selectableItemBackground"
                         android:orientation="vertical">
 
-                        <View style="@style/divider"/>
+                        <View style="@style/pv.divider"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/default_padding"
+                            android:paddingHorizontal="@dimen/space_horizontal"
+                            android:paddingVertical="@dimen/space_vertical"
                             android:orientation="horizontal">
 
                             <LinearLayout
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_weight="1"
@@ -151,6 +154,7 @@
                                 android:id="@+id/settings_security_login_biometrics_switch"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/space_horizontal_between"
                                 android:layout_gravity="center"/>
 
                         </LinearLayout>
@@ -158,20 +162,21 @@
 
                     </LinearLayout>
 
-                    <View style="@style/divider"/>
+                    <View style="@style/pv.divider"/>
 
                     <LinearLayout
                         android:id="@+id/settings_security_login_password_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/default_padding"
+                        android:paddingHorizontal="@dimen/space_horizontal"
+                        android:paddingVertical="@dimen/space_vertical"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
                         android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical">
@@ -193,26 +198,29 @@
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_horizontal_between"
                             android:layout_gravity="center"
                             android:src="@drawable/ic_next"
+                            tools:ignore="ContentDescription"
                             style="@style/pv.icon"/>
 
                     </LinearLayout>
 
-                    <View style="@style/divider"/>
+                    <View style="@style/pv.divider"/>
 
                     <LinearLayout
                         android:id="@+id/settings_security_login_recovery_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/default_padding"
+                        android:paddingHorizontal="@dimen/space_horizontal"
+                        android:paddingVertical="@dimen/space_vertical"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
                         android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical">
@@ -234,11 +242,72 @@
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_horizontal_between"
                             android:layout_gravity="center"
                             android:src="@drawable/ic_next"
+                            tools:ignore="ContentDescription"
                             style="@style/pv.icon"/>
 
                     </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+            <!-- Data -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_security_data"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
+                style="@style/pv.text.highlight"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                style="@style/pv.container">
+
+                <LinearLayout
+                    android:id="@+id/settings_security_data_screenshot_clickable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_security_data_screenshot"
+                            style="@style/pv.text"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_security_data_screenshot_info"
+                            style="@style/pv.text.variant"/>
+
+                    </LinearLayout>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/settings_security_data_screenshot_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_horizontal_between"
+                        android:layout_gravity="center"/>
 
                 </LinearLayout>
 
@@ -251,7 +320,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_security_password"
-                android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
                 style="@style/pv.text.highlight"/>
 
             <LinearLayout
@@ -265,13 +334,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
-                    android:padding="@dimen/default_padding"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
                     android:clickable="true"
                     android:focusable="true"
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
@@ -293,26 +363,29 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_horizontal_between"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_next"
+                        tools:ignore="ContentDescription"
                         style="@style/pv.icon"/>
 
                 </LinearLayout>
 
-                <View style="@style/divider"/>
+                <View style="@style/pv.divider"/>
 
                 <LinearLayout
                     android:id="@+id/settings_security_password_analysis_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
@@ -334,8 +407,10 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_horizontal_between"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_next"
+                        tools:ignore="ContentDescription"
                         style="@style/pv.icon"/>
 
                 </LinearLayout>
@@ -349,14 +424,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_search"
-                android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
                 style="@style/pv.text.highlight"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/default_padding"
                 style="@style/pv.container.highlight">
 
                 <com.google.android.material.button.MaterialButton
@@ -364,14 +438,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_search_backup"
-                    style="@style/Widget.Material3.Button.TextButton"/>
+                    style="@style/pv.material.button.different"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_search_autofillauthentication"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_search_autofillauthentication"
-                    style="@style/Widget.Material3.Button.TextButton"/>
+                    style="@style/pv.material.button.different"/>
 
             </LinearLayout>
 

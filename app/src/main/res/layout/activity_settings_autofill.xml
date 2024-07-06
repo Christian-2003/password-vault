@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.activities.SettingsAutofillActivity">
+    tools:context=".view.settings.activity_autofill.SettingsAutofillActivity">
 
     <!-- Toolbar for the activity -->
     <com.google.android.material.appbar.AppBarLayout
@@ -54,6 +54,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_vertical_title"
                 style="@style/pv.container">
 
                 <LinearLayout
@@ -61,37 +62,40 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
-                    android:padding="@dimen/default_padding"
                     android:clickable="true"
                     android:focusable="true"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
 
                         <TextView
+                            style="@style/pv.text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/settings_autofill_toggle"
-                            style="@style/pv.text"/>
+                            android:text="@string/settings_autofill_toggle" />
 
                         <TextView
+                            style="@style/pv.text.variant"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/settings_autofill_toggle_info"
-                            style="@style/pv.text.variant"/>
+                            android:text="@string/settings_autofill_toggle_info" />
 
                     </LinearLayout>
 
                     <ImageView
+                        style="@style/pv.icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/space_horizontal_between"
                         android:src="@drawable/ic_external"
-                        style="@style/pv.icon"/>
+                        tools:ignore="ContentDescription" />
 
                 </LinearLayout>
 
@@ -110,7 +114,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_autofill_cache"
-                    android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                    android:layout_marginHorizontal="@dimen/space_horizontal"
                     style="@style/pv.text.highlight"/>
 
                 <LinearLayout
@@ -123,14 +127,15 @@
                         android:id="@+id/settings_autofill_cache_toggle_clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/default_padding"
+                        android:paddingHorizontal="@dimen/space_horizontal"
+                        android:paddingVertical="@dimen/space_vertical"
                         android:focusable="true"
                         android:clickable="true"
                         android:background="?attr/selectableItemBackground"
                         android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_gravity="center"
@@ -154,6 +159,7 @@
                             android:id="@+id/settings_autofill_cache_toggle_switch"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_horizontal_between"
                             android:layout_gravity="center"/>
 
                     </LinearLayout>
@@ -164,14 +170,15 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <View style="@style/divider"/>
+                        <View style="@style/pv.divider"/>
 
                         <LinearLayout
                             android:id="@+id/settings_autofill_config_cache_delete_container"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="?attr/selectableItemBackground"
-                            android:padding="@dimen/default_padding"
+                            android:paddingHorizontal="@dimen/space_horizontal"
+                            android:paddingVertical="@dimen/space_vertical"
                             android:clickable="true"
                             android:focusable="true"
                             android:orientation="vertical">
@@ -207,7 +214,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/settings_autofill_authentication"
-                        android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                        android:layout_marginHorizontal="@dimen/space_horizontal"
                         style="@style/pv.text.highlight"/>
 
                     <LinearLayout
@@ -220,14 +227,15 @@
                             android:id="@+id/settings_autofill_authentication_toggle_clickable"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/default_padding"
+                            android:paddingHorizontal="@dimen/space_horizontal"
+                            android:paddingVertical="@dimen/space_vertical"
                             android:focusable="true"
                             android:clickable="true"
                             android:background="?attr/selectableItemBackground"
                             android:orientation="horizontal">
 
                             <LinearLayout
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="vertical">
@@ -250,6 +258,7 @@
                                 android:id="@+id/settings_autofill_authentication_toggle_switch"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/space_horizontal_between"
                                 android:layout_gravity="center"/>
 
                         </LinearLayout>

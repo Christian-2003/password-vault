@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".view.activities.SecurityQuestionActivity">
+    tools:context=".view.authentication.activity_security_question.SecurityQuestionActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -42,8 +42,9 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
+                android:layout_marginVertical="@dimen/space_vertical"
                 android:text="@string/recovery_login_info"
-                android:layout_margin="@dimen/default_padding"
                 style="@style/pv.text.info"/>
 
             <androidx.viewpager2.widget.ViewPager2
@@ -54,6 +55,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
                 android:orientation="horizontal">
 
                 <Button
@@ -87,7 +89,8 @@
                 android:id="@+id/button_recover"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/default_margin"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
+                android:layout_marginVertical="@dimen/space_vertical"
                 android:layout_gravity="center"
                 android:text="@string/button_recover_password"/>
 
@@ -99,6 +102,7 @@
                 android:visibility="invisible"
                 android:text="@string/error_master_password_recovery"
                 android:textColor="?attr/colorError"
+                tools:visibility="visible"
                 style="@style/pv.text"/>
 
         </LinearLayout>

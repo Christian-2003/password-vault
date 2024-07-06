@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.activities.RestoreBackupActivity">
+    tools:context=".view.settings.activity_restore_backup.RestoreBackupActivity">
 
     <!-- Toolbar for the activity -->
     <com.google.android.material.appbar.AppBarLayout
@@ -60,7 +60,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                    android:layout_marginHorizontal="@dimen/space_horizontal"
                     android:text="@string/settings_data_backup_restore_metadata"
                     style="@style/pv.text.highlight"/>
 
@@ -73,9 +73,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/default_padding"
-                        android:layout_marginStart="@dimen/default_padding"
-                        android:layout_marginEnd="@dimen/default_padding"
+                        android:layout_marginHorizontal="@dimen/space_horizontal"
+                        android:layout_marginTop="@dimen/space_vertical"
                         android:text="@string/settings_data_backup_restore_metadata_filename"
                         style="@style/pv.text"/>
 
@@ -83,20 +82,18 @@
                         android:id="@+id/text_filename"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/default_padding"
-                        android:layout_marginEnd="@dimen/default_padding"
-                        android:layout_marginBottom="@dimen/default_padding"
+                        android:layout_marginHorizontal="@dimen/space_horizontal"
+                        android:layout_marginBottom="@dimen/space_vertical"
                         android:text="@string/settings_data_backup_restore_metadata_filename"
                         style="@style/pv.text.variant"/>
 
-                    <View style="@style/divider"/>
+                    <View style="@style/pv.divider"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/default_padding"
-                        android:layout_marginTop="@dimen/default_padding"
-                        android:layout_marginEnd="@dimen/default_padding"
+                        android:layout_marginHorizontal="@dimen/space_horizontal"
+                        android:layout_marginTop="@dimen/space_vertical"
                         android:text="@string/settings_data_backup_restore_metadata_created"
                         style="@style/pv.text"/>
 
@@ -104,9 +101,8 @@
                         android:id="@+id/text_created"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/default_padding"
-                        android:layout_marginEnd="@dimen/default_padding"
-                        android:layout_marginBottom="@dimen/default_padding"
+                        android:layout_marginHorizontal="@dimen/space_horizontal"
+                        android:layout_marginBottom="@dimen/space_vertical"
                         android:text="@string/settings_data_backup_restore_metadata_created"
                         style="@style/pv.text.variant"/>
 
@@ -121,7 +117,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                        android:layout_marginHorizontal="@dimen/space_horizontal"
                         android:text="@string/settings_data_backup_restore_settings"
                         style="@style/pv.text.highlight"/>
 
@@ -135,56 +131,102 @@
                             android:id="@+id/container_settings_override"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/default_padding"
                             android:orientation="vertical">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="@dimen/space_horizontal"
+                                android:layout_marginVertical="@dimen/space_vertical"
                                 android:text="@string/settings_data_backup_restore_settings_override"
                                 style="@style/pv.text"/>
 
-                            <RadioGroup
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:id="@+id/container_radio_delete"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical">
+                                android:paddingHorizontal="@dimen/space_horizontal"
+                                android:paddingVertical="@dimen/space_vertical"
+                                android:background="?attr/selectableItemBackground"
+                                android:orientation="horizontal">
 
                                 <RadioButton
                                     android:id="@+id/radio_delete"
+                                    android:layout_width="@dimen/radio_size"
+                                    android:layout_height="@dimen/radio_size"/>
+
+                                <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="@dimen/space_horizontal_between"
                                     android:text="@string/settings_data_backup_restore_settings_override_delete"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/container_radio_replace"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingHorizontal="@dimen/space_horizontal"
+                                android:paddingVertical="@dimen/space_vertical"
+                                android:background="?attr/selectableItemBackground"
+                                android:orientation="horizontal">
 
                                 <RadioButton
                                     android:id="@+id/radio_replace"
+                                    android:layout_width="@dimen/radio_size"
+                                    android:layout_height="@dimen/radio_size"/>
+
+                                <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="@dimen/space_horizontal_between"
                                     android:text="@string/settings_data_backup_restore_settings_override_replace"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/container_radio_skip"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingHorizontal="@dimen/space_horizontal"
+                                android:paddingVertical="@dimen/space_vertical"
+                                android:background="?attr/selectableItemBackground"
+                                android:orientation="horizontal">
 
                                 <RadioButton
                                     android:id="@+id/radio_skip"
+                                    android:layout_width="@dimen/radio_size"
+                                    android:layout_height="@dimen/radio_size"/>
+
+                                <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="@dimen/space_horizontal_between"
                                     android:text="@string/settings_data_backup_restore_settings_override_skip"/>
 
-                            </RadioGroup>
+                            </LinearLayout>
 
                         </LinearLayout>
 
-                        <View style="@style/divider"/>
+                        <View style="@style/pv.divider"/>
 
                         <LinearLayout
                             android:id="@+id/container_settings_settings"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/default_padding"
+                            android:paddingHorizontal="@dimen/space_horizontal"
+                            android:paddingVertical="@dimen/space_vertical"
                             android:focusable="true"
                             android:clickable="true"
                             android:background="?attr/selectableItemBackground"
                             android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:layout_gravity="center"
@@ -194,18 +236,20 @@
                             <com.google.android.material.materialswitch.MaterialSwitch
                                 android:id="@+id/switch_restore_settings"
                                 android:layout_width="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_height="wrap_content"/>
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/space_horizontal_between"
+                                android:layout_gravity="center"/>
 
                         </LinearLayout>
 
-                        <View style="@style/divider"/>
+                        <View style="@style/pv.divider"/>
 
                         <LinearLayout
                             android:id="@+id/container_settings_quality_gates"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/default_padding"
+                            android:paddingHorizontal="@dimen/space_horizontal"
+                            android:paddingVertical="@dimen/space_vertical"
                             android:focusable="true"
                             android:clickable="true"
                             android:background="?attr/selectableItemBackground"
@@ -222,8 +266,9 @@
                             <com.google.android.material.materialswitch.MaterialSwitch
                                 android:id="@+id/switch_restore_quality_gates"
                                 android:layout_width="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_height="wrap_content"/>
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/space_horizontal_between"
+                                android:layout_gravity="center"/>
 
                         </LinearLayout>
 
@@ -240,7 +285,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                        android:layout_marginHorizontal="@dimen/space_horizontal"
                         android:text="@string/settings_data_backup_restore_settings_encryption"
                         style="@style/pv.text.highlight"/>
 
@@ -248,13 +293,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="@dimen/default_padding"
                         style="@style/pv.container">
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/container_password"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/space_horizontal"
+                            android:layout_marginVertical="@dimen/space_vertical"
                             app:passwordToggleEnabled="true"
                             app:passwordToggleDrawable="@drawable/drawable_password"
                             android:hint="@string/hint_password">
@@ -276,7 +322,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_margin="@dimen/default_margin"
+                    android:layout_marginHorizontal="@dimen/space_horizontal"
+                    android:layout_marginVertical="@dimen/space_vertical"
                     android:text="@string/button_restore_backup"/>
 
             </LinearLayout>
@@ -286,9 +333,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
+                android:layout_marginVertical="@dimen/space_vertical"
                 android:indeterminate="true"
-                android:padding="@dimen/default_padding"
-                android:layout_margin="@dimen/default_margin"
                 android:visibility="gone"/>
 
         </LinearLayout>

@@ -27,7 +27,7 @@ public class ContentCache extends Cache {
     /**
      * Field stores the name of the cache.
      */
-    private static final String CACHE_NAME = "autofill_content.cache";
+    private static final String CACHE_NAME = "autofill/content.cache";
 
 
     /**

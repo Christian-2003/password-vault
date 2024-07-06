@@ -45,6 +45,7 @@
     <string name="settings_search_autofillauthentication">Authentifizierung für autom. Ausfüllen</string>
 
     <string name="settings_customization">Personalisierung</string>
+    <string name="settings_customization_info">Nachtmodus • Wischgesten</string>
     <string name="settings_customization_appearance">Ansicht</string>
     <string name="settings_customization_appearance_darkmode">Nachtmodus</string>
     <string name="settings_customization_appearance_darkmode_info">Nachtmodus-Einstellungen ändern</string>
@@ -57,13 +58,14 @@
     <string name="settings_customization_home_recentlyedited_number_option">{arg} Konten</string>
     <string name="settings_customization_details">Kontoinformationen</string>
     <string name="settings_customization_details_swipe">Wischgesten</string>
-    <string name="settings_customization_details_swipe_info">Aktionen beim Wischen von Kontoinformationen bearbeiten</string>
+    <string name="settings_customization_details_swipe_info">Aktionen beim Wischen bearbeiten</string>
     <string name="settings_customization_details_swipe_left">Nach links wischen</string>
     <string name="settings_customization_details_swipe_right">Nach rechts wischen</string>
-    <string name="settings_customization_details_swipe_delete">Information löschen</string>
-    <string name="settings_customization_details_swipe_edit">Information bearbeiten</string>
+    <string name="settings_customization_details_swipe_delete">Eintrag löschen</string>
+    <string name="settings_customization_details_swipe_edit">Eintrag bearbeiten</string>
 
     <string name="settings_security">Sicherheit</string>
+    <string name="settings_security_info">App-Login • Biometrie • Passwortsicherheit</string>
     <string name="settings_security_login">App-Login</string>
     <string name="settings_security_login_app">Login verwenden</string>
     <string name="settings_security_login_app_info">Master-Password zum Öffnen der App verlangen</string>
@@ -78,8 +80,12 @@
     <string name="settings_security_password_qualitygates_info">Sicherheitskriterien für Passwortsicherheit bearbeiten</string>
     <string name="settings_security_password_analysis">Passwortanalyse</string>
     <string name="settings_security_password_analysis_info">Sicherheit sämtlicher Passwörter analysieren</string>
+    <string name="settings_security_data">Datensicherheit</string>
+    <string name="settings_security_data_screenshot">Screenshots verhindern</string>
+    <string name="settings_security_data_screenshot_info">Verhindern, dass Screenshots von sensiblen Daten angefertigt werden</string>
 
     <string name="settings_autofill">Automatisches Ausfüllen</string>
+    <string name="settings_autofill_info">Caching • Authentifizierung</string>
     <string name="settings_autofill_toggle">Automatisches Ausfüllen aktivieren</string>
     <string name="settings_autofill_toggle_info">Automatisches Ausfüllen in den Einstellungen aktivieren</string>
     <string name="settings_autofill_toggle_error">Automatisches Ausfüllen kann nicht aktiviert werden</string>
@@ -95,29 +101,27 @@
     <string name="settings_autofill_authentication_toggle_info">Datensicherheit durch Authentifizierung vor dem Zugriff auf App-Daten erhöhen</string>
 
     <string name="settings_help">Hilfe</string>
+    <string name="settings_help_info">Hilfeseiten • Anleitungen</string>
     <string name="settings_help_autofill_configuration">Automatisches Ausfüllen konfigurieren</string>
     <string name="settings_help_login_configuration">App-Login konfigurieren</string>
     <string name="settings_help_backup">Backups verwalten</string>
 
     <string name="settings_about">Über</string>
+    <string name="settings_about_info">Nutzungsbedingungen • Datenschutzerklärung • App-Infos</string>
     <string name="settings_about_usage">Rechtliches</string>
-    <string name="settings_about_usage_license">MIT Lizenz</string>
-    <string name="settings_about_usage_license_info">Lizenz anzeigen (Nur in Englisch)</string>
+    <string name="settings_about_usage_tos">Nutzungsbedingungen</string>
+    <string name="settings_about_usage_tos_info">Nutzungsbedingungen anzeigen</string>
     <string name="settings_about_usage_dependencies">Abhängigkeiten</string>
     <string name="settings_about_usage_dependencies_info">Verwendete Software anzeigen</string>
     <string name="settings_about_usage_privacypolicy">Datenschutzerklärung</string>
     <string name="settings_about_usage_privacypolicy_info">Datenschutzerklärung anzeigen</string>
-    <string name="settings_about_github">GitHub</string>
-    <string name="settings_about_github_repo">Repository</string>
-    <string name="settings_about_github_repo_info">App auf GitHub anzeigen</string>
-    <string name="settings_about_github_issues">Fehler melden</string>
-    <string name="settings_about_github_issues_info">Fehler auf GitHub melden</string>
     <string name="settings_about_software">Software</string>
-    <string name="settings_about_software_update">Software aktualisieren</string>
-    <string name="settings_about_software_update_info">Neueste Version herunterladen</string>
     <string name="settings_about_software_version">App-Version</string>
+    <string name="settings_about_software_more">Weitere Infos</string>
+    <string name="settings_about_software_more_info">Öffne die App in den Systemeinstellungen</string>
 
     <string name="settings_data">Daten</string>
+    <string name="settings_data_info">Backup • Export • Alle Daten Löschen</string>
     <string name="settings_data_export">Export</string>
     <string name="settings_data_export_file">kontodaten_{date}.html</string>
     <string name="settings_data_export_html">Daten exportieren</string>
@@ -229,6 +233,7 @@
 
     <!-- Recovery activity -->
     <string name="recovery_info">Wähle mindestens fünf Sicherheitsfragen aus um dich in Password Vault anzumelden, falls du das Master-Passwort vergisst. Wenn du dich mit diesen Fragen anmeldest, dann musst du mindestens vier Fragen richtig beantworten. Andernfalls funktioniert der Login nicht.</string>
+    <string name="recovery_progress">Fortschritt</string>
     <string name="recovery_questions">Sicherheitsfragen</string>
     <string name="recovery_question">Frage</string>
     <string name="recovery_answer">Antwort</string>
@@ -285,15 +290,6 @@
     <string name="button_recover_password">Master Passwort wiederherstellen</string>
 
 
-    <!-- Placeholder -->
-    <string name="placeholder_name">Name</string>
-    <string name="placeholder_description">Beschreibung</string>
-    <string name="placeholder_uuid">00000000–0000–0000–0000–000000000000</string>
-    <string name="placeholder_date">01.01.1970</string>
-    <string name="placeholder_content">Inhalt</string>
-    <string name="placeholder_security_score">0/0</string>
-
-
     <!-- Input hints -->
     <string name="hint_search">Suchen…</string>
     <string name="hint_password">Passwort</string>
@@ -340,6 +336,11 @@
 
 
     <!-- Password quality gates -->
+    <string name="quality_gates">Sicherheitskriterien</string>
+    <string name="quality_gates_info">Definiere Sicherheitskriterien um die Sicherheit deiner Passwörter zu verbessern.</string>
+    <string name="quality_gates_custom">Eigene Sicherheitskriterien</string>
+    <string name="quality_gates_default">Standard Sicherheitskriterien</string>
+    <string name="quality_gates_enabled">Aktiv</string>
     <string name="quality_gate_enabled">Aktiviert</string>
     <string name="quality_gate_configure">Kriterium bearbeiten</string>
     <string name="quality_gate_test">Kriterium testen</string>

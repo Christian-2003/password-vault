@@ -9,17 +9,25 @@
     <dimen name="app_bar_text_size">22sp</dimen>
 
     <dimen name="background_corner_radius">20dp</dimen>
-    <dimen name="default_padding">10dp</dimen>
-    <dimen name="default_margin">5dp</dimen>
-    <dimen name="default_left_margin_outside_container">15dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="image_button_width">48dp</dimen>
     <dimen name="image_button_height">48dp</dimen>
     <dimen name="image_button_width_2">96dp</dimen> <!-- Twice the width of the image button -->
     <dimen name="pin_icon_size">12dp</dimen>
-    <dimen name="tab_icon_size">8dp</dimen>
+    <dimen name="tab_icon_size">4dp</dimen>
 
     <dimen name="progress_bar_thickness">9dp</dimen>
     <dimen name="progress_bar_thickness_large">34dp</dimen>
+
+    <dimen name="checkbox_size">24dp</dimen>
+    <dimen name="radio_size">26dp</dimen>
+    <dimen name="space_small">10dp</dimen>
+
+    <dimen name="space_vertical">8dp</dimen>
+    <dimen name="space_vertical_between">4dp</dimen>
+    <dimen name="space_horizontal">24dp</dimen>
+    <dimen name="space_horizontal_between">16dp</dimen>
+    <dimen name="space_vertical_title">16dp</dimen>
+    <dimen name="space_vertical_list_button">16dp</dimen>
 
 </resources>

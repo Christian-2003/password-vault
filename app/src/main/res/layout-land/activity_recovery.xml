@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".view.activities.RecoveryActivity">
+    tools:context=".view.settings.activity_recovery.RecoveryActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -42,19 +42,25 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/default_left_margin_outside_container"
-                android:layout_marginEnd="@dimen/default_left_margin_outside_container"
-                android:layout_marginTop="@dimen/default_margin"
-                android:layout_marginBottom="@dimen/default_margin"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
+                android:layout_marginVertical="@dimen/space_vertical"
                 android:text="@string/recovery_info"
                 style="@style/pv.text.info"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
+                android:text="@string/recovery_progress"
+                style="@style/pv.text.highlight"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:animateLayoutChanges="true"
-                android:padding="@dimen/default_padding"
+                android:paddingHorizontal="@dimen/space_horizontal"
+                android:paddingVertical="@dimen/space_vertical"
                 style="@style/pv.container">
 
                 <LinearLayout
@@ -65,20 +71,18 @@
                     <ProgressBar
                         android:id="@+id/progress_bar_score"
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="@dimen/progress_bar_thickness_large"
                         android:layout_weight="1"
-                        android:layout_marginTop="@dimen/default_margin"
-                        android:layout_marginBottom="@dimen/default_margin"
+                        android:layout_marginEnd="@dimen/space_horizontal_between"
                         android:progressDrawable="@drawable/multipurpose_bar"
                         style="?android:attr/progressBarStyleHorizontal"/>
 
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/progress_bar_thickness_large"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/default_margin"
-                        android:orientation="vertical"
+                        android:orientation="horizontal"
                         style="@style/pv.eyecatcher.pill">
 
                         <TextView
@@ -86,11 +90,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_margin="0dp"
-                            android:paddingHorizontal="@dimen/default_left_margin_outside_container"
-                            android:text="@string/placeholder_security_score"
+                            android:layout_marginHorizontal="@dimen/space_horizontal_between"
                             android:textColor="@color/pv_primary"
-                            style="@style/pv.text.highlight"/>
+                            android:textStyle="bold"
+                            tools:text="0 / 0"
+                            style="@style/pv.text"/>
 
                     </LinearLayout>
 
@@ -101,7 +105,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/space_vertical"
                     android:text="@string/error_not_enough_security_questions"
+                    android:textAlignment="center"
                     android:textColor="?attr/colorError"
                     style="@style/pv.text"/>
 
@@ -110,8 +116,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/default_left_margin_outside_container"
-                android:layout_marginTop="@dimen/default_margin"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
                 android:text="@string/recovery_questions"
                 style="@style/pv.text.highlight"/>
 
@@ -131,37 +136,16 @@
                     android:nestedScrollingEnabled="false"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-                <LinearLayout
+                <de.passwordvault.view.utils.components.ListButtonView
                     android:id="@+id/button_add_question"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
-                    android:focusable="true"
-                    android:clickable="true"
-                    android:background="?attr/selectableItemBackground"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_add"
-                        style="@style/pv.icon.highlight"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:padding="@dimen/default_padding"
-                        android:text="@string/button_security_question_add"
-                        style="@style/pv.text"/>
-
-                </LinearLayout>
+                    app:text="@string/button_security_question_add"/>
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

@@ -10,6 +10,10 @@ import de.passwordvault.model.storage.csv.CsvConfiguration;
 import de.passwordvault.model.storage.encryption.EncryptionException;
 import de.passwordvault.model.storage.file.EncryptedFileReader;
 import de.passwordvault.model.storage.file.EncryptedFileWriter;
+import de.passwordvault.service.autofill.caching.ContentCache;
+import de.passwordvault.service.autofill.caching.InvalidationCache;
+import de.passwordvault.service.autofill.caching.InvalidationCacheItem;
+import de.passwordvault.service.autofill.caching.MappingCache;
 
 
 /**
@@ -17,7 +21,7 @@ import de.passwordvault.model.storage.file.EncryptedFileWriter;
  * the managed entries. All data that is stored through this manager is being encrypted.
  *
  * @author  Christian-2003
- * @version 3.5.2
+ * @version 3.6.0
  */
 public class StorageManager {
 
@@ -30,7 +34,7 @@ public class StorageManager {
      * Field stores the generic name of the file in which extended entries are stored. To get the
      * 'real' name for a file, replace "{id}" within this string with the ID of the entry.
      */
-    private static final String EXTENDED_ENTRIES_FILE = "entry_{id}.csv";
+    private static final String EXTENDED_ENTRIES_FILE = "entries/entry_{id}.csv";
 
 
     /**
@@ -61,6 +65,9 @@ public class StorageManager {
      */
     public HashMap<String, EntryAbbreviated> loadAbbreviatedEntries() throws EncryptionException {
         String fileContent = fileReader.read(ABBREVIATED_ENTRIES_FILE);
+        if (fileContent == null) {
+            return new HashMap<>();
+        }
         String[] lines = fileContent.split("\n");
         HashMap<String, EntryAbbreviated> entries = new HashMap<>();
         for (String s : lines) {

@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.activities.SettingsDataActivity">
+    tools:context=".view.settings.activity_data.SettingsDataActivity">
 
     <!-- Toolbar for the activity -->
     <com.google.android.material.appbar.AppBarLayout
@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_data_export"
-                android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
                 style="@style/pv.text.highlight"/>
 
             <LinearLayout
@@ -69,13 +69,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
-                    android:padding="@dimen/default_padding"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
                     android:clickable="true"
                     android:focusable="true"
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
@@ -97,8 +98,10 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_horizontal_between"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_next"
+                        tools:ignore="ContentDescription"
                         style="@style/pv.icon"/>
 
                 </LinearLayout>
@@ -112,7 +115,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_data_backup"
-                android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
                 style="@style/pv.text.highlight"/>
 
             <LinearLayout
@@ -126,13 +129,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
-                    android:padding="@dimen/default_padding"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
                     android:clickable="true"
                     android:focusable="true"
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
@@ -154,26 +158,29 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_horizontal_between"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_next"
+                        tools:ignore="ContentDescription"
                         style="@style/pv.icon"/>
 
                 </LinearLayout>
 
-                <View style="@style/divider"/>
+                <View style="@style/pv.divider"/>
 
                 <LinearLayout
                     android:id="@+id/settings_data_backup_restore_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
-                    android:padding="@dimen/default_padding"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
                     android:clickable="true"
                     android:focusable="true"
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
@@ -195,8 +202,10 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_horizontal_between"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_next"
+                        tools:ignore="ContentDescription"
                         style="@style/pv.icon"/>
 
                 </LinearLayout>
@@ -210,7 +219,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_data_delete"
-                android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
                 style="@style/pv.text.highlight"/>
 
             <LinearLayout
@@ -224,13 +233,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
-                    android:padding="@dimen/default_padding"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
                     android:clickable="true"
                     android:focusable="true"
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
@@ -253,8 +263,10 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_horizontal_between"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_next"
+                        tools:ignore="ContentDescription"
                         style="@style/pv.icon"/>
 
                 </LinearLayout>
@@ -268,14 +280,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_search"
-                android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
                 style="@style/pv.text.highlight"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/default_padding"
                 style="@style/pv.container.highlight">
 
                 <com.google.android.material.button.MaterialButton
@@ -283,14 +294,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_search_qualitygates"
-                    style="@style/Widget.Material3.Button.TextButton"/>
+                    style="@style/pv.material.button.different"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_search_masterpassword"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_search_masterpassword"
-                    style="@style/Widget.Material3.Button.TextButton"/>
+                    style="@style/pv.material.button.different"/>
 
             </LinearLayout>
 

@@ -46,6 +46,7 @@
     <string name="settings_search_autofillauthentication">Autofill authentication</string>
 
     <string name="settings_customization">Customization</string>
+    <string name="settings_customization_info">Darkmode • Swipe actions</string>
     <string name="settings_customization_appearance">Appearance</string>
     <string name="settings_customization_appearance_darkmode">Dark mode</string>
     <string name="settings_customization_appearance_darkmode_info">Change dark mode settings</string>
@@ -58,13 +59,14 @@
     <string name="settings_customization_home_recentlyedited_number_option">{arg} accounts</string>
     <string name="settings_customization_details">Details</string>
     <string name="settings_customization_details_swipe">Swipe actions</string>
-    <string name="settings_customization_details_swipe_info">Change swipe actions for details</string>
+    <string name="settings_customization_details_swipe_info">Change swipe actions</string>
     <string name="settings_customization_details_swipe_left">Left swipe action</string>
     <string name="settings_customization_details_swipe_right">Right swipe action</string>
-    <string name="settings_customization_details_swipe_delete">Delete detail</string>
-    <string name="settings_customization_details_swipe_edit">Edit detail</string>
+    <string name="settings_customization_details_swipe_delete">Delete item</string>
+    <string name="settings_customization_details_swipe_edit">Edit item</string>
 
     <string name="settings_security">Security</string>
+    <string name="settings_security_info">App login • Biometrics • Password security</string>
     <string name="settings_security_login">App login</string>
     <string name="settings_security_login_app">Require login</string>
     <string name="settings_security_login_app_info">Require master password to open the app</string>
@@ -79,8 +81,12 @@
     <string name="settings_security_password_qualitygates_info">Change quality gates for password evaluation</string>
     <string name="settings_security_password_analysis">Password analysis</string>
     <string name="settings_security_password_analysis_info">Analyze password security</string>
+    <string name="settings_security_data">Data Security</string>
+    <string name="settings_security_data_screenshot">Prevent Screenshots</string>
+    <string name="settings_security_data_screenshot_info">Prevent Screenshots of sensitive data from being created</string>
 
     <string name="settings_autofill">Autofill</string>
+    <string name="settings_autofill_info">Caching • Authentication</string>
     <string name="settings_autofill_toggle">Enable autofill</string>
     <string name="settings_autofill_toggle_info">Enable autofill in settings</string>
     <string name="settings_autofill_toggle_error">Cannot activate autofill service</string>
@@ -96,32 +102,27 @@
     <string name="settings_autofill_authentication_toggle_info">Increase security by requiring authentication prior to accessing data</string>
 
     <string name="settings_help">Help</string>
+    <string name="settings_help_info">Help pages • Tutorials</string>
     <string name="settings_help_autofill_configuration">Configure autofill</string>
     <string name="settings_help_login_configuration">Configure app login</string>
     <string name="settings_help_backup">Manage backups</string>
 
     <string name="settings_about">About</string>
+    <string name="settings_about_info">Terms of Service • Privacy Policy • App info</string>
     <string name="settings_about_usage">Legal</string>
-    <string name="settings_about_usage_license">MIT License</string>
-    <string name="settings_about_usage_license_info">Show license</string>
+    <string name="settings_about_usage_tos">Terms of Service</string>
+    <string name="settings_about_usage_tos_info">Show Terms of Service</string>
     <string name="settings_about_usage_dependencies">Dependencies</string>
     <string name="settings_about_usage_dependencies_info">Show used software</string>
     <string name="settings_about_usage_privacypolicy">Privacy Policy</string>
     <string name="settings_about_usage_privacypolicy_info">Show Privacy Policy</string>
-    <string name="settings_about_github">GitHub</string>
-    <string name="settings_about_github_repo">Repository</string>
-    <string name="settings_about_github_repo_info">Show app on GitHub</string>
-    <string name="settings_about_github_issues">Report bugs</string>
-    <string name="settings_about_github_issues_info">Report bugs on GitHub</string>
     <string name="settings_about_software">Software</string>
-    <string name="settings_about_software_update">Software update</string>
-    <string name="settings_about_software_update_info">Download newest release</string>
     <string name="settings_about_software_version">App version</string>
-    <string name="settings_about_github_link" translatable="false">https://github.com/Christian-2003/password-vault</string>
-    <string name="settings_about_bug_link" translatable="false">https://github.com/Christian-2003/password-vault/issues</string>
-    <string name="settings_about_update_link" translatable="false">https://github.com/Christian-2003/password-vault/releases/latest</string>
+    <string name="settings_about_software_more">More info</string>
+    <string name="settings_about_software_more_info">Show app in system settings</string>
 
     <string name="settings_data">Data</string>
+    <string name="settings_data_info">Backup • Export • Delete all data</string>
     <string name="settings_data_export">Export</string>
     <string name="settings_data_export_file">account_data_{date}.html</string>
     <string name="settings_data_export_html">Export data</string>
@@ -234,6 +235,7 @@
 
     <!-- Recovery activity -->
     <string name="recovery_info">Select at least five security questions that are used to login into Password Vault in case you forget the master password. When you login to the app with these questions, you need to answer at least four questions correctly. Otherwise, the login fails.</string>
+    <string name="recovery_progress">Progress</string>
     <string name="recovery_questions">Security Questions</string>
     <string name="recovery_question">Question</string>
     <string name="recovery_answer">Answer</string>
@@ -290,15 +292,6 @@
     <string name="button_recover_password">Recover master password</string>
 
 
-    <!-- Placeholder -->
-    <string name="placeholder_name">Name</string>
-    <string name="placeholder_description">Description</string>
-    <string name="placeholder_uuid">00000000–0000–0000–0000–000000000000</string>
-    <string name="placeholder_date">1970–01–01</string>
-    <string name="placeholder_content">Content</string>
-    <string name="placeholder_security_score">0/0</string>
-
-
     <!-- Input hints -->
     <string name="hint_search">Search…</string>
     <string name="hint_password">Password</string>
@@ -345,6 +338,11 @@
 
 
     <!-- Password quality gates -->
+    <string name="quality_gates">Quality Gates</string>
+    <string name="quality_gates_info">Specify quality gates to enhance the security of your passwords.</string>
+    <string name="quality_gates_custom">Custom quality gates</string>
+    <string name="quality_gates_default">Default quality gates</string>
+    <string name="quality_gates_enabled">Enabled</string>
     <string name="quality_gate_enabled">Enabled</string>
     <string name="quality_gate_configure">Configure quality gate</string>
     <string name="quality_gate_test">Test quality gate</string>

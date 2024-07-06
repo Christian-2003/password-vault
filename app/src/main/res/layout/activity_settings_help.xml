@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.activities.SettingsHelpActivity">
+    tools:context=".view.settings.activity_help.SettingsHelpActivity">
 
     <!-- Toolbar for the activity -->
     <com.google.android.material.appbar.AppBarLayout
@@ -53,6 +53,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_vertical_title"
                 android:orientation="vertical"
                 style="@style/pv.container">
 
@@ -61,7 +62,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
-                    android:padding="@dimen/default_padding"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
                     android:clickable="true"
                     android:focusable="true"
                     android:orientation="horizontal">
@@ -71,27 +73,30 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_gravity="center"
-                        android:padding="@dimen/default_padding"
+                        android:paddingVertical="@dimen/space_vertical"
                         android:text="@string/settings_help_login_configuration"
                         style="@style/pv.text"/>
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_horizontal_between"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_next"
+                        tools:ignore="ContentDescription"
                         style="@style/pv.icon"/>
 
                 </LinearLayout>
 
-                <View style="@style/divider"/>
+                <View style="@style/pv.divider"/>
 
                 <LinearLayout
                     android:id="@+id/settings_help_autofill_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
-                    android:padding="@dimen/default_padding"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
                     android:clickable="true"
                     android:focusable="true"
                     android:orientation="horizontal">
@@ -101,27 +106,30 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_gravity="center"
-                        android:padding="@dimen/default_padding"
+                        android:paddingVertical="@dimen/space_vertical"
                         android:text="@string/settings_help_autofill_configuration"
                         style="@style/pv.text"/>
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_horizontal_between"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_next"
+                        tools:ignore="ContentDescription"
                         style="@style/pv.icon"/>
 
                 </LinearLayout>
 
-                <View style="@style/divider"/>
+                <View style="@style/pv.divider"/>
 
                 <LinearLayout
                     android:id="@+id/settings_help_backup_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
-                    android:padding="@dimen/default_padding"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
                     android:clickable="true"
                     android:focusable="true"
                     android:orientation="horizontal">
@@ -131,15 +139,17 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_gravity="center"
-                        android:padding="@dimen/default_padding"
+                        android:paddingVertical="@dimen/space_vertical"
                         android:text="@string/settings_help_backup"
                         style="@style/pv.text"/>
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_horizontal_between"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_next"
+                        tools:ignore="ContentDescription"
                         style="@style/pv.icon"/>
 
                 </LinearLayout>

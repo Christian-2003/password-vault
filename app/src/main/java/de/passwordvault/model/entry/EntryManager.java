@@ -7,10 +7,11 @@ import de.passwordvault.model.CachableManager;
 import de.passwordvault.model.Observable;
 import de.passwordvault.model.Observer;
 import de.passwordvault.model.PersistableManager;
-import de.passwordvault.model.storage.Configuration;
 import de.passwordvault.model.storage.app.StorageException;
 import de.passwordvault.model.storage.app.StorageManager;
 import de.passwordvault.model.storage.encryption.EncryptionException;
+import de.passwordvault.model.storage.settings.Config;
+import de.passwordvault.service.autofill.caching.ContentCache;
 import de.passwordvault.service.autofill.caching.InvalidationCache;
 import de.passwordvault.service.autofill.caching.InvalidationCacheItem;
 
@@ -21,7 +22,7 @@ import de.passwordvault.service.autofill.caching.InvalidationCacheItem;
  * retrieved through {@link #getInstance()}.
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.6.0
  */
 public class EntryManager implements CachableManager<EntryExtended>, Observable<ArrayList<EntryAbbreviated>>, PersistableManager {
 
@@ -424,14 +425,27 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
         catch (Exception e) {
             throw new StorageException(e.getMessage());
         }
+        boolean invalidationCacheModified = false;
         for (EntryExtended entry : extendedEntryCache.values()) {
             try {
                 storageManager.saveExtendedEntry(entry);
+                if (entry.isModified()) {
+                    //Invalidate cache if item is modified:
+                    if (ContentCache.getInstance().getItem(entry.getUuid()) != null) {
+                        InvalidationCache.getInstance().putItem(new InvalidationCacheItem(entry.getUuid()));
+                        invalidationCacheModified = true;
+                    }
+                }
             }
             catch (Exception e) {
-                e.printStackTrace();
+                if (invalidationCacheModified) {
+                    InvalidationCache.getInstance().save();
+                }
                 throw new StorageException(e.getMessage());
             }
+        }
+        if (invalidationCacheModified) {
+            InvalidationCache.getInstance().save();
         }
     }
 
@@ -544,7 +558,7 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
         }
         mostRecentlyEditedEntriesCache.add(mostRecentlyChanged);
 
-        for (int i = 0; i < Configuration.getNumberOfRecentlyEdited() - 1; i++) {
+        for (int i = 0; i < Config.getInstance().numRecentlyEdited.get() - 1; i++) {
             EntryAbbreviated newMostRecentlyChanged = null;
             for (int j = 0; j < abbreviatedEntriesArrayListCache.size(); j++) {
                 if (abbreviatedEntriesArrayListCache.get(j).getChanged().compareTo(mostRecentlyChanged.getChanged()) < 0) {

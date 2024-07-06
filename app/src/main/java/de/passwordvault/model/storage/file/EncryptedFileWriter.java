@@ -1,6 +1,5 @@
 package de.passwordvault.model.storage.file;
 
-import android.content.Context;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,7 +12,7 @@ import de.passwordvault.model.storage.encryption.EncryptionException;
  * Class models a FileWriter which can write to an encrypted file.
  *
  * @author  Christian-2003
- * @version 2.2.2
+ * @version 3.6.0
  */
 public class EncryptedFileWriter {
 
@@ -39,6 +38,10 @@ public class EncryptedFileWriter {
         File file = new File(App.getContext().getFilesDir(), filename);
         if (!file.exists()) {
             try {
+                File parentDir = file.getParentFile();
+                if (!parentDir.exists()) {
+                    parentDir.mkdirs();
+                }
                 file.createNewFile();
             }
             catch (IOException | SecurityException e) {
@@ -46,7 +49,7 @@ public class EncryptedFileWriter {
                 return false;
             }
         }
-        try (FileOutputStream fos = App.getContext().openFileOutput(filename, Context.MODE_PRIVATE)) {
+        try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(content.getBytes());
         }
         catch (IOException e) {

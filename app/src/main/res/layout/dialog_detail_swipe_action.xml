@@ -14,18 +14,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/default_padding">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
                 android:text="@string/settings_customization_details_swipe_right"
                 style="@style/pv.text.highlight"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
+                android:layout_marginVertical="@dimen/space_vertical"
                 android:orientation="horizontal"
                 android:backgroundTint="@color/pv_background"
                 style="@style/pv.container">
@@ -35,14 +37,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="@dimen/default_padding"
+                    android:padding="@dimen/space_small"
                     android:background="@color/pv_primary">
 
                     <ImageView
                         android:id="@+id/right_swipe_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/default_padding"
+                        android:paddingHorizontal="@dimen/space_horizontal_between"
+                        android:paddingVertical="@dimen/space_vertical_between"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_edit"
                         android:tint="@color/pv_background"/>
@@ -55,19 +58,19 @@
                     android:layout_weight="1"
                     android:layout_gravity="center"
                     android:orientation="vertical"
-                    android:padding="@dimen/default_padding">
+                    android:padding="@dimen/space_small">
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/default_padding"
-                        android:layout_marginEnd="@dimen/default_padding"
+                        android:layout_height="@dimen/space_small"
+                        android:layout_marginEnd="@dimen/space_small"
                         android:background="@drawable/pill"
                         android:backgroundTint="@color/pv_container"/>
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/default_padding"
-                        android:layout_marginTop="@dimen/default_padding"
+                        android:layout_height="@dimen/space_small"
+                        android:layout_marginTop="@dimen/space_small"
                         android:background="@drawable/pill"
                         android:backgroundTint="@color/pv_container"/>
 
@@ -75,46 +78,86 @@
 
             </LinearLayout>
 
-            <RadioGroup
+            <LinearLayout
+                android:id="@+id/container_right_swipe_edit"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/space_horizontal"
+                android:paddingVertical="@dimen/space_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"
+                android:orientation="horizontal">
 
                 <RadioButton
                     android:id="@+id/radio_right_swipe_edit"
+                    android:layout_width="@dimen/radio_size"
+                    android:layout_height="@dimen/radio_size"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/text_right_swipe_edit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_horizontal_between"
+                    android:layout_gravity="center"
                     android:text="@string/settings_customization_details_swipe_edit"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/container_right_swipe_delete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/space_horizontal"
+                android:paddingVertical="@dimen/space_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"
+                android:orientation="horizontal">
 
                 <RadioButton
                     android:id="@+id/radio_right_swipe_delete"
+                    android:layout_width="@dimen/radio_size"
+                    android:layout_height="@dimen/radio_size"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/text_right_swipe_delete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_horizontal_between"
+                    android:layout_gravity="center"
                     android:text="@string/settings_customization_details_swipe_delete"/>
 
-            </RadioGroup>
+            </LinearLayout>
 
         </LinearLayout>
 
         <View
-            style="@style/divider"/>
+            style="@style/pv.divider"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/default_padding">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
                 android:text="@string/settings_customization_details_swipe_left"
                 style="@style/pv.text.highlight"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
+                android:layout_marginVertical="@dimen/space_vertical"
                 android:orientation="horizontal"
                 android:backgroundTint="@color/pv_background"
+                android:baselineAligned="false"
                 style="@style/pv.container">
 
                 <LinearLayout
@@ -123,19 +166,19 @@
                     android:layout_weight="1"
                     android:layout_gravity="center"
                     android:orientation="vertical"
-                    android:padding="@dimen/default_padding">
+                    android:padding="@dimen/space_small">
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/default_padding"
-                        android:layout_marginEnd="@dimen/default_padding"
+                        android:layout_height="@dimen/space_small"
+                        android:layout_marginEnd="@dimen/space_small"
                         android:background="@drawable/pill"
                         android:backgroundTint="@color/pv_container"/>
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/default_padding"
-                        android:layout_marginTop="@dimen/default_padding"
+                        android:layout_height="@dimen/space_small"
+                        android:layout_marginTop="@dimen/space_small"
                         android:background="@drawable/pill"
                         android:backgroundTint="@color/pv_container"/>
 
@@ -146,14 +189,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="@dimen/default_padding"
+                    android:padding="@dimen/space_small"
                     android:background="@color/pv_red">
 
                     <ImageView
                         android:id="@+id/left_swipe_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/default_padding"
+                        android:paddingHorizontal="@dimen/space_horizontal_between"
+                        android:paddingVertical="@dimen/space_vertical_between"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_delete"
                         android:tint="@color/pv_background"/>
@@ -162,23 +206,60 @@
 
             </LinearLayout>
 
-            <RadioGroup
+            <LinearLayout
+                android:id="@+id/container_left_swipe_edit"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/space_horizontal"
+                android:paddingVertical="@dimen/space_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"
+                android:orientation="horizontal">
 
                 <RadioButton
                     android:id="@+id/radio_left_swipe_edit"
+                    android:layout_width="@dimen/radio_size"
+                    android:layout_height="@dimen/radio_size"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/text_left_swipe_edit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_horizontal_between"
+                    android:layout_gravity="center"
                     android:text="@string/settings_customization_details_swipe_edit"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/container_left_swipe_delete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/space_horizontal"
+                android:paddingVertical="@dimen/space_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"
+                android:orientation="horizontal">
 
                 <RadioButton
                     android:id="@+id/radio_left_swipe_delete"
+                    android:layout_width="@dimen/radio_size"
+                    android:layout_height="@dimen/radio_size"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/text_left_swipe_delete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_horizontal_between"
+                    android:layout_gravity="center"
                     android:text="@string/settings_customization_details_swipe_delete"/>
 
-            </RadioGroup>
+            </LinearLayout>
 
         </LinearLayout>
 

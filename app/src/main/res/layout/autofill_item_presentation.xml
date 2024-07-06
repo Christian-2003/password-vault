@@ -10,9 +10,11 @@ changing this layout.
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/default_padding"
+    android:paddingHorizontal="@dimen/space_horizontal"
+    android:paddingVertical="@dimen/space_vertical"
     android:background="@color/pv_background"
     android:orientation="horizontal">
 
@@ -20,14 +22,18 @@ changing this layout.
         android:layout_width="@dimen/image_button_width"
         android:layout_height="@dimen/image_button_height"
         android:layout_gravity="center"
-        android:src="@mipmap/ic_launcher_round"/>
+        android:src="@mipmap/ic_launcher_round"
+        tools:ignore="ContentDescription"/>
 
     <TextView
         android:id="@+id/list_item_autofill_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:paddingStart="@dimen/default_padding"
+        android:layout_marginStart="@dimen/space_horizontal_between"
+        android:maxLines="2"
+        android:ellipsize="end"
+        tools:text="Password for XYZ"
         style="@style/pv.text"/>
 
 </LinearLayout>

@@ -11,7 +11,7 @@ import de.passwordvault.model.storage.csv.CsvConfiguration;
  * Class models an extended entry which contains all available information about an account-entry.
  *
  * @author  Christian-2003
- * @version 3.3.0
+ * @version 3.6.0
  */
 public class EntryExtended extends EntryAbbreviated implements Storable {
 
@@ -20,6 +20,13 @@ public class EntryExtended extends EntryAbbreviated implements Storable {
      */
     private ArrayList<Detail> details;
 
+    /**
+     * Attribute indicates whether the content of the extended entry has been modified since it was
+     * loaded from storage.
+     * This will not be set tot {@code true} if the entry is newly created.
+     */
+    private boolean modified;
+
 
     /**
      * Constructor instantiates a new entry without any contents.
@@ -27,6 +34,7 @@ public class EntryExtended extends EntryAbbreviated implements Storable {
     public EntryExtended() {
         super();
         setDetails(new ArrayList<>());
+        modified = false;
     }
 
     /**
@@ -39,6 +47,7 @@ public class EntryExtended extends EntryAbbreviated implements Storable {
     public EntryExtended(EntryExtended entry) throws NullPointerException {
         super(entry);
         setDetails(entry.getDetails());
+        setModified(entry.isModified());
     }
 
     /**
@@ -51,6 +60,7 @@ public class EntryExtended extends EntryAbbreviated implements Storable {
     public EntryExtended(EntryAbbreviated entry) throws NullPointerException {
         super(entry);
         details = new ArrayList<>();
+        modified = false;
     }
 
 
@@ -74,6 +84,24 @@ public class EntryExtended extends EntryAbbreviated implements Storable {
             throw new NullPointerException();
         }
         this.details = details;
+    }
+
+    /**
+     * Method returns whether the entry is modified.
+     *
+     * @return  Whether the entry is modified.
+     */
+    public boolean isModified() {
+        return modified;
+    }
+
+    /**
+     * Method changes whether the entry is modified.
+     *
+     * @param modified  Whether the entry is modified.
+     */
+    public void setModified(boolean modified) {
+        this.modified = modified;
     }
 
     /**

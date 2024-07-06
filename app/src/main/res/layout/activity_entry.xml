@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.activities.EntryActivity">
+    tools:context=".view.entries.activity_entry.EntryActivity">
 
     <!-- Toolbar for the activity -->
     <com.google.android.material.appbar.AppBarLayout
@@ -83,7 +83,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
                 android:text="@string/entry_general_info"
                 style="@style/pv.text.highlight"/>
 
@@ -95,26 +95,22 @@
                 android:orientation="vertical"
                 style="@style/pv.container">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/default_padding"
-                    android:orientation="vertical">
+                    android:layout_marginHorizontal="@dimen/space_horizontal"
+                    android:layout_marginTop="@dimen/space_vertical"
+                    android:text="@string/entry_name"
+                    style="@style/pv.text.variant"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/entry_name"
-                        style="@style/pv.text.variant"/>
-
-                    <TextView
-                        android:id="@+id/entry_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/placeholder_name"
-                        style="@style/pv.text"/>
-
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/entry_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/space_horizontal"
+                    android:layout_marginBottom="@dimen/space_vertical"
+                    tools:text="Account Name"
+                    style="@style/pv.text"/>
 
                 <LinearLayout
                     android:id="@+id/entry_description_container"
@@ -122,28 +118,24 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <View style="@style/divider"/>
+                    <View style="@style/pv.divider"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/default_padding"
-                        android:orientation="vertical">
+                        android:layout_marginHorizontal="@dimen/space_horizontal"
+                        android:layout_marginTop="@dimen/space_vertical"
+                        android:text="@string/entry_description"
+                        style="@style/pv.text.variant"/>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/entry_description"
-                            style="@style/pv.text.variant"/>
-
-                        <TextView
-                            android:id="@+id/entry_description"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/placeholder_description"
-                            style="@style/pv.text"/>
-
-                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/entry_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/space_horizontal"
+                        android:layout_marginBottom="@dimen/space_vertical"
+                        tools:text="Account Description"
+                        style="@style/pv.text"/>
 
                 </LinearLayout>
 
@@ -153,7 +145,7 @@
                 android:id="@+id/entry_details_container_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
                 android:text="@string/entry_details_info"
                 style="@style/pv.text.highlight"/>
 
@@ -193,7 +185,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                    android:layout_marginHorizontal="@dimen/space_horizontal"
                     android:text="@string/entry_additional_info"
                     style="@style/pv.text.highlight"/>
 
@@ -205,50 +197,41 @@
                     android:orientation="vertical"
                     style="@style/pv.container">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/default_padding"
-                        android:orientation="vertical">
+                        android:layout_marginHorizontal="@dimen/space_horizontal"
+                        android:layout_marginTop="@dimen/space_vertical"
+                        android:text="@string/entry_created"
+                        style="@style/pv.text.variant"/>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/entry_created"
-                            style="@style/pv.text.variant"/>
-
-                        <TextView
-                            android:id="@+id/entry_created"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/placeholder_date"
-                            style="@style/pv.text"/>
-
-                    </LinearLayout>
-
-                    <View
-                        style="@style/divider"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/entry_created"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/default_padding"
-                        android:orientation="vertical">
+                        android:layout_marginHorizontal="@dimen/space_horizontal"
+                        android:layout_marginBottom="@dimen/space_vertical"
+                        tools:text="2000-01-01"
+                        style="@style/pv.text"/>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/entry_changed"
-                            style="@style/pv.text.variant"/>
+                    <View style="@style/pv.divider"/>
 
-                        <TextView
-                            android:id="@+id/entry_changed"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/placeholder_date"
-                            style="@style/pv.text"/>
-                        
-                    </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/space_horizontal"
+                        android:layout_marginTop="@dimen/space_vertical"
+                        android:text="@string/entry_changed"
+                        style="@style/pv.text.variant"/>
+
+                    <TextView
+                        android:id="@+id/entry_changed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/space_horizontal"
+                        android:layout_marginBottom="@dimen/space_vertical"
+                        tools:text="2000-01-01"
+                        style="@style/pv.text"/>
 
                     <LinearLayout
                         android:id="@+id/entry_automatically_created"
@@ -256,13 +239,14 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <View style="@style/divider"/>
+                        <View style="@style/pv.divider"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/entry_automatically_created"
-                            android:padding="@dimen/default_padding"
+                            android:layout_marginHorizontal="@dimen/space_horizontal"
+                            android:layout_marginVertical="@dimen/space_vertical"
                             style="@style/pv.text.variant"/>
 
                     </LinearLayout>
@@ -274,26 +258,22 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <View style="@style/divider"/>
+                        <View style="@style/pv.divider"/>
 
-                        <LinearLayout
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/space_horizontal"
+                            android:layout_marginTop="@dimen/space_vertical"
+                            android:text="@string/entry_tags"
+                            style="@style/pv.text.variant"/>
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/entry_tag_container"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/default_padding"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/entry_tags"
-                                style="@style/pv.text.variant"/>
-
-                            <com.google.android.material.chip.ChipGroup
-                                android:id="@+id/entry_tag_container"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"/>
-
-                        </LinearLayout>
+                            android:layout_marginHorizontal="@dimen/space_horizontal"
+                            android:layout_marginBottom="@dimen/space_vertical"/>
 
                     </LinearLayout>
 
@@ -304,28 +284,24 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <View style="@style/divider"/>
+                        <View style="@style/pv.divider"/>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/default_padding"
-                            android:orientation="vertical">
+                            android:layout_marginHorizontal="@dimen/space_horizontal"
+                            android:layout_marginTop="@dimen/space_vertical"
+                            android:text="@string/entry_package"
+                            style="@style/pv.text.variant"/>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/entry_package"
-                                style="@style/pv.text.variant"/>
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/entry_packages_recycler_view"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-
-                        </LinearLayout>
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/entry_packages_recycler_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/space_horizontal"
+                            android:layout_marginBottom="@dimen/space_vertical"
+                            android:orientation="horizontal"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
                     </LinearLayout>
 
@@ -335,7 +311,7 @@
                     android:id="@+id/entry_hidden_details_container_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/default_left_margin_outside_container"
+                    android:layout_marginHorizontal="@dimen/space_horizontal"
                     android:text="@string/entry_hidden_details_info"
                     style="@style/pv.text.highlight"/>
 

@@ -30,7 +30,7 @@ public class InvalidationCache extends Cache {
     /**
      * Field stores the name of the cache.
      */
-    private static final String CACHE_NAME = "autofill_invalidation.cache";
+    private static final String CACHE_NAME = "autofill/invalidation.cache";
 
 
     /**

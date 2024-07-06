@@ -2,7 +2,7 @@ package de.passwordvault.model.storage.file;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStreamReader;
+import java.io.FileReader;
 import de.passwordvault.App;
 import de.passwordvault.model.storage.encryption.AES;
 import de.passwordvault.model.storage.encryption.EncryptionException;
@@ -12,7 +12,7 @@ import de.passwordvault.model.storage.encryption.EncryptionException;
  * Class models a FileReader which can read an encrypted file.
  *
  * @author  Christian-2003
- * @version 2.2.2
+ * @version 3.6.0
  */
 public class EncryptedFileReader {
 
@@ -38,7 +38,7 @@ public class EncryptedFileReader {
             //File does not exist:
             return null;
         }
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(App.getContext().openFileInput(filename)))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             StringBuilder content = new StringBuilder();
             String line = reader.readLine();
             while (line != null) {
