@@ -2,6 +2,15 @@
 
 # Changelog
 
+# 3.6.1 (XXXX-XX-XX)
+###### Release Highlights
+n/a
+
+###### Features
+* n/a
+
+<br/>
+
 ## 3.6.0 (02-07-2024)
 ###### Release Highlights
 Introduced security questions to reset master password if required as well as changes to UI. Furthermore, app changes were made to prepare the app for release on Google Play.

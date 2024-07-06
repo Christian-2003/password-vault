@@ -5,13 +5,14 @@ plugins {
 
 android {
     namespace 'de.passwordvault'
+    //noinspection GradleCompatible
     compileSdk 32
 
     defaultConfig {
         applicationId 'de.christian2003.passwordvault'
         minSdk 32
-        //noinspection OldTargetApi
-        targetSdk 33
+        //noinspection EditedTargetSdkVersion
+        targetSdk 34
         versionCode 20
         versionName '3.6.0'
         setProperty('archivesBaseName', 'password-vault-v' + versionName)
