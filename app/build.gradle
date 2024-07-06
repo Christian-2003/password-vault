@@ -11,9 +11,9 @@ android {
         applicationId 'de.christian2003.passwordvault'
         minSdk 32
         //noinspection OldTargetApi
-        targetSdk 32
-        versionCode 19
-        versionName '3.6.0-pre1'
+        targetSdk 33
+        versionCode 20
+        versionName '3.6.0'
         setProperty('archivesBaseName', 'password-vault-v' + versionName)
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
