@@ -14,6 +14,8 @@ n/a
 * Reintroduced links to GitHub repository from settings.
 * Reintroduced badges to navigate user to button from which to download update.
 * Changes to debug build config.
+* Added `SegmentedProgressBar` as custom view for a segmented progress bar.
+* Added display of entire device storage to settings.
 
 <br/>
 

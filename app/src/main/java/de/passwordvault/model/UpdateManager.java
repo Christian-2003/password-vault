@@ -1,4 +1,5 @@
 package de.passwordvault.model;
+
 import android.app.Activity;
 import android.util.Log;
 import com.supersuman.apkupdater.ApkUpdater;
@@ -52,6 +53,11 @@ public class UpdateManager {
     private boolean updateAvailable;
 
     /**
+     * Attribute stores whether the update manager is currently downloading a new release.
+     */
+    private boolean downloading;
+
+    /**
      * Attribute stores the callback for when the update status is discovered for the first time.
      */
     private final UpdateStatusChangedCallback callback;
@@ -67,6 +73,7 @@ public class UpdateManager {
      */
     private UpdateManager(Activity activity, UpdateStatusChangedCallback callback) {
         this.callback = callback;
+        this.downloading = false;
         this.updateAvailable = false;
 
         //For some reason, the ApkUpdater-class does not work within the main thread.
@@ -91,6 +98,24 @@ public class UpdateManager {
             }
         });
         updateThread.start();
+    }
+
+
+    public void requestDownload(Activity activity) {
+        if (updateAvailable && !downloading) {
+            downloading = true; //Only allow ONE download once the app runs!
+            Thread downloadThread = new Thread(() -> {
+                try {
+                    ApkUpdater updater = new ApkUpdater(activity, URL);
+                    updater.setThreeNumbers(true);
+                    updater.requestDownload();
+                }
+                catch (Exception e) {
+                    Log.e(TAG, "Could not download newest app release: " + e.getMessage());
+                }
+            });
+            downloadThread.start();
+        }
     }
 
 

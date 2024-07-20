@@ -377,6 +377,12 @@
         <item name="android:layout_marginHorizontal">@dimen/space_horizontal</item>
     </style>
 
+    <style name="pv.progess_bar_legend">
+        <item name="android:background">@drawable/pill</item>
+        <item name="android:layout_height">@dimen/pin_icon_size</item>
+        <item name="android:layout_width">@dimen/pin_icon_size</item>
+    </style>
+
     <!-- Style for popup menus -->
     <style name="popup_menu" parent="@android:style/Widget.PopupMenu">
         <item name="android:backgroundTint">@color/pv_container</item>

@@ -309,49 +309,32 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:background="?attr/selectableItemBackground"
-                    android:orientation="horizontal">
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:orientation="vertical">
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/settings_about_github_update"
-                                style="@style/pv.text"/>
-
-                            <View
-                                android:id="@+id/badge_update"
-                                android:visibility="gone"
-                                tools:visibility="visible"
-                                style="@style/pv.eyecatcher"/>
-
-                        </LinearLayout>
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/settings_about_github_update_info"
-                            style="@style/pv.text.variant"/>
+                            android:text="@string/settings_about_github_update"
+                            style="@style/pv.text"/>
+
+                        <View
+                            android:id="@+id/badge_update"
+                            style="@style/pv.eyecatcher"/>
 
                     </LinearLayout>
 
-                    <ImageView
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="@dimen/space_horizontal_between"
-                        android:src="@drawable/ic_external"
-                        tools:ignore="ContentDescription"
-                        style="@style/pv.icon"/>
+                        android:text="@string/settings_about_github_update_info"
+                        style="@style/pv.text.variant"/>
 
                 </LinearLayout>
 

@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
@@ -43,9 +44,10 @@ public class SettingsAboutActivity extends PasswordVaultBaseActivity {
         //GitHub
         findViewById(R.id.settings_about_github_repo_container).setOnClickListener(view -> openUrl(getString(R.string.settings_about_github_repo_link)));
         findViewById(R.id.settings_about_github_issues_container).setOnClickListener(view -> openUrl(getString(R.string.settings_about_github_issues_link)));
-        findViewById(R.id.settings_about_github_update_container).setOnClickListener(view -> openUrl(getString(R.string.settings_about_github_update_link)));
         if (UpdateManager.getInstance(this).isUpdateAvailable()) {
-            findViewById(R.id.badge_update).setVisibility(View.VISIBLE);
+            LinearLayout updateContainer = findViewById(R.id.settings_about_github_update_container);
+            updateContainer.setVisibility(View.VISIBLE);
+            updateContainer.setOnClickListener(view -> UpdateManager.getInstance(this).requestDownload(this));
         }
 
         //Software

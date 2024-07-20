@@ -124,7 +124,7 @@
     <string name="settings_about_github_issues_info">Report bugs on GitHub</string>
     <string name="settings_about_github_issues_link" translatable="false">https://github.com/Christian-2003/password-vault/issues</string>
     <string name="settings_about_github_update">Software update</string>
-    <string name="settings_about_github_update_info">Download newest release from GitHub</string>
+    <string name="settings_about_github_update_info">Download newest release</string>
     <string name="settings_about_github_update_link" translatable="false">https://github.com/Christian-2003/password-vault/releases/latest</string>
     <string name="settings_about_software">Software</string>
     <string name="settings_about_software_version">App version</string>
@@ -167,6 +167,13 @@
     <string name="settings_data_backup_restore_settings_quality_gates">Restore Quality Gates</string>
     <string name="settings_data_backup_restore_settings_settings">Restore Settings</string>
     <string name="settings_data_backup_restore_settings_encryption">Encryption</string>
+    <string name="settings_data_storage">Storage</string>
+    <string name="settings_data_storage_used">Used</string>
+    <string name="settings_data_storage_free">Free</string>
+    <string name="settings_data_storage_app">Password Vault</string>
+    <string name="settings_data_storage_data">Password Vault data</string>
+    <string name="settings_data_storage_cache">Password Vault cache</string>
+    <string name="settings_data_storage_placeholder">{space} {unit}</string>
     <string name="settings_data_delete">Delete</string>
     <string name="settings_data_delete_all">Delete data</string>
     <string name="settings_data_delete_all_info">Delete all data irreversibly</string>

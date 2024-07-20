@@ -9,17 +9,10 @@ import androidx.biometric.BiometricManager;
 import androidx.lifecycle.ViewModel;
 import de.passwordvault.App;
 import de.passwordvault.R;
-import de.passwordvault.model.analysis.QualityGateManager;
-import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.security.login.Account;
-import de.passwordvault.model.storage.app.StorageException;
 import de.passwordvault.model.storage.backup.BackupException;
 import de.passwordvault.model.storage.backup.BackupCreator;
 import de.passwordvault.model.storage.encryption.EncryptionException;
-import de.passwordvault.model.storage.export.ExportException;
-import de.passwordvault.model.storage.export.ExportToHtml2;
-import de.passwordvault.model.tags.TagManager;
-import de.passwordvault.view.activity_main.fragment_settings.SettingsFragment;
 
 
 /**
@@ -27,7 +20,7 @@ import de.passwordvault.view.activity_main.fragment_settings.SettingsFragment;
  * relevant data and functionalities that are not directly bound to the view of the fragment.
  *
  * @author  Christian-2003
- * @version 3.5.4
+ * @version 3.6.1
  */
 public class SettingsViewModel extends ViewModel {
 
@@ -76,50 +69,6 @@ public class SettingsViewModel extends ViewModel {
             return;
         }
         Toast.makeText(context, context.getString(R.string.settings_data_backup_create_success), Toast.LENGTH_SHORT).show();
-    }
-
-
-    /**
-     * Method IRREVERSIBLY deletes all data from the device!
-     */
-    public void deleteAllData() {
-        TagManager.getInstance().clear();
-        TagManager.getInstance().save(true);
-
-        QualityGateManager.getInstance().clearQualityGates();
-        QualityGateManager.getInstance().saveAllQualityGates();
-
-        EntryManager.getInstance().clear();
-        try {
-            EntryManager.getInstance().save(true);
-        }
-        catch (StorageException e) {
-            //Ignore...
-        }
-    }
-
-
-    /**
-     * Method exports the application data to readable HTML-format.
-     *
-     * @param uri                   URI of the HTML file to which shall be exported.
-     * @param context               Context needed to display error messages.
-     * @throws NullPointerException The passed URI is {@code null}.
-     */
-    public void exportToHtml(Uri uri, Context context) throws NullPointerException {
-        if (uri == null) {
-            throw new NullPointerException("Null is invalid URI");
-        }
-        ExportToHtml2 htmlExporter = new ExportToHtml2(uri);
-        try {
-            htmlExporter.export();
-        }
-        catch (ExportException e) {
-            e.printStackTrace();
-            Toast.makeText(context, context.getString(R.string.settings_data_export_html_error), Toast.LENGTH_LONG).show();
-            return;
-        }
-        Toast.makeText(context, context.getString(R.string.settings_data_export_html_success), Toast.LENGTH_LONG).show();
     }
 
 
