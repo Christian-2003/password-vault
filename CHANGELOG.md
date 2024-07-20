@@ -4,7 +4,7 @@
 
 # 3.6.1 (XXXX-XX-XX)
 ###### Release Highlights
-n/a
+Reintroduction of features required when the app is not published on Google Play as well as bugfixes and general improvements.
 
 ###### Features
 * Fixed a bug where the app crashes when the user tries to reset the master password while more than five security questions were configured.
@@ -14,8 +14,10 @@ n/a
 * Reintroduced links to GitHub repository from settings.
 * Reintroduced badges to navigate user to button from which to download update.
 * Changes to debug build config.
+* Clicking button to update app in settings downloads new release APK file instead of redirecting to GitHub releases page.
 * Added `SegmentedProgressBar` as custom view for a segmented progress bar.
 * Added display of entire device storage to settings.
+* Replaced back button with cancel button in `AddEntryActivity` and `QualityGateActivity` to indicate that closing the activity will not save changes.
 
 <br/>
 
