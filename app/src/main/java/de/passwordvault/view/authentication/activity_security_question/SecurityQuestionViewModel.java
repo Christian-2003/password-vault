@@ -14,7 +14,7 @@ import de.passwordvault.model.security.login.SecurityQuestion;
  * questions in order to restore the master password.
  *
  * @author  Christian-2003
- * @version 3.6.0
+ * @version 3.6.1
  */
 public class SecurityQuestionViewModel extends ViewModel {
 
