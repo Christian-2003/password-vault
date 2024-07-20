@@ -42,6 +42,7 @@ public class SecurityQuestionViewModel extends ViewModel {
             ArrayList<SecurityQuestion> allQuestions = new ArrayList<>(Account.getInstance().getSecurityQuestions());
             Collections.shuffle(allQuestions);
             if (allQuestions.size() > Account.REQUIRED_SECURITY_QUESTIONS) {
+                questions = new ArrayList<>();
                 for (int i = 0; i < Account.REQUIRED_SECURITY_QUESTIONS; i++) {
                     questions.add(allQuestions.get(i));
                 }

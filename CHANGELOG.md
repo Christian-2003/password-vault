@@ -7,7 +7,7 @@
 n/a
 
 ###### Features
-* n/a
+* Fixed a bug where the app crashes when the user tries to reset the master password while more than five security questions were configured.
 
 <br/>
 
