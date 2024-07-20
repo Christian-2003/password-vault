@@ -11,6 +11,8 @@ n/a
 * Fixed a bug where the color of swipe icons for security questions was incorrect.
 * Fixed a bug where the color of the radio button labels within the dialog to change swipe actions was incorrect.
 * Reintroduced `UpdateManager`-class for the app to be able to update from GitHub.
+* Reintroduced links to GitHub repository from settings.
+* Reintroduced badges to navigate user to button from which to download update.
 * Changes to debug build config.
 
 <br/>

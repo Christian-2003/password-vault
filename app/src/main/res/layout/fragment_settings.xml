@@ -346,11 +346,24 @@
                         android:layout_marginHorizontal="@dimen/space_horizontal_between"
                         android:orientation="vertical">
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/settings_about"
-                            style="@style/pv.text"/>
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/settings_about"
+                                style="@style/pv.text"/>
+
+                            <View
+                                android:id="@+id/badge_update"
+                                android:visibility="gone"
+                                tools:visibility="visible"
+                                style="@style/pv.eyecatcher"/>
+
+                        </LinearLayout>
 
                         <TextView
                             android:layout_width="wrap_content"

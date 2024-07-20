@@ -108,7 +108,7 @@
     <string name="settings_help_backup">Manage backups</string>
 
     <string name="settings_about">About</string>
-    <string name="settings_about_info">Terms of Service • Privacy Policy • App info</string>
+    <string name="settings_about_info">Legal • GitHub • App info</string>
     <string name="settings_about_usage">Legal</string>
     <string name="settings_about_usage_tos">Terms of Service</string>
     <string name="settings_about_usage_tos_info">Show Terms of Service</string>
@@ -116,6 +116,16 @@
     <string name="settings_about_usage_dependencies_info">Show used software</string>
     <string name="settings_about_usage_privacypolicy">Privacy Policy</string>
     <string name="settings_about_usage_privacypolicy_info">Show Privacy Policy</string>
+    <string name="settings_about_github">GitHub</string>
+    <string name="settings_about_github_repo">Repository</string>
+    <string name="settings_about_github_repo_info">Show app on GitHub</string>
+    <string name="settings_about_github_repo_link" translatable="false">https://github.com/Christian-2003/password-vault</string>
+    <string name="settings_about_github_issues">Report bugs</string>
+    <string name="settings_about_github_issues_info">Report bugs on GitHub</string>
+    <string name="settings_about_github_issues_link" translatable="false">https://github.com/Christian-2003/password-vault/issues</string>
+    <string name="settings_about_github_update">Software update</string>
+    <string name="settings_about_github_update_info">Download newest release from GitHub</string>
+    <string name="settings_about_github_update_link" translatable="false">https://github.com/Christian-2003/password-vault/releases/latest</string>
     <string name="settings_about_software">Software</string>
     <string name="settings_about_software_version">App version</string>
     <string name="settings_about_software_more">More info</string>

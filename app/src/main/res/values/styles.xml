@@ -254,8 +254,9 @@
     <!-- Style for eyecatcher -->
     <style name="pv.eyecatcher">
         <item name="android:background">@drawable/shape_important</item>
-        <item name="android:layout_height">@dimen/pin_icon_size</item>
-        <item name="android:layout_width">@dimen/pin_icon_size</item>
+        <item name="android:backgroundTint">@color/pv_red</item>
+        <item name="android:layout_height">@dimen/eyecatcher_size</item>
+        <item name="android:layout_width">@dimen/eyecatcher_size</item>
     </style>
 
     <style name="pv.eyecatcher.pill">
