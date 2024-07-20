@@ -18,6 +18,7 @@ Reintroduction of features required when the app is not published on Google Play
 * Added `SegmentedProgressBar` as custom view for a segmented progress bar.
 * Added display of entire device storage to settings.
 * Replaced back button with cancel button in `AddEntryActivity` and `QualityGateActivity` to indicate that closing the activity will not save changes.
+* Fixed a bug where the password security analysis did not reload when the dataset changes.
 
 <br/>
 
