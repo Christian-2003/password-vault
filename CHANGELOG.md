@@ -8,7 +8,8 @@ n/a
 
 ###### Features
 * Fixed a bug where the app crashes when the user tries to reset the master password while more than five security questions were configured.
-* Fixed a bug where the color of swipe icons for security questions was incorrect. 
+* Fixed a bug where the color of swipe icons for security questions was incorrect.
+* Fixed a bug where the color of the radio button labels within the dialog to change swipe actions was incorrect.
 
 <br/>
 
