@@ -102,7 +102,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_horizontal_between"
                     android:layout_gravity="center"
-                    android:text="@string/settings_customization_details_swipe_edit"/>
+                    android:text="@string/settings_customization_details_swipe_edit"
+                    style="@style/pv.text"/>
 
 
             </LinearLayout>
@@ -130,7 +131,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_horizontal_between"
                     android:layout_gravity="center"
-                    android:text="@string/settings_customization_details_swipe_delete"/>
+                    android:text="@string/settings_customization_details_swipe_delete"
+                    style="@style/pv.text"/>
 
             </LinearLayout>
 
@@ -233,7 +235,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_horizontal_between"
                     android:layout_gravity="center"
-                    android:text="@string/settings_customization_details_swipe_edit"/>
+                    android:text="@string/settings_customization_details_swipe_edit"
+                    style="@style/pv.text"/>
 
 
             </LinearLayout>
@@ -261,7 +264,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_horizontal_between"
                     android:layout_gravity="center"
-                    android:text="@string/settings_customization_details_swipe_delete"/>
+                    android:text="@string/settings_customization_details_swipe_delete"
+                    style="@style/pv.text"/>
 
             </LinearLayout>
 

@@ -2,7 +2,28 @@
 
 # Changelog
 
-## 3.6.0 (02-07-2024)
+# 3.6.1 (2024-07-27)
+###### Release Highlights
+Reintroduction of features required when the app is not published on Google Play as well as bugfixes and general improvements.
+
+###### Features
+* Fixed a bug where the app crashes when the user tries to reset the master password while more than five security questions were configured.
+* Fixed a bug where the color of swipe icons for security questions was incorrect.
+* Fixed a bug where the color of the radio button labels within the dialog to change swipe actions was incorrect.
+* Reintroduced `UpdateManager`-class for the app to be able to update from GitHub.
+* Reintroduced links to GitHub repository from settings.
+* Reintroduced badges to navigate user to button from which to download update.
+* Changes to debug build config.
+* Clicking button to update app in settings downloads new release APK file instead of redirecting to GitHub releases page.
+* Added `SegmentedProgressBar` as custom view for a segmented progress bar.
+* Added display of entire device storage to settings.
+* Replaced back button with cancel button in `AddEntryActivity` and `QualityGateActivity` to indicate that closing the activity will not save changes.
+* Fixed a bug where the password security analysis did not reload when the dataset changes.
+* Fixed a bug where rotating the activity displaying all packages crashes the app.
+
+<br/>
+
+## 3.6.0 (2024-07-02)
 ###### Release Highlights
 Introduced security questions to reset master password if required as well as changes to UI. Furthermore, app changes were made to prepare the app for release on Google Play.
 

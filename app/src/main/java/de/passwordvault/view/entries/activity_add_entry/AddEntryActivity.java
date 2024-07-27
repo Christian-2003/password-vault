@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.model.Observable;
 import de.passwordvault.model.Observer;
+import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
 import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.packages.PackageCollection;
@@ -44,7 +45,7 @@ import de.passwordvault.view.utils.DialogCallbackListener;
  * Class implements an activity which can add (or edit) entries.
  *
  * @author  Christian-2003
- * @version 3.6.0
+ * @version 3.6.1
  */
 public class AddEntryActivity extends PasswordVaultBaseActivity implements DialogCallbackListener, Observer<ArrayList<Tag>> {
 
@@ -160,6 +161,7 @@ public class AddEntryActivity extends PasswordVaultBaseActivity implements Dialo
                 return;
             }
             EntryManager.getInstance().set(viewModel.getEntry(), viewModel.getEntry().getUuid());
+            PasswordSecurityAnalysis.getInstance().invalidate();
             setResult(RESULT_OK);
             finishedEditing = true;
             AddEntryActivity.this.finish();

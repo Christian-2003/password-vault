@@ -1,7 +1,9 @@
 package de.passwordvault.view.settings.activity_data;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -10,7 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import java.util.Calendar;
-
+import java.util.concurrent.Executor;
+import de.passwordvault.App;
 import de.passwordvault.R;
 import de.passwordvault.model.security.authentication.AuthenticationCallback;
 import de.passwordvault.model.security.authentication.AuthenticationFailure;
@@ -23,7 +26,7 @@ import de.passwordvault.view.settings.activity_quality_gates.QualityGatesActivit
 import de.passwordvault.view.utils.DialogCallbackListener;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
-import de.passwordvault.view.activity_main.fragment_settings.SettingsViewModel;
+import de.passwordvault.view.utils.components.SegmentedProgressBar;
 
 
 /**
@@ -43,7 +46,7 @@ public class SettingsDataActivity extends PasswordVaultBaseActivity implements D
     /**
      * Attribute stores the view model of the activity.
      */
-    private SettingsViewModel viewModel;
+    private SettingsDataViewModel viewModel;
 
     /**
      * Attribute stores the activity result launcher for selecting a directory for the HTML export.
@@ -87,6 +90,7 @@ public class SettingsDataActivity extends PasswordVaultBaseActivity implements D
     public void onPositiveCallback(DialogFragment fragment) {
         if (fragment instanceof ConfirmDeleteDialog) {
             viewModel.deleteAllData();
+            updateStorageData(true);
         }
     }
 
@@ -113,6 +117,7 @@ public class SettingsDataActivity extends PasswordVaultBaseActivity implements D
         }
         if (tag.equals(TAG_AUTH_DELETE)) {
             viewModel.deleteAllData();
+            updateStorageData(true);
         }
     }
 
@@ -137,7 +142,7 @@ public class SettingsDataActivity extends PasswordVaultBaseActivity implements D
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_data);
-        viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
+        viewModel = new ViewModelProvider(this).get(SettingsDataViewModel.class);
 
         findViewById(R.id.button_back).setOnClickListener(view -> finish());
 
@@ -147,6 +152,9 @@ public class SettingsDataActivity extends PasswordVaultBaseActivity implements D
         //Backup:
         findViewById(R.id.settings_data_backup_create_container).setOnClickListener(view -> startActivity(new Intent(this, CreateBackupActivity.class)));
         findViewById(R.id.settings_data_backup_restore_container).setOnClickListener(view -> restoreXmlBackup());
+
+        //Storage:
+        updateStorageData(false);
 
         //Delete:
         findViewById(R.id.settings_data_delete_all_container).setOnClickListener(view -> deleteAllData());
@@ -207,6 +215,44 @@ public class SettingsDataActivity extends PasswordVaultBaseActivity implements D
             dialog.setArguments(args);
             dialog.show(getSupportFragmentManager(), "");
         }
+    }
+
+
+    private void updateStorageData(boolean force) {
+        SegmentedProgressBar progressBar = findViewById(R.id.progress_bar);
+        Executor mainExecutor = getMainExecutor();
+        App.getExecutor().execute(() -> {
+            viewModel.calculateStorageStats(this, force);
+            String placeholder = getString(R.string.settings_data_storage_placeholder);
+            double usedSpaceMb = viewModel.getTotalUsedDiskSpace();
+            double freeSpaceMb = viewModel.getTotalFreeDiskSpace();
+            double appSpaceMb = viewModel.getTotalAppSpace();
+            double dataSpaceMb = viewModel.getTotalDataSpace();
+            double cacheSpaceMb = viewModel.getTotalCacheSpace();
+            double totalSpace = usedSpaceMb + freeSpaceMb + appSpaceMb + dataSpaceMb + cacheSpaceMb;
+            float usedSpacePercentage = (float)(usedSpaceMb / totalSpace);
+            float appSpacePercentage = (float)(appSpaceMb / totalSpace);
+            float dataSpacePercentage = (float)(dataSpaceMb / totalSpace);
+            float cacheSpacePercentage = (float)(cacheSpaceMb / totalSpace);
+            String usedSpaceText = viewModel.formatStorageSpace(placeholder, usedSpaceMb / 1024, "GB");
+            String freeSpaceText = viewModel.formatStorageSpace(placeholder, freeSpaceMb / 1024, "GB");
+            String appSpaceText = viewModel.formatStorageSpace(placeholder, appSpaceMb, "MB");
+            String dataSpaceText = viewModel.formatStorageSpace(placeholder, dataSpaceMb, "MB");
+            String cacheSpaceText = viewModel.formatStorageSpace(placeholder, cacheSpaceMb, "MB");
+            progressBar.clearSegments();
+            progressBar.addSegment(new SegmentedProgressBar.Segment(usedSpacePercentage, getColor(R.color.pv_text_secondary)));
+            progressBar.addSegment(new SegmentedProgressBar.Segment(appSpacePercentage, getColor(R.color.pv_primary)));
+            progressBar.addSegment(new SegmentedProgressBar.Segment(dataSpacePercentage, getColor(R.color.pv_green)));
+            progressBar.addSegment(new SegmentedProgressBar.Segment(cacheSpacePercentage, getColor(R.color.pv_yellow)));
+            mainExecutor.execute(() -> {
+                ((TextView)findViewById(R.id.used)).setText(usedSpaceText);
+                ((TextView)findViewById(R.id.free)).setText(freeSpaceText);
+                ((TextView)findViewById(R.id.app)).setText(appSpaceText);
+                ((TextView)findViewById(R.id.data)).setText(dataSpaceText);
+                ((TextView)findViewById(R.id.cache)).setText(cacheSpaceText);
+                progressBar.invalidate();
+            });
+        });
     }
 
 }

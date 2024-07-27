@@ -8,13 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
-
 import de.passwordvault.R;
 import de.passwordvault.model.packages.Package;
 import de.passwordvault.model.packages.PackagesManager;
@@ -85,7 +83,9 @@ public class PackagesListFragment extends PasswordVaultBaseFragment implements O
 
             @Override
             public void afterTextChanged(Editable editable) {
-                adapter.getFilter().filter(editable);
+                if (adapter != null) {
+                    adapter.getFilter().filter(editable);
+                }
             }
         });
 

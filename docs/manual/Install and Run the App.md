@@ -36,7 +36,7 @@ After downloading a Password Vault release APK, you can locate the APK file thro
 
 Once located, execute the downloaded APK file. If this is your first time installing Password Vault, your operating system warns you about the APK file, since the certificate for signing the APK file is not verified by Google or your device's manufacturer. You need to click **Install anyways** in order to install the APK file.
 
-If you have already installed Password Vault, you can follow the same steps. Instead of installing Password Vault, your current installation will be updated, while keeping your data. The only exception to this is for updating from version 3.1.0 or lower. To keep your data when updating from these versions, follow [this](Update%20to%20Version%203.2.0.md) guide.
+If you have already installed Password Vault, you can follow the same steps. Instead of installing Password Vault, your current installation will be updated, while keeping your data. The only exceptions to this is for updating to versions 3.2.0 or 3.6.0. To keep your data when updating from these versions, follow [this](Update%20to%20Newer%Versions.md) guide.
 
 ###### Run the App
 In order to verify that the installation worked, you should open Password Vault. If the app can be opened, the installation worked as intended and you should not encounter any problems.

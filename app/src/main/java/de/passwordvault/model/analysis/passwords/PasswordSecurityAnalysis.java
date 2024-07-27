@@ -4,7 +4,6 @@ import android.util.Log;
 import java.util.ArrayList;
 import de.passwordvault.model.Observable;
 import de.passwordvault.model.Observer;
-import de.passwordvault.model.analysis.QualityGateManager;
 import de.passwordvault.model.detail.Detail;
 import de.passwordvault.model.detail.DetailType;
 import de.passwordvault.model.entry.EntryAbbreviated;
@@ -18,7 +17,7 @@ import de.passwordvault.model.entry.EntryManager;
  * finds duplicate passwords.
  *
  * @author  Christian-2003
- * @version 3.4.0
+ * @version 3.6.1
  */
 public class PasswordSecurityAnalysis implements Observable<ArrayList<Password>>, Runnable {
 
@@ -127,6 +126,15 @@ public class PasswordSecurityAnalysis implements Observable<ArrayList<Password>>
      */
     public boolean isAnalysisRunning() {
         return analysisRunning;
+    }
+
+
+    /**
+     * Method invalidates the results of the analysis which can be done
+     */
+    public void invalidate() {
+        analysisCompleted = false;
+        cancel();
     }
 
 

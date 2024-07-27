@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import de.passwordvault.BuildConfig;
 import de.passwordvault.R;
+import de.passwordvault.model.UpdateManager;
 import de.passwordvault.view.settings.activity_localized_asset_viewer.LocalizedAssetViewerActivity;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 
@@ -37,6 +40,15 @@ public class SettingsAboutActivity extends PasswordVaultBaseActivity {
         findViewById(R.id.settings_about_usage_tos_container).setOnClickListener(view -> showLegalPage("terms_of_service.html"));
         findViewById(R.id.settings_about_usage_dependencies_container).setOnClickListener(view -> startActivity(new Intent(this, OssLicensesMenuActivity.class)));
         findViewById(R.id.settings_about_usage_privacypolicy_container).setOnClickListener(view -> showLegalPage("privacy_policy.html"));
+
+        //GitHub
+        findViewById(R.id.settings_about_github_repo_container).setOnClickListener(view -> openUrl(getString(R.string.settings_about_github_repo_link)));
+        findViewById(R.id.settings_about_github_issues_container).setOnClickListener(view -> openUrl(getString(R.string.settings_about_github_issues_link)));
+        if (UpdateManager.getInstance(this).isUpdateAvailable()) {
+            LinearLayout updateContainer = findViewById(R.id.settings_about_github_update_container);
+            updateContainer.setVisibility(View.VISIBLE);
+            updateContainer.setOnClickListener(view -> UpdateManager.getInstance(this).requestDownload(this));
+        }
 
         //Software
         String version = BuildConfig.VERSION_NAME;

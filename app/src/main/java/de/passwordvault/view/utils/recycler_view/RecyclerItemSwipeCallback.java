@@ -24,7 +24,7 @@ import de.passwordvault.model.storage.settings.Config;
  *
  * @param <T>   Data type for the items displayed in the recycler view.
  * @author      Christian-2003
- * @version     3.6.0
+ * @version     3.6.1
  */
 public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
 
@@ -296,7 +296,7 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
         if (drawable == null) {
             return null;
         }
-        drawable.setTint(adapter.getContext().getColor(R.color.pv_background));
+        drawable.setTint(adapter.getContext().getColor(R.color.pv_container));
         Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());

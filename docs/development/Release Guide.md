@@ -176,10 +176,10 @@ Furthermore, if some very important happened during the release (like some backw
 Due to backwards-incompatible changes...
 ```
 
-Always include information for people who update from version 3.1.0 or lower:
+Always include information for people who update from version 3.5.6 or lower:
 ```markdown
-###### Update From Version 3.1.0 or Lower
-If you update from version 3.1.0 or lower, please follow the [update guidelines](https://github.com/Christian-2003/password-vault/blob/master/docs/manual/Update%20to%20Version%203.2.0.md) for updating to the newer versions.
+###### Update From Version 3.5.6 or Lower
+If you update from version 3.5.6 or lower, please follow the [update guidelines](https://github.com/Christian-2003/password-vault/blob/master/docs/manual/Update%20to%20Newer%Versions.md) for updating to the newer versions.
 ```
 
 A complete release description could be as follows:
@@ -192,8 +192,8 @@ Due to backwards-incompatible changes...
 ###### Changes
 Minor changes to application UI as well as some bugfixes.
 
-###### Update From Version 3.1.0 or Lower
-If you update from version 3.1.0 or lower, please follow the [update guidelines](https://github.com/Christian-2003/password-vault/blob/master/docs/manual/Update%20to%20Version%203.2.0.md) for updating to the newer versions.
+###### Update From Version 3.5.6 or Lower
+If you update from version 3.5.6 or lower, please follow the [update guidelines](https://github.com/Christian-2003/password-vault/blob/master/docs/manual/Update%20to%20Newer%Versions.md) for updating to the newer versions.
 ```
 
 After that, you may publish the release to GitHub.
