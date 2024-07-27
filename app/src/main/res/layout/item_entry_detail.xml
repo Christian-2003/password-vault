@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout
+    android:id="@+id/container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -18,7 +19,7 @@
         app:cardCornerRadius="28dp">
 
         <ImageView
-            android:id="@+id/image_app"
+            android:id="@+id/image_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:src="@drawable/detail_text"
@@ -40,7 +41,7 @@
             android:maxLines="1"
             android:ellipsize="end"
             tools:text="Detail name"
-            style="@style/pv.text.highlight"/>
+            style="@style/pv.text.title"/>
 
         <TextView
             android:id="@+id/text_content"
@@ -63,7 +64,8 @@
                 android:layout_weight="1"
                 android:layout_gravity="bottom"
                 android:layout_marginEnd="@dimen/space_horizontal_between"
-                tools:text="2024-07-24"/>
+                tools:text="2024-07-24"
+                style="@style/pv.text.secondary"/>
 
             <ImageButton
                 android:id="@+id/button_copy"

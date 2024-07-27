@@ -40,7 +40,7 @@
 
     <dimen name="text_toolbar">22sp</dimen>
     <dimen name="text_xl">28sp</dimen>
-    <dimen name="text_l">16sp</dimen>
+    <dimen name="text_l">18sp</dimen>
     <dimen name="text_m">16sp</dimen>
     <dimen name="text_s">14sp</dimen>
     <dimen name="text_xs">12sp</dimen>

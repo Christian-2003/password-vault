@@ -43,7 +43,7 @@
                 android:maxLines="1"
                 android:ellipsize="end"
                 tools:text="Account name"
-                style="@style/pv.text.highlight"/>
+                style="@style/pv.text.title"/>
 
             <TextView
                 android:id="@+id/text_description"
@@ -52,7 +52,7 @@
                 android:maxLines="2"
                 android:ellipsize="end"
                 tools:text="Account description"
-                style="@style/pv.text"/>
+                style="@style/pv.text.support"/>
 
             <TextView
                 android:id="@+id/text_date"
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 tools:text="2024-07-24"
-                style="@style/pv.text.variant"/>
+                style="@style/pv.text.secondary"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -105,9 +105,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/entry_details_info"
-            style="@style/pv.text.highlight"/>
+            style="@style/pv.text.title"/>
 
         <ImageButton
+            android:id="@+id/button_add_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_add"

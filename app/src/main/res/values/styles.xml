@@ -17,9 +17,27 @@
 
     <!-- Style for normal text -->
     <style name="pv.text">
-        <item name="android:textSize">@dimen/default_text_size</item>
+        <item name="android:textSize">@dimen/text_m</item>
         <item name="android:textColor">@color/pv_text</item>
     </style>
+
+    <style name="pv.text.toolbar" parent="pv.text">
+        <item name="android:textSize">@dimen/text_toolbar</item>
+    </style>
+
+    <style name="pv.text.title" parent="pv.text">
+        <item name="android:textSize">@dimen/text_xl</item>
+    </style>
+
+    <style name="pv.text.support" parent="pv.text">
+        <item name="android:textSize">@dimen/text_l</item>
+    </style>
+
+    <style name="pv.text.secondary" parent="pv.text">
+        <item name="android:textSize">@dimen/text_s</item>
+        <item name="android:textColor">@color/pv_text_secondary</item>
+    </style>
+
 
     <!-- Style for secondary text -->
     <style name="pv.text.variant" parent="pv.text">

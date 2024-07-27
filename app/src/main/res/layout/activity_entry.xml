@@ -24,25 +24,40 @@
             style="@style/pv.button.image_button"/>
 
         <TextView
-            android:id="@+id/text_appbar"
+            android:id="@+id/text_toolbar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center"
+            android:layout_marginHorizontal="@dimen/space_horizontal_between"
             android:maxLines="1"
             android:ellipsize="end"
             tools:text="Entry name"
-            style="@style/pv.text.app_bar"/>
+            style="@style/pv.text.toolbar"/>
 
-        <ImageButton
-            android:id="@+id/button_delete"
-            android:layout_width="?attr/actionBarSize"
-            android:layout_height="?attr/actionBarSize"
-            android:src="@drawable/ic_delete"
-            android:layout_gravity="center"
-            tools:ignore="contentDescription"
-            style="@style/pv.button.image_button"/>
+        <LinearLayout
+            android:id="@+id/container_selection_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/button_delete"
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="?attr/actionBarSize"
+                android:src="@drawable/ic_delete"
+                android:layout_gravity="center"
+                tools:ignore="contentDescription"
+                style="@style/pv.button.image_button"/>
+
+        </LinearLayout>
 
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
 </LinearLayout>
