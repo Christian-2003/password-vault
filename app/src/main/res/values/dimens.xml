@@ -24,11 +24,25 @@
     <dimen name="radio_size">26dp</dimen>
     <dimen name="space_small">10dp</dimen>
 
+
     <dimen name="space_vertical">8dp</dimen>
     <dimen name="space_vertical_between">4dp</dimen>
     <dimen name="space_horizontal">24dp</dimen>
     <dimen name="space_horizontal_between">16dp</dimen>
     <dimen name="space_vertical_title">16dp</dimen>
     <dimen name="space_vertical_list_button">16dp</dimen>
+
+    <dimen name="image_xl">136dp</dimen>
+    <dimen name="image_l">98dp</dimen>
+    <dimen name="image_m">64dp</dimen>
+    <dimen name="image_s">32dp</dimen>
+    <dimen name="image_xs">24dp</dimen>
+
+    <dimen name="text_toolbar">22sp</dimen>
+    <dimen name="text_xl">28sp</dimen>
+    <dimen name="text_l">16sp</dimen>
+    <dimen name="text_m">16sp</dimen>
+    <dimen name="text_s">14sp</dimen>
+    <dimen name="text_xs">12sp</dimen>
 
 </resources>

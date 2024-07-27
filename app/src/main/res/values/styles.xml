@@ -38,7 +38,6 @@
     <style name="pv.text.highlight" parent="pv.text">
         <item name="android:textColor">@color/pv_text</item>
         <item name="android:textSize">@dimen/highlight_text_size</item>
-        <item name="android:layout_marginTop">@dimen/space_vertical_title</item>
     </style>
 
     <!-- Style for text within the app bar -->
@@ -132,6 +131,13 @@
         <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/app_bar_height</item>
+    </style>
+
+    <!-- Style for a search bar within the ap bar -->
+    <style name="pv.app_bar.search_bar">
+        <item name="android:textColorHint">@color/pv_text_secondary</item>
+        <item name="android:textSize">@dimen/app_bar_text_size</item>
+        <item name="android:hint">@string/hint_search</item>
     </style>
 
     <!-- Parent style for all page layouts -->
