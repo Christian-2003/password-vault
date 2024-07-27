@@ -1,4 +1,4 @@
-<img src="docs/img/icon.png" height="150" align="right">
+8<img src="docs/img/icon.png" height="150" align="right">
 
 # Security Policy
 This document contains information regarding the security of Password Vault.
@@ -15,9 +15,10 @@ Password Vault encrypts your data using **AES / GCM** to ensure maximum security
 
 Code | Version | Data | Backup | User Password | Autofill Cache | Password Recovery
 --- | --- | --- | --- | --- | --- | ---
+21 | 3.6.1 | :white_check_mark: | :white_check_mark:<sup>1</sup> | :white_check_mark: | :white_check_mark: | :white_check_mark:
 20 | 3.6.0 | :white_check_mark: | :white_check_mark:<sup>1</sup> | :white_check_mark: | :white_check_mark: | :white_check_mark:
 19 | 3.5.6 | :white_check_mark: | :white_check_mark:<sup>1</sup> | :white_check_mark: | :white_check_mark: |
-1 | 3.5.5 | :white_check_mark: | :white_check_mark:<sup>1</sup> | :white_check_mark: | :white_check_mark: |
+18 | 3.5.5 | :white_check_mark: | :white_check_mark:<sup>1</sup> | :white_check_mark: | :white_check_mark: |
 1 | 3.5.4 | :white_check_mark: | :white_check_mark:<sup>1</sup> | :white_check_mark: | :white_check_mark: |
 1 | 3.5.3 | :white_check_mark: | :white_check_mark:<sup>1</sup> | :white_check_mark: | :white_check_mark: |
 1 | 3.5.2 | :white_check_mark: | :white_check_mark:<sup>1</sup> | :white_check_mark: | :white_check_mark: |

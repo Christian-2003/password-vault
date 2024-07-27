@@ -2,7 +2,7 @@
 
 # Changelog
 
-# 3.6.1 (XXXX-XX-XX)
+# 3.6.1 (2024-07-27)
 ###### Release Highlights
 Reintroduction of features required when the app is not published on Google Play as well as bugfixes and general improvements.
 
@@ -23,7 +23,7 @@ Reintroduction of features required when the app is not published on Google Play
 
 <br/>
 
-## 3.6.0 (02-07-2024)
+## 3.6.0 (2024-07-02)
 ###### Release Highlights
 Introduced security questions to reset master password if required as well as changes to UI. Furthermore, app changes were made to prepare the app for release on Google Play.
 
