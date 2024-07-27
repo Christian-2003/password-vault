@@ -19,6 +19,7 @@ Reintroduction of features required when the app is not published on Google Play
 * Added display of entire device storage to settings.
 * Replaced back button with cancel button in `AddEntryActivity` and `QualityGateActivity` to indicate that closing the activity will not save changes.
 * Fixed a bug where the password security analysis did not reload when the dataset changes.
+* Fixed a bug where rotating the activity displaying all packages crashes the app.
 
 <br/>
 
