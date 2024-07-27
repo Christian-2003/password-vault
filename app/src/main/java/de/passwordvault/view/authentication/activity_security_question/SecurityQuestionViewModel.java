@@ -14,7 +14,7 @@ import de.passwordvault.model.security.login.SecurityQuestion;
  * questions in order to restore the master password.
  *
  * @author  Christian-2003
- * @version 3.6.0
+ * @version 3.6.1
  */
 public class SecurityQuestionViewModel extends ViewModel {
 
@@ -42,6 +42,7 @@ public class SecurityQuestionViewModel extends ViewModel {
             ArrayList<SecurityQuestion> allQuestions = new ArrayList<>(Account.getInstance().getSecurityQuestions());
             Collections.shuffle(allQuestions);
             if (allQuestions.size() > Account.REQUIRED_SECURITY_QUESTIONS) {
+                questions = new ArrayList<>();
                 for (int i = 0; i < Account.REQUIRED_SECURITY_QUESTIONS; i++) {
                     questions.add(allQuestions.get(i));
                 }

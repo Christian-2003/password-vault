@@ -218,7 +218,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_data_delete"
+                android:text="@string/settings_data_storage"
                 android:layout_marginHorizontal="@dimen/space_horizontal"
                 style="@style/pv.text.highlight"/>
 
@@ -227,6 +227,134 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 style="@style/pv.container">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/space_horizontal"
+                    android:paddingVertical="@dimen/space_vertical"
+                    android:orientation="vertical">
+
+                    <de.passwordvault.view.utils.components.SegmentedProgressBar
+                        android:id="@+id/progress_bar"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/progress_bar_thickness_large"
+                        android:background="@drawable/pill"
+                        android:backgroundTint="@color/pv_container_detail"
+                        android:clipToOutline="true"/>
+
+                    <GridLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_vertical_between"
+                        android:rowCount="5"
+                        android:columnCount="3">
+
+                        <View
+                            android:layout_gravity="center_vertical"
+                            android:backgroundTint="@color/pv_text_secondary"
+                            android:layout_marginEnd="@dimen/space_horizontal_between"
+                            style="@style/pv.progess_bar_legend"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_data_storage_used"
+                            style="@style/pv.text"/>
+
+                        <TextView
+                            android:id="@+id/used"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_horizontal_between"
+                            tools:text="0 GB"
+                            style="@style/pv.text"/>
+
+                        <View
+                            android:layout_gravity="center_vertical"
+                            android:backgroundTint="@color/pv_primary"
+                            android:layout_marginEnd="@dimen/space_horizontal_between"
+                            style="@style/pv.progess_bar_legend"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_data_storage_app"
+                            style="@style/pv.text"/>
+
+                        <TextView
+                            android:id="@+id/app"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_horizontal_between"
+                            tools:text="0 MB"
+                            style="@style/pv.text"/>
+
+                        <View
+                            android:layout_gravity="center_vertical"
+                            android:backgroundTint="@color/pv_green"
+                            android:layout_marginEnd="@dimen/space_horizontal_between"
+                            style="@style/pv.progess_bar_legend"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_data_storage_data"
+                            style="@style/pv.text"/>
+
+                        <TextView
+                            android:id="@+id/data"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_horizontal_between"
+                            tools:text="0 MB"
+                            style="@style/pv.text"/>
+
+                        <View
+                            android:layout_gravity="center_vertical"
+                            android:backgroundTint="@color/pv_yellow"
+                            android:layout_marginEnd="@dimen/space_horizontal_between"
+                            style="@style/pv.progess_bar_legend"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_data_storage_cache"
+                            style="@style/pv.text"/>
+
+                        <TextView
+                            android:id="@+id/cache"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_horizontal_between"
+                            tools:text="0 MB"
+                            style="@style/pv.text"/>
+
+                        <View
+                            android:layout_gravity="center_vertical"
+                            android:backgroundTint="@color/pv_container_detail"
+                            android:layout_marginEnd="@dimen/space_horizontal_between"
+                            style="@style/pv.progess_bar_legend"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_data_storage_free"
+                            style="@style/pv.text"/>
+
+                        <TextView
+                            android:id="@+id/free"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_horizontal_between"
+                            tools:text="0 GB"
+                            style="@style/pv.text"/>
+
+                    </GridLayout>
+
+                </LinearLayout>
+
+                <View style="@style/pv.divider"/>
 
                 <LinearLayout
                     android:id="@+id/settings_data_delete_all_container"

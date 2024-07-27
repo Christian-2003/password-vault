@@ -5,15 +5,16 @@ plugins {
 
 android {
     namespace 'de.passwordvault'
+    //noinspection GradleCompatible
     compileSdk 32
 
     defaultConfig {
         applicationId 'de.christian2003.passwordvault'
         minSdk 32
-        //noinspection OldTargetApi
-        targetSdk 33
-        versionCode 20
-        versionName '3.6.0'
+        //noinspection EditedTargetSdkVersion
+        targetSdk 34
+        versionCode 21
+        versionName '3.6.1'
         setProperty('archivesBaseName', 'password-vault-v' + versionName)
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
@@ -23,6 +24,9 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            applicationIdSuffix = '.debug'
         }
     }
 
@@ -44,12 +48,14 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation 'androidx.security:security-crypto:1.0.0'
     implementation 'androidx.biometric:biometric:1.1.0'
-
     //noinspection GradleDependency
     implementation 'com.google.android.material:material:1.9.0' //Use of older version to compile for Android SDK 32
     implementation 'com.google.android.gms:play-services-oss-licenses:17.1.0'
+    implementation 'com.github.supersu-man:apkupdater-library:v2.1.0'
 
     testImplementation 'junit:junit:4.13.2'
+    //noinspection GradleDependency
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    //noinspection GradleDependency
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }

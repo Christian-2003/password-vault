@@ -254,8 +254,9 @@
     <!-- Style for eyecatcher -->
     <style name="pv.eyecatcher">
         <item name="android:background">@drawable/shape_important</item>
-        <item name="android:layout_height">@dimen/pin_icon_size</item>
-        <item name="android:layout_width">@dimen/pin_icon_size</item>
+        <item name="android:backgroundTint">@color/pv_red</item>
+        <item name="android:layout_height">@dimen/eyecatcher_size</item>
+        <item name="android:layout_width">@dimen/eyecatcher_size</item>
     </style>
 
     <style name="pv.eyecatcher.pill">
@@ -342,7 +343,7 @@
 
     <!-- Style for badges -->
     <style name="pv.material.badge" parent="Widget.MaterialComponents.Badge">
-        <item name="backgroundColor">@color/pv_primary</item>
+        <item name="backgroundColor">@color/pv_red</item>
         <item name="badgeTextColor">@color/pv_text_onPrimary</item>
     </style>
 
@@ -374,6 +375,12 @@
         <item name="android:layout_height">1dp</item>
         <item name="android:background">@color/pv_container_detail</item>
         <item name="android:layout_marginHorizontal">@dimen/space_horizontal</item>
+    </style>
+
+    <style name="pv.progess_bar_legend">
+        <item name="android:background">@drawable/pill</item>
+        <item name="android:layout_height">@dimen/pin_icon_size</item>
+        <item name="android:layout_width">@dimen/pin_icon_size</item>
     </style>
 
     <!-- Style for popup menus -->

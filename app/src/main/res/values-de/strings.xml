@@ -107,7 +107,7 @@
     <string name="settings_help_backup">Backups verwalten</string>
 
     <string name="settings_about">Über</string>
-    <string name="settings_about_info">Nutzungsbedingungen • Datenschutzerklärung • App-Infos</string>
+    <string name="settings_about_info">Rechtliches • GitHub • App-Infos</string>
     <string name="settings_about_usage">Rechtliches</string>
     <string name="settings_about_usage_tos">Nutzungsbedingungen</string>
     <string name="settings_about_usage_tos_info">Nutzungsbedingungen anzeigen</string>
@@ -115,6 +115,16 @@
     <string name="settings_about_usage_dependencies_info">Verwendete Software anzeigen</string>
     <string name="settings_about_usage_privacypolicy">Datenschutzerklärung</string>
     <string name="settings_about_usage_privacypolicy_info">Datenschutzerklärung anzeigen</string>
+    <string name="settings_about_github">GitHub</string>
+    <string name="settings_about_github_repo">Repository</string>
+    <string name="settings_about_github_repo_info">App auf GitHub anzeigen</string>
+    <string name="settings_about_github_repo_link" translatable="false">https://github.com/Christian-2003/password-vault</string>
+    <string name="settings_about_github_issues">Fehler melden</string>
+    <string name="settings_about_github_issues_info">Fehler auf GitHub melden</string>
+    <string name="settings_about_github_issues_link" translatable="false">https://github.com/Christian-2003/password-vault/issues</string>
+    <string name="settings_about_github_update">App aktualisieren</string>
+    <string name="settings_about_github_update_info">Neueste Version herunterladen</string>
+    <string name="settings_about_github_update_link" translatable="false">https://github.com/Christian-2003/password-vault/releases/latest</string>
     <string name="settings_about_software">Software</string>
     <string name="settings_about_software_version">App-Version</string>
     <string name="settings_about_software_more">Weitere Infos</string>
@@ -155,6 +165,13 @@
     <string name="settings_data_backup_restore_settings_quality_gates">Sicherheitskriterien wiederherstellen</string>
     <string name="settings_data_backup_restore_settings_settings">Einstellungen wiederherstellen</string>
     <string name="settings_data_backup_restore_settings_encryption">Verschlüsselung</string>
+    <string name="settings_data_storage">Speicher</string>
+    <string name="settings_data_storage_used">Verwendet</string>
+    <string name="settings_data_storage_free">Frei</string>
+    <string name="settings_data_storage_app">Password Vault</string>
+    <string name="settings_data_storage_data">Password Vault Daten</string>
+    <string name="settings_data_storage_cache">Password Vault Cache</string>
+    <string name="settings_data_storage_placeholder">{space} {unit}</string>
     <string name="settings_data_delete">Löschen</string>
     <string name="settings_data_delete_all">Daten Löschen</string>
     <string name="settings_data_delete_all_info">Alle Daten unumkehrbar löschen</string>
