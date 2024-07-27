@@ -2,7 +2,16 @@
 
 # Changelog
 
-# 3.6.1 (2024-07-27)
+## 3.7.0 (XXXX-XX-XX)
+###### Release Highlights
+n/a
+
+###### Features
+* Introduced new app icons.
+
+<br/>
+
+## 3.6.1 (2024-07-27)
 ###### Release Highlights
 Reintroduction of features required when the app is not published on Google Play as well as bugfixes and general improvements.
 
