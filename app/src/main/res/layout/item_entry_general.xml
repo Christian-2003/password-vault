@@ -14,20 +14,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <androidx.cardview.widget.CardView
+        <ImageView
+            android:id="@+id/image_app"
             android:layout_width="@dimen/image_xl"
             android:layout_height="@dimen/image_xl"
-            android:layout_gravity="center"
-            app:cardCornerRadius="28dp">
-
-            <ImageView
-                android:id="@+id/image_app"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:src="@mipmap/ic_launcher"
-                tools:ignore="contentDescription"/>
-
-        </androidx.cardview.widget.CardView>
+            tools:src="@mipmap/ic_launcher"
+            tools:ignore="contentDescription"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -35,15 +27,6 @@
             android:layout_weight="1"
             android:layout_marginStart="@dimen/space_horizontal_between"
             android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/text_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:ellipsize="end"
-                tools:text="Account name"
-                style="@style/pv.text.title"/>
 
             <TextView
                 android:id="@+id/text_description"
@@ -62,10 +45,11 @@
                 tools:text="2024-07-24"
                 style="@style/pv.text.secondary"/>
 
-            <LinearLayout
+            <com.google.android.flexbox.FlexboxLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                app:flexWrap="wrap"
+                app:flexDirection="row">
 
                 <Button
                     android:id="@+id/button_edit"
@@ -82,8 +66,8 @@
                     android:backgroundTint="?attr/colorError"
                     android:text="@string/button_delete"
                     tools:ignore="contentDescription"/>
-
-            </LinearLayout>
+s
+            </com.google.android.flexbox.FlexboxLayout>
 
         </LinearLayout>
 

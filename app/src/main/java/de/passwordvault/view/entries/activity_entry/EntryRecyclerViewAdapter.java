@@ -8,12 +8,19 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+
 import de.passwordvault.R;
 import de.passwordvault.model.detail.Detail;
 import de.passwordvault.model.entry.EntryExtended;
+import de.passwordvault.model.tags.Tag;
 import de.passwordvault.view.utils.Utils;
+import de.passwordvault.view.utils.recycler_view.OnRecyclerItemClickListener;
 import de.passwordvault.view.utils.recycler_view.RecyclerViewAdapter;
 
 
@@ -29,11 +36,6 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter {
      * Class models the view holder for the view displaying general information.
      */
     public static class GeneralViewHolder extends RecyclerView.ViewHolder {
-
-        /**
-         * Attribute stores the text view displaying the name of the entry.
-         */
-        public TextView nameTextView;
 
         /**
          * Attribute stores the text view displaying the description of the entry.
@@ -65,6 +67,11 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter {
          */
         public ImageView appImageView;
 
+        /**
+         * Attribute stores the chip group used as container for the tags.
+         */
+        public ChipGroup tagsContainer;
+
 
         /**
          * Constructor instantiates a new view holder.
@@ -73,13 +80,13 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter {
          */
         public GeneralViewHolder(View itemView) {
             super(itemView);
-            nameTextView = itemView.findViewById(R.id.text_name);
             descriptionTextView = itemView.findViewById(R.id.text_description);
             dateTextView = itemView.findViewById(R.id.text_date);
             editButton = itemView.findViewById(R.id.button_edit);
             deleteButton = itemView.findViewById(R.id.button_delete);
             addDetailButton = itemView.findViewById(R.id.button_add_detail);
             appImageView = itemView.findViewById(R.id.image_app);
+            tagsContainer= itemView.findViewById(R.id.container_tags);
         }
 
     }
@@ -150,6 +157,30 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter {
     @NonNull
     private final EntryExtended entry;
 
+    /**
+     * Attribute stores the click listener which is called when the edit button is clicked.
+     */
+    @Nullable
+    private View.OnClickListener editClickListener;
+
+    /**
+     * Attribute stores the click listener which is called when the delete button is clicked.
+     */
+    @Nullable
+    private View.OnClickListener deleteClickListener;
+
+    /**
+     * Attribute stores the click listener which is called when the app image is clicked.
+     */
+    @Nullable
+    private View.OnClickListener imageClickListener;
+
+    /**
+     * Attribute stores the click listener which is called when a detail is clicked.
+     */
+    @Nullable
+    private OnRecyclerItemClickListener<Detail> detailClickListener;
+
 
     /**
      * Constructor instantiates a new recycler view adapter.
@@ -164,6 +195,34 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter {
 
 
     /**
+     * Method changes the click listener that is called when the edit button is clicked.
+     *
+     * @param clickListener New click listener.
+     */
+    public void setEditClickListener(@Nullable View.OnClickListener clickListener) {
+        editClickListener = clickListener;
+    }
+
+    /**
+     * Method changes the click listener that is called when the delete button is clicked.
+     *
+     * @param clickListener New click listener.
+     */
+    public void setDeleteClickListener(@Nullable View.OnClickListener clickListener) {
+        deleteClickListener = clickListener;
+    }
+
+    /**
+     * Method changes the click listener that is called when the app image is clicked.
+     *
+     * @param clickListener New click listener.
+     */
+    public void setImageClickListener(@Nullable View.OnClickListener clickListener) {
+        imageClickListener = clickListener;
+    }
+
+
+    /**
      * Method binds data to the passed view holder.
      *
      * @param viewHolder    The view holder to which to bind data.
@@ -173,10 +232,29 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         if (viewHolder instanceof GeneralViewHolder) {
             GeneralViewHolder holder = (GeneralViewHolder)viewHolder;
-            holder.nameTextView.setText(entry.getName());
             holder.descriptionTextView.setText(entry.getDescription());
             holder.dateTextView.setText(Utils.formatDate(entry.getChanged(), context.getString(R.string.date_format)));
-            //TODO: Continue binding...
+            holder.editButton.setOnClickListener(view -> {
+                if (editClickListener != null) {
+                    editClickListener.onClick(view);
+                }
+            });
+            holder.deleteButton.setOnClickListener(view -> {
+                if (deleteClickListener != null) {
+                    deleteClickListener.onClick(view);
+                }
+            });
+            holder.appImageView.setOnClickListener(view -> {
+                if (imageClickListener != null) {
+                    imageClickListener.onClick(view);
+                }
+            });
+            holder.appImageView.setImageDrawable(entry.getLogo());
+            for (Tag tag : entry.getTags()) {
+                Chip chip = new Chip(context);
+                chip.setText(tag.getName());
+                holder.tagsContainer.addView(chip);
+            }
         }
         else if (viewHolder instanceof DetailViewHolder) {
             DetailViewHolder holder = (DetailViewHolder)viewHolder;

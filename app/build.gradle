@@ -52,6 +52,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.9.0' //Use of older version to compile for Android SDK 32
     implementation 'com.google.android.gms:play-services-oss-licenses:17.1.0'
     implementation 'com.github.supersu-man:apkupdater-library:v2.1.0'
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
     testImplementation 'junit:junit:4.13.2'
     //noinspection GradleDependency

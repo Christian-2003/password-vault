@@ -20,6 +20,11 @@
 
     <color name="pv_icon_green">#11A960</color>
 
+    <color name="pv_detail_blue">#3A21D1</color>
+    <color name="pv_detail_green">#00A66A</color>
+    <color name="pv_detail_red">#B74E4E</color>
+    <color name="pv_detail_yellow">#CBA622</color>
+
     <!-- Light / dark variants needed for dialog to switch darkmode -->
     <color name="pv_background_light">#F6F6F8</color>
     <color name="pv_container_light">#FCFCFE</color>

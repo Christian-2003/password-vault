@@ -7,15 +7,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingVertical="@dimen/space_vertical_between"
     android:orientation="horizontal"
-    android:background="?attr/selectableItemBackground">
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true">
 
     <androidx.cardview.widget.CardView
         android:layout_width="@dimen/image_l"
         android:layout_height="@dimen/image_l"
         android:layout_gravity="center"
         android:layout_marginStart="@dimen/space_horizontal"
-        android:layout_marginEnd="@dimen/space_horizontal_between"
         app:cardCornerRadius="28dp">
 
         <ImageView
@@ -27,11 +28,11 @@
 
     </androidx.cardview.widget.CardView>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:layout_marginEnd="@dimen/space_horizontal"
+        android:layout_marginHorizontal="@dimen/space_horizontal_between"
         android:orientation="vertical">
 
         <TextView
@@ -40,6 +41,8 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:ellipsize="end"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Detail name"
             style="@style/pv.text.title"/>
 
@@ -49,34 +52,31 @@
             android:layout_height="wrap_content"
             android:maxLines="2"
             android:ellipsize="end"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_name"
             tools:text="Detail name"
             style="@style/pv.text"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/text_date"
+            style="@style/pv.text.secondary"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_gravity="bottom"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="2024-07-24" />
 
-            <TextView
-                android:id="@+id/text_date"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="bottom"
-                android:layout_marginEnd="@dimen/space_horizontal_between"
-                tools:text="2024-07-24"
-                style="@style/pv.text.secondary"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageButton
-                android:id="@+id/button_copy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_copy"
-                tools:ignore="contentDescription"
-                style="@style/pv.button.image_button"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
+    <ImageButton
+        android:id="@+id/button_copy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginEnd="@dimen/space_horizontal"
+        android:src="@drawable/ic_copy"
+        tools:ignore="contentDescription"
+        style="@style/pv.button.image_button"/>
 
 </LinearLayout>

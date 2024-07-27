@@ -1,7 +1,10 @@
 package de.passwordvault.model.packages;
 
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import java.util.ArrayList;
 import java.util.Collections;
