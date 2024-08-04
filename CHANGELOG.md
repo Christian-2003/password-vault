@@ -4,10 +4,11 @@
 
 ## 3.6.2 (XXXX-XX-XX)
 ###### Release Highlights
-n/a
+The upadte focuses on smaller bugfixes.
 
 ###### Features
-* n/a
+* Fixed typos in help pages.
+* Fixed a bug where the master password recovery would display all security questions when more than five questions were configured.
 
 <br/>
 
