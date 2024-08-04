@@ -298,20 +298,23 @@
 
                 </LinearLayout>
 
-                <View style="@style/pv.divider"/>
-
                 <LinearLayout
                     android:id="@+id/settings_about_github_update_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="@dimen/space_horizontal"
-                    android:paddingVertical="@dimen/space_vertical"
+                    android:paddingBottom="@dimen/space_vertical"
                     android:clickable="true"
                     android:focusable="true"
                     android:background="?attr/selectableItemBackground"
                     android:visibility="gone"
                     tools:visibility="visible"
                     android:orientation="vertical">
+
+                    <View
+                        android:layout_marginHorizontal="0dp"
+                        android:layout_marginBottom="@dimen/space_vertical"
+                        style="@style/pv.divider"/>
 
                     <LinearLayout
                         android:layout_width="wrap_content"

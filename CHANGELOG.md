@@ -9,6 +9,7 @@ The upadte focuses on smaller bugfixes.
 ###### Features
 * Fixed typos in help pages.
 * Fixed a bug where the master password recovery would display all security questions when more than five questions were configured.
+* Fixed a bug where the divider of the "Download newest release" button was visible when no newest release is available.
 
 <br/>
 
