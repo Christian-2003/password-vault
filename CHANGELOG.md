@@ -4,7 +4,7 @@
 
 ## 3.6.2 (XXXX-XX-XX)
 ###### Release Highlights
-The upadte focuses on smaller bugfixes.
+The update focuses on smaller bugfixes.
 
 ###### Features
 * Fixed typos in help pages.
