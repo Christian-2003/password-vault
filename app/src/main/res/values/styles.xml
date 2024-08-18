@@ -2,6 +2,76 @@
 
 <resources>
 
+    <!-- Styles for text -->
+    <style name="text">
+        <item name="android:textSize">@dimen/text_m</item>
+        <item name="android:textColor">@color/text</item>
+    </style>
+
+    <style name="text.light">
+        <item name="android:textSize">@dimen/text_s</item>
+        <item name="android:textColor">@color/text_light</item>
+    </style>
+
+    <style name="text.app_bar">
+        <item name="android:textSize">@dimen/text_l</item>
+        <item name="android:textColor">@color/text</item>
+    </style>
+
+    <style name="text.headline">
+        <item name="android:textSize">@dimen/text_m</item>
+        <item name="android:textColor">@color/text_light</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+
+    <!-- Styles for buttons -->
+    <style name="button">
+
+    </style>
+
+    <style name="button.image">
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:minWidth">@dimen/image_m</item>
+        <item name="android:minHeight">@dimen/image_m</item>
+        <item name="android:tint">@color/text</item>
+    </style>
+
+    <style name="button.image.app_bar" parent="button.image">
+        <!-- No deviations from parent so far -->
+    </style>
+
+
+
+    <!-- Styles for images -->
+    <style name="image">
+
+    </style>
+
+    <style name="image.item" parent="image">
+        <item name="android:layout_height">@dimen/image_s</item>
+        <item name="android:layout_width">@dimen/image_s</item>
+        <item name="android:tint">@color/text</item>
+    </style>
+
+
+
+    <!-- Styles for the app bar -->
+    <style name="app_bar">
+        <item name="android:background">@color/background_app_bar</item>
+    </style>
+
+
+
+
+
+
+
+
+
+
+
     <!-- Top-level style which applies to all components of the application -->
     <style name="pv"/>
 

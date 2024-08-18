@@ -1,16 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
+    <color name="primary">#1D7874</color>
+    <color name="primary_translucent">#991D7874</color>
+
+    <color name="background">#FAF9FE</color>
+    <color name="background_app_bar">#F5F3F8</color>
+    <color name="background_nav_bar">#EFEdF2</color>
+    <color name="background_container">#E9E7EC</color>
+
+    <color name="text">#1B1A1F</color>
+    <color name="text_light">#444750</color>
+
+
+
+    <!-- DEPRECATED BELOW -->
     <color name="pv_primary">#1D7874</color>
     <color name="pv_primary_translucent">#991D7874</color>
-    <color name="pv_background">#F6F6F8</color>
+    <color name="pv_background">#FAF9FE</color>
 
-    <color name="pv_container">#FCFCFE</color>
+    <color name="pv_container">#F5F3F8</color>
     <color name="pv_container_highlight">#BFE3E2</color>
     <color name="pv_container_detail">#F2F2F2</color>
 
-    <color name="pv_text">#000000</color>
-    <color name="pv_text_secondary">#8D8C91</color>
+    <color name="pv_text">#1B1A1F</color>
+    <color name="pv_text_secondary">#44474E</color>
     <color name="pv_text_primary">#1D7874</color>
     <color name="pv_text_onPrimary">#FAFAFA</color>
 

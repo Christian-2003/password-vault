@@ -189,7 +189,7 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter {
      * @param entry     Data for the adapter.
      */
     public EntryRecyclerViewAdapter(@NonNull Context context, @NonNull EntryExtended entry) {
-        super(context);
+        super(context, new EntryViewModel()); //TODO: Fix passing 'new' view model to superclass.
         this.entry = entry;
     }
 
