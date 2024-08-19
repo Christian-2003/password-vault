@@ -133,7 +133,7 @@ public class SettingsAutofillActivity extends PasswordVaultBaseActivity implemen
         }
         else if (button.getId() == R.id.settings_autofill_cache_toggle_switch) {
             Config.getInstance().useAutofillCaching.set(checked);
-            findViewById(R.id.settings_autofill_config_cache_container).setVisibility(checked ? View.VISIBLE : View.GONE);
+            findViewById(R.id.settings_autofill_config_cache_delete_container).setVisibility(checked ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -164,7 +164,7 @@ public class SettingsAutofillActivity extends PasswordVaultBaseActivity implemen
         findViewById(R.id.settings_autofill_cache_toggle_clickable).setOnClickListener(view -> cacheSwitch.setChecked(!cacheSwitch.isChecked()));
 
         //Clear cache:
-        findViewById(R.id.settings_autofill_config_cache_container).setVisibility(Config.getInstance().useAutofillCaching.get() ? View.VISIBLE : View.GONE);
+        findViewById(R.id.settings_autofill_config_cache_delete_container).setVisibility(Config.getInstance().useAutofillCaching.get() ? View.VISIBLE : View.GONE);
         findViewById(R.id.settings_autofill_config_cache_delete_container).setOnClickListener(view -> clearAutofillCaches());
 
         //Authentication:
