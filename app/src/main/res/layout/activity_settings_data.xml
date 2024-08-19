@@ -1,49 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".view.settings.activity_data.SettingsDataActivity">
 
-    <!-- Toolbar for the activity -->
-    <com.google.android.material.appbar.AppBarLayout
-        style="@style/pv.layout.app_bar">
+    <!-- Appbar for the activity -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:orientation="horizontal"
+        style="@style/app_bar">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            app:title="@string/settings_data"
-            style="@style/pv.layout.app_bar.collapsing_toolbar">
+        <FrameLayout
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize">
 
-            <androidx.appcompat.widget.Toolbar
-                app:contentInsetStart="?attr/actionBarSize"
-                style="@style/pv.layout.app_bar.collapsing_toolbar.toolbar"/>
+            <ImageButton
+                android:id="@+id/button_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back"
+                android:layout_gravity="center"
+                tools:ignore="contentDescription"
+                style="@style/button.image.app_bar"/>
 
-            <FrameLayout
-                android:layout_width="?attr/actionBarSize"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_gravity="start|bottom">
+        </FrameLayout>
 
-                <ImageButton
-                    android:id="@+id/button_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_back"
-                    android:layout_gravity="center"
-                    style="@style/pv.button.image_button.app_bar"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:text="@string/settings_data"
+            style="@style/text.app_bar"/>
 
-            </FrameLayout>
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
+    </LinearLayout>
 
 
 
     <!-- Content for the activity -->
-    <androidx.core.widget.NestedScrollView
-        style="@style/pv.layout.nested_scroll_view">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -54,59 +59,54 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_data_export"
                 android:layout_marginHorizontal="@dimen/space_horizontal"
-                style="@style/pv.text.highlight"/>
+                android:layout_marginVertical="@dimen/space_vertical"
+                android:text="@string/settings_data_export"
+                style="@style/text.headline"/>
 
             <LinearLayout
+                android:id="@+id/settings_data_export_html_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                style="@style/pv.container">
+                android:foreground="?attr/selectableItemBackground"
+                android:paddingHorizontal="@dimen/space_horizontal"
+                android:paddingVertical="@dimen/space_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:id="@+id/settings_data_export_html_container"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:paddingHorizontal="@dimen/space_horizontal"
-                    android:paddingVertical="@dimen/space_vertical"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:orientation="horizontal">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_data_export_html"
-                            style="@style/pv.text"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_data_export_html_info"
-                            style="@style/pv.text.variant"/>
-
-                    </LinearLayout>
-
-                    <ImageView
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_horizontal_between"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_next"
-                        tools:ignore="ContentDescription"
-                        style="@style/pv.icon"/>
+                        android:text="@string/settings_data_export_html"
+                        style="@style/text"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_data_export_html_info"
+                        style="@style/text.light"/>
 
                 </LinearLayout>
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_horizontal_between"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_next"
+                    tools:ignore="ContentDescription"
+                    style="@style/image.item"/>
+
             </LinearLayout>
+
+            <View style="@style/divider"/>
 
 
 
@@ -116,290 +116,269 @@
                 android:layout_height="wrap_content"
                 android:text="@string/settings_data_backup"
                 android:layout_marginHorizontal="@dimen/space_horizontal"
-                style="@style/pv.text.highlight"/>
+                android:layout_marginVertical="@dimen/space_vertical"
+                style="@style/text.headline"/>
 
             <LinearLayout
+                android:id="@+id/settings_data_backup_create_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                style="@style/pv.container">
+                android:foreground="?attr/selectableItemBackground"
+                android:paddingHorizontal="@dimen/space_horizontal"
+                android:paddingVertical="@dimen/space_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:id="@+id/settings_data_backup_create_container"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:paddingHorizontal="@dimen/space_horizontal"
-                    android:paddingVertical="@dimen/space_vertical"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:orientation="horizontal">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_data_backup_create"
-                            style="@style/pv.text"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_data_backup_create_info"
-                            style="@style/pv.text.variant"/>
-
-                    </LinearLayout>
-
-                    <ImageView
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_horizontal_between"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_next"
-                        tools:ignore="ContentDescription"
-                        style="@style/pv.icon"/>
+                        android:text="@string/settings_data_backup_create"
+                        style="@style/text"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_data_backup_create_info"
+                        style="@style/text.light"/>
 
                 </LinearLayout>
 
-                <View style="@style/pv.divider"/>
-
-                <LinearLayout
-                    android:id="@+id/settings_data_backup_restore_container"
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:paddingHorizontal="@dimen/space_horizontal"
-                    android:paddingVertical="@dimen/space_vertical"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_data_backup_restore"
-                            style="@style/pv.text"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_data_backup_restore_info"
-                            style="@style/pv.text.variant"/>
-
-                    </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_horizontal_between"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_next"
-                        tools:ignore="ContentDescription"
-                        style="@style/pv.icon"/>
-
-                </LinearLayout>
+                    android:layout_marginStart="@dimen/space_horizontal_between"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_next"
+                    tools:ignore="ContentDescription"
+                    style="@style/image.item"/>
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/settings_data_backup_restore_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:foreground="?attr/selectableItemBackground"
+                android:paddingHorizontal="@dimen/space_horizontal"
+                android:paddingVertical="@dimen/space_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_data_backup_restore"
+                        style="@style/text"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_data_backup_restore_info"
+                        style="@style/text.light"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_horizontal_between"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_next"
+                    tools:ignore="ContentDescription"
+                    style="@style/image.item"/>
+
+            </LinearLayout>
+
+            <View style="@style/divider"/>
 
 
-            <!-- Delete -->
+
+            <!-- Storage -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_data_storage"
                 android:layout_marginHorizontal="@dimen/space_horizontal"
-                style="@style/pv.text.highlight"/>
+                android:layout_marginVertical="@dimen/space_vertical"
+                style="@style/text.headline"/>
 
-            <LinearLayout
+            <de.passwordvault.view.utils.components.SegmentedProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/progress_bar_thickness_large"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
+                android:background="@drawable/pill"
+                android:backgroundTint="@color/pv_container_detail"
+                android:clipToOutline="true"/>
+
+            <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                style="@style/pv.container">
+                android:layout_marginHorizontal="@dimen/space_horizontal"
+                android:layout_marginVertical="@dimen/space_vertical"
+                android:rowCount="5"
+                android:columnCount="3">
+
+                <View
+                    android:layout_gravity="center_vertical"
+                    android:backgroundTint="@color/pv_text_secondary"
+                    android:layout_marginEnd="@dimen/space_horizontal_between"
+                    style="@style/pv.progess_bar_legend"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_data_storage_used"
+                    style="@style/pv.text"/>
+
+                <TextView
+                    android:id="@+id/used"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_horizontal_between"
+                    tools:text="0 GB"
+                    style="@style/pv.text"/>
+
+                <View
+                    android:layout_gravity="center_vertical"
+                    android:backgroundTint="@color/pv_primary"
+                    android:layout_marginEnd="@dimen/space_horizontal_between"
+                    style="@style/pv.progess_bar_legend"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_data_storage_app"
+                    style="@style/pv.text"/>
+
+                <TextView
+                    android:id="@+id/app"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_horizontal_between"
+                    tools:text="0 MB"
+                    style="@style/pv.text"/>
+
+                <View
+                    android:layout_gravity="center_vertical"
+                    android:backgroundTint="@color/pv_green"
+                    android:layout_marginEnd="@dimen/space_horizontal_between"
+                    style="@style/pv.progess_bar_legend"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_data_storage_data"
+                    style="@style/pv.text"/>
+
+                <TextView
+                    android:id="@+id/data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_horizontal_between"
+                    tools:text="0 MB"
+                    style="@style/pv.text"/>
+
+                <View
+                    android:layout_gravity="center_vertical"
+                    android:backgroundTint="@color/pv_yellow"
+                    android:layout_marginEnd="@dimen/space_horizontal_between"
+                    style="@style/pv.progess_bar_legend"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_data_storage_cache"
+                    style="@style/pv.text"/>
+
+                <TextView
+                    android:id="@+id/cache"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_horizontal_between"
+                    tools:text="0 MB"
+                    style="@style/pv.text"/>
+
+                <View
+                    android:layout_gravity="center_vertical"
+                    android:backgroundTint="@color/pv_container_detail"
+                    android:layout_marginEnd="@dimen/space_horizontal_between"
+                    style="@style/pv.progess_bar_legend"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_data_storage_free"
+                    style="@style/pv.text"/>
+
+                <TextView
+                    android:id="@+id/free"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_horizontal_between"
+                    tools:text="0 GB"
+                    style="@style/pv.text"/>
+
+            </GridLayout>
+
+            <LinearLayout
+                android:id="@+id/settings_data_delete_all_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:foreground="?attr/selectableItemBackground"
+                android:paddingHorizontal="@dimen/space_horizontal"
+                android:paddingVertical="@dimen/space_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="@dimen/space_horizontal"
-                    android:paddingVertical="@dimen/space_vertical"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <de.passwordvault.view.utils.components.SegmentedProgressBar
-                        android:id="@+id/progress_bar"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/progress_bar_thickness_large"
-                        android:background="@drawable/pill"
-                        android:backgroundTint="@color/pv_container_detail"
-                        android:clipToOutline="true"/>
-
-                    <GridLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/space_vertical_between"
-                        android:rowCount="5"
-                        android:columnCount="3">
-
-                        <View
-                            android:layout_gravity="center_vertical"
-                            android:backgroundTint="@color/pv_text_secondary"
-                            android:layout_marginEnd="@dimen/space_horizontal_between"
-                            style="@style/pv.progess_bar_legend"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_data_storage_used"
-                            style="@style/pv.text"/>
-
-                        <TextView
-                            android:id="@+id/used"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/space_horizontal_between"
-                            tools:text="0 GB"
-                            style="@style/pv.text"/>
-
-                        <View
-                            android:layout_gravity="center_vertical"
-                            android:backgroundTint="@color/pv_primary"
-                            android:layout_marginEnd="@dimen/space_horizontal_between"
-                            style="@style/pv.progess_bar_legend"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_data_storage_app"
-                            style="@style/pv.text"/>
-
-                        <TextView
-                            android:id="@+id/app"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/space_horizontal_between"
-                            tools:text="0 MB"
-                            style="@style/pv.text"/>
-
-                        <View
-                            android:layout_gravity="center_vertical"
-                            android:backgroundTint="@color/pv_green"
-                            android:layout_marginEnd="@dimen/space_horizontal_between"
-                            style="@style/pv.progess_bar_legend"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_data_storage_data"
-                            style="@style/pv.text"/>
-
-                        <TextView
-                            android:id="@+id/data"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/space_horizontal_between"
-                            tools:text="0 MB"
-                            style="@style/pv.text"/>
-
-                        <View
-                            android:layout_gravity="center_vertical"
-                            android:backgroundTint="@color/pv_yellow"
-                            android:layout_marginEnd="@dimen/space_horizontal_between"
-                            style="@style/pv.progess_bar_legend"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_data_storage_cache"
-                            style="@style/pv.text"/>
-
-                        <TextView
-                            android:id="@+id/cache"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/space_horizontal_between"
-                            tools:text="0 MB"
-                            style="@style/pv.text"/>
-
-                        <View
-                            android:layout_gravity="center_vertical"
-                            android:backgroundTint="@color/pv_container_detail"
-                            android:layout_marginEnd="@dimen/space_horizontal_between"
-                            style="@style/pv.progess_bar_legend"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_data_storage_free"
-                            style="@style/pv.text"/>
-
-                        <TextView
-                            android:id="@+id/free"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/space_horizontal_between"
-                            tools:text="0 GB"
-                            style="@style/pv.text"/>
-
-                    </GridLayout>
-
-                </LinearLayout>
-
-                <View style="@style/pv.divider"/>
-
-                <LinearLayout
-                    android:id="@+id/settings_data_delete_all_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:paddingHorizontal="@dimen/space_horizontal"
-                    android:paddingVertical="@dimen/space_vertical"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_data_delete_all"
-                            style="@style/pv.text"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_data_delete_all_info"
-                            android:textColor="@color/pv_red"
-                            style="@style/pv.text.variant"/>
-
-                    </LinearLayout>
-
-                    <ImageView
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_horizontal_between"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_next"
-                        tools:ignore="ContentDescription"
-                        style="@style/pv.icon"/>
+                        android:text="@string/settings_data_delete_all"
+                        style="@style/text"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_data_delete_all_info"
+                        android:textColor="?attr/colorError"
+                        style="@style/text.light"/>
 
                 </LinearLayout>
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_horizontal_between"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_next"
+                    tools:ignore="ContentDescription"
+                    style="@style/image.item"/>
+
             </LinearLayout>
+
+            <View style="@style/divider"/>
 
 
 
@@ -409,32 +388,25 @@
                 android:layout_height="wrap_content"
                 android:text="@string/settings_search"
                 android:layout_marginHorizontal="@dimen/space_horizontal"
-                style="@style/pv.text.highlight"/>
+                android:layout_marginVertical="@dimen/space_vertical"
+                style="@style/text.headline"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_search_qualitygates"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                style="@style/pv.container.highlight">
+                android:text="@string/settings_search_qualitygates"
+                style="@style/pv.material.button.different"/>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_search_qualitygates"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/settings_search_qualitygates"
-                    style="@style/pv.material.button.different"/>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_search_masterpassword"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/settings_search_masterpassword"
-                    style="@style/pv.material.button.different"/>
-
-            </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_search_masterpassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_search_masterpassword"
+                style="@style/pv.material.button.different"/>
 
         </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>
