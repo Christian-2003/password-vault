@@ -92,7 +92,8 @@ public class LicensesRecyclerViewAdapter extends RecyclerViewAdapter<LicensesVie
             viewHolder.itemView.setOnClickListener(view -> {
                 Bundle args = new Bundle();
                 args.putString(LicenseDialog.ARG_TITLE, usedSoftware.getLicenseName());
-                args.putString(LicenseDialog.ARG_LICENSE, "TEst license text");
+                String resourceText = viewModel.getLicenseText(usedSoftware);
+                args.putString(LicenseDialog.ARG_LICENSE, resourceText == null ? "" : resourceText);
                 LicenseDialog dialog = new LicenseDialog();
                 dialog.setArguments(args);
                 dialog.show(((AppCompatActivity)context).getSupportFragmentManager(), null);

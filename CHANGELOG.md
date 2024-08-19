@@ -8,6 +8,8 @@ n/a
 
 ###### Features
 * Introduced new app icons.
+* Changed activity displaying used software to only include direct dependencies and no transient dependencies.
+* Introduced `BottomSheetDialogFragment` to display the license of a used software.
 
 <br/>
 

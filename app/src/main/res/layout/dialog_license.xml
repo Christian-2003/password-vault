@@ -2,13 +2,53 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/text_license"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/text"/>
+        android:paddingHorizontal="@dimen/space_horizontal"
+        android:paddingVertical="@dimen/space_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/space_vertical"
+            android:layout_marginEnd="@dimen/space_horizontal_between"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_license"
+            style="@style/image.light"/>
+
+        <TextView
+            android:id="@+id/text_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            tools:text="MIT License"
+            style="@style/text.headline"/>
+
+    </LinearLayout>
+
+    <View style="@style/divider"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical">
+
+        <TextView
+            android:id="@+id/text_license"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/space_horizontal"
+            android:paddingVertical="@dimen/space_vertical"
+            tools:text="Permission is hereby granted, free of charge, ..."
+            style="@style/text"/>
+
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

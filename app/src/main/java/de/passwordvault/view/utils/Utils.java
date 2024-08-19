@@ -3,9 +3,12 @@ package de.passwordvault.view.utils;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import java.io.InputStream;
 import java.text.DecimalFormat;
@@ -24,7 +27,7 @@ import de.passwordvault.model.analysis.QualityGateManager;
  * necessary to implement each of the provided methods with it's own class.
  *
  * @author  Christian-2003
- * @version 3.5.2
+ * @version 3.7.0
  */
 public class Utils {
 
@@ -116,6 +119,25 @@ public class Utils {
     public static String readRawResource(int id) {
         byte[] content;
         try (InputStream inputStream = App.getContext().getResources().openRawResource(id)) {
+            content = new byte[inputStream.available()];
+            inputStream.read(content);
+        }
+        catch (Exception e) {
+            return null;
+        }
+        return new String(content);
+    }
+
+    /**
+     * Method reads a raw resource file and returns it's content as string.
+     *
+     * @param name  Name of the raw resource file to read (without extension).
+     * @return      Content of the resource file as string.
+     */
+    public static String readRawResource(@NonNull String name) {
+        byte[] content;
+        Resources resources = App.getContext().getResources();
+        try (InputStream inputStream = resources.openRawResource(resources.getIdentifier(name, "raw", App.getContext().getPackageName()))) {
             content = new byte[inputStream.available()];
             inputStream.read(content);
         }

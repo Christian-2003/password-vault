@@ -139,6 +139,11 @@ public class LicensesViewModel extends ViewModel {
     }
 
 
+    public String getLicenseText(UsedSoftware software) {
+        return Utils.readRawResource(software.getLicenseResourceFile());
+    }
+
+
     /**
      * Method loads the used software from a raw resource file. After the method finishes execution,
      * the {@link #usedSoftware} is not null.

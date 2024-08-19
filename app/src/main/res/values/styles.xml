@@ -46,7 +46,13 @@
 
     <!-- Styles for images -->
     <style name="image">
+        <item name="android:layout_height">@dimen/image_s</item>
+        <item name="android:layout_width">@dimen/image_s</item>
+        <item name="android:tint">@color/text</item>
+    </style>
 
+    <style name="image.light" parent="image">
+        <item name="android:tint">@color/text_light</item>
     </style>
 
     <style name="image.item" parent="image">
@@ -63,6 +69,26 @@
     </style>
 
 
+
+    <!-- Other styles -->
+    <style name="divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/divider</item>
+        <item name="android:backgroundTint">@color/divider</item>
+    </style>
+
+
+
+
+    <!-- Styles for default components -->
+    <style name="view">
+
+    </style>
+
+    <style name="view.bottomSheet" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="android:backgroundTint">@color/background_app_bar</item>
+    </style>
 
 
 

@@ -20,7 +20,7 @@
         <item name="colorOnSurfaceVariant">@color/pv_background</item>
         <item name="colorOutline">@color/pv_text_secondary</item>
 
-        <item name="android:statusBarColor">@color/pv_background</item>
+        <item name="android:statusBarColor">@color/background_app_bar</item>
         <item name="android:colorBackgroundFloating">@color/pv_container</item>
         <item name="android:windowLightNavigationBar">false</item>
         <item name="android:windowLightStatusBar">false</item>
@@ -39,6 +39,7 @@
         <item name="checkboxStyle">@style/pv.material.checkbox</item>
         <item name="badgeStyle">@style/pv.material.badge</item>
         <item name="chipStyle">@style/pv.material.chip</item>
+        <item name="bottomSheetDialogTheme">@style/view.bottomSheet</item>
     </style>
 
 
