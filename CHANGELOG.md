@@ -10,6 +10,7 @@ n/a
 * Introduced new app icons.
 * Changed activity displaying used software to only include direct dependencies and no transient dependencies.
 * Introduced `BottomSheetDialogFragment` to display the license of a used software.
+* Added `PasswordVaultBottomSheetDialog<V extends ViewModel>` to handle basic functions used by all future bottom sheet dialogs.
 
 <br/>
 

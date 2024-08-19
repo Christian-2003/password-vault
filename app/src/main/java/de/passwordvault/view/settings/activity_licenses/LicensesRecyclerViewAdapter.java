@@ -1,20 +1,13 @@
 package de.passwordvault.view.settings.activity_licenses;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import de.passwordvault.R;
 import de.passwordvault.view.settings.dialog_license.LicenseDialog;
 import de.passwordvault.view.utils.recycler_view.RecyclerViewAdapter;
@@ -57,8 +50,6 @@ public class LicensesRecyclerViewAdapter extends RecyclerViewAdapter<LicensesVie
      */
     public LicensesRecyclerViewAdapter(@NonNull Context context, @NonNull LicensesViewModel viewModel) {
         super(context, viewModel);
-        Log.d("LRVA", "Create adapter");
-        Log.d("LRVA", "Items: " + getItemCount());
     }
 
 

@@ -1,65 +1,67 @@
 package de.passwordvault.view.settings.dialog_license;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextClock;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
-
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
 import de.passwordvault.R;
+import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
 
 
-public class LicenseDialog extends BottomSheetDialogFragment {
+/**
+ * Class implements the dialog displaying the license text of a used software.
+ *
+ * @author  Christian-2003
+ * @version 3.7.0
+ */
+public class LicenseDialog extends PasswordVaultBottomSheetDialog<LicenseViewModel> {
 
+    /**
+     * Field stores the key with which to pass the title of the dialog.
+     */
     public static final String ARG_TITLE = "arg_title";
 
+    /**
+     * Field stores the key with which to pass the license text of the dialog.
+     */
     public static final String ARG_LICENSE = "arg_license";
 
 
-    private LicenseViewModel viewModel;
+    /**
+     * Constructor instantiates a new dialog.
+     */
+    public LicenseDialog() {
+        super(LicenseViewModel.class, R.layout.dialog_license);
+    }
 
 
+    /**
+     * Method is called whenever the view of the dialog is created.
+     *
+     * @param inflater              Layout inflater to use in order to inflate the dialog view.
+     * @param container             Parent view of the dialog.
+     * @param savedInstanceState    Previously saved state of the instance.
+     * @return                      View for the dialog.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        viewModel = new ViewModelProvider(this).get(LicenseViewModel.class);
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+
         Bundle args = getArguments();
         if (args != null) {
             viewModel.processArguments(args);
         }
 
-        View view = inflater.inflate(R.layout.dialog_license, container, false);
-        ((TextView)view.findViewById(R.id.text_title)).setText(viewModel.getTitle());
-        ((TextView)view.findViewById(R.id.text_license)).setText(viewModel.getLicense());
+        if (view != null) {
+            ((TextView)view.findViewById(R.id.text_title)).setText(viewModel.getTitle());
+            ((TextView)view.findViewById(R.id.text_license)).setText(viewModel.getLicense());
+        }
 
         return view;
     }
 
-
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        if (getDialog() != null) {
-            getDialog().setOnShowListener(view -> {
-                BottomSheetDialog dialog = (BottomSheetDialog)view;
-                View bottomSheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
-                if (bottomSheet != null) {
-                    BottomSheetBehavior<View> behavior = BottomSheetBehavior.from(bottomSheet);
-                    behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                }
-            });
-        }
-        return super.onCreateDialog(savedInstanceState);
-    }
 }

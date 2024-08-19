@@ -1,7 +1,5 @@
 package de.passwordvault.view.settings.activity_licenses;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
@@ -139,6 +137,13 @@ public class LicensesViewModel extends ViewModel {
     }
 
 
+    /**
+     * Method loads the license text for the passed used software from a raw resource. The return
+     * value can be {@code null} if no license text is available.
+     *
+     * @param software  Used software for which to load the license text.
+     * @return          License text for the used software.
+     */
     public String getLicenseText(UsedSoftware software) {
         return Utils.readRawResource(software.getLicenseResourceFile());
     }
@@ -149,11 +154,9 @@ public class LicensesViewModel extends ViewModel {
      * the {@link #usedSoftware} is not null.
      */
     private void loadUsedSoftware() {
-        Log.d("LVM", "Begin loading used software");
         String csv = Utils.readRawResource(R.raw.licenses);
         usedSoftware = new ArrayList<>();
         if (csv == null) {
-            Log.d("LVM", "Could not load software");
             return;
         }
         String[] software = csv.split("\n");
@@ -161,7 +164,6 @@ public class LicensesViewModel extends ViewModel {
             String[] attributes = s.split(",");
             if (attributes.length == 4) {
                 usedSoftware.add(new UsedSoftware(attributes[0], attributes[1], attributes[2], attributes[3]));
-                Log.d("LVM", "Added license: " + s);
             }
         }
     }
