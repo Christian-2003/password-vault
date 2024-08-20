@@ -11,6 +11,7 @@ n/a
 * Changed activity displaying used software to only include direct dependencies and no transient dependencies.
 * Introduced `BottomSheetDialogFragment` to display the license of a used software.
 * Added `PasswordVaultBottomSheetDialog<V extends ViewModel>` to handle basic functions used by all future bottom sheet dialogs.
+* Fixed a bug where the `DarkmodeDialog` did not display the UI mode of the Android OS but instead used the UI mode of the app.
 
 <br/>
 

@@ -13,6 +13,14 @@
     <color name="text_light">#C4C7D0</color>
     <color name="divider">#454746</color>
 
+    <!-- Light / dark variants needed for dialog to switch darkmode -->
+    <color name="light_background">#FAF9FE</color>
+    <color name="light_container">#E9E7EC</color>
+    <color name="light_highlight">#991D7874</color>
+    <color name="dark_background">#121317</color>
+    <color name="dark_container">#292A2E</color>
+    <color name="dark_highlight">#9929A7A1</color>
+
 
 
     <!-- DEPRECATED BELOW -->

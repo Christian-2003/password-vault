@@ -4,7 +4,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import de.passwordvault.R;
-import de.passwordvault.view.settings.activity_customization.dialog_darkmode.DarkmodeDialog;
+import de.passwordvault.view.settings.dialog_darkmode.DarkmodeDialog;
 import de.passwordvault.view.settings.activity_customization.dialog_swipe_action.DetailSwipeActionDialog;
 import de.passwordvault.view.settings.activity_customization.dialog_recently_edited.RecentlyEditedDialog;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
