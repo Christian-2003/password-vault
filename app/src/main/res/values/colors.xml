@@ -8,9 +8,11 @@
     <color name="background_app_bar">#F5F3F8</color>
     <color name="background_nav_bar">#EFEdF2</color>
     <color name="background_container">#E9E7EC</color>
+    <color name="background_critical">#FFDAD6</color>
 
     <color name="text">#1B1A1F</color>
     <color name="text_light">#444750</color>
+    <color name="text_critical">#BA1A1A</color>
     <color name="divider">#C5C7C6</color>
 
     <!-- Light / dark variants needed for dialog to switch darkmode -->

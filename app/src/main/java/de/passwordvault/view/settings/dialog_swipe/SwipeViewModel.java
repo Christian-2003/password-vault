@@ -1,19 +1,18 @@
-package de.passwordvault.view.settings.activity_customization.dialog_swipe_action;
+package de.passwordvault.view.settings.dialog_swipe;
 
 import androidx.lifecycle.ViewModel;
 import de.passwordvault.model.detail.DetailSwipeAction;
 import de.passwordvault.model.storage.settings.Config;
-import de.passwordvault.view.settings.activity_customization.dialog_swipe_action.DetailSwipeActionDialog;
 
 
 /**
  * Class implements the view model for the
- * {@link DetailSwipeActionDialog}.
+ * {@link SwipeDialog}.
  *
  * @author  Christian-2003
  * @version 3.5.4
  */
-public class DetailSwipeActionViewModel extends ViewModel {
+public class SwipeViewModel extends ViewModel {
 
     /**
      * Attribute stores the left swipe action.
@@ -29,7 +28,7 @@ public class DetailSwipeActionViewModel extends ViewModel {
     /**
      * Constructor instantiates a new view model.
      */
-    public DetailSwipeActionViewModel() {
+    public SwipeViewModel() {
         leftSwipeAction = Config.getInstance().leftSwipeAction.get();
         rightSwipeAction = Config.getInstance().rightSwipeAction.get();
     }

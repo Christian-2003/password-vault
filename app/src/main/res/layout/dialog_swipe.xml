@@ -1,27 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/pv_container">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:background="@color/background_container">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:paddingHorizontal="@dimen/space_horizontal"
+        android:paddingVertical="@dimen/space_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/space_vertical"
+            android:layout_marginEnd="@dimen/space_horizontal_between"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_swipe"
+            style="@style/image.light"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/settings_customization_details_swipe"
+            style="@style/text.headline"/>
+
+    </LinearLayout>
+
+    <View style="@style/divider"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+
+            <!-- Swipe right -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/space_horizontal"
                 android:text="@string/settings_customization_details_swipe_right"
-                style="@style/pv.text.highlight"/>
+                style="@style/text.headline"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -29,7 +60,7 @@
                 android:layout_marginHorizontal="@dimen/space_horizontal"
                 android:layout_marginVertical="@dimen/space_vertical"
                 android:orientation="horizontal"
-                android:backgroundTint="@color/pv_background"
+                android:backgroundTint="@color/background"
                 style="@style/pv.container">
 
                 <LinearLayout
@@ -38,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:padding="@dimen/space_small"
-                    android:background="@color/pv_primary">
+                    android:background="@color/primary">
 
                     <ImageView
                         android:id="@+id/right_swipe_image"
@@ -48,7 +79,8 @@
                         android:paddingVertical="@dimen/space_vertical_between"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_edit"
-                        android:tint="@color/pv_background"/>
+                        android:tint="@color/background"
+                        tools:ignore="UseAppTint"/>
 
                 </LinearLayout>
 
@@ -65,14 +97,14 @@
                         android:layout_height="@dimen/space_small"
                         android:layout_marginEnd="@dimen/space_small"
                         android:background="@drawable/pill"
-                        android:backgroundTint="@color/pv_container"/>
+                        android:backgroundTint="@color/background_container"/>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/space_small"
                         android:layout_marginTop="@dimen/space_small"
                         android:background="@drawable/pill"
-                        android:backgroundTint="@color/pv_container"/>
+                        android:backgroundTint="@color/background_container"/>
 
                 </LinearLayout>
 
@@ -86,7 +118,7 @@
                 android:paddingVertical="@dimen/space_vertical"
                 android:clickable="true"
                 android:focusable="true"
-                android:background="?attr/selectableItemBackground"
+                android:foreground="?attr/selectableItemBackground"
                 android:orientation="horizontal">
 
                 <RadioButton
@@ -102,7 +134,7 @@
                     android:layout_marginStart="@dimen/space_horizontal_between"
                     android:layout_gravity="center"
                     android:text="@string/settings_customization_details_swipe_edit"
-                    style="@style/pv.text"/>
+                    style="@style/text"/>
 
 
             </LinearLayout>
@@ -111,11 +143,12 @@
                 android:id="@+id/container_right_swipe_delete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_vertical"
                 android:paddingHorizontal="@dimen/space_horizontal"
                 android:paddingVertical="@dimen/space_vertical"
                 android:clickable="true"
                 android:focusable="true"
-                android:background="?attr/selectableItemBackground"
+                android:foreground="?attr/selectableItemBackground"
                 android:orientation="horizontal">
 
                 <RadioButton
@@ -131,26 +164,21 @@
                     android:layout_marginStart="@dimen/space_horizontal_between"
                     android:layout_gravity="center"
                     android:text="@string/settings_customization_details_swipe_delete"
-                    style="@style/pv.text"/>
+                    style="@style/text"/>
 
             </LinearLayout>
 
-        </LinearLayout>
 
-        <View
-            style="@style/pv.divider"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
 
+            <!-- Swipe left -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/space_horizontal"
+                android:layout_marginTop="@dimen/space_vertical"
                 android:text="@string/settings_customization_details_swipe_left"
-                style="@style/pv.text.highlight"/>
+                style="@style/text.headline"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -158,7 +186,7 @@
                 android:layout_marginHorizontal="@dimen/space_horizontal"
                 android:layout_marginVertical="@dimen/space_vertical"
                 android:orientation="horizontal"
-                android:backgroundTint="@color/pv_background"
+                android:backgroundTint="@color/background"
                 android:baselineAligned="false"
                 style="@style/pv.container">
 
@@ -175,14 +203,14 @@
                         android:layout_height="@dimen/space_small"
                         android:layout_marginEnd="@dimen/space_small"
                         android:background="@drawable/pill"
-                        android:backgroundTint="@color/pv_container"/>
+                        android:backgroundTint="@color/background_container"/>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/space_small"
                         android:layout_marginTop="@dimen/space_small"
                         android:background="@drawable/pill"
-                        android:backgroundTint="@color/pv_container"/>
+                        android:backgroundTint="@color/background_container"/>
 
                 </LinearLayout>
 
@@ -192,7 +220,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:padding="@dimen/space_small"
-                    android:background="@color/pv_red">
+                    android:background="@color/text_critical">
 
                     <ImageView
                         android:id="@+id/left_swipe_image"
@@ -202,7 +230,8 @@
                         android:paddingVertical="@dimen/space_vertical_between"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_delete"
-                        android:tint="@color/pv_background"/>
+                        android:tint="@color/background"
+                        tools:ignore="UseAppTint"/>
 
                 </LinearLayout>
 
@@ -216,7 +245,7 @@
                 android:paddingVertical="@dimen/space_vertical"
                 android:clickable="true"
                 android:focusable="true"
-                android:background="?attr/selectableItemBackground"
+                android:foreground="?attr/selectableItemBackground"
                 android:orientation="horizontal">
 
                 <RadioButton
@@ -232,7 +261,7 @@
                     android:layout_marginStart="@dimen/space_horizontal_between"
                     android:layout_gravity="center"
                     android:text="@string/settings_customization_details_swipe_edit"
-                    style="@style/pv.text"/>
+                    style="@style/text"/>
 
 
             </LinearLayout>
@@ -245,7 +274,7 @@
                 android:paddingVertical="@dimen/space_vertical"
                 android:clickable="true"
                 android:focusable="true"
-                android:background="?attr/selectableItemBackground"
+                android:foreground="?attr/selectableItemBackground"
                 android:orientation="horizontal">
 
                 <RadioButton
@@ -261,12 +290,12 @@
                     android:layout_marginStart="@dimen/space_horizontal_between"
                     android:layout_gravity="center"
                     android:text="@string/settings_customization_details_swipe_delete"
-                    style="@style/pv.text"/>
+                    style="@style/text"/>
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-</ScrollView>
+</LinearLayout>

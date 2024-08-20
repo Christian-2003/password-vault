@@ -8,8 +8,8 @@
         <item name="colorOnPrimary">@color/pv_text</item>
         <item name="colorPrimaryContainer">@color/pv_primary</item>
         <item name="colorOnPrimaryContainer">@color/pv_primary</item>
-        <item name="colorError">#BA1A1A</item>
-        <item name="colorErrorContainer">#FFDAD6</item>
+        <item name="colorError">@color/text_critical</item>
+        <item name="colorErrorContainer">@color/background_critical</item>
         <item name="colorOnError">#FFFFFF</item>
         <item name="colorOnErrorContainer">#410002</item>
         <item name="android:colorBackground">@color/pv_background</item>
