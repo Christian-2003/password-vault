@@ -1,12 +1,17 @@
 package de.passwordvault.view.settings.dialog_recently_edited;
 
 import android.content.Context;
-
 import androidx.lifecycle.ViewModel;
-
 import de.passwordvault.R;
 import de.passwordvault.model.storage.settings.Config;
 
+
+/**
+ * Class implements the view model for the {@link RecentlyEditedDialog}.
+ *
+ * @author  Christian-2003
+ * @version 3.7.0
+ */
 public class RecentlyEditedViewModel extends ViewModel {
 
     /**
