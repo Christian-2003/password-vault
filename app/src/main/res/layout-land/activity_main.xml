@@ -24,9 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center"
-            android:layout_marginHorizontal="@dimen/space_horizontal"
-            android:maxLines="1"
-            android:ellipsize="end"
+            android:layout_marginStart="@dimen/space_horizontal"
             android:text="@string/app_name"
             style="@style/text.app_bar"/>
 

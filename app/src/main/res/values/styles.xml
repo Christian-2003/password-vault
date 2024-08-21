@@ -16,12 +16,21 @@
     <style name="text.app_bar">
         <item name="android:textSize">@dimen/text_l</item>
         <item name="android:textColor">@color/text</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:layout_marginEnd">@dimen/space_horizontal</item>
     </style>
 
     <style name="text.headline">
         <item name="android:textSize">@dimen/text_m</item>
         <item name="android:textColor">@color/text_light</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="text.info">
+        <item name="android:textSize">@dimen/text_m</item>
+        <item name="android:textColor">@color/text_light</item>
+        <item name="android:lineSpacingExtra">5sp</item>
     </style>
 
 
@@ -78,6 +87,15 @@
         <item name="android:backgroundTint">@color/divider</item>
     </style>
 
+
+
+    <!-- Styles for cards -->
+    <style name="card">
+        <item name="android:background">@drawable/background</item>
+        <item name="android:backgroundTint">@color/background_container</item>
+        <item name="android:paddingHorizontal">@dimen/space_horizontal</item>
+        <item name="android:paddingVertical">@dimen/space_vertical</item>
+    </style>
 
 
 
