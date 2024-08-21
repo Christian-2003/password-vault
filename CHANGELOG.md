@@ -12,6 +12,7 @@ n/a
 * Introduced `BottomSheetDialogFragment` to display the license of a used software.
 * Added `PasswordVaultBottomSheetDialog<V extends ViewModel>` to handle basic functions used by all future bottom sheet dialogs.
 * Fixed a bug where the `DarkmodeDialog` did not display the UI mode of the Android OS but instead used the UI mode of the app.
+* Changed color of background when swiping an item to delete from _@color/pv\_red_ to _@color/text\_critical_.
 
 <br/>
 

@@ -297,7 +297,7 @@ public class RecoveryActivity extends PasswordVaultBaseActivity implements OnRec
         RecyclerItemSwipeCallback.SwipeAction<SecurityQuestion> leftSwipeCallback = null;
         DetailSwipeAction leftSwipeAction = Config.getInstance().leftSwipeAction.get();
         if (leftSwipeAction == DetailSwipeAction.DELETE) {
-            leftSwipeCallback = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_delete, R.color.pv_red, this::deleteSecurityQuestion);
+            leftSwipeCallback = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_delete, R.color.text_critical, this::deleteSecurityQuestion);
         }
         else if (leftSwipeAction == DetailSwipeAction.EDIT) {
             leftSwipeCallback = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_edit, R.color.pv_primary, this::editSecurityQuestion);
@@ -306,7 +306,7 @@ public class RecoveryActivity extends PasswordVaultBaseActivity implements OnRec
         RecyclerItemSwipeCallback.SwipeAction<SecurityQuestion> rightSwipeCallback = null;
         DetailSwipeAction rightSwipeAction = Config.getInstance().rightSwipeAction.get();
         if (rightSwipeAction == DetailSwipeAction.DELETE) {
-            rightSwipeCallback = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_delete, R.color.pv_red, this::deleteSecurityQuestion);
+            rightSwipeCallback = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_delete, R.color.text_critical, this::deleteSecurityQuestion);
         }
         else if (rightSwipeAction == DetailSwipeAction.EDIT) {
             rightSwipeCallback = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_edit, R.color.pv_primary, this::editSecurityQuestion);
