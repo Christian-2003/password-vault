@@ -5,30 +5,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="@dimen/space_vertical"
-    android:paddingHorizontal="@dimen/space_horizontal"
     android:foreground="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_gravity="center"
-        android:layout_marginEnd="@dimen/space_horizontal_between"
-        tools:text="Headline Text"
-        style="@style/text.headline"/>
+    <View
+        android:id="@+id/divider"
+        style="@style/divider"/>
 
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        tools:src="@drawable/ic_add"
-        tools:ignore="ContentDescription"
-        style="@style/image.light"/>
+        android:paddingVertical="@dimen/space_vertical"
+        android:paddingHorizontal="@dimen/space_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/space_horizontal_between"
+            tools:text="Headline Text"
+            style="@style/text.headline"/>
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            tools:src="@drawable/ic_add"
+            tools:ignore="ContentDescription"
+            style="@style/image.light"/>
+
+    </LinearLayout>
 
 </LinearLayout>

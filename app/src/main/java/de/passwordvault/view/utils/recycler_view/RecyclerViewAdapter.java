@@ -37,7 +37,7 @@ public abstract class RecyclerViewAdapter<V extends ViewModel> extends RecyclerV
          *
          * @param itemView  Inflated view from which to create the view holder.
          */
-        private GenericInfoViewHolder(@NonNull View itemView) {
+        public GenericInfoViewHolder(@NonNull View itemView) {
             super(itemView);
             infoTextView = itemView.findViewById(R.id.text);
         }
@@ -54,6 +54,11 @@ public abstract class RecyclerViewAdapter<V extends ViewModel> extends RecyclerV
          */
         public final TextView headlineTextView;
 
+        /**
+         * Attribute stores the view displaying a horizontal divider above the headline.
+         */
+        public final View dividerView;
+
 
         /**
          * Constructor instantiates a new view holder.
@@ -62,7 +67,8 @@ public abstract class RecyclerViewAdapter<V extends ViewModel> extends RecyclerV
          */
         public GenericHeadlineViewHolder(@NonNull View itemView) {
             super(itemView);
-            headlineTextView = (TextView)itemView;
+            headlineTextView = itemView.findViewById(R.id.text);
+            dividerView = itemView.findViewById(R.id.divider);
         }
 
     }
@@ -82,6 +88,11 @@ public abstract class RecyclerViewAdapter<V extends ViewModel> extends RecyclerV
          */
         public final ImageView buttonImageView;
 
+        /**
+         * Attribute stores the view displaying a horizontal divider above the headline.
+         */
+        public final View dividerView;
+
 
         /**
          * Constructor instantiates a new view holder.
@@ -92,9 +103,31 @@ public abstract class RecyclerViewAdapter<V extends ViewModel> extends RecyclerV
             super(itemView);
             headlineTextView = itemView.findViewById(R.id.text);
             buttonImageView = itemView.findViewById(R.id.image);
+            dividerView = itemView.findViewById(R.id.divider);
         }
 
     }
+
+
+    /**
+     * Field stores the view type for the generic info.
+     */
+    public static final int TYPE_GENERIC_INFO = 2;
+
+    /**
+     * Field stores the view type for the generic headline.
+     */
+    public static final int TYPE_GENERIC_HEADLINE = 4;
+
+    /**
+     * Field stores the view type for the generic headline button.
+     */
+    public static final int TYPE_GENERIC_HEADLINE_BUTTON = 8;
+
+    /**
+     * Field stores a tag used for logging.
+     */
+    protected static final String TAG = "RecyclerViewAdapter";
 
 
     /**
@@ -116,6 +149,11 @@ public abstract class RecyclerViewAdapter<V extends ViewModel> extends RecyclerV
     @NonNull
     protected final LayoutInflater layoutInflater;
 
+    /**
+     * Attribute stores the recycler view to which the adapter is attached.
+     */
+    protected RecyclerView recyclerView;
+
 
     /**
      * Constructor instantiates a new recycler view adapter.
@@ -127,6 +165,18 @@ public abstract class RecyclerViewAdapter<V extends ViewModel> extends RecyclerV
         this.context = context;
         this.viewModel = viewModel;
         layoutInflater = LayoutInflater.from(context);
+    }
+
+
+    /**
+     * Method is called once the adapter is attached to a recycler view.
+     *
+     * @param recyclerView  The RecyclerView instance which started observing this adapter.
+     */
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView = recyclerView;
     }
 
 }

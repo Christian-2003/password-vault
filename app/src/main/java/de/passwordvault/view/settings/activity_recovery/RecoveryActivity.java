@@ -55,6 +55,14 @@ public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> {
         //Back button:
         findViewById(R.id.button_back).setOnClickListener(view -> finish());
 
+        if (viewModel.getSecurityQuestions() == null) {
+            viewModel.loadSecurityQuestions();
+        }
+
+        //Recycler view:
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        RecoveryRecyclerViewAdapter adapter = new RecoveryRecyclerViewAdapter(this, viewModel);
+        recyclerView.setAdapter(adapter);
     }
 
 }
