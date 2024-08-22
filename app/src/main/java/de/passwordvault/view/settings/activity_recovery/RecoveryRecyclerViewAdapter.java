@@ -7,13 +7,14 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.security.login.SecurityQuestion;
+import de.passwordvault.view.utils.recycler_view.OnRecyclerViewActionListener;
 import de.passwordvault.view.utils.recycler_view.RecyclerViewAdapter;
 import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
 
@@ -108,6 +109,18 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
      */
     public static final int TYPE_RECOVERY_QUESTION = 3;
 
+    /**
+     * Field stores the offset with which the security questions are positioned within the adapter.
+     */
+    public static final int QUESTIONS_OFFSET = 4;
+
+
+    /**
+     * Attribute stores the listener invoked to add a new security question.
+     */
+    @Nullable
+    private OnRecyclerViewActionListener addQuestionListener;
+
 
     /**
      * Constructor instantiates a new recycler view adapter.
@@ -117,6 +130,16 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
      */
     public RecoveryRecyclerViewAdapter(@NonNull Context context, @NonNull RecoveryViewModel viewModel) {
         super(context, viewModel);
+    }
+
+
+    /**
+     * Method changes the listener invoked when a new question shall be added.
+     *
+     * @param addQuestionListener   New listener.
+     */
+    public void setAddQuestionListener(@Nullable OnRecyclerViewActionListener addQuestionListener) {
+        this.addQuestionListener = addQuestionListener;
     }
 
 
@@ -195,14 +218,15 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
                     viewHolder.headlineTextView.setText(R.string.recovery_questions);
                     viewHolder.buttonImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_add));
                     viewHolder.itemView.setOnClickListener(view -> {
-                        Toast.makeText(context, "Add new question", Toast.LENGTH_SHORT).show();
-                        //TODO: Add new question!
+                        if (addQuestionListener != null) {
+                            addQuestionListener.onAction(holder);
+                        }
                     });
                     break;
                 }
                 default: {
                     RecoveryQuestionViewHolder viewHolder = (RecoveryQuestionViewHolder)holder;
-                    SecurityQuestion question = viewModel.getSecurityQuestions().get(position - 4);
+                    SecurityQuestion question = viewModel.getSecurityQuestions().get(position - QUESTIONS_OFFSET);
                     String[] allQuestions = context.getResources().getStringArray(R.array.security_questions);
                     viewHolder.questionTextView.setText(allQuestions[question.getQuestion()]);
                     viewHolder.answerTextView.setText(question.getAnswer());
@@ -231,7 +255,7 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
      */
     @Override
     public int getItemCount() {
-        return viewModel.getSecurityQuestions().size() + 4;
+        return viewModel.getSecurityQuestions().size() + QUESTIONS_OFFSET;
     }
 
 
@@ -265,7 +289,7 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
      * @return          Whether the view at the specified position supports swiping.
      */
     public boolean supportsSwipe(int position) {
-        return position >= 4;
+        return position >= QUESTIONS_OFFSET;
     }
 
 }

@@ -1,29 +1,14 @@
 package de.passwordvault.view.settings.activity_recovery;
 
-import android.animation.LayoutTransition;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
-import de.passwordvault.model.detail.DetailSwipeAction;
-import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.security.login.SecurityQuestion;
-import de.passwordvault.model.storage.settings.Config;
-import de.passwordvault.view.entries.activity_add_entry.dialog_delete.ConfirmDeleteDialog;
-import de.passwordvault.view.settings.activity_recovery.dialog_security_question.SecurityQuestionDialog;
-import de.passwordvault.view.utils.DialogCallbackListener;
+import de.passwordvault.view.settings.dialog_security_question.SecurityQuestionDialog;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
-import de.passwordvault.view.utils.recycler_view.OnRecyclerItemClickListener;
-import de.passwordvault.view.utils.recycler_view.RecyclerItemSwipeCallback;
-import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
+import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
 import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
 
 
@@ -34,6 +19,11 @@ import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
  * @version 3.6.0
  */
 public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> {
+
+    /**
+     * Attribute stores the adapter for the activity.
+     */
+    private RecoveryRecyclerViewAdapter adapter;
 
 
     /**
@@ -62,7 +52,8 @@ public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> {
 
         //Recycler view:
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        RecoveryRecyclerViewAdapter adapter = new RecoveryRecyclerViewAdapter(this, viewModel);
+        adapter = new RecoveryRecyclerViewAdapter(this, viewModel);
+        adapter.setAddQuestionListener(this::onAddSecurityQuestion);
         recyclerView.setAdapter(adapter);
         RecyclerViewSwipeCallback.SwipeAction leftSwipe = RecyclerViewSwipeCallback.makeLeftSwipeAction(this::onEditSecurityQuestion, this::onDeleteSecurityQuestion);
         RecyclerViewSwipeCallback.SwipeAction rightSwipe = RecyclerViewSwipeCallback.makeRightSwipeAction(this::onEditSecurityQuestion, this::onDeleteSecurityQuestion);
@@ -73,10 +64,50 @@ public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> {
 
 
     private void onEditSecurityQuestion(RecyclerView.ViewHolder holder) {
+        //Get available security questions that can be used:
+        int position = holder.getAdapterPosition() - RecoveryRecyclerViewAdapter.QUESTIONS_OFFSET;
+        SecurityQuestion question = viewModel.getSecurityQuestions().get(position);
+        int numberOfAllQuestions = SecurityQuestion.getAllQuestions().length;
+        String[] availableQuestions = new String[numberOfAllQuestions - viewModel.getSecurityQuestions().size() + 1];
 
+        int k = 0;
+        for (int i = 0; i < numberOfAllQuestions; i++) {
+            boolean questionUsed = false;
+            for (SecurityQuestion usedQuestion : viewModel.getSecurityQuestions()) {
+                if (usedQuestion.getQuestion() == i) {
+                    questionUsed = true;
+                    break;
+                }
+            }
+            if (questionUsed) {
+                continue;
+            }
+            availableQuestions[k++] = SecurityQuestion.getAllQuestions()[i];
+        }
+        availableQuestions[availableQuestions.length - 1] = SecurityQuestion.getAllQuestions()[question.getQuestion()];
+
+        SecurityQuestionDialog dialog = new SecurityQuestionDialog();
+        Bundle args = new Bundle();
+        args.putSerializable(SecurityQuestionDialog.ARG_QUESTION, question);
+        args.putStringArray(SecurityQuestionDialog.ARG_QUESTIONS, availableQuestions);
+        PasswordVaultBottomSheetDialog.Callback callback = (d, resultCode) -> {
+            if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS) {
+                SecurityQuestionDialog securityQuestionDialog = (SecurityQuestionDialog)d;
+                SecurityQuestion newQuestion = securityQuestionDialog.getQuestion();
+                viewModel.getSecurityQuestions().set(position, newQuestion);
+                adapter.notifyItemChanged(position + RecoveryRecyclerViewAdapter.QUESTIONS_OFFSET);
+            }
+        };
+        args.putSerializable(SecurityQuestionDialog.ARG_CALLBACK, callback);
+        dialog.setArguments(args);
+        dialog.show(getSupportFragmentManager(), null);
     }
 
     private void onDeleteSecurityQuestion(RecyclerView.ViewHolder holder) {
+
+    }
+
+    private void onAddSecurityQuestion(RecyclerView.ViewHolder holder) {
 
     }
 
