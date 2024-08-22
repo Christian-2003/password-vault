@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,9 +15,16 @@ import de.passwordvault.R;
 import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.security.login.SecurityQuestion;
 import de.passwordvault.view.utils.recycler_view.RecyclerViewAdapter;
+import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
 
 
-public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryViewModel> {
+/**
+ * Class implements the recycler view adapter for the {@link RecoveryActivity}.
+ *
+ * @author  Christian-2003
+ * @version 3.7.0
+ */
+public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryViewModel> implements RecyclerViewSwipeCallback.SwipeContract {
 
     /**
      * Class models the view holder for the item displaying the progress bar of the recovery setup.
@@ -152,6 +158,12 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
     }
 
 
+    /**
+     * Method binds data to a view holder.
+     *
+     * @param holder    View holder to update.
+     * @param position  The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         try {
@@ -243,6 +255,17 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
             default:
                 return TYPE_RECOVERY_QUESTION;
         }
+    }
+
+
+    /**
+     * Method is called to determine whether the view at the specified position supports swiping.
+     *
+     * @param position  Position to query.
+     * @return          Whether the view at the specified position supports swiping.
+     */
+    public boolean supportsSwipe(int position) {
+        return position >= 4;
     }
 
 }

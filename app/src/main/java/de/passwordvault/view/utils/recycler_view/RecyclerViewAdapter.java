@@ -179,4 +179,17 @@ public abstract class RecyclerViewAdapter<V extends ViewModel> extends RecyclerV
         this.recyclerView = recyclerView;
     }
 
+
+    /**
+     * Method returns the context of the adapter. This is required by
+     * {@link de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback.SwipeContract}
+     * when implementing swipe actions.
+     *
+     * @return  Context of the adapter.
+     */
+    @NonNull
+    public Context getContext() {
+        return context;
+    }
+
 }

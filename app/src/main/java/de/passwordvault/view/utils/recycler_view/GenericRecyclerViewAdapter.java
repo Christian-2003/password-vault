@@ -17,6 +17,7 @@ import java.util.ArrayList;
  * @param <D>   Type of the data displayed by the adapter.
  * @author      Christian-2003
  * @version     3.6.0
+ * @deprecated  Use {@link RecyclerViewAdapter} instead.
  */
 public abstract class GenericRecyclerViewAdapter<V extends RecyclerView.ViewHolder, D> extends RecyclerView.Adapter<V> implements RecyclerItemSwipeCallback.ItemSwipeContract<D> {
 

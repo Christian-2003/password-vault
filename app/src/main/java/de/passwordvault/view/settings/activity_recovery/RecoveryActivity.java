@@ -24,6 +24,7 @@ import de.passwordvault.view.utils.components.PasswordVaultActivity;
 import de.passwordvault.view.utils.recycler_view.OnRecyclerItemClickListener;
 import de.passwordvault.view.utils.recycler_view.RecyclerItemSwipeCallback;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
+import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
 
 
 /**
@@ -63,6 +64,20 @@ public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> {
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         RecoveryRecyclerViewAdapter adapter = new RecoveryRecyclerViewAdapter(this, viewModel);
         recyclerView.setAdapter(adapter);
+        RecyclerViewSwipeCallback.SwipeAction leftSwipe = RecyclerViewSwipeCallback.makeLeftSwipeAction(this::onEditSecurityQuestion, this::onDeleteSecurityQuestion);
+        RecyclerViewSwipeCallback.SwipeAction rightSwipe = RecyclerViewSwipeCallback.makeRightSwipeAction(this::onEditSecurityQuestion, this::onDeleteSecurityQuestion);
+        RecyclerViewSwipeCallback callback = new RecyclerViewSwipeCallback(adapter, leftSwipe, rightSwipe);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(recyclerView);
+    }
+
+
+    private void onEditSecurityQuestion(RecyclerView.ViewHolder holder) {
+
+    }
+
+    private void onDeleteSecurityQuestion(RecyclerView.ViewHolder holder) {
+
     }
 
 }

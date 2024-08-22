@@ -20,21 +20,17 @@ import de.passwordvault.model.storage.settings.Config;
 
 
 /**
- * Class implements a swipe callback for recycler items.
+ * Class implements a swipe callback for a recycler view.
  *
- * @param <T>   Data type for the items displayed in the recycler view.
- * @author      Christian-2003
- * @version     3.6.1
- * @deprecated  Use {@link RecyclerViewSwipeCallback} instead.
+ * @author  Christian-2003
+ * @version 3.7.0
  */
-public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
+public class RecyclerViewSwipeCallback extends ItemTouchHelper.Callback {
 
     /**
-     * Interface can be implemented by a recycler view adapter.
-     *
-     * @param <T>   Data type for the items displayed in the recycler view.
+     * Interface needs to be implemented by a recycler view adapter in order to support swiping.
      */
-    public interface ItemSwipeContract<T> {
+    public interface SwipeContract {
 
         /**
          * Method returns the context to use with this callback.
@@ -44,12 +40,12 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
         Context getContext();
 
         /**
-         * Method is called whenever an item is being swiped.
+         * Method is called to determine whether the view at the specified position supports swiping.
          *
-         * @param viewHolder    View holder of the swiped item.
-         * @param swipeAction   Swipe action to call when an item was swiped.
+         * @param position  Position to query.
+         * @return          Whether the view at the specified position supports swiping.
          */
-        void onSwiped(RecyclerView.ViewHolder viewHolder, OnRecyclerItemClickListener<T> swipeAction);
+        boolean supportsSwipe(int position);
 
         /**
          * Method is called to return an item to it's original position after it was swiped left or
@@ -65,10 +61,8 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
 
     /**
      * Class models a swipe action which specifies attributes for item swipes.
-     *
-     * @param <T>   Data type for the items displayed in the recycler view.
      */
-    public static class SwipeAction<T> {
+    public static class SwipeAction {
 
         /**
          * Attribute stores the drawable to be displayed when an item is swiped.
@@ -85,7 +79,8 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
         /**
          * Attribute stores the listener to be called when an item is swiped.
          */
-        private final OnRecyclerItemClickListener<T> swipeListener;
+        @NonNull
+        private final OnRecyclerViewActionListener swipeListener;
 
 
         /**
@@ -95,7 +90,7 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
          * @param colorRes      Color to display when the item is swiped.
          * @param swipeListener Listener for when the item is swiped.
          */
-        public SwipeAction(@DrawableRes int drawableRes, @ColorRes int colorRes, @Nullable OnRecyclerItemClickListener<T> swipeListener) {
+        public SwipeAction(@DrawableRes int drawableRes, @ColorRes int colorRes, @NonNull OnRecyclerViewActionListener swipeListener) {
             this.drawableRes = drawableRes;
             this.colorRes = colorRes;
             this.swipeListener = swipeListener;
@@ -126,7 +121,8 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
          *
          * @return  Swipe listener to call when an item is swiped.
          */
-        public OnRecyclerItemClickListener<T> getSwipeListener() {
+        @NonNull
+        public OnRecyclerViewActionListener getSwipeListener() {
             return swipeListener;
         }
 
@@ -136,33 +132,30 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
     /**
      * Attribute stores the recycler view adapter.
      */
-    private final ItemSwipeContract<T> adapter;
+    @NonNull
+    private final SwipeContract adapter;
 
     /**
      * Attribute stores the left swipe action.
      */
     @Nullable
-    private final SwipeAction<T> leftSwipeAction;
+    private final SwipeAction leftSwipeAction;
 
     /**
      * Attribute stores the right swipe action.
      */
     @Nullable
-    private final SwipeAction<T> rightSwipeAction;
+    private final SwipeAction rightSwipeAction;
 
 
     /**
      * Constructor instantiates a new callback for the passed recycler view adapter.
      *
-     * @param adapter               Adapter for the callback.
-     * @param leftSwipeAction       Action for when an item is left swiped.
-     * @param rightSwipeAction      Action for when an item is right swiped.
-     * @throws NullPointerException The passed adapter is {@code null}.
+     * @param adapter           Adapter for the callback.
+     * @param leftSwipeAction   Action for when an item is left swiped.
+     * @param rightSwipeAction  Action for when an item is right swiped.
      */
-    public RecyclerItemSwipeCallback(ItemSwipeContract<T> adapter, @Nullable SwipeAction<T> leftSwipeAction, @Nullable SwipeAction<T> rightSwipeAction) throws NullPointerException {
-        if (adapter == null) {
-            throw new NullPointerException();
-        }
+    public RecyclerViewSwipeCallback(@NonNull SwipeContract adapter, @Nullable SwipeAction leftSwipeAction, @Nullable SwipeAction rightSwipeAction) {
         this.adapter = adapter;
         this.leftSwipeAction = leftSwipeAction;
         this.rightSwipeAction = rightSwipeAction;
@@ -188,15 +181,16 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
      */
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-        if (direction == ItemTouchHelper.LEFT && leftSwipeAction != null && leftSwipeAction.getSwipeListener() != null) {
-            adapter.onSwiped(viewHolder, leftSwipeAction.getSwipeListener());
+        if (direction == ItemTouchHelper.LEFT && leftSwipeAction != null) {
+            leftSwipeAction.getSwipeListener().onAction(viewHolder);
             adapter.notifyItemChanged(viewHolder.getAdapterPosition());
         }
-        else if (direction == ItemTouchHelper.RIGHT && rightSwipeAction != null && rightSwipeAction.getSwipeListener() != null) {
-            adapter.onSwiped(viewHolder, rightSwipeAction.getSwipeListener());
+        else if (direction == ItemTouchHelper.RIGHT && rightSwipeAction != null) {
+            rightSwipeAction.getSwipeListener().onAction(viewHolder);
             adapter.notifyItemChanged(viewHolder.getAdapterPosition());
         }
     }
+
 
     /**
      * Method is called whenever an item is being moved.
@@ -223,18 +217,21 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
      */
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        int swipeFlags = 0;
-        int dragFlags = 0;
-        if (leftSwipeAction != null && rightSwipeAction != null) {
-            swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+        if (adapter.supportsSwipe(viewHolder.getAdapterPosition())) {
+            int swipeFlags = 0;
+            int dragFlags = 0;
+            if (leftSwipeAction != null && rightSwipeAction != null) {
+                swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+            }
+            else if (leftSwipeAction != null) {
+                swipeFlags = ItemTouchHelper.LEFT;
+            }
+            else if (rightSwipeAction != null) {
+                swipeFlags = ItemTouchHelper.RIGHT;
+            }
+            return makeMovementFlags(dragFlags, swipeFlags);
         }
-        else if (leftSwipeAction != null) {
-            swipeFlags = ItemTouchHelper.LEFT;
-        }
-        else if (rightSwipeAction != null) {
-            swipeFlags = ItemTouchHelper.RIGHT;
-        }
-        return makeMovementFlags(dragFlags, swipeFlags);
+        return 0;
     }
 
 
@@ -297,7 +294,7 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
         if (drawable == null) {
             return null;
         }
-        drawable.setTint(adapter.getContext().getColor(R.color.pv_container));
+        drawable.setTint(adapter.getContext().getColor(R.color.background));
         Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -313,16 +310,16 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
      * @param editListener      Listener to call when the item is edited.
      * @param deleteListener    Listener to call when the item is deleted.
      * @return                  Swipe action for when an item is swiped left.
-     * @param <T>               Generic type for the swipe action.
      */
-    public static<T> RecyclerItemSwipeCallback.SwipeAction<T> makeLeftSwipeAction(OnRecyclerItemClickListener<T> editListener, OnRecyclerItemClickListener<T> deleteListener) {
-        RecyclerItemSwipeCallback.SwipeAction<T> swipeAction = null;
+    @Nullable
+    public static SwipeAction makeLeftSwipeAction(@Nullable OnRecyclerViewActionListener editListener, @Nullable OnRecyclerViewActionListener deleteListener) {
+        SwipeAction swipeAction = null;
         DetailSwipeAction action = Config.getInstance().leftSwipeAction.get();
-        if (action == DetailSwipeAction.DELETE) {
-            swipeAction = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_delete, R.color.text_critical, deleteListener);
+        if (action == DetailSwipeAction.DELETE && deleteListener != null) {
+            swipeAction = new SwipeAction(R.drawable.ic_delete, R.color.text_critical, deleteListener);
         }
-        else if (action == DetailSwipeAction.EDIT) {
-            swipeAction = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_edit, R.color.pv_primary, editListener);
+        else if (action == DetailSwipeAction.EDIT && editListener != null) {
+            swipeAction = new SwipeAction(R.drawable.ic_edit, R.color.pv_primary, editListener);
         }
         return swipeAction;
     }
@@ -335,16 +332,16 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
      * @param editListener      Listener to call when the item is edited.
      * @param deleteListener    Listener to call when the item is deleted.
      * @return                  Swipe action for when an item is swiped left.
-     * @param <T>               Generic type for the swipe action.
      */
-    public static<T> RecyclerItemSwipeCallback.SwipeAction<T> makeRightSwipeAction(OnRecyclerItemClickListener<T> editListener, OnRecyclerItemClickListener<T> deleteListener) {
-        RecyclerItemSwipeCallback.SwipeAction<T> swipeAction = null;
+    @Nullable
+    public static SwipeAction makeRightSwipeAction(@Nullable OnRecyclerViewActionListener editListener, @Nullable OnRecyclerViewActionListener deleteListener) {
+        SwipeAction swipeAction = null;
         DetailSwipeAction action = Config.getInstance().rightSwipeAction.get();
-        if (action == DetailSwipeAction.DELETE) {
-            swipeAction = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_delete, R.color.text_critical, deleteListener);
+        if (action == DetailSwipeAction.DELETE && deleteListener != null) {
+            swipeAction = new SwipeAction(R.drawable.ic_delete, R.color.text_critical, deleteListener);
         }
-        else if (action == DetailSwipeAction.EDIT) {
-            swipeAction = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_edit, R.color.pv_primary, editListener);
+        else if (action == DetailSwipeAction.EDIT && editListener != null) {
+            swipeAction = new SwipeAction(R.drawable.ic_edit, R.color.pv_primary, editListener);
         }
         return swipeAction;
     }
