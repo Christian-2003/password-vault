@@ -17,6 +17,18 @@ n/a
 
 <br/>
 
+## 3.6.2 (2024-08-24)
+###### Release Highlights
+The update focuses on smaller bugfixes.
+
+###### Features
+* Fixed typos in help pages.
+* Fixed a bug where the master password recovery would display all security questions when more than five questions were configured.
+* Fixed a bug where the divider of the "Download newest release" button was visible when no newest release is available.
+* Fixed typo in terms of service.
+
+<br/>
+
 ## 3.6.1 (2024-07-27)
 ###### Release Highlights
 Reintroduction of features required when the app is not published on Google Play as well as bugfixes and general improvements.
