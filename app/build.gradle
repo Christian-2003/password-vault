@@ -13,8 +13,8 @@ android {
         minSdk 32
         //noinspection EditedTargetSdkVersion
         targetSdk 34
-        versionCode 21
-        versionName '3.6.1'
+        versionCode 22
+        versionName '3.6.2'
         setProperty('archivesBaseName', 'password-vault-v' + versionName)
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }

@@ -47,7 +47,9 @@ public class SecurityQuestionViewModel extends ViewModel {
                     questions.add(allQuestions.get(i));
                 }
             }
-            questions = allQuestions;
+            else {
+                questions = allQuestions;
+            }
         }
         ArrayList<String> questionStrings = new ArrayList<>();
         String[] allQuestionStrings = SecurityQuestion.getAllQuestions();
