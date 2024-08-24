@@ -138,6 +138,9 @@ public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> {
                 viewModel.getSecurityQuestions().remove(position);
                 adapter.notifyItemRemoved(position + RecoveryRecyclerViewAdapter.QUESTIONS_OFFSET);
                 adapter.notifyItemChanged(RecoveryRecyclerViewAdapter.POSITION_PROGRESS_BAR);
+                if (viewModel.getSecurityQuestions().isEmpty()) {
+                    adapter.notifyItemChanged(RecoveryRecyclerViewAdapter.POSITION_EMPTY_PLACEHOLDER);
+                }
             }
         };
         args.putSerializable(SecurityQuestionDialog.ARG_CALLBACK, callback);
@@ -173,6 +176,9 @@ public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> {
         PasswordVaultBottomSheetDialog.Callback callback = (d, resultCode) -> {
             if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS) {
                 SecurityQuestionDialog securityQuestionDialog = (SecurityQuestionDialog)d;
+                if (viewModel.getSecurityQuestions().isEmpty()) {
+                    adapter.notifyItemChanged(RecoveryRecyclerViewAdapter.POSITION_EMPTY_PLACEHOLDER);
+                }
                 viewModel.getSecurityQuestions().add(securityQuestionDialog.getQuestion());
                 adapter.notifyItemInserted(adapter.getItemCount());
                 adapter.notifyItemChanged(RecoveryRecyclerViewAdapter.POSITION_PROGRESS_BAR);

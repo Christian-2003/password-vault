@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStructure;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -113,12 +114,17 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
     /**
      * Field stores the offset with which the security questions are positioned within the adapter.
      */
-    public static final int QUESTIONS_OFFSET = 4;
+    public static final int QUESTIONS_OFFSET = 5;
 
     /**
      * Field stores the position of the progress bar.
      */
     public static final int POSITION_PROGRESS_BAR = 2;
+
+    /**
+     * Field stores the position of the empty placeholder
+     */
+    public static final int POSITION_EMPTY_PLACEHOLDER = 4;
 
 
     /**
@@ -195,6 +201,10 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
                 view = layoutInflater.inflate(R.layout.item_recovery_progress_bar, parent, false);
                 holder = new RecoveryProgressBarViewHolder(view);
                 break;
+            case TYPE_GENERIC_EMPTY_PLACEHOLDER:
+                view = layoutInflater.inflate(R.layout.item_generic_empty_placeholder, parent, false);
+                holder = new GenericEmptyPlaceholderViewHolder(view);
+                break;
             default:
                 view = layoutInflater.inflate(R.layout.item_recovery_question, parent, false);
                 holder = new RecoveryQuestionViewHolder(view);
@@ -245,6 +255,21 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
                             addQuestionListener.onAction(holder);
                         }
                     });
+                    break;
+                }
+                case 4: {
+                    GenericEmptyPlaceholderViewHolder viewHolder = (GenericEmptyPlaceholderViewHolder)holder;
+                    if (viewModel.getSecurityQuestions().isEmpty()) {
+                        viewHolder.imageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.detail_security_question)); //TODO: Use dedicated placeholder drawable!
+                        viewHolder.headlineTextView.setText(context.getString(R.string.recovery_questions_empty_headline));
+                        viewHolder.supportTextView.setText(context.getString(R.string.recovery_questions_empty_support));
+                        viewHolder.itemView.setVisibility(View.VISIBLE);
+                        viewHolder.itemView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    }
+                    else {
+                        viewHolder.itemView.setVisibility(View.VISIBLE);
+                        viewHolder.itemView.setLayoutParams(new ViewGroup.LayoutParams(0, 0));
+                    }
                     break;
                 }
                 default: {
@@ -304,6 +329,8 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
                 return TYPE_RECOVERY_PROGRESS_BAR;
             case 3:
                 return TYPE_GENERIC_HEADLINE_BUTTON;
+            case 4:
+                return TYPE_GENERIC_EMPTY_PLACEHOLDER;
             default:
                 return TYPE_RECOVERY_QUESTION;
         }

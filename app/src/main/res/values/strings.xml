@@ -255,6 +255,8 @@
     <string name="recovery_progress">Progress</string>
     <string name="recovery_score">{arg} / {max}</string>
     <string name="recovery_questions">Security Questions</string>
+    <string name="recovery_questions_empty_headline">No security questions</string>
+    <string name="recovery_questions_empty_support">Added security questions will be displayed here</string>
     <string name="recovery_question">Question</string>
     <string name="recovery_answer">Answer</string>
     <string name="recovery_configure_question">Configure Question</string>

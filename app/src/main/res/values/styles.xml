@@ -65,9 +65,13 @@
     </style>
 
     <style name="image.item" parent="image">
-        <item name="android:layout_height">@dimen/image_s</item>
-        <item name="android:layout_width">@dimen/image_s</item>
-        <item name="android:tint">@color/text</item>
+
+    </style>
+
+    <style name="image.emptyPlaceholder" parent="image">
+        <item name="android:layout_width">@dimen/image_xxl</item>
+        <item name="android:layout_height">@dimen/image_xxl</item>
+        <item name="android:tint">@android:color/transparent</item>
     </style>
 
 

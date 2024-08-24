@@ -110,6 +110,42 @@ public abstract class RecyclerViewAdapter<V extends ViewModel> extends RecyclerV
 
 
     /**
+     * Class models the view holder for the placeholder used when no data is available.
+     */
+    public static class GenericEmptyPlaceholderViewHolder extends RecyclerView.ViewHolder {
+
+        /**
+         * Attribute store the image view displaying the placeholder image.
+         */
+        public final ImageView imageView;
+
+        /**
+         * Attribute stores the text view displaying the headline text.
+         */
+        public final TextView headlineTextView;
+
+        /**
+         * Attribute stores the text view displaying support text.
+         */
+        public final TextView supportTextView;
+
+
+        /**
+         * Constructor instantiates a new view holder.
+         *
+         * @param itemView  Inflated view for which to create the view holder.
+         */
+        public GenericEmptyPlaceholderViewHolder(View itemView) {
+            super(itemView);
+            imageView = itemView.findViewById(R.id.image);
+            headlineTextView = itemView.findViewById(R.id.text_headline);
+            supportTextView = itemView.findViewById(R.id.text_support);
+        }
+
+    }
+
+
+    /**
      * Field stores the view type for the generic info.
      */
     public static final int TYPE_GENERIC_INFO = 2;
@@ -123,6 +159,11 @@ public abstract class RecyclerViewAdapter<V extends ViewModel> extends RecyclerV
      * Field stores the view type for the generic headline button.
      */
     public static final int TYPE_GENERIC_HEADLINE_BUTTON = 8;
+
+    /**
+     * Field stores the view type for the generic empty list placeholder.
+     */
+    public static final int TYPE_GENERIC_EMPTY_PLACEHOLDER = 16;
 
     /**
      * Field stores a tag used for logging.

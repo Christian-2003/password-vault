@@ -253,6 +253,8 @@
     <string name="recovery_progress">Fortschritt</string>
     <string name="recovery_score">{arg} / {max}</string>
     <string name="recovery_questions">Sicherheitsfragen</string>
+    <string name="recovery_questions_empty_headline">Keine Sicherheitsfragen</string>
+    <string name="recovery_questions_empty_support">Sicherheitsfragen werden hier angezeigt</string>
     <string name="recovery_question">Frage</string>
     <string name="recovery_answer">Antwort</string>
     <string name="recovery_configure_question">Frage bearbeiten</string>
