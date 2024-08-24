@@ -1,4 +1,4 @@
-package de.passwordvault.view.settings.dialog_delete;
+package de.passwordvault.view.general.dialog_delete;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

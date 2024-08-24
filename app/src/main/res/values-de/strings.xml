@@ -282,7 +282,7 @@
 
     <!-- ConfirmDelete dialog -->
     <string name="confirm_delete_dialog_confirm">Soll {arg} wirklich gelöscht werden?</string>
-    <string name="delete_dialog_message">Soll "{arg}" wirklich gelöscht werden? Diese Aktion kann nicht rückgängig gemacht werden.</string>
+    <string name="delete_dialog_message">Soll \"{arg}\" wirklich gelöscht werden? Diese Aktion kann nicht rückgängig gemacht werden.</string>
 
 
     <!-- Buttons -->

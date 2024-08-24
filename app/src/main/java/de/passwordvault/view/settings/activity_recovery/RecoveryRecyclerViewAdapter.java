@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -79,9 +80,9 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
         public final TextView answerTextView;
 
         /**
-         * Attribute stores the container which contains the answer which can be collapsed.
+         * Attribute stores the button to display more options.
          */
-        public final LinearLayout containerAnswer;
+        public final ImageButton moreButton;
 
 
         /**
@@ -93,7 +94,7 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
             super(itemView);
             questionTextView = itemView.findViewById(R.id.text_question);
             answerTextView = itemView.findViewById(R.id.text_answer);
-            containerAnswer = itemView.findViewById(R.id.container_answer);
+            moreButton = itemView.findViewById(R.id.button_more);
         }
 
     }
@@ -126,6 +127,12 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
     @Nullable
     private OnRecyclerViewActionListener addQuestionListener;
 
+    /**
+     * Attribute stores the listener invoked to show more options for a question.
+     */
+    @Nullable
+    private OnRecyclerViewActionListener questionMoreListener;
+
 
     /**
      * Constructor instantiates a new recycler view adapter.
@@ -135,6 +142,8 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
      */
     public RecoveryRecyclerViewAdapter(@NonNull Context context, @NonNull RecoveryViewModel viewModel) {
         super(context, viewModel);
+        addQuestionListener = null;
+        questionMoreListener = null;
     }
 
 
@@ -145,6 +154,15 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
      */
     public void setAddQuestionListener(@Nullable OnRecyclerViewActionListener addQuestionListener) {
         this.addQuestionListener = addQuestionListener;
+    }
+
+    /**
+     * Method changes the listener invoked when more options for a question shall be displayed.
+     *
+     * @param questionMoreListener  New listener.
+     */
+    public void setQuestionMoreListener(@Nullable OnRecyclerViewActionListener questionMoreListener) {
+        this.questionMoreListener = questionMoreListener;
     }
 
 
@@ -235,12 +253,17 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
                     String[] allQuestions = context.getResources().getStringArray(R.array.security_questions);
                     viewHolder.questionTextView.setText(allQuestions[question.getQuestion()]);
                     viewHolder.answerTextView.setText(question.getAnswer());
-                    viewHolder.containerAnswer.setVisibility(question.isExpanded() ? View.VISIBLE : View.GONE);
+                    viewHolder.answerTextView.setVisibility(question.isExpanded() ? View.VISIBLE : View.GONE);
                     viewHolder.itemView.setOnClickListener(view -> {
                         if (!recyclerView.isAnimating()) {
-                            viewHolder.containerAnswer.setVisibility(question.isExpanded() ? View.GONE : View.VISIBLE);
+                            viewHolder.answerTextView.setVisibility(question.isExpanded() ? View.GONE : View.VISIBLE);
                             question.setExpanded(!question.isExpanded());
                             notifyItemChanged(position);
+                        }
+                    });
+                    viewHolder.moreButton.setOnClickListener(view -> {
+                        if (questionMoreListener != null) {
+                            questionMoreListener.onAction(holder);
                         }
                     });
                     break;

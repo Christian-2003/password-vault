@@ -20,7 +20,7 @@
             android:layout_marginVertical="@dimen/space_vertical"
             android:layout_marginEnd="@dimen/space_horizontal_between"
             android:layout_gravity="center"
-            android:src="@drawable/ic_help"
+            android:src="@drawable/ic_edit"
             style="@style/image.light"/>
 
         <TextView

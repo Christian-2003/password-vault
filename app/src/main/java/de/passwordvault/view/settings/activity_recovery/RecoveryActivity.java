@@ -2,12 +2,15 @@ package de.passwordvault.view.settings.activity_recovery;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.SecurityQuestion;
-import de.passwordvault.view.settings.dialog_delete.DeleteDialog;
+import de.passwordvault.view.general.dialog_delete.DeleteDialog;
+import de.passwordvault.view.general.dialog_more.MoreDialog;
 import de.passwordvault.view.settings.dialog_security_question.SecurityQuestionDialog;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
 import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
@@ -56,6 +59,7 @@ public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> {
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         adapter = new RecoveryRecyclerViewAdapter(this, viewModel);
         adapter.setAddQuestionListener(this::onAddSecurityQuestion);
+        adapter.setQuestionMoreListener(this::onShowMoreOptions);
         recyclerView.setAdapter(adapter);
         RecyclerViewSwipeCallback.SwipeAction leftSwipe = RecyclerViewSwipeCallback.makeLeftSwipeAction(this::onEditSecurityQuestion, this::onDeleteSecurityQuestion);
         RecyclerViewSwipeCallback.SwipeAction rightSwipe = RecyclerViewSwipeCallback.makeRightSwipeAction(this::onEditSecurityQuestion, this::onDeleteSecurityQuestion);
@@ -175,6 +179,27 @@ public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> {
             }
         };
         args.putSerializable(SecurityQuestionDialog.ARG_CALLBACK, callback);
+        dialog.setArguments(args);
+        dialog.show(getSupportFragmentManager(), null);
+    }
+
+
+    /**
+     * Listener for when the "more" button of a security question is clicked.
+     *
+     * @param holder    View holder of the security question whose button was clicked.
+     */
+    private void onShowMoreOptions(RecyclerView.ViewHolder holder) {
+        int position = holder.getAdapterPosition() - RecoveryRecyclerViewAdapter.QUESTIONS_OFFSET;
+        SecurityQuestion question = viewModel.getSecurityQuestions().get(position);
+        MoreDialog dialog = new MoreDialog();
+        Bundle args = new Bundle();
+        args.putString(MoreDialog.ARG_TITLE, SecurityQuestion.getAllQuestions()[question.getQuestion()]);
+        args.putInt(MoreDialog.ARG_ICON, R.drawable.ic_help);
+        ArrayList<MoreDialog.Item> items = new ArrayList<>();
+        items.add(new MoreDialog.Item(getString(R.string.button_edit), R.drawable.ic_edit, view -> onEditSecurityQuestion(holder)));
+        items.add(new MoreDialog.Item(getString(R.string.button_delete), R.drawable.ic_delete, view -> onDeleteSecurityQuestion(holder)));
+        args.putSerializable(MoreDialog.ARG_ITEMS, items);
         dialog.setArguments(args);
         dialog.show(getSupportFragmentManager(), null);
     }
