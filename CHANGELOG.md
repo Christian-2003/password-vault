@@ -2,7 +2,7 @@
 
 # Changelog
 
-## 3.6.2 (XXXX-XX-XX)
+## 3.6.2 (2024-08-24)
 ###### Release Highlights
 The update focuses on smaller bugfixes.
 
@@ -10,7 +10,7 @@ The update focuses on smaller bugfixes.
 * Fixed typos in help pages.
 * Fixed a bug where the master password recovery would display all security questions when more than five questions were configured.
 * Fixed a bug where the divider of the "Download newest release" button was visible when no newest release is available.
-* Fixed typo in terms of service
+* Fixed typo in terms of service.
 
 <br/>
 
