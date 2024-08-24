@@ -2,10 +2,12 @@ package de.passwordvault.view.settings.activity_recovery;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.SecurityQuestion;
+import de.passwordvault.view.settings.dialog_delete.DeleteDialog;
 import de.passwordvault.view.settings.dialog_security_question.SecurityQuestionDialog;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
 import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
@@ -63,6 +65,17 @@ public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> {
     }
 
 
+    @Override
+    public void finish() {
+        super.finish();
+        viewModel.save();
+    }
+
+    /**
+     * Listener for when a security question should be edited.
+     *
+     * @param holder    View holder of the view displaying the question to edit.
+     */
     private void onEditSecurityQuestion(RecyclerView.ViewHolder holder) {
         //Get available security questions that can be used:
         int position = holder.getAdapterPosition() - RecoveryRecyclerViewAdapter.QUESTIONS_OFFSET;
@@ -103,12 +116,67 @@ public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> {
         dialog.show(getSupportFragmentManager(), null);
     }
 
+    /**
+     * Listener for when a security question should be deleted.
+     *
+     * @param holder    View holder of the view displaying the question to delete.
+     */
     private void onDeleteSecurityQuestion(RecyclerView.ViewHolder holder) {
-
+        int position = holder.getAdapterPosition() - RecoveryRecyclerViewAdapter.QUESTIONS_OFFSET;
+        SecurityQuestion question = viewModel.getSecurityQuestions().get(position);
+        DeleteDialog dialog = new DeleteDialog();
+        Bundle args = new Bundle();
+        String message = getString(R.string.delete_dialog_message);
+        message = message.replace("{arg}", SecurityQuestion.getAllQuestions()[question.getQuestion()]);
+        args.putString(DeleteDialog.ARG_MESSAGE, message);
+        PasswordVaultBottomSheetDialog.Callback callback = (d, resultCode) -> {
+            if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS) {
+                viewModel.getSecurityQuestions().remove(position);
+                adapter.notifyItemRemoved(position + RecoveryRecyclerViewAdapter.QUESTIONS_OFFSET);
+                adapter.notifyItemChanged(RecoveryRecyclerViewAdapter.POSITION_PROGRESS_BAR);
+            }
+        };
+        args.putSerializable(SecurityQuestionDialog.ARG_CALLBACK, callback);
+        dialog.setArguments(args);
+        dialog.show(getSupportFragmentManager(), null);
     }
 
+    /**
+     * Listener for when a new security question should be added.
+     *
+     * @param holder    View holder of the view requesting to add a new security question.
+     */
     private void onAddSecurityQuestion(RecyclerView.ViewHolder holder) {
-
+        String[] allQuestions = SecurityQuestion.getAllQuestions();
+        String[] unusedQuestions = new String[allQuestions.length - viewModel.getSecurityQuestions().size()];
+        int k = 0;
+        for (int i = 0; i < allQuestions.length; i++) {
+            boolean questionUnused = true;
+            for (SecurityQuestion question : viewModel.getSecurityQuestions()) {
+                if (question.getQuestion() == i) {
+                    questionUnused = false;
+                    break;
+                }
+            }
+            if (questionUnused) {
+                unusedQuestions[k++] = allQuestions[i];
+            }
+        }
+        SecurityQuestionDialog dialog = new SecurityQuestionDialog();
+        Bundle args = new Bundle();
+        args.putStringArray(SecurityQuestionDialog.ARG_QUESTIONS, unusedQuestions);
+        args.putSerializable(SecurityQuestionDialog.ARG_QUESTION, null);
+        PasswordVaultBottomSheetDialog.Callback callback = (d, resultCode) -> {
+            if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS) {
+                SecurityQuestionDialog securityQuestionDialog = (SecurityQuestionDialog)d;
+                viewModel.getSecurityQuestions().add(securityQuestionDialog.getQuestion());
+                adapter.notifyItemInserted(adapter.getItemCount());
+                adapter.notifyItemChanged(RecoveryRecyclerViewAdapter.POSITION_PROGRESS_BAR);
+            }
+        };
+        args.putSerializable(SecurityQuestionDialog.ARG_CALLBACK, callback);
+        dialog.setArguments(args);
+        dialog.show(getSupportFragmentManager(), null);
     }
 
 }

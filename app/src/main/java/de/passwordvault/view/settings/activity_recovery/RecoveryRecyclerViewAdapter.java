@@ -114,6 +114,11 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
      */
     public static final int QUESTIONS_OFFSET = 4;
 
+    /**
+     * Field stores the position of the progress bar.
+     */
+    public static final int POSITION_PROGRESS_BAR = 2;
+
 
     /**
      * Attribute stores the listener invoked to add a new security question.
