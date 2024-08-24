@@ -4,9 +4,9 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import de.passwordvault.R;
-import de.passwordvault.view.settings.activity_customization.dialog_darkmode.DarkmodeDialog;
-import de.passwordvault.view.settings.activity_customization.dialog_swipe_action.DetailSwipeActionDialog;
-import de.passwordvault.view.settings.activity_customization.dialog_recently_edited.RecentlyEditedDialog;
+import de.passwordvault.view.settings.dialog_darkmode.DarkmodeDialog;
+import de.passwordvault.view.settings.dialog_swipe.SwipeDialog;
+import de.passwordvault.view.settings.dialog_recently_edited.RecentlyEditedDialog;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.view.activity_main.fragment_settings.SettingsViewModel;
 
@@ -70,7 +70,7 @@ public class SettingsCustomizationActivity extends PasswordVaultBaseActivity {
      * Method shows the dialog to change the swipe actions for swiping details.
      */
     private void changeSwipeActions() {
-        DetailSwipeActionDialog dialog = new DetailSwipeActionDialog();
+        SwipeDialog dialog = new SwipeDialog();
         dialog.show(getSupportFragmentManager(), "");
     }
 

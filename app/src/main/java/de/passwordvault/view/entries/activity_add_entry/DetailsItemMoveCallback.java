@@ -231,7 +231,7 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
             if (dX > 1) {
                 DetailSwipeAction swipeAction = Config.getInstance().rightSwipeAction.get();
                 if (swipeAction == DetailSwipeAction.DELETE) {
-                    paint.setColor(adapter.getContext().getColor(R.color.pv_red));
+                    paint.setColor(adapter.getContext().getColor(R.color.text_critical));
                     icon = getBitmap(R.drawable.ic_delete);
                 }
                 else {
@@ -246,7 +246,7 @@ public class DetailsItemMoveCallback extends ItemTouchHelper.Callback {
             else if (dX < -1) {
                 DetailSwipeAction swipeAction = Config.getInstance().leftSwipeAction.get();
                 if (swipeAction == DetailSwipeAction.DELETE) {
-                    paint.setColor(adapter.getContext().getColor(R.color.pv_red));
+                    paint.setColor(adapter.getContext().getColor(R.color.text_critical));
                     icon = getBitmap(R.drawable.ic_delete);
                 }
                 else {

@@ -1,9 +1,9 @@
-package de.passwordvault.view.settings.activity_recovery.dialog_security_question;
+package de.passwordvault.view.settings.dialog_security_question;
 
 import android.os.Bundle;
 import androidx.lifecycle.ViewModel;
 import de.passwordvault.model.security.login.SecurityQuestion;
-import de.passwordvault.view.utils.DialogCallbackListener;
+import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
 
 
 /**
@@ -11,23 +11,23 @@ import de.passwordvault.view.utils.DialogCallbackListener;
  * which to recover the master password.
  *
  * @author  Christian-2003
- * @version 3.6.0
+ * @version 3.7.0
  */
 public class SecurityQuestionViewModel extends ViewModel {
 
     /**
      * Attribute stores the callback listener for the dialog.
      */
-    private DialogCallbackListener callbackListener;
+    private PasswordVaultBottomSheetDialog.Callback callback;
 
     /**
      * Attribute stores the security question that is edited by the user.
      */
-    private SecurityQuestion securityQuestion;
+    private SecurityQuestion question;
 
     /**
      * Attribute stores a list of all available security questions. This should include the question
-     * within {@link #securityQuestion}. However, all other security questions that are used should
+     * within {@link #question}. However, all other security questions that are used should
      * NOT be included in this array.
      */
     private String[] availableQuestions;
@@ -48,8 +48,8 @@ public class SecurityQuestionViewModel extends ViewModel {
      * Constructor instantiates a new view model.
      */
     public SecurityQuestionViewModel() {
-        callbackListener = null;
-        securityQuestion = null;
+        callback = null;
+        question = null;
         availableQuestions = null;
         allQuestions = SecurityQuestion.getAllQuestions();
         selectedQuestionIndex = -1;
@@ -57,12 +57,12 @@ public class SecurityQuestionViewModel extends ViewModel {
 
 
     /**
-     * Method returns the callback listener for the dialog.
+     * Method returns the callback for the dialog.
      *
-     * @return  Callback listener.
+     * @return  Callback.
      */
-    public DialogCallbackListener getCallbackListener() {
-        return callbackListener;
+    public PasswordVaultBottomSheetDialog.Callback getCallback() {
+        return callback;
     }
 
     /**
@@ -70,8 +70,8 @@ public class SecurityQuestionViewModel extends ViewModel {
      *
      * @return  Security question.
      */
-    public SecurityQuestion getSecurityQuestion() {
-        return securityQuestion;
+    public SecurityQuestion getQuestion() {
+        return question;
     }
 
     /**
@@ -117,49 +117,43 @@ public class SecurityQuestionViewModel extends ViewModel {
      * @param args  Arguments to process.
      * @return      Whether the arguments were successfully processed.
      */
-    public boolean processArguments(Bundle args) {
+    public void processArguments(Bundle args) {
         if (args == null) {
-            return false;
+            return;
         }
 
-        //Get callback listener:
-        if (args.containsKey(SecurityQuestionDialog.KEY_CALLBACK_LISTENER)) {
+        //Get callback:
+        if (args.containsKey(SecurityQuestionDialog.ARG_CALLBACK)) {
             try {
-                callbackListener = (DialogCallbackListener)args.getSerializable(SecurityQuestionDialog.KEY_CALLBACK_LISTENER);
+                callback = (PasswordVaultBottomSheetDialog.Callback)args.getSerializable(SecurityQuestionDialog.ARG_CALLBACK);
             }
             catch (ClassCastException e) {
-                return false;
+                //Ignore...
             }
-        }
-        else {
-            return false;
         }
 
         //Get available security questions:
-        if (args.containsKey(SecurityQuestionDialog.KEY_QUESTIONS)) {
+        if (args.containsKey(SecurityQuestionDialog.ARG_QUESTIONS)) {
             try {
-                availableQuestions = args.getStringArray(SecurityQuestionDialog.KEY_QUESTIONS);
-                if (availableQuestions == null) {
-                    return false;
-                }
+                availableQuestions = args.getStringArray(SecurityQuestionDialog.ARG_QUESTIONS);
             }
             catch (ClassCastException e) {
-                return false;
+                //Ignore...
             }
         }
-        else {
-            return false;
+        if (availableQuestions == null) {
+            availableQuestions = new String[0];
         }
 
         //Get security question:
-        if (args.containsKey(SecurityQuestionDialog.KEY_QUESTION)) {
+        if (args.containsKey(SecurityQuestionDialog.ARG_QUESTION)) {
             try {
-                securityQuestion = (SecurityQuestion)args.getSerializable(SecurityQuestionDialog.KEY_QUESTION);
-                if (securityQuestion == null) {
-                    return false;
+                question = (SecurityQuestion)args.getSerializable(SecurityQuestionDialog.ARG_QUESTION);
+                if (question == null) {
+                    question = new SecurityQuestion();
                 }
-                if (securityQuestion.getQuestion() != SecurityQuestion.NO_QUESTION) {
-                    String question = allQuestions[securityQuestion.getQuestion()];
+                if (question.getQuestion() != SecurityQuestion.NO_QUESTION) {
+                    String question = allQuestions[this.question.getQuestion()];
                     for (int i = 0; i < availableQuestions.length; i++) {
                         if (availableQuestions[i].equals(question)) {
                             selectedQuestionIndex = i;
@@ -169,14 +163,12 @@ public class SecurityQuestionViewModel extends ViewModel {
                 }
             }
             catch (ClassCastException e) {
-                securityQuestion = new SecurityQuestion();
+                //Ignore...
             }
         }
-        else {
-            securityQuestion = new SecurityQuestion();
+        if (question == null) {
+            question = new SecurityQuestion();
         }
-
-        return true;
     }
 
 

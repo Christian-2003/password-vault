@@ -2,6 +2,21 @@
 
 # Changelog
 
+## 3.7.0 (XXXX-XX-XX)
+###### Release Highlights
+n/a
+
+###### Features
+* Introduced new app icons.
+* Changed activity displaying used software to only include direct dependencies and no transient dependencies.
+* Introduced `BottomSheetDialogFragment` to display the license of a used software.
+* Added `PasswordVaultBottomSheetDialog<V extends ViewModel>` to handle basic functions used by all future bottom sheet dialogs.
+* Fixed a bug where the `DarkmodeDialog` did not display the UI mode of the Android OS but instead used the UI mode of the app.
+* Changed color of background when swiping an item to delete from _@color/pv\_red_ to _@color/text\_critical_.
+* Implemented new framework for recycler item swiping.
+
+<br/>
+
 ## 3.6.2 (2024-08-24)
 ###### Release Highlights
 The update focuses on smaller bugfixes.

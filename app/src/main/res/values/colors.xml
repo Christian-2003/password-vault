@@ -1,16 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
+    <color name="primary">#1D7874</color>
+    <color name="primary_translucent">#991D7874</color>
+
+    <color name="background">#FAF9FE</color>
+    <color name="background_app_bar">#F5F3F8</color>
+    <color name="background_nav_bar">#EFEdF2</color>
+    <color name="background_container">#E9E7EC</color>
+    <color name="background_critical">#FFDAD6</color>
+
+    <color name="text">#1B1A1F</color>
+    <color name="text_light">#444750</color>
+    <color name="text_critical">#BA1A1A</color>
+    <color name="divider">#C5C7C6</color>
+
+    <!-- Light / dark variants needed for dialog to switch darkmode -->
+    <color name="light_background">#FAF9FE</color>
+    <color name="light_container">#E9E7EC</color>
+    <color name="light_highlight">#991D7874</color>
+    <color name="dark_background">#121317</color>
+    <color name="dark_container">#292A2E</color>
+    <color name="dark_highlight">#9929A7A1</color>
+
+
+
+    <!-- DEPRECATED BELOW -->
     <color name="pv_primary">#1D7874</color>
     <color name="pv_primary_translucent">#991D7874</color>
-    <color name="pv_background">#F6F6F8</color>
+    <color name="pv_background">#FAF9FE</color>
 
-    <color name="pv_container">#FCFCFE</color>
+    <color name="pv_container">#F5F3F8</color>
     <color name="pv_container_highlight">#BFE3E2</color>
     <color name="pv_container_detail">#F2F2F2</color>
 
-    <color name="pv_text">#000000</color>
-    <color name="pv_text_secondary">#8D8C91</color>
+    <color name="pv_text">#1B1A1F</color>
+    <color name="pv_text_secondary">#44474E</color>
     <color name="pv_text_primary">#1D7874</color>
     <color name="pv_text_onPrimary">#FAFAFA</color>
 
@@ -19,6 +44,11 @@
     <color name="pv_yellow">#F0C430</color>
 
     <color name="pv_icon_green">#11A960</color>
+
+    <color name="pv_detail_blue">#3A21D1</color>
+    <color name="pv_detail_green">#00A66A</color>
+    <color name="pv_detail_red">#B74E4E</color>
+    <color name="pv_detail_yellow">#CBA622</color>
 
     <!-- Light / dark variants needed for dialog to switch darkmode -->
     <color name="pv_background_light">#F6F6F8</color>

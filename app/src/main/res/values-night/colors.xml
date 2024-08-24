@@ -1,16 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
+    <color name="primary">#29A7A1</color>
+    <color name="primary_translucent">#9929A7A1</color>
+
+    <color name="background">#121317</color>
+    <color name="background_app_bar">#1B1A1F</color>
+    <color name="background_nav_bar">#1F1E23</color>
+    <color name="background_container">#292A2E</color>
+    <color name="background_critical">#93000A</color>
+
+    <color name="text">#E3E2E7</color>
+    <color name="text_light">#C4C7D0</color>
+    <color name="text_critical">#FFB4AB</color>
+    <color name="divider">#454746</color>
+
+    <!-- Light / dark variants needed for dialog to switch darkmode -->
+    <color name="light_background">#FAF9FE</color>
+    <color name="light_container">#E9E7EC</color>
+    <color name="light_highlight">#991D7874</color>
+    <color name="dark_background">#121317</color>
+    <color name="dark_container">#292A2E</color>
+    <color name="dark_highlight">#9929A7A1</color>
+
+
+
+    <!-- DEPRECATED BELOW -->
     <color name="pv_primary">#29A7A1</color>
     <color name="pv_primary_translucent">#9929A7A1</color>
-    <color name="pv_background">#000000</color>
+    <color name="pv_background">#121317</color>
 
-    <color name="pv_container">#171719</color>
+    <color name="pv_container">#1F1E23</color>
     <color name="pv_container_highlight">#5029A7A1</color>
     <color name="pv_container_detail">#2D2D2F</color>
 
-    <color name="pv_text">#FAFAFA</color>
-    <color name="pv_text_secondary">#999999</color>
+    <color name="pv_text">#E3E2E7</color>
+    <color name="pv_text_secondary">#C4C7D0</color>
     <color name="pv_text_primary">#29A7A1</color>
     <color name="pv_text_onPrimary">#FAFAFA</color>
 

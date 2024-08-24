@@ -7,6 +7,7 @@ package de.passwordvault.view.utils.recycler_view;
  * @param <T>   Type of the data that is being displayed by the recycler view.
  * @author      Christian-2003
  * @version     3.4.0
+ * @deprecated  Use {@link OnRecyclerViewActionListener} instead.
  */
 public interface OnRecyclerItemClickListener<T> {
 

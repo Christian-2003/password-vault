@@ -25,6 +25,7 @@ import de.passwordvault.model.storage.settings.Config;
  * @param <T>   Data type for the items displayed in the recycler view.
  * @author      Christian-2003
  * @version     3.6.1
+ * @deprecated  Use {@link RecyclerViewSwipeCallback} instead.
  */
 public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
 
@@ -318,7 +319,7 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
         RecyclerItemSwipeCallback.SwipeAction<T> swipeAction = null;
         DetailSwipeAction action = Config.getInstance().leftSwipeAction.get();
         if (action == DetailSwipeAction.DELETE) {
-            swipeAction = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_delete, R.color.pv_red, deleteListener);
+            swipeAction = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_delete, R.color.text_critical, deleteListener);
         }
         else if (action == DetailSwipeAction.EDIT) {
             swipeAction = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_edit, R.color.pv_primary, editListener);
@@ -340,7 +341,7 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
         RecyclerItemSwipeCallback.SwipeAction<T> swipeAction = null;
         DetailSwipeAction action = Config.getInstance().rightSwipeAction.get();
         if (action == DetailSwipeAction.DELETE) {
-            swipeAction = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_delete, R.color.pv_red, deleteListener);
+            swipeAction = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_delete, R.color.text_critical, deleteListener);
         }
         else if (action == DetailSwipeAction.EDIT) {
             swipeAction = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_edit, R.color.pv_primary, editListener);

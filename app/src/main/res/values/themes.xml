@@ -8,8 +8,8 @@
         <item name="colorOnPrimary">@color/pv_text</item>
         <item name="colorPrimaryContainer">@color/pv_primary</item>
         <item name="colorOnPrimaryContainer">@color/pv_primary</item>
-        <item name="colorError">#BA1A1A</item>
-        <item name="colorErrorContainer">#FFDAD6</item>
+        <item name="colorError">@color/text_critical</item>
+        <item name="colorErrorContainer">@color/background_critical</item>
         <item name="colorOnError">#FFFFFF</item>
         <item name="colorOnErrorContainer">#410002</item>
         <item name="android:colorBackground">@color/pv_background</item>
@@ -20,8 +20,10 @@
         <item name="colorOnSurfaceVariant">@color/pv_background</item>
         <item name="colorOutline">@color/pv_text_secondary</item>
 
+        <item name="android:statusBarColor">@color/background_app_bar</item>
         <item name="android:colorBackgroundFloating">@color/pv_container</item>
         <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:windowLightStatusBar">true</item>
         <item name="android:navigationBarColor">@color/pv_background</item>
         <item name="colorControlActivated">@color/pv_primary</item>
         <item name="android:textColorHighlight">@color/pv_primary_translucent</item>
@@ -37,6 +39,7 @@
         <item name="checkboxStyle">@style/pv.material.checkbox</item>
         <item name="badgeStyle">@style/pv.material.badge</item>
         <item name="chipStyle">@style/pv.material.chip</item>
+        <item name="bottomSheetDialogTheme">@style/view.bottomSheet</item>
     </style>
 
 

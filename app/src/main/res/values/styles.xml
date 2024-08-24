@@ -2,6 +2,120 @@
 
 <resources>
 
+    <!-- Styles for text -->
+    <style name="text">
+        <item name="android:textSize">@dimen/text_m</item>
+        <item name="android:textColor">@color/text</item>
+    </style>
+
+    <style name="text.light">
+        <item name="android:textSize">@dimen/text_s</item>
+        <item name="android:textColor">@color/text_light</item>
+    </style>
+
+    <style name="text.app_bar">
+        <item name="android:textSize">@dimen/text_l</item>
+        <item name="android:textColor">@color/text</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:layout_marginEnd">@dimen/space_horizontal</item>
+    </style>
+
+    <style name="text.headline">
+        <item name="android:textSize">@dimen/text_m</item>
+        <item name="android:textColor">@color/text_light</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="text.info">
+        <item name="android:textSize">@dimen/text_m</item>
+        <item name="android:textColor">@color/text_light</item>
+        <item name="android:lineSpacingExtra">5sp</item>
+    </style>
+
+
+
+    <!-- Styles for buttons -->
+    <style name="button">
+
+    </style>
+
+    <style name="button.image">
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:minWidth">@dimen/image_m</item>
+        <item name="android:minHeight">@dimen/image_m</item>
+        <item name="android:tint">@color/text</item>
+    </style>
+
+    <style name="button.image.app_bar" parent="button.image">
+        <!-- No deviations from parent so far -->
+    </style>
+
+
+
+    <!-- Styles for images -->
+    <style name="image">
+        <item name="android:layout_height">@dimen/image_s</item>
+        <item name="android:layout_width">@dimen/image_s</item>
+        <item name="android:tint">@color/text</item>
+    </style>
+
+    <style name="image.light" parent="image">
+        <item name="android:tint">@color/text_light</item>
+    </style>
+
+    <style name="image.item" parent="image">
+        <item name="android:layout_height">@dimen/image_s</item>
+        <item name="android:layout_width">@dimen/image_s</item>
+        <item name="android:tint">@color/text</item>
+    </style>
+
+
+
+    <!-- Styles for the app bar -->
+    <style name="app_bar">
+        <item name="android:background">@color/background_app_bar</item>
+    </style>
+
+
+
+    <!-- Other styles -->
+    <style name="divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/divider</item>
+        <item name="android:backgroundTint">@color/divider</item>
+    </style>
+
+
+
+    <!-- Styles for cards -->
+    <style name="card">
+        <item name="android:background">@drawable/background</item>
+        <item name="android:backgroundTint">@color/background_container</item>
+        <item name="android:paddingHorizontal">@dimen/space_horizontal</item>
+        <item name="android:paddingVertical">@dimen/space_vertical</item>
+    </style>
+
+
+
+    <!-- Styles for default components -->
+    <style name="view">
+
+    </style>
+
+    <style name="view.bottomSheet" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="android:backgroundTint">@color/background_app_bar</item>
+    </style>
+
+
+
+
+
+
+
+
+
     <!-- Top-level style which applies to all components of the application -->
     <style name="pv"/>
 
@@ -17,9 +131,27 @@
 
     <!-- Style for normal text -->
     <style name="pv.text">
-        <item name="android:textSize">@dimen/default_text_size</item>
+        <item name="android:textSize">@dimen/text_m</item>
         <item name="android:textColor">@color/pv_text</item>
     </style>
+
+    <style name="pv.text.toolbar" parent="pv.text">
+        <item name="android:textSize">@dimen/text_toolbar</item>
+    </style>
+
+    <style name="pv.text.title" parent="pv.text">
+        <item name="android:textSize">@dimen/text_xl</item>
+    </style>
+
+    <style name="pv.text.support" parent="pv.text">
+        <item name="android:textSize">@dimen/text_l</item>
+    </style>
+
+    <style name="pv.text.secondary" parent="pv.text">
+        <item name="android:textSize">@dimen/text_s</item>
+        <item name="android:textColor">@color/pv_text_secondary</item>
+    </style>
+
 
     <!-- Style for secondary text -->
     <style name="pv.text.variant" parent="pv.text">
@@ -38,7 +170,6 @@
     <style name="pv.text.highlight" parent="pv.text">
         <item name="android:textColor">@color/pv_text</item>
         <item name="android:textSize">@dimen/highlight_text_size</item>
-        <item name="android:layout_marginTop">@dimen/space_vertical_title</item>
     </style>
 
     <!-- Style for text within the app bar -->
@@ -132,6 +263,13 @@
         <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/app_bar_height</item>
+    </style>
+
+    <!-- Style for a search bar within the ap bar -->
+    <style name="pv.app_bar.search_bar">
+        <item name="android:textColorHint">@color/pv_text_secondary</item>
+        <item name="android:textSize">@dimen/app_bar_text_size</item>
+        <item name="android:hint">@string/hint_search</item>
     </style>
 
     <!-- Parent style for all page layouts -->

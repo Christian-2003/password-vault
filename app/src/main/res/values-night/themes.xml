@@ -8,8 +8,8 @@
         <item name="colorOnPrimary">@color/pv_text</item>
         <item name="colorPrimaryContainer">@color/pv_primary</item>
         <item name="colorOnPrimaryContainer">@color/pv_primary</item>
-        <item name="colorError">#FFB4AB</item>
-        <item name="colorErrorContainer">#93000A</item>
+        <item name="colorError">@color/text_critical</item>
+        <item name="colorErrorContainer">@color/background_critical</item>
         <item name="colorOnError">#690005</item>
         <item name="colorOnErrorContainer">#FFDAD6</item>
         <item name="android:colorBackground">@color/pv_background</item>
@@ -20,7 +20,7 @@
         <item name="colorOnSurfaceVariant">@color/pv_background</item>
         <item name="colorOutline">@color/pv_text_secondary</item>
 
-        <item name="android:statusBarColor">@color/pv_background</item>
+        <item name="android:statusBarColor">@color/background_app_bar</item>
         <item name="android:colorBackgroundFloating">@color/pv_container</item>
         <item name="android:windowLightNavigationBar">false</item>
         <item name="android:windowLightStatusBar">false</item>
@@ -39,6 +39,7 @@
         <item name="checkboxStyle">@style/pv.material.checkbox</item>
         <item name="badgeStyle">@style/pv.material.badge</item>
         <item name="chipStyle">@style/pv.material.chip</item>
+        <item name="bottomSheetDialogTheme">@style/view.bottomSheet</item>
     </style>
 
 

@@ -12,6 +12,7 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import de.passwordvault.BuildConfig;
 import de.passwordvault.R;
 import de.passwordvault.model.UpdateManager;
+import de.passwordvault.view.settings.activity_licenses.LicensesActivity;
 import de.passwordvault.view.settings.activity_localized_asset_viewer.LocalizedAssetViewerActivity;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 
@@ -38,7 +39,7 @@ public class SettingsAboutActivity extends PasswordVaultBaseActivity {
 
         //Usage
         findViewById(R.id.settings_about_usage_tos_container).setOnClickListener(view -> showLegalPage("terms_of_service.html"));
-        findViewById(R.id.settings_about_usage_dependencies_container).setOnClickListener(view -> startActivity(new Intent(this, OssLicensesMenuActivity.class)));
+        findViewById(R.id.settings_about_usage_dependencies_container).setOnClickListener(view -> startActivity(new Intent(this, LicensesActivity.class)));
         findViewById(R.id.settings_about_usage_privacypolicy_container).setOnClickListener(view -> showLegalPage("privacy_policy.html"));
 
         //GitHub

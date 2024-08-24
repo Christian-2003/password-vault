@@ -251,6 +251,7 @@
     <!-- Recovery activity -->
     <string name="recovery_info">Wähle mindestens fünf Sicherheitsfragen aus um dich in Password Vault anzumelden, falls du das Master-Passwort vergisst. Wenn du dich mit diesen Fragen anmeldest, dann musst du mindestens vier Fragen richtig beantworten. Andernfalls funktioniert der Login nicht.</string>
     <string name="recovery_progress">Fortschritt</string>
+    <string name="recovery_score">{arg} / {max}</string>
     <string name="recovery_questions">Sicherheitsfragen</string>
     <string name="recovery_question">Frage</string>
     <string name="recovery_answer">Antwort</string>
