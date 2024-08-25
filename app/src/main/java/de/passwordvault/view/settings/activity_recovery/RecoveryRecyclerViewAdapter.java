@@ -4,9 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewStructure;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -114,7 +112,7 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
     /**
      * Field stores the offset with which the security questions are positioned within the adapter.
      */
-    public static final int QUESTIONS_OFFSET = 5;
+    public static final int OFFSET_QUESTIONS = 5;
 
     /**
      * Field stores the position of the progress bar.
@@ -252,7 +250,7 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
                     viewHolder.buttonImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_add));
                     viewHolder.itemView.setOnClickListener(view -> {
                         if (addQuestionListener != null) {
-                            addQuestionListener.onAction(holder);
+                            addQuestionListener.onAction(holder.getAdapterPosition());
                         }
                     });
                     break;
@@ -260,7 +258,7 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
                 case 4: {
                     GenericEmptyPlaceholderViewHolder viewHolder = (GenericEmptyPlaceholderViewHolder)holder;
                     if (viewModel.getSecurityQuestions().isEmpty()) {
-                        viewHolder.imageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.detail_security_question)); //TODO: Use dedicated placeholder drawable!
+                        viewHolder.imageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.el_security_question));
                         viewHolder.headlineTextView.setText(context.getString(R.string.recovery_questions_empty_headline));
                         viewHolder.supportTextView.setText(context.getString(R.string.recovery_questions_empty_support));
                         viewHolder.itemView.setVisibility(View.VISIBLE);
@@ -274,7 +272,7 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
                 }
                 default: {
                     RecoveryQuestionViewHolder viewHolder = (RecoveryQuestionViewHolder)holder;
-                    SecurityQuestion question = viewModel.getSecurityQuestions().get(position - QUESTIONS_OFFSET);
+                    SecurityQuestion question = viewModel.getSecurityQuestions().get(position - OFFSET_QUESTIONS);
                     String[] allQuestions = context.getResources().getStringArray(R.array.security_questions);
                     viewHolder.questionTextView.setText(allQuestions[question.getQuestion()]);
                     viewHolder.answerTextView.setText(question.getAnswer());
@@ -288,7 +286,7 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
                     });
                     viewHolder.moreButton.setOnClickListener(view -> {
                         if (questionMoreListener != null) {
-                            questionMoreListener.onAction(holder);
+                            questionMoreListener.onAction(holder.getAdapterPosition());
                         }
                     });
                     break;
@@ -308,7 +306,7 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
      */
     @Override
     public int getItemCount() {
-        return viewModel.getSecurityQuestions().size() + QUESTIONS_OFFSET;
+        return viewModel.getSecurityQuestions().size() + OFFSET_QUESTIONS;
     }
 
 
@@ -344,7 +342,7 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
      * @return          Whether the view at the specified position supports swiping.
      */
     public boolean supportsSwipe(int position) {
-        return position >= QUESTIONS_OFFSET;
+        return position >= OFFSET_QUESTIONS;
     }
 
 }

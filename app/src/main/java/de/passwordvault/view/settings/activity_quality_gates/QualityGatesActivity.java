@@ -2,22 +2,26 @@ package de.passwordvault.view.settings.activity_quality_gates;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+
+import java.util.ArrayList;
 
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGate;
-import de.passwordvault.view.entries.activity_add_entry.dialog_delete.ConfirmDeleteDialog;
+import de.passwordvault.model.security.login.SecurityQuestion;
+import de.passwordvault.view.general.dialog_delete.DeleteDialog;
+import de.passwordvault.view.general.dialog_more.MoreDialog;
 import de.passwordvault.view.settings.activity_quality_gate.QualityGateActivity;
-import de.passwordvault.view.utils.DialogCallbackListener;
-import de.passwordvault.view.utils.recycler_view.RecyclerItemSwipeCallback;
-import de.passwordvault.view.utils.components.ListButtonView;
-import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
+import de.passwordvault.view.settings.activity_recovery.RecoveryRecyclerViewAdapter;
+import de.passwordvault.view.settings.dialog_security_question.SecurityQuestionDialog;
+import de.passwordvault.view.utils.components.PasswordVaultActivity;
+import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
+import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
 
 
 /**
@@ -26,47 +30,48 @@ import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
  * @author  Christian-2003
  * @version 3.6.0
  */
-public class QualityGatesActivity extends PasswordVaultBaseActivity implements DialogCallbackListener {
+public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesViewModel> {
 
     /**
-     * Attribute stores the view model for the activity.
+     * Attribute stores the adapter of the activity.
      */
-    private QualityGatesViewModel viewModel;
+    private QualityGatesRecyclerViewAdapter adapter;
 
     /**
-     * Attribute stores the activity result launcher to edit / add a quality gate.
+     * Attribute stores the result launcher used to get a result from the activity to edit a quality
+     * gate.
      */
-    private final ActivityResultLauncher<Intent> qualityGatesResultLauncher;
-
-    /**
-     * Attribute stores the adapter for the custom quality gates.
-     */
-    private QualityGatesRecyclerViewAdapter customQualityGatesAdapter;
+    private final ActivityResultLauncher<Intent> qualityGateResultLauncher;
 
 
     /**
      * Constructor instantiates a new activity.
      */
     public QualityGatesActivity() {
-        qualityGatesResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        super(QualityGatesViewModel.class, R.layout.activity_quality_gates);
+
+        qualityGateResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == QualityGateActivity.RESULT_EDITED) {
                 if (result.getData() == null) {
                     return;
                 }
                 Bundle args = result.getData().getExtras();
                 if (args == null || !args.containsKey(QualityGateActivity.KEY_INDEX) || !args.containsKey(QualityGateActivity.KEY_QUALITY_GATE)) {
-                    return;
+                     return;
                 }
                 int position = args.getInt(QualityGateActivity.KEY_INDEX);
                 QualityGate qualityGate = (QualityGate)args.getSerializable(QualityGateActivity.KEY_QUALITY_GATE);
                 if (position == -1) {
                     //Added quality gate:
+                    if (viewModel.getCustomQualityGates().isEmpty()) {
+                        adapter.notifyItemChanged(QualityGatesRecyclerViewAdapter.POSITION_EMPTY_PLACEHOLDER);
+                    }
                     viewModel.getCustomQualityGates().add(qualityGate);
-                    customQualityGatesAdapter.notifyItemInserted(viewModel.getCustomQualityGates().size() - 1);
+                    adapter.notifyItemInserted(QualityGatesRecyclerViewAdapter.OFFSET_DEFAULT_QUALITY_GATES + viewModel.getDefaultQualityGates().size() - 1);
                 }
                 else {
                     viewModel.getCustomQualityGates().set(position, qualityGate);
-                    customQualityGatesAdapter.notifyItemChanged(position);
+                    adapter.notifyItemChanged(QualityGatesRecyclerViewAdapter.OFFSET_DEFAULT_QUALITY_GATES + position);
                 }
             }
         });
@@ -74,116 +79,89 @@ public class QualityGatesActivity extends PasswordVaultBaseActivity implements D
 
 
     /**
-     * Method is called on positive dialog callback.
-     *
-     * @param fragment  Dialog which called the method.
+     * Method is called when the activity closes.
      */
     @Override
-    public void onPositiveCallback(DialogFragment fragment) {
-        if (fragment instanceof ConfirmDeleteDialog) {
-            String tag = fragment.getTag();
-            if (tag != null) {
-                int position;
-                try {
-                    position = Integer.parseInt(tag);
-                    viewModel.getCustomQualityGates().remove(position);
-                }
-                catch (NumberFormatException | IndexOutOfBoundsException e) {
-                    return;
-                }
-                customQualityGatesAdapter.notifyItemRemoved(position);
-            }
-        }
-    }
-
-    /**
-     * Method is called on negative dialog callback.
-     * @param fragment  Dialog which called the method.
-     */
-    @Override
-    public void onNegativeCallback(DialogFragment fragment) {
-
-    }
-
-
-    /**
-     * Method is called whenever the activity is created / recreated.
-     *
-     * @param savedInstanceState    Previously saved state of the instance.
-     */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(QualityGatesViewModel.class);
-        setContentView(R.layout.activity_quality_gates);
-        viewModel.loadQualityGatesIfRequired();
-
-        //Back button:
-        findViewById(R.id.button_back).setOnClickListener(view -> finish());
-
-        //Button to add quality gates:
-        ListButtonView addButton = findViewById(R.id.button_add);
-        addButton.setOnClickListener(view -> {
-            Log.d("QGA", "Add QG");
-            Intent intent = new Intent(QualityGatesActivity.this, QualityGateActivity.class);
-            qualityGatesResultLauncher.launch(intent);
-        });
-
-        //Custom quality gates:
-        RecyclerItemSwipeCallback.SwipeAction<QualityGate> leftSwipeAction = RecyclerItemSwipeCallback.makeLeftSwipeAction(this::editQualityGate, this::deleteQualityGate);
-        RecyclerItemSwipeCallback.SwipeAction<QualityGate> rightSwipeAction = RecyclerItemSwipeCallback.makeRightSwipeAction(this::editQualityGate, this::deleteQualityGate);
-        RecyclerView customRecyclerView = findViewById(R.id.recycler_view_custom);
-        customQualityGatesAdapter = new QualityGatesRecyclerViewAdapter(this, viewModel.getCustomQualityGates());
-        RecyclerItemSwipeCallback<QualityGate> callback = new RecyclerItemSwipeCallback<>(customQualityGatesAdapter, leftSwipeAction, rightSwipeAction);
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
-        itemTouchHelper.attachToRecyclerView(customRecyclerView);
-        customRecyclerView.setAdapter(customQualityGatesAdapter);
-
-        //Default quality gates:
-        RecyclerView defaultRecyclerView = findViewById(R.id.recycler_view_default);
-        QualityGatesRecyclerViewAdapter defaultQualityGatesAdapter = new QualityGatesRecyclerViewAdapter(this, viewModel.getDefaultQualityGates());
-        defaultRecyclerView.setAdapter(defaultQualityGatesAdapter);
-    }
-
-
-    /**
-     * Method is called whenever the activity is destroyed.
-     */
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void finish() {
+        super.finish();
         viewModel.saveQualityGates();
     }
 
 
     /**
-     * Method is called whenever a quality gate shall be edited.
-     *
-     * @param qualityGate   Quality gate to edit.
-     * @param position      Position of the quality gate within the data.
+     * Method is called whenever the activity is created.
+     * @param savedInstanceState    Previously saved state of the instance.
      */
-    private void editQualityGate(QualityGate qualityGate, int position) {
-        Intent intent = new Intent(this, QualityGateActivity.class);
-        intent.putExtra(QualityGateActivity.KEY_QUALITY_GATE, qualityGate);
-        intent.putExtra(QualityGateActivity.KEY_INDEX, position);
-        qualityGatesResultLauncher.launch(intent);
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel.loadQualityGatesIfRequired();
+
+        //Back button:
+        findViewById(R.id.button_back).setOnClickListener(view -> finish());
+
+        //Recycler view:
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        adapter = new QualityGatesRecyclerViewAdapter(this, viewModel);
+        adapter.setAddQualityGateListener(this::onAddQualityGate);
+        adapter.setQualityGatesMoreListener(this::onShowMoreOptions);
+        recyclerView.setAdapter(adapter);
+        RecyclerViewSwipeCallback.SwipeAction leftSwipe = RecyclerViewSwipeCallback.makeLeftSwipeAction(this::onEditQualityGate, this::onDeleteQualityGate);
+        RecyclerViewSwipeCallback.SwipeAction rightSwipe = RecyclerViewSwipeCallback.makeRightSwipeAction(this::onEditQualityGate, this::onDeleteQualityGate);
+        RecyclerViewSwipeCallback callback = new RecyclerViewSwipeCallback(adapter, leftSwipe, rightSwipe);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(recyclerView);
     }
 
 
-    /**
-     * Method is called whenever a quality gate shall be deleted, which shows a dialog to confirm
-     * deletion. On Positive callback, the quality gate is deleted.
-     *
-     * @param qualityGate   Quality gate to delete.
-     * @param position      Position of the quality gate within the data.
-     */
-    private void deleteQualityGate(QualityGate qualityGate, int position) {
-        ConfirmDeleteDialog dialog = new ConfirmDeleteDialog();
+    private void onEditQualityGate(int position) {
+        Intent intent = new Intent(this, QualityGateActivity.class);
+        int index = position - QualityGatesRecyclerViewAdapter.OFFSET_DEFAULT_QUALITY_GATES;
+        intent.putExtra(QualityGateActivity.KEY_QUALITY_GATE, viewModel.getCustomQualityGates().get(index));
+        intent.putExtra(QualityGateActivity.KEY_INDEX, index);
+        qualityGateResultLauncher.launch(intent);
+    }
+
+    private void onDeleteQualityGate(int position) {
+        int index = position - QualityGatesRecyclerViewAdapter.OFFSET_DEFAULT_QUALITY_GATES;
+        QualityGate qualityGate = viewModel.getCustomQualityGates().get(index);
+        DeleteDialog dialog = new DeleteDialog();
         Bundle args = new Bundle();
-        args.putString(ConfirmDeleteDialog.KEY_OBJECT, qualityGate.getDescription());
-        args.putSerializable(ConfirmDeleteDialog.KEY_CALLBACK_LISTENER, this);
+        String message = getString(R.string.delete_dialog_message);
+        message = message.replace("{arg}", qualityGate.getDescription());
+        args.putString(DeleteDialog.ARG_MESSAGE, message);
+        PasswordVaultBottomSheetDialog.Callback callback = (d, resultCode) -> {
+            if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS) {
+                viewModel.getCustomQualityGates().remove(index);
+                adapter.notifyItemRemoved(index + QualityGatesRecyclerViewAdapter.OFFSET_DEFAULT_QUALITY_GATES);
+                if (viewModel.getCustomQualityGates().isEmpty()) {
+                    adapter.notifyItemChanged(QualityGatesRecyclerViewAdapter.POSITION_EMPTY_PLACEHOLDER);
+                }
+            }
+        };
+        args.putSerializable(SecurityQuestionDialog.ARG_CALLBACK, callback);
         dialog.setArguments(args);
-        dialog.show(getSupportFragmentManager(), "" + position);
+        dialog.show(getSupportFragmentManager(), null);
+    }
+
+    private void onAddQualityGate(int position) {
+        Intent intent = new Intent(this, QualityGateActivity.class);
+        qualityGateResultLauncher.launch(intent);
+    }
+
+    private void onShowMoreOptions(int position) {
+        int index = position - QualityGatesRecyclerViewAdapter.OFFSET_DEFAULT_QUALITY_GATES;
+        QualityGate qualityGate = viewModel.getCustomQualityGates().get(index);
+        MoreDialog dialog = new MoreDialog();
+        Bundle args = new Bundle();
+        args.putString(MoreDialog.ARG_TITLE, qualityGate.getDescription());
+        args.putInt(MoreDialog.ARG_ICON, R.drawable.ic_shield);
+        ArrayList<MoreDialog.Item> items = new ArrayList<>();
+        items.add(new MoreDialog.Item(getString(R.string.button_edit), R.drawable.ic_edit, view -> onEditQualityGate(position)));
+        items.add(new MoreDialog.Item(getString(R.string.button_delete), R.drawable.ic_delete, view -> onDeleteQualityGate(position)));
+        args.putSerializable(MoreDialog.ARG_ITEMS, items);
+        dialog.setArguments(args);
+        dialog.show(getSupportFragmentManager(), null);
     }
 
 }

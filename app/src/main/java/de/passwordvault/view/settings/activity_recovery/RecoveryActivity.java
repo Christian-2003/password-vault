@@ -40,6 +40,16 @@ public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> {
 
 
     /**
+     * Method is called whenever the activity closes.
+     */
+    @Override
+    public void finish() {
+        super.finish();
+        viewModel.save();
+    }
+
+
+    /**
      * Method is called whenever the activity is created.
      *
      * @param savedInstanceState    Previously saved state of the instance.
@@ -69,21 +79,15 @@ public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> {
     }
 
 
-    @Override
-    public void finish() {
-        super.finish();
-        viewModel.save();
-    }
-
     /**
      * Listener for when a security question should be edited.
      *
-     * @param holder    View holder of the view displaying the question to edit.
+     * @param position  Position of the view that invoked this action
      */
-    private void onEditSecurityQuestion(RecyclerView.ViewHolder holder) {
+    private void onEditSecurityQuestion(int position) {
         //Get available security questions that can be used:
-        int position = holder.getAdapterPosition() - RecoveryRecyclerViewAdapter.QUESTIONS_OFFSET;
-        SecurityQuestion question = viewModel.getSecurityQuestions().get(position);
+        int index = position - RecoveryRecyclerViewAdapter.OFFSET_QUESTIONS;
+        SecurityQuestion question = viewModel.getSecurityQuestions().get(index);
         int numberOfAllQuestions = SecurityQuestion.getAllQuestions().length;
         String[] availableQuestions = new String[numberOfAllQuestions - viewModel.getSecurityQuestions().size() + 1];
 
@@ -111,8 +115,8 @@ public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> {
             if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS) {
                 SecurityQuestionDialog securityQuestionDialog = (SecurityQuestionDialog)d;
                 SecurityQuestion newQuestion = securityQuestionDialog.getQuestion();
-                viewModel.getSecurityQuestions().set(position, newQuestion);
-                adapter.notifyItemChanged(position + RecoveryRecyclerViewAdapter.QUESTIONS_OFFSET);
+                viewModel.getSecurityQuestions().set(index, newQuestion);
+                adapter.notifyItemChanged(index + RecoveryRecyclerViewAdapter.OFFSET_QUESTIONS);
             }
         };
         args.putSerializable(SecurityQuestionDialog.ARG_CALLBACK, callback);
@@ -123,11 +127,11 @@ public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> {
     /**
      * Listener for when a security question should be deleted.
      *
-     * @param holder    View holder of the view displaying the question to delete.
+     * @param position  Position of the view that invoked this action.
      */
-    private void onDeleteSecurityQuestion(RecyclerView.ViewHolder holder) {
-        int position = holder.getAdapterPosition() - RecoveryRecyclerViewAdapter.QUESTIONS_OFFSET;
-        SecurityQuestion question = viewModel.getSecurityQuestions().get(position);
+    private void onDeleteSecurityQuestion(int position) {
+        int index = position - RecoveryRecyclerViewAdapter.OFFSET_QUESTIONS;
+        SecurityQuestion question = viewModel.getSecurityQuestions().get(index);
         DeleteDialog dialog = new DeleteDialog();
         Bundle args = new Bundle();
         String message = getString(R.string.delete_dialog_message);
@@ -135,8 +139,8 @@ public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> {
         args.putString(DeleteDialog.ARG_MESSAGE, message);
         PasswordVaultBottomSheetDialog.Callback callback = (d, resultCode) -> {
             if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS) {
-                viewModel.getSecurityQuestions().remove(position);
-                adapter.notifyItemRemoved(position + RecoveryRecyclerViewAdapter.QUESTIONS_OFFSET);
+                viewModel.getSecurityQuestions().remove(index);
+                adapter.notifyItemRemoved(index + RecoveryRecyclerViewAdapter.OFFSET_QUESTIONS);
                 adapter.notifyItemChanged(RecoveryRecyclerViewAdapter.POSITION_PROGRESS_BAR);
                 if (viewModel.getSecurityQuestions().isEmpty()) {
                     adapter.notifyItemChanged(RecoveryRecyclerViewAdapter.POSITION_EMPTY_PLACEHOLDER);
@@ -151,9 +155,9 @@ public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> {
     /**
      * Listener for when a new security question should be added.
      *
-     * @param holder    View holder of the view requesting to add a new security question.
+     * @param position  Position of the item which invoked this action.
      */
-    private void onAddSecurityQuestion(RecyclerView.ViewHolder holder) {
+    private void onAddSecurityQuestion(int position) {
         String[] allQuestions = SecurityQuestion.getAllQuestions();
         String[] unusedQuestions = new String[allQuestions.length - viewModel.getSecurityQuestions().size()];
         int k = 0;
@@ -193,18 +197,18 @@ public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> {
     /**
      * Listener for when the "more" button of a security question is clicked.
      *
-     * @param holder    View holder of the security question whose button was clicked.
+     * @param position  Position of the view which invoked this action.
      */
-    private void onShowMoreOptions(RecyclerView.ViewHolder holder) {
-        int position = holder.getAdapterPosition() - RecoveryRecyclerViewAdapter.QUESTIONS_OFFSET;
-        SecurityQuestion question = viewModel.getSecurityQuestions().get(position);
+    private void onShowMoreOptions(int position) {
+        int index = position - RecoveryRecyclerViewAdapter.OFFSET_QUESTIONS;
+        SecurityQuestion question = viewModel.getSecurityQuestions().get(index);
         MoreDialog dialog = new MoreDialog();
         Bundle args = new Bundle();
         args.putString(MoreDialog.ARG_TITLE, SecurityQuestion.getAllQuestions()[question.getQuestion()]);
         args.putInt(MoreDialog.ARG_ICON, R.drawable.ic_help);
         ArrayList<MoreDialog.Item> items = new ArrayList<>();
-        items.add(new MoreDialog.Item(getString(R.string.button_edit), R.drawable.ic_edit, view -> onEditSecurityQuestion(holder)));
-        items.add(new MoreDialog.Item(getString(R.string.button_delete), R.drawable.ic_delete, view -> onDeleteSecurityQuestion(holder)));
+        items.add(new MoreDialog.Item(getString(R.string.button_edit), R.drawable.ic_edit, view -> onEditSecurityQuestion(position)));
+        items.add(new MoreDialog.Item(getString(R.string.button_delete), R.drawable.ic_delete, view -> onDeleteSecurityQuestion(position)));
         args.putSerializable(MoreDialog.ARG_ITEMS, items);
         dialog.setArguments(args);
         dialog.show(getSupportFragmentManager(), null);

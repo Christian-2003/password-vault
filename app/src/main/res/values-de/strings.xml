@@ -360,6 +360,8 @@
     <string name="quality_gates">Sicherheitskriterien</string>
     <string name="quality_gates_info">Definiere Sicherheitskriterien um die Sicherheit deiner Passwörter zu verbessern.</string>
     <string name="quality_gates_custom">Eigene Sicherheitskriterien</string>
+    <string name="quality_gates_custom_empty_headline">Keine Sicherheitskriterien</string>
+    <string name="quality_gates_custom_empty_support">Sicherheitskriterien werden hier angezeigt</string>
     <string name="quality_gates_default">Standard Sicherheitskriterien</string>
     <string name="quality_gates_enabled">Aktiv</string>
     <string name="quality_gate_enabled">Aktiviert</string>

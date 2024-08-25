@@ -11,7 +11,7 @@
     <ImageView
         android:id="@+id/image"
         android:layout_marginTop="@dimen/space_vertical"
-        tools:src="@drawable/detail_security_question"
+        tools:src="@drawable/el_security_question"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

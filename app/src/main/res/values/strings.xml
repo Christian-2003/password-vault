@@ -362,6 +362,8 @@
     <string name="quality_gates">Quality Gates</string>
     <string name="quality_gates_info">Specify quality gates to enhance the security of your passwords.</string>
     <string name="quality_gates_custom">Custom quality gates</string>
+    <string name="quality_gates_custom_empty_headline">No quality gates</string>
+    <string name="quality_gates_custom_empty_support">Added quality gates will be displayed here</string>
     <string name="quality_gates_default">Default quality gates</string>
     <string name="quality_gates_enabled">Enabled</string>
     <string name="quality_gate_enabled">Enabled</string>

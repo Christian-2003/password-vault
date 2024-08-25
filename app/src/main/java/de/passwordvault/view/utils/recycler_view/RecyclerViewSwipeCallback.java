@@ -182,11 +182,11 @@ public class RecyclerViewSwipeCallback extends ItemTouchHelper.Callback {
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
         if (direction == ItemTouchHelper.LEFT && leftSwipeAction != null) {
-            leftSwipeAction.getSwipeListener().onAction(viewHolder);
+            leftSwipeAction.getSwipeListener().onAction(viewHolder.getAdapterPosition());
             adapter.notifyItemChanged(viewHolder.getAdapterPosition());
         }
         else if (direction == ItemTouchHelper.RIGHT && rightSwipeAction != null) {
-            rightSwipeAction.getSwipeListener().onAction(viewHolder);
+            rightSwipeAction.getSwipeListener().onAction(viewHolder.getAdapterPosition());
             adapter.notifyItemChanged(viewHolder.getAdapterPosition());
         }
     }
