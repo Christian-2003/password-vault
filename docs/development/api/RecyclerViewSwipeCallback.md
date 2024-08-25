@@ -8,8 +8,9 @@ Class models a swipe callback that supports item swiping with a [`RecyclerViewAd
 
 ###### Table of Contents
 1. [Overview](#overview)
-2. [Public Constructors](#public-constructors)
-3. [Public Methods](#public-methods)
+2. [Nested Types](#nested-types)
+3. [Public Constructors](#public-constructors)
+4. [Public Methods](#public-methods)
 
 <br/>
 
@@ -82,6 +83,12 @@ public class MyActivity extends PasswordVaultActivity<MyViewModel> {
 <br/>
 
 ## Summary
+###### Nested Types
+Nested Type | Description
+--- | ---
+[`SwipeContract`](RecyclerViewSwipeCallback.SwipeContract.md) | Interface for a recycler view to implement in order to support swipe actions.
+[`SwipeAction`](RecyclerViewSwipeCallback.SwipeAction.md) | Configuration for a swipe action.
+
 ###### Public Constructors
 Constructor | Description
 --- | ---
