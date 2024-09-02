@@ -250,10 +250,7 @@ public class CreateBackupActivity extends PasswordVaultBaseActivity {
      */
     private void encryptBackup(CompoundButton button, boolean checked) {
         viewModel.setBackupEncrypted(checked);
-        LinearLayout contentContainer = findViewById(R.id.container_content);
         LinearLayout encryptionContainer = findViewById(R.id.container_encryption);
-        LayoutTransition layoutTransition = contentContainer.getLayoutTransition();
-        layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
         encryptionContainer.setVisibility(checked ? View.VISIBLE : View.GONE);
     }
 
