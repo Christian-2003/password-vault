@@ -41,6 +41,15 @@
 
     </LinearLayout>
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
 
 
     <!-- Content for the activity -->
@@ -49,6 +58,7 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
+            android:id="@+id/container_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
@@ -241,16 +251,6 @@
                 android:layout_marginHorizontal="@dimen/space_horizontal"
                 android:layout_marginVertical="@dimen/space_vertical"
                 android:text="@string/button_create_backup"/>
-
-            <com.google.android.material.progressindicator.CircularProgressIndicator
-                android:id="@+id/progress_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/space_horizontal"
-                android:layout_marginVertical="@dimen/space_vertical"
-                android:layout_gravity="center"
-                android:indeterminate="true"
-                android:visibility="gone"/>
 
         </LinearLayout>
 
