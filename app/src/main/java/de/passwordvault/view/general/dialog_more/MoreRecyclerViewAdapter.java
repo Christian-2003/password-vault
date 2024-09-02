@@ -3,6 +3,8 @@ package de.passwordvault.view.general.dialog_more;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -30,19 +32,45 @@ public class MoreRecyclerViewAdapter extends RecyclerViewAdapter<MoreViewModel> 
          * @param view  View of the item that was clicked.
          * @param item  Item that was clicked.
          */
-        void onItemClicked(View view, MoreDialog.Item item);
+        void onItemClicked(View view, ItemButton item);
+
+        /**
+         * Method is called whenever an item's checkbox is changed.
+         *
+         * @param button    Checkbox.
+         * @param item      Item whose checkbox was clicked.
+         */
+        void onCheckboxChecked(CompoundButton button, ItemCheckbox item);
 
     }
 
     /**
      * Class models the view holder for the items to display.
      */
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
+    public static abstract class ItemViewHolder extends RecyclerView.ViewHolder {
 
         /**
          * Attribute stores the text view of the item.
          */
         public final TextView textView;
+
+
+        /**
+         * Constructor instantiates a new view holder for the passed view.
+         *
+         * @param itemView  Inflated view from which to create the view holder.
+         */
+        public ItemViewHolder(View itemView) {
+            super(itemView);
+            textView = itemView.findViewById(R.id.text);
+        }
+
+    }
+
+    /**
+     * Class models the view holder for the item button to display.
+     */
+    public static class ItemButtonViewHolder extends ItemViewHolder {
 
         /**
          * Attribute stores the image view of the item.
@@ -55,13 +83,46 @@ public class MoreRecyclerViewAdapter extends RecyclerViewAdapter<MoreViewModel> 
          *
          * @param itemView  Inflated view from which to create the view holder.
          */
-        public ItemViewHolder(View itemView) {
+        public ItemButtonViewHolder(View itemView) {
             super(itemView);
-            textView = itemView.findViewById(R.id.text);
             imageView = itemView.findViewById(R.id.image);
         }
 
     }
+
+    /**
+     * Class models the view holder for the item checkbox to display.
+     */
+    public static class ItemCheckboxViewHolder extends ItemViewHolder {
+
+        /**
+         * Attribute stores the checkbox of the item.
+         */
+        public final CheckBox checkBox;
+
+
+        /**
+         * Constructor instantiates a new view holder for the passed view.
+         *
+         * @param itemView  Inflated view from which to create the view holder.
+         */
+        public ItemCheckboxViewHolder(View itemView) {
+            super(itemView);
+            checkBox = itemView.findViewById(R.id.checkbox);
+        }
+
+    }
+
+
+    /**
+     * Field stores the view type for the button item.
+     */
+    public static final int TYPE_BUTTON = 1;
+
+    /**
+     * Field stores the view type for the checkbox item.
+     */
+    public static final int TYPE_CHECKBOX = 3;
 
 
     /**
@@ -94,8 +155,15 @@ public class MoreRecyclerViewAdapter extends RecyclerViewAdapter<MoreViewModel> 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.item_more_button, parent, false);
-        return new ItemViewHolder(view);
+        View view;
+        switch (viewType) {
+            case TYPE_CHECKBOX:
+                view = layoutInflater.inflate(R.layout.item_more_checkbox, parent, false);
+                return new ItemCheckboxViewHolder(view);
+            default:
+                view = layoutInflater.inflate(R.layout.item_more_button, parent, false);
+                return new ItemButtonViewHolder(view);
+        }
     }
 
 
@@ -107,17 +175,44 @@ public class MoreRecyclerViewAdapter extends RecyclerViewAdapter<MoreViewModel> 
      */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof ItemViewHolder) {
-            ItemViewHolder viewHolder = (ItemViewHolder)holder;
-            MoreDialog.Item item = viewModel.getItems().get(position);
-            viewHolder.imageView.setImageResource(item.getIcon());
-            viewHolder.textView.setText(item.getTitle());
-            viewHolder.itemView.setOnClickListener(view -> {
-                dialog.onItemClicked(view, item);
-            });
+        Item item = viewModel.getItems().get(position);
+        switch (item.getType()) {
+            case Item.TYPE_BUTTON: {
+                ItemButton buttonItem = (ItemButton)item;
+                ItemButtonViewHolder viewHolder = (ItemButtonViewHolder)holder;
+                viewHolder.imageView.setImageResource(buttonItem.getIcon());
+                viewHolder.textView.setText(buttonItem.getTitle());
+                viewHolder.itemView.setOnClickListener(view -> {
+                    dialog.onItemClicked(view, buttonItem);
+                });
+                break;
+            }
+            case Item.TYPE_CHECKBOX: {
+                ItemCheckbox checkboxItem = (ItemCheckbox)item;
+                ItemCheckboxViewHolder viewHolder = (ItemCheckboxViewHolder)holder;
+                viewHolder.textView.setText(checkboxItem.getTitle());
+                viewHolder.checkBox.setChecked(checkboxItem.isChecked());
+                viewHolder.itemView.setOnClickListener(view -> {
+                    viewHolder.checkBox.setChecked(!viewHolder.checkBox.isChecked());
+                });
+                viewHolder.checkBox.setOnCheckedChangeListener((button, checked) -> {
+                    dialog.onCheckboxChecked(button, checkboxItem);
+                });
+                break;
+            }
         }
     }
 
+
+    @Override
+    public int getItemViewType(int position) {
+        if (viewModel.getItems().get(position).getType() == Item.TYPE_BUTTON) {
+            return TYPE_BUTTON;
+        }
+        else {
+            return TYPE_CHECKBOX;
+        }
+    }
 
     /**
      * Method returns the number of items to display.

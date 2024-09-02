@@ -34,7 +34,7 @@ public class MoreViewModel extends ViewModel {
     /**
      * Attribute stores the list of items to be displayed by the dialog.
      */
-    private ArrayList<MoreDialog.Item> items;
+    private ArrayList<Item> items;
 
 
     /**
@@ -68,7 +68,7 @@ public class MoreViewModel extends ViewModel {
      * @return  List of items to display.
      */
     @NonNull
-    public ArrayList<MoreDialog.Item> getItems() {
+    public ArrayList<Item> getItems() {
         if (items != null) {
             return items;
         }
@@ -92,7 +92,7 @@ public class MoreViewModel extends ViewModel {
 
         if (args.containsKey(MoreDialog.ARG_ITEMS)) {
             try {
-                items = (ArrayList<MoreDialog.Item>)args.getSerializable(MoreDialog.ARG_ITEMS);
+                items = (ArrayList<Item>)args.getSerializable(MoreDialog.ARG_ITEMS);
             }
             catch (Exception e) {
                 //Ignore...

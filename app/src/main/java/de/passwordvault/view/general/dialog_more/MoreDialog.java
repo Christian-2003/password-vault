@@ -4,16 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.io.Serializable;
 import de.passwordvault.R;
 import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
 
@@ -25,78 +21,6 @@ import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
  * @version 3.7.0
  */
 public class MoreDialog extends PasswordVaultBottomSheetDialog<MoreViewModel> implements MoreRecyclerViewAdapter.DialogContract {
-
-    /**
-     * Class models an item within the dialog.
-     */
-    public static class Item implements Serializable {
-
-        /**
-         * Attribute stores the title of the item.
-         */
-        @NonNull
-        private final String title;
-
-        /**
-         * Attribute stores the icon of the item.
-         */
-        @DrawableRes
-        private final int icon;
-
-        /**
-         * Attribute stores the click listener to invoke when the item is clicked.
-         */
-        @NonNull
-        private final View.OnClickListener clickListener;
-
-
-        /**
-         * Constructor instantiates a new item with the passed arguments.
-         *
-         * @param title         Title for the item.
-         * @param icon          Icon for the item.
-         * @param clickListener Click listener to invoke when the item is clicked.
-         */
-        public Item(@NonNull String title, @DrawableRes int icon, @NonNull View.OnClickListener clickListener) {
-            this.title = title;
-            this.icon = icon;
-            this.clickListener = clickListener;
-            Bundle bundle = new Bundle();
-        }
-
-
-        /**
-         * Method returns the title of the item.
-         *
-         * @return  Title if the item.
-         */
-        @NonNull
-        public String getTitle() {
-            return title;
-        }
-
-        /**
-         * Method returns the icon of the item.
-         *
-         * @return  Icon of the item.
-         */
-        @DrawableRes
-        public int getIcon() {
-            return icon;
-        }
-
-        /**
-         * Method returns the click listener to invoke when the item is clicked.
-         *
-         * @return  Click listener to invoke when the item is clicked.
-         */
-        @NonNull
-        public View.OnClickListener getClickListener() {
-            return clickListener;
-        }
-
-    }
-
 
     /**
      * Field stores the key with which to pass the title for the dialog as string.
@@ -158,8 +82,20 @@ public class MoreDialog extends PasswordVaultBottomSheetDialog<MoreViewModel> im
      * @param item  Item that was clicked.
      */
     @Override
-    public void onItemClicked(View view, Item item) {
-        item.clickListener.onClick(view);
+    public void onItemClicked(View view, ItemButton item) {
+        item.getClickListener().onClick(view);
+        dismiss();
+    }
+
+    /**
+     * Method is called whenever an item's checkbox is changed.
+     *
+     * @param button    Checkbox.
+     * @param item      Item whose checkbox was clicked.
+     */
+    @Override
+    public void onCheckboxChecked(CompoundButton button, ItemCheckbox item) {
+        item.getCheckedChangeListener().onCheckedChanged(button, button.isChecked());
         dismiss();
     }
 
