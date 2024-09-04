@@ -33,6 +33,15 @@
         <item name="android:lineSpacingExtra">5sp</item>
     </style>
 
+    <style name="text.search">
+        <item name="android:textSize">@dimen/text_l</item>
+        <item name="android:textColor">@color/text</item>
+        <item name="android:textColorHint">@color/text_light</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:inputType">text</item>
+    </style>
+
 
 
     <!-- Styles for buttons -->

@@ -1,5 +1,6 @@
 package de.passwordvault.view.passwords.activity_duplicates;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 import de.passwordvault.model.analysis.passwords.Password;
@@ -12,7 +13,7 @@ import de.passwordvault.model.entry.EntryManager;
  * {@link DuplicatePasswordEntriesActivity}.
  *
  * @author  Christian-2003
- * @version 3.5.2
+ * @version 3.7.0
  */
 public class DuplicatePasswordEntriesViewModel extends ViewModel {
 
@@ -33,6 +34,13 @@ public class DuplicatePasswordEntriesViewModel extends ViewModel {
      */
     private EntryAbbreviated displayedEntry;
 
+    /**
+     * Attribute stores the search query entered by the user. This is {@code null} if the user is
+     * not searching anything.
+     */
+    @Nullable
+    private String searchQuery;
+
 
     /**
      * Constructor instantiates a new view model.
@@ -41,6 +49,7 @@ public class DuplicatePasswordEntriesViewModel extends ViewModel {
         passwords = null;
         entries = null;
         displayedEntry = null;
+        searchQuery = null;
     }
 
 
@@ -103,6 +112,27 @@ public class DuplicatePasswordEntriesViewModel extends ViewModel {
      */
     public void setDisplayedEntry(EntryAbbreviated displayedEntry) {
         this.displayedEntry = displayedEntry;
+    }
+
+    /**
+     * Method returns the search query entered by the user. This is {@code null} if the user is not
+     * searching anything.
+     *
+     * @return  Search query.
+     */
+    @Nullable
+    public String getSearchQuery() {
+        return searchQuery;
+    }
+
+    /**
+     * Method changes the search query to the passed argument. Pass {@code null} to indicate that
+     * the user is not searching anything.
+     *
+     * @param searchQuery   New search query.
+     */
+    public void setSearchQuery(@Nullable String searchQuery) {
+        this.searchQuery = searchQuery;
     }
 
 }

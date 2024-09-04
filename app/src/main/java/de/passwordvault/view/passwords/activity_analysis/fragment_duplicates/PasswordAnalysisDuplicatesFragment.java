@@ -86,7 +86,7 @@ public class PasswordAnalysisDuplicatesFragment extends PasswordVaultBaseFragmen
     @Override
     public void onItemClick(Password item, int position) {
         Intent intent = new Intent(requireActivity(), DuplicatePasswordEntriesActivity.class);
-        intent.putExtra(DuplicatePasswordEntriesActivity.KEY_PASSWORDS, PasswordSecurityAnalysis.getInstance().getIdenticalPasswords().get(position));
+        intent.putExtra(DuplicatePasswordEntriesActivity.EXTRA_PASSWORDS, PasswordSecurityAnalysis.getInstance().getIdenticalPasswords().get(position));
         startActivity(intent);
     }
 
