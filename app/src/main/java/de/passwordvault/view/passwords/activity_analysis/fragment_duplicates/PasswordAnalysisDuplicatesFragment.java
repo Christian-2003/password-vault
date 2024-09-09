@@ -5,15 +5,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
-import de.passwordvault.model.analysis.passwords.Password;
 import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
 import de.passwordvault.view.passwords.activity_duplicates.DuplicatePasswordEntriesActivity;
-import de.passwordvault.view.utils.recycler_view.OnRecyclerItemClickListener;
-import de.passwordvault.view.passwords.PasswordsRecyclerViewAdapter;
 import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
 
 
@@ -23,7 +19,7 @@ import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
  * @author  Christian-2003
  * @version 3.4.0
  */
-public class PasswordAnalysisDuplicatesFragment extends PasswordVaultBaseFragment implements OnRecyclerItemClickListener<Password> {
+public class PasswordAnalysisDuplicatesFragment extends PasswordVaultBaseFragment {
 
     /**
      * Attribute stores the view model of the fragment.
@@ -65,12 +61,9 @@ public class PasswordAnalysisDuplicatesFragment extends PasswordVaultBaseFragmen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_password_analysis_duplicates, container, false);
 
-        boolean duplicatesFound = PasswordSecurityAnalysis.getInstance().getIdenticalPasswords().size() != 0;
-        view.findViewById(R.id.duplicate_passwords_none_container).setVisibility(duplicatesFound ? View.GONE : View.VISIBLE);
-
-        PasswordsRecyclerViewAdapter adapter = new PasswordsRecyclerViewAdapter(viewModel.getPasswords(), this, false);
+        PasswordAnalysisDuplicatesRecyclerViewAdapter adapter = new PasswordAnalysisDuplicatesRecyclerViewAdapter(requireActivity(), viewModel);
+        adapter.setItemClickListener(this::onPasswordClicked);
         RecyclerView recyclerView = view.findViewById(R.id.duplicate_passwords_recycler_view);
-        recyclerView.setVisibility(duplicatesFound ? View.VISIBLE : View.GONE);
         recyclerView.setAdapter(adapter);
 
         return view;
@@ -80,13 +73,11 @@ public class PasswordAnalysisDuplicatesFragment extends PasswordVaultBaseFragmen
     /**
      * Method is called when the item which is passed as argument is clicked by the user.
      *
-     * @param item      Clicked item.
      * @param position  Index of the clicked item.
      */
-    @Override
-    public void onItemClick(Password item, int position) {
+    private void onPasswordClicked(int position) {
         Intent intent = new Intent(requireActivity(), DuplicatePasswordEntriesActivity.class);
-        intent.putExtra(DuplicatePasswordEntriesActivity.EXTRA_PASSWORDS, PasswordSecurityAnalysis.getInstance().getIdenticalPasswords().get(position));
+        intent.putExtra(DuplicatePasswordEntriesActivity.EXTRA_PASSWORDS, PasswordSecurityAnalysis.getInstance().getIdenticalPasswords().get(position - PasswordAnalysisDuplicatesRecyclerViewAdapter.OFFSET_PASSWORDS));
         startActivity(intent);
     }
 
