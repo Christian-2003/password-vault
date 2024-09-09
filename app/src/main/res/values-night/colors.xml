@@ -15,6 +15,10 @@
     <color name="text_critical">#FFB4AB</color>
     <color name="divider">#454746</color>
 
+    <color name="red">#A7292F</color>
+    <color name="yellow">#A7A129</color>
+    <color name="green">#6EA729</color>
+
     <!-- Light / dark variants needed for dialog to switch darkmode -->
     <color name="light_background">#FAF9FE</color>
     <color name="light_container">#E9E7EC</color>

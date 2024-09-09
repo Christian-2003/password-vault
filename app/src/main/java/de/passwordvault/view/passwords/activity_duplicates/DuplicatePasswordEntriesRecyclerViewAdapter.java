@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -79,7 +77,7 @@ public class DuplicatePasswordEntriesRecyclerViewAdapter extends RecyclerViewAda
     /**
      * Field stores the view type for entries.
      */
-    private static final int TYPE_ENTRY = 0;
+    private static final int TYPE_DUPLICATES_ENTRY = 0;
 
 
     /**
@@ -166,7 +164,7 @@ public class DuplicatePasswordEntriesRecyclerViewAdapter extends RecyclerViewAda
      */
     @Override
     public int getItemViewType(int position) {
-        return TYPE_ENTRY;
+        return TYPE_DUPLICATES_ENTRY;
     }
 
 

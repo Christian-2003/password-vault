@@ -218,6 +218,8 @@
     <string name="password_results_list_none">Keine Passwörter</string>
     <string name="password_results_weak_title">Einfache Passwörter</string>
     <string name="password_results_weak_none">Keine einfachen Passwörter</string>
+    <string name="password_all_empty_title">Keine Passwörter</string>
+    <string name="password_all_empty_info">Verfügbare Passwörter werden hier angezeigt</string>
 
 
     <!-- Packages activity -->

@@ -220,6 +220,8 @@
     <string name="password_results_list_none">No passwords</string>
     <string name="password_results_weak_title">Weak passwords</string>
     <string name="password_results_weak_none">No weak passwords</string>
+    <string name="password_all_empty_title">No passwords</string>
+    <string name="password_all_empty_info">Available passwords are shown here</string>
 
 
     <!-- Packages activity -->

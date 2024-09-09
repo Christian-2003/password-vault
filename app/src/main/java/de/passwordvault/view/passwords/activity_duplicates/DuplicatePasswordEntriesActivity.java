@@ -90,6 +90,20 @@ public class DuplicatePasswordEntriesActivity extends PasswordVaultActivity<Dupl
 
 
     /**
+     * Method is called whenever the back button is closed while the activity is open.
+     */
+    @Override
+    public void finish() {
+        if (viewModel.getSearchQuery() != null) {
+            disableSearch();
+        }
+        else {
+            super.finish();
+        }
+    }
+
+
+    /**
      * Method is called whenever the activity is created.
      *
      * @param savedInstanceState    Previously saved state of the instance.
@@ -135,14 +149,7 @@ public class DuplicatePasswordEntriesActivity extends PasswordVaultActivity<Dupl
         });
 
         //Back button:
-        findViewById(R.id.button_back).setOnClickListener(view -> {
-            if (viewModel.getSearchQuery() != null) {
-                disableSearch();
-            }
-            else {
-                finish();
-            }
-        });
+        findViewById(R.id.button_back).setOnClickListener(view -> finish());
 
         //Search button:
         searchButton = findViewById(R.id.button_search);
