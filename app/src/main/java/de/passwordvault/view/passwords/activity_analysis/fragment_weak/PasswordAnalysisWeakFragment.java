@@ -5,15 +5,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.passwords.Password;
-import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
 import de.passwordvault.view.entries.activity_entry.EntryActivity;
-import de.passwordvault.view.utils.recycler_view.OnRecyclerItemClickListener;
-import de.passwordvault.view.passwords.PasswordsRecyclerViewAdapter;
-import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
+import de.passwordvault.view.utils.components.PasswordVaultFragment;
 import de.passwordvault.view.passwords.activity_analysis.PasswordAnalysisViewModel;
 
 
@@ -21,30 +17,21 @@ import de.passwordvault.view.passwords.activity_analysis.PasswordAnalysisViewMod
  * Class implements the fragment used to display weak passwords to the user.
  *
  * @author  Christian-2003
- * @version 3.5.2
+ * @version 3.7.0
  */
-public class PasswordAnalysisWeakFragment extends PasswordVaultBaseFragment implements OnRecyclerItemClickListener<Password> {
+public class PasswordAnalysisWeakFragment extends PasswordVaultFragment<PasswordAnalysisViewModel> {
 
     /**
-     * Attribute stores the view model for the fragment.
+     * Attribute stores the adapter for the fragment.
      */
-    private PasswordAnalysisViewModel viewModel;
-
-    /**
-     * Attribute stores the inflated view for the fragment.
-     */
-    private View view;
+    private PasswordAnalysisWeakRecyclerViewAdapter adapter;
 
 
     /**
-     * Method is called whenever the fragment is created.
-     *
-     * @param savedInstanceState    Previously saved state of the instance.
+     * Constructor instantiates a new fragment.
      */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        viewModel = new ViewModelProvider(requireActivity()).get(PasswordAnalysisViewModel.class);
+    public PasswordAnalysisWeakFragment() {
+        super(PasswordAnalysisViewModel.class, R.layout.fragment_password_analysis_weak);
     }
 
 
@@ -63,29 +50,25 @@ public class PasswordAnalysisWeakFragment extends PasswordVaultBaseFragment impl
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_password_analysis_weak, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
-        boolean passwordsFound = PasswordSecurityAnalysis.getInstance().getData().size() != 0;
-        view.findViewById(R.id.container_none).setVisibility(passwordsFound ? View.GONE : View.VISIBLE);
-
-        PasswordsRecyclerViewAdapter adapter = new PasswordsRecyclerViewAdapter(viewModel.getWeakPasswords(), this, true);
-        RecyclerView recyclerView = view.findViewById(R.id.passwords_recycler_view);
-        recyclerView.setVisibility(passwordsFound ? View.VISIBLE : View.GONE);
+        adapter = new PasswordAnalysisWeakRecyclerViewAdapter(requireContext(), viewModel);
+        adapter.setItemClickListener(this::onItemClick);
+        RecyclerView recyclerView = fragmentView.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(adapter);
 
-        return view;
+        return fragmentView;
     }
 
 
     /**
      * Method is called when the item which is passed as argument is clicked by the user.
      *
-     * @param item      Clicked item.
      * @param position  Index of the clicked item.
      */
-    @Override
-    public void onItemClick(Password item, int position) {
+    public void onItemClick(int position) {
         Intent intent = new Intent(requireActivity(), EntryActivity.class);
+        Password item = viewModel.getWeakPasswords().get(position - PasswordAnalysisWeakRecyclerViewAdapter.OFFSET_PASSWORDS);
         intent.putExtra("uuid", item.getEntryUuid());
         startActivity(intent);
     }

@@ -20,6 +20,9 @@ import de.passwordvault.view.utils.components.PasswordVaultFragment;
  */
 public class PasswordAnalysisDuplicatesFragment extends PasswordVaultFragment<PasswordAnalysisDuplicatesViewModel> {
 
+    /**
+     * Constructor instantiates a new fragment.
+     */
     public PasswordAnalysisDuplicatesFragment() {
         super(PasswordAnalysisDuplicatesViewModel.class, R.layout.fragment_password_analysis_duplicates);
     }
