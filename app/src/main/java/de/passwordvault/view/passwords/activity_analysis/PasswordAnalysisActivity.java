@@ -3,7 +3,6 @@ package de.passwordvault.view.passwords.activity_analysis;
 import android.os.Bundle;
 import android.view.View;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -13,7 +12,7 @@ import de.passwordvault.model.Observable;
 import de.passwordvault.model.Observer;
 import de.passwordvault.model.analysis.passwords.Password;
 import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
-import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
+import de.passwordvault.view.utils.components.PasswordVaultActivity;
 
 
 /**
@@ -22,12 +21,7 @@ import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
  * @author  Christian-2003
  * @version 3.4.0
  */
-public class PasswordAnalysisActivity extends PasswordVaultBaseActivity implements Observer<ArrayList<Password>> {
-
-    /**
-     * Attribute stores the view model of the activity.
-     */
-    private PasswordAnalysisViewModel viewModel;
+public class PasswordAnalysisActivity extends PasswordVaultActivity<PasswordAnalysisViewModel> implements Observer<ArrayList<Password>> {
 
     /**
      * Attribute stores the adapter for the view pager which shows the different tabs of the activity.
@@ -40,6 +34,11 @@ public class PasswordAnalysisActivity extends PasswordVaultBaseActivity implemen
     private ViewPager2 viewPager;
 
 
+    public PasswordAnalysisActivity() {
+        super(PasswordAnalysisViewModel.class, R.layout.activity_password_analysis);
+    }
+
+
     /**
      * Method creates a new activity.
      *
@@ -48,8 +47,6 @@ public class PasswordAnalysisActivity extends PasswordVaultBaseActivity implemen
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_password_analysis);
-        viewModel = new ViewModelProvider(this).get(PasswordAnalysisViewModel.class);
 
         findViewById(R.id.button_back).setOnClickListener(view -> finish());
         findViewById(R.id.button_reload).setOnClickListener(view -> restartAnalysis());
@@ -79,14 +76,14 @@ public class PasswordAnalysisActivity extends PasswordVaultBaseActivity implemen
      * @param showResults   Whether to show the analysis results or the waiting screen.
      */
     public void showAnalysisResults(boolean showResults) {
-        findViewById(R.id.password_analysis_container_analyzing).setVisibility(showResults ? View.GONE : View.VISIBLE);
+        findViewById(R.id.progress_bar).setVisibility(showResults ? View.GONE : View.VISIBLE);
         findViewById(R.id.password_analysis_container_results).setVisibility(showResults ? View.VISIBLE : View.GONE);
         if (showResults) {
             adapter = new PasswordAnalysisFragmentStateAdapter(this);
-            viewPager = findViewById(R.id.password_analysis_view_pager);
+            viewPager = findViewById(R.id.view_pager);
             viewPager.setAdapter(adapter);
 
-            TabLayout tabs = findViewById(R.id.password_analysis_tabs);
+            TabLayout tabs = findViewById(R.id.tabs);
             new TabLayoutMediator(tabs, viewPager, (tab, position) -> PasswordAnalysisActivity.this.viewModel.updateTabName(tab, position)).attach();
         }
     }
