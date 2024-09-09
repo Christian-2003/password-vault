@@ -15,6 +15,7 @@ n/a
 * Changed color of background when swiping an item to delete from _@color/pv\_red_ to _@color/text\_critical_.
 * Implemented new framework for recycler item swiping.
 * Added `MoreDialog` which dynamically displays a list of clickable items to the user.
+* Introduced new base class `PasswordVaultFragment` for all fragments that handles basic tasks like view model management.
 
 <br/>
 

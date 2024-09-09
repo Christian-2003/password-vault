@@ -5,42 +5,23 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
 import de.passwordvault.view.passwords.activity_duplicates.DuplicatePasswordEntriesActivity;
-import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
+import de.passwordvault.view.utils.components.PasswordVaultFragment;
 
 
 /**
  * Class implements the fragment that shows a list of duplicate passwords to the user.
  *
  * @author  Christian-2003
- * @version 3.4.0
+ * @version 3.7.0
  */
-public class PasswordAnalysisDuplicatesFragment extends PasswordVaultBaseFragment {
+public class PasswordAnalysisDuplicatesFragment extends PasswordVaultFragment<PasswordAnalysisDuplicatesViewModel> {
 
-    /**
-     * Attribute stores the view model of the fragment.
-     */
-    private PasswordAnalysisDuplicatesViewModel viewModel;
-
-    /**
-     * Attribute stores the inflated view of the fragment.
-     */
-    private View view;
-
-
-    /**
-     * Method is called whenever the fragment is created.
-     *
-     * @param savedInstanceState    Previously saved state of the instance.
-     */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        viewModel = new ViewModelProvider(requireActivity()).get(PasswordAnalysisDuplicatesViewModel.class);
+    public PasswordAnalysisDuplicatesFragment() {
+        super(PasswordAnalysisDuplicatesViewModel.class, R.layout.fragment_password_analysis_duplicates);
     }
 
 
@@ -59,14 +40,14 @@ public class PasswordAnalysisDuplicatesFragment extends PasswordVaultBaseFragmen
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_password_analysis_duplicates, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         PasswordAnalysisDuplicatesRecyclerViewAdapter adapter = new PasswordAnalysisDuplicatesRecyclerViewAdapter(requireActivity(), viewModel);
         adapter.setItemClickListener(this::onPasswordClicked);
-        RecyclerView recyclerView = view.findViewById(R.id.duplicate_passwords_recycler_view);
+        RecyclerView recyclerView = fragmentView.findViewById(R.id.duplicate_passwords_recycler_view);
         recyclerView.setAdapter(adapter);
 
-        return view;
+        return fragmentView;
     }
 
 
