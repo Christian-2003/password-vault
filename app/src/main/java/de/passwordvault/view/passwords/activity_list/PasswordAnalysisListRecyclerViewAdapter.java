@@ -281,8 +281,8 @@ public class PasswordAnalysisListRecyclerViewAdapter extends RecyclerViewAdapter
      * @param position  Position whose entry to return.
      * @return          Entry at the specified position.
      */
-    public Password getEntryForAdapterPosition(int position) {
-        return filteredPasswords.get(position + OFFSET_PASSWORDS);
+    public Password getPasswordForAdapterPosition(int position) {
+        return filteredPasswords.get(position - OFFSET_PASSWORDS);
     }
 
 }

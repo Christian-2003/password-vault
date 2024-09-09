@@ -216,7 +216,7 @@ public class DuplicatePasswordEntriesRecyclerViewAdapter extends RecyclerViewAda
      * @return          Entry at the specified position.
      */
     public EntryAbbreviated getEntryForAdapterPosition(int position) {
-        return filteredEntries.get(position + OFFSET_ENTRIES);
+        return filteredEntries.get(position - OFFSET_ENTRIES);
     }
 
 }

@@ -3,12 +3,17 @@ package de.passwordvault.view.passwords.activity_list;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
-
 import java.util.ArrayList;
-
 import de.passwordvault.model.analysis.passwords.Password;
 import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
 
+
+/**
+ * Class implements the view model for the {@link PasswordAnalysisListActivity}.
+ *
+ * @author  Christian-2003
+ * @version 3.7.0
+ */
 public class PasswordAnalysisListViewModel extends ViewModel {
 
     /**

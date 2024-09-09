@@ -11,16 +11,16 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.passwords.Password;
-import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
 import de.passwordvault.model.entry.EntryAbbreviated;
+import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.view.entries.activity_entry.EntryActivity;
+import de.passwordvault.view.passwords.activity_duplicates.DuplicatePasswordEntriesRecyclerViewAdapter;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
-import de.passwordvault.view.utils.recycler_view.OnRecyclerItemClickListener;
-import de.passwordvault.view.passwords.PasswordsRecyclerViewAdapter;
-import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 
 
 /**
@@ -28,7 +28,7 @@ import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
  * password security analysis.
  *
  * @author  Christian-2003
- * @version 3.5.2
+ * @version 3.7.0
  */
 public class PasswordAnalysisListActivity extends PasswordVaultActivity<PasswordAnalysisListViewModel> {
 
@@ -139,17 +139,10 @@ public class PasswordAnalysisListActivity extends PasswordVaultActivity<Password
      * @param position  Position of the item clicked.
      */
     private void onItemClicked(int position) {
-        /*
-        EntryAbbreviated entry = adapter.getEntryForAdapterPosition(position);
+        Password password = adapter.getPasswordForAdapterPosition(position);
         Intent intent = new Intent(this, EntryActivity.class);
-        intent.putExtra("uuid", entry.getUuid());
-        try {
-            entryLauncher.launch(intent);
-        }
-        catch (Exception e) {
-            //Ignore...
-        }
-        */
+        intent.putExtra("uuid", password.getEntryUuid());
+        startActivity(intent);
     }
 
 }
