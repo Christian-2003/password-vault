@@ -258,6 +258,7 @@
     <style name="pv.tab_layout">
         <item name="tabTextColor">@color/pv_text</item>
         <item name="tabSelectedTextColor">@color/pv_text_primary</item>
+        <item name="android:background">@color/background_app_bar</item>
     </style>
 
 
