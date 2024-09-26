@@ -10,12 +10,10 @@
     tools:context=".view.entries.activity_packages.fragment_list.PackagesListFragment">
 
     <!-- Progress bar shown while packages load -->
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/container_progress_bar"
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/space_horizontal"
-        android:layout_marginVertical="@dimen/space_vertical"
         android:layout_gravity="center"
         android:indeterminate="true"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,35 +23,10 @@
 
 
     <!-- Content shown after packages are loaded -->
-    <RelativeLayout
-        android:id="@+id/container_content"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <de.passwordvault.view.utils.components.SearchBarView
-            android:id="@+id/search_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/space_vertical"/>
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/space_horizontal"
-            android:layout_below="@id/search_bar"
-            android:text="@string/packages_list_title"
-            style="@style/pv.text.highlight"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/packages_list_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/title"
-            android:scrollbars="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            style="@style/pv.container"/>
-
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
 </LinearLayout>

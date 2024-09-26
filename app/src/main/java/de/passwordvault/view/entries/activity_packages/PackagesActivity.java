@@ -16,6 +16,7 @@ import de.passwordvault.model.packages.SerializablePackageCollection;
 import de.passwordvault.view.entries.activity_add_entry.AddEntryActivity;
 import de.passwordvault.view.entries.activity_packages.fragment_list.PackagesListFragment;
 import de.passwordvault.view.entries.activity_packages.fragment_selected.PackagesSelectedFragment;
+import de.passwordvault.view.utils.components.PasswordVaultActivity;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 
 
@@ -26,23 +27,25 @@ import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
  * @author  Christian-2003
  * @version 3.5.2
  */
-public class PackagesActivity extends PasswordVaultBaseActivity {
+public class PackagesActivity extends PasswordVaultActivity<PackagesViewModel> {
 
     /**
      * Field stores the key that needs to be used when passing the selected package as argument.
      */
     public static final String KEY_PACKAGES = "packages";
 
-
-    /**
-     * Attribute stores the view model of the activity.
-     */
-    private PackagesViewModel viewModel;
-
     /**
      * Attribute stores the adapter for the view pager displaying the tabs.
      */
     private PackagesFragmentStateAdapter adapter;
+
+
+    /**
+     * Constructor instantiates a new activity.
+     */
+    public PackagesActivity() {
+        super(PackagesViewModel.class, R.layout.activity_packages);
+    }
 
 
     /**
@@ -53,8 +56,6 @@ public class PackagesActivity extends PasswordVaultBaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(PackagesViewModel.class);
-        setContentView(R.layout.activity_packages);
 
         Bundle args = getIntent().getExtras();
         if (!viewModel.processArguments(args)) {
@@ -99,7 +100,7 @@ public class PackagesActivity extends PasswordVaultBaseActivity {
     @Override
     public void finish() {
         Intent intent = new Intent(PackagesActivity.this, AddEntryActivity.class);
-        SerializablePackageCollection packages = new SerializablePackageCollection(viewModel.getPackages());
+        SerializablePackageCollection packages = new SerializablePackageCollection(viewModel.getSelectedPackages());
         intent.putExtra(PackagesActivity.KEY_PACKAGES, packages);
         setResult(RESULT_OK, intent);
         super.finish();
@@ -137,7 +138,7 @@ public class PackagesActivity extends PasswordVaultBaseActivity {
         Fragment fragment = adapter.getItemAt(1);
         if (fragment instanceof PackagesListFragment) {
             PackagesListFragment listFragment = (PackagesListFragment)fragment;
-            listFragment.searchButtonClicked();
+            //listFragment.searchButtonClicked();
         }
         else if (fragment == null) {
             Log.e("PA", "Instance null");

@@ -230,6 +230,8 @@
     <string name="packages_selected_title">Selected apps</string>
     <string name="packages_selected_none">None selected</string>
     <string name="packages_list_none">None available</string>
+    <string name="packages_list_empty_headline">No apps available</string>
+    <string name="packages_list_empty_support">Apps are shown here that match the query</string>
 
 
     <!-- Login activity -->

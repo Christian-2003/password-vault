@@ -198,7 +198,6 @@ public class DuplicatePasswordEntriesRecyclerViewAdapter extends RecyclerViewAda
             resetFilter();
             return;
         }
-        int displayedEntries = filteredEntries.size();
         filteredEntries.clear();
         query = query.toLowerCase();
         for (EntryAbbreviated entry : viewModel.getEntries()) {

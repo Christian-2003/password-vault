@@ -71,9 +71,9 @@ public class PackagesSelectedFragment extends PasswordVaultBaseFragment implemen
     @Override
     public void onItemClick(Package item, int position) {
         try {
-            viewModel.getPackages().remove(item);
+            viewModel.getSelectedPackages().remove(item);
             adapter.notifyDataSetChanged();
-            if (viewModel.getPackages().isEmpty()) {
+            if (viewModel.getSelectedPackages().isEmpty()) {
                 //Removed last package:
                 setupList();
             }
@@ -89,7 +89,7 @@ public class PackagesSelectedFragment extends PasswordVaultBaseFragment implemen
      * Method informs the adapter of the fragment, that a package was added to the selected packages.
      */
     public void notifyPackageAdded() {
-        if (viewModel.getPackages().size() == 1) {
+        if (viewModel.getSelectedPackages().size() == 1) {
             //Added first package:
             setupList();
         }
@@ -101,12 +101,12 @@ public class PackagesSelectedFragment extends PasswordVaultBaseFragment implemen
      * Method sets up the recycler view displaying the packages.
      */
     private void setupList() {
-        view.findViewById(R.id.packages_selected_none).setVisibility(viewModel.getPackages().size() == 0 ? View.VISIBLE : View.GONE);
+        view.findViewById(R.id.packages_selected_none).setVisibility(viewModel.getSelectedPackages().size() == 0 ? View.VISIBLE : View.GONE);
 
         RecyclerView recyclerView = view.findViewById(R.id.packages_selected_recycler_view);
-        recyclerView.setVisibility(viewModel.getPackages().size() == 0 ? View.GONE : View.VISIBLE);
+        recyclerView.setVisibility(viewModel.getSelectedPackages().size() == 0 ? View.GONE : View.VISIBLE);
         if (adapter == null) {
-            adapter = new PackagesRecyclerViewAdapter(viewModel.getPackages(), null, this);
+            adapter = new PackagesRecyclerViewAdapter(viewModel.getSelectedPackages(), null, this);
             recyclerView.setAdapter(adapter);
         }
     }
