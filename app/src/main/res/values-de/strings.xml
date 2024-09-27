@@ -229,7 +229,9 @@
     <string name="packages_selected_none">Keine ausgewählt</string>
     <string name="packages_list_none">Keine Verfügbar</string>
     <string name="packages_list_empty_headline">Keine Apps verfügbar</string>
-    <string name="packages_list_empty_support">Apps die dem Filter entsprechen werden hier angezeigt</string>
+    <string name="packages_list_empty_support">Apps, die dem Filter entsprechen, werden hier angezeigt</string>
+    <string name="packages_selected_empty_headline">Keine Apps ausgewählt</string>
+    <string name="packages_selected_empty_support">Ausgewählte Apps werden hier angezeigt</string>
 
 
     <!-- Login activity -->

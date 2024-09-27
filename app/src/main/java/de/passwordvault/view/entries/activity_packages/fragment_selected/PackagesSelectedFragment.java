@@ -6,13 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
 import de.passwordvault.model.packages.Package;
 import de.passwordvault.view.entries.activity_packages.PackagesActivity;
+import de.passwordvault.view.utils.components.PasswordVaultFragment;
 import de.passwordvault.view.utils.recycler_view.OnRecyclerItemClickListener;
-import de.passwordvault.view.entries.activity_packages.PackagesRecyclerViewAdapter;
 import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
 import de.passwordvault.view.entries.activity_packages.PackagesViewModel;
 
@@ -24,22 +25,17 @@ import de.passwordvault.view.entries.activity_packages.PackagesViewModel;
  * @author  Christian-2003
  * @version 3.5.2
  */
-public class PackagesSelectedFragment extends PasswordVaultBaseFragment implements OnRecyclerItemClickListener<Package> {
-
-    /**
-     * Attribute stores the view model of the fragment and it's hosting activity.
-     */
-    private PackagesViewModel viewModel;
-
-    /**
-     * Attribute stores the inflated view of the fragment.
-     */
-    private View view;
+public class PackagesSelectedFragment extends PasswordVaultFragment<PackagesViewModel> {
 
     /**
      * Attribute stores the adapter for the recycler view displaying the selected packages.
      */
-    private PackagesRecyclerViewAdapter adapter;
+    private PackagesSelectedRecyclerViewAdapter adapter;
+
+
+    public PackagesSelectedFragment() {
+        super(PackagesViewModel.class, R.layout.fragment_packages_selected);
+    }
 
 
     /**
@@ -53,31 +49,39 @@ public class PackagesSelectedFragment extends PasswordVaultBaseFragment implemen
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_packages_selected, container, false);
-        viewModel = new ViewModelProvider(requireActivity()).get(PackagesViewModel.class);
+        super.onCreateView(inflater, container, savedInstanceState);
 
-        setupList();
+        if (adapter == null) {
+            adapter = new PackagesSelectedRecyclerViewAdapter(requireActivity(), viewModel);
+            adapter.setItemClickListener(this::onDeleteClicked);
+        }
+        RecyclerView recyclerView = fragmentView.findViewById(R.id.recycler_view);
+        recyclerView.setAdapter(adapter);
 
-        return view;
+        return fragmentView;
     }
 
 
+
+
+
     /**
-     * Method is called when the item which is passed as argument is clicked by the user.
+     * Method is called whenever the delete button for a selected package is clicked.
      *
-     * @param item      Clicked item.
-     * @param position  Index of the clicked item.
+     * @param position  Index of the item clicked to delete.
      */
-    @Override
-    public void onItemClick(Package item, int position) {
+    public void onDeleteClicked(int position) {
         try {
-            viewModel.getSelectedPackages().remove(item);
-            adapter.notifyDataSetChanged();
-            if (viewModel.getSelectedPackages().isEmpty()) {
-                //Removed last package:
-                setupList();
+            Package packageToDelete = adapter.getPackageForAdapterPosition(position);
+            viewModel.getSelectedPackages().remove(packageToDelete);
+            adapter.notifyPackageRemoved(position);
+            FragmentActivity activity = requireActivity();
+            if (activity instanceof PackagesActivity) {
+                ((PackagesActivity)activity).notifyPackageUnselected();
             }
-            ((PackagesActivity)requireActivity()).notifyPackageUnselected();
+            if (viewModel.getSelectedPackages().size() == 0) {
+                adapter.notifyItemChanged(PackagesSelectedRecyclerViewAdapter.POSITION_EMPTY_PLACEHOLDER);
+            }
         }
         catch (IndexOutOfBoundsException e) {
             //This should not be triggered. Better be safe than sorry...
@@ -89,25 +93,9 @@ public class PackagesSelectedFragment extends PasswordVaultBaseFragment implemen
      * Method informs the adapter of the fragment, that a package was added to the selected packages.
      */
     public void notifyPackageAdded() {
+        adapter.notifyPackageAdded();
         if (viewModel.getSelectedPackages().size() == 1) {
-            //Added first package:
-            setupList();
-        }
-        adapter.notifyItemInserted(adapter.getItemCount());
-    }
-
-
-    /**
-     * Method sets up the recycler view displaying the packages.
-     */
-    private void setupList() {
-        view.findViewById(R.id.packages_selected_none).setVisibility(viewModel.getSelectedPackages().size() == 0 ? View.VISIBLE : View.GONE);
-
-        RecyclerView recyclerView = view.findViewById(R.id.packages_selected_recycler_view);
-        recyclerView.setVisibility(viewModel.getSelectedPackages().size() == 0 ? View.GONE : View.VISIBLE);
-        if (adapter == null) {
-            adapter = new PackagesRecyclerViewAdapter(viewModel.getSelectedPackages(), null, this);
-            recyclerView.setAdapter(adapter);
+            adapter.notifyItemChanged(PackagesSelectedRecyclerViewAdapter.POSITION_EMPTY_PLACEHOLDER);
         }
     }
 

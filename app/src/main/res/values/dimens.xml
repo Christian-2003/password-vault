@@ -48,4 +48,9 @@
     <dimen name="text_s">14sp</dimen>
     <dimen name="text_xs">12sp</dimen>
 
+    <dimen name="corner_l">24dp</dimen>
+    <dimen name="corner_m">16dp</dimen>
+    <dimen name="corner_s">12dp</dimen>
+    <dimen name="corner_xs">8dp</dimen>
+
 </resources>

@@ -18,14 +18,12 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/space_horizontal_between">
 
-        <com.google.android.material.imageview.ShapeableImageView
+        <ImageView
             android:id="@+id/image_logo"
             android:layout_width="@dimen/image_m"
             android:layout_height="@dimen/image_m"
             android:layout_weight="0"
             android:layout_gravity="center"
-            android:background="@color/background_container"
-            app:shapeAppearanceOverlay="@style/rounded_corners"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -33,11 +31,13 @@
 
         <TextView
             android:id="@+id/text_abbreviation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/image_m"
+            android:layout_height="@dimen/image_m"
             android:textSize="22sp"
             android:textColor="@color/primary"
+            android:background="@drawable/background_logo_abbreviation"
             android:textStyle="bold"
+            android:gravity="center"
             tools:text="A"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

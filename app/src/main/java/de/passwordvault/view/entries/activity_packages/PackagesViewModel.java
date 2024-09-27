@@ -35,10 +35,11 @@ public class PackagesViewModel extends ViewModel {
     private ArrayList<Package> allPackages;
 
     /**
-     * Attribute stores whether the search bar of the {@link PackagesListFragment}
-     * is visible.
+     * Attribute stores the search query entered by the user. If this is {@code null}, the search
+     * bar is currently invisible.
      */
-    private boolean searchBarVisible;
+    @Nullable
+    private String searchQuery;
 
 
     /**
@@ -47,7 +48,7 @@ public class PackagesViewModel extends ViewModel {
     public PackagesViewModel() {
         selectedPackages = null;
         allPackages = null;
-        searchBarVisible = false;
+        searchQuery = null;
     }
 
 
@@ -84,22 +85,26 @@ public class PackagesViewModel extends ViewModel {
         return allPackages;
     }
 
+
     /**
-     * Method returns whether the search bar is visible.
+     * Method changes the search query entered by the user. Pass {@code null} to indicate that the
+     * search query is currently not enabled.
      *
-     * @return  Whether the search bar is visible.
+     * @param searchQuery   Search query entered by the user.
      */
-    public boolean isSearchBarVisible() {
-        return searchBarVisible;
+    public void setSearchQuery(@Nullable String searchQuery) {
+        this.searchQuery = searchQuery;
     }
 
     /**
-     * Method changes whether the search bar is visible.
+     * Method returns the search query entered by the user. This is {@code null} if the search bar
+     * is currently not visible.
      *
-     * @param searchBarVisible  Whether the search bar is visible.
+     * @return  Search query entered by the user.
      */
-    public void setSearchBarVisible(boolean searchBarVisible) {
-        this.searchBarVisible = searchBarVisible;
+    @Nullable
+    public String getSearchQuery() {
+        return searchQuery;
     }
 
 

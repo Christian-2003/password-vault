@@ -3,8 +3,8 @@
 <shape
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <corners android:radius="@dimen/background_corner_radius"/>
+    <corners android:radius="@dimen/corner_l"/>
 
-    <solid android:color="@color/pv_container"/>
+    <solid android:color="@color/background_container"/>
 
 </shape>

@@ -1,7 +1,6 @@
-package de.passwordvault.view.entries.activity_packages.fragment_list;
+package de.passwordvault.view.entries.activity_packages.fragment_selected;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
@@ -15,23 +14,23 @@ import de.passwordvault.view.entries.activity_packages.PackagesRecyclerViewAdapt
 
 
 /**
- * Class implements the recycler view adapter for the {@link PackagesListFragment}.
+ * Class implements the recycler view adapter for the {@link PackagesSelectedFragment}.
  *
  * @author  Christian-2003
  * @version 3.7.0
  */
-public class PackagesListRecyclerViewAdapter extends PackagesRecyclerViewAdapter {
+public class PackagesSelectedRecyclerViewAdapter extends PackagesRecyclerViewAdapter {
 
     /**
      * Constructor instantiates a new recycler view adapter.
      *
      * @param context   Context for the adapter.
-     * @param viewModel View model for the adapter.
+     * @param viewModel View model from which to source the data.
      */
-    public PackagesListRecyclerViewAdapter(@NonNull Context context, @NonNull PackagesViewModel viewModel) {
+    public PackagesSelectedRecyclerViewAdapter(@NonNull Context context, @NonNull PackagesViewModel viewModel) {
         super(context, viewModel);
-        if (viewModel.getAllPackages() != null) {
-            filteredPackages.addAll(viewModel.getAllPackages());
+        if (viewModel.getSelectedPackages() != null) {
+            filteredPackages.addAll(viewModel.getSelectedPackages());
         }
     }
 
@@ -45,10 +44,10 @@ public class PackagesListRecyclerViewAdapter extends PackagesRecyclerViewAdapter
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (position == POSITION_EMPTY_PLACEHOLDER) {
             GenericEmptyPlaceholderViewHolder viewHolder = (GenericEmptyPlaceholderViewHolder)holder;
-            viewHolder.headlineTextView.setText(context.getString(R.string.packages_list_empty_headline));
-            viewHolder.supportTextView.setText(context.getString(R.string.packages_list_empty_support));
+            viewHolder.headlineTextView.setText(context.getString(R.string.packages_selected_empty_headline));
+            viewHolder.supportTextView.setText(context.getString(R.string.packages_selected_empty_support));
             viewHolder.imageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.el_packages));
-            if (filteredPackages.size() == 0) {
+            if (viewModel.getSelectedPackages() == null || viewModel.getSelectedPackages().size() == 0) {
                 viewHolder.itemView.setVisibility(View.VISIBLE);
                 viewHolder.itemView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             }
@@ -58,22 +57,24 @@ public class PackagesListRecyclerViewAdapter extends PackagesRecyclerViewAdapter
             }
         }
         else {
-            if (viewModel.getAllPackages() == null) {
+            if (viewModel.getSelectedPackages() == null) {
                 return;
             }
             PackageViewHolder viewHolder = (PackageViewHolder)holder;
-            Package p = filteredPackages.get(position - OFFSET_PACKAGES);
+            Package p = viewModel.getSelectedPackages().get(position - OFFSET_PACKAGES);
             viewHolder.nameTextView.setText(p.getAppName());
             viewHolder.logoImageView.setImageDrawable(p.getLogo());
-            viewHolder.removeButton.setVisibility(View.GONE);
-            viewHolder.selectedImageView.setVisibility(viewModel.getSelectedPackages().contains(p) ? View.VISIBLE : View.GONE);
-            viewHolder.itemView.setOnClickListener(view -> {
+            viewHolder.selectedImageView.setVisibility(View.GONE);
+            viewHolder.itemView.setClickable(false);
+            viewHolder.itemView.setFocusable(false);
+            viewHolder.removeButton.setOnClickListener((view) -> {
                 if (itemClickListener != null) {
                     itemClickListener.onAction(holder.getAdapterPosition());
                 }
             });
         }
     }
+
 
     /**
      * Method returns the item view type for the specified position.
@@ -94,7 +95,32 @@ public class PackagesListRecyclerViewAdapter extends PackagesRecyclerViewAdapter
      */
     @Override
     public int getItemCount() {
-        return filteredPackages.size() + 1;
+        int count = 1;
+        if (viewModel.getSelectedPackages() != null) {
+            count += viewModel.getSelectedPackages().size();
+        }
+        return count;
+    }
+
+
+    /**
+     * Method notifies the adapter that a package at the specified position has been removed.
+     *
+     * @param position  Adapter position of the package removed.
+     */
+    public void notifyPackageRemoved(int position) {
+        filteredPackages.remove(position - OFFSET_PACKAGES);
+        notifyItemRemoved(position);
+    }
+
+    /**
+     * Method notifies the adapter that a package has been added (to the end of the adapter's dataset).
+     */
+    public void notifyPackageAdded() {
+        if (viewModel.getSelectedPackages().size() > 0) {
+            filteredPackages.add(viewModel.getSelectedPackages().get(viewModel.getSelectedPackages().size() - 1));
+            notifyItemInserted(getItemCount());
+        }
     }
 
 
@@ -103,8 +129,8 @@ public class PackagesListRecyclerViewAdapter extends PackagesRecyclerViewAdapter
      */
     public void resetFilter() {
         filteredPackages.clear();
-        if (viewModel.getAllPackages() != null) {
-            filteredPackages.addAll(viewModel.getAllPackages());
+        if (viewModel.getSelectedPackages() != null) {
+            filteredPackages.addAll(viewModel.getSelectedPackages());
         }
         notifyDataSetChanged();
     }
@@ -122,15 +148,14 @@ public class PackagesListRecyclerViewAdapter extends PackagesRecyclerViewAdapter
         }
         filteredPackages.clear();
         query = query.toLowerCase();
-        if (viewModel.getAllPackages() != null) {
-            for (Package p : viewModel.getAllPackages()) {
+        if (viewModel.getSelectedPackages() != null) {
+            for (Package p : viewModel.getSelectedPackages()) {
                 if (p.getPackageName().toLowerCase().contains(query) || p.getAppName().toLowerCase().contains(query)) {
                     filteredPackages.add(p);
                 }
             }
         }
         notifyDataSetChanged();
-        Log.d("Adapter", "Filtered " + filteredPackages.size() + " packages for " + query);
     }
 
     /**

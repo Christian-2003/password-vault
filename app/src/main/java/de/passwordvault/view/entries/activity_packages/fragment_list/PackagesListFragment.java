@@ -1,15 +1,10 @@
 package de.passwordvault.view.entries.activity_packages.fragment_list;
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
@@ -17,12 +12,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
 import de.passwordvault.model.packages.Package;
-import de.passwordvault.model.packages.PackagesManager;
 import de.passwordvault.view.entries.activity_packages.PackagesActivity;
 import de.passwordvault.view.utils.recycler_view.OnRecyclerItemClickListener;
-import de.passwordvault.view.entries.activity_packages.PackagesRecyclerViewAdapter;
 import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
-import de.passwordvault.view.utils.components.SearchBarView;
 import de.passwordvault.view.entries.activity_packages.PackagesViewModel;
 
 
@@ -33,7 +25,7 @@ import de.passwordvault.view.entries.activity_packages.PackagesViewModel;
  * @author  Christian-2003
  * @version 3.5.2
  */
-public class PackagesListFragment extends PasswordVaultBaseFragment implements OnRecyclerItemClickListener<Package> {
+public class PackagesListFragment extends PasswordVaultBaseFragment {
 
     /**
      * Attribute stores the view model of the fragment and it's host activity.
@@ -73,30 +65,24 @@ public class PackagesListFragment extends PasswordVaultBaseFragment implements O
 
 
     /**
-     * Method is called when the item which is passed as argument is clicked by the user.
-     *
-     * @param item      Clicked item.
-     * @param position  Index of the clicked item.
-     */
-    @Override
-    public void onItemClick(Package item, int position) {
-        if (!viewModel.getSelectedPackages().containsPackageName(item.getPackageName())) {
-            viewModel.getSelectedPackages().add(item);
-            FragmentActivity activity = requireActivity();
-            if (activity instanceof PackagesActivity) {
-                ((PackagesActivity)activity).notifyPackageAdded();
-            }
-            adapter.notifyItemChanged(position);
-        }
-    }
-
-
-    /**
      * Method notifies the adapter that the data has been changed.
      */
     public void notifyPackageUnselected() {
         if (adapter != null) {
             adapter.notifyDataSetChanged();
+        }
+    }
+
+
+    public void filter(String searchQuery) {
+        if (adapter != null) {
+            adapter.filter(searchQuery);
+        }
+    }
+
+    public void resetFilter() {
+        if (adapter != null) {
+            adapter.resetFilter();
         }
     }
 

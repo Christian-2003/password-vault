@@ -12,13 +12,13 @@
     android:focusable="true"
     android:paddingVertical="@dimen/space_vertical">
 
-    <com.google.android.material.imageview.ShapeableImageView
+    <ImageView
         android:id="@+id/image_logo"
         android:layout_width="@dimen/image_m"
         android:layout_height="@dimen/image_m"
         android:layout_marginStart="@dimen/space_horizontal"
         tools:src="@mipmap/ic_launcher"
-        app:shapeAppearanceOverlay="@style/rounded_corners"/>
+        android:scaleType="centerCrop"/>
 
     <TextView
         android:id="@+id/text_name"

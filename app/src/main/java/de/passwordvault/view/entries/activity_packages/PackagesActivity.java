@@ -1,10 +1,17 @@
 package de.passwordvault.view.entries.activity_packages;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -39,6 +46,12 @@ public class PackagesActivity extends PasswordVaultActivity<PackagesViewModel> {
      */
     private PackagesFragmentStateAdapter adapter;
 
+    private TextView appBarTextView;
+
+    private EditText searchBarEditText;
+
+    private ImageButton searchButton;
+
 
     /**
      * Constructor instantiates a new activity.
@@ -57,27 +70,65 @@ public class PackagesActivity extends PasswordVaultActivity<PackagesViewModel> {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //Process arguments:
         Bundle args = getIntent().getExtras();
         if (!viewModel.processArguments(args)) {
             finish();
             return;
         }
 
+        //Setup app bar:
+        appBarTextView = findViewById(R.id.text_appbar);
+        appBarTextView.setVisibility(viewModel.getSearchQuery() == null ? View.VISIBLE : View.GONE);
+        searchBarEditText = findViewById(R.id.input_search);
+        searchBarEditText.setVisibility(viewModel.getSearchQuery() == null ? View.GONE : View.VISIBLE);
+        searchBarEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Fragment fragment = adapter.getItemAt(1);
+                if (fragment instanceof PackagesListFragment) {
+                    ((PackagesListFragment)fragment).filter(charSequence.toString());
+                    Log.d("Filter", "Search query: " + charSequence.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        //Back button:
         findViewById(R.id.button_back).setOnClickListener(view -> finish());
 
+        //Search button:
+        searchButton = findViewById(R.id.button_search);
+        searchButton.setOnClickListener(view -> enableSearch(true));
+
+        //View pager:
         adapter = new PackagesFragmentStateAdapter(this);
         ViewPager2 viewPager = findViewById(R.id.packages_view_pager);
         viewPager.setAdapter(adapter);
 
-        ImageButton searchButton = findViewById(R.id.button_search);
-        searchButton.setOnClickListener(this::searchButtonClicked);
-
+        //Tab layout:
         TabLayout tabs = findViewById(R.id.packages_tabs);
         new TabLayoutMediator(tabs, viewPager, (tab, position) -> PackagesActivity.this.viewModel.updateTabName(tab, position)).attach();
         tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                searchButton.setVisibility(tab.getPosition() == 1 ? View.VISIBLE : View.GONE);
+                searchButton.setVisibility(tab.getPosition() == 1 && viewModel.getSearchQuery() == null ? View.VISIBLE : View.GONE);
+                if (tab.getPosition() == 1 && viewModel.getSearchQuery() != null) {
+                    enableSearch(false);
+                }
+                if (tab.getPosition() == 0) {
+                    disableSearch(false);
+                    searchButton.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -99,11 +150,16 @@ public class PackagesActivity extends PasswordVaultActivity<PackagesViewModel> {
      */
     @Override
     public void finish() {
-        Intent intent = new Intent(PackagesActivity.this, AddEntryActivity.class);
-        SerializablePackageCollection packages = new SerializablePackageCollection(viewModel.getSelectedPackages());
-        intent.putExtra(PackagesActivity.KEY_PACKAGES, packages);
-        setResult(RESULT_OK, intent);
-        super.finish();
+        if (searchBarEditText.getVisibility() == View.VISIBLE) {
+            disableSearch(true);
+        }
+        else {
+            Intent intent = new Intent(PackagesActivity.this, AddEntryActivity.class);
+            SerializablePackageCollection packages = new SerializablePackageCollection(viewModel.getSelectedPackages());
+            intent.putExtra(PackagesActivity.KEY_PACKAGES, packages);
+            setResult(RESULT_OK, intent);
+            super.finish();
+        }
     }
 
 
@@ -130,21 +186,37 @@ public class PackagesActivity extends PasswordVaultActivity<PackagesViewModel> {
 
 
     /**
-     * Method is called whenever the search-button is clicked.
-     *
-     * @param button    Button that was clicked.
+     * Method disables the search bar.
      */
-    private void searchButtonClicked(View button) {
-        Fragment fragment = adapter.getItemAt(1);
-        if (fragment instanceof PackagesListFragment) {
-            PackagesListFragment listFragment = (PackagesListFragment)fragment;
-            //listFragment.searchButtonClicked();
+    private void disableSearch(boolean clearQuery) {
+        searchBarEditText.setVisibility(View.GONE);
+        appBarTextView.setVisibility(View.VISIBLE);
+        searchButton.setVisibility(View.VISIBLE);
+        if (clearQuery) {
+            viewModel.setSearchQuery(null);
+            Fragment fragment = adapter.getItemAt(1);
+            if (fragment instanceof PackagesListFragment) {
+                ((PackagesListFragment)fragment).resetFilter();
+            }
         }
-        else if (fragment == null) {
-            Log.e("PA", "Instance null");
-        }
-        else {
-            Log.e("PA", "No instance of PackagesListFragment");
+        searchBarEditText.clearFocus();
+        InputMethodManager manager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        manager.hideSoftInputFromWindow(searchBarEditText.getWindowToken(), 0);
+    }
+
+    /**
+     * Method enables the search bar.
+     */
+    private void enableSearch(boolean focusSearchBar) {
+        searchBarEditText.setVisibility(View.VISIBLE);
+        appBarTextView.setVisibility(View.GONE);
+        searchButton.setVisibility(View.GONE);
+        if (focusSearchBar) {
+            viewModel.setSearchQuery("");
+            searchBarEditText.setText(viewModel.getSearchQuery());
+            searchBarEditText.requestFocus();
+            InputMethodManager manager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            manager.showSoftInput(searchBarEditText, 0);
         }
     }
 

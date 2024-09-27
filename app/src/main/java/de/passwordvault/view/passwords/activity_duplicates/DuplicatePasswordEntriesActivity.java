@@ -127,6 +127,7 @@ public class DuplicatePasswordEntriesActivity extends PasswordVaultActivity<Dupl
             }
         }
 
+        //Setup app bar:
         appBarTextView = findViewById(R.id.text_appbar);
         appBarTextView.setVisibility(viewModel.getSearchQuery() == null ? View.VISIBLE : View.GONE);
         searchBarEditText = findViewById(R.id.input_search);
