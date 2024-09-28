@@ -1,26 +1,28 @@
 package de.passwordvault.view.entries.activity_entry;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-
 import de.passwordvault.R;
 import de.passwordvault.model.detail.Detail;
 import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.model.tags.Tag;
 import de.passwordvault.view.utils.Utils;
-import de.passwordvault.view.utils.recycler_view.OnRecyclerItemClickListener;
+import de.passwordvault.view.utils.recycler_view.OnRecyclerViewActionListener;
 import de.passwordvault.view.utils.recycler_view.RecyclerViewAdapter;
 
 
@@ -30,7 +32,7 @@ import de.passwordvault.view.utils.recycler_view.RecyclerViewAdapter;
  * @author  Christian-2003
  * @version 3.7.0
  */
-public class EntryRecyclerViewAdapter extends RecyclerViewAdapter {
+public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel> {
 
     /**
      * Class models the view holder for the view displaying general information.
@@ -43,9 +45,10 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter {
         public TextView descriptionTextView;
 
         /**
-         * Attribute stores the text view displaying the date at which the entry was edited.
+         * Attribute stores the text view displaying the abbreviation of the account name if no
+         * app logo is available.
          */
-        public TextView dateTextView;
+        public TextView abbreviationTextView;
 
         /**
          * Attribute stores the button used to edit the entry.
@@ -56,11 +59,6 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter {
          * Attribute stores the button to delete the entry.
          */
         public Button deleteButton;
-
-        /**
-         * Attribute stores the button to add a new detail.
-         */
-        public ImageButton addDetailButton;
 
         /**
          * Attribute stores the image view displaying the app image.
@@ -81,10 +79,9 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter {
         public GeneralViewHolder(View itemView) {
             super(itemView);
             descriptionTextView = itemView.findViewById(R.id.text_description);
-            dateTextView = itemView.findViewById(R.id.text_date);
+            abbreviationTextView = itemView.findViewById(R.id.text_abbreviation);
             editButton = itemView.findViewById(R.id.button_edit);
             deleteButton = itemView.findViewById(R.id.button_delete);
-            addDetailButton = itemView.findViewById(R.id.button_add_detail);
             appImageView = itemView.findViewById(R.id.image_app);
             tagsContainer= itemView.findViewById(R.id.container_tags);
         }
@@ -108,14 +105,10 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter {
         public TextView contentTextView;
 
         /**
-         * Attribute stores the text view displaying the date on which the detail was edited.
+         * Attribute stores the image button used to show a dialog displaying more options for the
+         * detail.
          */
-        public TextView dateTextView;
-
-        /**
-         * Attribute stores the image button used to copy the contents of the detail.
-         */
-        public ImageButton copyImageButton;
+        public ImageButton moreImageButton;
 
         /**
          * Attribute stores the image view displaying an image corresponding to the detail type.
@@ -132,12 +125,27 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.text_name);
             contentTextView = itemView.findViewById(R.id.text_content);
-            dateTextView = itemView.findViewById(R.id.text_date);
-            copyImageButton = itemView.findViewById(R.id.button_copy);
+            moreImageButton = itemView.findViewById(R.id.button_more);
             detailImageView = itemView.findViewById(R.id.image_detail);
         }
 
     }
+
+
+    /**
+     * Attribute stores the offset with which the details begin displaying within the adapter.
+     */
+    public static final int OFFSET_DETAILS = 3;
+
+    /**
+     * Attribute stores the position of the general info within the adapter.
+     */
+    public static final int POSITION_GENERAL = 0;
+
+    /**
+     * Attribute stores the position of the empty placeholder for the details.
+     */
+    public static final int POSITION_DETAILS_EMPTY_PLACEHOLDER = 2;
 
 
     /**
@@ -150,19 +158,6 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter {
      */
     private static final int TYPE_DETAIL = 1;
 
-
-    /**
-     * Attribute stores the entry to display with the adapter.
-     */
-    @NonNull
-    private final EntryExtended entry;
-
-    /**
-     * Attribute stores the click listener which is called when the edit button is clicked.
-     */
-    @Nullable
-    private View.OnClickListener editClickListener;
-
     /**
      * Attribute stores the click listener which is called when the delete button is clicked.
      */
@@ -170,37 +165,45 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter {
     private View.OnClickListener deleteClickListener;
 
     /**
-     * Attribute stores the click listener which is called when the app image is clicked.
+     * Attribute stores the action listener to invoke when the entry shall be edited.
      */
     @Nullable
-    private View.OnClickListener imageClickListener;
+    private OnRecyclerViewActionListener editEntryListener;
 
     /**
-     * Attribute stores the click listener which is called when a detail is clicked.
+     * Attribute stores the action listener to invoke when the packages for the entry shall be changed.
      */
     @Nullable
-    private OnRecyclerItemClickListener<Detail> detailClickListener;
+    private OnRecyclerViewActionListener editPackagesListener;
+
+    /**
+     * Attribute stores the action listener to invoke when the button to add a new detail is clicked.
+     */
+    @Nullable
+    private OnRecyclerViewActionListener addDetailListener;
 
 
     /**
      * Constructor instantiates a new recycler view adapter.
      *
      * @param context   Context for the recycler view.
-     * @param entry     Data for the adapter.
+     * @param viewModel View model from which to source the data.
      */
-    public EntryRecyclerViewAdapter(@NonNull Context context, @NonNull EntryExtended entry) {
-        super(context, new EntryViewModel()); //TODO: Fix passing 'new' view model to superclass.
-        this.entry = entry;
+    public EntryRecyclerViewAdapter(@NonNull Context context, @NonNull EntryViewModel viewModel) {
+        super(context, viewModel);
+        editEntryListener = null;
+        editPackagesListener = null;
+        addDetailListener = null;
     }
 
 
     /**
      * Method changes the click listener that is called when the edit button is clicked.
      *
-     * @param clickListener New click listener.
+     * @param editEntryListener New listener.
      */
-    public void setEditClickListener(@Nullable View.OnClickListener clickListener) {
-        editClickListener = clickListener;
+    public void setEditEntryListener(@Nullable OnRecyclerViewActionListener editEntryListener) {
+        this.editEntryListener = editEntryListener;
     }
 
     /**
@@ -209,16 +212,25 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter {
      * @param clickListener New click listener.
      */
     public void setDeleteClickListener(@Nullable View.OnClickListener clickListener) {
-        deleteClickListener = clickListener;
+        this.deleteClickListener = clickListener;
     }
 
     /**
      * Method changes the click listener that is called when the app image is clicked.
      *
-     * @param clickListener New click listener.
+     * @param editPackagesListener  New click listener.
      */
-    public void setImageClickListener(@Nullable View.OnClickListener clickListener) {
-        imageClickListener = clickListener;
+    public void setEditPackagesListener(@Nullable OnRecyclerViewActionListener editPackagesListener) {
+        this.editPackagesListener = editPackagesListener;
+    }
+
+    /**
+     * Method changes the action listener to invoke when the button to add a new detail is clicked.
+     * 
+     * @param addDetailListener New listener to invoke.
+     */
+    public void setAddDetailListener(@Nullable OnRecyclerViewActionListener addDetailListener) {
+        this.addDetailListener = addDetailListener;
     }
 
 
@@ -230,13 +242,16 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter {
      */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
+        EntryExtended entry = viewModel.getEntry();
+        if (entry == null) {
+            return;
+        }
         if (viewHolder instanceof GeneralViewHolder) {
             GeneralViewHolder holder = (GeneralViewHolder)viewHolder;
             holder.descriptionTextView.setText(entry.getDescription());
-            holder.dateTextView.setText(Utils.formatDate(entry.getChanged(), context.getString(R.string.date_format)));
             holder.editButton.setOnClickListener(view -> {
-                if (editClickListener != null) {
-                    editClickListener.onClick(view);
+                if (editEntryListener != null) {
+                    editEntryListener.onAction(holder.getAdapterPosition());
                 }
             });
             holder.deleteButton.setOnClickListener(view -> {
@@ -244,25 +259,69 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter {
                     deleteClickListener.onClick(view);
                 }
             });
-            holder.appImageView.setOnClickListener(view -> {
-                if (imageClickListener != null) {
-                    imageClickListener.onClick(view);
-                }
-            });
-            holder.appImageView.setImageDrawable(entry.getLogo());
+            Drawable appLogo = viewModel.getEntry().getLogo();
+            if (appLogo == null) {
+                holder.appImageView.setVisibility(View.GONE);
+                holder.abbreviationTextView.setVisibility(View.VISIBLE);
+                holder.abbreviationTextView.setText(entry.getName().length() > 0 ? "" + entry.getName().charAt(0) : "?");
+                holder.abbreviationTextView.setOnClickListener(view -> {
+                    if (editPackagesListener != null) {
+                        editPackagesListener.onAction(holder.getAdapterPosition());
+                    }
+                });
+            }
+            else {
+                //Create a new drawable in the next line. If this would not be done, the app icon in the
+                //list view (e.g. in EntriesFragment) would be stretched after closing the EntryActivity,
+                //since the drawable is stretched for display in this activity:
+                appLogo = appLogo.getConstantState().newDrawable().mutate();
+                holder.appImageView.setBackground(appLogo);
+                holder.appImageView.setVisibility(View.VISIBLE);
+                holder.abbreviationTextView.setVisibility(View.GONE);
+                holder.appImageView.setOnClickListener(view -> {
+                    if (editPackagesListener != null) {
+                        editPackagesListener.onAction(holder.getAdapterPosition());
+                    }
+                });
+            }
+            holder.tagsContainer.removeAllViews();
             for (Tag tag : entry.getTags()) {
                 Chip chip = new Chip(context);
                 chip.setText(tag.getName());
                 holder.tagsContainer.addView(chip);
             }
         }
+        else if (viewHolder instanceof GenericHeadlineButtonViewHolder) {
+            GenericHeadlineButtonViewHolder holder = (GenericHeadlineButtonViewHolder)viewHolder;
+            holder.dividerView.setVisibility(View.VISIBLE);
+            holder.buttonImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_add));
+            holder.headlineTextView.setText(R.string.entry_details_info);
+            holder.itemView.setOnClickListener(view -> {
+                if (addDetailListener != null) {
+                    addDetailListener.onAction(holder.getAdapterPosition());
+                }
+            });
+        }
+        else if (viewHolder instanceof GenericEmptyPlaceholderViewHolder) {
+            GenericEmptyPlaceholderViewHolder holder = (GenericEmptyPlaceholderViewHolder)viewHolder;
+            holder.imageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.el_details));
+            holder.headlineTextView.setText(R.string.entry_details_empty_headline);
+            holder.supportTextView.setText(R.string.entry_details_empty_support);
+            if (!entry.getVisibleDetails().isEmpty()) {
+                holder.itemView.setVisibility(View.GONE);
+                holder.itemView.setLayoutParams(new ViewGroup.LayoutParams(0, 0));
+            }
+            else {
+                holder.itemView.setVisibility(View.VISIBLE);
+                holder.itemView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            }
+        }
         else if (viewHolder instanceof DetailViewHolder) {
             DetailViewHolder holder = (DetailViewHolder)viewHolder;
-            Detail detail = entry.getDetails().get(position - 1);
+            Detail detail = entry.getDetails().get(position - OFFSET_DETAILS);
             holder.nameTextView.setText(detail.getName());
             holder.contentTextView.setText(detail.getContent());
-            holder.dateTextView.setText(Utils.formatDate(detail.getChanged(), context.getString(R.string.date_format)));
-            holder.copyImageButton.setOnClickListener(view -> Utils.copyToClipboard(detail.getContent()));
+            holder.moreImageButton.setOnClickListener(view -> Utils.copyToClipboard(detail.getContent()));
             holder.detailImageView.setImageDrawable(AppCompatResources.getDrawable(context, detail.getType().getDrawable()));
         }
     }
@@ -283,11 +342,16 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter {
             case TYPE_GENERAL:
                 itemView = layoutInflater.inflate(R.layout.item_entry_general, parent, false);
                 return new GeneralViewHolder(itemView);
+            case TYPE_GENERIC_HEADLINE_BUTTON:
+                itemView = layoutInflater.inflate(R.layout.item_generic_headline_button, parent, false);
+                return new GenericHeadlineButtonViewHolder(itemView);
+            case TYPE_GENERIC_EMPTY_PLACEHOLDER:
+                itemView = layoutInflater.inflate(R.layout.item_generic_empty_placeholder, parent, false);
+                return new GenericEmptyPlaceholderViewHolder(itemView);
             case TYPE_DETAIL:
+            default:
                 itemView = layoutInflater.inflate(R.layout.item_entry_detail, parent, false);
                 return new DetailViewHolder(itemView);
-            default:
-                return new DetailViewHolder(new View(context));
         }
     }
 
@@ -303,6 +367,12 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter {
         if (position == 0) {
             return TYPE_GENERAL;
         }
+        else if (position == 1) {
+            return TYPE_GENERIC_HEADLINE_BUTTON;
+        }
+        else if (position == 2) {
+            return TYPE_GENERIC_EMPTY_PLACEHOLDER;
+        }
         else {
             return TYPE_DETAIL;
         }
@@ -316,7 +386,10 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter {
      */
     @Override
     public int getItemCount() {
-        return entry.getVisibleDetails().size() + 1;
+        if (viewModel.getEntry() == null) {
+            return 0;
+        }
+        return viewModel.getEntry().getVisibleDetails().size() + 3;
     }
 
 }

@@ -56,8 +56,8 @@ public class DeleteDialog extends PasswordVaultBottomSheetDialog<DeleteViewModel
 
             view.findViewById(R.id.button_cancel).setOnClickListener(v -> dismiss());
             view.findViewById(R.id.button_delete).setOnClickListener(v -> {
-                if (viewModel.getCallback() != null) {
-                    viewModel.getCallback().onCallback(this, Callback.RESULT_SUCCESS);
+                if (callback != null) {
+                    callback.onCallback(this, Callback.RESULT_SUCCESS);
                     dismiss();
                 }
             });

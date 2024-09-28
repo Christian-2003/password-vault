@@ -15,11 +15,6 @@ import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
 public class DeleteViewModel extends ViewModel {
 
     /**
-     * Attribute stores the callback to notify when the dialog closes.
-     */
-    private PasswordVaultBottomSheetDialog.Callback callback;
-
-    /**
      * Attribute stores the message to display.
      */
     private String message;
@@ -29,19 +24,9 @@ public class DeleteViewModel extends ViewModel {
      * Constructor instantiates a new view model.
      */
     public DeleteViewModel() {
-        callback = null;
         message = null;
     }
 
-
-    /**
-     * Method returns the callback for the dialog.
-     *
-     * @return  Callback for the dialog.
-     */
-    public PasswordVaultBottomSheetDialog.Callback getCallback() {
-        return callback;
-    }
 
     /**
      * Method returns the message for the dialog.
@@ -59,15 +44,6 @@ public class DeleteViewModel extends ViewModel {
      * @param args  Bundle containing the arguments.
      */
     public void processArguments(@NonNull Bundle args) {
-        if (args.containsKey(DeleteDialog.ARG_CALLBACK)) {
-            try {
-                callback = (PasswordVaultBottomSheetDialog.Callback)args.getSerializable(DeleteDialog.ARG_CALLBACK);
-            }
-            catch (Exception e) {
-                //Ignore...
-            }
-        }
-
         if (args.containsKey(DeleteDialog.ARG_MESSAGE)) {
             message = args.getString(DeleteDialog.ARG_MESSAGE);
         }

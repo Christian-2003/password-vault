@@ -3,6 +3,7 @@ package de.passwordvault.view.settings.activity_quality_gates;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,7 +34,7 @@ import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
  * @author  Christian-2003
  * @version 3.6.0
  */
-public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesViewModel> {
+public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesViewModel> implements PasswordVaultBottomSheetDialog.Callback {
 
     /**
      * Attribute stores the adapter of the activity.
@@ -91,6 +92,23 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
     }
 
 
+    public void onCallback (PasswordVaultBottomSheetDialog<? extends ViewModel> dialog, int resultCode) {
+        if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS) {
+            try {
+                int index = Integer.parseInt(dialog.getTag());
+                viewModel.getCustomQualityGates().remove(index);
+                adapter.notifyItemRemoved(index + QualityGatesRecyclerViewAdapter.OFFSET_DEFAULT_QUALITY_GATES);
+                if (viewModel.getCustomQualityGates().isEmpty()) {
+                    adapter.notifyItemChanged(QualityGatesRecyclerViewAdapter.POSITION_EMPTY_PLACEHOLDER);
+                }
+            }
+            catch (Exception e) {
+                //Cannot parse tag containing index.
+            }
+        }
+    }
+
+
     /**
      * Method is called whenever the activity is created.
      * @param savedInstanceState    Previously saved state of the instance.
@@ -133,18 +151,8 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
         String message = getString(R.string.delete_dialog_message);
         message = message.replace("{arg}", qualityGate.getDescription());
         args.putString(DeleteDialog.ARG_MESSAGE, message);
-        PasswordVaultBottomSheetDialog.Callback callback = (d, resultCode) -> {
-            if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS) {
-                viewModel.getCustomQualityGates().remove(index);
-                adapter.notifyItemRemoved(index + QualityGatesRecyclerViewAdapter.OFFSET_DEFAULT_QUALITY_GATES);
-                if (viewModel.getCustomQualityGates().isEmpty()) {
-                    adapter.notifyItemChanged(QualityGatesRecyclerViewAdapter.POSITION_EMPTY_PLACEHOLDER);
-                }
-            }
-        };
-        args.putSerializable(SecurityQuestionDialog.ARG_CALLBACK, callback);
         dialog.setArguments(args);
-        dialog.show(getSupportFragmentManager(), null);
+        dialog.show(getSupportFragmentManager(), "" + index);
     }
 
     private void onAddQualityGate(int position) {

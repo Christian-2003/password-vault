@@ -502,6 +502,10 @@
     <!-- Style for chips -->
     <style name="pv.material.chip" parent="Widget.Material3.Chip.Assist">
         <item name="chipBackgroundColor">@color/chip</item>
+        <item name="materialThemeOverlay">@style/pv.material.chip.overlay</item>
+    </style>
+    <style name="pv.material.chip.overlay" parent="">
+        <item name="elevationOverlayEnabled">false</item>
     </style>
 
     <!-- Style for divider -->

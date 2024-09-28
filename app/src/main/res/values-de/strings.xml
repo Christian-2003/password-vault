@@ -192,6 +192,9 @@
     <string name="entry_package">Apps</string>
     <string name="entry_package_none">Keine ausgewählt</string>
     <string name="entry_automatically_created">Dieses Konto wurde durch automatisches Ausfüllen hinzugefügt</string>
+    <string name="entry_details_empty_headline">Buh</string>
+    <string name="entry_details_empty_support">Informationen werden hier angezeigt</string>
+    <string name="entry_edit">Konto bearbeiten</string>
 
 
     <!-- PasswordAnalysis activity -->

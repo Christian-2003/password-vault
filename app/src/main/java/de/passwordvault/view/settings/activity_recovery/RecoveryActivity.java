@@ -2,6 +2,7 @@ package de.passwordvault.view.settings.activity_recovery;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +15,7 @@ import de.passwordvault.view.general.dialog_more.Item;
 import de.passwordvault.view.general.dialog_more.ItemButton;
 import de.passwordvault.view.general.dialog_more.MoreDialog;
 import de.passwordvault.view.settings.dialog_security_question.SecurityQuestionDialog;
+import de.passwordvault.view.utils.DialogCallbackListener;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
 import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
 import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
@@ -25,7 +27,7 @@ import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
  * @author  Christian-2003
  * @version 3.6.0
  */
-public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> {
+public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> implements PasswordVaultBottomSheetDialog.Callback {
 
     /**
      * Attribute stores the adapter for the activity.
@@ -48,6 +50,63 @@ public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> {
     public void finish() {
         super.finish();
         viewModel.save();
+    }
+
+
+    /**
+     * Method is called whenever a dialog callback is invoked.
+     *
+     * @param dialog        Dialog that was closed.
+     * @param resultCode    Result code is either {@link #RESULT_SUCCESS} or {@link #RESULT_CANCEL}
+     *                      and indicates how the dialog is closed.
+     */
+    @Override
+    public void onCallback(PasswordVaultBottomSheetDialog<? extends ViewModel> dialog, int resultCode) {
+        if (dialog instanceof SecurityQuestionDialog) {
+            if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS) {
+                SecurityQuestionDialog securityQuestionDialog = (SecurityQuestionDialog)dialog;
+                if (securityQuestionDialog.getTag() == null) {
+                    //Add a new security question:
+                    if (viewModel.getSecurityQuestions().isEmpty()) {
+                        adapter.notifyItemChanged(RecoveryRecyclerViewAdapter.POSITION_EMPTY_PLACEHOLDER);
+                    }
+                    viewModel.getSecurityQuestions().add(securityQuestionDialog.getQuestion());
+                    adapter.notifyItemInserted(adapter.getItemCount());
+                    adapter.notifyItemChanged(RecoveryRecyclerViewAdapter.POSITION_PROGRESS_BAR);
+                }
+                else {
+                    //Edit a security question:
+                    try {
+                        int index = Integer.parseInt(dialog.getTag());
+                        SecurityQuestion newQuestion = securityQuestionDialog.getQuestion();
+                        viewModel.getSecurityQuestions().set(index, newQuestion);
+                        adapter.notifyItemChanged(index + RecoveryRecyclerViewAdapter.OFFSET_QUESTIONS);
+                    }
+                    catch (Exception e) {
+                        //Cannot parse index from tag.
+                    }
+                }
+            }
+        }
+        else if (dialog instanceof DeleteDialog) {
+            if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS) {
+                try {
+                    if (dialog.getTag() == null) {
+                        return;
+                    }
+                    int index = Integer.parseInt(dialog.getTag());
+                    viewModel.getSecurityQuestions().remove(index);
+                    adapter.notifyItemRemoved(index + RecoveryRecyclerViewAdapter.OFFSET_QUESTIONS);
+                    adapter.notifyItemChanged(RecoveryRecyclerViewAdapter.POSITION_PROGRESS_BAR);
+                    if (viewModel.getSecurityQuestions().isEmpty()) {
+                        adapter.notifyItemChanged(RecoveryRecyclerViewAdapter.POSITION_EMPTY_PLACEHOLDER);
+                    }
+                }
+                catch (Exception e) {
+                    //Cannot parse index from tag.
+                }
+            }
+        }
     }
 
 
@@ -113,17 +172,8 @@ public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> {
         Bundle args = new Bundle();
         args.putSerializable(SecurityQuestionDialog.ARG_QUESTION, question);
         args.putStringArray(SecurityQuestionDialog.ARG_QUESTIONS, availableQuestions);
-        PasswordVaultBottomSheetDialog.Callback callback = (d, resultCode) -> {
-            if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS) {
-                SecurityQuestionDialog securityQuestionDialog = (SecurityQuestionDialog)d;
-                SecurityQuestion newQuestion = securityQuestionDialog.getQuestion();
-                viewModel.getSecurityQuestions().set(index, newQuestion);
-                adapter.notifyItemChanged(index + RecoveryRecyclerViewAdapter.OFFSET_QUESTIONS);
-            }
-        };
-        args.putSerializable(SecurityQuestionDialog.ARG_CALLBACK, callback);
         dialog.setArguments(args);
-        dialog.show(getSupportFragmentManager(), null);
+        dialog.show(getSupportFragmentManager(), "" + index);
     }
 
     /**
@@ -139,19 +189,8 @@ public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> {
         String message = getString(R.string.delete_dialog_message);
         message = message.replace("{arg}", SecurityQuestion.getAllQuestions()[question.getQuestion()]);
         args.putString(DeleteDialog.ARG_MESSAGE, message);
-        PasswordVaultBottomSheetDialog.Callback callback = (d, resultCode) -> {
-            if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS) {
-                viewModel.getSecurityQuestions().remove(index);
-                adapter.notifyItemRemoved(index + RecoveryRecyclerViewAdapter.OFFSET_QUESTIONS);
-                adapter.notifyItemChanged(RecoveryRecyclerViewAdapter.POSITION_PROGRESS_BAR);
-                if (viewModel.getSecurityQuestions().isEmpty()) {
-                    adapter.notifyItemChanged(RecoveryRecyclerViewAdapter.POSITION_EMPTY_PLACEHOLDER);
-                }
-            }
-        };
-        args.putSerializable(SecurityQuestionDialog.ARG_CALLBACK, callback);
         dialog.setArguments(args);
-        dialog.show(getSupportFragmentManager(), null);
+        dialog.show(getSupportFragmentManager(), "" + index);
     }
 
     /**
@@ -179,18 +218,6 @@ public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> {
         Bundle args = new Bundle();
         args.putStringArray(SecurityQuestionDialog.ARG_QUESTIONS, unusedQuestions);
         args.putSerializable(SecurityQuestionDialog.ARG_QUESTION, null);
-        PasswordVaultBottomSheetDialog.Callback callback = (d, resultCode) -> {
-            if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS) {
-                SecurityQuestionDialog securityQuestionDialog = (SecurityQuestionDialog)d;
-                if (viewModel.getSecurityQuestions().isEmpty()) {
-                    adapter.notifyItemChanged(RecoveryRecyclerViewAdapter.POSITION_EMPTY_PLACEHOLDER);
-                }
-                viewModel.getSecurityQuestions().add(securityQuestionDialog.getQuestion());
-                adapter.notifyItemInserted(adapter.getItemCount());
-                adapter.notifyItemChanged(RecoveryRecyclerViewAdapter.POSITION_PROGRESS_BAR);
-            }
-        };
-        args.putSerializable(SecurityQuestionDialog.ARG_CALLBACK, callback);
         dialog.setArguments(args);
         dialog.show(getSupportFragmentManager(), null);
     }

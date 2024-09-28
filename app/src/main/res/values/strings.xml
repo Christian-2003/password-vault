@@ -194,6 +194,9 @@
     <string name="entry_package">Apps</string>
     <string name="entry_package_none">None selected</string>
     <string name="entry_automatically_created">This account was automatically created by the autofill service</string>
+    <string name="entry_details_empty_headline">Wooo</string>
+    <string name="entry_details_empty_support">Details are shown here</string>
+    <string name="entry_edit">Edit account</string>
 
 
     <!-- PasswordAnalysis activity -->
