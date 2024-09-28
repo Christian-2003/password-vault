@@ -1,7 +1,7 @@
-<img src="docs/img/icon.png" height="150" align="right">
+<img src="../../docs/img/icon.png" height="150" align="right">
 
 # Update to Newer Versions
-This page descruibes steps that need to be performed in order to update to certain newer versions of Password Vault.
+This page describes steps that need to be performed in order to update to certain newer versions of Password Vault.
 
 ###### Table of Contents
 1. [Update from Version 3.5.6](#update-from-version-356)
