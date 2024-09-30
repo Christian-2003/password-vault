@@ -5,17 +5,15 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
-
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.SecurityQuestion;
 import de.passwordvault.view.general.dialog_delete.DeleteDialog;
 import de.passwordvault.view.general.dialog_more.Item;
 import de.passwordvault.view.general.dialog_more.ItemButton;
 import de.passwordvault.view.general.dialog_more.MoreDialog;
+import de.passwordvault.view.general.dialog_more.MoreDialogCallback;
 import de.passwordvault.view.settings.dialog_security_question.SecurityQuestionDialog;
-import de.passwordvault.view.utils.DialogCallbackListener;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
 import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
 import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
@@ -25,9 +23,20 @@ import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
  * Class implements the activity that is used to configure the master password recovery.
  *
  * @author  Christian-2003
- * @version 3.6.0
+ * @version 3.7.0
  */
-public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> implements PasswordVaultBottomSheetDialog.Callback {
+public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> implements PasswordVaultBottomSheetDialog.Callback, MoreDialogCallback {
+
+    /**
+     * Field stores the tag for the more dialog item to edit a security question.
+     */
+    private static final String TAG_EDIT_SECURITY_QUESTION = "edit";
+
+    /**
+     * Field stores the tag for the more dialog item to delete a security question.
+     */
+    private static final String TAG_DELETE_SECURITY_QUESTION = "delete";
+
 
     /**
      * Attribute stores the adapter for the activity.
@@ -106,6 +115,38 @@ public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> i
                     //Cannot parse index from tag.
                 }
             }
+        }
+    }
+
+
+    /**
+     * Method is called whenever the {@link MoreDialog} is dismissed with a callback.
+     *
+     * @param dialog    Dialog in which the action was invoked.
+     * @param tag       Tag from the {@link Item} whose action is invoked.
+     * @param position  Position of the {@link Item} within the dialog.
+     */
+    @Override
+    public void onDialogItemClicked(MoreDialog dialog, String tag, int position) {
+        String[] tagParts = tag.split(":"); //Tag in the form of "<TAG>:<POSITION>".
+        if (tagParts.length != 2) {
+            return;
+        }
+        String tagValue = tagParts[0];
+        int index;
+        try {
+            index = Integer.parseInt(tagParts[1]);
+        }
+        catch (NumberFormatException e) {
+            return;
+        }
+        switch (tagValue) {
+            case TAG_EDIT_SECURITY_QUESTION:
+                onEditSecurityQuestion(index);
+                break;
+            case TAG_DELETE_SECURITY_QUESTION:
+                onDeleteSecurityQuestion(index);
+                break;
         }
     }
 
@@ -236,8 +277,8 @@ public class RecoveryActivity extends PasswordVaultActivity<RecoveryViewModel> i
         args.putString(MoreDialog.ARG_TITLE, SecurityQuestion.getAllQuestions()[question.getQuestion()]);
         args.putInt(MoreDialog.ARG_ICON, R.drawable.ic_help);
         ArrayList<Item> items = new ArrayList<>();
-        items.add(new ItemButton(getString(R.string.button_edit), R.drawable.ic_edit, view -> onEditSecurityQuestion(position)));
-        items.add(new ItemButton(getString(R.string.button_delete), R.drawable.ic_delete, view -> onDeleteSecurityQuestion(position)));
+        items.add(new ItemButton(getString(R.string.button_edit), TAG_EDIT_SECURITY_QUESTION + ":" + position, R.drawable.ic_edit));
+        items.add(new ItemButton(getString(R.string.button_delete), TAG_DELETE_SECURITY_QUESTION + ":" + position, R.drawable.ic_delete));
         args.putSerializable(MoreDialog.ARG_ITEMS, items);
         dialog.setArguments(args);
         dialog.show(getSupportFragmentManager(), null);

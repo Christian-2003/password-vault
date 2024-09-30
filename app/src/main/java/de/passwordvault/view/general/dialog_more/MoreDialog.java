@@ -1,10 +1,10 @@
 package de.passwordvault.view.general.dialog_more;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -37,12 +37,19 @@ public class MoreDialog extends PasswordVaultBottomSheetDialog<MoreViewModel> im
      */
     public static final String ARG_ITEMS = "arg_items";
 
+    /**
+     * Attribute stores the callback for the dialog.
+     */
+    @Nullable
+    private MoreDialogCallback callback;
+
 
     /**
      * Constructor instantiates a new dialog.
      */
     public MoreDialog() {
         super(MoreViewModel.class, R.layout.dialog_more);
+        callback = null;
     }
 
 
@@ -76,26 +83,31 @@ public class MoreDialog extends PasswordVaultBottomSheetDialog<MoreViewModel> im
 
 
     /**
-     * Method is called whenever an item within the dialog is clicked.
+     * Method is called whenever the dialog is attached to a activity or fragment.
      *
-     * @param view  View of the item that was clicked.
-     * @param item  Item that was clicked.
+     * @param context   Context to which the dialog is attached.
      */
     @Override
-    public void onItemClicked(View view, ItemButton item) {
-        item.getClickListener().onClick(view);
-        dismiss();
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (getHost() instanceof MoreDialogCallback) {
+            callback = (MoreDialogCallback)getHost();
+        }
     }
 
+
     /**
-     * Method is called whenever an item's checkbox is changed.
+     * Method is called whenever the action of an item is invoked. This triggers the callback for the
+     * dialog.
      *
-     * @param button    Checkbox.
-     * @param item      Item whose checkbox was clicked.
+     * @param tag       Tag of the item whose action was invoked.
+     * @param position  Position of the item within the adapter.
      */
     @Override
-    public void onCheckboxChecked(CompoundButton button, ItemCheckbox item) {
-        item.getCheckedChangeListener().onCheckedChanged(button, button.isChecked());
+    public void onActionInvoked(String tag, int position) {
+        if (callback != null) {
+            callback.onDialogItemClicked(this, tag, position);
+        }
         dismiss();
     }
 

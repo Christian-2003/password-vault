@@ -6,23 +6,18 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
-
 import java.util.ArrayList;
-
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGate;
-import de.passwordvault.model.security.login.SecurityQuestion;
 import de.passwordvault.view.general.dialog_delete.DeleteDialog;
 import de.passwordvault.view.general.dialog_more.Item;
 import de.passwordvault.view.general.dialog_more.ItemButton;
 import de.passwordvault.view.general.dialog_more.ItemCheckbox;
 import de.passwordvault.view.general.dialog_more.MoreDialog;
+import de.passwordvault.view.general.dialog_more.MoreDialogCallback;
 import de.passwordvault.view.settings.activity_quality_gate.QualityGateActivity;
-import de.passwordvault.view.settings.activity_recovery.RecoveryRecyclerViewAdapter;
-import de.passwordvault.view.settings.dialog_security_question.SecurityQuestionDialog;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
 import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
 import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
@@ -34,7 +29,23 @@ import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
  * @author  Christian-2003
  * @version 3.6.0
  */
-public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesViewModel> implements PasswordVaultBottomSheetDialog.Callback {
+public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesViewModel> implements PasswordVaultBottomSheetDialog.Callback, MoreDialogCallback {
+
+    /**
+     * Field stores the tag for the more dialog item to edit a quality gate.
+     */
+    private static final String TAG_EDIT_QUALITY_GATE = "edit";
+
+    /**
+     * Field stores the tag for the more dialog item to delete a quality gate.
+     */
+    private static final String TAG_DELETE_QUALITY_GATE = "delete";
+
+    /**
+     * Field stores the tag for the more dialog item to enable / disable a quality gate.
+     */
+    private static final String TAG_ENABLE_QUALITY_GATE = "enable";
+
 
     /**
      * Attribute stores the adapter of the activity.
@@ -92,9 +103,19 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
     }
 
 
+    /**
+     * Method is called whenever a dialog is dismissed with a callback.
+     *
+     * @param dialog        Dialog that was closed.
+     * @param resultCode    Result code is either {@link #RESULT_SUCCESS} or {@link #RESULT_CANCEL}
+     *                      and indicates how the dialog is closed.
+     */
     public void onCallback (PasswordVaultBottomSheetDialog<? extends ViewModel> dialog, int resultCode) {
         if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS) {
             try {
+                if (dialog.getTag() == null) {
+                    return;
+                }
                 int index = Integer.parseInt(dialog.getTag());
                 viewModel.getCustomQualityGates().remove(index);
                 adapter.notifyItemRemoved(index + QualityGatesRecyclerViewAdapter.OFFSET_DEFAULT_QUALITY_GATES);
@@ -105,6 +126,44 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
             catch (Exception e) {
                 //Cannot parse tag containing index.
             }
+        }
+    }
+
+
+    /**
+     * Method is called whenever the {@link MoreDialog} is dismissed with a callback.
+     *
+     * @param dialog    Dialog in which the action was invoked.
+     * @param tag       Tag from the {@link Item} whose action is invoked.
+     * @param position  Position of the {@link Item} within the dialog.
+     */
+    @Override
+    public void onDialogItemClicked(MoreDialog dialog, String tag, int position) {
+        String[] tagParts = tag.split(":"); //Tag in the form "<TAG>:<POSITION>"
+        if (tagParts.length != 2) {
+            return;
+        }
+        String tagValue = tagParts[0];
+        int adapterPosition;
+        try {
+            adapterPosition = Integer.parseInt(tagParts[1]);
+        }
+        catch (NumberFormatException e) {
+            return;
+        }
+        switch (tagValue) {
+            case TAG_EDIT_QUALITY_GATE:
+                onEditQualityGate(adapterPosition);
+                break;
+            case TAG_DELETE_QUALITY_GATE:
+                onDeleteQualityGate(adapterPosition);
+                break;
+            case TAG_ENABLE_QUALITY_GATE:
+                if (viewModel.getCustomQualityGates().size() < adapterPosition) {
+                    int index = adapterPosition - QualityGatesRecyclerViewAdapter.OFFSET_DEFAULT_QUALITY_GATES;
+                    viewModel.getCustomQualityGates().get(index).setEnabled(!viewModel.getCustomQualityGates().get(index).isEnabled());
+                }
+                break;
         }
     }
 
@@ -135,6 +194,11 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
     }
 
 
+    /**
+     * Method is called to edit the custom quality gate at the specified position.
+     *
+     * @param position  Position at which to edit the quality gate.
+     */
     private void onEditQualityGate(int position) {
         Intent intent = new Intent(this, QualityGateActivity.class);
         int index = position - QualityGatesRecyclerViewAdapter.OFFSET_DEFAULT_QUALITY_GATES;
@@ -143,6 +207,13 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
         qualityGateResultLauncher.launch(intent);
     }
 
+
+    /**
+     * Method shows a dialog asking the user to confirm the deletion of the custom quality gate at
+     * the specified position.
+     *
+     * @param position  Position of the quality gate to delete.
+     */
     private void onDeleteQualityGate(int position) {
         int index = position - QualityGatesRecyclerViewAdapter.OFFSET_DEFAULT_QUALITY_GATES;
         QualityGate qualityGate = viewModel.getCustomQualityGates().get(index);
@@ -155,11 +226,22 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
         dialog.show(getSupportFragmentManager(), "" + index);
     }
 
+
+    /**
+     * Method starts the activity to add a new quality gate.
+     *
+     * @param position  Position of the recycler view item clicked.
+     */
     private void onAddQualityGate(int position) {
         Intent intent = new Intent(this, QualityGateActivity.class);
         qualityGateResultLauncher.launch(intent);
     }
 
+    /**
+     * Method is called whenever the {@link MoreDialog} for a custom quality gate should be displayed.
+     *
+     * @param position  Position of the item clicked in the recycler view adapter.
+     */
     private void onShowMoreOptions(int position) {
         int index = position - QualityGatesRecyclerViewAdapter.OFFSET_DEFAULT_QUALITY_GATES;
         QualityGate qualityGate = viewModel.getCustomQualityGates().get(index);
@@ -168,9 +250,9 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
         args.putString(MoreDialog.ARG_TITLE, qualityGate.getDescription());
         args.putInt(MoreDialog.ARG_ICON, R.drawable.ic_shield);
         ArrayList<Item> items = new ArrayList<>();
-        items.add(new ItemButton(getString(R.string.button_edit), R.drawable.ic_edit, view -> onEditQualityGate(position)));
-        items.add(new ItemButton(getString(R.string.button_delete), R.drawable.ic_delete, view -> onDeleteQualityGate(position)));
-        items.add(new ItemCheckbox(getString(R.string.quality_gate_enabled), (button, checked) -> qualityGate.setEnabled(checked), qualityGate.isEnabled()));
+        items.add(new ItemButton(getString(R.string.button_edit), TAG_EDIT_QUALITY_GATE + ":" + position, R.drawable.ic_edit));
+        items.add(new ItemButton(getString(R.string.button_delete),TAG_DELETE_QUALITY_GATE + ":" + position , R.drawable.ic_delete));
+        items.add(new ItemCheckbox(getString(R.string.quality_gate_enabled), TAG_ENABLE_QUALITY_GATE + ":" + position, qualityGate.isEnabled()));
         args.putSerializable(MoreDialog.ARG_ITEMS, items);
         dialog.setArguments(args);
         dialog.show(getSupportFragmentManager(), null);

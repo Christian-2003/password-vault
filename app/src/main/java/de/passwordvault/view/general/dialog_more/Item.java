@@ -1,9 +1,7 @@
 package de.passwordvault.view.general.dialog_more;
 
-import android.view.View;
-
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import java.io.Serializable;
 
 
@@ -33,6 +31,12 @@ public abstract class Item implements Serializable {
     private final String title;
 
     /**
+     * Attribute stores the tag of the item.
+     */
+    @Nullable
+    private final String tag;
+
+    /**
      * Attribute stores the type of the item.
      */
     private final int type;
@@ -42,10 +46,12 @@ public abstract class Item implements Serializable {
      * Constructor instantiates a new item with the passed title.
      *
      * @param title Title for the item.
+     * @param tag   Tag for the item.
      * @param type  Type for the item.
      */
-    public Item(@NonNull String title, int type) {
+    public Item(@NonNull String title, @Nullable String tag, int type) {
         this.title = title;
+        this.tag = tag;
         this.type = type;
     }
 
@@ -58,6 +64,16 @@ public abstract class Item implements Serializable {
     @NonNull
     public String getTitle() {
         return title;
+    }
+
+    /**
+     * Method returns the tag of the item.
+     *
+     * @return  Tag of the item.
+     */
+    @Nullable
+    public String getTag() {
+        return tag;
     }
 
     /**

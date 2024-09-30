@@ -27,20 +27,12 @@ public class MoreRecyclerViewAdapter extends RecyclerViewAdapter<MoreViewModel> 
     public interface DialogContract {
 
         /**
-         * Method is called whenever an item is clicked.
+         * Method is called whenever the action of an item is invoked.
          *
-         * @param view  View of the item that was clicked.
-         * @param item  Item that was clicked.
+         * @param tag       Tag of the item whose action was invoked.
+         * @param position  Position of the item within the adapter.
          */
-        void onItemClicked(View view, ItemButton item);
-
-        /**
-         * Method is called whenever an item's checkbox is changed.
-         *
-         * @param button    Checkbox.
-         * @param item      Item whose checkbox was clicked.
-         */
-        void onCheckboxChecked(CompoundButton button, ItemCheckbox item);
+        void onActionInvoked(String tag, int position);
 
     }
 
@@ -183,7 +175,7 @@ public class MoreRecyclerViewAdapter extends RecyclerViewAdapter<MoreViewModel> 
                 viewHolder.imageView.setImageResource(buttonItem.getIcon());
                 viewHolder.textView.setText(buttonItem.getTitle());
                 viewHolder.itemView.setOnClickListener(view -> {
-                    dialog.onItemClicked(view, buttonItem);
+                    dialog.onActionInvoked(buttonItem.getTag(), holder.getAdapterPosition());
                 });
                 break;
             }
@@ -196,7 +188,7 @@ public class MoreRecyclerViewAdapter extends RecyclerViewAdapter<MoreViewModel> 
                     viewHolder.checkBox.setChecked(!viewHolder.checkBox.isChecked());
                 });
                 viewHolder.checkBox.setOnCheckedChangeListener((button, checked) -> {
-                    dialog.onCheckboxChecked(button, checkboxItem);
+                    dialog.onActionInvoked(checkboxItem.getTag(), holder.getAdapterPosition());
                 });
                 break;
             }

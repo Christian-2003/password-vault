@@ -139,7 +139,7 @@ public class PasswordVaultBottomSheetDialog<V extends ViewModel> extends BottomS
     /**
      * Method is called whenever the dialog is attached to a context (e.g. an activity).
      *
-     * @param context   Context to which the callback is attached.
+     * @param context   Context to which the dialog is attached.
      */
     @Override
     public void onAttach(@NonNull Context context) {

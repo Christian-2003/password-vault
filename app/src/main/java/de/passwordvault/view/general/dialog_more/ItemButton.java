@@ -1,8 +1,8 @@
 package de.passwordvault.view.general.dialog_more;
 
-import android.view.View;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 
 /**
@@ -19,24 +19,17 @@ public class ItemButton extends Item {
     @DrawableRes
     private final int icon;
 
-    /**
-     * Attribute stores the click listener to invoke when the item is clicked.
-     */
-    @NonNull
-    private final View.OnClickListener clickListener;
-
 
     /**
      * Constructor instantiates a new item with the passed arguments.
      *
-     * @param title         Title for the item.
-     * @param icon          Icon for the item.
-     * @param clickListener Click listener to invoke when the item is clicked.
+     * @param title Title for the item.
+     * @param tag   Tag for the item.
+     * @param icon  Icon for the item.
      */
-    public ItemButton(@NonNull String title, @DrawableRes int icon, @NonNull View.OnClickListener clickListener) {
-        super(title, TYPE_BUTTON);
+    public ItemButton(@NonNull String title, @Nullable String tag, @DrawableRes int icon) {
+        super(title, tag, TYPE_BUTTON);
         this.icon = icon;
-        this.clickListener = clickListener;
     }
 
 
@@ -48,16 +41,6 @@ public class ItemButton extends Item {
     @DrawableRes
     public int getIcon() {
         return icon;
-    }
-
-    /**
-     * Method returns the click listener to invoke when the item is clicked.
-     *
-     * @return  Click listener to invoke when the item is clicked.
-     */
-    @NonNull
-    public View.OnClickListener getClickListener() {
-        return clickListener;
     }
 
 }
