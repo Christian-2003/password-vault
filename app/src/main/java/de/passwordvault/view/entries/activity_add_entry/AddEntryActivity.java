@@ -31,9 +31,9 @@ import de.passwordvault.model.packages.SerializablePackageCollection;
 import de.passwordvault.model.tags.Tag;
 import de.passwordvault.model.tags.TagManager;
 import de.passwordvault.view.entries.activity_packages.PackagesActivity;
-import de.passwordvault.view.entries.activity_add_entry.dialog_edit_tag.EditTagDialog;
 import de.passwordvault.view.entries.activity_entry.DetailsRecyclerViewAdapter;
 import de.passwordvault.view.entries.activity_entry.PackagesLogoRecyclerViewAdapter;
+import de.passwordvault.view.entries.dialog_edit_tag.EditTagDialog;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 import de.passwordvault.model.detail.Detail;
 import de.passwordvault.view.entries.activity_add_entry.dialog_delete_detail.ConfirmDeleteDetailDialog;
@@ -289,7 +289,7 @@ public class AddEntryActivity extends PasswordVaultBaseActivity implements Dialo
             chip.setOnLongClickListener(view -> {
                 EditTagDialog dialog = new EditTagDialog();
                 Bundle args = new Bundle();
-                args.putSerializable(EditTagDialog.KEY_TAG, tag);
+                args.putSerializable(EditTagDialog.ARG_TAG, tag);
                 dialog.setArguments(args);
                 dialog.show(getSupportFragmentManager(), "");
                 return true;

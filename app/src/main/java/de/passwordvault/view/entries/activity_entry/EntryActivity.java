@@ -15,6 +15,7 @@ import de.passwordvault.model.tags.Tag;
 import de.passwordvault.view.entries.activity_packages.PackagesActivity;
 import de.passwordvault.view.entries.dialog_edit_entry.EditEntryDialog;
 import de.passwordvault.view.entries.dialog_edit_entry.EditEntryViewModel;
+import de.passwordvault.view.entries.dialog_edit_tag.EditTagDialog;
 import de.passwordvault.view.general.dialog_delete.DeleteDialog;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
 import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
@@ -166,6 +167,9 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
                 EntryManager.getInstance().remove(Objects.requireNonNull(viewModel.getEntry()).getUuid());
                 finish();
             }
+        }
+        else if (dialog instanceof EditTagDialog) {
+            Log.d("EditActivity", "Received callback: " + resultCode);
         }
     }
 

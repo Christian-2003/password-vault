@@ -2,11 +2,14 @@ package de.passwordvault.view.entries.dialog_edit_entry;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModel;
+
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
@@ -14,6 +17,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.model.tags.Tag;
+import de.passwordvault.view.entries.dialog_edit_tag.EditTagDialog;
 import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
 
 
@@ -23,7 +27,7 @@ import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
  * @author  Christian-2003
  * @version 3.7.0
  */
-public class EditEntryDialog extends PasswordVaultBottomSheetDialog<EditEntryViewModel> {
+public class EditEntryDialog extends PasswordVaultBottomSheetDialog<EditEntryViewModel> implements PasswordVaultBottomSheetDialog.Callback {
 
     /**
      * Attribute stores the key with which to pass the name to edit as string.
@@ -90,6 +94,12 @@ public class EditEntryDialog extends PasswordVaultBottomSheetDialog<EditEntryVie
             descriptionEditText = view.findViewById(R.id.input_description);
             nameEditText.setText(viewModel.getName());
             descriptionEditText.setText(viewModel.getDescription());
+
+            //Button to add a new tag:
+            view.findViewById(R.id.button_tags).setOnClickListener(v -> {
+                EditTagDialog d = new EditTagDialog();
+                d.show(getParentFragmentManager(), null);
+            });
 
             //Tags:
             ChipGroup tagContainer = view.findViewById(R.id.container_tags);
@@ -163,6 +173,12 @@ public class EditEntryDialog extends PasswordVaultBottomSheetDialog<EditEntryVie
     }
 
 
+    /**
+     * Method validates the user inputs. If all inputs are valid, {@code true} is returned. Otherwise,
+     * {@code false} is returned and the UI is updated to inform the user about invalid inputs.
+     *
+     * @return  Whether all userdata is valid.
+     */
     private boolean validateUserInput() {
         if (nameEditText.getText() != null) {
             viewModel.setName(nameEditText.getText().toString());
@@ -177,6 +193,14 @@ public class EditEntryDialog extends PasswordVaultBottomSheetDialog<EditEntryVie
         else {
             nameContainer.setErrorEnabled(false);
             return true;
+        }
+    }
+
+    @Override
+    public void onCallback(PasswordVaultBottomSheetDialog<? extends ViewModel> dialog, int resultCode) {
+        Log.d("DIALOG", "Callback received: " + resultCode);
+        if (resultCode == Callback.RESULT_SUCCESS && dialog instanceof EditTagDialog) {
+            EditTagDialog editTagDialog = (EditTagDialog)dialog;
         }
     }
 
