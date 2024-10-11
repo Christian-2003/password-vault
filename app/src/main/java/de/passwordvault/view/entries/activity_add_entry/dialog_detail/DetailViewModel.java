@@ -109,7 +109,7 @@ public class DetailViewModel extends ViewModel {
             return null;
         }
 
-        AutoCompleteTextView detailTypeTextView = view.findViewById(R.id.detail_dialog_type);
+        AutoCompleteTextView detailTypeTextView = view.findViewById(R.id.input_type);
         if (detail == null) {
             //Dialog to create new detail:
             detailTypeTextView.setText(DetailType.TEXT.getDisplayName());
@@ -122,14 +122,14 @@ public class DetailViewModel extends ViewModel {
             obfuscatedEnteredAutomatically = false;
         }
 
-        TextInputEditText nameEditText = view.findViewById(R.id.detail_dialog_name);
+        TextInputEditText nameEditText = view.findViewById(R.id.input_name);
         nameEditText.setText(detail.getName());
-        TextInputEditText contentEditText = view.findViewById(R.id.detail_dialog_content);
+        TextInputEditText contentEditText = view.findViewById(R.id.input_content);
         contentEditText.setText(detail.getContent());
-        TextInputLayout contentLayout = view.findViewById(R.id.detail_dialog_content_hint);
-        CheckBox obfuscatedCheckBox = view.findViewById(R.id.detail_dialog_obfuscated);
+        TextInputLayout contentLayout = view.findViewById(R.id.container_content);
+        CheckBox obfuscatedCheckBox = view.findViewById(R.id.checkbox_obfuscate);
         obfuscatedCheckBox.setChecked(detail.isObfuscated());
-        CheckBox visibleCheckBox = view.findViewById(R.id.detail_dialog_visible);
+        CheckBox visibleCheckBox = view.findViewById(R.id.checkbox_visible);
         visibleCheckBox.setChecked(detail.isVisible());
         if (detail.getType() != DetailType.UNDEFINED) {
             detailTypeTextView.setText(Detail.getTypes()[detail.getType().ordinal()]);
@@ -139,9 +139,9 @@ public class DetailViewModel extends ViewModel {
         }
         detailTypeTextView.setAdapter(new ArrayAdapter<>(view.getContext(), android.R.layout.simple_spinner_dropdown_item, Detail.getTypes()));
 
-        CheckBox usernameCheckbox = view.findViewById(R.id.detail_dialog_username);
+        CheckBox usernameCheckbox = view.findViewById(R.id.checkbox_username);
         usernameCheckbox.setChecked(detail.isUsername());
-        CheckBox passwordCheckbox = view.findViewById(R.id.detail_dialog_password);
+        CheckBox passwordCheckbox = view.findViewById(R.id.checkbox_password);
         passwordCheckbox.setChecked(detail.isPassword());
 
         obfuscatedCheckBox.setOnClickListener(view1 -> obfuscatedEnteredAutomatically = false);
@@ -242,25 +242,25 @@ public class DetailViewModel extends ViewModel {
         }
 
         //Retrieve required data:
-        TextInputEditText nameEditText = view.findViewById(R.id.detail_dialog_name);
+        TextInputEditText nameEditText = view.findViewById(R.id.input_name);
         String name = Objects.requireNonNull(nameEditText.getText()).toString();
-        TextInputEditText contentEditText = view.findViewById(R.id.detail_dialog_content);
+        TextInputEditText contentEditText = view.findViewById(R.id.input_content);
         String content = Objects.requireNonNull(contentEditText.getText()).toString();
-        AutoCompleteTextView detailTypeTextView = view.findViewById(R.id.detail_dialog_type);
+        AutoCompleteTextView detailTypeTextView = view.findViewById(R.id.input_type);
         DetailType detailType = Detail.getTypeByName(detailTypeTextView.getText().toString());
-        CheckBox obfuscatedCheckBox = view.findViewById(R.id.detail_dialog_obfuscated);
+        CheckBox obfuscatedCheckBox = view.findViewById(R.id.checkbox_obfuscate);
         boolean obfuscated = obfuscatedCheckBox.isChecked();
-        CheckBox visibleCheckBox = view.findViewById(R.id.detail_dialog_visible);
+        CheckBox visibleCheckBox = view.findViewById(R.id.checkbox_visible);
         boolean visible = visibleCheckBox.isChecked();
-        CheckBox usernameCheckbox = view.findViewById(R.id.detail_dialog_username);
+        CheckBox usernameCheckbox = view.findViewById(R.id.checkbox_username);
         boolean username = usernameCheckbox.isChecked();
-        CheckBox passwordCheckbox = view.findViewById(R.id.detail_dialog_password);
+        CheckBox passwordCheckbox = view.findViewById(R.id.checkbox_password);
         boolean password = passwordCheckbox.isChecked();
 
         boolean inputCorrect = true;
 
         //Test whether name was entered correctly:
-        TextInputLayout nameLayout = view.findViewById(R.id.detail_dialog_name_hint);
+        TextInputLayout nameLayout = view.findViewById(R.id.container_name);
         if (name.isEmpty()) {
             nameLayout.setError(view.getResources().getString(R.string.error_empty_input));
             inputCorrect = false;
@@ -270,7 +270,7 @@ public class DetailViewModel extends ViewModel {
         }
 
         //Test whether content was entered correctly:
-        TextInputLayout contentLayout = view.findViewById(R.id.detail_dialog_content_hint);
+        TextInputLayout contentLayout = view.findViewById(R.id.container_content);
         if (content.isEmpty()) {
             contentLayout.setError(view.getResources().getString(R.string.error_empty_input));
             inputCorrect = false;
@@ -307,8 +307,8 @@ public class DetailViewModel extends ViewModel {
      * @param view      Inflated dialog view.
      */
     private void obfuscateContentEditText(boolean obfuscate, View view) {
-        TextInputEditText contentEditText = view.findViewById(R.id.detail_dialog_content);
-        TextInputLayout contentLayout = view.findViewById(R.id.detail_dialog_content_hint);
+        TextInputEditText contentEditText = view.findViewById(R.id.input_content);
+        TextInputLayout contentLayout = view.findViewById(R.id.container_content);
         if (obfuscate) {
             contentEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             contentLayout.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);

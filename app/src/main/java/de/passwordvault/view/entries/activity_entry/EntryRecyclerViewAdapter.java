@@ -8,8 +8,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
@@ -88,6 +86,29 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
 
     }
 
+    /**
+     * Class models the view holder for the view displaying the button to expand / collapse the
+     * list of invisible details.
+     */
+    public static class MoreButtonViewHolder extends RecyclerView.ViewHolder {
+
+        /**
+         * Attribute store the more button to expand / collapse the list of invisible details.
+         */
+        public Button moreButton;
+
+
+        /**
+         * Constructor instantiates a new view holder for the specified view.
+         *
+         * @param itemView  Inflated view for which to create the view holder.
+         */
+        public MoreButtonViewHolder(View itemView) {
+            super(itemView);
+            moreButton = itemView.findViewById(R.id.button_more);
+        }
+
+    }
 
     /**
      * Class models the view holder for the view displaying information about a detail.
@@ -157,6 +178,12 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
      * Field stores the view type for the detail item view.
      */
     private static final int TYPE_DETAIL = 1;
+
+    /**
+     * Field stores the view type for the more button.
+     */
+    private static final int TYPE_MORE_BUTTON = 3;
+
 
     /**
      * Attribute stores the click listener which is called when the delete button is clicked.
@@ -318,11 +345,53 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
         }
         else if (viewHolder instanceof DetailViewHolder) {
             DetailViewHolder holder = (DetailViewHolder)viewHolder;
-            Detail detail = entry.getDetails().get(position - OFFSET_DETAILS);
-            holder.nameTextView.setText(detail.getName());
-            holder.contentTextView.setText(detail.getContent());
-            holder.moreImageButton.setOnClickListener(view -> Utils.copyToClipboard(detail.getContent()));
-            holder.detailImageView.setImageDrawable(AppCompatResources.getDrawable(context, detail.getType().getDrawable()));
+            Detail detail;
+            boolean visible;
+            if (position < getOffsetInvisibleDetails()) {
+                detail = entry.getVisibleDetails().get(position - OFFSET_DETAILS);
+                visible = true;
+            }
+            else {
+                detail = entry.getInvisibleDetails().get(position - getOffsetInvisibleDetails());
+                visible = viewModel.areInvisibleDetailsExpanded();
+            }
+            if (visible) {
+                holder.itemView.setVisibility(View.VISIBLE);
+                holder.itemView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                holder.nameTextView.setText(detail.getName());
+                holder.contentTextView.setText(detail.getContent());
+                holder.moreImageButton.setOnClickListener(view -> Utils.copyToClipboard(detail.getContent()));
+                holder.detailImageView.setImageDrawable(AppCompatResources.getDrawable(context, detail.getType().getDrawable()));
+            }
+            else {
+                holder.itemView.setVisibility(View.GONE);
+                holder.itemView.setLayoutParams(new ViewGroup.LayoutParams(0, 0));
+            }
+        }
+        else if (viewHolder instanceof MoreButtonViewHolder) {
+            MoreButtonViewHolder holder = (MoreButtonViewHolder)viewHolder;
+            if (viewModel.getEntry().getInvisibleDetails().isEmpty()) {
+                holder.moreButton.setVisibility(View.GONE);
+                holder.itemView.setLayoutParams(new ViewGroup.LayoutParams(0, 0));
+                return;
+            }
+            else {
+                holder.moreButton.setVisibility(View.VISIBLE);
+                holder.itemView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                holder.moreButton.setOnClickListener(view -> {
+                    viewModel.setInvisibleDetailsExpanded(!viewModel.areInvisibleDetailsExpanded());
+                    for (int i = getOffsetInvisibleDetails(); i < getOffsetInvisibleDetails() + viewModel.getEntry().getInvisibleDetails().size(); i++) {
+                        notifyItemChanged(i);
+                    }
+                    notifyItemChanged(holder.getAdapterPosition());
+                });
+            }
+            if (viewModel.areInvisibleDetailsExpanded()) {
+                holder.moreButton.setText(context.getString(R.string.button_show_less));
+            }
+            else {
+                holder.moreButton.setText(context.getString(R.string.button_show_more));
+            }
         }
     }
 
@@ -348,6 +417,9 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
             case TYPE_GENERIC_EMPTY_PLACEHOLDER:
                 itemView = layoutInflater.inflate(R.layout.item_generic_empty_placeholder, parent, false);
                 return new GenericEmptyPlaceholderViewHolder(itemView);
+            case TYPE_MORE_BUTTON:
+                itemView = layoutInflater.inflate(R.layout.item_entry_more_button, parent, false);
+                return new MoreButtonViewHolder(itemView);
             case TYPE_DETAIL:
             default:
                 itemView = layoutInflater.inflate(R.layout.item_entry_detail, parent, false);
@@ -364,14 +436,17 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
      */
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) {
+        if (position == POSITION_GENERAL) {
             return TYPE_GENERAL;
         }
         else if (position == 1) {
             return TYPE_GENERIC_HEADLINE_BUTTON;
         }
-        else if (position == 2) {
+        else if (position == POSITION_DETAILS_EMPTY_PLACEHOLDER) {
             return TYPE_GENERIC_EMPTY_PLACEHOLDER;
+        }
+        else if (position == getPositionMoreButton()) {
+            return TYPE_MORE_BUTTON;
         }
         else {
             return TYPE_DETAIL;
@@ -389,7 +464,36 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
         if (viewModel.getEntry() == null) {
             return 0;
         }
+        //Display the details plus the following:
+        // - General view
+        // - Headline details
+        // - Empty placeholder for the list of details
+        // - More button
+        return viewModel.getEntry().getDetails().size() + 4;
+    }
+
+    /**
+     * Method returns the position of the more button within the recycler view.
+     *
+     * @return  Position of the more button.
+     */
+    public int getPositionMoreButton() {
+        if (viewModel.getEntry() == null) {
+            return 0;
+        }
         return viewModel.getEntry().getVisibleDetails().size() + 3;
+    }
+
+    /**
+     * Method returns the offset with which the invisible details are displayed within the adapter.
+     *
+     * @return  Offset with which the invisible details are displayed.
+     */
+    public int getOffsetInvisibleDetails() {
+        if (viewModel.getEntry() == null) {
+            return 0;
+        }
+        return viewModel.getEntry().getVisibleDetails().size() + 4;
     }
 
 }

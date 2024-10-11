@@ -13,6 +13,7 @@ import de.passwordvault.model.packages.SerializablePackage;
 import de.passwordvault.model.packages.SerializablePackageCollection;
 import de.passwordvault.model.tags.Tag;
 import de.passwordvault.view.entries.activity_packages.PackagesActivity;
+import de.passwordvault.view.entries.dialog_detail.DetailDialog;
 import de.passwordvault.view.entries.dialog_edit_entry.EditEntryDialog;
 import de.passwordvault.view.entries.dialog_edit_entry.EditEntryViewModel;
 import de.passwordvault.view.entries.dialog_edit_tag.EditTagDialog;
@@ -70,7 +71,7 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
     /**
      * Attribute stores the launcher used to start the {@link de.passwordvault.view.entries.activity_packages.PackagesActivity}.
      */
-    private ActivityResultLauncher<Intent> packagesLauncher;
+    private final ActivityResultLauncher<Intent> packagesLauncher;
 
 
     /**
@@ -124,10 +125,10 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
 
         //Configure recycler view adapter:
         adapter = new EntryRecyclerViewAdapter(this, viewModel);
-
         adapter.setEditEntryListener(this::onEditEntryClicked);
         adapter.setDeleteClickListener(this::onDeleteClicked);
         adapter.setEditPackagesListener(this::onPackagesClicked);
+        adapter.setAddDetailListener(this::onAddDetailClicked);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setAdapter(adapter);
 
@@ -171,6 +172,13 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
         else if (dialog instanceof EditTagDialog) {
             Log.d("EditActivity", "Received callback: " + resultCode);
         }
+    }
+
+
+
+    private void onAddDetailClicked(int position) {
+        DetailDialog detailDialog = new DetailDialog();
+        detailDialog.show(getSupportFragmentManager(), null);
     }
 
 

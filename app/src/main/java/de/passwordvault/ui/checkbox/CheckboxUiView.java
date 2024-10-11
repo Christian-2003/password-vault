@@ -9,6 +9,9 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
+
+import com.google.android.material.checkbox.MaterialCheckBox;
+
 import de.passwordvault.R;
 
 
@@ -123,7 +126,12 @@ public class CheckboxUiView extends LinearLayout {
      * @param checked   Whether the checkbox is checked.
      */
     public void setChecked(boolean checked) {
-        this.checkbox.setChecked(checked);
+        //Update the checked state using post. Otherwise, calling setChecked immediately after inflating
+        //the view could sometimes not reflect the checked state in the UI. This occurred due to
+        //timing related issues since the view is being inflated while the state change is invoked.
+        post(() -> {
+            checkbox.setChecked(checked);
+        });
     }
 
     /**

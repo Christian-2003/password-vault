@@ -19,7 +19,7 @@ n/a
 * Fixed a bug where the logos of other apps were cropped off on all sides on devices that use squircles as launcher icons.
 * Changed shape displaying the abbreviation of an entry if no app logo is available to a square with rounded corners instead of a circle.
 * Upgrade project files to support _Android Studio Koala_.
-* Added new reusable `CheckboxUiView` as checkbox component for the app. 
+* Added new reusable `CheckboxUiView` as checkbox component for the app.
 
 <br/>
 
