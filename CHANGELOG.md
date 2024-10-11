@@ -20,6 +20,8 @@ n/a
 * Changed shape displaying the abbreviation of an entry if no app logo is available to a square with rounded corners instead of a circle.
 * Upgrade project files to support _Android Studio Koala_.
 * Added new reusable `CheckboxUiView` as checkbox component for the app.
+* Added branding drawable to splash screen.
+* Added `androidx.core:core-splashscreen:1.0.1` library to enable animated splash screens and branding drawables. 
 
 <br/>
 

@@ -28,6 +28,12 @@
         <item name="colorControlActivated">@color/pv_primary</item>
         <item name="android:textColorHighlight">@color/pv_primary_translucent</item>
 
+        <!-- Splash screen -->
+        <item name="android:windowSplashScreenBackground">@color/background</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>
+        <item name="android:windowSplashScreenAnimationDuration">1000</item>
+        <item name="android:windowSplashScreenBrandingImage">@drawable/ic_splash_branding</item>
+
         <!-- Default styles for material components -->
         <item name="textInputStyle">@style/pv.material.text_input_layout</item>
         <item name="materialSwitchStyle">@style/pv.material.switch</item>
