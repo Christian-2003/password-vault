@@ -1,11 +1,10 @@
 plugins {
     id 'com.android.application'
-    id 'com.google.android.gms.oss-licenses-plugin'
 }
 
 android {
     namespace 'de.passwordvault'
-    //noinspection GradleCompatible
+    //noinspection GradleDependency,GradleCompatible
     compileSdk 32
 
     defaultConfig {
