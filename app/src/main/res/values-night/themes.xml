@@ -31,7 +31,7 @@
         <!-- Splash screen -->
         <item name="android:windowSplashScreenBackground">@color/background</item>
         <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>
-        <item name="android:windowSplashScreenAnimationDuration">1000</item>
+        <item name="android:windowSplashScreenAnimationDuration">@integer/anim_duration_splash</item>
         <item name="android:windowSplashScreenBrandingImage">@drawable/ic_splash_branding</item>
 
         <!-- Default styles for material components -->

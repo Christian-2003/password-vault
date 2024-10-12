@@ -53,4 +53,7 @@
     <dimen name="corner_s">12dp</dimen>
     <dimen name="corner_xs">8dp</dimen>
 
+
+    <integer name="anim_duration_splash">1000</integer>
+
 </resources>

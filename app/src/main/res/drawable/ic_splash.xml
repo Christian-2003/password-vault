@@ -5,6 +5,6 @@
 
     <target
         android:name="mainPath"
-        android:animation="@animator/test_animator" />
+        android:animation="@animator/splash_color" />
 
 </animated-vector>
