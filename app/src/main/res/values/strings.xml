@@ -305,7 +305,7 @@
     <string name="button_delete">Delete</string>
     <string name="button_save">Save</string>
     <string name="button_cancel">Cancel</string>
-    <string name="button_ok">Ok</string>
+    <string name="button_ok">OK</string>
     <string name="button_login">Login</string>
     <string name="button_biometrics">Use biometrics</string>
     <string name="button_add_quality_gate">Add quality gate</string>

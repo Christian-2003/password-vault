@@ -13,6 +13,7 @@
     <color name="text">#E3E2E7</color>
     <color name="text_light">#C4C7D0</color>
     <color name="text_critical">#FFB4AB</color>
+    <color name="text_on_primary">#FAFAFA</color>
     <color name="divider">#454746</color>
 
     <color name="red">#A7292F</color>
