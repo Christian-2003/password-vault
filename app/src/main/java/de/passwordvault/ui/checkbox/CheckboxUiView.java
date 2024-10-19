@@ -9,9 +9,6 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
-
-import com.google.android.material.checkbox.MaterialCheckBox;
-
 import de.passwordvault.R;
 
 

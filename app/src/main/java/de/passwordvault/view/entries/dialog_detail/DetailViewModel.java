@@ -59,8 +59,8 @@ public class DetailViewModel extends ViewModel {
      */
     public DetailViewModel() {
         detail = null;
-        nameEnteredAutomatically = false;
-        obfuscatedEnteredAutomatically = false;
+        nameEnteredAutomatically = true;
+        obfuscatedEnteredAutomatically = true;
         editingDetail = false;
         types = DetailType.values();
         typeNames = new String[types.length - 1]; //Ignore last DetailType, since this is DetailType.UNDEFINED.
@@ -115,7 +115,7 @@ public class DetailViewModel extends ViewModel {
      * @return  Whether obfuscated was entered automatically.
      */
     public boolean isObfuscatedEnteredAutomatically() {
-        return nameEnteredAutomatically;
+        return obfuscatedEnteredAutomatically;
     }
 
     /**
@@ -146,6 +146,26 @@ public class DetailViewModel extends ViewModel {
     @NonNull
     public String[] getTypeNames() {
         return typeNames;
+    }
+
+
+    /**
+     * Method returns the index of the passed type name within the array {@link #typeNames}. If the
+     * name was not found, {@code -1} is returned.
+     *
+     * @param typeName  Type name whose index to return.
+     * @return          Index of the passed type name.
+     */
+    public int getTypeIndexFromName(@Nullable String typeName) {
+        if (typeName == null) {
+            return -1;
+        }
+        for (int i = 0; i < typeNames.length; i++) {
+            if (typeNames[i].equals(typeName)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
 
