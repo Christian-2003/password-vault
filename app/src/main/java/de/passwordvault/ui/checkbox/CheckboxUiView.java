@@ -129,8 +129,17 @@ public class CheckboxUiView extends LinearLayout {
         //Update the checked state using post. Otherwise, calling setChecked immediately after inflating
         //the view could sometimes not reflect the checked state in the UI. This occurred due to
         //timing related issues since the view is being inflated while the state change is invoked.
+        //Since setChecked is called some time after this method is called, the method needs to remember
+        //whether the checked change event listener is set while THIS method is called or not. Therefore,
+        //correct checked change event triggering is possible even if setChecked is called later.
+        boolean invokeCheckedChangeEvent = checkedChangeListener != null;
         post(() -> {
+            CompoundButton.OnCheckedChangeListener listener = checkedChangeListener;
+            if (!invokeCheckedChangeEvent) {
+                checkedChangeListener = null;
+            }
             checkbox.setChecked(checked);
+            checkedChangeListener = listener;
         });
     }
 
