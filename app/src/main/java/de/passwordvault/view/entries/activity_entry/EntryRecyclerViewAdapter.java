@@ -209,6 +209,12 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
     @Nullable
     private OnRecyclerViewActionListener addDetailListener;
 
+    /**
+     * Attribute stores the action listener to invoke when the 'more' button of a detail is clicked.
+     */
+    @Nullable
+    private OnRecyclerViewActionListener moreListener;
+
 
     /**
      * Constructor instantiates a new recycler view adapter.
@@ -221,6 +227,7 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
         editEntryListener = null;
         editPackagesListener = null;
         addDetailListener = null;
+        moreListener = null;
     }
 
 
@@ -258,6 +265,15 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
      */
     public void setAddDetailListener(@Nullable OnRecyclerViewActionListener addDetailListener) {
         this.addDetailListener = addDetailListener;
+    }
+
+    /**
+     * Method changes the action listener to invoked when the 'more' button of a detail is clicked.
+     *
+     * @param moreListener  New listener to invoke.
+     */
+    public void setMoreListener(@Nullable OnRecyclerViewActionListener moreListener) {
+        this.moreListener = moreListener;
     }
 
 
@@ -359,8 +375,17 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
                 holder.itemView.setVisibility(View.VISIBLE);
                 holder.itemView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 holder.nameTextView.setText(detail.getName());
-                holder.contentTextView.setText(detail.getContent());
-                holder.moreImageButton.setOnClickListener(view -> Utils.copyToClipboard(detail.getContent()));
+                if (detail.isObfuscated()) {
+                    holder.contentTextView.setText(Utils.obfuscate(detail.getContent()));
+                }
+                else {
+                    holder.contentTextView.setText(detail.getContent());
+                }
+                holder.moreImageButton.setOnClickListener(view -> {
+                    if (moreListener != null) {
+                        moreListener.onAction(viewHolder.getAdapterPosition());
+                    }
+                });
                 holder.detailImageView.setImageDrawable(AppCompatResources.getDrawable(context, detail.getType().getDrawable()));
             }
             else {
@@ -494,6 +519,24 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
             return 0;
         }
         return viewModel.getEntry().getVisibleDetails().size() + 4;
+    }
+
+    @Nullable
+    public Detail getDetailForAdapterPosition(int position) {
+        if (viewModel.getEntry() == null) {
+            return null;
+        }
+        int offsetInvisibleDetails = getOffsetInvisibleDetails();
+        if (position >= offsetInvisibleDetails) {
+            //Invisible details:
+            return viewModel.getEntry().getInvisibleDetails().get(position - offsetInvisibleDetails);
+        }
+        else if (position >= OFFSET_DETAILS && position < offsetInvisibleDetails - 1) {
+            return viewModel.getEntry().getVisibleDetails().get(position - OFFSET_DETAILS);
+        }
+        else {
+            return null;
+        }
     }
 
 }

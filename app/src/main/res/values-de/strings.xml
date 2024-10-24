@@ -282,8 +282,8 @@
     <string name="detail_dialog_obfuscated">Unkenntlich</string>
     <string name="detail_dialog_encrypted">Verschlüsselt</string>
     <string name="detail_dialog_visible">Sichtbar</string>
-    <string name="detail_dialog_username">Als Benutzernamen für automatisches Ausfüllen verwenden</string>
-    <string name="detail_dialog_password">Als Passwort für automatisches Ausfüllen verwenden</string>
+    <string name="detail_dialog_username">Benutzername für autom. Ausfüllen</string>
+    <string name="detail_dialog_password">Passwort für autom. Ausfüllen</string>
 
 
     <!-- Tag dialog -->
@@ -318,6 +318,7 @@
     <string name="button_previous">Zurück</string>
     <string name="button_forgot_password">Passwort vergessen?</string>
     <string name="button_recover_password">Master Passwort wiederherstellen</string>
+    <string name="button_copy_detail">Inhalt kopieren</string>
 
 
     <!-- Input hints -->

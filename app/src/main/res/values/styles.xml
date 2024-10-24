@@ -73,8 +73,14 @@
         <item name="android:tint">@color/text_light</item>
     </style>
 
-    <style name="image.item" parent="image">
+    <style name="image.light.small" parent="image.light">
+        <item name="android:layout_height">@dimen/image_xxs</item>
+        <item name="android:layout_width">@dimen/image_xxs</item>
+    </style>
 
+    <style name="image.item" parent="image">
+        <item name="android:layout_height">@dimen/image_xs</item>
+        <item name="android:layout_width">@dimen/image_xs</item>
     </style>
 
     <style name="image.emptyPlaceholder" parent="image">

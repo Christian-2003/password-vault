@@ -4,12 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.Resources;
-import android.database.Cursor;
-import android.net.Uri;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
-
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -87,13 +82,13 @@ public class Utils {
     public static int getPasswordSecurityScoreColor(int score) {
         double securityScorePercentage = (double)score / (double)QualityGateManager.getInstance().numberOfQualityGates();
         if (securityScorePercentage < 0.33) {
-            return App.getContext().getColor(R.color.pv_red);
+            return App.getContext().getColor(R.color.red);
         }
         else if (securityScorePercentage > 0.67) {
-            return App.getContext().getColor(R.color.pv_green);
+            return App.getContext().getColor(R.color.green);
         }
         else {
-            return App.getContext().getColor(R.color.pv_yellow);
+            return App.getContext().getColor(R.color.yellow);
         }
     }
 

@@ -16,9 +16,9 @@
     <color name="text_on_primary">#FAFAFA</color>
     <color name="divider">#C5C7C6</color>
 
-    <color name="red">#781D21</color>
-    <color name="yellow">#78741D</color>
-    <color name="green">#4E781D</color>
+    <color name="red">#D14147</color>
+    <color name="yellow">#BAB41B</color>
+    <color name="green">#86C03F</color>
 
     <!-- Light / dark variants needed for dialog to switch darkmode -->
     <color name="light_background">#FAF9FE</color>
@@ -34,28 +34,21 @@
     <color name="pv_primary">#1D7874</color>
     <color name="pv_primary_translucent">#991D7874</color>
     <color name="pv_background">#FAF9FE</color>
-
     <color name="pv_container">#F5F3F8</color>
     <color name="pv_container_highlight">#BFE3E2</color>
     <color name="pv_container_detail">#F2F2F2</color>
-
     <color name="pv_text">#1B1A1F</color>
     <color name="pv_text_secondary">#44474E</color>
     <color name="pv_text_primary">#1D7874</color>
     <color name="pv_text_onPrimary">#FAFAFA</color>
-
     <color name="pv_red">#FB5F2E</color>
     <color name="pv_green">#03D58A</color>
     <color name="pv_yellow">#F0C430</color>
-
     <color name="pv_icon_green">#11A960</color>
-
     <color name="pv_detail_blue">#3A21D1</color>
     <color name="pv_detail_green">#00A66A</color>
     <color name="pv_detail_red">#B74E4E</color>
     <color name="pv_detail_yellow">#CBA622</color>
-
-    <!-- Light / dark variants needed for dialog to switch darkmode -->
     <color name="pv_background_light">#F6F6F8</color>
     <color name="pv_container_light">#FCFCFE</color>
     <color name="pv_container_highlight_light">#BFE3E2</color>

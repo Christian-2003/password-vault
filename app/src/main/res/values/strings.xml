@@ -320,6 +320,7 @@
     <string name="button_previous">Previous</string>
     <string name="button_forgot_password">Forgot password?</string>
     <string name="button_recover_password">Recover master password</string>
+    <string name="button_copy_detail">Copy content</string>
 
 
     <!-- Input hints -->

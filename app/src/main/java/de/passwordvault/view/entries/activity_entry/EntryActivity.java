@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
+import de.passwordvault.model.detail.Detail;
 import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.packages.PackageCollection;
@@ -18,6 +19,11 @@ import de.passwordvault.view.entries.dialog_edit_entry.EditEntryDialog;
 import de.passwordvault.view.entries.dialog_edit_entry.EditEntryViewModel;
 import de.passwordvault.view.entries.dialog_edit_tag.EditTagDialog;
 import de.passwordvault.view.general.dialog_delete.DeleteDialog;
+import de.passwordvault.view.general.dialog_more.Item;
+import de.passwordvault.view.general.dialog_more.ItemButton;
+import de.passwordvault.view.general.dialog_more.MoreDialog;
+import de.passwordvault.view.general.dialog_more.MoreDialogCallback;
+import de.passwordvault.view.utils.Utils;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
 import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
 
@@ -40,7 +46,7 @@ import java.util.Objects;
  * @author  Christian-2003
  * @version 3.7.0
  */
-public class EntryActivity extends PasswordVaultActivity<EntryViewModel> implements PasswordVaultBottomSheetDialog.Callback {
+public class EntryActivity extends PasswordVaultActivity<EntryViewModel> implements PasswordVaultBottomSheetDialog.Callback, MoreDialogCallback {
 
     /**
      * Field stores the key to use when passing the UUID of an entry to show as extra with the intent.
@@ -56,6 +62,26 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
      * Field stores the result code returned if the displayed entry is deleted.
      */
     public static final int RESULT_DELETED = 315;
+
+    /**
+     * Field stores the tag for the more dialog to show items for details.
+     */
+    private static final String TAG_DIALOG_DETAIL = "detail";
+
+    /**
+     * Field stores the tag for the more dialog item to edit a detail.
+     */
+    private static final String TAG_EDIT_DETAIL = "edit";
+
+    /**
+     * Field stores the tag for the more dialog item to delete a detail.
+     */
+    private static final String TAG_DELETE_DETAIL = "delete";
+
+    /**
+     * Field stores the tag for the more dialog item to copy the content of a detail.
+     */
+    private static final String TAG_COPY_DETAIL = "copy";
 
 
     /**
@@ -100,6 +126,82 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
 
 
     /**
+     * Method is called whenever a dialog callback is invoked.
+     *
+     * @param dialog        Dialog that was closed.
+     * @param resultCode    Result code is either {@link #RESULT_SUCCESS} or {@link #RESULT_CANCEL}
+     *                      and indicates how the dialog is closed.
+     */
+    @Override
+    public void onCallback(PasswordVaultBottomSheetDialog<? extends ViewModel> dialog, int resultCode) {
+        if (dialog instanceof EditEntryDialog) {
+            EditEntryDialog editEntryDialog = (EditEntryDialog)dialog;
+            if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS && viewModel.getEntry() != null) {
+                viewModel.getEntry().setName(editEntryDialog.getName());
+                viewModel.getEntry().setDescription(editEntryDialog.getDescription());
+                viewModel.getEntry().getTags().clear();
+                for (Tag tag : editEntryDialog.getSelectedTags()) {
+                    viewModel.getEntry().getTags().add(tag);
+                }
+                appBarTextView.setText(viewModel.getEntry().getName());
+                adapter.notifyItemChanged(EntryRecyclerViewAdapter.POSITION_GENERAL);
+            }
+        }
+        else if (dialog instanceof DeleteDialog) {
+            if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS) {
+                EntryManager.getInstance().remove(Objects.requireNonNull(viewModel.getEntry()).getUuid());
+                finish();
+            }
+        }
+        else if (dialog instanceof EditTagDialog) {
+            Log.d("EditActivity", "Received callback: " + resultCode);
+        }
+    }
+
+
+    /**
+     * Method is called whenever an item within the {@link MoreDialog} is clicked.
+     *
+     * @param dialog    Dialog in which the action was invoked.
+     * @param tag       Tag from the {@link Item} whose action is invoked.
+     * @param position  Position of the {@link Item} within the dialog.
+     */
+    @Override
+    public void onDialogItemClicked(MoreDialog dialog, String tag, int position) {
+        if (dialog.getTag() != null && dialog.getTag().equals(TAG_DIALOG_DETAIL)) {
+            String[] tagParts = tag.split(":");
+            if (tagParts.length != 2) {
+                return;
+            }
+            int adapterPosition;
+            try {
+                adapterPosition = Integer.parseInt(tagParts[1]);
+            }
+            catch (NumberFormatException e) {
+                return;
+            }
+            switch (tagParts[0]) {
+                case TAG_EDIT_DETAIL: {
+
+                    break;
+                }
+                case TAG_DELETE_DETAIL: {
+
+                    break;
+                }
+                case TAG_COPY_DETAIL: {
+                    Detail detail = adapter.getDetailForAdapterPosition(adapterPosition);
+                    if (detail != null) {
+                        Utils.copyToClipboard(detail.getContent());
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+
+    /**
      * Method is called whenever the activity is created.
      *
      * @param savedInstanceState    Previously saved state of the instance.
@@ -129,6 +231,7 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
         adapter.setDeleteClickListener(this::onDeleteClicked);
         adapter.setEditPackagesListener(this::onPackagesClicked);
         adapter.setAddDetailListener(this::onAddDetailClicked);
+        adapter.setMoreListener(this::showDetailMoreDialog);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setAdapter(adapter);
 
@@ -146,32 +249,6 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
         args.putString(DeleteDialog.ARG_MESSAGE, getString(R.string.delete_dialog_message).replace("{arg}", viewModel.getEntry().getName()));
         dialog.setArguments(args);
         dialog.show(getSupportFragmentManager(), null);
-    }
-
-    @Override
-    public void onCallback(PasswordVaultBottomSheetDialog<? extends ViewModel> dialog, int resultCode) {
-        if (dialog instanceof EditEntryDialog) {
-            EditEntryDialog editEntryDialog = (EditEntryDialog)dialog;
-            if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS && viewModel.getEntry() != null) {
-                viewModel.getEntry().setName(editEntryDialog.getName());
-                viewModel.getEntry().setDescription(editEntryDialog.getDescription());
-                viewModel.getEntry().getTags().clear();
-                for (Tag tag : editEntryDialog.getSelectedTags()) {
-                    viewModel.getEntry().getTags().add(tag);
-                }
-                appBarTextView.setText(viewModel.getEntry().getName());
-                adapter.notifyItemChanged(EntryRecyclerViewAdapter.POSITION_GENERAL);
-            }
-        }
-        else if (dialog instanceof DeleteDialog) {
-            if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS) {
-                EntryManager.getInstance().remove(Objects.requireNonNull(viewModel.getEntry()).getUuid());
-                finish();
-            }
-        }
-        else if (dialog instanceof EditTagDialog) {
-            Log.d("EditActivity", "Received callback: " + resultCode);
-        }
     }
 
 
@@ -201,6 +278,27 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
             packagesLauncher.launch(intent);
             Log.d("EntryActivity", "Launched intent to edit packages");
         }
+    }
+
+
+    private void showDetailMoreDialog(int position) {
+        Detail detail = adapter.getDetailForAdapterPosition(position);
+        if (detail == null) {
+            return;
+        }
+
+        Bundle args = new Bundle();
+        args.putString(MoreDialog.ARG_TITLE, detail.getName());
+        args.putInt(MoreDialog.ARG_ICON, R.drawable.ic_info); //TODO: Change icon for dialog
+        ArrayList<Item> items = new ArrayList<>();
+        items.add(new ItemButton(getString(R.string.button_edit), TAG_EDIT_DETAIL + ":" + position, R.drawable.ic_edit));
+        items.add(new ItemButton(getString(R.string.button_delete), TAG_DELETE_DETAIL + ":" + position, R.drawable.ic_delete));
+        items.add(new ItemButton(getString(R.string.button_copy_detail), TAG_COPY_DETAIL + ":" + position, R.drawable.ic_copy));
+        args.putSerializable(MoreDialog.ARG_ITEMS, items);
+
+        MoreDialog dialog = new MoreDialog();
+        dialog.setArguments(args);
+        dialog.show(getSupportFragmentManager(), TAG_DIALOG_DETAIL);
     }
 
 }
