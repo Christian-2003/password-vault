@@ -15,9 +15,11 @@ import de.passwordvault.model.packages.Package;
 /**
  * Class implements an adapter for a recycler view which displays a list of package logos.
  *
- * @author  Christian-2003
- * @version 3.5.0
+ * @author      Christian-2003
+ * @version     3.5.0
+ * @deprecated  This no longer used and will be removed once the new UI is fully implemented.
  */
+@Deprecated
 public class PackagesLogoRecyclerViewAdapter extends RecyclerView.Adapter<PackagesLogoRecyclerViewAdapter.ViewHolder> {
 
     /**

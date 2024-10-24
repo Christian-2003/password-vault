@@ -17,12 +17,14 @@
         android:layout_width="@dimen/image_m"
         android:layout_height="@dimen/image_m"
         android:layout_marginStart="@dimen/space_horizontal"
+        android:backgroundTint="@color/background_container"
         app:cardCornerRadius="@dimen/corner_xs">
 
         <ImageView
             android:id="@+id/image_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:tint="@color/primary"
             tools:src="@drawable/detail_text"
             tools:ignore="contentDescription"/>
 

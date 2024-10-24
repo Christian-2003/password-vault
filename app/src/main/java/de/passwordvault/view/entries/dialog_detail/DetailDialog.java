@@ -151,18 +151,18 @@ public class DetailDialog extends PasswordVaultBottomSheetDialog<DetailViewModel
     /**
      * Attribute stores the text watcher triggered whenever the name entered changes.
      */
-    private NameTextWatcher nameTextWatcher;
+    private final NameTextWatcher nameTextWatcher;
 
     /**
      * Attribute stores the text watcher triggered whenever the type selected changes.
      */
-    private TypeTextWatcher typeTextWatcher;
+    private final TypeTextWatcher typeTextWatcher;
 
     /**
      * Attribute stores the checked change listener triggered whenever the state of the obfuscated
      * checkbox changes.
      */
-    private ObfuscatedCheckedChangeListener obfuscatedCheckedChangeListener;
+    private final ObfuscatedCheckedChangeListener obfuscatedCheckedChangeListener;
 
     /**
      * Attribute stores the edit text used to enter the name for the detail.
@@ -276,23 +276,18 @@ public class DetailDialog extends PasswordVaultBottomSheetDialog<DetailViewModel
             obfuscateCheckbox.setChecked(viewModel.getDetail().isObfuscated());
             obfuscateCheckbox.setCheckedChangeListener(obfuscatedCheckedChangeListener);
             visibleCheckbox.setChecked(viewModel.getDetail().isVisible());
-            visibleCheckbox.setCheckedChangeListener((button, checked) -> {
-                viewModel.getDetail().setVisible(checked);
-            });
+            visibleCheckbox.setCheckedChangeListener((button, checked) -> viewModel.getDetail().setVisible(checked));
             usernameCheckbox.setChecked(viewModel.getDetail().isUsername());
-            usernameCheckbox.setCheckedChangeListener((button, checked) -> {
-                viewModel.getDetail().setUsername(checked);
-            });
+            usernameCheckbox.setCheckedChangeListener((button, checked) -> viewModel.getDetail().setUsername(checked));
             passwordCheckbox.setChecked(viewModel.getDetail().isPassword());
-            passwordCheckbox.setCheckedChangeListener((button, checked) -> {
-                viewModel.getDetail().setPassword(checked);
-            });
+            passwordCheckbox.setCheckedChangeListener((button, checked) -> viewModel.getDetail().setPassword(checked));
             typeSelector.setAdapter(new ArrayAdapter<>(view.getContext(), R.layout.list_item_dropdown, R.id.text_view, viewModel.getTypeNames()));
         }
 
         nameEditText.addTextChangedListener(nameTextWatcher);
         typeSelector.addTextChangedListener(typeTextWatcher);
 
+        //Cancel button:
         view.findViewById(R.id.button_cancel).setOnClickListener(v -> {
             if (callback != null) {
                 callback.onCallback(this, Callback.RESULT_CANCEL);
@@ -300,6 +295,7 @@ public class DetailDialog extends PasswordVaultBottomSheetDialog<DetailViewModel
             dismiss();
         });
 
+        //Save button:
         view.findViewById(R.id.button_save).setOnClickListener(v -> {
             if (validateUserInput()) {
                 if (callback != null) {
@@ -310,6 +306,16 @@ public class DetailDialog extends PasswordVaultBottomSheetDialog<DetailViewModel
         });
 
         return view;
+    }
+
+
+    /**
+     * Method returns the detail that is edited / through the dialog.
+     *
+     * @return  Detail.
+     */
+    public Detail getDetail() {
+        return viewModel.getDetail();
     }
 
 

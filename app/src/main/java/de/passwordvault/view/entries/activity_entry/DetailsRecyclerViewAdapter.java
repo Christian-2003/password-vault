@@ -36,9 +36,11 @@ import de.passwordvault.view.utils.Utils;
 /**
  * Class implements an adapter for a recycler view displaying {@link Detail}-instances for an entry.
  *
- * @author  Christian-2003
- * @version 3.5.4
+ * @author      Christian-2003
+ * @version     3.5.4
+ * @deprecated  This no longer used and will be removed once the new UI is fully implemented.
  */
+@Deprecated
 public class DetailsRecyclerViewAdapter extends RecyclerView.Adapter<DetailsRecyclerViewAdapter.ViewHolder> implements DetailsItemMoveCallback.ItemTouchHelperContract {
 
     /**
