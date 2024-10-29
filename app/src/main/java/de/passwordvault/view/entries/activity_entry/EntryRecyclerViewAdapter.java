@@ -1,5 +1,6 @@
 package de.passwordvault.view.entries.activity_entry;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,8 +19,11 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.atomic.AtomicBoolean;
 import de.passwordvault.R;
+import de.passwordvault.model.analysis.QualityGateManager;
 import de.passwordvault.model.detail.Detail;
+import de.passwordvault.model.detail.DetailType;
 import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.model.tags.Tag;
 import de.passwordvault.view.utils.Utils;
@@ -138,6 +143,11 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
          */
         public ImageView detailImageView;
 
+        /**
+         * Attribute stores the image button used to (un-)obfuscate the content of the detail.
+         */
+        public ImageButton obfuscateImageButton;
+
 
         /**
          * Constructor instantiates a new view holder.
@@ -150,6 +160,36 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
             contentTextView = itemView.findViewById(R.id.text_content);
             moreImageButton = itemView.findViewById(R.id.button_more);
             detailImageView = itemView.findViewById(R.id.image_detail);
+            obfuscateImageButton = itemView.findViewById(R.id.button_obfuscate);
+        }
+
+    }
+
+    /**
+     * Class models the view holder for the view displaying information about a detail password.
+     */
+    public static class DetailPasswordViewHolder extends DetailViewHolder {
+
+        /**
+         * Attribute stores the text view displaying the password security score.
+         */
+        public final TextView scoreTextView;
+
+        /**
+         * Attribute stores the progress bar displaying the score progress bar.
+         */
+        public final ProgressBar scoreProgressBar;
+
+
+        /**
+         * Constructor instantiates a new view holder for the specified item view.
+         *
+         * @param itemView  Inflated view for which to create the view holder.
+         */
+        public DetailPasswordViewHolder(View itemView) {
+            super(itemView);
+            scoreTextView = itemView.findViewById(R.id.text_score);
+            scoreProgressBar = itemView.findViewById(R.id.progress_bar);
         }
 
     }
@@ -185,6 +225,11 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
      * Field stores the view type for the more button.
      */
     private static final int TYPE_MORE_BUTTON = 3;
+
+    /**
+     * Field stores the view type for the detail item view displaying a password.
+     */
+    private static final int TYPE_DETAIL_PASSWORD = 5;
 
 
     /**
@@ -365,6 +410,7 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
             DetailViewHolder holder = (DetailViewHolder)viewHolder;
             Detail detail;
             boolean visible;
+            AtomicBoolean obfuscated = new AtomicBoolean(false);
             if (position < getOffsetInvisibleDetails()) {
                 detail = entry.getVisibleDetails().get(position - OFFSET_DETAILS);
                 visible = true;
@@ -389,10 +435,37 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
                     }
                 });
                 holder.detailImageView.setImageDrawable(AppCompatResources.getDrawable(context, detail.getType().getDrawable()));
+                holder.obfuscateImageButton.setVisibility(detail.isObfuscated() ? View.VISIBLE : View.GONE);
+                holder.obfuscateImageButton.setOnClickListener(view -> {
+                    if (obfuscated.get()) {
+                        holder.obfuscateImageButton.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_show));
+                        holder.contentTextView.setText(Utils.obfuscate(detail.getContent()));
+                    }
+                    else {
+                        holder.obfuscateImageButton.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_show_off));
+                        holder.contentTextView.setText(detail.getContent());
+                    }
+                    obfuscated.set(!obfuscated.get());
+                });
             }
             else {
                 holder.itemView.setVisibility(View.GONE);
                 holder.itemView.setLayoutParams(new ViewGroup.LayoutParams(0, 0));
+            }
+
+            //Test whether item view displays password:
+            if (holder instanceof DetailPasswordViewHolder) {
+                DetailPasswordViewHolder passwordHolder = (DetailPasswordViewHolder)holder;
+                int securityScore = QualityGateManager.getInstance().calculatePassedQualityGates(detail.getContent());
+                int maxSecurityScore = QualityGateManager.getInstance().numberOfQualityGates();
+                passwordHolder.scoreProgressBar.setMax(maxSecurityScore * 100);
+                ValueAnimator animator = ValueAnimator.ofInt(0, securityScore * 100);
+                animator.setDuration(context.getResources().getInteger(R.integer.default_anim_duration) * 5L);
+                animator.addUpdateListener(anim -> passwordHolder.scoreProgressBar.setProgress((int)anim.getAnimatedValue()));
+                animator.start();
+                //passwordHolder.scoreProgressBar.setProgress(securityScore * 100);
+                String securityScoreString = securityScore + " / " + maxSecurityScore;
+                passwordHolder.scoreTextView.setText(securityScoreString);
             }
         }
         else if (viewHolder instanceof MoreButtonViewHolder) {
@@ -447,6 +520,9 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
             case TYPE_MORE_BUTTON:
                 itemView = layoutInflater.inflate(R.layout.item_entry_more_button, parent, false);
                 return new MoreButtonViewHolder(itemView);
+            case TYPE_DETAIL_PASSWORD:
+                itemView = layoutInflater.inflate(R.layout.item_entry_detail_password, parent, false);
+                return new DetailPasswordViewHolder(itemView);
             case TYPE_DETAIL:
             default:
                 itemView = layoutInflater.inflate(R.layout.item_entry_detail, parent, false);
@@ -476,6 +552,10 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
             return TYPE_MORE_BUTTON;
         }
         else {
+            Detail detail = getDetailForAdapterPosition(position);
+            if (detail != null && detail.getType() == DetailType.PASSWORD) {
+                return TYPE_DETAIL_PASSWORD;
+            }
             return TYPE_DETAIL;
         }
     }
