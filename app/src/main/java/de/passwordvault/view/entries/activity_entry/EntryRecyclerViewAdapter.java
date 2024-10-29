@@ -22,6 +22,7 @@ import de.passwordvault.model.tags.Tag;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.view.utils.recycler_view.OnRecyclerViewActionListener;
 import de.passwordvault.view.utils.recycler_view.RecyclerViewAdapter;
+import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
 
 
 /**
@@ -30,7 +31,7 @@ import de.passwordvault.view.utils.recycler_view.RecyclerViewAdapter;
  * @author  Christian-2003
  * @version 3.7.0
  */
-public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel> {
+public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel> implements RecyclerViewSwipeCallback.SwipeContract {
 
     /**
      * Class models the view holder for the view displaying general information.
@@ -496,6 +497,23 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
         // - More button
         return viewModel.getEntry().getDetails().size() + 4;
     }
+
+
+    /**
+     * Method determines whether the queried position supports swiping.
+     *
+     * @param position  Position to query.
+     * @return          Whether the queried position supports swiping.
+     */
+    @Override
+    public boolean supportsSwipe(int position) {
+        if (viewModel.getEntry() != null) {
+            int offsetInvisibleDetails = getOffsetInvisibleDetails();
+            return (position >= OFFSET_DETAILS && position < offsetInvisibleDetails - 1) || position >= offsetInvisibleDetails;
+        }
+        return false;
+    }
+
 
     /**
      * Method returns the position of the more button within the recycler view.

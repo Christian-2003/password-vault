@@ -4,6 +4,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
 import de.passwordvault.model.detail.Detail;
@@ -24,6 +25,8 @@ import de.passwordvault.view.general.dialog_more.MoreDialogCallback;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
 import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
+import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -263,6 +266,12 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
         adapter.setMoreListener(this::showDetailMoreDialog);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setAdapter(adapter);
+
+        RecyclerViewSwipeCallback.SwipeAction leftSwipe = RecyclerViewSwipeCallback.makeLeftSwipeAction(this::onEditDetail, this::onDeleteDetail);
+        RecyclerViewSwipeCallback.SwipeAction rightSwipe = RecyclerViewSwipeCallback.makeRightSwipeAction(this::onEditDetail, this::onDeleteDetail);
+        RecyclerViewSwipeCallback callback = new RecyclerViewSwipeCallback(adapter, leftSwipe, rightSwipe);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(recyclerView);
 
         appBarTextView = findViewById(R.id.text_appbar);
         appBarTextView.setText(viewModel.getEntry().getName());
