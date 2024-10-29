@@ -16,7 +16,6 @@ import de.passwordvault.model.tags.Tag;
 import de.passwordvault.view.entries.activity_packages.PackagesActivity;
 import de.passwordvault.view.entries.dialog_detail.DetailDialog;
 import de.passwordvault.view.entries.dialog_edit_entry.EditEntryDialog;
-import de.passwordvault.view.entries.dialog_edit_tag.EditTagDialog;
 import de.passwordvault.view.general.dialog_delete.DeleteDialog;
 import de.passwordvault.view.general.dialog_more.Item;
 import de.passwordvault.view.general.dialog_more.ItemButton;
@@ -26,7 +25,6 @@ import de.passwordvault.view.utils.Utils;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
 import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
 import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -120,6 +118,7 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
                         viewModel.getEntry().setPackages(new SerializablePackageCollection(packages).toPackageCollection());
                     }
                     adapter.notifyItemChanged(EntryRecyclerViewAdapter.POSITION_GENERAL);
+                    viewModel.entryVisiblyEdited();
                 }
             }
         });
@@ -147,6 +146,7 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
                 }
                 appBarTextView.setText(viewModel.getEntry().getName());
                 adapter.notifyItemChanged(EntryRecyclerViewAdapter.POSITION_GENERAL);
+                viewModel.entryVisiblyEdited();
             }
         }
         else if (dialog instanceof DeleteDialog) {
@@ -154,6 +154,7 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
                 if (dialog.getTag() == null) {
                     //Delete entry:
                     EntryManager.getInstance().remove(Objects.requireNonNull(viewModel.getEntry()).getUuid());
+                    viewModel.setResultCode(RESULT_DELETED);
                     finish();
                 }
                 else {
@@ -185,6 +186,7 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
                             adapter.notifyItemRangeChanged(EntryRecyclerViewAdapter.OFFSET_DETAILS, adapter.getItemCount() - 1);
                         }
                     }
+                    viewModel.entryEdited();
                 }
             }
         }
@@ -230,6 +232,25 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
                 }
             }
         }
+    }
+
+
+    /**
+     * Method is called whenever the activity is closed.
+     */
+    @Override
+    public void finish() {
+        if (viewModel.isEdited() && viewModel.getEntry() != null) {
+            EntryManager.getInstance().set(viewModel.getEntry(), viewModel.getEntry().getUuid());
+        }
+        if (viewModel.isVisiblyEdited()) {
+            //No need to save data, since visibly changes necessitate "regular" changes as well.
+            if (viewModel.getResultCode() != RESULT_DELETED) {
+                viewModel.setResultCode(RESULT_EDITED);
+            }
+        }
+        setResult(viewModel.getResultCode());
+        super.finish();
     }
 
 

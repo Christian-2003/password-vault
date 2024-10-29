@@ -40,6 +40,11 @@ public class MainViewModel extends ViewModel {
      */
     private int selectedItem;
 
+    /**
+     * Attribute stores the adapter position of an entry that is currently opened from the MainActivity.
+     */
+    private int openedEntryAdapterPosition;
+
 
     /**
      * Constructor instantiates a new MainViewModel with default values.
@@ -49,6 +54,7 @@ public class MainViewModel extends ViewModel {
         entriesFragment = new EntriesFragment();
         settingsFragment = new SettingsFragment();
         selectedItem = R.id.menu_home;
+        openedEntryAdapterPosition = -1;
     }
 
 
@@ -97,6 +103,24 @@ public class MainViewModel extends ViewModel {
         this.selectedItem = selectedItem;
     }
 
+    /**
+     * Method returns the adapter position of the entry that is currently opened from the MainActivity.
+     *
+     * @return  Adapter position of the entry currently opened.
+     */
+    public int getOpenedEntryAdapterPosition() {
+        return openedEntryAdapterPosition;
+    }
+
+    /**
+     * Method changes the adapter position of the entry that is currently opened from the MainActivity.
+     *
+     * @param openedEntryAdapterPosition    Adapter position for the entry currently opened.
+     */
+    public void setOpenedEntryAdapterPosition(int openedEntryAdapterPosition) {
+        this.openedEntryAdapterPosition = openedEntryAdapterPosition;
+    }
+
 
     /**
      * Method returns a list of all entries.
@@ -104,6 +128,7 @@ public class MainViewModel extends ViewModel {
      * @return  List of all entries.
      */
     public ArrayList<EntryAbbreviated> getAllEntries() {
+        EntryManager.getInstance().sortByName(false);
         return EntryManager.getInstance().getData();
     }
 

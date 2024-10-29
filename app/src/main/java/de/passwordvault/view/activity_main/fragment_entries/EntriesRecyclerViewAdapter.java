@@ -3,7 +3,6 @@ package de.passwordvault.view.activity_main.fragment_entries;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -155,7 +154,6 @@ public class EntriesRecyclerViewAdapter extends RecyclerViewAdapter<MainViewMode
                     itemClickListener.onAction(viewHolder.getAdapterPosition());
                 }
             });
-            Log.d("Adapter", "Bound VH for " + entry.getName());
         }
         else if (holder instanceof GenericEmptyPlaceholderViewHolder) {
             GenericEmptyPlaceholderViewHolder viewHolder = (GenericEmptyPlaceholderViewHolder)holder;
@@ -198,6 +196,22 @@ public class EntriesRecyclerViewAdapter extends RecyclerViewAdapter<MainViewMode
     @Override
     public int getItemCount() {
         return viewModel.getAllEntries().size() + 1;
+    }
+
+
+    /**
+     * Method returns the entry for the specified adapter position. If no entry is available for the
+     * adapter position, {@code null} is returned.
+     *
+     * @param position  Adapter position whose entry to return.
+     * @return          Entry for the specified adapter position.
+     */
+    @Nullable
+    public EntryAbbreviated getEntryForAdapterPosition(int position) {
+        if (position - OFFSET_ENTRIES >= 0 && position - OFFSET_ENTRIES < viewModel.getAllEntries().size()) {
+            return viewModel.getAllEntries().get(position - OFFSET_ENTRIES);
+        }
+        return null;
     }
 
 }

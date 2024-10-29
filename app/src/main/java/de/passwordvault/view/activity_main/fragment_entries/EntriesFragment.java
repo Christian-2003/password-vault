@@ -1,6 +1,10 @@
 package de.passwordvault.view.activity_main.fragment_entries;
 
+import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -15,6 +19,7 @@ import de.passwordvault.model.Observer;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.view.activity_main.MainViewModel;
+import de.passwordvault.view.entries.activity_entry.EntryActivity;
 import de.passwordvault.view.utils.components.PasswordVaultFragment;
 
 
@@ -31,6 +36,11 @@ public class EntriesFragment extends PasswordVaultFragment<MainViewModel> implem
      */
     private EntriesRecyclerViewAdapter adapter;
 
+    /**
+     * Attribute stores the launcher used to start the {@link EntryActivity}.
+     */
+    private ActivityResultLauncher<Intent> entryLauncher;
+
 
     /**
      * Constructor instantiates a new fragment.
@@ -39,6 +49,24 @@ public class EntriesFragment extends PasswordVaultFragment<MainViewModel> implem
         super(MainViewModel.class, R.layout.fragment_entries);
     }
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState == null) {
+            entryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                int adapterPosition = viewModel.getOpenedEntryAdapterPosition();
+                if (adapterPosition >= EntriesRecyclerViewAdapter.OFFSET_ENTRIES && adapterPosition <= EntriesRecyclerViewAdapter.OFFSET_ENTRIES + adapter.getItemCount()) {
+                    if (result.getResultCode() == EntryActivity.RESULT_DELETED) {
+                        adapter.notifyItemRemoved(adapterPosition);
+                    }
+                    else if (result.getResultCode() == EntryActivity.RESULT_EDITED) {
+                        adapter.notifyItemChanged(adapterPosition);
+                    }
+                }
+            });
+        }
+    }
 
     /**
      * Method is called whenever the {@linkplain View} for the EntriesFragment is created.
@@ -58,6 +86,7 @@ public class EntriesFragment extends PasswordVaultFragment<MainViewModel> implem
         EntryManager.getInstance().addObserver(this);
 
         adapter = new EntriesRecyclerViewAdapter(requireActivity(), viewModel);
+        adapter.setItemClickListener(this::onEntryClicked);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(adapter);
 
@@ -99,6 +128,22 @@ public class EntriesFragment extends PasswordVaultFragment<MainViewModel> implem
             return;
         }
         //adapter.notifyDataSetChanged();
+    }
+
+
+    /**
+     * Method is called whenever an entry is clicked.
+     *
+     * @param position  Adapter position of the entry clicked.
+     */
+    private void onEntryClicked(int position) {
+        EntryAbbreviated entry = adapter.getEntryForAdapterPosition(position);
+        if (entry != null) {
+            Intent intent = new Intent(getActivity(), EntryActivity.class);
+            intent.putExtra(EntryActivity.KEY_ID, entry.getUuid());
+            viewModel.setOpenedEntryAdapterPosition(position);
+            entryLauncher.launch(intent);
+        }
     }
 
 }
