@@ -269,7 +269,7 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
 
         RecyclerViewSwipeCallback.SwipeAction leftSwipe = RecyclerViewSwipeCallback.makeLeftSwipeAction(this::onEditDetail, this::onDeleteDetail);
         RecyclerViewSwipeCallback.SwipeAction rightSwipe = RecyclerViewSwipeCallback.makeRightSwipeAction(this::onEditDetail, this::onDeleteDetail);
-        RecyclerViewSwipeCallback callback = new RecyclerViewSwipeCallback(adapter, leftSwipe, rightSwipe);
+        EntryRecyclerViewMoveCallback callback = new EntryRecyclerViewMoveCallback(adapter, leftSwipe, rightSwipe);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(recyclerView);
 

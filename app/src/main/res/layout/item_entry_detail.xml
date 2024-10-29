@@ -10,6 +10,7 @@
     android:paddingVertical="@dimen/space_vertical_between"
     android:orientation="horizontal"
     android:foreground="?attr/selectableItemBackground"
+    android:background="@color/background"
     android:focusable="true"
     android:clickable="true">
 

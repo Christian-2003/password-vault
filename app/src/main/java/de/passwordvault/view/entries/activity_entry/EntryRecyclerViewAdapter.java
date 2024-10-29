@@ -15,6 +15,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import java.util.ArrayList;
+import java.util.Collections;
 import de.passwordvault.R;
 import de.passwordvault.model.detail.Detail;
 import de.passwordvault.model.entry.EntryExtended;
@@ -22,7 +24,6 @@ import de.passwordvault.model.tags.Tag;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.view.utils.recycler_view.OnRecyclerViewActionListener;
 import de.passwordvault.view.utils.recycler_view.RecyclerViewAdapter;
-import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
 
 
 /**
@@ -31,7 +32,7 @@ import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
  * @author  Christian-2003
  * @version 3.7.0
  */
-public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel> implements RecyclerViewSwipeCallback.SwipeContract {
+public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel> implements EntryRecyclerViewMoveCallback.EntryMoveContract {
 
     /**
      * Class models the view holder for the view displaying general information.
@@ -307,7 +308,7 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
             if (appLogo == null) {
                 holder.appImageView.setVisibility(View.GONE);
                 holder.abbreviationTextView.setVisibility(View.VISIBLE);
-                holder.abbreviationTextView.setText(entry.getName().length() > 0 ? "" + entry.getName().charAt(0) : "?");
+                holder.abbreviationTextView.setText(!entry.getName().isEmpty() ? "" + entry.getName().charAt(0) : "?");
                 holder.abbreviationTextView.setOnClickListener(view -> {
                     if (editPackagesListener != null) {
                         editPackagesListener.onAction(holder.getAdapterPosition());
@@ -514,6 +515,99 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
         return false;
     }
 
+    /**
+     * Method is called to move a detail between the specified positions.
+     *
+     * @param from  Position of the detail to move.
+     * @param to    Position to which to move the detail.
+     */
+    @Override
+    public void onRowMove(int from, int to) {
+        if (viewModel.getEntry() == null) {
+            return;
+        }
+
+        ArrayList<Detail> visibleDetails = viewModel.getEntry().getVisibleDetails();
+        ArrayList<Detail> invisibleDetails = viewModel.getEntry().getInvisibleDetails();
+        int offsetInvisibleDetails = getOffsetInvisibleDetails();
+
+        if (from >= offsetInvisibleDetails && to >= offsetInvisibleDetails) {
+            //Invisible details:
+            if (from < to) {
+                for (int i = from - offsetInvisibleDetails; i < to - offsetInvisibleDetails; i++) {
+                    Collections.swap(invisibleDetails, i, i + 1);
+                }
+            }
+            else {
+                for (int i = from - offsetInvisibleDetails; i > to - offsetInvisibleDetails; i--) {
+                    Collections.swap(invisibleDetails, i, i - 1);
+                }
+            }
+        }
+        else if (from >= OFFSET_DETAILS && from < offsetInvisibleDetails - 1 && to >= OFFSET_DETAILS && to < offsetInvisibleDetails - 1) {
+            //Visible details:
+            if (from < to) {
+                for (int i = from - OFFSET_DETAILS; i < to - OFFSET_DETAILS; i++) {
+                    Collections.swap(visibleDetails, i, i + 1);
+                }
+            }
+            else {
+                for (int i = from - OFFSET_DETAILS; i > to - OFFSET_DETAILS; i--) {
+                    Collections.swap(visibleDetails, i, i - 1);
+                }
+            }
+        }
+        else {
+            //Invalid positions passed:
+            return;
+        }
+
+        viewModel.getEntry().getDetails().clear();
+        viewModel.getEntry().getDetails().addAll(visibleDetails);
+        viewModel.getEntry().getDetails().addAll(invisibleDetails);
+
+        notifyItemMoved(from, to);
+    }
+
+    /**
+     * Method determines the range in between a detail at the specified position can be moved.
+     * The method returns {@code null} if the item at the specified position does not support
+     * moving (e.g. if the item is not a detail).
+     *
+     * @param position  Position of the detail for which to determine the movable range.
+     * @return          Move range for the detail at the specified position.
+     */
+    @Nullable
+    @Override
+    public EntryRecyclerViewMoveCallback.MoveRange getMoveRange(int position) {
+        if (viewModel.getEntry() != null) {
+            int offsetInvisibleDetails = getOffsetInvisibleDetails();
+            if (position >= offsetInvisibleDetails) {
+                return new EntryRecyclerViewMoveCallback.MoveRange(offsetInvisibleDetails, offsetInvisibleDetails + viewModel.getEntry().getInvisibleDetails().size() - 1);
+            }
+            else if (position >= OFFSET_DETAILS && position < offsetInvisibleDetails - 1) {
+                return new EntryRecyclerViewMoveCallback.MoveRange(OFFSET_DETAILS, offsetInvisibleDetails - 1);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Method determines whether the item at the specified position can be moved.
+     *
+     * @param position  Position of the item for which to determine whether it can be moved.
+     * @return          Whether the item at the specified position can be moved.
+     */
+    @Override
+    public boolean supportsMove(int position) {
+        if (viewModel.getEntry() != null) {
+            int offsetInvisibleDetails = getOffsetInvisibleDetails();
+            return (position >= OFFSET_DETAILS && position < offsetInvisibleDetails - 1) || position >= offsetInvisibleDetails;
+        }
+        return false;
+    }
+
+
 
     /**
      * Method returns the position of the more button within the recycler view.
@@ -539,6 +633,13 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
         return viewModel.getEntry().getVisibleDetails().size() + 4;
     }
 
+    /**
+     * Method returns the detail for the specified adapter position. If the adapter position does
+     * not show a detail, {@code null} is returned.
+     *
+     * @param position  Adapter position for which to return the detail.
+     * @return          Detail for the specified adapter position.
+     */
     @Nullable
     public Detail getDetailForAdapterPosition(int position) {
         if (viewModel.getEntry() == null) {
@@ -550,6 +651,7 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
             return viewModel.getEntry().getInvisibleDetails().get(position - offsetInvisibleDetails);
         }
         else if (position >= OFFSET_DETAILS && position < offsetInvisibleDetails - 1) {
+            //Visible details:
             return viewModel.getEntry().getVisibleDetails().get(position - OFFSET_DETAILS);
         }
         else {

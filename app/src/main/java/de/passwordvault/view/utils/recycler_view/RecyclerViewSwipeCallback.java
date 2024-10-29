@@ -139,13 +139,13 @@ public class RecyclerViewSwipeCallback extends ItemTouchHelper.Callback {
      * Attribute stores the left swipe action.
      */
     @Nullable
-    private final SwipeAction leftSwipeAction;
+    protected final SwipeAction leftSwipeAction;
 
     /**
      * Attribute stores the right swipe action.
      */
     @Nullable
-    private final SwipeAction rightSwipeAction;
+    protected final SwipeAction rightSwipeAction;
 
 
     /**
