@@ -1,7 +1,10 @@
 package de.passwordvault.view.activity_main;
 
 import androidx.lifecycle.ViewModel;
+import java.util.ArrayList;
 import de.passwordvault.R;
+import de.passwordvault.model.entry.EntryAbbreviated;
+import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.view.activity_main.fragment_entries.EntriesFragment;
 import de.passwordvault.view.activity_main.fragment_home.HomeFragment;
 import de.passwordvault.view.activity_main.fragment_settings.SettingsFragment;
@@ -12,7 +15,7 @@ import de.passwordvault.view.activity_main.fragment_settings.SettingsFragment;
  * that shall be persistent throughout activity changes.
  *
  * @author  Christian-2003
- * @version 1.0.0
+ * @version 3.7.0
  */
 public class MainViewModel extends ViewModel {
 
@@ -92,6 +95,16 @@ public class MainViewModel extends ViewModel {
      */
     public void setSelectedItem(int selectedItem) {
         this.selectedItem = selectedItem;
+    }
+
+
+    /**
+     * Method returns a list of all entries.
+     *
+     * @return  List of all entries.
+     */
+    public ArrayList<EntryAbbreviated> getAllEntries() {
+        return EntryManager.getInstance().getData();
     }
 
 }

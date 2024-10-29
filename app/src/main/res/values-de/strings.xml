@@ -33,6 +33,8 @@
 
     <!-- Entries fragment -->
     <string name="entries_none">Keine</string>
+    <string name="entries_empty_headline">Keine Konten</string>
+    <string name="entries_empty_support">Konten werden hier angezeigt</string>
 
 
     <!-- Settings -->

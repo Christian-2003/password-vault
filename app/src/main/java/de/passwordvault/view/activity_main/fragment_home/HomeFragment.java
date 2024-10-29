@@ -83,9 +83,9 @@ public class HomeFragment extends PasswordVaultBaseFragment implements Observer<
         View analyzePasswordsButton = view.findViewById(R.id.home_analyze_passwords_container);
         analyzePasswordsButton.setOnClickListener(view -> startActivity(new Intent(requireActivity(), PasswordAnalysisActivity.class)));
 
-        adapter = new EntriesRecyclerViewAdapter(EntryManager.getInstance().getMostRecentlyEditedEntries(), (MainActivity)requireActivity());
-        RecyclerView recyclerView = view.findViewById(R.id.home_recently_changed_container);
-        recyclerView.setAdapter(adapter);
+        //adapter = new EntriesRecyclerViewAdapter(EntryManager.getInstance().getMostRecentlyEditedEntries(), (MainActivity)requireActivity());
+        //RecyclerView recyclerView = view.findViewById(R.id.home_recently_changed_container);
+        //recyclerView.setAdapter(adapter);
 
         if (EntryManager.getInstance().getMostRecentlyEditedEntries().isEmpty()) {
             view.findViewById(R.id.home_recently_changed_none).setVisibility(View.VISIBLE);

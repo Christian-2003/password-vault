@@ -1,213 +1,203 @@
 package de.passwordvault.view.activity_main.fragment_entries;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.imageview.ShapeableImageView;
-import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.model.entry.EntryAbbreviated;
-import de.passwordvault.view.utils.recycler_view.OnRecyclerItemClickListener;
+import de.passwordvault.view.activity_main.MainViewModel;
+import de.passwordvault.view.utils.recycler_view.OnRecyclerViewActionListener;
+import de.passwordvault.view.utils.recycler_view.RecyclerViewAdapter;
 
 
 /**
- * Class implements an adapter for a recycler view which can display abbreviated entries.
+ * Class implements the recycler view adapter for {@link EntriesFragment}.
  *
  * @author  Christian-2003
- * @version 3.5.5
+ * @version 3.7.0
  */
-public class EntriesRecyclerViewAdapter extends RecyclerView.Adapter<EntriesRecyclerViewAdapter.ViewHolder> implements Filterable {
+public class EntriesRecyclerViewAdapter extends RecyclerViewAdapter<MainViewModel> {
 
     /**
-     * Class implements a view holder for an abbreviated entry.
+     * Class models the view holder for the entries displayed on this page.
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class EntryViewHolder extends RecyclerView.ViewHolder {
 
         /**
-         * Attribute stores the text view which displays the name of the entry.
+         * Attribute stores the image view displaying the app icon of the entry.
          */
-        public final TextView name;
+        public final ImageView logoImageView;
 
         /**
-         * Attribute stores the text view which displays the description of the entry.
+         * Attribute stores the text view displaying the abbreviation for the entry in case no
+         * app icon is available.
          */
-        public final TextView description;
+        public final TextView abbreviationTextView;
 
         /**
-         * Attribute stores the view of a list item.
+         * Attribute stores the text view displaying the name of the entry.
          */
-        public final View itemView;
+        public final TextView nameTextView;
 
         /**
-         * Attribute stores the image view displaying the logo.
+         * Attribute stores the text view displaying the description of the entry.
          */
-        public final ShapeableImageView logo;
-
-        /**
-         * Attribute stores the text view that displays the acronym of the entry-name, if no logo is
-         * available.
-         */
-        public final TextView acronym;
+        public final TextView descriptionTextView;
 
 
         /**
-         * Constructor instantiates a new view holder for the passed inflated view.
+         * Constructor instantiates a new view holder for the passed view.
          *
-         * @param itemView  Inflated view for which to create this view holder.
+         * @param itemView  Inflated view for which to create the view holder.
          */
-        public ViewHolder(View itemView) {
+        public EntryViewHolder(View itemView) {
             super(itemView);
-            this.name = itemView.findViewById(R.id.entries_list_item_name);
-            this.description = itemView.findViewById(R.id.entries_list_item_description);
-            this.logo = itemView.findViewById(R.id.entries_list_item_logo);
-            this.acronym = itemView.findViewById(R.id.entry_acronym);
-            this.itemView = itemView;
+            logoImageView = itemView.findViewById(R.id.image_logo);
+            abbreviationTextView = itemView.findViewById(R.id.text_abbreviation);
+            nameTextView = itemView.findViewById(R.id.text_name);
+            descriptionTextView = itemView.findViewById(R.id.text_description);
         }
 
     }
 
 
     /**
-     * Attribute stores the data that shall be displayed in this adapter.
+     * Field stores the offset for the list of entries within the adapter.
      */
-    private final ArrayList<EntryAbbreviated> data;
+    public static final int OFFSET_ENTRIES = 1;
 
     /**
-     * Attribute stores the filtered data which is being displayed.
+     * Field stores the view type for entries.
      */
-    private ArrayList<EntryAbbreviated> filteredData;
-
-    /**
-     * Attribute stores the click listener that is called when an item is clicked.
-     */
-    private final OnRecyclerItemClickListener<EntryAbbreviated> clickListener;
+    private static final int TYPE_ENTRY = 0;
 
 
     /**
-     * Constructor instantiates a new adapter for a recycler view to display abbreviated entries.
+     * Attribute stores the action listener invoked when an item is clicked.
+     */
+    @Nullable
+    private OnRecyclerViewActionListener itemClickListener;
+
+
+    /**
+     * Constructor instantiates a new recycler view adapter.
      *
-     * @param data                  Array list of entries to be displayed.
-     * @param clickListener         Item click listener which is called when an item is clicked.
-     * @throws NullPointerException The passed array list is {@code null}.
+     * @param context   Context for the adapter.
+     * @param viewModel View model for the adapter.
      */
-    public EntriesRecyclerViewAdapter(ArrayList<EntryAbbreviated> data, OnRecyclerItemClickListener<EntryAbbreviated> clickListener) throws NullPointerException {
-        if (data == null) {
-            throw new NullPointerException();
-        }
-        this.data = data;
-        filteredData = data;
-        this.clickListener = clickListener;
+    public EntriesRecyclerViewAdapter(@NonNull Context context, @NonNull MainViewModel viewModel) {
+        super(context, viewModel);
     }
 
 
     /**
-     * Method creates a new view holder for a recycler view item.
+     * Method changes the click listener invoked when an item is clicked.
      *
-     * @param parent    The ViewGroup into which the new View will be added after it is bound to
-     *                  an adapter position.
+     * @param itemClickListener New listener.
+     */
+    public void setItemClickListener(@Nullable OnRecyclerViewActionListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
+
+
+    /**
+     * Method creates a new view holder.
+     *
+     * @param parent    Parent for the item view of the view holder.
      * @param viewType  The view type of the new View.
-     * @return          Generated view holder.
+     * @return          Created view holder.
      */
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_entries, parent, false);
-        return new ViewHolder(itemView);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == TYPE_ENTRY) {
+            View view = layoutInflater.inflate(R.layout.item_entry, parent, false);
+            return new EntryViewHolder(view);
+        }
+        else {
+            View view = layoutInflater.inflate(R.layout.item_generic_empty_placeholder, parent, false);
+            return new GenericEmptyPlaceholderViewHolder(view);
+        }
     }
 
+
     /**
-     * Method binds the data of an abbreviated entry to a view holder.
+     * Method binds data to the view holder at the specified position.
      *
-     * @param holder    The ViewHolder which should be updated to represent the contents of the
-     *                  item at the given position in the data set.
+     * @param holder    View holder to update.
      * @param position  The position of the item within the adapter's data set.
      */
+    @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        EntryAbbreviated entry = filteredData.get(position);
-        holder.name.setText(entry.getName());
-        holder.description.setText(entry.getDescription());
-        holder.acronym.setText(entry.getName().isEmpty() ? "" : "" + entry.getName().charAt(0));
-        if (clickListener != null) {
-            holder.itemView.setOnClickListener(view -> clickListener.onItemClick(entry, position));
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof EntryViewHolder) {
+            EntryViewHolder viewHolder = (EntryViewHolder)holder;
+            EntryAbbreviated entry = viewModel.getAllEntries().get(position - OFFSET_ENTRIES);
+            Drawable logo = entry.getLogo();
+            viewHolder.logoImageView.setImageDrawable(logo);
+            if (logo == null) {
+                viewHolder.abbreviationTextView.setText("" + entry.getName().charAt(0));
+            }
+            viewHolder.abbreviationTextView.setVisibility(logo == null ? View.VISIBLE : View.GONE);
+            viewHolder.nameTextView.setText(entry.getName());
+            viewHolder.descriptionTextView.setText(entry.getDescription());
+            viewHolder.itemView.setOnClickListener(view -> {
+                if (itemClickListener != null) {
+                    itemClickListener.onAction(viewHolder.getAdapterPosition());
+                }
+            });
+            Log.d("Adapter", "Bound VH for " + entry.getName());
         }
-        Drawable logo = entry.getLogo();
-        holder.logo.setImageDrawable(logo);
-        holder.acronym.setVisibility(logo == null ? View.VISIBLE : View.GONE);
+        else if (holder instanceof GenericEmptyPlaceholderViewHolder) {
+            GenericEmptyPlaceholderViewHolder viewHolder = (GenericEmptyPlaceholderViewHolder)holder;
+            if (!viewModel.getAllEntries().isEmpty()) {
+                viewHolder.itemView.setVisibility(View.GONE);
+                viewHolder.itemView.setLayoutParams(new ViewGroup.LayoutParams(0, 0));
+            }
+            else {
+                viewHolder.itemView.setVisibility(View.VISIBLE);
+                viewHolder.itemView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                viewHolder.headlineTextView.setText(context.getString(R.string.entries_empty_headline));
+                viewHolder.supportTextView.setText(context.getString(R.string.entries_empty_support));
+                viewHolder.imageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.el_entries));
+            }
+        }
+
     }
 
 
     /**
-     * Method returns the number of items that are displayed with the recycler view.
+     * Method returns the view type for the specified position.
      *
-     * @return  Number of abbreviated entries being displayed.
+     * @param position  Position to query.
+     * @return          View type for the queried position.
+     */
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return TYPE_GENERIC_EMPTY_PLACEHOLDER;
+        }
+        return TYPE_ENTRY;
+    }
+
+
+    /**
+     * Method returns the number of items displayed.
+     *
+     * @return  Number of items displayed.
      */
     @Override
     public int getItemCount() {
-        return filteredData.size();
-    }
-
-
-    /**
-     * Method returns a filter that can be used to filter the data that is being displayed by the
-     * recycler view.
-     *
-     * @return  Filter for filtering the displayed data.
-     */
-    @Override
-    public Filter getFilter() {
-        return new Filter() {
-
-            /**
-             * Method filters {@link EntriesRecyclerViewAdapter#data} according to the specified
-             * char sequence.
-             *
-             * @param s Filter to be applied to name or description of the entries.
-             * @return  Generated filter results.
-             */
-            @Override
-            protected FilterResults performFiltering(CharSequence s) {
-                FilterResults results = new FilterResults();
-                if (s == null || s.length() == 0) {
-                    results.count = data.size();
-                    results.values = data;
-                }
-                else {
-                    ArrayList<EntryAbbreviated> filteredData = new ArrayList<>();
-                    s = s.toString().toLowerCase();
-                    for (EntryAbbreviated entry : data) {
-                        if (entry.matchesFilter(s)) {
-                            filteredData.add(entry);
-                        }
-                    }
-                    results.count = filteredData.size();
-                    results.values = filteredData;
-                }
-                return results;
-            }
-
-            /**
-             * Method applies the passed filter results to the recycler view.
-             *
-             * @param s             Filter which was applied to name and description of the entries.
-             * @param filterResults Filter results generated while filtering.
-             */
-            @Override
-            protected void publishResults(CharSequence s, FilterResults filterResults) {
-                ArrayList<EntryAbbreviated> data = (ArrayList<EntryAbbreviated>)filterResults.values;
-                if (data != null) {
-                    EntriesRecyclerViewAdapter.this.filteredData = data;
-                    notifyDataSetChanged();
-                }
-            }
-
-        };
+        return viewModel.getAllEntries().size() + 1;
     }
 
 }

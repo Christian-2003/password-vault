@@ -47,33 +47,33 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
         /**
          * Attribute stores the text view displaying the description of the entry.
          */
-        public TextView descriptionTextView;
+        public final TextView descriptionTextView;
 
         /**
          * Attribute stores the text view displaying the abbreviation of the account name if no
          * app logo is available.
          */
-        public TextView abbreviationTextView;
+        public final TextView abbreviationTextView;
 
         /**
          * Attribute stores the button used to edit the entry.
          */
-        public Button editButton;
+        public final Button editButton;
 
         /**
          * Attribute stores the button to delete the entry.
          */
-        public Button deleteButton;
+        public final Button deleteButton;
 
         /**
          * Attribute stores the image view displaying the app image.
          */
-        public ImageView appImageView;
+        public final ImageView appImageView;
 
         /**
          * Attribute stores the chip group used as container for the tags.
          */
-        public ChipGroup tagsContainer;
+        public final ChipGroup tagsContainer;
 
 
         /**
@@ -102,7 +102,7 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
         /**
          * Attribute store the more button to expand / collapse the list of invisible details.
          */
-        public Button moreButton;
+        public final Button moreButton;
 
 
         /**
@@ -125,28 +125,34 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
         /**
          * Attribute stores the text view displaying the name of the detail.
          */
-        public TextView nameTextView;
+        public final TextView nameTextView;
 
         /**
          * Attribute stores the text view displaying the content of the detail.
          */
-        public TextView contentTextView;
+        public final TextView contentTextView;
 
         /**
          * Attribute stores the image button used to show a dialog displaying more options for the
          * detail.
          */
-        public ImageButton moreImageButton;
+        public final ImageButton moreImageButton;
 
         /**
          * Attribute stores the image view displaying an image corresponding to the detail type.
          */
-        public ImageView detailImageView;
+        public final ImageView detailImageView;
 
         /**
          * Attribute stores the image button used to (un-)obfuscate the content of the detail.
          */
-        public ImageButton obfuscateImageButton;
+        public final ImageButton obfuscateImageButton;
+
+        /**
+         * Attribute stores the image view displaying whether the detail is used as password or
+         * username for autofill.
+         */
+        public final ImageView autofillImageView;
 
 
         /**
@@ -161,6 +167,7 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
             moreImageButton = itemView.findViewById(R.id.button_more);
             detailImageView = itemView.findViewById(R.id.image_detail);
             obfuscateImageButton = itemView.findViewById(R.id.button_obfuscate);
+            autofillImageView = itemView.findViewById(R.id.image_autofill);
         }
 
     }
@@ -447,6 +454,13 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
                     }
                     obfuscated.set(!obfuscated.get());
                 });
+                holder.autofillImageView.setVisibility(detail.isPassword() || detail.isUsername() ? View.VISIBLE : View.GONE);
+                if (detail.isPassword()) {
+                    holder.autofillImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_password));
+                }
+                else if (detail.isUsername()) {
+                    holder.autofillImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_email));
+                }
             }
             else {
                 holder.itemView.setVisibility(View.GONE);

@@ -34,6 +34,8 @@
 
     <!-- Entries fragment -->
     <string name="entries_none">None</string>
+    <string name="entries_empty_headline">No accounts</string>
+    <string name="entries_empty_support">Accounts are displayed here</string>
 
 
     <!-- Settings -->
