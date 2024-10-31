@@ -23,6 +23,7 @@ n/a
 * Added branding drawable to splash screen.
 * Added `androidx.core:core-splashscreen:1.0.1` library to enable animated splash screens and branding drawables.
 * Added animated splash screen.
+* Removed bottom navigation bar from `MainActivity`, since the home screen is completely empty and useless. The main activity now displays the list of entries and the settings can be opened by clicking a button within the app bar.
 
 <br/>
 

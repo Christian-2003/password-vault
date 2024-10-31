@@ -1,4 +1,4 @@
-package de.passwordvault.view.activity_main.fragment_entries;
+package de.passwordvault.view.activity_main;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -13,18 +13,17 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
 import de.passwordvault.model.entry.EntryAbbreviated;
-import de.passwordvault.view.activity_main.MainViewModel;
 import de.passwordvault.view.utils.recycler_view.OnRecyclerViewActionListener;
 import de.passwordvault.view.utils.recycler_view.RecyclerViewAdapter;
 
 
 /**
- * Class implements the recycler view adapter for {@link EntriesFragment}.
+ * Class implements the recycler view adapter for {@link MainActivity}.
  *
  * @author  Christian-2003
  * @version 3.7.0
  */
-public class EntriesRecyclerViewAdapter extends RecyclerViewAdapter<MainViewModel> {
+public class MainRecyclerViewAdapter extends RecyclerViewAdapter<MainViewModel> {
 
     /**
      * Class models the view holder for the entries displayed on this page.
@@ -93,7 +92,7 @@ public class EntriesRecyclerViewAdapter extends RecyclerViewAdapter<MainViewMode
      * @param context   Context for the adapter.
      * @param viewModel View model for the adapter.
      */
-    public EntriesRecyclerViewAdapter(@NonNull Context context, @NonNull MainViewModel viewModel) {
+    public MainRecyclerViewAdapter(@NonNull Context context, @NonNull MainViewModel viewModel) {
         super(context, viewModel);
     }
 

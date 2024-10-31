@@ -19,14 +19,36 @@
         app:layout_constraintEnd_toEndOf="parent"
         style="@style/app_bar">
 
-        <TextView
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_marginHorizontal="@dimen/space_horizontal"
             android:layout_gravity="center"
-            android:layout_marginStart="@dimen/space_horizontal"
-            android:text="@string/app_name"
-            style="@style/text.app_bar"/>
+            android:background="@drawable/background_search_bar"
+            android:orientation="horizontal"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:clipToOutline="true"
+            tools:context=".view.utils.components.SearchBarView">
+
+            <ImageButton
+                android:id="@+id/button_settings"
+                android:src="@drawable/ic_settings"
+                style="@style/button.image.app_bar"/>
+
+            <TextView
+                android:id="@+id/input_query"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/space_horizontal_between"
+                android:layout_marginEnd="@dimen/space_horizontal"
+                android:text="@string/hint_search"
+                android:textColor="@color/text_light"
+                style="@style/text.app_bar"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -37,25 +59,27 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_add"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/main_navigation"/>
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <FrameLayout
-        android:id="@+id/frame_layout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/app_bar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/main_navigation"/>
+        app:layout_constraintBottom_toBottomOf="parent">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/main_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/bottom_navigation_menu"
-        style="@style/pv.menu_bar"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/app_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

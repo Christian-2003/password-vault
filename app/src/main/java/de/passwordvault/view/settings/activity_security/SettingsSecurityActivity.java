@@ -23,7 +23,7 @@ import de.passwordvault.view.authentication.dialog_change_password.ChangePasswor
 import de.passwordvault.view.settings.activity_quality_gates.QualityGatesActivity;
 import de.passwordvault.view.settings.activity_recovery.RecoveryActivity;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
-import de.passwordvault.view.activity_main.fragment_settings.SettingsViewModel;
+import de.passwordvault.view.settings.activity_settings.SettingsViewModel;
 
 
 /**

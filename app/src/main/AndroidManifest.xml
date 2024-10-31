@@ -32,7 +32,7 @@
         </activity>
 
         <!-- Other activities of the application -->
-        <activity android:name=".view.activity_main.MainActivity" android:theme="@style/Theme.PasswordVault.ContainerNavBar" android:exported="false"/>
+        <activity android:name=".view.activity_main.MainActivity" android:exported="false"/>
         <activity android:name=".view.entries.activity_add_entry.AddEntryActivity" android:exported="false"/>
         <activity android:name=".view.entries.activity_entry.EntryActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_quality_gates.QualityGatesActivity" android:exported="false"/>
@@ -53,6 +53,7 @@
         <activity android:name=".view.settings.activity_recovery.RecoveryActivity" android:exported="false"/>
         <activity android:name=".view.authentication.activity_security_question.SecurityQuestionActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_licenses.LicensesActivity" android:exported="false"/>
+        <activity android:name=".view.settings.activity_settings.SettingsActivity" android:exported="false"/>
 
         <!-- Activity used for authentication with autofill requests -->
         <activity android:name=".view.authentication.activity_autofill_authentication.AutofillAuthenticationActivity" android:exported="false"/>

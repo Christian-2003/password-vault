@@ -24,7 +24,7 @@ import de.passwordvault.service.autofill.caching.ContentCache;
 import de.passwordvault.service.autofill.caching.InvalidationCache;
 import de.passwordvault.service.autofill.caching.MappingCache;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
-import de.passwordvault.view.activity_main.fragment_settings.SettingsViewModel;
+import de.passwordvault.view.settings.activity_settings.SettingsViewModel;
 
 
 /**

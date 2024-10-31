@@ -1,4 +1,4 @@
-package de.passwordvault.view.activity_main.fragment_settings;
+package de.passwordvault.view.settings.activity_settings;
 
 import android.content.Context;
 import android.net.Uri;
@@ -16,7 +16,7 @@ import de.passwordvault.model.storage.encryption.EncryptionException;
 
 
 /**
- * Class models a {@linkplain ViewModel} for the {@linkplain SettingsFragment} which contains all
+ * Class models a {@linkplain ViewModel} for the {@linkplain SettingsActivity} which contains all
  * relevant data and functionalities that are not directly bound to the view of the fragment.
  *
  * @author  Christian-2003

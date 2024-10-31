@@ -48,10 +48,4 @@
         <item name="bottomSheetDialogTheme">@style/view.bottomSheet</item>
     </style>
 
-
-    <!-- Theme for activity in which the navigation bar needs to be colored the same as a container -->
-    <style name="Theme.PasswordVault.ContainerNavBar" parent="Theme.PasswordVault">
-        <item name="android:navigationBarColor">@color/pv_container</item>
-    </style>
-
 </resources>

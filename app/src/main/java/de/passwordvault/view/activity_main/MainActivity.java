@@ -2,23 +2,18 @@ package de.passwordvault.view.activity_main;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProvider;
-import android.annotation.SuppressLint;
+import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.Toast;
-import com.google.android.material.navigation.NavigationBarView;
 import de.passwordvault.R;
-import de.passwordvault.model.UpdateManager;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.view.entries.activity_add_entry.AddEntryActivity;
 import de.passwordvault.view.entries.activity_entry.EntryActivity;
-import de.passwordvault.view.utils.recycler_view.OnRecyclerItemClickListener;
-import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
+import de.passwordvault.view.settings.activity_settings.SettingsActivity;
+import de.passwordvault.view.utils.components.PasswordVaultActivity;
 
 
 /**
@@ -28,17 +23,17 @@ import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
  * @author  Christian-2003
  * @version 3.5.2
  */
-public class MainActivity extends PasswordVaultBaseActivity implements NavigationBarView.OnItemSelectedListener, OnRecyclerItemClickListener<EntryAbbreviated> {
+public class MainActivity extends PasswordVaultActivity<MainViewModel> {
 
     /**
-     * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} for this activity.
+     * Attribute stores the adapter for the recycler view which displays the abbreviated entries.
      */
-    private MainViewModel viewModel;
+    private MainRecyclerViewAdapter adapter;
 
     /**
-     * Attribute stores the activity result launcher used to start the activity which shows an entry.
+     * Attribute stores the launcher used to start the {@link EntryActivity}.
      */
-    private final ActivityResultLauncher<Intent> showEntryLauncher;
+    private ActivityResultLauncher<Intent> entryLauncher;
 
     /**
      * Attribute stores the activity result launcher used to start the activity through which to add
@@ -46,21 +41,23 @@ public class MainActivity extends PasswordVaultBaseActivity implements Navigatio
      */
     private final ActivityResultLauncher<Intent> addEntryLauncher;
 
-    /**
-     * Attribute stores the navigation bar / navigation rail of the activity.
-     */
-    private NavigationBarView navigationBarView;
-
 
     /**
      * Constructor instantiates a new activity.
      */
     public MainActivity() {
+        super(MainViewModel.class, R.layout.activity_main);
+
         //Show entry:
-        showEntryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result != null && (result.getResultCode() == EntryActivity.RESULT_EDITED || result.getResultCode() == EntryActivity.RESULT_DELETED)) {
-                viewModel.getHomeFragment().update(EntryManager.getInstance());
-                viewModel.getEntriesFragment().updateDataset();
+        entryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            int adapterPosition = viewModel.getOpenedEntryAdapterPosition();
+            if (adapterPosition >= MainRecyclerViewAdapter.OFFSET_ENTRIES && adapterPosition <= MainRecyclerViewAdapter.OFFSET_ENTRIES + adapter.getItemCount()) {
+                if (result.getResultCode() == EntryActivity.RESULT_DELETED) {
+                    adapter.notifyItemRemoved(adapterPosition);
+                }
+                else if (result.getResultCode() == EntryActivity.RESULT_EDITED) {
+                    adapter.notifyItemChanged(adapterPosition);
+                }
             }
         });
 
@@ -68,56 +65,10 @@ public class MainActivity extends PasswordVaultBaseActivity implements Navigatio
         addEntryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             Log.d("AddEntry", "MainActivity: ResultCode=" + result.getResultCode());
             if (result != null && result.getResultCode() == RESULT_OK) {
-                viewModel.getHomeFragment().update(EntryManager.getInstance());
-                viewModel.getEntriesFragment().updateDataset();
+                //viewModel.getHomeFragment().update(EntryManager.getInstance());
+                //viewModel.getEntriesFragment().updateDataset();
             }
         });
-    }
-
-
-    /**
-     * Method is called whenever a menu item in the {@linkplain NavigationBarView} is selected and
-     * changes the view that is displayed within this MainActivity to the corresponding fragment.
-     *
-     * @param item  Menu item that was selected.
-     * @return      Whether clicked menu item could change the fragment successfully.
-     */
-    @SuppressLint("NonConstantResourceId")
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return switchToFragment(item.getItemId(), false);
-    }
-
-
-    /**
-     * Method switches to the fragment of the passed id. This method is needed for fragments of this
-     * activity to change the displayed fragment. This will update the {@linkplain NavigationBarView}
-     * to display the item that is switched to as "selected".
-     *
-     * @param id    Id of the fragment to which to switch.
-     * @return      Whether the fragment was switched successfully.
-     */
-    public boolean switchToFragment(int id) {
-        return switchToFragment(id, true);
-    }
-
-
-    /**
-     * Method is called whenever an entry within any recycler view is clicked.
-     *
-     * @param item      Clicked item.
-     * @param position  Index of the clicked item.
-     */
-    @Override
-    public void onItemClick(EntryAbbreviated item, int position) {
-        Intent intent = new Intent(this, EntryActivity.class);
-        intent.putExtra("uuid", item.getUuid());
-        try {
-            showEntryLauncher.launch(intent);
-        }
-        catch (Exception e) {
-            Toast.makeText(this, "Cannot show entry", Toast.LENGTH_SHORT).show();
-        }
     }
 
 
@@ -143,19 +94,17 @@ public class MainActivity extends PasswordVaultBaseActivity implements Navigatio
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         //Add action listener to FAB:
         findViewById(R.id.main_fab).setOnClickListener(view -> addNewEntry());
 
-        //Configure navigation bar:
-        navigationBarView = findViewById(R.id.main_navigation);
-        navigationBarView.setOnItemSelectedListener(this);
-        navigationBarView.setSelectedItemId(viewModel.getSelectedItem());
+        //Setup app bar:
+        findViewById(R.id.button_settings).setOnClickListener(view -> startActivity(new Intent(this, SettingsActivity.class)));
 
-        //Check for updates:
-        UpdateManager.getInstance(this, this::onUpdateStatusChanged);
+        adapter = new MainRecyclerViewAdapter(this, viewModel);
+        adapter.setItemClickListener(this::onEntryClicked);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setAdapter(adapter);
     }
 
 
@@ -184,52 +133,17 @@ public class MainActivity extends PasswordVaultBaseActivity implements Navigatio
 
 
     /**
-     * Method switches to the fragment of the passed id. This method is needed for fragments of this
-     * activity to change the displayed fragment. Pass {@code true} as argument {@code updateUi}
-     * if the {@link NavigationBarView} shall be updated by this method. This is not required if
-     * the method is called when the user clicks on the respective item.
+     * Method is called whenever an entry is clicked.
      *
-     * @param id        Id of the fragment to which to switch.
-     * @param updateUi  Whether the UI shall be updated or not.
-     * @return          Whether the fragment was switched successfully.
+     * @param position  Adapter position of the entry clicked.
      */
-    private boolean switchToFragment(int id, boolean updateUi) {
-        switch (id) {
-            case R.id.menu_home:
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, viewModel.getHomeFragment()).commit();
-                viewModel.setSelectedItem(R.id.menu_home);
-                if (updateUi) {
-                    ((NavigationBarView)findViewById(R.id.main_navigation)).setSelectedItemId(R.id.menu_home);
-                }
-                return true;
-            case R.id.menu_entries:
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, viewModel.getEntriesFragment()).commit();
-                viewModel.setSelectedItem(R.id.menu_entries);
-                if (updateUi) {
-                    ((NavigationBarView)findViewById(R.id.main_navigation)).setSelectedItemId(R.id.menu_entries);
-                }
-                return true;
-
-            case R.id.menu_settings:
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, viewModel.getSettingsFragment()).commit();
-                viewModel.setSelectedItem(R.id.menu_settings);
-                if (updateUi) {
-                    ((NavigationBarView)findViewById(R.id.main_navigation)).setSelectedItemId(R.id.menu_settings);
-                }
-                return true;
-        }
-        return false;
-    }
-
-
-    /**
-     * Method is called when the update state is registered the first time.
-     *
-     * @param updateAvailable   Whether an update is available.
-     */
-    private void onUpdateStatusChanged(boolean updateAvailable) {
-        if (updateAvailable) {
-            navigationBarView.getOrCreateBadge(R.id.menu_settings);
+    private void onEntryClicked(int position) {
+        EntryAbbreviated entry = adapter.getEntryForAdapterPosition(position);
+        if (entry != null) {
+            Intent intent = new Intent(this, EntryActivity.class);
+            intent.putExtra(EntryActivity.KEY_ID, entry.getUuid());
+            viewModel.setOpenedEntryAdapterPosition(position);
+            entryLauncher.launch(intent);
         }
     }
 
