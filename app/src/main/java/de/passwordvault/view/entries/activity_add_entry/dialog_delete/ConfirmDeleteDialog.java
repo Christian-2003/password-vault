@@ -16,9 +16,11 @@ import de.passwordvault.view.utils.DialogCallbackListener;
  * The {@linkplain android.app.Activity} that creates this dialog, must implement the interface
  * {@linkplain DialogCallbackListener}!
  *
- * @author  Christian-2003
- * @version 3.5.4
+ * @author      Christian-2003
+ * @version     3.5.4
+ * @deprecated  Use {@link de.passwordvault.view.general.dialog_delete.DeleteDialog} instead.
  */
+@Deprecated
 public class ConfirmDeleteDialog extends DialogFragment {
 
     /**

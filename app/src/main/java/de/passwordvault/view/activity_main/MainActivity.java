@@ -6,11 +6,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 import de.passwordvault.R;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryManager;
-import de.passwordvault.view.entries.activity_add_entry.AddEntryActivity;
 import de.passwordvault.view.entries.activity_entry.EntryActivity;
 import de.passwordvault.view.settings.activity_settings.SettingsActivity;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
@@ -33,13 +31,7 @@ public class MainActivity extends PasswordVaultActivity<MainViewModel> {
     /**
      * Attribute stores the launcher used to start the {@link EntryActivity}.
      */
-    private ActivityResultLauncher<Intent> entryLauncher;
-
-    /**
-     * Attribute stores the activity result launcher used to start the activity through which to add
-     * a new entry.
-     */
-    private final ActivityResultLauncher<Intent> addEntryLauncher;
+    private final ActivityResultLauncher<Intent> entryLauncher;
 
 
     /**
@@ -56,33 +48,13 @@ public class MainActivity extends PasswordVaultActivity<MainViewModel> {
                     adapter.notifyItemRemoved(adapterPosition);
                 }
                 else if (result.getResultCode() == EntryActivity.RESULT_EDITED) {
-                    adapter.notifyItemChanged(adapterPosition);
+                    adapter.notifyDataSetChanged(); //Need to update entire adapter since data is sorted alphabetically
                 }
             }
-        });
-
-        //Add entry:
-        addEntryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            Log.d("AddEntry", "MainActivity: ResultCode=" + result.getResultCode());
-            if (result != null && result.getResultCode() == RESULT_OK) {
-                //viewModel.getHomeFragment().update(EntryManager.getInstance());
-                //viewModel.getEntriesFragment().updateDataset();
+            else if (adapterPosition == -1 && result.getResultCode() == EntryActivity.RESULT_EDITED) {
+                adapter.notifyDataSetChanged(); //Need to update entire adapter since data is sorted alphabetically
             }
         });
-    }
-
-
-    /**
-     * Method starts the activity which allows the user to add a new entry.
-     */
-    public void addNewEntry() {
-        Intent intent = new Intent(this, AddEntryActivity.class);
-        try {
-            addEntryLauncher.launch(intent);
-        }
-        catch (Exception e) {
-            Toast.makeText(this, "Cannot add new entry", Toast.LENGTH_SHORT).show();
-        }
     }
 
 
@@ -96,7 +68,7 @@ public class MainActivity extends PasswordVaultActivity<MainViewModel> {
         super.onCreate(savedInstanceState);
 
         //Add action listener to FAB:
-        findViewById(R.id.main_fab).setOnClickListener(view -> addNewEntry());
+        findViewById(R.id.main_fab).setOnClickListener(view -> onAddEntry());
 
         //Setup app bar:
         findViewById(R.id.button_settings).setOnClickListener(view -> startActivity(new Intent(this, SettingsActivity.class)));
@@ -145,6 +117,16 @@ public class MainActivity extends PasswordVaultActivity<MainViewModel> {
             viewModel.setOpenedEntryAdapterPosition(position);
             entryLauncher.launch(intent);
         }
+    }
+
+
+    /**
+     * Method is called whenever to add a new entry.
+     */
+    private void onAddEntry() {
+        Intent intent = new Intent(this, EntryActivity.class);
+        viewModel.setOpenedEntryAdapterPosition(-1);
+        entryLauncher.launch(intent);
     }
 
 }

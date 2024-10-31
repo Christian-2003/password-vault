@@ -11,20 +11,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import de.passwordvault.R;
 import de.passwordvault.model.packages.SerializablePackageCollection;
-import de.passwordvault.view.entries.activity_add_entry.AddEntryActivity;
 import de.passwordvault.view.entries.activity_packages.fragment_list.PackagesListFragment;
 import de.passwordvault.view.entries.activity_packages.fragment_selected.PackagesSelectedFragment;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
-import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 
 
 /**
@@ -154,7 +150,7 @@ public class PackagesActivity extends PasswordVaultActivity<PackagesViewModel> {
             disableSearch(true);
         }
         else {
-            Intent intent = new Intent(PackagesActivity.this, AddEntryActivity.class);
+            Intent intent = new Intent();
             SerializablePackageCollection packages = new SerializablePackageCollection(viewModel.getSelectedPackages());
             intent.putExtra(PackagesActivity.KEY_PACKAGES, packages);
             setResult(RESULT_OK, intent);
