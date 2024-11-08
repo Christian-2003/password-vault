@@ -1,7 +1,6 @@
 package de.passwordvault.view.settings.activity_data;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -9,7 +8,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import java.util.Calendar;
 import java.util.concurrent.Executor;
@@ -18,14 +17,14 @@ import de.passwordvault.R;
 import de.passwordvault.model.security.authentication.AuthenticationCallback;
 import de.passwordvault.model.security.authentication.AuthenticationFailure;
 import de.passwordvault.model.security.authentication.Authenticator;
+import de.passwordvault.view.general.dialog_delete.DeleteDialog;
 import de.passwordvault.view.settings.activity_create_backup.CreateBackupActivity;
 import de.passwordvault.view.settings.activity_restore_backup.RestoreBackupActivity;
-import de.passwordvault.view.entries.activity_add_entry.dialog_delete.ConfirmDeleteDialog;
 import de.passwordvault.view.settings.activity_security.SettingsSecurityActivity;
 import de.passwordvault.view.settings.activity_quality_gates.QualityGatesActivity;
-import de.passwordvault.view.utils.DialogCallbackListener;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
+import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
 import de.passwordvault.view.utils.components.SegmentedProgressBar;
 
 
@@ -33,9 +32,9 @@ import de.passwordvault.view.utils.components.SegmentedProgressBar;
  * Class implements the settings data activity.
  *
  * @author  Christian-2003
- * @version 3.5.4
+ * @version 3.7.0
  */
-public class SettingsDataActivity extends PasswordVaultBaseActivity implements DialogCallbackListener, AuthenticationCallback {
+public class SettingsDataActivity extends PasswordVaultBaseActivity implements AuthenticationCallback, PasswordVaultBottomSheetDialog.Callback {
 
     /**
      * Field stores the tag used for authenticating when deleting all app data.
@@ -82,26 +81,17 @@ public class SettingsDataActivity extends PasswordVaultBaseActivity implements D
 
 
     /**
-     * Method is called on positive callback from a dialog.
-     *
-     * @param fragment  Dialog which called the method.
+     * Method is called whenever a dialog is closed with a callback.
+     * @param dialog        Dialog that was closed.
+     * @param resultCode    Result code is either {@link #RESULT_SUCCESS} or {@link #RESULT_CANCEL}
+     *                      and indicates how the dialog is closed.
      */
     @Override
-    public void onPositiveCallback(DialogFragment fragment) {
-        if (fragment instanceof ConfirmDeleteDialog) {
+    public void onCallback(PasswordVaultBottomSheetDialog<? extends ViewModel> dialog, int resultCode) {
+        if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS && dialog instanceof DeleteDialog) {
             viewModel.deleteAllData();
             updateStorageData(true);
         }
-    }
-
-    /**
-     * Method is called on negative callback from a dialog.
-     *
-     * @param fragment  Dialog which called the method.
-     */
-    @Override
-    public void onNegativeCallback(DialogFragment fragment) {
-
     }
 
 
@@ -208,16 +198,20 @@ public class SettingsDataActivity extends PasswordVaultBaseActivity implements D
         }
         else {
             //No app login with which to authenticate:
-            ConfirmDeleteDialog dialog = new ConfirmDeleteDialog();
+            DeleteDialog dialog = new DeleteDialog();
             Bundle args = new Bundle();
-            args.putSerializable(ConfirmDeleteDialog.KEY_CALLBACK_LISTENER, this);
-            args.putString(ConfirmDeleteDialog.KEY_MESSAGE, getString(R.string.settings_data_delete_all_info_dialog));
+            args.putString(DeleteDialog.ARG_MESSAGE, getString(R.string.settings_data_delete_all_info_dialog));
             dialog.setArguments(args);
             dialog.show(getSupportFragmentManager(), "");
         }
     }
 
 
+    /**
+     * Method updates the storage display within the activity.
+     *
+     * @param force Whether to force recalculate the storage used by the app.
+     */
     private void updateStorageData(boolean force) {
         SegmentedProgressBar progressBar = findViewById(R.id.progress_bar);
         Executor mainExecutor = getMainExecutor();
