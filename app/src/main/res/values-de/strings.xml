@@ -197,6 +197,7 @@
     <string name="entry_details_empty_headline">Buh</string>
     <string name="entry_details_empty_support">Informationen werden hier angezeigt</string>
     <string name="entry_edit">Konto bearbeiten</string>
+    <string name="entry_name_placeholder">Neues Konto {arg}</string>
 
 
     <!-- PasswordAnalysis activity -->

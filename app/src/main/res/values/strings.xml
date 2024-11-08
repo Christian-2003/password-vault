@@ -199,6 +199,7 @@
     <string name="entry_details_empty_headline">Wooo</string>
     <string name="entry_details_empty_support">Details are shown here</string>
     <string name="entry_edit">Edit account</string>
+    <string name="entry_name_placeholder">New account {arg}</string>
 
 
     <!-- PasswordAnalysis activity -->

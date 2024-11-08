@@ -274,7 +274,9 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
                 }
             }
             if (viewModel.getEntry() == null) {
-                viewModel.setEntry(new EntryExtended());
+                EntryExtended entry = new EntryExtended();
+                entry.setName(getString(R.string.entry_name_placeholder).replace("{arg}", (EntryManager.getInstance().size() + 1) + ""));
+                viewModel.setEntry(entry);
             }
         }
 
@@ -296,6 +298,7 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
 
         appBarTextView = findViewById(R.id.text_appbar);
         appBarTextView.setText(viewModel.getEntry().getName());
+        appBarTextView.setOnClickListener(view -> onEditEntryClicked(0));
 
         //Back button:
         findViewById(R.id.button_back).setOnClickListener(view -> finish());
