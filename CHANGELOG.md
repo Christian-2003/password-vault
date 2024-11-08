@@ -25,6 +25,7 @@ n/a
 * Added animated splash screen.
 * Removed bottom navigation bar from `MainActivity`, since the home screen is completely empty and useless. The main activity now displays the list of entries and the settings can be opened by clicking a button within the app bar.
 * Viewing and editing entries now happens through the same activity.
+* Removed all Google Play related contents from this repository such as the "play"-folder, since the app is no longer intended to be published on Google Play.
 
 <br/>
 
