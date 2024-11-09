@@ -16,6 +16,7 @@ import de.passwordvault.model.tags.Tag;
 import de.passwordvault.view.entries.activity_packages.PackagesActivity;
 import de.passwordvault.view.entries.dialog_detail.DetailDialog;
 import de.passwordvault.view.entries.dialog_edit_entry.EditEntryDialog;
+import de.passwordvault.view.entries.dialog_edit_tag.EditTagDialog;
 import de.passwordvault.view.general.dialog_delete.DeleteDialog;
 import de.passwordvault.view.general.dialog_more.Item;
 import de.passwordvault.view.general.dialog_more.ItemButton;
@@ -98,6 +99,13 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
      */
     private final ActivityResultLauncher<Intent> packagesLauncher;
 
+    /**
+     * Attribute stores the dialog to edit the entry. This is always {@code null} unless the dialog
+     * is currently visible to the user.
+     */
+    @Nullable
+    private EditEntryDialog editEntryDialog;
+
 
     /**
      * Constructor instantiates a new activity.
@@ -148,6 +156,11 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
                 adapter.notifyItemChanged(EntryRecyclerViewAdapter.POSITION_GENERAL);
                 viewModel.entryVisiblyEdited();
             }
+            else if (editEntryDialog.isTagListChanged()) {
+                //A tag might have been deleted or renamed:
+                adapter.notifyItemChanged(EntryRecyclerViewAdapter.POSITION_GENERAL);
+            }
+            this.editEntryDialog = null; //Remove reference to dialog
         }
         else if (dialog instanceof DeleteDialog) {
             if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS) {
@@ -167,8 +180,8 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
             }
         }
         else if (dialog instanceof DetailDialog) {
-            DetailDialog detailDialog = (DetailDialog)dialog;
             if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS) {
+                DetailDialog detailDialog = (DetailDialog)dialog;
                 if (detailDialog.getTag() != null && viewModel.getEntry() != null) {
                     if (detailDialog.getTag().equals(TAG_ADD_DETAIL)) {
                         //Add detail:
@@ -187,6 +200,14 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
                         }
                     }
                     viewModel.entryEdited();
+                }
+            }
+        }
+        else if (dialog instanceof EditTagDialog) {
+            if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS) {
+                //Tag added, edited or deleted:
+                if (editEntryDialog != null) {
+                    editEntryDialog.notifyTagsChanged();
                 }
             }
         }
@@ -372,13 +393,13 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
      */
     private void onEditEntryClicked(int position) {
         if (viewModel.getEntry() != null) {
-            EditEntryDialog dialog = new EditEntryDialog();
+            editEntryDialog = new EditEntryDialog();
             Bundle args = new Bundle();
             args.putString(EditEntryDialog.ARG_NAME, viewModel.getEntry().getName());
             args.putString(EditEntryDialog.ARG_DESCRIPTION, viewModel.getEntry().getDescription());
             args.putSerializable(EditEntryDialog.ARG_TAGS, new ArrayList<>(viewModel.getEntry().getTags()));
-            dialog.setArguments(args);
-            dialog.show(getSupportFragmentManager(), null);
+            editEntryDialog.setArguments(args);
+            editEntryDialog.show(getSupportFragmentManager(), null);
         }
     }
 

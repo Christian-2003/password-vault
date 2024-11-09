@@ -2,14 +2,11 @@ package de.passwordvault.view.entries.dialog_edit_entry;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModel;
-
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
@@ -17,6 +14,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.model.tags.Tag;
+import de.passwordvault.model.tags.TagManager;
 import de.passwordvault.view.entries.dialog_edit_tag.EditTagDialog;
 import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
 
@@ -27,7 +25,7 @@ import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
  * @author  Christian-2003
  * @version 3.7.0
  */
-public class EditEntryDialog extends PasswordVaultBottomSheetDialog<EditEntryViewModel> implements PasswordVaultBottomSheetDialog.Callback {
+public class EditEntryDialog extends PasswordVaultBottomSheetDialog<EditEntryViewModel> {
 
     /**
      * Attribute stores the key with which to pass the name to edit as string.
@@ -60,6 +58,11 @@ public class EditEntryDialog extends PasswordVaultBottomSheetDialog<EditEntryVie
      */
     private TextInputEditText descriptionEditText;
 
+    /**
+     * Attribute stores the chip group displaying all tags.
+     */
+    private ChipGroup tagContainer;
+
 
     /**
      * Constructor instantiates a new dialog.
@@ -85,8 +88,6 @@ public class EditEntryDialog extends PasswordVaultBottomSheetDialog<EditEntryVie
         Bundle args = getArguments();
         viewModel.processArgs(args);
 
-        Context context = requireContext();
-
         if (view != null) {
             //Name / description:
             nameEditText = view.findViewById(R.id.input_name);
@@ -102,25 +103,8 @@ public class EditEntryDialog extends PasswordVaultBottomSheetDialog<EditEntryVie
             });
 
             //Tags:
-            ChipGroup tagContainer = view.findViewById(R.id.container_tags);
-            tagContainer.removeAllViews();
-            for (Tag tag : viewModel.getAllTags()) {
-                Chip chip = new Chip(context);
-                chip.setText(tag.getName());
-                chip.setCheckable(true);
-                if (viewModel.getSelectedTags().contains(tag)) {
-                    chip.setChecked(true);
-                }
-                chip.setOnCheckedChangeListener((v, checked) -> {
-                    if (checked) {
-                        viewModel.getSelectedTags().add(tag);
-                    }
-                    else {
-                        viewModel.getSelectedTags().remove(tag);
-                    }
-                });
-                tagContainer.addView(chip);
-            }
+            tagContainer = view.findViewById(R.id.container_tags);
+            notifyTagsChanged();
 
             //Save button:
             view.findViewById(R.id.button_save).setOnClickListener(v -> {
@@ -142,6 +126,46 @@ public class EditEntryDialog extends PasswordVaultBottomSheetDialog<EditEntryVie
         }
 
         return view;
+    }
+
+
+    /**
+     * Method notifies the dialog that the tags have changed. This makes the dialog redraw the views
+     * displaying the tags.
+     */
+    public void notifyTagsChanged() {
+        if (tagContainer != null) {
+            Context context = getContext();
+            tagContainer.removeAllViews();
+            for (Tag tag : viewModel.getAllTags()) {
+                Chip chip = new Chip(context);
+                chip.setText(tag.getName());
+                chip.setCheckable(true);
+                if (viewModel.getSelectedTags().contains(tag)) {
+                    chip.setChecked(true);
+                }
+                chip.setOnCheckedChangeListener((v, checked) -> {
+                    if (checked) {
+                        viewModel.getSelectedTags().add(tag);
+                    }
+                    else {
+                        viewModel.getSelectedTags().remove(tag);
+                    }
+                });
+                chip.setOnLongClickListener(v -> {
+                    EditTagDialog d = new EditTagDialog();
+                    Bundle args = new Bundle();
+                    args.putSerializable(EditTagDialog.ARG_TAG, tag);
+                    d.setArguments(args);
+                    d.show(getParentFragmentManager(), null);
+                    return true;
+                });
+                tagContainer.addView(chip);
+            }
+        }
+        if (viewModel != null) {
+            viewModel.setTagListChanged(true);
+        }
     }
 
 
@@ -172,6 +196,18 @@ public class EditEntryDialog extends PasswordVaultBottomSheetDialog<EditEntryVie
         return viewModel.getSelectedTags();
     }
 
+    /**
+     * Method returns whether the global list of tags (from {@link TagManager}) changed through this
+     * dialog. Even if a callback of type
+     * {@link de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog.Callback#RESULT_CANCEL}
+     * is invoked, this method may still return {@code true}.
+     *
+     * @return  Whether the global tag list changed.
+     */
+    public boolean isTagListChanged() {
+        return viewModel.isTagListChanged();
+    }
+
 
     /**
      * Method validates the user inputs. If all inputs are valid, {@code true} is returned. Otherwise,
@@ -193,14 +229,6 @@ public class EditEntryDialog extends PasswordVaultBottomSheetDialog<EditEntryVie
         else {
             nameContainer.setErrorEnabled(false);
             return true;
-        }
-    }
-
-    @Override
-    public void onCallback(PasswordVaultBottomSheetDialog<? extends ViewModel> dialog, int resultCode) {
-        Log.d("DIALOG", "Callback received: " + resultCode);
-        if (resultCode == Callback.RESULT_SUCCESS && dialog instanceof EditTagDialog) {
-            EditTagDialog editTagDialog = (EditTagDialog)dialog;
         }
     }
 

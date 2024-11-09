@@ -36,6 +36,12 @@ public class EditEntryViewModel extends ViewModel {
     @NonNull
     private final ArrayList<Tag> selectedTags;
 
+    /**
+     * Attribute stores whether the global list of tags (from {@link TagManager}) changed through
+     * this dialog.
+     */
+    private boolean tagListChanged;
+
 
     /**
      * Constructor instantiates a new view model.
@@ -44,6 +50,7 @@ public class EditEntryViewModel extends ViewModel {
         name = "";
         description = "";
         selectedTags = new ArrayList<>();
+        tagListChanged = false;
     }
 
 
@@ -107,12 +114,23 @@ public class EditEntryViewModel extends ViewModel {
     }
 
     /**
-     * Method adds the specified tag to the available tags of the application.
+     * Method returns whether the global list of tags (from {@link TagManager}) changed through this
+     * dialog.
      *
-     * @param tag   Tag to add to the available tags.
+     * @return  Whether the global tag list changed.
      */
-    public void addNewTag(@NonNull Tag tag) {
-        TagManager.getInstance().add(tag);
+    public boolean isTagListChanged() {
+        return tagListChanged;
+    }
+
+    /**
+     * Method changes whether the global list of tags (from {@link TagManager}) changed through this
+     * dialog.
+     *
+     * @param tagListChanged    Whether the global tag list changed.
+     */
+    public void setTagListChanged(boolean tagListChanged) {
+        this.tagListChanged = tagListChanged;
     }
 
 
