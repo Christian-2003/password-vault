@@ -50,11 +50,11 @@
     </style>
 
     <style name="button.image">
-        <item name="android:layout_width">@dimen/image_m</item>
-        <item name="android:layout_height">@dimen/image_m</item>
+        <item name="android:layout_width">@dimen/image_s</item>
+        <item name="android:layout_height">@dimen/image_s</item>
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
-        <item name="android:minWidth">@dimen/image_m</item>
-        <item name="android:minHeight">@dimen/image_m</item>
+        <item name="android:minWidth">@dimen/image_s</item>
+        <item name="android:minHeight">@dimen/image_s</item>
         <item name="android:tint">@color/text</item>
     </style>
 
