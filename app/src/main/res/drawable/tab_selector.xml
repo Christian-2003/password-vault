@@ -10,7 +10,7 @@
             android:useLevel="false">
 
             <corners android:radius="100dp"/>
-            <solid android:color="@color/pv_primary"/>
+            <solid android:color="@color/primary"/>
         </shape>
     </item>
 
@@ -22,7 +22,7 @@
             android:useLevel="false">
 
             <corners android:radius="100dp"/>
-            <solid android:color="@color/pv_text_secondary"/>
+            <solid android:color="@color/text_light"/>
         </shape>
     </item>
 

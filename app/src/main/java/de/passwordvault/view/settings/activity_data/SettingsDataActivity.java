@@ -234,10 +234,10 @@ public class SettingsDataActivity extends PasswordVaultBaseActivity implements A
             String dataSpaceText = viewModel.formatStorageSpace(placeholder, dataSpaceMb, "MB");
             String cacheSpaceText = viewModel.formatStorageSpace(placeholder, cacheSpaceMb, "MB");
             progressBar.clearSegments();
-            progressBar.addSegment(new SegmentedProgressBar.Segment(usedSpacePercentage, getColor(R.color.pv_text_secondary)));
-            progressBar.addSegment(new SegmentedProgressBar.Segment(appSpacePercentage, getColor(R.color.pv_primary)));
-            progressBar.addSegment(new SegmentedProgressBar.Segment(dataSpacePercentage, getColor(R.color.pv_green)));
-            progressBar.addSegment(new SegmentedProgressBar.Segment(cacheSpacePercentage, getColor(R.color.pv_yellow)));
+            progressBar.addSegment(new SegmentedProgressBar.Segment(usedSpacePercentage, getColor(R.color.text_light)));
+            progressBar.addSegment(new SegmentedProgressBar.Segment(appSpacePercentage, getColor(R.color.primary)));
+            progressBar.addSegment(new SegmentedProgressBar.Segment(dataSpacePercentage, getColor(R.color.green)));
+            progressBar.addSegment(new SegmentedProgressBar.Segment(cacheSpacePercentage, getColor(R.color.yellow)));
             mainExecutor.execute(() -> {
                 ((TextView)findViewById(R.id.used)).setText(usedSpaceText);
                 ((TextView)findViewById(R.id.free)).setText(freeSpaceText);

@@ -297,7 +297,7 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
         if (drawable == null) {
             return null;
         }
-        drawable.setTint(adapter.getContext().getColor(R.color.pv_container));
+        drawable.setTint(adapter.getContext().getColor(R.color.background_container));
         Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -322,7 +322,7 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
             swipeAction = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_delete, R.color.text_critical, deleteListener);
         }
         else if (action == DetailSwipeAction.EDIT) {
-            swipeAction = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_edit, R.color.pv_primary, editListener);
+            swipeAction = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_edit, R.color.primary, editListener);
         }
         return swipeAction;
     }
@@ -344,7 +344,7 @@ public class RecyclerItemSwipeCallback<T> extends ItemTouchHelper.Callback {
             swipeAction = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_delete, R.color.text_critical, deleteListener);
         }
         else if (action == DetailSwipeAction.EDIT) {
-            swipeAction = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_edit, R.color.pv_primary, editListener);
+            swipeAction = new RecyclerItemSwipeCallback.SwipeAction<>(R.drawable.ic_edit, R.color.primary, editListener);
         }
         return swipeAction;
     }

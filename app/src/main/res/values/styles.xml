@@ -153,7 +153,7 @@
     <!-- Style for normal text -->
     <style name="pv.text">
         <item name="android:textSize">@dimen/text_m</item>
-        <item name="android:textColor">@color/pv_text</item>
+        <item name="android:textColor">@color/text</item>
     </style>
 
     <style name="pv.text.toolbar" parent="pv.text">
@@ -170,26 +170,26 @@
 
     <style name="pv.text.secondary" parent="pv.text">
         <item name="android:textSize">@dimen/text_s</item>
-        <item name="android:textColor">@color/pv_text_secondary</item>
+        <item name="android:textColor">@color/text_light</item>
     </style>
 
 
     <!-- Style for secondary text -->
     <style name="pv.text.variant" parent="pv.text">
-        <item name="android:textColor">@color/pv_text_secondary</item>
+        <item name="android:textColor">@color/text_light</item>
         <item name="android:textSize">@dimen/secondary_text_size</item>
     </style>
 
     <!-- Style for info text -->
     <style name="pv.text.info" parent="pv.text">
         <item name="android:textSize">@dimen/default_text_size</item>
-        <item name="android:textColor">@color/pv_text_secondary</item>
+        <item name="android:textColor">@color/text_light</item>
         <item name="android:lineSpacingExtra">5sp</item>
     </style>
 
     <!-- Style for highlighted text -->
     <style name="pv.text.highlight" parent="pv.text">
-        <item name="android:textColor">@color/pv_text</item>
+        <item name="android:textColor">@color/text</item>
         <item name="android:textSize">@dimen/highlight_text_size</item>
     </style>
 
@@ -197,7 +197,7 @@
     <style name="pv.text.app_bar" parent="pv.text">
         <item name="android:textSize">@dimen/app_bar_text_size</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/pv_text_onPrimary</item>
+        <item name="android:textColor">@color/text</item>
     </style>
 
 
@@ -218,12 +218,12 @@
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
         <item name="android:minWidth">@dimen/image_button_width</item>
         <item name="android:minHeight">@dimen/image_button_height</item>
-        <item name="android:tint">@color/pv_text_secondary</item>
+        <item name="android:tint">@color/text_light</item>
     </style>
 
     <!-- Style for image buttons within the app bar / toolbar -->
     <style name="pv.button.image_button.app_bar" parent="pv.button.image_button">
-        <item name="android:tint">@color/pv_text_onPrimary</item>
+        <item name="android:tint">@color/text</item>
     </style>
 
 
@@ -238,9 +238,9 @@
 
     <!-- Styles for the bottom navigation bar / navigation rail -->
     <style name="pv.menu_bar" parent="Widget.Material3.BottomNavigationView">
-        <item name="android:background">@color/pv_container</item>
-        <item name="itemIconTint">@color/pv_text</item>
-        <item name="itemTextColor">@color/pv_text</item>
+        <item name="android:background">@color/background_container</item>
+        <item name="itemIconTint">@color/text</item>
+        <item name="itemTextColor">@color/text</item>
         <item name="itemTextAppearanceInactive">@style/pv.menu_bar.text</item>
         <item name="itemActiveIndicatorStyle">@style/pv.menu_bar.activeitem</item>
         <item name="itemTextAppearanceActive">@style/pv.menu_bar.activeitem.text</item>
@@ -248,7 +248,7 @@
 
     <!-- Style for the active item of a navigation bar / navigation rail -->
     <style name="pv.menu_bar.activeitem" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
-        <item name="android:color">@color/pv_container_detail</item>
+        <item name="android:color">@color/primary</item>
     </style>
 
     <!-- Style for the text of the active item of a navigation bar / navigation rail -->
@@ -264,8 +264,8 @@
 
     <!-- Style for tab layouts -->
     <style name="pv.tab_layout">
-        <item name="tabTextColor">@color/pv_text</item>
-        <item name="tabSelectedTextColor">@color/pv_text_primary</item>
+        <item name="tabTextColor">@color/text</item>
+        <item name="tabSelectedTextColor">@color/text</item>
         <item name="android:background">@color/background_app_bar</item>
     </style>
 
@@ -289,7 +289,7 @@
 
     <!-- Style for a search bar within the ap bar -->
     <style name="pv.app_bar.search_bar">
-        <item name="android:textColorHint">@color/pv_text_secondary</item>
+        <item name="android:textColorHint">@color/text_light</item>
         <item name="android:textSize">@dimen/app_bar_text_size</item>
         <item name="android:hint">@string/hint_search</item>
     </style>
@@ -315,8 +315,8 @@
         <item name="layout_scrollFlags">scroll|exitUntilCollapsed</item>
         <item name="titleCollapseMode">scale</item>
         <item name="expandedTitleGravity">center_vertical|center_horizontal</item>
-        <item name="collapsedTitleTextColor">@color/pv_text_onPrimary</item>
-        <item name="expandedTitleTextColor">@color/pv_text_onPrimary</item>
+        <item name="collapsedTitleTextColor">@color/text</item>
+        <item name="expandedTitleTextColor">@color/text</item>
         <item name="collapsedTitleTextAppearance">@style/pv.layout.app_bar.collapsing_toolbar.collapsed_title</item>
         <item name="expandedTitleTextAppearance">@style/pv.layout.app_bar.collapsing_toolbar.expanded_title</item>
     </style>
@@ -364,17 +364,17 @@
     <style name="pv.icon">
         <item name="android:layout_height">@dimen/pin_icon_size</item>
         <item name="android:layout_width">@dimen/pin_icon_size</item>
-        <item name="android:tint">@color/pv_text_secondary</item>
+        <item name="android:tint">@color/text_light</item>
     </style>
 
     <!-- Style for pin-icons -->
     <style name="pv.icon.pin" parent="pv.icon">
-        <item name="android:tint">@color/pv_text_secondary</item>
+        <item name="android:tint">@color/text_light</item>
     </style>
 
     <!-- Style for pin-icons -->
     <style name="pv.icon.highlight" parent="pv.icon">
-        <item name="android:tint">@color/pv_icon_green</item>
+        <item name="android:tint">@color/green</item>
     </style>
 
 
@@ -396,7 +396,7 @@
     <!-- Style for highlighted container -->
     <style name="pv.container.highlight">
         <item name="android:background">@drawable/background</item>
-        <item name="android:backgroundTint">@color/pv_container_highlight</item>
+        <item name="android:backgroundTint">@color/primary_translucent</item>
         <item name="android:padding">0dp</item>
         <item name="android:clipToOutline">true</item>
     </style>
@@ -414,14 +414,14 @@
     <!-- Style for eyecatcher -->
     <style name="pv.eyecatcher">
         <item name="android:background">@drawable/shape_important</item>
-        <item name="android:backgroundTint">@color/pv_red</item>
+        <item name="android:backgroundTint">@color/red</item>
         <item name="android:layout_height">@dimen/eyecatcher_size</item>
         <item name="android:layout_width">@dimen/eyecatcher_size</item>
     </style>
 
     <style name="pv.eyecatcher.pill">
         <item name="android:background">@drawable/pill</item>
-        <item name="android:backgroundTint">@color/pv_container_detail</item>
+        <item name="android:backgroundTint">@color/background_container</item>
     </style>
 
 
@@ -438,14 +438,14 @@
 
     <!-- Style for 'com.google.android.material.textfield.TextInputLayout' -->
     <style name="pv.material.text_input_layout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
-        <item name="android:textColorHint">@color/pv_text_secondary</item>
-        <item name="endIconTint">@color/pv_text_secondary</item>
+        <item name="android:textColorHint">@color/text_light</item>
+        <item name="endIconTint">@color/text_light</item>
     </style>
 
     <!-- Style for 'com.google.android.material.textfield.TextInputLayout' with a dropdown menu -->
     <style name="pv.material.text_input_layout.exposed_dropdown" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
-        <item name="android:textColorHint">@color/pv_text_secondary</item>
-        <item name="endIconTint">@color/pv_text_secondary</item>
+        <item name="android:textColorHint">@color/text_light</item>
+        <item name="endIconTint">@color/text_light</item>
     </style>
 
     <!-- Style for 'com.google.android.material.materialswitch.MaterialSwitch' -->
@@ -455,19 +455,19 @@
 
     <!-- Style for 'com.google.android.material.floatingactionbutton.FloatingActionButton' -->
     <style name="pv.material.fab" parent="Widget.Material3.FloatingActionButton.Primary">
-        <item name="tint">@color/pv_text_onPrimary</item>
+        <item name="tint">@color/text</item>
     </style>
 
     <!-- Style for Alert dialog -->
     <style name="pv.material.dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="materialAlertDialogBodyTextStyle">@style/pv.text</item>
-        <item name="android:background">@color/pv_container</item>
+        <item name="android:background">@color/background_container</item>
     </style>
 
     <!-- Style for buttons -->
     <style name="pv.material.button" parent="Widget.Material3.Button">
-        <item name="android:textColor">@color/pv_text_onPrimary</item>
-        <item name="iconTint">@color/pv_text_onPrimary</item>
+        <item name="android:textColor">@color/text</item>
+        <item name="iconTint">@color/text</item>
     </style>
 
     <!-- Style for buttons used with "Searching for something different" -->
@@ -479,15 +479,15 @@
 
     <!-- Style for 'com.google.android.material.search.SearchBar' -->
     <style name="pv.material.search_bar" parent="Widget.Material3.SearchBar">
-        <item name="android:backgroundTint">@color/pv_container</item>
+        <item name="android:backgroundTint">@color/background_container</item>
         <item name="android:textAppearance">@style/pv.material.search_bar.text</item>
         <item name="navigationIcon">@drawable/ic_search</item>
-        <item name="navigationIconTint">@color/pv_text_secondary</item>
+        <item name="navigationIconTint">@color/text_light</item>
     </style>
 
     <!-- Style for the text of a search bar -->
     <style name="pv.material.search_bar.text" parent="pv.text">
-        <item name="android:textColor">@color/pv_text_secondary</item>
+        <item name="android:textColor">@color/text_light</item>
     </style>
 
     <!-- Style for radio buttons -->
@@ -503,8 +503,8 @@
 
     <!-- Style for badges -->
     <style name="pv.material.badge" parent="Widget.MaterialComponents.Badge">
-        <item name="backgroundColor">@color/pv_red</item>
-        <item name="badgeTextColor">@color/pv_text_onPrimary</item>
+        <item name="backgroundColor">@color/red</item>
+        <item name="badgeTextColor">@color/text</item>
     </style>
 
     <!-- Style for chips -->
@@ -520,7 +520,7 @@
     <style name="pv.material.divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
-        <item name="android:background">@color/pv_text_secondary</item>
+        <item name="android:background">@color/text_light</item>
     </style>
 
 
@@ -537,7 +537,7 @@
     <style name="pv.divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
-        <item name="android:background">@color/pv_container_detail</item>
+        <item name="android:background">@color/text_light</item>
         <item name="android:layout_marginHorizontal">@dimen/space_horizontal</item>
     </style>
 
@@ -549,9 +549,9 @@
 
     <!-- Style for popup menus -->
     <style name="popup_menu" parent="@android:style/Widget.PopupMenu">
-        <item name="android:backgroundTint">@color/pv_container</item>
-        <item name="android:iconTint">@color/pv_text</item>
-        <item name="android:textColor">@color/pv_text</item>
+        <item name="android:backgroundTint">@color/background_container</item>
+        <item name="android:iconTint">@color/text</item>
+        <item name="android:textColor">@color/text</item>
     </style>
 
     <!-- Style to make the login image rounded -->

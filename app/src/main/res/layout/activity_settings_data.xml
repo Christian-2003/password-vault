@@ -221,7 +221,7 @@
                 android:layout_height="@dimen/progress_bar_thickness_large"
                 android:layout_marginHorizontal="@dimen/space_horizontal"
                 android:background="@drawable/pill"
-                android:backgroundTint="@color/pv_container_detail"
+                android:backgroundTint="@color/background_container"
                 android:clipToOutline="true"/>
 
             <GridLayout
@@ -234,7 +234,7 @@
 
                 <View
                     android:layout_gravity="center_vertical"
-                    android:backgroundTint="@color/pv_text_secondary"
+                    android:backgroundTint="@color/text_light"
                     android:layout_marginEnd="@dimen/space_horizontal_between"
                     style="@style/pv.progess_bar_legend"/>
 
@@ -254,7 +254,7 @@
 
                 <View
                     android:layout_gravity="center_vertical"
-                    android:backgroundTint="@color/pv_primary"
+                    android:backgroundTint="@color/primary"
                     android:layout_marginEnd="@dimen/space_horizontal_between"
                     style="@style/pv.progess_bar_legend"/>
 
@@ -274,7 +274,7 @@
 
                 <View
                     android:layout_gravity="center_vertical"
-                    android:backgroundTint="@color/pv_green"
+                    android:backgroundTint="@color/green"
                     android:layout_marginEnd="@dimen/space_horizontal_between"
                     style="@style/pv.progess_bar_legend"/>
 
@@ -294,7 +294,7 @@
 
                 <View
                     android:layout_gravity="center_vertical"
-                    android:backgroundTint="@color/pv_yellow"
+                    android:backgroundTint="@color/yellow"
                     android:layout_marginEnd="@dimen/space_horizontal_between"
                     style="@style/pv.progess_bar_legend"/>
 
@@ -314,7 +314,7 @@
 
                 <View
                     android:layout_gravity="center_vertical"
-                    android:backgroundTint="@color/pv_container_detail"
+                    android:backgroundTint="@color/background_container"
                     android:layout_marginEnd="@dimen/space_horizontal_between"
                     style="@style/pv.progess_bar_legend"/>
 

@@ -15,7 +15,7 @@ changing this layout.
     android:layout_height="wrap_content"
     android:paddingHorizontal="@dimen/space_horizontal"
     android:paddingVertical="@dimen/space_vertical"
-    android:background="@color/pv_background"
+    android:background="@color/background"
     android:orientation="horizontal">
 
     <ImageView

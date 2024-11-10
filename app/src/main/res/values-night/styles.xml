@@ -12,7 +12,7 @@
     <style name="pv.text.app_bar" parent="pv.text">
         <item name="android:textSize">@dimen/app_bar_text_size</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/pv_text</item>
+        <item name="android:textColor">@color/text</item>
     </style>
 
 
@@ -27,8 +27,8 @@
 
     <!-- Style for an AppBar which cannot be collapsed -->
     <style name="pv.app_bar">
-        <item name="android:background">@color/pv_background</item>
-        <item name="android:textColor">@color/pv_text</item>
+        <item name="android:background">@color/background</item>
+        <item name="android:textColor">@color/text</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/app_bar_height</item>
     </style>
@@ -38,14 +38,14 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:fitsSystemWindows">true</item>
-        <item name="android:background">@color/pv_background</item>
-        <item name="contentScrim">@color/pv_background</item>
-        <item name="statusBarScrim">@color/pv_background</item>
+        <item name="android:background">@color/background</item>
+        <item name="contentScrim">@color/background</item>
+        <item name="statusBarScrim">@color/background</item>
         <item name="layout_scrollFlags">scroll|exitUntilCollapsed</item>
         <item name="titleCollapseMode">scale</item>
         <item name="expandedTitleGravity">center_vertical|center_horizontal</item>
-        <item name="collapsedTitleTextColor">@color/pv_text</item>
-        <item name="expandedTitleTextColor">@color/pv_text</item>
+        <item name="collapsedTitleTextColor">@color/text</item>
+        <item name="expandedTitleTextColor">@color/text</item>
         <item name="collapsedTitleTextAppearance">@style/pv.layout.app_bar.collapsing_toolbar.collapsed_title</item>
         <item name="expandedTitleTextAppearance">@style/pv.layout.app_bar.collapsing_toolbar.expanded_title</item>
     </style>

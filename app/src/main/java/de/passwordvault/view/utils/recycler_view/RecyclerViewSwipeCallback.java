@@ -319,7 +319,7 @@ public class RecyclerViewSwipeCallback extends ItemTouchHelper.Callback {
             swipeAction = new SwipeAction(R.drawable.ic_delete, R.color.text_critical, deleteListener);
         }
         else if (action == DetailSwipeAction.EDIT && editListener != null) {
-            swipeAction = new SwipeAction(R.drawable.ic_edit, R.color.pv_primary, editListener);
+            swipeAction = new SwipeAction(R.drawable.ic_edit, R.color.primary, editListener);
         }
         return swipeAction;
     }
@@ -341,7 +341,7 @@ public class RecyclerViewSwipeCallback extends ItemTouchHelper.Callback {
             swipeAction = new SwipeAction(R.drawable.ic_delete, R.color.text_critical, deleteListener);
         }
         else if (action == DetailSwipeAction.EDIT && editListener != null) {
-            swipeAction = new SwipeAction(R.drawable.ic_edit, R.color.pv_primary, editListener);
+            swipeAction = new SwipeAction(R.drawable.ic_edit, R.color.primary, editListener);
         }
         return swipeAction;
     }
