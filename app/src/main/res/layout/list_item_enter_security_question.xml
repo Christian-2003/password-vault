@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:paddingHorizontal="@dimen/space_horizontal"
     android:paddingVertical="@dimen/space_vertical"
-    style="@style/pv.container">
+    style="@style/card">
 
     <TextView
         android:id="@+id/text_view_question"
@@ -17,7 +17,7 @@
         android:lines="3"
         android:gravity="center_vertical"
         android:text="@string/button_security_question_add"
-        style="@style/pv.text"/>
+        style="@style/text"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"

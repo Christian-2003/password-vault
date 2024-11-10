@@ -49,8 +49,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    app:shapeAppearance="@style/rounded_corners"
-                    app:shapeAppearanceOverlay="@style/rounded_corners"
                     app:srcCompat="@mipmap/ic_launcher_round"/>
 
                 <TextView

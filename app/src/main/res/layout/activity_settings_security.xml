@@ -407,14 +407,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_search_backup"
-                style="@style/pv.material.button.different"/>
+                style="@style/button.different"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_search_autofillauthentication"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_search_autofillauthentication"
-                style="@style/pv.material.button.different"/>
+                style="@style/button.different"/>
 
         </LinearLayout>
 

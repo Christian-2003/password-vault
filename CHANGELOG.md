@@ -28,7 +28,8 @@ n/a
 * Removed all Google Play related contents from this repository such as the "play"-folder, since the app is no longer intended to be published on Google Play.
 * Decreased size for all image buttons from `48dp` to `32dp`, to reduce size of borderless ripple effect when clicked.
 * Established Material Design 3 compliance for all activities, fragments and dialogs to create a seemless UI integration with the Android OS on all devices.
-* Remove all old colors with the `pv_<name>`-notation since they have been superseded by the newer material design colors.
+* Removed all old colors with the `pv_<name>`-notation since they have been superseded by the newer material design colors.
+* Removed all old global styles from the app.
 
 <br/>
 

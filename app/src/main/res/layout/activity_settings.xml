@@ -355,7 +355,7 @@
                             android:id="@+id/badge_update"
                             android:visibility="gone"
                             tools:visibility="visible"
-                            style="@style/pv.eyecatcher"/>
+                            style="@style/eyecatcher"/>
 
                     </LinearLayout>
 

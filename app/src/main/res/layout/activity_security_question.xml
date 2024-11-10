@@ -45,7 +45,8 @@
 
     <!-- Content for the activity -->
     <ScrollView
-        style="@style/pv.layout.nested_scroll_view">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -58,7 +59,7 @@
                 android:layout_marginHorizontal="@dimen/space_horizontal"
                 android:layout_marginVertical="@dimen/space_vertical"
                 android:text="@string/recovery_login_info"
-                style="@style/pv.text.info"/>
+                style="@style/text.info"/>
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/view_pager"
@@ -116,7 +117,7 @@
                 android:text="@string/error_master_password_recovery"
                 android:textColor="?attr/colorError"
                 tools:visibility="visible"
-                style="@style/pv.text"/>
+                style="@style/text"/>
 
         </LinearLayout>
 

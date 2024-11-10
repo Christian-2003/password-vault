@@ -312,7 +312,7 @@
 
                     <View
                         android:id="@+id/badge_update"
-                        style="@style/pv.eyecatcher"/>
+                        style="@style/eyecatcher"/>
 
                 </LinearLayout>
 

@@ -1,18 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!--
+Styles follow strict naming guidelines:
+- Styles for texts shall be named "text.<name>"
+- Styles for buttons shall be named "button.<name>"
+- Styles for image buttons shall be named "button.image.<name>"
+- Styles for images shall be named "image.<name>"
+- Styles for default components (e.g. text fields) shall be named "component.<name>"
+
+All styles that do not fit into the categories mentioned above do not need to follow any naming
+guidelines.
+-->
 <resources>
 
-    <!-- Styles for text -->
+    <!--
+    ================================================================================================
+    The following section contains styles for texts
+    ================================================================================================
+    -->
+
+    <!-- Regular text -->
     <style name="text">
         <item name="android:textSize">@dimen/text_m</item>
         <item name="android:textColor">@color/text</item>
     </style>
 
+    <!-- Light text -->
     <style name="text.light">
         <item name="android:textSize">@dimen/text_s</item>
         <item name="android:textColor">@color/text_light</item>
     </style>
 
+    <!-- App bar text -->
     <style name="text.app_bar">
         <item name="android:textSize">@dimen/text_l</item>
         <item name="android:textColor">@color/text</item>
@@ -21,18 +40,21 @@
         <item name="android:layout_marginEnd">@dimen/space_horizontal</item>
     </style>
 
+    <!-- Headline text -->
     <style name="text.headline">
         <item name="android:textSize">@dimen/text_m</item>
         <item name="android:textColor">@color/text_light</item>
         <item name="android:textStyle">bold</item>
     </style>
 
+    <!-- Text within info boxes -->
     <style name="text.info">
         <item name="android:textSize">@dimen/text_m</item>
         <item name="android:textColor">@color/text_light</item>
         <item name="android:lineSpacingExtra">5sp</item>
     </style>
 
+    <!-- Searchbar text -->
     <style name="text.search">
         <item name="android:textSize">@dimen/text_l</item>
         <item name="android:textColor">@color/text</item>
@@ -44,11 +66,16 @@
 
 
 
-    <!-- Styles for buttons -->
-    <style name="button">
+    <!--
+    ================================================================================================
+    The following section contains styles for buttons
+    ================================================================================================
+    -->
 
-    </style>
+    <!-- Parent style -->
+    <style name="button"/>
 
+    <!-- Image button -->
     <style name="button.image">
         <item name="android:layout_width">@dimen/image_s</item>
         <item name="android:layout_height">@dimen/image_s</item>
@@ -58,33 +85,49 @@
         <item name="android:tint">@color/text</item>
     </style>
 
-    <style name="button.image.app_bar" parent="button.image">
-        <!-- No deviations from parent so far -->
+    <!-- App bar image button -->
+    <style name="button.image.app_bar" parent="button.image"/>
+
+    <!-- Style for buttons used with "Searching for something different" -->
+    <style name="button.different" parent="Widget.Material3.Button.TextButton">
+        <item name="android:paddingStart">@dimen/space_horizontal</item>
+        <item name="android:paddingEnd">@dimen/space_horizontal</item>
+        <item name="android:textAlignment">textStart</item>
     </style>
 
 
 
-    <!-- Styles for images -->
+    <!--
+    ================================================================================================
+    The following section contains styles for images
+    ================================================================================================
+    -->
+
+    <!-- Images -->
     <style name="image">
         <item name="android:layout_height">@dimen/image_s</item>
         <item name="android:layout_width">@dimen/image_s</item>
         <item name="android:tint">@color/text</item>
     </style>
 
+    <!-- Light images -->
     <style name="image.light" parent="image">
         <item name="android:tint">@color/text_light</item>
     </style>
 
+    <!-- Small light image -->
     <style name="image.light.small" parent="image.light">
         <item name="android:layout_height">@dimen/image_xxs</item>
         <item name="android:layout_width">@dimen/image_xxs</item>
     </style>
 
+    <!-- Images for recycler view adapter items -->
     <style name="image.item" parent="image">
         <item name="android:layout_height">@dimen/image_xs</item>
         <item name="android:layout_width">@dimen/image_xs</item>
     </style>
 
+    <!-- Empty list placeholder image -->
     <style name="image.emptyPlaceholder" parent="image">
         <item name="android:layout_width">@dimen/image_xxl</item>
         <item name="android:layout_height">@dimen/image_xxl</item>
@@ -93,437 +136,81 @@
 
 
 
-    <!-- Styles for the app bar -->
-    <style name="app_bar">
-        <item name="android:background">@color/background_app_bar</item>
-    </style>
-
-
-
-    <!-- Other styles -->
-    <style name="divider">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1dp</item>
-        <item name="android:background">@color/divider</item>
-        <item name="android:backgroundTint">@color/divider</item>
-    </style>
-
-
-
-    <!-- Styles for cards -->
-    <style name="card">
-        <item name="android:background">@drawable/background</item>
-        <item name="android:backgroundTint">@color/background_container</item>
-        <item name="android:paddingHorizontal">@dimen/space_horizontal</item>
-        <item name="android:paddingVertical">@dimen/space_vertical</item>
-    </style>
-
-
-
-    <!-- Styles for default components -->
-    <style name="view">
-
-    </style>
-
-    <style name="view.bottomSheet" parent="ThemeOverlay.Material3.BottomSheetDialog">
-        <item name="android:backgroundTint">@color/background_app_bar</item>
-    </style>
-
-
-
-
-
-
-
-
-
-    <!-- Top-level style which applies to all components of the application -->
-    <style name="pv"/>
-
-
-
-
-
     <!--
     ================================================================================================
-    The following section contains styles for texts
+    The following section contains styles for components
     ================================================================================================
     -->
 
-    <!-- Style for normal text -->
-    <style name="pv.text">
-        <item name="android:textSize">@dimen/text_m</item>
-        <item name="android:textColor">@color/text</item>
-    </style>
-
-    <style name="pv.text.toolbar" parent="pv.text">
-        <item name="android:textSize">@dimen/text_toolbar</item>
-    </style>
-
-    <style name="pv.text.title" parent="pv.text">
-        <item name="android:textSize">@dimen/text_xl</item>
-    </style>
-
-    <style name="pv.text.support" parent="pv.text">
-        <item name="android:textSize">@dimen/text_l</item>
-    </style>
-
-    <style name="pv.text.secondary" parent="pv.text">
-        <item name="android:textSize">@dimen/text_s</item>
-        <item name="android:textColor">@color/text_light</item>
-    </style>
-
-
-    <!-- Style for secondary text -->
-    <style name="pv.text.variant" parent="pv.text">
-        <item name="android:textColor">@color/text_light</item>
-        <item name="android:textSize">@dimen/secondary_text_size</item>
-    </style>
-
-    <!-- Style for info text -->
-    <style name="pv.text.info" parent="pv.text">
-        <item name="android:textSize">@dimen/default_text_size</item>
-        <item name="android:textColor">@color/text_light</item>
-        <item name="android:lineSpacingExtra">5sp</item>
-    </style>
-
-    <!-- Style for highlighted text -->
-    <style name="pv.text.highlight" parent="pv.text">
-        <item name="android:textColor">@color/text</item>
-        <item name="android:textSize">@dimen/highlight_text_size</item>
-    </style>
-
-    <!-- Style for text within the app bar -->
-    <style name="pv.text.app_bar" parent="pv.text">
-        <item name="android:textSize">@dimen/app_bar_text_size</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/text</item>
-    </style>
-
-
-
-
-
-    <!--
-    ================================================================================================
-    The following section contains styles for buttons
-    ================================================================================================
-    -->
-
-    <!-- Style for buttons -->
-    <style name="pv.button"/>
-
-    <!-- Style for image buttons -->
-    <style name="pv.button.image_button">
-        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
-        <item name="android:minWidth">@dimen/image_button_width</item>
-        <item name="android:minHeight">@dimen/image_button_height</item>
-        <item name="android:tint">@color/text_light</item>
-    </style>
-
-    <!-- Style for image buttons within the app bar / toolbar -->
-    <style name="pv.button.image_button.app_bar" parent="pv.button.image_button">
-        <item name="android:tint">@color/text</item>
-    </style>
-
-
-
-
-
-    <!--
-    ================================================================================================
-    The following section contains styles for navigation elements
-    ================================================================================================
-    -->
-
-    <!-- Styles for the bottom navigation bar / navigation rail -->
-    <style name="pv.menu_bar" parent="Widget.Material3.BottomNavigationView">
-        <item name="android:background">@color/background_container</item>
-        <item name="itemIconTint">@color/text</item>
-        <item name="itemTextColor">@color/text</item>
-        <item name="itemTextAppearanceInactive">@style/pv.menu_bar.text</item>
-        <item name="itemActiveIndicatorStyle">@style/pv.menu_bar.activeitem</item>
-        <item name="itemTextAppearanceActive">@style/pv.menu_bar.activeitem.text</item>
-    </style>
-
-    <!-- Style for the active item of a navigation bar / navigation rail -->
-    <style name="pv.menu_bar.activeitem" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
-        <item name="android:color">@color/primary</item>
-    </style>
-
-    <!-- Style for the text of the active item of a navigation bar / navigation rail -->
-    <style name="pv.menu_bar.activeitem.text" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/default_text_size</item>
-    </style>
-
-    <!-- Style for the text of the inactive item of a navigation bar / navigation rail -->
-    <style name="pv.menu_bar.text" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
-        <item name="android:textSize">@dimen/default_text_size</item>
-    </style>
-
-    <!-- Style for tab layouts -->
-    <style name="pv.tab_layout">
-        <item name="tabTextColor">@color/text</item>
-        <item name="tabSelectedTextColor">@color/text</item>
-        <item name="android:background">@color/background_app_bar</item>
-    </style>
-
-
-
-
-
-    <!--
-    ================================================================================================
-    The following section contains styles for the general layout of activities / fragments
-    ================================================================================================
-    -->
-
-    <!-- Style for an AppBar which cannot be collapsed -->
-    <style name="pv.app_bar">
-        <item name="android:background">?attr/colorPrimary</item>
-        <item name="android:textColor">?attr/colorOnPrimary</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/app_bar_height</item>
-    </style>
-
-    <!-- Style for a search bar within the ap bar -->
-    <style name="pv.app_bar.search_bar">
-        <item name="android:textColorHint">@color/text_light</item>
-        <item name="android:textSize">@dimen/app_bar_text_size</item>
-        <item name="android:hint">@string/hint_search</item>
-    </style>
-
-    <!-- Parent style for all page layouts -->
-    <style name="pv.layout"/>
-
-    <!-- Style for AppBarLayout -->
-    <style name="pv.layout.app_bar">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">176dp</item>
-        <item name="android:theme">@style/ThemeOverlay.AppCompat.ActionBar</item>
-    </style>
-
-    <!-- Style for CollapsingToolbarLayout -->
-    <style name="pv.layout.app_bar.collapsing_toolbar">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:fitsSystemWindows">true</item>
-        <item name="android:background">?attr/colorPrimary</item>
-        <item name="contentScrim">?attr/colorPrimary</item>
-        <item name="statusBarScrim">?attr/colorPrimary</item>
-        <item name="layout_scrollFlags">scroll|exitUntilCollapsed</item>
-        <item name="titleCollapseMode">scale</item>
-        <item name="expandedTitleGravity">center_vertical|center_horizontal</item>
-        <item name="collapsedTitleTextColor">@color/text</item>
-        <item name="expandedTitleTextColor">@color/text</item>
-        <item name="collapsedTitleTextAppearance">@style/pv.layout.app_bar.collapsing_toolbar.collapsed_title</item>
-        <item name="expandedTitleTextAppearance">@style/pv.layout.app_bar.collapsing_toolbar.expanded_title</item>
-    </style>
-
-    <!-- Style for CollapsingToolbarLayout.collapsedTitleTextAppearance -->
-    <style name="pv.layout.app_bar.collapsing_toolbar.collapsed_title" parent="@style/TextAppearance.AppCompat">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/app_bar_text_size</item>
-        <item name="maxLines">1</item>
-    </style>
-
-    <!-- Style for CollapsingToolbarLayout.expandedTitleTextAppearance -->
-    <style name="pv.layout.app_bar.collapsing_toolbar.expanded_title" parent="@style/TextAppearance.AppCompat">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/app_bar_text_size</item>
-        <item name="maxLines">2</item>
-    </style>
-
-    <!-- Style for Toolbar -->
-    <style name="pv.layout.app_bar.collapsing_toolbar.toolbar">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">?attr/actionBarSize</item>
-        <item name="layout_collapseMode">pin</item>
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
-    </style>
-
-    <!-- Style for NestedScrollView which contains the content of a page below an AppBarLayout -->
-    <style name="pv.layout.nested_scroll_view">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="layout_behavior">@string/appbar_scrolling_view_behavior</item>
-    </style>
-
-
-
-
-
-    <!--
-    ================================================================================================
-    The following section contains styles for icons
-    ================================================================================================
-    -->
-
-    <!-- Style for icons -->
-    <style name="pv.icon">
-        <item name="android:layout_height">@dimen/pin_icon_size</item>
-        <item name="android:layout_width">@dimen/pin_icon_size</item>
-        <item name="android:tint">@color/text_light</item>
-    </style>
-
-    <!-- Style for pin-icons -->
-    <style name="pv.icon.pin" parent="pv.icon">
-        <item name="android:tint">@color/text_light</item>
-    </style>
-
-    <!-- Style for pin-icons -->
-    <style name="pv.icon.highlight" parent="pv.icon">
-        <item name="android:tint">@color/green</item>
-    </style>
-
-
-
-
-
-    <!--
-    ================================================================================================
-    The following section contains styles for containers
-    ================================================================================================
-    -->
-
-    <!-- Style for container -->
-    <style name="pv.container">
-        <item name="android:background">@drawable/background</item>
-        <item name="android:clipToOutline">true</item>
-    </style>
-
-    <!-- Style for highlighted container -->
-    <style name="pv.container.highlight">
-        <item name="android:background">@drawable/background</item>
-        <item name="android:backgroundTint">@color/primary_translucent</item>
-        <item name="android:padding">0dp</item>
-        <item name="android:clipToOutline">true</item>
-    </style>
-
-
-
-
-
-    <!--
-    ================================================================================================
-    The following section contains styles for eyecatchers
-    ================================================================================================
-    -->
-
-    <!-- Style for eyecatcher -->
-    <style name="pv.eyecatcher">
-        <item name="android:background">@drawable/shape_important</item>
-        <item name="android:backgroundTint">@color/red</item>
-        <item name="android:layout_height">@dimen/eyecatcher_size</item>
-        <item name="android:layout_width">@dimen/eyecatcher_size</item>
-    </style>
-
-    <style name="pv.eyecatcher.pill">
-        <item name="android:background">@drawable/pill</item>
-        <item name="android:backgroundTint">@color/background_container</item>
-    </style>
-
-
-
-
-
-    <!--
-    ================================================================================================
-    The following section contains default styles for material components
-    ================================================================================================
-    -->
-
-    <style name="pv.material"/>
-
-    <!-- Style for 'com.google.android.material.textfield.TextInputLayout' -->
-    <style name="pv.material.text_input_layout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+    <!-- Parent style -->
+    <style name="component"/>
+
+    <!-- Style for the TextInputLayout -->
+    <style name="component.text_input_layout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
         <item name="android:textColorHint">@color/text_light</item>
         <item name="endIconTint">@color/text_light</item>
     </style>
 
     <!-- Style for 'com.google.android.material.textfield.TextInputLayout' with a dropdown menu -->
-    <style name="pv.material.text_input_layout.exposed_dropdown" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+    <style name="component.text_input_layout.exposed_dropdown" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
         <item name="android:textColorHint">@color/text_light</item>
         <item name="endIconTint">@color/text_light</item>
     </style>
 
     <!-- Style for 'com.google.android.material.materialswitch.MaterialSwitch' -->
-    <style name="pv.material.switch" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+    <style name="component.switch" parent="Widget.Material3.CompoundButton.MaterialSwitch">
         <item name="thumbTint">@color/switch_thumb</item>
     </style>
 
     <!-- Style for 'com.google.android.material.floatingactionbutton.FloatingActionButton' -->
-    <style name="pv.material.fab" parent="Widget.Material3.FloatingActionButton.Primary">
-        <item name="tint">@color/text</item>
+    <style name="component.fab" parent="Widget.Material3.FloatingActionButton.Primary">
+        <item name="tint">@color/text_on_primary</item>
     </style>
 
     <!-- Style for Alert dialog -->
-    <style name="pv.material.dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="materialAlertDialogBodyTextStyle">@style/pv.text</item>
+    <style name="component.dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="materialAlertDialogBodyTextStyle">@style/text</item>
         <item name="android:background">@color/background_container</item>
     </style>
 
     <!-- Style for buttons -->
-    <style name="pv.material.button" parent="Widget.Material3.Button">
-        <item name="android:textColor">@color/text</item>
+    <style name="component.button" parent="Widget.Material3.Button">
+        <item name="android:textColor">@color/text_on_primary</item>
         <item name="iconTint">@color/text</item>
     </style>
 
-    <!-- Style for buttons used with "Searching for something different" -->
-    <style name="pv.material.button.different" parent="Widget.Material3.Button.TextButton">
-        <item name="android:paddingStart">@dimen/space_horizontal</item>
-        <item name="android:paddingEnd">@dimen/space_horizontal</item>
-        <item name="android:textAlignment">textStart</item>
-    </style>
-
-    <!-- Style for 'com.google.android.material.search.SearchBar' -->
-    <style name="pv.material.search_bar" parent="Widget.Material3.SearchBar">
-        <item name="android:backgroundTint">@color/background_container</item>
-        <item name="android:textAppearance">@style/pv.material.search_bar.text</item>
-        <item name="navigationIcon">@drawable/ic_search</item>
-        <item name="navigationIconTint">@color/text_light</item>
-    </style>
-
-    <!-- Style for the text of a search bar -->
-    <style name="pv.material.search_bar.text" parent="pv.text">
-        <item name="android:textColor">@color/text_light</item>
-    </style>
-
     <!-- Style for radio buttons -->
-    <style name="pv.material.radio_button" parent="Widget.Material3.CompoundButton.RadioButton">
+    <style name="component.radio_button" parent="Widget.Material3.CompoundButton.RadioButton">
         <item name="buttonTint">@color/radio_button</item>
     </style>
 
     <!-- Style for checkboxes -->
-    <style name="pv.material.checkbox" parent="Widget.Material3.CompoundButton.CheckBox">
+    <style name="component.checkbox" parent="Widget.Material3.CompoundButton.CheckBox">
         <item name="buttonTint">@color/radio_button</item>
         <item name="buttonIconTint">@color/checkbox_icon</item>
     </style>
 
-    <!-- Style for badges -->
-    <style name="pv.material.badge" parent="Widget.MaterialComponents.Badge">
-        <item name="backgroundColor">@color/red</item>
-        <item name="badgeTextColor">@color/text</item>
+    <!-- Style for chips -->
+    <style name="component.chip" parent="Widget.Material3.Chip.Assist">
+        <item name="chipBackgroundColor">@color/chip</item>
+        <item name="materialThemeOverlay">@style/component.chip.overlay</item>
     </style>
 
-    <!-- Style for chips -->
-    <style name="pv.material.chip" parent="Widget.Material3.Chip.Assist">
-        <item name="chipBackgroundColor">@color/chip</item>
-        <item name="materialThemeOverlay">@style/pv.material.chip.overlay</item>
-    </style>
-    <style name="pv.material.chip.overlay" parent="">
+    <!-- Style for chip overlay -->
+    <style name="component.chip.overlay" parent="">
         <item name="elevationOverlayEnabled">false</item>
     </style>
 
-    <!-- Style for divider -->
-    <style name="pv.material.divider">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1dp</item>
-        <item name="android:background">@color/text_light</item>
+    <style name="component.bottomSheet" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="android:backgroundTint">@color/background_app_bar</item>
     </style>
 
-
+    <!-- Style for tab layouts -->
+    <style name="component.tab_layout">
+        <item name="tabTextColor">@color/text</item>
+        <item name="tabSelectedTextColor">@color/text</item>
+        <item name="android:background">@color/background_app_bar</item>
+    </style>
 
 
 
@@ -533,31 +220,46 @@
     ================================================================================================
     -->
 
-    <!-- Style for dividers -->
-    <style name="pv.divider">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1dp</item>
-        <item name="android:background">@color/text_light</item>
-        <item name="android:layout_marginHorizontal">@dimen/space_horizontal</item>
+    <!-- Styles for the app bar -->
+    <style name="app_bar">
+        <item name="android:background">@color/background_app_bar</item>
     </style>
 
-    <style name="pv.progess_bar_legend">
+    <!-- Divider -->
+    <style name="divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/divider</item>
+        <item name="android:backgroundTint">@color/divider</item>
+    </style>
+
+    <!-- Styles for cards -->
+    <style name="card">
+        <item name="android:background">@drawable/background</item>
+        <item name="android:backgroundTint">@color/background_container</item>
+        <item name="android:paddingHorizontal">@dimen/space_horizontal</item>
+        <item name="android:paddingVertical">@dimen/space_vertical</item>
+    </style>
+
+    <!-- Style for eyecatcher -->
+    <style name="eyecatcher">
+        <item name="android:background">@drawable/shape_important</item>
+        <item name="android:backgroundTint">@color/red</item>
+        <item name="android:layout_height">@dimen/eyecatcher_size</item>
+        <item name="android:layout_width">@dimen/eyecatcher_size</item>
+    </style>
+
+    <!-- Style for pills (e.g. the background displaying "3 / 5" security questions are entered) -->
+    <style name="pill">
+        <item name="android:background">@drawable/pill</item>
+        <item name="android:backgroundTint">@color/background_container</item>
+    </style>
+
+    <!-- Circle indicating the color for the segmented progress bar in SettingsDataActivity -->
+    <style name="data_progress_bar_legend">
         <item name="android:background">@drawable/pill</item>
         <item name="android:layout_height">@dimen/pin_icon_size</item>
         <item name="android:layout_width">@dimen/pin_icon_size</item>
-    </style>
-
-    <!-- Style for popup menus -->
-    <style name="popup_menu" parent="@android:style/Widget.PopupMenu">
-        <item name="android:backgroundTint">@color/background_container</item>
-        <item name="android:iconTint">@color/text</item>
-        <item name="android:textColor">@color/text</item>
-    </style>
-
-    <!-- Style to make the login image rounded -->
-    <style name="rounded_corners">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">50%</item>
     </style>
 
 </resources>

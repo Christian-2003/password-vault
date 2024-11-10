@@ -51,7 +51,7 @@
                 android:layout_marginVertical="@dimen/space_vertical"
                 android:layout_marginHorizontal="@dimen/space_horizontal"
                 android:hint="@string/detail_dialog_type"
-                style="@style/pv.material.text_input_layout.exposed_dropdown">
+                style="@style/component.text_input_layout.exposed_dropdown">
 
                 <AutoCompleteTextView
                     android:id="@+id/input_type"

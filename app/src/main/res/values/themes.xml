@@ -35,17 +35,15 @@
         <item name="android:windowSplashScreenBrandingImage">@drawable/ic_splash_branding</item>
 
         <!-- Default styles for material components -->
-        <item name="textInputStyle">@style/pv.material.text_input_layout</item>
-        <item name="materialSwitchStyle">@style/pv.material.switch</item>
-        <item name="floatingActionButtonStyle">@style/pv.material.fab</item>
-        <item name="materialAlertDialogTheme">@style/pv.material.dialog</item>
-        <item name="materialButtonStyle">@style/pv.material.button</item>
-        <item name="materialSearchBarStyle">@style/pv.material.search_bar</item>
-        <item name="radioButtonStyle">@style/pv.material.radio_button</item>
-        <item name="checkboxStyle">@style/pv.material.checkbox</item>
-        <item name="badgeStyle">@style/pv.material.badge</item>
-        <item name="chipStyle">@style/pv.material.chip</item>
-        <item name="bottomSheetDialogTheme">@style/view.bottomSheet</item>
+        <item name="textInputStyle">@style/component.text_input_layout</item>
+        <item name="materialSwitchStyle">@style/component.switch</item>
+        <item name="floatingActionButtonStyle">@style/component.fab</item>
+        <item name="materialAlertDialogTheme">@style/component.dialog</item>
+        <item name="materialButtonStyle">@style/component.button</item>
+        <item name="radioButtonStyle">@style/component.radio_button</item>
+        <item name="checkboxStyle">@style/component.checkbox</item>
+        <item name="chipStyle">@style/component.chip</item>
+        <item name="bottomSheetDialogTheme">@style/component.bottomSheet</item>
     </style>
 
 </resources>
