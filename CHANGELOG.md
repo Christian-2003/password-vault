@@ -32,6 +32,7 @@ n/a
 * Removed all old global styles from the app.
 * Removed `PasswordVaultBaseActivity` for newer `PasswordVaultActivity<V extends ViewModel>` which handles view models.
 * Removed `PasswordVaultBaseFragment` for newer `PasswordVaultFragment<V extends ViewModel>` which handles view models.
+* Remove deprecated recycler view adapter framework.
 
 <br/>
 
