@@ -2,7 +2,8 @@ package de.passwordvault.view.activity_main;
 
 import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
-import de.passwordvault.R;
+
+import de.passwordvault.model.UpdateManager;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryManager;
 
@@ -21,12 +22,21 @@ public class MainViewModel extends ViewModel {
      */
     private int openedEntryAdapterPosition;
 
+    /**
+     * Attribute stores whether the warning to download a new version is dismissed.
+     */
+    private boolean downloadWarningDismissed;
+
+    private boolean updateAvailable;
+
 
     /**
      * Constructor instantiates a new MainViewModel with default values.
      */
     public MainViewModel() {
         openedEntryAdapterPosition = -1;
+        downloadWarningDismissed = false;
+        updateAvailable = false;
     }
 
 
@@ -46,6 +56,30 @@ public class MainViewModel extends ViewModel {
      */
     public void setOpenedEntryAdapterPosition(int openedEntryAdapterPosition) {
         this.openedEntryAdapterPosition = openedEntryAdapterPosition;
+    }
+
+    /**
+     * Method returns whether the download warning is dismissed.
+     *
+     * @return  Whether the download warning is dismissed.
+     */
+    public boolean isDownloadWarningDismissed() {
+        return downloadWarningDismissed;
+    }
+
+    /**
+     * Method dismisses the download warning.
+     */
+    public void dismissDownloadWarning() {
+        downloadWarningDismissed = true;
+    }
+
+    public boolean isUpdateAvailable() {
+        return updateAvailable;
+    }
+
+    public void updateAvailable() {
+        updateAvailable = true;
     }
 
 

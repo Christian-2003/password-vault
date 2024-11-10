@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import de.passwordvault.R;
+import de.passwordvault.model.UpdateManager;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.view.entries.activity_entry.EntryActivity;
@@ -15,13 +16,12 @@ import de.passwordvault.view.utils.components.PasswordVaultActivity;
 
 
 /**
- * Class implements the MainActivity for this application. This MainActivity resembles the starting
- * point for the application and contains multiple fragments with different functionalities.
+ * Class implements the MainActivity for this application, displaying a list of all entries.
  *
  * @author  Christian-2003
- * @version 3.5.2
+ * @version 3.7.0
  */
-public class MainActivity extends PasswordVaultActivity<MainViewModel> {
+public class MainActivity extends PasswordVaultActivity<MainViewModel> implements UpdateManager.UpdateStatusChangedCallback {
 
     /**
      * Attribute stores the adapter for the recycler view which displays the abbreviated entries.
@@ -59,6 +59,25 @@ public class MainActivity extends PasswordVaultActivity<MainViewModel> {
 
 
     /**
+     * Callback is invoked when the update manager determines whether a new update is available or
+     * not.
+     *
+     * @param updateAvailable   Whether an update is available.
+     */
+    @Override
+    public void onUpdateStatusChanged(boolean updateAvailable) {
+        if (updateAvailable) {
+            viewModel.updateAvailable();
+            if (adapter != null) {
+                runOnUiThread(() -> {
+                    adapter.notifyItemChanged(MainRecyclerViewAdapter.POSITION_UPDATE_INFO);
+                });
+            }
+        }
+    }
+
+
+    /**
      * Method is called whenever the MainActivity is created or recreated.
      *
      * @param savedInstanceState    Previously saved state of the instance.
@@ -75,8 +94,11 @@ public class MainActivity extends PasswordVaultActivity<MainViewModel> {
 
         adapter = new MainRecyclerViewAdapter(this, viewModel);
         adapter.setItemClickListener(this::onEntryClicked);
+        adapter.setUpdateClickListener(this::onUpdateClicked);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setAdapter(adapter);
+
+        UpdateManager.getInstance(this, this);
     }
 
 
@@ -127,6 +149,16 @@ public class MainActivity extends PasswordVaultActivity<MainViewModel> {
         Intent intent = new Intent(this, EntryActivity.class);
         viewModel.setOpenedEntryAdapterPosition(-1);
         entryLauncher.launch(intent);
+    }
+
+
+    /**
+     * Method requests to download the newest version of the app.
+     *
+     * @param position  Adapter position which invoked the click event.
+     */
+    private void onUpdateClicked(int position) {
+        UpdateManager.getInstance(this).requestDownload(this);
     }
 
 }

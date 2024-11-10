@@ -6,12 +6,15 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
+import de.passwordvault.model.UpdateManager;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.view.utils.recycler_view.OnRecyclerViewActionListener;
 import de.passwordvault.view.utils.recycler_view.RecyclerViewAdapter;
@@ -67,11 +70,20 @@ public class MainRecyclerViewAdapter extends RecyclerViewAdapter<MainViewModel> 
 
     }
 
+    /**
+     * Field stores the position of the warning displayed if a new app version is available.
+     */
+    public static final int POSITION_UPDATE_INFO = 0;
+
+    /**
+     * Field stores the position of the empty placeholder within the adapter.
+     */
+    public static final int POSITION_EMPTY_PLACEHOLDER = 1;
 
     /**
      * Field stores the offset for the list of entries within the adapter.
      */
-    public static final int OFFSET_ENTRIES = 1;
+    public static final int OFFSET_ENTRIES = 2;
 
     /**
      * Field stores the view type for entries.
@@ -85,6 +97,12 @@ public class MainRecyclerViewAdapter extends RecyclerViewAdapter<MainViewModel> 
     @Nullable
     private OnRecyclerViewActionListener itemClickListener;
 
+    /**
+     * Attribute stores the action listener invoked when the user clicks to update the app.
+     */
+    @Nullable
+    private OnRecyclerViewActionListener updateClickListener;
+
 
     /**
      * Constructor instantiates a new recycler view adapter.
@@ -94,6 +112,8 @@ public class MainRecyclerViewAdapter extends RecyclerViewAdapter<MainViewModel> 
      */
     public MainRecyclerViewAdapter(@NonNull Context context, @NonNull MainViewModel viewModel) {
         super(context, viewModel);
+        itemClickListener = null;
+        updateClickListener = null;
     }
 
 
@@ -104,6 +124,15 @@ public class MainRecyclerViewAdapter extends RecyclerViewAdapter<MainViewModel> 
      */
     public void setItemClickListener(@Nullable OnRecyclerViewActionListener itemClickListener) {
         this.itemClickListener = itemClickListener;
+    }
+
+    /**
+     * Method changes the click listener invoked when the user clicks to update the app.
+     *
+     * @param updateClickListener   New listener.
+     */
+    public void setUpdateClickListener(@Nullable OnRecyclerViewActionListener updateClickListener) {
+        this.updateClickListener = updateClickListener;
     }
 
 
@@ -120,6 +149,10 @@ public class MainRecyclerViewAdapter extends RecyclerViewAdapter<MainViewModel> 
         if (viewType == TYPE_ENTRY) {
             View view = layoutInflater.inflate(R.layout.item_entry, parent, false);
             return new EntryViewHolder(view);
+        }
+        else if (viewType == TYPE_GENERIC_WARNING) {
+            View view = layoutInflater.inflate(R.layout.item_generic_warning, parent, false);
+            return new GenericWarningViewHolder(view);
         }
         else {
             View view = layoutInflater.inflate(R.layout.item_generic_empty_placeholder, parent, false);
@@ -168,7 +201,35 @@ public class MainRecyclerViewAdapter extends RecyclerViewAdapter<MainViewModel> 
                 viewHolder.imageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.el_entries));
             }
         }
-
+        else if (holder instanceof GenericWarningViewHolder) {
+            GenericWarningViewHolder viewHolder = (GenericWarningViewHolder)holder;
+            if (viewModel.isUpdateAvailable() && !viewModel.isDownloadWarningDismissed()) {
+                //Warning is visible:
+                viewHolder.itemView.setVisibility(View.VISIBLE);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                int horizontalMargin = context.getResources().getDimensionPixelSize(R.dimen.space_horizontal);
+                int verticalMargin = context.getResources().getDimensionPixelSize(R.dimen.space_vertical);
+                params.setMargins(horizontalMargin, verticalMargin, horizontalMargin, verticalMargin);
+                viewHolder.itemView.setLayoutParams(params);
+                viewHolder.warningTextView.setText(R.string.warning_new_app_version);
+                viewHolder.cancelButton.setText(R.string.button_later);
+                viewHolder.cancelButton.setOnClickListener(view -> {
+                    viewModel.dismissDownloadWarning();
+                    notifyItemChanged(POSITION_UPDATE_INFO);
+                });
+                viewHolder.confirmButton.setText(R.string.button_download);
+                viewHolder.confirmButton.setOnClickListener(view -> {
+                    if (updateClickListener != null) {
+                        updateClickListener.onAction(holder.getAdapterPosition());
+                    }
+                });
+            }
+            else {
+                //Warning is invisible:
+                viewHolder.itemView.setVisibility(View.GONE);
+                viewHolder.itemView.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+            }
+        }
     }
 
 
@@ -180,8 +241,11 @@ public class MainRecyclerViewAdapter extends RecyclerViewAdapter<MainViewModel> 
      */
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) {
+        if (position == POSITION_EMPTY_PLACEHOLDER) {
             return TYPE_GENERIC_EMPTY_PLACEHOLDER;
+        }
+        else if (position == POSITION_UPDATE_INFO) {
+            return TYPE_GENERIC_WARNING;
         }
         return TYPE_ENTRY;
     }
@@ -194,7 +258,7 @@ public class MainRecyclerViewAdapter extends RecyclerViewAdapter<MainViewModel> 
      */
     @Override
     public int getItemCount() {
-        return viewModel.getAllEntries().size() + 1;
+        return viewModel.getAllEntries().size() + 2;
     }
 
 

@@ -322,6 +322,8 @@
     <string name="button_forgot_password">Passwort vergessen?</string>
     <string name="button_recover_password">Master Passwort wiederherstellen</string>
     <string name="button_copy_detail">Inhalt kopieren</string>
+    <string name="button_later">Später</string>
+    <string name="button_download">Download</string>
 
 
     <!-- Input hints -->
@@ -359,7 +361,7 @@
     <string name="detail_username">Benutzername</string>
 
 
-    <!-- Error messages that are sent to the user -->
+    <!-- Error messages and warnings that are sent to the user -->
     <string name="error_cannot_show_entry">Eintrag kann nicht angezeigt werden.</string>
     <string name="error_empty_input">Dieses Feld darf nicht leer sein.</string>
     <string name="error_passwords_incorrect">Falsches Passwort.</string>
@@ -367,6 +369,7 @@
     <string name="error_invalid_regex">RegEx ist inkorrekt.</string>
     <string name="error_not_enough_security_questions">Du benötigst mindestens 5 Sicherheitsfragen.</string>
     <string name="error_master_password_recovery">Die eingegebenen Antworten sind inkorrekt.</string>
+    <string name="warning_new_app_version">Eine neue Version der App ist zum Download bereit. Soll die neue Version jetzt heruntergeladen werden?</string>
 
 
     <!-- Password quality gates -->

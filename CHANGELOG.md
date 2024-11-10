@@ -33,6 +33,7 @@ n/a
 * Removed `PasswordVaultBaseActivity` for newer `PasswordVaultActivity<V extends ViewModel>` which handles view models.
 * Removed `PasswordVaultBaseFragment` for newer `PasswordVaultFragment<V extends ViewModel>` which handles view models.
 * Remove deprecated recycler view adapter framework.
+* `MainActivity` displays a warning at the top of the page if a newer version of the app is available for download. This is done to immediately inform the user about a newer version.
 
 <br/>
 

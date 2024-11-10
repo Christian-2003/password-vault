@@ -9,10 +9,13 @@
     <color name="background_nav_bar">#EFEdF2</color>
     <color name="background_container">#E9E7EC</color>
     <color name="background_critical">#FFDAD6</color>
+    <color name="background_warning">#FFEBD6</color>
 
     <color name="text">#1B1A1F</color>
     <color name="text_light">#444750</color>
     <color name="text_critical">#BA1A1A</color>
+    <color name="text_warning">#BB5E1B</color>
+    <color name="text_warning_translucent">#33BB5E1B</color>
     <color name="text_on_primary">#FAFAFA</color>
     <color name="divider">#C5C7C6</color>
 

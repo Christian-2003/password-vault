@@ -54,6 +54,11 @@ guidelines.
         <item name="android:lineSpacingExtra">5sp</item>
     </style>
 
+    <!-- Text within info boxes -->
+    <style name="text.warning" parent="text.info">
+        <item name="android:textColor">@color/text_critical</item>
+    </style>
+
     <!-- Searchbar text -->
     <style name="text.search">
         <item name="android:textSize">@dimen/text_l</item>
@@ -95,6 +100,12 @@ guidelines.
         <item name="android:textAlignment">textStart</item>
     </style>
 
+    <!-- Style for buttons used with "Searching for something different" -->
+    <style name="button.warning" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textColor">@color/text_warning</item>
+        <item name="rippleColor">@color/text_warning_translucent</item>
+    </style>
+
 
 
     <!--
@@ -119,6 +130,11 @@ guidelines.
     <style name="image.light.small" parent="image.light">
         <item name="android:layout_height">@dimen/image_xxs</item>
         <item name="android:layout_width">@dimen/image_xxs</item>
+    </style>
+
+    <!-- Warning image -->
+    <style name="image.warning" parent="image">
+        <item name="android:tint">@color/text_warning</item>
     </style>
 
     <!-- Images for recycler view adapter items -->
@@ -239,6 +255,11 @@ guidelines.
         <item name="android:backgroundTint">@color/background_container</item>
         <item name="android:paddingHorizontal">@dimen/space_horizontal</item>
         <item name="android:paddingVertical">@dimen/space_vertical</item>
+    </style>
+
+    <!-- Styles for warning cards -->
+    <style name="card.warning" parent="card">
+        <item name="android:backgroundTint">@color/background_warning</item>
     </style>
 
     <!-- Style for eyecatcher -->
