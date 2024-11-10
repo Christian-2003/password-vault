@@ -1,6 +1,5 @@
 package de.passwordvault.view.settings.activity_create_backup;
 
-import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,7 +11,6 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -24,7 +22,7 @@ import de.passwordvault.R;
 import de.passwordvault.model.storage.backup.BackupException;
 import de.passwordvault.model.storage.encryption.EncryptionException;
 import de.passwordvault.view.utils.Utils;
-import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
+import de.passwordvault.view.utils.components.PasswordVaultActivity;
 
 
 /**
@@ -33,12 +31,7 @@ import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
  * @author  Christian-2003
  * @version 3.5.4
  */
-public class CreateBackupActivity extends PasswordVaultBaseActivity {
-
-    /**
-     * Attribute stores the view model of the activity.
-     */
-    private CreateBackupViewModel viewModel;
+public class CreateBackupActivity extends PasswordVaultActivity<CreateBackupViewModel> {
 
     /**
      * Attribute stores the activity result launcher used to start the directory-chooser to select a
@@ -52,6 +45,8 @@ public class CreateBackupActivity extends PasswordVaultBaseActivity {
      * Constructor instantiates a new activity.
      */
     public CreateBackupActivity() {
+        super(CreateBackupViewModel.class, R.layout.activity_create_backup);
+
         chooseDirectoryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK && result.getData() != null && result.getData().getData() != null) {
                 viewModel.setBackupDirectory(result.getData().getData());
@@ -70,8 +65,6 @@ public class CreateBackupActivity extends PasswordVaultBaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_backup);
-        viewModel = new ViewModelProvider(this).get(CreateBackupViewModel.class);
 
         if (viewModel.getFilename() == null || viewModel.getFilename().isEmpty()) {
             viewModel.setFilename(getString(R.string.settings_data_backup_file).replace("{date}", Utils.formatDate(Calendar.getInstance(), "yyyy-MM-dd")));

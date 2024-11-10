@@ -30,6 +30,8 @@ n/a
 * Established Material Design 3 compliance for all activities, fragments and dialogs to create a seemless UI integration with the Android OS on all devices.
 * Removed all old colors with the `pv_<name>`-notation since they have been superseded by the newer material design colors.
 * Removed all old global styles from the app.
+* Removed `PasswordVaultBaseActivity` for newer `PasswordVaultActivity<V extends ViewModel>` which handles view models.
+* Removed `PasswordVaultBaseFragment` for newer `PasswordVaultFragment<V extends ViewModel>` which handles view models.
 
 <br/>
 

@@ -12,7 +12,6 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -25,7 +24,7 @@ import de.passwordvault.model.storage.backup.BackupException;
 import de.passwordvault.model.storage.backup.XmlConfiguration;
 import de.passwordvault.model.storage.encryption.EncryptionException;
 import de.passwordvault.view.utils.Utils;
-import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
+import de.passwordvault.view.utils.components.PasswordVaultActivity;
 
 
 /**
@@ -35,7 +34,7 @@ import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
  * @author  Christian-2003
  * @version 3.6.0
  */
-public class RestoreBackupActivity extends PasswordVaultBaseActivity {
+public class RestoreBackupActivity extends PasswordVaultActivity<RestoreBackupViewModel> {
 
     /**
      * Field stores the key that needs to be used when passing the URI of the backup file as extra
@@ -45,14 +44,27 @@ public class RestoreBackupActivity extends PasswordVaultBaseActivity {
 
 
     /**
-     * Attribute stores the view model for the activity.
+     * Attribute stores the radio button to delete all existing data when restoring.
      */
-    private RestoreBackupViewModel viewModel;
-
-
     private RadioButton deleteRadioButton;
+
+    /**
+     * Attribute stores the radio button to replace all existing data when restoring.
+     */
     private RadioButton replaceRadioButton;
+
+    /**
+     * Attribute stores the radio button to skip all existing data when restoring.
+     */
     private RadioButton skipRadioButton;
+
+
+    /**
+     * Constructor instantiates a new activity.
+     */
+    public RestoreBackupActivity() {
+        super(RestoreBackupViewModel.class, R.layout.activity_restore_backup);
+    }
 
 
     /**
@@ -63,8 +75,6 @@ public class RestoreBackupActivity extends PasswordVaultBaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_restore_backup);
-        viewModel = new ViewModelProvider(this).get(RestoreBackupViewModel.class);
 
         findViewById(R.id.button_back).setOnClickListener(view -> finish());
         findViewById(R.id.button_restore).setOnClickListener(view -> restore());

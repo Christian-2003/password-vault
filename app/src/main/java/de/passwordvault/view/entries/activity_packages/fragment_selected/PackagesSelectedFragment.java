@@ -7,14 +7,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
 import de.passwordvault.model.packages.Package;
 import de.passwordvault.view.entries.activity_packages.PackagesActivity;
 import de.passwordvault.view.utils.components.PasswordVaultFragment;
-import de.passwordvault.view.utils.recycler_view.OnRecyclerItemClickListener;
-import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
 import de.passwordvault.view.entries.activity_packages.PackagesViewModel;
 
 

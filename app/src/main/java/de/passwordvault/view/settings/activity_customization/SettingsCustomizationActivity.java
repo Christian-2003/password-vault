@@ -2,11 +2,10 @@ package de.passwordvault.view.settings.activity_customization;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
 import de.passwordvault.R;
 import de.passwordvault.view.settings.dialog_darkmode.DarkmodeDialog;
 import de.passwordvault.view.settings.dialog_swipe.SwipeDialog;
-import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
+import de.passwordvault.view.utils.components.PasswordVaultActivity;
 import de.passwordvault.view.settings.activity_settings.SettingsViewModel;
 
 
@@ -16,12 +15,14 @@ import de.passwordvault.view.settings.activity_settings.SettingsViewModel;
  * @author  Christian-2003
  * @version 3.7.0
  */
-public class SettingsCustomizationActivity extends PasswordVaultBaseActivity {
+public class SettingsCustomizationActivity extends PasswordVaultActivity<SettingsViewModel> {
 
     /**
-     * Attribute stores the view model for the activity.
+     * Constructor instantiates a new activity.
      */
-    private SettingsViewModel viewModel;
+    public SettingsCustomizationActivity() {
+        super(SettingsViewModel.class, R.layout.activity_settings_customization);
+    }
 
 
     /**
@@ -32,8 +33,6 @@ public class SettingsCustomizationActivity extends PasswordVaultBaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings_customization);
-        viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
 
         findViewById(R.id.button_back).setOnClickListener(view -> finish());
 

@@ -208,7 +208,7 @@ guidelines.
     <!-- Style for tab layouts -->
     <style name="component.tab_layout">
         <item name="tabTextColor">@color/text</item>
-        <item name="tabSelectedTextColor">@color/text</item>
+        <item name="tabSelectedTextColor">@color/primary</item>
         <item name="android:background">@color/background_app_bar</item>
     </style>
 

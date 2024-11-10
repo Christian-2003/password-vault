@@ -1,7 +1,5 @@
 package de.passwordvault.view.settings.activity_quality_gate;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,7 +12,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGate;
-import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
+import de.passwordvault.view.utils.components.PasswordVaultActivity;
 
 
 /**
@@ -26,7 +24,7 @@ import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
  * @author  Christian-2003
  * @version 3.6.0
  */
-public class QualityGateActivity extends PasswordVaultBaseActivity implements Serializable {
+public class QualityGateActivity extends PasswordVaultActivity<QualityGateViewModel> implements Serializable {
 
     /**
      * Field stores the key with which to pass a quality gate to edit as serializable.
@@ -45,9 +43,11 @@ public class QualityGateActivity extends PasswordVaultBaseActivity implements Se
 
 
     /**
-     * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} of this activity.
+     * Constructor instantiates a new activity.
      */
-    private QualityGateViewModel viewModel;
+    public QualityGateActivity() {
+        super(QualityGateViewModel.class, R.layout.activity_quality_gate);
+    }
 
 
     /**
@@ -58,8 +58,6 @@ public class QualityGateActivity extends PasswordVaultBaseActivity implements Se
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quality_gate);
-        viewModel = new ViewModelProvider(this).get(QualityGateViewModel.class);
 
         try {
             Bundle extras = getIntent().getExtras();

@@ -16,8 +16,8 @@ import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
 import de.passwordvault.view.passwords.activity_analysis.PasswordAnalysisActivity;
 import de.passwordvault.view.passwords.activity_list.PasswordAnalysisListActivity;
 import de.passwordvault.view.utils.Utils;
-import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
 import de.passwordvault.view.passwords.activity_analysis.PasswordAnalysisViewModel;
+import de.passwordvault.view.utils.components.PasswordVaultFragment;
 
 
 /**
@@ -27,17 +27,11 @@ import de.passwordvault.view.passwords.activity_analysis.PasswordAnalysisViewMod
  * @author  Christian-2003
  * @version 3.5.2
  */
-public class PasswordAnalysisGeneralFragment extends PasswordVaultBaseFragment {
+public class PasswordAnalysisGeneralFragment extends PasswordVaultFragment<PasswordAnalysisViewModel> {
 
-    /**
-     * Attribute stores the view model of the fragment.
-     */
-    private PasswordAnalysisViewModel viewModel;
-
-    /**
-     * Attribute stores the inflated view of the fragment.
-     */
-    private View view;
+    public PasswordAnalysisGeneralFragment() {
+        super(PasswordAnalysisViewModel.class, R.layout.fragment_password_analysis_general);
+    }
 
 
     /**
@@ -67,7 +61,10 @@ public class PasswordAnalysisGeneralFragment extends PasswordVaultBaseFragment {
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_password_analysis_general, container, false);
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        if (view == null) {
+            return null;
+        }
 
         //Security score:
         String securityScore = Utils.formatNumber(PasswordSecurityAnalysis.getInstance().getAverageSecurityScore()) + " / " + QualityGateManager.getInstance().numberOfQualityGates();
@@ -92,7 +89,7 @@ public class PasswordAnalysisGeneralFragment extends PasswordVaultBaseFragment {
             analyzed = view.getContext().getString(R.string.password_results_general_analyzed_hint).replace("{arg}", "" + PasswordSecurityAnalysis.getInstance().getData().size());
         }
         ((TextView)view.findViewById(R.id.password_analysis_general_analyzed)).setText(analyzed);
-        view.findViewById(R.id.password_analysis_analyzed_clickable).setOnClickListener(view -> showAllPasswords());
+        view.findViewById(R.id.password_analysis_analyzed_clickable).setOnClickListener(v -> showAllPasswords());
 
         //Duplicate passwords:
         String duplicates;
@@ -103,7 +100,7 @@ public class PasswordAnalysisGeneralFragment extends PasswordVaultBaseFragment {
             duplicates = view.getContext().getString(R.string.password_results_general_duplicates_hint).replace("{arg}", "" + PasswordSecurityAnalysis.getInstance().getIdenticalPasswords().size());
         }
         ((TextView)view.findViewById(R.id.password_analysis_general_duplicates)).setText(duplicates);
-        view.findViewById(R.id.password_analysis_duplicates_clickable).setOnClickListener(view -> showDuplicatePasswords());
+        view.findViewById(R.id.password_analysis_duplicates_clickable).setOnClickListener(v -> showDuplicatePasswords());
 
         //Weak passwords:
         String weak;
@@ -114,7 +111,7 @@ public class PasswordAnalysisGeneralFragment extends PasswordVaultBaseFragment {
             weak = view.getContext().getString(R.string.password_results_general_weak_hint).replace("{arg}", "" + viewModel.getWeakPasswords().size());
         }
         ((TextView)view.findViewById(R.id.password_analysis_general_weak)).setText(weak);
-        view.findViewById(R.id.password_analysis_weak_clickable).setOnClickListener(view -> showWeakPasswords());
+        view.findViewById(R.id.password_analysis_weak_clickable).setOnClickListener(v -> showWeakPasswords());
 
         return view;
     }

@@ -9,7 +9,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 import java.util.Calendar;
 import java.util.concurrent.Executor;
 import de.passwordvault.App;
@@ -23,7 +22,7 @@ import de.passwordvault.view.settings.activity_restore_backup.RestoreBackupActiv
 import de.passwordvault.view.settings.activity_security.SettingsSecurityActivity;
 import de.passwordvault.view.settings.activity_quality_gates.QualityGatesActivity;
 import de.passwordvault.view.utils.Utils;
-import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
+import de.passwordvault.view.utils.components.PasswordVaultActivity;
 import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
 import de.passwordvault.view.utils.components.SegmentedProgressBar;
 
@@ -34,18 +33,13 @@ import de.passwordvault.view.utils.components.SegmentedProgressBar;
  * @author  Christian-2003
  * @version 3.7.0
  */
-public class SettingsDataActivity extends PasswordVaultBaseActivity implements AuthenticationCallback, PasswordVaultBottomSheetDialog.Callback {
+public class SettingsDataActivity extends PasswordVaultActivity<SettingsDataViewModel> implements AuthenticationCallback, PasswordVaultBottomSheetDialog.Callback {
 
     /**
      * Field stores the tag used for authenticating when deleting all app data.
      */
     private static final String TAG_AUTH_DELETE = "delete";
 
-
-    /**
-     * Attribute stores the view model of the activity.
-     */
-    private SettingsDataViewModel viewModel;
 
     /**
      * Attribute stores the activity result launcher for selecting a directory for the HTML export.
@@ -63,6 +57,8 @@ public class SettingsDataActivity extends PasswordVaultBaseActivity implements A
      * Constructor instantiates a new settings data activity.
      */
     public SettingsDataActivity() {
+        super(SettingsDataViewModel.class, R.layout.activity_settings_data);
+
         //HTML export:
         htmlExportLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK && result.getData() != null) {
@@ -131,8 +127,6 @@ public class SettingsDataActivity extends PasswordVaultBaseActivity implements A
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings_data);
-        viewModel = new ViewModelProvider(this).get(SettingsDataViewModel.class);
 
         findViewById(R.id.button_back).setOnClickListener(view -> finish());
 

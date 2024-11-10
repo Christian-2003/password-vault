@@ -8,7 +8,6 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.biometric.BiometricPrompt;
-import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import java.util.Objects;
@@ -18,7 +17,7 @@ import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.storage.settings.Config;
 import de.passwordvault.view.activity_main.MainActivity;
 import de.passwordvault.view.authentication.activity_security_question.SecurityQuestionActivity;
-import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
+import de.passwordvault.view.utils.components.PasswordVaultActivity;
 
 
 /**
@@ -27,17 +26,20 @@ import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
  * @author  Christian-2003
  * @version 3.6.0
  */
-public class LoginActivity extends PasswordVaultBaseActivity {
-
-    /**
-     * Attribute stores the {@link LoginViewModel} for the {@link LoginActivity}.
-     */
-    private LoginViewModel viewModel;
+public class LoginActivity extends PasswordVaultActivity<LoginViewModel> {
 
     /**
      * Attribute stores the biometric prompt which is used for biometric login.
      */
     private BiometricPrompt biometricPrompt;
+
+
+    /**
+     * Constructor instantiates a new activity.
+     */
+    public LoginActivity() {
+        super(LoginViewModel.class, R.layout.activity_login);
+    }
 
 
     /**
@@ -56,8 +58,6 @@ public class LoginActivity extends PasswordVaultBaseActivity {
             continueToMainActivity();
             return;
         }
-        setContentView(R.layout.activity_login);
-        viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         TextInputEditText passwordEditText = findViewById(R.id.login_password);
         passwordEditText.setOnEditorActionListener((textView, actionId, keyEvent) -> {

@@ -8,13 +8,13 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
+import androidx.lifecycle.ViewModel;
 import de.passwordvault.BuildConfig;
 import de.passwordvault.R;
 import de.passwordvault.model.UpdateManager;
 import de.passwordvault.view.settings.activity_licenses.LicensesActivity;
 import de.passwordvault.view.settings.activity_localized_asset_viewer.LocalizedAssetViewerActivity;
-import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
+import de.passwordvault.view.utils.components.PasswordVaultActivity;
 
 
 /**
@@ -23,7 +23,15 @@ import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
  * @author  Christian-2003
  * @version 3.6.0
  */
-public class SettingsAboutActivity extends PasswordVaultBaseActivity {
+public class SettingsAboutActivity extends PasswordVaultActivity<ViewModel> {
+
+    /**
+     * Constructor instantiates a new activity.
+     */
+    public SettingsAboutActivity() {
+        super(null, R.layout.activity_settings_about);
+    }
+
 
     /**
      * Method is called whenever the activity is created.

@@ -3,9 +3,10 @@ package de.passwordvault.view.settings.activity_help;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModel;
 import de.passwordvault.R;
 import de.passwordvault.view.settings.activity_localized_asset_viewer.LocalizedAssetViewerActivity;
-import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
+import de.passwordvault.view.utils.components.PasswordVaultActivity;
 
 
 /**
@@ -14,7 +15,11 @@ import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
  * @author  Christian-2003
  * @version 3.5.3
  */
-public class SettingsHelpActivity extends PasswordVaultBaseActivity {
+public class SettingsHelpActivity extends PasswordVaultActivity<ViewModel> {
+
+    public SettingsHelpActivity() {
+        super(null, R.layout.activity_settings_help);
+    }
 
     /**
      * Method is called whenever the activity is created.
@@ -24,7 +29,6 @@ public class SettingsHelpActivity extends PasswordVaultBaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings_help);
 
         //Back button:
         findViewById(R.id.button_back).setOnClickListener(view -> finish());

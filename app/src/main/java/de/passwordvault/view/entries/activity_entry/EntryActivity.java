@@ -283,6 +283,7 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        enableSecureModeIfRequired();
 
         //Get entry to display or create new entry:
         if (viewModel.getEntry() == null) {

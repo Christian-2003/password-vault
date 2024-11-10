@@ -8,13 +8,11 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
 import de.passwordvault.model.packages.Package;
 import de.passwordvault.view.entries.activity_packages.PackagesActivity;
-import de.passwordvault.view.utils.recycler_view.OnRecyclerItemClickListener;
-import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
+import de.passwordvault.view.utils.components.PasswordVaultFragment;
 import de.passwordvault.view.entries.activity_packages.PackagesViewModel;
 
 
@@ -25,12 +23,7 @@ import de.passwordvault.view.entries.activity_packages.PackagesViewModel;
  * @author  Christian-2003
  * @version 3.5.2
  */
-public class PackagesListFragment extends PasswordVaultBaseFragment {
-
-    /**
-     * Attribute stores the view model of the fragment and it's host activity.
-     */
-    private PackagesViewModel viewModel;
+public class PackagesListFragment extends PasswordVaultFragment<PackagesViewModel> {
 
     /**
      * Attribute stores the view of the fragment.
@@ -44,6 +37,11 @@ public class PackagesListFragment extends PasswordVaultBaseFragment {
     private PackagesListRecyclerViewAdapter adapter;
 
 
+    public PackagesListFragment() {
+        super(PackagesViewModel.class, R.layout.fragment_packages_list);
+    }
+
+
     /**
      * Method is called whenever the fragment view is created.
      *
@@ -55,8 +53,7 @@ public class PackagesListFragment extends PasswordVaultBaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_packages_list, container, false);
-        viewModel = new ViewModelProvider(requireActivity()).get(PackagesViewModel.class);
+        view = super.onCreateView(inflater, container, savedInstanceState);
 
         viewModel.loadPackages(this::onDataLoaded);
 

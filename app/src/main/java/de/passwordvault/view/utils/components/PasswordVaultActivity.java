@@ -1,10 +1,17 @@
 package de.passwordvault.view.utils.components;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.WindowManager;
+
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+
+import de.passwordvault.model.storage.settings.Config;
 
 
 /**
@@ -16,7 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
  * @author      Christian-2003
  * @version     3.7.0
  */
-public class PasswordVaultActivity<V extends ViewModel> extends PasswordVaultBaseActivity {
+public class PasswordVaultActivity<V extends ViewModel> extends AppCompatActivity {
 
     /**
      * Attribute stores the view model of the activity.
@@ -61,6 +68,27 @@ public class PasswordVaultActivity<V extends ViewModel> extends PasswordVaultBas
         if (viewModelType != null) {
             viewModel = new ViewModelProvider(this).get(viewModelType);
         }
+    }
+
+
+    /**
+     * Method enables secure mode for the activity, if set in settings. This prevents screenshots
+     * from being made.
+     */
+    protected void enableSecureModeIfRequired() {
+        if (Config.getInstance().preventScreenshots.get()) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+    }
+
+    /**
+     * Method opens the specified URL in the browser.
+     *
+     * @param url   URL to be opened.
+     */
+    protected void openUrl(String url) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(browserIntent);
     }
 
 }
