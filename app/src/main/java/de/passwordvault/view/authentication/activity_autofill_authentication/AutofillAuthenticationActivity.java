@@ -91,7 +91,7 @@ public class AutofillAuthenticationActivity extends PasswordVaultBaseActivity {
         });
 
         findViewById(R.id.autofill_authentication_authenticate_button).setOnClickListener(view -> authenticate());
-        findViewById(R.id.autofill_authentication_back_button).setOnClickListener(view -> onFailure());
+        findViewById(R.id.button_back).setOnClickListener(view -> onFailure());
 
         if (biometricPrompt == null) {
             biometricPrompt = new BiometricPrompt(AutofillAuthenticationActivity.this, viewModel.getExecutor(), new BiometricPrompt.AuthenticationCallback() {

@@ -34,6 +34,6 @@ changing this layout.
         android:maxLines="2"
         android:ellipsize="end"
         tools:text="Password for XYZ"
-        style="@style/pv.text"/>
+        style="@style/text"/>
 
 </LinearLayout>

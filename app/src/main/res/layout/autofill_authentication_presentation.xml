@@ -35,14 +35,14 @@ changing this layout.
         android:maxLines="2"
         android:ellipsize="end"
         tools:text="Authenticate for XYZ"
-        style="@style/pv.text"/>
+        style="@style/text"/>
 
     <ImageView
         android:layout_width="@dimen/image_button_width"
         android:layout_height="@dimen/image_button_height"
         android:layout_gravity="center"
         android:src="@drawable/ic_biometrics"
-        android:tint="@color/pv_text"
+        android:tint="@color/text"
         tools:ignore="ContentDescription"/>
 
 </LinearLayout>
