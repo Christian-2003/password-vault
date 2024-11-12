@@ -55,7 +55,7 @@ public class SettingsAutofillActivity extends PasswordVaultActivity<SettingsView
      * Constructor instantiates a new activity.
      */
     public SettingsAutofillActivity() {
-        super(SettingsViewModel.class, R.layout.activity_settings);
+        super(SettingsViewModel.class, R.layout.activity_settings_autofill);
 
         //Autofill:
         activateAutofillLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
