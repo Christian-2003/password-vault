@@ -36,6 +36,11 @@ public class MainActivity extends PasswordVaultActivity<MainViewModel> implement
     private final ActivityResultLauncher<Intent> entryLauncher;
 
     /**
+     * Attribute stores the launcher used to launch the {@link SettingsActivity}.
+     */
+    private final ActivityResultLauncher<Intent> settingsLauncher;
+
+    /**
      * Attribute stores the progress bar displaying that entries are being loaded.
      */
     private ProgressBar progressBar;
@@ -54,17 +59,25 @@ public class MainActivity extends PasswordVaultActivity<MainViewModel> implement
 
         //Show entry:
         entryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            int adapterPosition = viewModel.getOpenedEntryAdapterPosition();
-            if (adapterPosition >= MainRecyclerViewAdapter.OFFSET_ENTRIES && adapterPosition <= MainRecyclerViewAdapter.OFFSET_ENTRIES + adapter.getItemCount()) {
-                if (result.getResultCode() == EntryActivity.RESULT_DELETED) {
-                    adapter.notifyItemRemoved(adapterPosition);
+            if (adapter != null) {
+                int adapterPosition = viewModel.getOpenedEntryAdapterPosition();
+                if (adapterPosition >= MainRecyclerViewAdapter.OFFSET_ENTRIES && adapterPosition <= MainRecyclerViewAdapter.OFFSET_ENTRIES + adapter.getItemCount()) {
+                    if (result.getResultCode() == EntryActivity.RESULT_DELETED) {
+                        adapter.notifyItemRemoved(adapterPosition);
+                    }
+                    else if (result.getResultCode() == EntryActivity.RESULT_EDITED) {
+                        adapter.notifyDataSetChanged(); //Need to update entire adapter since data is sorted alphabetically
+                    }
                 }
-                else if (result.getResultCode() == EntryActivity.RESULT_EDITED) {
+                else if (adapterPosition == -1 && result.getResultCode() == EntryActivity.RESULT_EDITED) {
                     adapter.notifyDataSetChanged(); //Need to update entire adapter since data is sorted alphabetically
                 }
             }
-            else if (adapterPosition == -1 && result.getResultCode() == EntryActivity.RESULT_EDITED) {
-                adapter.notifyDataSetChanged(); //Need to update entire adapter since data is sorted alphabetically
+        });
+
+        settingsLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (viewModel.isChangedSinceLastCacheGeneration() && adapter != null) {
+                adapter.notifyDataSetChanged();
             }
         });
     }
@@ -102,7 +115,7 @@ public class MainActivity extends PasswordVaultActivity<MainViewModel> implement
         findViewById(R.id.main_fab).setOnClickListener(view -> onAddEntry());
 
         //Setup app bar:
-        findViewById(R.id.button_settings).setOnClickListener(view -> startActivity(new Intent(this, SettingsActivity.class)));
+        findViewById(R.id.button_settings).setOnClickListener(view -> settingsLauncher.launch(new Intent(this, SettingsActivity.class)));
 
         //Load entries:
         recyclerView = findViewById(R.id.recycler_view);

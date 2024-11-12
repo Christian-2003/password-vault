@@ -32,8 +32,14 @@ public class MainViewModel extends ViewModel {
      */
     private boolean updateAvailable;
 
+    /**
+     * Attribute stores whether the entries have been loaded.
+     */
     private boolean loaded;
 
+    /**
+     * Attribute stores whether the entries are currently loading.
+     */
     private boolean loading;
 
 
@@ -97,6 +103,11 @@ public class MainViewModel extends ViewModel {
      */
     public void updateAvailable() {
         updateAvailable = true;
+    }
+
+
+    public boolean isChangedSinceLastCacheGeneration() {
+        return EntryManager.getInstance().isChangedSinceLastCacheGeneration();
     }
 
 

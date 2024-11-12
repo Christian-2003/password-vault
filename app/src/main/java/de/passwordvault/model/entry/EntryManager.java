@@ -518,6 +518,16 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
 
 
     /**
+     * Method returns whether changes were made since last cache generation.
+     *
+     * @return  Whether changes were made.
+     */
+    public boolean isChangedSinceLastCacheGeneration() {
+        return changesMadeSinceCachedAbbreviatedList;
+    }
+
+
+    /**
      * Method regenerates all caches after changes were made to the dataset, which is indicated
      * through the flag {@link #changesMadeSinceCachedAbbreviatedList}.
      */
