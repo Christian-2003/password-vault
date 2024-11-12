@@ -20,6 +20,7 @@
         style="@style/app_bar">
 
         <LinearLayout
+            android:id="@+id/search_bar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/image_m"
             android:layout_marginHorizontal="@dimen/space_horizontal"

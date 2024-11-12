@@ -12,6 +12,7 @@ import de.passwordvault.R;
 import de.passwordvault.model.UpdateManager;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryManager;
+import de.passwordvault.view.activity_search.SearchActivity;
 import de.passwordvault.view.entries.activity_entry.EntryActivity;
 import de.passwordvault.view.settings.activity_settings.SettingsActivity;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
@@ -116,6 +117,7 @@ public class MainActivity extends PasswordVaultActivity<MainViewModel> implement
 
         //Setup app bar:
         findViewById(R.id.button_settings).setOnClickListener(view -> settingsLauncher.launch(new Intent(this, SettingsActivity.class)));
+        findViewById(R.id.search_bar).setOnClickListener(view -> startActivity(new Intent(this, SearchActivity.class)));
 
         //Load entries:
         recyclerView = findViewById(R.id.recycler_view);

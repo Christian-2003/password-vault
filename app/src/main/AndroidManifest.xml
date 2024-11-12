@@ -54,6 +54,7 @@
         <activity android:name=".view.authentication.activity_security_question.SecurityQuestionActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_licenses.LicensesActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_settings.SettingsActivity" android:exported="false"/>
+        <activity android:name=".view.activity_search.SearchActivity" android:exported="false"/>
 
         <!-- Activity used for authentication with autofill requests -->
         <activity android:name=".view.authentication.activity_autofill_authentication.AutofillAuthenticationActivity" android:exported="false"/>
