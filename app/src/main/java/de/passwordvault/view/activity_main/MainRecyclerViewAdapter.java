@@ -170,7 +170,7 @@ public class MainRecyclerViewAdapter extends RecyclerViewAdapter<MainViewModel> 
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof EntryViewHolder) {
+        if (holder instanceof EntryViewHolder && viewModel.getAllEntries() != null) {
             EntryViewHolder viewHolder = (EntryViewHolder)holder;
             EntryAbbreviated entry = viewModel.getAllEntries().get(position - OFFSET_ENTRIES);
             Drawable logo = entry.getLogo();
@@ -187,7 +187,7 @@ public class MainRecyclerViewAdapter extends RecyclerViewAdapter<MainViewModel> 
                 }
             });
         }
-        else if (holder instanceof GenericEmptyPlaceholderViewHolder) {
+        else if (holder instanceof GenericEmptyPlaceholderViewHolder && viewModel.getAllEntries() != null) {
             GenericEmptyPlaceholderViewHolder viewHolder = (GenericEmptyPlaceholderViewHolder)holder;
             if (!viewModel.getAllEntries().isEmpty()) {
                 viewHolder.itemView.setVisibility(View.GONE);
@@ -258,7 +258,11 @@ public class MainRecyclerViewAdapter extends RecyclerViewAdapter<MainViewModel> 
      */
     @Override
     public int getItemCount() {
-        return viewModel.getAllEntries().size() + 2;
+        int count = 2;
+        if (viewModel.getAllEntries() != null) {
+            count += viewModel.getAllEntries().size();
+        }
+        return count;
     }
 
 
@@ -271,8 +275,10 @@ public class MainRecyclerViewAdapter extends RecyclerViewAdapter<MainViewModel> 
      */
     @Nullable
     public EntryAbbreviated getEntryForAdapterPosition(int position) {
-        if (position - OFFSET_ENTRIES >= 0 && position - OFFSET_ENTRIES < viewModel.getAllEntries().size()) {
-            return viewModel.getAllEntries().get(position - OFFSET_ENTRIES);
+        if (viewModel.getAllEntries() != null) {
+            if (position - OFFSET_ENTRIES >= 0 && position - OFFSET_ENTRIES < viewModel.getAllEntries().size()) {
+                return viewModel.getAllEntries().get(position - OFFSET_ENTRIES);
+            }
         }
         return null;
     }

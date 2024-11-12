@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import de.passwordvault.R;
 import de.passwordvault.model.UpdateManager;
 import de.passwordvault.model.entry.EntryAbbreviated;
@@ -32,6 +34,16 @@ public class MainActivity extends PasswordVaultActivity<MainViewModel> implement
      * Attribute stores the launcher used to start the {@link EntryActivity}.
      */
     private final ActivityResultLauncher<Intent> entryLauncher;
+
+    /**
+     * Attribute stores the progress bar displaying that entries are being loaded.
+     */
+    private ProgressBar progressBar;
+
+    /**
+     * Attribute stores the recycler view displaying the main page content.
+     */
+    private RecyclerView recyclerView;
 
 
     /**
@@ -92,11 +104,12 @@ public class MainActivity extends PasswordVaultActivity<MainViewModel> implement
         //Setup app bar:
         findViewById(R.id.button_settings).setOnClickListener(view -> startActivity(new Intent(this, SettingsActivity.class)));
 
-        adapter = new MainRecyclerViewAdapter(this, viewModel);
-        adapter.setItemClickListener(this::onEntryClicked);
-        adapter.setUpdateClickListener(this::onUpdateClicked);
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setAdapter(adapter);
+        //Load entries:
+        recyclerView = findViewById(R.id.recycler_view);
+        progressBar = findViewById(R.id.progress_bar);
+        recyclerView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        viewModel.loadAllEntries(this::onEntriesLoaded, false);
 
         UpdateManager.getInstance(this, this);
     }
@@ -159,6 +172,21 @@ public class MainActivity extends PasswordVaultActivity<MainViewModel> implement
      */
     private void onUpdateClicked(int position) {
         UpdateManager.getInstance(this).requestDownload(this);
+    }
+
+
+    /**
+     * Method is called as callback once all entries are loaded and available to display.
+     */
+    private void onEntriesLoaded() {
+        runOnUiThread(() -> {
+            progressBar.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            adapter = new MainRecyclerViewAdapter(this, viewModel);
+            adapter.setItemClickListener(this::onEntryClicked);
+            adapter.setUpdateClickListener(this::onUpdateClicked);
+            recyclerView.setAdapter(adapter);
+        });
     }
 
 }

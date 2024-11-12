@@ -12,7 +12,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import java.util.Objects;
 import de.passwordvault.R;
-import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.storage.settings.Config;
 import de.passwordvault.view.activity_main.MainActivity;
@@ -24,7 +23,7 @@ import de.passwordvault.view.utils.components.PasswordVaultActivity;
  * Class implements the {@link LoginActivity} which allows the user to login to the activity.
  *
  * @author  Christian-2003
- * @version 3.6.0
+ * @version 3.7.0
  */
 public class LoginActivity extends PasswordVaultActivity<LoginViewModel> {
 
@@ -131,17 +130,6 @@ public class LoginActivity extends PasswordVaultActivity<LoginViewModel> {
      * Method opens the {@link MainActivity}.
      */
     private void continueToMainActivity() {
-        //Begin loading the data in a separate thread:
-        Thread thread = new Thread(() -> {
-            try {
-                EntryManager.getInstance().load();
-            }
-            catch (Exception e) {
-                //Ignore
-            }
-        });
-        thread.start();
-
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         finish();

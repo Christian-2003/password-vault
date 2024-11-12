@@ -1,11 +1,11 @@
 package de.passwordvault.view.activity_main;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
-
-import de.passwordvault.model.UpdateManager;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryManager;
+import de.passwordvault.model.storage.app.StorageException;
 
 
 /**
@@ -27,7 +27,14 @@ public class MainViewModel extends ViewModel {
      */
     private boolean downloadWarningDismissed;
 
+    /**
+     * Attribute stores whether an update for the app is available.
+     */
     private boolean updateAvailable;
+
+    private boolean loaded;
+
+    private boolean loading;
 
 
     /**
@@ -37,6 +44,8 @@ public class MainViewModel extends ViewModel {
         openedEntryAdapterPosition = -1;
         downloadWarningDismissed = false;
         updateAvailable = false;
+        loaded = false;
+        loading = false;
     }
 
 
@@ -74,12 +83,56 @@ public class MainViewModel extends ViewModel {
         downloadWarningDismissed = true;
     }
 
+    /**
+     * Method returns whether an update for the app is available.
+     *
+     * @return  Whether an update is available.
+     */
     public boolean isUpdateAvailable() {
         return updateAvailable;
     }
 
+    /**
+     * Method informs the view model that an update is available.
+     */
     public void updateAvailable() {
         updateAvailable = true;
+    }
+
+
+    /**
+     * Method loads the entries from storage.
+     *
+     * @param callback  Callback to invoke after the entries are loaded.
+     * @param force     Whether to force (re)load the entries after they were already loaded.
+     */
+    public void loadAllEntries(@Nullable Runnable callback, boolean force) {
+        if (!loading) {
+            if (!loaded || force) {
+                loading = true;
+                Thread thread = new Thread(() -> {
+                    try {
+                        EntryManager.getInstance().load();
+                    }
+                    catch (StorageException e) {
+                        //We can ignore this exception and treat this case as if the user opens
+                        //the app for the first time and has no data to load.
+                    }
+                    EntryManager.getInstance().sortByName(false);
+                    EntryManager.getInstance().getData(); //Sorts data
+                    loaded = true;
+                    loading = false;
+                    if (callback != null) {
+                        callback.run();
+                    }
+                });
+                thread.start();
+                return;
+            }
+            if (callback != null) {
+                callback.run();
+            }
+        }
     }
 
 
@@ -88,8 +141,11 @@ public class MainViewModel extends ViewModel {
      *
      * @return  List of all entries.
      */
+    @Nullable
     public ArrayList<EntryAbbreviated> getAllEntries() {
-        EntryManager.getInstance().sortByName(false);
+        if (!loaded) {
+            return null;
+        }
         return EntryManager.getInstance().getData();
     }
 
