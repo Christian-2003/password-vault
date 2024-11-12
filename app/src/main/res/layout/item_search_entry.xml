@@ -78,23 +78,22 @@
                 tools:text="Description"
                 style="@style/text.light"/>
 
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/container_tags"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="@dimen/space_horizontal"
+                    app:singleLine="true"/>
+
+            </HorizontalScrollView>
+
         </LinearLayout>
 
     </LinearLayout>
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/space_vertical"
-        android:scrollbars="none">
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/container_tags"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/space_horizontal"
-            app:singleLine="true"/>
-
-    </HorizontalScrollView>
 
 </LinearLayout>

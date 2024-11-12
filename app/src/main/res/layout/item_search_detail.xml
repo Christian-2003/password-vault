@@ -14,15 +14,10 @@
     android:longClickable="true"
     android:focusable="true">
 
-    <ImageView
-        android:id="@+id/image_detail"
+    <View
         android:layout_width="@dimen/image_m"
-        android:layout_height="@dimen/image_m"
-        android:layout_marginStart="@dimen/space_horizontal"
-        android:background="@drawable/background_logo_abbreviation"
-        app:tint="@color/primary"
-        tools:src="@drawable/detail_text"
-        tools:ignore="contentDescription"/>
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/space_horizontal"/>
 
     <LinearLayout
         android:layout_width="0dp"

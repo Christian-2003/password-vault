@@ -10,16 +10,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.passwords.Password;
-import de.passwordvault.model.entry.EntryAbbreviated;
-import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.view.entries.activity_entry.EntryActivity;
-import de.passwordvault.view.passwords.activity_duplicates.DuplicatePasswordEntriesRecyclerViewAdapter;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
 
 
@@ -32,15 +26,30 @@ import de.passwordvault.view.utils.components.PasswordVaultActivity;
  */
 public class PasswordAnalysisListActivity extends PasswordVaultActivity<PasswordAnalysisListViewModel> {
 
+    /**
+     * Attribute stores the adapter for the activity.
+     */
     private PasswordAnalysisListRecyclerViewAdapter adapter;
 
+    /**
+     * Attribute stores the text view within the app bar.
+     */
     private TextView appBarTextView;
 
+    /**
+     * Attribute stores the search query input within the app bar.
+     */
     private EditText searchBarEditText;
 
+    /**
+     * Attribute stores the search button within the app bar.
+     */
     private ImageButton searchButton;
 
 
+    /**
+     * Constructor instantiates a new activity.
+     */
     public PasswordAnalysisListActivity() {
         super(PasswordAnalysisListViewModel.class, R.layout.activity_password_analysis_list);
     }

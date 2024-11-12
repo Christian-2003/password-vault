@@ -2,12 +2,12 @@ package de.passwordvault.view.activity_search;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.chip.Chip;
@@ -18,6 +18,7 @@ import de.passwordvault.model.search.SearchResultDetail;
 import de.passwordvault.model.search.SearchResultEntry;
 import de.passwordvault.model.tags.Tag;
 import de.passwordvault.view.utils.Utils;
+import de.passwordvault.view.utils.recycler_view.OnRecyclerViewActionListener;
 import de.passwordvault.view.utils.recycler_view.RecyclerViewAdapter;
 
 
@@ -82,11 +83,6 @@ public class SearchRecyclerViewAdapter extends RecyclerViewAdapter<SearchViewMod
     public static class DetailViewHolder extends RecyclerView.ViewHolder {
 
         /**
-         * Attribute stores the image view displaying the image for the detail.
-         */
-        public final ImageView detailImageView;
-
-        /**
          * Attribute stores the text view displaying the name of the detail.
          */
         public final TextView nameTextView;
@@ -104,7 +100,6 @@ public class SearchRecyclerViewAdapter extends RecyclerViewAdapter<SearchViewMod
          */
         public DetailViewHolder(View itemView) {
             super(itemView);
-            detailImageView = itemView.findViewById(R.id.image_detail);
             nameTextView = itemView.findViewById(R.id.text_name);
             contentTextView = itemView.findViewById(R.id.text_content);
         }
@@ -129,6 +124,13 @@ public class SearchRecyclerViewAdapter extends RecyclerViewAdapter<SearchViewMod
 
 
     /**
+     * Attribute stores the action listener to invoke when a search result is clicked.
+     */
+    @Nullable
+    private OnRecyclerViewActionListener searchResultClicked;
+
+
+    /**
      * Constructor instantiates a new recycler view adapter.
      *
      * @param context   Context for the recycler view adapter.
@@ -136,6 +138,17 @@ public class SearchRecyclerViewAdapter extends RecyclerViewAdapter<SearchViewMod
      */
     public SearchRecyclerViewAdapter(@NonNull Context context, @NonNull SearchViewModel viewModel) {
         super(context, viewModel);
+        searchResultClicked = null;
+    }
+
+
+    /**
+     * Method changes the action listener to invoke when a search result is clicked.
+     *
+     * @param searchResultClicked   New listener to invoke.
+     */
+    public void setSearchResultClicked(@Nullable OnRecyclerViewActionListener searchResultClicked) {
+        this.searchResultClicked = searchResultClicked;
     }
 
 
@@ -148,15 +161,12 @@ public class SearchRecyclerViewAdapter extends RecyclerViewAdapter<SearchViewMod
      */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Log.d(TAG, "Bind vh for pos " + position);
         if (viewModel.getSearchResults() != null) {
             SearchResult searchResult = viewModel.getSearchResults().get(position - OFFSET_SEARCH_RESULTS);
-            Log.d(TAG, "Search result type " + searchResult.getType());
             switch (searchResult.getType()) {
                 case SearchResult.TYPE_ENTRY: {
                     SearchResultEntry result = (SearchResultEntry)searchResult;
                     EntryViewHolder viewHolder = (EntryViewHolder)holder;
-                    Log.d(TAG, "Bind vh for entry " + result.getEntry().getName());
                     viewHolder.nameTextView.setText(result.getEntry().getName());
                     viewHolder.descriptionTextView.setText(result.getEntry().getDescription());
                     Drawable logo = result.getEntry().getLogo();
@@ -176,6 +186,11 @@ public class SearchRecyclerViewAdapter extends RecyclerViewAdapter<SearchViewMod
                         chip.setText(tag.getName());
                         viewHolder.tagsContainer.addView(chip);
                     }
+                    viewHolder.itemView.setOnClickListener(view -> {
+                        if (searchResultClicked != null) {
+                            searchResultClicked.onAction(holder.getAdapterPosition());
+                        }
+                    });
                     break;
                 }
                 case SearchResult.TYPE_DETAIL: {
@@ -188,7 +203,11 @@ public class SearchRecyclerViewAdapter extends RecyclerViewAdapter<SearchViewMod
                     else {
                         viewHolder.contentTextView.setText(result.getDetail().getContent());
                     }
-                    viewHolder.detailImageView.setImageDrawable(ContextCompat.getDrawable(context, result.getDetail().getType().getDrawable()));
+                    viewHolder.itemView.setOnClickListener(view -> {
+                        if (searchResultClicked != null) {
+                            searchResultClicked.onAction(holder.getAdapterPosition());
+                        }
+                    });
                     break;
                 }
             }
@@ -245,6 +264,7 @@ public class SearchRecyclerViewAdapter extends RecyclerViewAdapter<SearchViewMod
         }
     }
 
+
     /**
      * Method returns the number of items within the adapter.
      *
@@ -256,6 +276,22 @@ public class SearchRecyclerViewAdapter extends RecyclerViewAdapter<SearchViewMod
             return viewModel.getSearchResults().size();
         }
         return 0;
+    }
+
+
+    /**
+     * Method returns the the search result for the specified adapter position. If no search
+     * result is available, {@code null} is returned.
+     *
+     * @param position  Adapter position whose search result to return.
+     * @return          Search result for the specified adapter position.
+     */
+    @Nullable
+    public SearchResult getSearchResultForAdapterPosition(int position) {
+        if (viewModel.getSearchResults() != null && position >= 0 || position < getItemCount()) {
+            return viewModel.getSearchResults().get(position - OFFSET_SEARCH_RESULTS);
+        }
+        return null;
     }
 
 }
