@@ -278,6 +278,11 @@
     <string name="recovery_login_info">In order to recover the master password, you need to answer the security questions correctly.</string>
 
 
+    <!-- Search activity -->
+    <string name="search_empty_headline">Nothing found</string>
+    <string name="search_empty_support">Matching results are shown here</string>
+
+
     <!-- Detail dialog -->
     <string name="detail_dialog_title_edit">Edit Detail</string>
     <string name="detail_dialog_title_add">Add Detail</string>

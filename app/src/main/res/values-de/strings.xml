@@ -276,6 +276,11 @@
     <string name="recovery_login_info">Um das Master Passwort zurückzusetzen, musst du die Sicherheitsfragen korrekt beantworten.</string>
 
 
+    <!-- Search activity -->
+    <string name="search_empty_headline">Keine Ergebnisse</string>
+    <string name="search_empty_support">Passende Ergebnisse werden hier angezeigt</string>
+
+
     <!-- Detail dialog -->
     <string name="detail_dialog_title_edit">Information bearbeiten</string>
     <string name="detail_dialog_title_add">Information hinzufügen</string>

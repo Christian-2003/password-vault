@@ -108,9 +108,14 @@ public class SearchRecyclerViewAdapter extends RecyclerViewAdapter<SearchViewMod
 
 
     /**
+     * Field stores the position of the empty placeholder within the adapter.
+     */
+    public static final int POSITION_EMPTY_PLACEHOLDER = 0;
+
+    /**
      * Field stores the offset with which the search results are displayed.
      */
-    public static final int OFFSET_SEARCH_RESULTS = 0;
+    public static final int OFFSET_SEARCH_RESULTS = 1;
 
     /**
      * Field stores the view type for entries.
@@ -161,7 +166,21 @@ public class SearchRecyclerViewAdapter extends RecyclerViewAdapter<SearchViewMod
      */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (viewModel.getSearchResults() != null) {
+        if (position == POSITION_EMPTY_PLACEHOLDER) {
+            GenericEmptyPlaceholderViewHolder viewHolder = (GenericEmptyPlaceholderViewHolder)holder;
+            if (viewModel.getSearchResults() == null || viewModel.getSearchResults().isEmpty()) {
+                viewHolder.itemView.setVisibility(View.VISIBLE);
+                viewHolder.itemView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                viewHolder.imageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.el_search));
+                viewHolder.headlineTextView.setText(R.string.search_empty_headline);
+                viewHolder.supportTextView.setText(R.string.search_empty_support);
+            }
+            else {
+                viewHolder.itemView.setVisibility(View.GONE);
+                viewHolder.itemView.setLayoutParams(new ViewGroup.LayoutParams(0, 0));
+            }
+        }
+        else if (viewModel.getSearchResults() != null) {
             SearchResult searchResult = viewModel.getSearchResults().get(position - OFFSET_SEARCH_RESULTS);
             switch (searchResult.getType()) {
                 case SearchResult.TYPE_ENTRY: {
@@ -236,6 +255,10 @@ public class SearchRecyclerViewAdapter extends RecyclerViewAdapter<SearchViewMod
                 view = layoutInflater.inflate(R.layout.item_search_detail, parent, false);
                 return new DetailViewHolder(view);
             }
+            case TYPE_GENERIC_EMPTY_PLACEHOLDER: {
+                view = layoutInflater.inflate(R.layout.item_generic_empty_placeholder, parent, false);
+                return new GenericEmptyPlaceholderViewHolder(view);
+            }
             default: {
                 return null;
             }
@@ -251,8 +274,11 @@ public class SearchRecyclerViewAdapter extends RecyclerViewAdapter<SearchViewMod
      */
     @Override
     public int getItemViewType(int position) {
-        if (viewModel.getSearchResults() != null) {
-            if (viewModel.getSearchResults().get(position).getType() == SearchResult.TYPE_ENTRY) {
+        if (position == 0) {
+            return TYPE_GENERIC_EMPTY_PLACEHOLDER;
+        }
+        else if (viewModel.getSearchResults() != null) {
+            if (viewModel.getSearchResults().get(position - OFFSET_SEARCH_RESULTS).getType() == SearchResult.TYPE_ENTRY) {
                 return TYPE_ENTRY;
             }
             else {
@@ -273,9 +299,9 @@ public class SearchRecyclerViewAdapter extends RecyclerViewAdapter<SearchViewMod
     @Override
     public int getItemCount() {
         if (viewModel.getSearchResults() != null) {
-            return viewModel.getSearchResults().size();
+            return viewModel.getSearchResults().size() + 1;
         }
-        return 0;
+        return 1;
     }
 
 
