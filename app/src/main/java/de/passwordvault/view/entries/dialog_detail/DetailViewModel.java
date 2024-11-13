@@ -184,6 +184,8 @@ public class DetailViewModel extends ViewModel {
                 if (detail instanceof Detail) {
                     this.detail = new Detail((Detail)detail);
                     editingDetail = true;
+                    nameEnteredAutomatically = false;
+                    obfuscatedEnteredAutomatically = false;
                 }
             }
         }
