@@ -53,7 +53,7 @@ public class SearchHandler {
 
         for (EntryAbbreviated entryAbbreviated : EntryManager.getInstance().getData()) {
             boolean entryAdded = addEntryToSearchResults(entryAbbreviated);
-            EntryExtended entryExtended = EntryManager.getInstance().get(entryAbbreviated.getUuid());
+            EntryExtended entryExtended = EntryManager.getInstance().get(entryAbbreviated.getUuid(), false);
             if (entryExtended != null) {
                 for (Detail detail : entryExtended.getDetails()) {
                     boolean detailAdded = addDetailToSearchResults(detail, entryAbbreviated, entryAdded);
