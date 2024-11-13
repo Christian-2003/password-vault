@@ -346,6 +346,7 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
         if (viewHolder instanceof GeneralViewHolder) {
             GeneralViewHolder holder = (GeneralViewHolder)viewHolder;
             holder.descriptionTextView.setText(entry.getDescription());
+            holder.descriptionTextView.setVisibility(entry.getDescription().isEmpty() ? View.GONE : View.VISIBLE);
             holder.editButton.setOnClickListener(view -> {
                 if (editEntryListener != null) {
                     editEntryListener.onAction(holder.getAdapterPosition());

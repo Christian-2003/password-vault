@@ -198,6 +198,10 @@
     <string name="entry_details_empty_support">Informationen werden hier angezeigt</string>
     <string name="entry_edit">Konto bearbeiten</string>
     <string name="entry_name_placeholder">Neues Konto {arg}</string>
+    <string name="entry_more_edit">Konto bearbeiten</string>
+    <string name="entry_more_delete">Konto löschen</string>
+    <string name="entry_more_add_detail">Information hinzufügen</string>
+    <string name="entry_more_select_app">App für autom. Ausfüllen wählen</string>
 
 
     <!-- PasswordAnalysis activity -->

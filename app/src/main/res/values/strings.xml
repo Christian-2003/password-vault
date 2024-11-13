@@ -200,6 +200,10 @@
     <string name="entry_details_empty_support">Details are shown here</string>
     <string name="entry_edit">Edit account</string>
     <string name="entry_name_placeholder">New account {arg}</string>
+    <string name="entry_more_edit">Edit account</string>
+    <string name="entry_more_delete">Delete account</string>
+    <string name="entry_more_add_detail">Add detail</string>
+    <string name="entry_more_select_app">Select app for autofill</string>
 
 
     <!-- PasswordAnalysis activity -->

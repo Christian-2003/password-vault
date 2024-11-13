@@ -41,8 +41,24 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center"
+            android:layout_marginEnd="0dp"
             tools:text="App name"
             style="@style/text.app_bar"/>
+
+        <FrameLayout
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize">
+
+            <ImageButton
+                android:id="@+id/button_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_more"
+                android:layout_gravity="center"
+                tools:ignore="contentDescription"
+                style="@style/button.image.app_bar"/>
+
+        </FrameLayout>
 
     </LinearLayout>
 

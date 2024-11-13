@@ -64,6 +64,11 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
     private static final String TAG_DIALOG_DETAIL = "detail";
 
     /**
+     * Field stores the tag for the more dialog to show items for the entry.
+     */
+    private static final String TAG_DIALOG_ENTRY = "entry";
+
+    /**
      * Field stores the tag for the more dialog item to edit a detail.
      */
     private static final String TAG_EDIT_DETAIL = "edit";
@@ -77,6 +82,21 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
      * Field stores the tag for the more dialog item to copy the content of a detail.
      */
     private static final String TAG_COPY_DETAIL = "copy";
+
+    /**
+     * Field stores the tag for the more dialog item to edit the entry.
+     */
+    private static final String TAG_EDIT_ENTRY = "edit";
+
+    /**
+     * Field stores the tag for the more dialog item to delete the entry.
+     */
+    private static final String TAG_DELETE_ENTRY = "delete";
+
+    /**
+     * Field stores the tag for the more dialog item to select an app for autofill.
+     */
+    private static final String TAG_SELECT_APP = "select";
 
     /**
      * Field stores the tag for the {@link DetailDialog} to add a new detail.
@@ -230,33 +250,57 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
      */
     @Override
     public void onDialogItemClicked(MoreDialog dialog, String tag, int position) {
-        if (dialog.getTag() != null && dialog.getTag().equals(TAG_DIALOG_DETAIL)) {
-            String[] tagParts = tag.split(":");
-            if (tagParts.length != 2) {
-                return;
-            }
-            int adapterPosition;
-            try {
-                adapterPosition = Integer.parseInt(tagParts[1]);
-            }
-            catch (NumberFormatException e) {
-                return;
-            }
-            switch (tagParts[0]) {
-                case TAG_EDIT_DETAIL: {
-                    onEditDetail(adapterPosition);
-                    break;
+        if (dialog.getTag() != null) {
+            if (dialog.getTag().equals(TAG_DIALOG_DETAIL)) {
+                //Actions for details:
+                String[] tagParts = tag.split(":");
+                if (tagParts.length != 2) {
+                    return;
                 }
-                case TAG_DELETE_DETAIL: {
-                    onDeleteDetail(adapterPosition);
-                    break;
+                int adapterPosition;
+                try {
+                    adapterPosition = Integer.parseInt(tagParts[1]);
                 }
-                case TAG_COPY_DETAIL: {
-                    Detail detail = adapter.getDetailForAdapterPosition(adapterPosition);
-                    if (detail != null) {
-                        Utils.copyToClipboard(detail.getContent());
+                catch (NumberFormatException e) {
+                    return;
+                }
+                switch (tagParts[0]) {
+                    case TAG_EDIT_DETAIL: {
+                        onEditDetail(adapterPosition);
+                        break;
                     }
-                    break;
+                    case TAG_DELETE_DETAIL: {
+                        onDeleteDetail(adapterPosition);
+                        break;
+                    }
+                    case TAG_COPY_DETAIL: {
+                        Detail detail = adapter.getDetailForAdapterPosition(adapterPosition);
+                        if (detail != null) {
+                            Utils.copyToClipboard(detail.getContent());
+                        }
+                        break;
+                    }
+                }
+            }
+            else if (dialog.getTag().equals(TAG_DIALOG_ENTRY)) {
+                //Actions for entry:
+                switch (tag) {
+                    case TAG_EDIT_ENTRY: {
+                        onEditEntryClicked(0);
+                        break;
+                    }
+                    case TAG_DELETE_ENTRY: {
+                        onDeleteClicked(null);
+                        break;
+                    }
+                    case TAG_ADD_DETAIL: {
+                        onAddDetail(0);
+                        break;
+                    }
+                    case TAG_SELECT_APP: {
+                        onPackagesClicked(0);
+                        break;
+                    }
                 }
             }
         }
@@ -331,6 +375,9 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
 
         //Back button:
         findViewById(R.id.button_back).setOnClickListener(view -> finish());
+
+        //More button:
+        findViewById(R.id.button_more).setOnClickListener(view -> showEntryMoreDialog());
     }
 
 
@@ -421,7 +468,6 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
             Intent intent = new Intent(this, PackagesActivity.class);
             intent.putExtra(PackagesActivity.KEY_PACKAGES, new SerializablePackageCollection(viewModel.getEntry().getPackages()));
             packagesLauncher.launch(intent);
-            Log.d("EntryActivity", "Launched intent to edit packages");
         }
     }
 
@@ -448,6 +494,29 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
         MoreDialog dialog = new MoreDialog();
         dialog.setArguments(args);
         dialog.show(getSupportFragmentManager(), TAG_DIALOG_DETAIL);
+    }
+
+
+    /**
+     * Method shows the more dialog for the entry.
+     */
+    private void showEntryMoreDialog() {
+        if (viewModel.getEntry() == null) {
+            return;
+        }
+        Bundle args = new Bundle();
+        args.putString(MoreDialog.ARG_TITLE, viewModel.getEntry().getName());
+        args.putInt(MoreDialog.ARG_ICON, R.drawable.ic_info); //TODO: Change icon for dialog
+        ArrayList<Item> items = new ArrayList<>();
+        items.add(new ItemButton(getString(R.string.entry_more_edit), TAG_EDIT_ENTRY, R.drawable.ic_edit));
+        items.add(new ItemButton(getString(R.string.entry_more_delete), TAG_DELETE_DETAIL, R.drawable.ic_delete));
+        items.add(new ItemButton(getString(R.string.entry_more_add_detail), TAG_ADD_DETAIL, R.drawable.ic_add));
+        items.add(new ItemButton(getString(R.string.entry_more_select_app), TAG_SELECT_APP, R.drawable.ic_password));
+        args.putSerializable(MoreDialog.ARG_ITEMS, items);
+
+        MoreDialog dialog = new MoreDialog();
+        dialog.setArguments(args);
+        dialog.show(getSupportFragmentManager(), TAG_DIALOG_ENTRY);
     }
 
 }
