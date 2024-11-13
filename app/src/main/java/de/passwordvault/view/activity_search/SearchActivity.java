@@ -8,6 +8,8 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
@@ -51,12 +53,27 @@ public class SearchActivity extends PasswordVaultActivity<SearchViewModel> {
      */
     private InputMethodManager inputMethodManager;
 
+    /**
+     * Attribute stores the launcher to start the {@link EntryActivity}.
+     */
+    private final ActivityResultLauncher<Intent> entryLauncher;
+
 
     /**
      * Constructor instantiates a new activity.
      */
     public SearchActivity() {
         super(SearchViewModel.class, R.layout.activity_search);
+
+        entryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == EntryActivity.RESULT_DELETED && viewModel.getSearchResults() != null) {
+                for (int i = viewModel.getLastOpenedPosition(); i >= viewModel.getFirstOpenedPosition(); i--) {
+                    viewModel.getSearchResults().remove(i);
+                }
+                adapter.notifyItemRangeRemoved(viewModel.getFirstOpenedPosition() + SearchRecyclerViewAdapter.OFFSET_SEARCH_RESULTS, (viewModel.getLastOpenedPosition() - viewModel.getFirstOpenedPosition()) + 1);
+            }
+            viewModel.openEntry(-1);
+        });
     }
 
 
@@ -139,9 +156,11 @@ public class SearchActivity extends PasswordVaultActivity<SearchViewModel> {
             entryUuid = ((SearchResultDetail)result).getEntry().getUuid();
         }
 
+        viewModel.openEntry(position - SearchRecyclerViewAdapter.OFFSET_SEARCH_RESULTS);
+
         Intent intent = new Intent(this, EntryActivity.class);
         intent.putExtra(EntryActivity.KEY_ID, entryUuid);
-        startActivity(intent);
+        entryLauncher.launch(intent);
     }
 
 }

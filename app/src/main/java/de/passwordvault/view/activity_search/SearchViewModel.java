@@ -38,6 +38,18 @@ public class SearchViewModel extends ViewModel {
      */
     private boolean finished;
 
+    /**
+     * Attribute stores the position of the first search result of the entry opened or
+     * -1 if no entry is opened.
+     */
+    private int firstOpenedPosition;
+
+    /**
+     * Attribute stores the position of the last search result of the entry opened or
+     * -1 if no entry is opened.
+     */
+    private int lastOpenedPosition;
+
 
     /**
      * Constructor instantiates a new view model.
@@ -47,6 +59,8 @@ public class SearchViewModel extends ViewModel {
         searchHandler = new SearchHandler();
         searching = false;
         finished = false;
+        firstOpenedPosition = -1;
+        lastOpenedPosition = -1;
     }
 
 
@@ -71,6 +85,66 @@ public class SearchViewModel extends ViewModel {
      */
     public boolean isFinished() {
         return finished;
+    }
+
+    /**
+     * Method returns the position of the first search result of the entry opened or
+     * -1 if no entry is opened.
+     *
+     * @return  Position of the first search result of the entry opened.
+     */
+    public int getFirstOpenedPosition() {
+        return firstOpenedPosition;
+    }
+
+    /**
+     * Method returns the position of the lat search result of the entry opened or
+     * -1 if no entry is opened.
+     *
+     * @return  Position of the last search result of the entry opened.
+     */
+    public int getLastOpenedPosition() {
+        return lastOpenedPosition;
+    }
+
+    /**
+     * Method calculates {@link #firstOpenedPosition} and {@link #lastOpenedPosition} for the
+     * entry whose search result at the passed position is opened.
+     *
+     * @param position  Position of the search result to open.
+     */
+    public void openEntry(int position) {
+        if (position < 0) {
+            this.firstOpenedPosition = -1;
+            this.lastOpenedPosition = -1;
+            return;
+        }
+        int first = 0;
+        int last = -1;
+
+        //Determine first position:
+        if (searchResults.get(position).getType() == SearchResult.TYPE_ENTRY) {
+            first = position;
+        }
+        else {
+            for (int i = position; i >= 0; i--) {
+                if (searchResults.get(i).getType() == SearchResult.TYPE_ENTRY) {
+                    first = i;
+                    break;
+                }
+            }
+        }
+
+        //Determine last position:
+        for (int i = first + 1; i < searchResults.size(); i++) {
+            if (searchResults.get(i).getType() != SearchResult.TYPE_DETAIL) {
+                last = i - 1;
+                break;
+            }
+        }
+
+        this.firstOpenedPosition = first;
+        this.lastOpenedPosition = last;
     }
 
 
