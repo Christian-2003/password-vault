@@ -182,7 +182,7 @@ public class DetailViewModel extends ViewModel {
             if (args.containsKey(DetailDialog.ARG_DETAIL)) {
                 Serializable detail = args.getSerializable(DetailDialog.ARG_DETAIL);
                 if (detail instanceof Detail) {
-                    this.detail = (Detail)detail;
+                    this.detail = new Detail((Detail)detail);
                     editingDetail = true;
                 }
             }

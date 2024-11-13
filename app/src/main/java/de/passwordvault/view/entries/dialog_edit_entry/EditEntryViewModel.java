@@ -103,8 +103,7 @@ public class EditEntryViewModel extends ViewModel {
     }
 
     /**
-     * Method returns a list containing all available tags. Please do NOT add a new tag to the return
-     * value of this method. To add a new tag, use {@link #addNewTag(Tag)} instead!
+     * Method returns a list containing all available tags.
      *
      * @return  List containing all available tags.
      */
