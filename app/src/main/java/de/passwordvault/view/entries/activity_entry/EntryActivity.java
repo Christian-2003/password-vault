@@ -175,6 +175,9 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
                     if (viewModel.getEntry() != null) {
                         viewModel.getEntry().remove(dialog.getTag());
                         adapter.notifyItemRangeChanged(EntryRecyclerViewAdapter.OFFSET_DETAILS, adapter.getItemCount() - 1);
+                        if (viewModel.getEntry().getDetails().isEmpty()) {
+                            adapter.notifyItemChanged(EntryRecyclerViewAdapter.POSITION_DETAILS_EMPTY_PLACEHOLDER);
+                        }
                     }
                 }
             }
@@ -187,8 +190,12 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
                         //Add detail:
                         Detail detail = detailDialog.getDetail();
                         if (detail != null) {
+                            boolean hideEmptyPlaceholder = viewModel.getEntry().getDetails().isEmpty();
                             viewModel.getEntry().add(detail);
                             adapter.notifyItemRangeChanged(EntryRecyclerViewAdapter.OFFSET_DETAILS, adapter.getItemCount() - 1);
+                            if (hideEmptyPlaceholder) {
+                                adapter.notifyItemChanged(EntryRecyclerViewAdapter.POSITION_DETAILS_EMPTY_PLACEHOLDER);
+                            }
                         }
                     }
                     else if (detailDialog.getTag().equals(TAG_EDIT_DETAIL)) {
