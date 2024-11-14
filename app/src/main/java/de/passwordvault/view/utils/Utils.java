@@ -41,6 +41,18 @@ public class Utils {
 
 
     /**
+     * Static method formats the passed {@code Calendar} instance into a formatted date of the current
+     * locale. The format might be e.g. {@code yyyy-MM-dd}.
+     *
+     * @param date      Date to be formatted.
+     * @return          Formatted date.
+     */
+    public static String formatDate(Calendar date) {
+        return formatDate(date, App.getContext().getString(R.string.date_format));
+    }
+
+
+    /**
      * Static method formats the passed number into the format of the current locale.
      *
      * @param number    Number to be formatted.

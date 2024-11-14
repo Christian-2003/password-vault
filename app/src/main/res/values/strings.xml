@@ -188,7 +188,7 @@
     <string name="entry_tags">Tags</string>
     <string name="entry_uuid">UUID</string>
     <string name="entry_created">Created</string>
-    <string name="entry_changed">Changed</string>
+    <string name="entry_changed">Edited</string>
     <string name="entry_general_info">General</string>
     <string name="entry_details_info">Details</string>
     <string name="entry_hidden_details_info">Hidden Details</string>
@@ -204,6 +204,7 @@
     <string name="entry_more_delete">Delete account</string>
     <string name="entry_more_add_detail">Add detail</string>
     <string name="entry_more_select_app">Select app for autofill</string>
+    <string name="entry_more_info">Information</string>
 
 
     <!-- PasswordAnalysis activity -->

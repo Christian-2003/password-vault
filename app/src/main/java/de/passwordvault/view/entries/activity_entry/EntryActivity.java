@@ -17,6 +17,7 @@ import de.passwordvault.view.entries.activity_packages.PackagesActivity;
 import de.passwordvault.view.entries.dialog_detail.DetailDialog;
 import de.passwordvault.view.entries.dialog_edit_entry.EditEntryDialog;
 import de.passwordvault.view.entries.dialog_edit_tag.EditTagDialog;
+import de.passwordvault.view.entries.dialog_info_entry.InfoEntryDialog;
 import de.passwordvault.view.general.dialog_delete.DeleteDialog;
 import de.passwordvault.view.general.dialog_more.Item;
 import de.passwordvault.view.general.dialog_more.ItemButton;
@@ -97,6 +98,11 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
      * Field stores the tag for the more dialog item to select an app for autofill.
      */
     private static final String TAG_SELECT_APP = "select";
+
+    /**
+     * Field stores the tag for the more dialog item to show additional info of the entry.
+     */
+    private static final String TAG_SHOW_INFO = "info";
 
     /**
      * Field stores the tag for the {@link DetailDialog} to add a new detail.
@@ -301,6 +307,14 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
                         onPackagesClicked(0);
                         break;
                     }
+                    case TAG_SHOW_INFO: {
+                        InfoEntryDialog infoEntryDialog = new InfoEntryDialog();
+                        Bundle args = new Bundle();
+                        args.putSerializable(InfoEntryDialog.ARG_ENTRY, viewModel.getEntry());
+                        infoEntryDialog.setArguments(args);
+                        infoEntryDialog.show(getSupportFragmentManager(), null);
+                        break;
+                    }
                 }
             }
         }
@@ -484,7 +498,7 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
 
         Bundle args = new Bundle();
         args.putString(MoreDialog.ARG_TITLE, detail.getName());
-        args.putInt(MoreDialog.ARG_ICON, R.drawable.ic_info); //TODO: Change icon for dialog
+        args.putInt(MoreDialog.ARG_ICON, R.drawable.ic_entry); //TODO: Change icon for dialog
         ArrayList<Item> items = new ArrayList<>();
         items.add(new ItemButton(getString(R.string.button_edit), TAG_EDIT_DETAIL + ":" + position, R.drawable.ic_edit));
         items.add(new ItemButton(getString(R.string.button_delete), TAG_DELETE_DETAIL + ":" + position, R.drawable.ic_delete));
@@ -506,12 +520,13 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
         }
         Bundle args = new Bundle();
         args.putString(MoreDialog.ARG_TITLE, viewModel.getEntry().getName());
-        args.putInt(MoreDialog.ARG_ICON, R.drawable.ic_info); //TODO: Change icon for dialog
+        args.putInt(MoreDialog.ARG_ICON, R.drawable.ic_entry);
         ArrayList<Item> items = new ArrayList<>();
         items.add(new ItemButton(getString(R.string.entry_more_edit), TAG_EDIT_ENTRY, R.drawable.ic_edit));
         items.add(new ItemButton(getString(R.string.entry_more_delete), TAG_DELETE_DETAIL, R.drawable.ic_delete));
         items.add(new ItemButton(getString(R.string.entry_more_add_detail), TAG_ADD_DETAIL, R.drawable.ic_add));
         items.add(new ItemButton(getString(R.string.entry_more_select_app), TAG_SELECT_APP, R.drawable.ic_password));
+        items.add(new ItemButton(getString(R.string.entry_more_info), TAG_SHOW_INFO, R.drawable.ic_info));
         args.putSerializable(MoreDialog.ARG_ITEMS, items);
 
         MoreDialog dialog = new MoreDialog();

@@ -205,7 +205,6 @@ public class MainRecyclerViewAdapter extends RecyclerViewAdapter<MainViewModel> 
             GenericWarningViewHolder viewHolder = (GenericWarningViewHolder)holder;
             if (viewModel.isUpdateAvailable() && !viewModel.isDownloadWarningDismissed()) {
                 //Warning is visible:
-                viewHolder.itemView.setVisibility(View.VISIBLE);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 int horizontalMargin = context.getResources().getDimensionPixelSize(R.dimen.space_horizontal);
                 int verticalMargin = context.getResources().getDimensionPixelSize(R.dimen.space_vertical);
@@ -223,6 +222,7 @@ public class MainRecyclerViewAdapter extends RecyclerViewAdapter<MainViewModel> 
                         updateClickListener.onAction(holder.getAdapterPosition());
                     }
                 });
+                viewHolder.itemView.setVisibility(View.VISIBLE);
             }
             else {
                 //Warning is invisible:

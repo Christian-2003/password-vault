@@ -202,6 +202,7 @@
     <string name="entry_more_delete">Konto löschen</string>
     <string name="entry_more_add_detail">Information hinzufügen</string>
     <string name="entry_more_select_app">App für autom. Ausfüllen wählen</string>
+    <string name="entry_more_info">Details</string>
 
 
     <!-- PasswordAnalysis activity -->
