@@ -15,6 +15,7 @@ import de.passwordvault.view.general.dialog_delete.DeleteDialog;
 import de.passwordvault.view.general.dialog_more.Item;
 import de.passwordvault.view.general.dialog_more.ItemButton;
 import de.passwordvault.view.general.dialog_more.ItemCheckbox;
+import de.passwordvault.view.general.dialog_more.ItemDivider;
 import de.passwordvault.view.general.dialog_more.MoreDialog;
 import de.passwordvault.view.general.dialog_more.MoreDialogCallback;
 import de.passwordvault.view.settings.activity_quality_gate.QualityGateActivity;
@@ -252,6 +253,7 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
         ArrayList<Item> items = new ArrayList<>();
         items.add(new ItemButton(getString(R.string.button_edit), TAG_EDIT_QUALITY_GATE + ":" + position, R.drawable.ic_edit));
         items.add(new ItemButton(getString(R.string.button_delete),TAG_DELETE_QUALITY_GATE + ":" + position , R.drawable.ic_delete));
+        items.add(new ItemDivider());
         items.add(new ItemCheckbox(getString(R.string.quality_gate_enabled), TAG_ENABLE_QUALITY_GATE + ":" + position, qualityGate.isEnabled()));
         args.putSerializable(MoreDialog.ARG_ITEMS, items);
         dialog.setArguments(args);

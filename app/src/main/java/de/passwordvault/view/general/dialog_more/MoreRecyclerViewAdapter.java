@@ -105,6 +105,22 @@ public class MoreRecyclerViewAdapter extends RecyclerViewAdapter<MoreViewModel> 
 
     }
 
+    /**
+     * Class models the view holder for the item divider to display.
+     */
+    public static class ItemDividerViewHolder extends RecyclerView.ViewHolder {
+
+        /**
+         * Constructor instantiates a new view holder for the passed view.
+         *
+         * @param itemView  Inflated view from which to create the view holder.
+         */
+        public ItemDividerViewHolder(View itemView) {
+            super(itemView);
+        }
+
+    }
+
 
     /**
      * Field stores the view type for the button item.
@@ -115,6 +131,11 @@ public class MoreRecyclerViewAdapter extends RecyclerViewAdapter<MoreViewModel> 
      * Field stores the view type for the checkbox item.
      */
     public static final int TYPE_CHECKBOX = 3;
+
+    /**
+     * Field stores the view type for the divider item.
+     */
+    public static final int TYPE_DIVIDER = 5;
 
 
     /**
@@ -152,6 +173,9 @@ public class MoreRecyclerViewAdapter extends RecyclerViewAdapter<MoreViewModel> 
             case TYPE_CHECKBOX:
                 view = layoutInflater.inflate(R.layout.item_more_checkbox, parent, false);
                 return new ItemCheckboxViewHolder(view);
+            case TYPE_DIVIDER:
+                view = layoutInflater.inflate(R.layout.item_more_divider, parent, false);
+                return new ItemDividerViewHolder(view);
             default:
                 view = layoutInflater.inflate(R.layout.item_more_button, parent, false);
                 return new ItemButtonViewHolder(view);
@@ -198,11 +222,13 @@ public class MoreRecyclerViewAdapter extends RecyclerViewAdapter<MoreViewModel> 
 
     @Override
     public int getItemViewType(int position) {
-        if (viewModel.getItems().get(position).getType() == Item.TYPE_BUTTON) {
-            return TYPE_BUTTON;
-        }
-        else {
-            return TYPE_CHECKBOX;
+        switch (viewModel.getItems().get(position).getType()) {
+            case Item.TYPE_BUTTON:
+                return TYPE_BUTTON;
+            case Item.TYPE_DIVIDER:
+                return TYPE_DIVIDER;
+            default:
+                return TYPE_CHECKBOX;
         }
     }
 

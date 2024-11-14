@@ -21,6 +21,7 @@ import de.passwordvault.view.entries.dialog_info_entry.InfoEntryDialog;
 import de.passwordvault.view.general.dialog_delete.DeleteDialog;
 import de.passwordvault.view.general.dialog_more.Item;
 import de.passwordvault.view.general.dialog_more.ItemButton;
+import de.passwordvault.view.general.dialog_more.ItemDivider;
 import de.passwordvault.view.general.dialog_more.MoreDialog;
 import de.passwordvault.view.general.dialog_more.MoreDialogCallback;
 import de.passwordvault.view.utils.Utils;
@@ -502,6 +503,7 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
         ArrayList<Item> items = new ArrayList<>();
         items.add(new ItemButton(getString(R.string.button_edit), TAG_EDIT_DETAIL + ":" + position, R.drawable.ic_edit));
         items.add(new ItemButton(getString(R.string.button_delete), TAG_DELETE_DETAIL + ":" + position, R.drawable.ic_delete));
+        items.add(new ItemDivider());
         items.add(new ItemButton(getString(R.string.button_copy_detail), TAG_COPY_DETAIL + ":" + position, R.drawable.ic_copy));
         args.putSerializable(MoreDialog.ARG_ITEMS, items);
 
@@ -524,6 +526,7 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
         ArrayList<Item> items = new ArrayList<>();
         items.add(new ItemButton(getString(R.string.entry_more_edit), TAG_EDIT_ENTRY, R.drawable.ic_edit));
         items.add(new ItemButton(getString(R.string.entry_more_delete), TAG_DELETE_DETAIL, R.drawable.ic_delete));
+        items.add(new ItemDivider());
         items.add(new ItemButton(getString(R.string.entry_more_add_detail), TAG_ADD_DETAIL, R.drawable.ic_add));
         items.add(new ItemButton(getString(R.string.entry_more_select_app), TAG_SELECT_APP, R.drawable.ic_password));
         items.add(new ItemButton(getString(R.string.entry_more_info), TAG_SHOW_INFO, R.drawable.ic_info));

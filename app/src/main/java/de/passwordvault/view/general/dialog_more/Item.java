@@ -23,6 +23,11 @@ public abstract class Item implements Serializable {
      */
     public static final int TYPE_CHECKBOX = 4;
 
+    /**
+     * Field stores the type for divider items.
+     */
+    public static final int TYPE_DIVIDER = 8;
+
 
     /**
      * Attribute stores the title of the item.
