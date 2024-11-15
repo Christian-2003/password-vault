@@ -10,8 +10,10 @@
 
 <body>
 <h1>Autofill Service</h1>
-<p>Increase your productivity by allowing Password Vault to automatically fill login data into other
-    apps. This page contains information on how to configure this service.</p>
+<div class="container-info">
+    <p>Increase your productivity by allowing Password Vault to automatically fill login data into other
+        apps. This page contains information on how to configure this service.</p>
+</div>
 
 <h3>Table of Contents</h3>
 <ol>
@@ -22,6 +24,8 @@
     <li><a href="#cache">Cache</a></li>
 </ol>
 
+<hr>
+
 <h2 id="enable-autofill-service">Enable Autofill Service</h2>
 <p>In order to enable the autofill service, go to <b>Settings > Autofill</b>. If the autofill service
     is not yet enabled, the page will display a button <b>Enable autofill</b>:</p>
@@ -31,16 +35,21 @@
 <img src="../res/img/configure_autofill_enable_system.png"/>
 <p>Afterwards, Password Vault is selected as autofill service.</p>
 
+<hr>
+
 <h2 id="prepare-accounts-for-autofill">Prepare Accounts for Autofill</h2>
 <p>In order to autofill, Password Vault needs to know which account to use for which of your installed
     apps. This can be configured when you edit the respective account.</p>
-<p>Click on the <b>edit</b>-button to select an installed app:</p>
+<p>Click on the large box in the top left corner of the screen:</p>
 <img src="../res/img/configure_autofill_select_app.png"/>
 <p>Next, switch to <b>Installed apps</b> and select the apps which you want to autofill. You can
     select multiple apps if you want.</p>
 <img src="../res/img/configure_autofill_select_installed_app.png"/>
-<p>Afterwards, close the page. And click the <b>save</b>-button.</p>
+<p>Afterwards, close the page through which you selected an app for autofill. If you finish configuring
+    your account, close the underlying page as well:</p>
 <img src="../res/img/configure_autofill_select_save.png"/>
+
+<hr>
 
 <h2 id="which-details-are-selected">Which Details are Selected?</h2>
 <p>Usually, you need some sort of username and a password to login to an app. From all provided details,
@@ -50,13 +59,17 @@
 <img src="../res/img/configure_autofill_detail_define.png"/>
 <p>A username selected in this manner is indicated through a small e-mail icon. A password selected
     this way is indicated through a small password icon.</p>
-<p>If you select multiple details as username or password, the first one will be used for autofill.</p>
+<p>If you select multiple details as username or password, the first ones will be used for autofill.</p>
+
+<hr>
 
 <h2 id="authentication">Authentication</h2>
-<p>If the app login through a master password is enabled, the Password Vault requires you to authenticate
+<p>If the app login through a master password is enabled, the app requires you to authenticate
     either through your master password or through biometrics (if enabled), before providing autofill data.</p>
 <p>If you do not want this, you can disable authentication:</p>
 <img src="../res/img/configure_autofill_auth_disable.png"/>
+
+<hr>
 
 <h2 id="cache">Cache</h2>
 <p>Caching accelerates the autofill service. This is done by storing your login data in a separate

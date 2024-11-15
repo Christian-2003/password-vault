@@ -36,6 +36,7 @@ n/a
 * `MainActivity` displays a warning at the top of the page if a newer version of the app is available for download. This is done to immediately inform the user about a newer version.
 * Fixed bug where entries were sometimes not displayed after being loaded.
 * Added search functionality that searches entries and details.
+* Changes to styles of embedde help and legal pages to better match the overall app style of Password Vault.
 
 <br/>
 
