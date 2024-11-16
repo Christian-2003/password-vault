@@ -42,6 +42,11 @@ public class MainActivity extends PasswordVaultActivity<MainViewModel> implement
     private final ActivityResultLauncher<Intent> settingsLauncher;
 
     /**
+     * Attribute stores the launcher used to launch the {@link SearchActivity}.
+     */
+    private final ActivityResultLauncher<Intent> searchLauncher;
+
+    /**
      * Attribute stores the progress bar displaying that entries are being loaded.
      */
     private ProgressBar progressBar;
@@ -81,6 +86,12 @@ public class MainActivity extends PasswordVaultActivity<MainViewModel> implement
                 adapter.notifyDataSetChanged();
             }
         });
+
+        searchLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == SearchActivity.RESULT_DELETED && adapter != null) {
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
 
@@ -117,7 +128,7 @@ public class MainActivity extends PasswordVaultActivity<MainViewModel> implement
 
         //Setup app bar:
         findViewById(R.id.button_settings).setOnClickListener(view -> settingsLauncher.launch(new Intent(this, SettingsActivity.class)));
-        findViewById(R.id.search_bar).setOnClickListener(view -> startActivity(new Intent(this, SearchActivity.class)));
+        findViewById(R.id.search_bar).setOnClickListener(view -> searchLauncher.launch(new Intent(this, SearchActivity.class)));
 
         //Load entries:
         recyclerView = findViewById(R.id.recycler_view);

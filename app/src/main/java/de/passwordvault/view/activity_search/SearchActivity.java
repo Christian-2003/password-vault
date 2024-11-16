@@ -29,6 +29,12 @@ import de.passwordvault.view.utils.components.PasswordVaultActivity;
 public class SearchActivity extends PasswordVaultActivity<SearchViewModel> {
 
     /**
+     * Field stores the result code returned if some data was deleted.
+     */
+    public static final int RESULT_DELETED = 315;
+
+
+    /**
      * Attribute stores the progress bar indicating that the app is currently searching.
      */
     private ProgressBar progressBar;
@@ -71,9 +77,20 @@ public class SearchActivity extends PasswordVaultActivity<SearchViewModel> {
                     viewModel.getSearchResults().remove(i);
                 }
                 adapter.notifyItemRangeRemoved(viewModel.getFirstOpenedPosition() + SearchRecyclerViewAdapter.OFFSET_SEARCH_RESULTS, (viewModel.getLastOpenedPosition() - viewModel.getFirstOpenedPosition()) + 1);
+                viewModel.setResultCode(RESULT_DELETED);
             }
             viewModel.openEntry(-1);
         });
+    }
+
+
+    /**
+     * Method is called to close the activity.
+     */
+    @Override
+    public void finish() {
+        setResult(viewModel.getResultCode());
+        super.finish();
     }
 
 

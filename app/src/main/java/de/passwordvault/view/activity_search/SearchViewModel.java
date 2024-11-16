@@ -50,6 +50,11 @@ public class SearchViewModel extends ViewModel {
      */
     private int lastOpenedPosition;
 
+    /**
+     * Attribute stores the result code for the activity.
+     */
+    private int resultCode;
+
 
     /**
      * Constructor instantiates a new view model.
@@ -61,6 +66,7 @@ public class SearchViewModel extends ViewModel {
         finished = false;
         firstOpenedPosition = -1;
         lastOpenedPosition = -1;
+        resultCode = SearchActivity.RESULT_OK;
     }
 
 
@@ -108,6 +114,24 @@ public class SearchViewModel extends ViewModel {
     }
 
     /**
+     * Method returns the result code for the activity.
+     *
+     * @return  Result code.
+     */
+    public int getResultCode() {
+        return resultCode;
+    }
+
+    /**
+     * Method changes the result code for the activity.
+     *
+     * @param resultCode    New result code.
+     */
+    public void setResultCode(int resultCode) {
+        this.resultCode = resultCode;
+    }
+
+    /**
      * Method calculates {@link #firstOpenedPosition} and {@link #lastOpenedPosition} for the
      * entry whose search result at the passed position is opened.
      *
@@ -136,6 +160,7 @@ public class SearchViewModel extends ViewModel {
         }
 
         //Determine last position:
+        last = first;
         for (int i = first + 1; i < searchResults.size(); i++) {
             if (searchResults.get(i).getType() != SearchResult.TYPE_DETAIL) {
                 last = i - 1;
