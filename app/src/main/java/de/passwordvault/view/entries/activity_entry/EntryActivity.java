@@ -30,7 +30,6 @@ import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
 import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -328,6 +327,7 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
     @Override
     public void finish() {
         if (viewModel.isEdited() && viewModel.getEntry() != null) {
+            viewModel.getEntry().notifyDataChange();
             EntryManager.getInstance().set(viewModel.getEntry(), viewModel.getEntry().getUuid());
         }
         if (viewModel.isVisiblyEdited()) {

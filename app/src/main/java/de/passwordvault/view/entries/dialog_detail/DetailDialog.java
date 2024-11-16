@@ -371,6 +371,9 @@ public class DetailDialog extends PasswordVaultBottomSheetDialog<DetailViewModel
             contentContainer.setErrorEnabled(false);
         }
 
+        if (allInputsValid) {
+            detail.notifyDataChange();
+        }
         return allInputsValid;
     }
 
