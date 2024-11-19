@@ -2,9 +2,9 @@
 
 # Changelog
 
-## 3.7.0 (XXXX-XX-XX)
+## 3.7.0 (2024-11-19)
 ###### Release Highlights
-n/a
+Added extensive search functionality and reworked entire user interface.
 
 ###### Features
 * Introduced new app icons.
