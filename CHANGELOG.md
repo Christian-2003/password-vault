@@ -2,6 +2,15 @@
 
 # Changelog
 
+## 3.7.1 (XXXX-XX-XX)
+###### Release Highlights
+n./a.
+
+###### Features
+* n./a.
+
+<br/>
+
 ## 3.7.0 (2024-11-19)
 ###### Release Highlights
 Added extensive search functionality and reworked entire user interface.
