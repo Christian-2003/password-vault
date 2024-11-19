@@ -3,6 +3,7 @@ package de.passwordvault.view.utils.recycler_view;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -108,6 +109,76 @@ public abstract class RecyclerViewAdapter<V extends ViewModel> extends RecyclerV
 
     }
 
+    /**
+     * Class models the view holder for the placeholder used when no data is available.
+     */
+    public static class GenericEmptyPlaceholderViewHolder extends RecyclerView.ViewHolder {
+
+        /**
+         * Attribute store the image view displaying the placeholder image.
+         */
+        public final ImageView imageView;
+
+        /**
+         * Attribute stores the text view displaying the headline text.
+         */
+        public final TextView headlineTextView;
+
+        /**
+         * Attribute stores the text view displaying support text.
+         */
+        public final TextView supportTextView;
+
+
+        /**
+         * Constructor instantiates a new view holder.
+         *
+         * @param itemView  Inflated view for which to create the view holder.
+         */
+        public GenericEmptyPlaceholderViewHolder(View itemView) {
+            super(itemView);
+            imageView = itemView.findViewById(R.id.image);
+            headlineTextView = itemView.findViewById(R.id.text_headline);
+            supportTextView = itemView.findViewById(R.id.text_support);
+        }
+
+    }
+
+    /**
+     * Class models the view holder for the generic warning item.
+     */
+    public static class GenericWarningViewHolder extends RecyclerView.ViewHolder {
+
+        /**
+         * Attribute stores the text view displaying the warning text.
+         */
+        public final TextView warningTextView;
+
+        /**
+         * Attribute stores the button through which to cancel / dismiss the warning.
+         */
+        public final Button cancelButton;
+
+        /**
+         * Attribute stores the button through which to confirm / accept the warning.
+         */
+        public final Button confirmButton;
+
+
+        /**
+         * Constructor instantiates a new view holder for the specified view.
+         *
+         * @param itemView  Inflated view for which to create the view holder.
+         */
+        public GenericWarningViewHolder(View itemView) {
+            super(itemView);
+            warningTextView = itemView.findViewById(R.id.text);
+            cancelButton = itemView.findViewById(R.id.button_cancel);
+            confirmButton = itemView.findViewById(R.id.button_confirm);
+        }
+
+    }
+
 
     /**
      * Field stores the view type for the generic info.
@@ -123,6 +194,16 @@ public abstract class RecyclerViewAdapter<V extends ViewModel> extends RecyclerV
      * Field stores the view type for the generic headline button.
      */
     public static final int TYPE_GENERIC_HEADLINE_BUTTON = 8;
+
+    /**
+     * Field stores the view type for the generic empty list placeholder.
+     */
+    public static final int TYPE_GENERIC_EMPTY_PLACEHOLDER = 16;
+
+    /**
+     * Field stores the view type for the generic warning.
+     */
+    public static final int TYPE_GENERIC_WARNING = 32;
 
     /**
      * Field stores a tag used for logging.

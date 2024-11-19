@@ -139,13 +139,13 @@ public class RecyclerViewSwipeCallback extends ItemTouchHelper.Callback {
      * Attribute stores the left swipe action.
      */
     @Nullable
-    private final SwipeAction leftSwipeAction;
+    protected final SwipeAction leftSwipeAction;
 
     /**
      * Attribute stores the right swipe action.
      */
     @Nullable
-    private final SwipeAction rightSwipeAction;
+    protected final SwipeAction rightSwipeAction;
 
 
     /**
@@ -182,11 +182,11 @@ public class RecyclerViewSwipeCallback extends ItemTouchHelper.Callback {
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
         if (direction == ItemTouchHelper.LEFT && leftSwipeAction != null) {
-            leftSwipeAction.getSwipeListener().onAction(viewHolder);
+            leftSwipeAction.getSwipeListener().onAction(viewHolder.getAdapterPosition());
             adapter.notifyItemChanged(viewHolder.getAdapterPosition());
         }
         else if (direction == ItemTouchHelper.RIGHT && rightSwipeAction != null) {
-            rightSwipeAction.getSwipeListener().onAction(viewHolder);
+            rightSwipeAction.getSwipeListener().onAction(viewHolder.getAdapterPosition());
             adapter.notifyItemChanged(viewHolder.getAdapterPosition());
         }
     }
@@ -319,7 +319,7 @@ public class RecyclerViewSwipeCallback extends ItemTouchHelper.Callback {
             swipeAction = new SwipeAction(R.drawable.ic_delete, R.color.text_critical, deleteListener);
         }
         else if (action == DetailSwipeAction.EDIT && editListener != null) {
-            swipeAction = new SwipeAction(R.drawable.ic_edit, R.color.pv_primary, editListener);
+            swipeAction = new SwipeAction(R.drawable.ic_edit, R.color.primary, editListener);
         }
         return swipeAction;
     }
@@ -341,7 +341,7 @@ public class RecyclerViewSwipeCallback extends ItemTouchHelper.Callback {
             swipeAction = new SwipeAction(R.drawable.ic_delete, R.color.text_critical, deleteListener);
         }
         else if (action == DetailSwipeAction.EDIT && editListener != null) {
-            swipeAction = new SwipeAction(R.drawable.ic_edit, R.color.pv_primary, editListener);
+            swipeAction = new SwipeAction(R.drawable.ic_edit, R.color.primary, editListener);
         }
         return swipeAction;
     }

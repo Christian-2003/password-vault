@@ -1,6 +1,7 @@
 package de.passwordvault.view.utils.components;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,12 +56,6 @@ public class PasswordVaultBottomSheetDialog<V extends ViewModel> extends BottomS
 
 
     /**
-     * Field stores the key with which to pass a callback as argument.
-     */
-    public static final String ARG_CALLBACK = "arg_callback";
-
-
-    /**
      * Attribute stores the type of the view model for the dialog.
      */
     @Nullable
@@ -77,6 +72,14 @@ public class PasswordVaultBottomSheetDialog<V extends ViewModel> extends BottomS
      */
     protected V viewModel;
 
+    /**
+     * Attribute stores the callback for the dialog. This value is set when {@link #onAttach(Context)}
+     * is called. If the host for the dialog implements the {@link Callback}-interface, this value
+     * will not be {@code null} after the invocation of {@link #onAttach(Context)}.
+     */
+    @Nullable
+    protected Callback callback;
+
 
     /**
      * Constructor instantiates a new dialog.
@@ -88,6 +91,7 @@ public class PasswordVaultBottomSheetDialog<V extends ViewModel> extends BottomS
     public PasswordVaultBottomSheetDialog(@Nullable Class<V> viewModelType, @LayoutRes int layoutRes) {
         this.viewModelType = viewModelType;
         this.layoutRes = layoutRes;
+        callback = null;
     }
 
 
@@ -129,6 +133,20 @@ public class PasswordVaultBottomSheetDialog<V extends ViewModel> extends BottomS
             });
         }
         return super.onCreateDialog(savedInstanceState);
+    }
+
+
+    /**
+     * Method is called whenever the dialog is attached to a context (e.g. an activity).
+     *
+     * @param context   Context to which the dialog is attached.
+     */
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (getHost() instanceof Callback) {
+            callback = (Callback)getHost();
+        }
     }
 
 }

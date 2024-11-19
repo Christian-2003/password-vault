@@ -4,48 +4,46 @@
 
     <style name="Theme.PasswordVault" parent="Theme.Material3.Light.NoActionBar">
         <!-- Default app colors -->
-        <item name="colorPrimary">@color/pv_primary</item>
-        <item name="colorOnPrimary">@color/pv_text</item>
-        <item name="colorPrimaryContainer">@color/pv_primary</item>
-        <item name="colorOnPrimaryContainer">@color/pv_primary</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/text</item>
+        <item name="colorPrimaryContainer">@color/primary</item>
+        <item name="colorOnPrimaryContainer">@color/primary</item>
         <item name="colorError">@color/text_critical</item>
         <item name="colorErrorContainer">@color/background_critical</item>
         <item name="colorOnError">#FFFFFF</item>
         <item name="colorOnErrorContainer">#410002</item>
-        <item name="android:colorBackground">@color/pv_background</item>
-        <item name="colorOnBackground">@color/pv_text</item>
-        <item name="colorSurface">@color/pv_background</item>
-        <item name="colorOnSurface">@color/pv_text</item>
-        <item name="colorSurfaceVariant">@color/pv_background</item>
-        <item name="colorOnSurfaceVariant">@color/pv_background</item>
-        <item name="colorOutline">@color/pv_text_secondary</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorOnBackground">@color/text</item>
+        <item name="colorSurface">@color/background</item>
+        <item name="colorOnSurface">@color/text</item>
+        <item name="colorSurfaceVariant">@color/background</item>
+        <item name="colorOnSurfaceVariant">@color/background</item>
+        <item name="colorOutline">@color/text_light</item>
 
         <item name="android:statusBarColor">@color/background_app_bar</item>
-        <item name="android:colorBackgroundFloating">@color/pv_container</item>
+        <item name="android:colorBackgroundFloating">@color/background_container</item>
         <item name="android:windowLightNavigationBar">true</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:navigationBarColor">@color/pv_background</item>
-        <item name="colorControlActivated">@color/pv_primary</item>
-        <item name="android:textColorHighlight">@color/pv_primary_translucent</item>
+        <item name="android:navigationBarColor">@color/background</item>
+        <item name="colorControlActivated">@color/primary</item>
+        <item name="android:textColorHighlight">@color/primary_translucent</item>
+
+        <!-- Splash screen -->
+        <item name="android:windowSplashScreenBackground">@color/background</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>
+        <item name="android:windowSplashScreenAnimationDuration">@integer/anim_duration_splash</item>
+        <item name="android:windowSplashScreenBrandingImage">@drawable/ic_splash_branding</item>
 
         <!-- Default styles for material components -->
-        <item name="textInputStyle">@style/pv.material.text_input_layout</item>
-        <item name="materialSwitchStyle">@style/pv.material.switch</item>
-        <item name="floatingActionButtonStyle">@style/pv.material.fab</item>
-        <item name="materialAlertDialogTheme">@style/pv.material.dialog</item>
-        <item name="materialButtonStyle">@style/pv.material.button</item>
-        <item name="materialSearchBarStyle">@style/pv.material.search_bar</item>
-        <item name="radioButtonStyle">@style/pv.material.radio_button</item>
-        <item name="checkboxStyle">@style/pv.material.checkbox</item>
-        <item name="badgeStyle">@style/pv.material.badge</item>
-        <item name="chipStyle">@style/pv.material.chip</item>
-        <item name="bottomSheetDialogTheme">@style/view.bottomSheet</item>
-    </style>
-
-
-    <!-- Theme for activity in which the navigation bar needs to be colored the same as a container -->
-    <style name="Theme.PasswordVault.ContainerNavBar" parent="Theme.PasswordVault">
-        <item name="android:navigationBarColor">@color/pv_container</item>
+        <item name="textInputStyle">@style/component.text_input_layout</item>
+        <item name="materialSwitchStyle">@style/component.switch</item>
+        <item name="floatingActionButtonStyle">@style/component.fab</item>
+        <item name="materialAlertDialogTheme">@style/component.dialog</item>
+        <item name="materialButtonStyle">@style/component.button</item>
+        <item name="radioButtonStyle">@style/component.radio_button</item>
+        <item name="checkboxStyle">@style/component.checkbox</item>
+        <item name="chipStyle">@style/component.chip</item>
+        <item name="bottomSheetDialogTheme">@style/component.bottomSheet</item>
     </style>
 
 </resources>

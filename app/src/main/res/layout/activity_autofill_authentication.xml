@@ -9,25 +9,37 @@
     android:orientation="vertical"
     tools:context=".view.authentication.activity_autofill_authentication.AutofillAuthenticationActivity">
 
-    <androidx.appcompat.widget.Toolbar
+    <!-- Appbar for the activity -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/pv.app_bar">
+        android:layout_height="?attr/actionBarSize"
+        android:orientation="horizontal"
+        style="@style/app_bar">
 
-        <ImageButton
-            android:id="@+id/autofill_authentication_back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_back"
-            style="@style/pv.button.image_button.app_bar"/>
+        <FrameLayout
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize">
+
+            <ImageButton
+                android:id="@+id/button_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back"
+                android:layout_gravity="center"
+                tools:ignore="contentDescription"
+                style="@style/button.image.app_bar"/>
+
+        </FrameLayout>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
             android:text="@string/autofill_authentication_title"
-            style="@style/pv.text.app_bar"/>
+            style="@style/text.app_bar"/>
 
-    </androidx.appcompat.widget.Toolbar>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,11 +58,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.google.android.material.imageview.ShapeableImageView
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    app:shapeAppearanceOverlay="@style/rounded_corners"
                     app:srcCompat="@mipmap/ic_launcher_round"/>
 
                 <TextView
@@ -60,7 +71,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="@string/autofill_authentication_hint"
-                    style="@style/pv.text"/>
+                    style="@style/text"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/autofill_authentication_password_hint"

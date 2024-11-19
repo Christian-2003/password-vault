@@ -4,12 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.Resources;
-import android.database.Cursor;
-import android.net.Uri;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
-
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -42,6 +37,18 @@ public class Utils {
     public static String formatDate(Calendar date, String format) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
         return formatter.format(LocalDateTime.of(date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1, date.get(Calendar.DAY_OF_MONTH), date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE)));
+    }
+
+
+    /**
+     * Static method formats the passed {@code Calendar} instance into a formatted date of the current
+     * locale. The format might be e.g. {@code yyyy-MM-dd}.
+     *
+     * @param date      Date to be formatted.
+     * @return          Formatted date.
+     */
+    public static String formatDate(Calendar date) {
+        return formatDate(date, App.getContext().getString(R.string.date_format));
     }
 
 
@@ -87,13 +94,13 @@ public class Utils {
     public static int getPasswordSecurityScoreColor(int score) {
         double securityScorePercentage = (double)score / (double)QualityGateManager.getInstance().numberOfQualityGates();
         if (securityScorePercentage < 0.33) {
-            return App.getContext().getColor(R.color.pv_red);
+            return App.getContext().getColor(R.color.red);
         }
         else if (securityScorePercentage > 0.67) {
-            return App.getContext().getColor(R.color.pv_green);
+            return App.getContext().getColor(R.color.green);
         }
         else {
-            return App.getContext().getColor(R.color.pv_yellow);
+            return App.getContext().getColor(R.color.yellow);
         }
     }
 

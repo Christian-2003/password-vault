@@ -83,7 +83,7 @@ public class Detail implements Identifiable, Storable, Serializable {
         content = "";
         created = Calendar.getInstance();
         changed = created;
-        type = DetailType.UNDEFINED;
+        type = DetailType.TEXT;
         visible = true;
         obfuscated = false;
         password = false;
@@ -361,7 +361,10 @@ public class Detail implements Identifiable, Storable, Serializable {
      * for the available types.
      *
      * @return          String-array containing the String representations for the Detail types.
+     * @deprecated      Do not use this method anymore, since an array of types is only required in
+     *                  the dialog that edits a detail.
      */
+    @Deprecated
     public static String[] getTypes() {
         DetailType[] types = DetailType.values();
         String[] names = new String[types.length - 1]; //Ignore last DetailType, since this is DetailType.UNDEFINED.
@@ -377,7 +380,9 @@ public class Detail implements Identifiable, Storable, Serializable {
      *
      * @param typeName  Display name of the type to be returned.
      * @return          Type of the passed display name.
+     * @deprecated      Only required in dialog that edits a detail.
      */
+    @Deprecated
     public static DetailType getTypeByName(String typeName) {
         for (DetailType type : DetailType.values()) {
             if (type.getDisplayName().equals(typeName)) {

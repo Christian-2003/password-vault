@@ -1,7 +1,5 @@
 package de.passwordvault.view.utils.recycler_view;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 
 /**
  * Functional interface provides a generic action listener for recycler items.
@@ -14,8 +12,9 @@ public interface OnRecyclerViewActionListener {
     /**
      * Method is called whenever the recycler view action is invoked.
      *
-     * @param holder    View holder on which the action is invoked.
+     * @param position    Position of the item within the recycler view adapter for which the action
+     *                    is invoked.
      */
-    void onAction(RecyclerView.ViewHolder holder);
+    void onAction(int position);
 
 }

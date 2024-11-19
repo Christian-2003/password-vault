@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import de.passwordvault.R;
@@ -22,8 +22,8 @@ import de.passwordvault.view.settings.activity_data.SettingsDataActivity;
 import de.passwordvault.view.authentication.dialog_change_password.ChangePasswordDialog;
 import de.passwordvault.view.settings.activity_quality_gates.QualityGatesActivity;
 import de.passwordvault.view.settings.activity_recovery.RecoveryActivity;
-import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
-import de.passwordvault.view.activity_main.fragment_settings.SettingsViewModel;
+import de.passwordvault.view.settings.activity_settings.SettingsViewModel;
+import de.passwordvault.view.utils.components.PasswordVaultActivity;
 
 
 /**
@@ -32,7 +32,7 @@ import de.passwordvault.view.activity_main.fragment_settings.SettingsViewModel;
  * @author  Christian-2003
  * @version 3.6.0
  */
-public class SettingsSecurityActivity extends PasswordVaultBaseActivity implements AuthenticationCallback, CompoundButton.OnCheckedChangeListener {
+public class SettingsSecurityActivity extends PasswordVaultActivity<SettingsViewModel> implements AuthenticationCallback, CompoundButton.OnCheckedChangeListener {
 
     /**
      * Field stores the tag used for authentication when the app login is deactivated.
@@ -55,10 +55,9 @@ public class SettingsSecurityActivity extends PasswordVaultBaseActivity implemen
     private static final String TAG_AUTH_BIOMETRICS_ACTIVATE = "biometrics_on";
 
 
-    /**
-     * Attribute stores the view model for the activity.
-     */
-    private SettingsViewModel viewModel;
+    public SettingsSecurityActivity() {
+        super(SettingsViewModel.class, R.layout.activity_settings_security);
+    }
 
 
     /**
@@ -173,8 +172,6 @@ public class SettingsSecurityActivity extends PasswordVaultBaseActivity implemen
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings_security);
-        viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
 
         findViewById(R.id.button_back).setOnClickListener(view -> finish());
 

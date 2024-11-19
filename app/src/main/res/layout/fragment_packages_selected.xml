@@ -9,35 +9,10 @@
     android:orientation="vertical"
     tools:context=".view.entries.activity_packages.fragment_selected.PackagesSelectedFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/space_horizontal"
-        android:text="@string/packages_selected_title"
-        style="@style/pv.text.highlight"/>
-
-    <LinearLayout
-        android:id="@+id/packages_selected_none"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/pv.container">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/space_horizontal"
-            android:layout_marginVertical="@dimen/space_vertical"
-            android:text="@string/packages_selected_none"
-            style="@style/pv.text.variant"/>
-
-    </LinearLayout>
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/packages_selected_recycler_view"
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        style="@style/pv.container"/>
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
 </LinearLayout>

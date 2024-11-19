@@ -179,7 +179,7 @@ Due to backwards-incompatible changes...
 Always include information for people who update from version 3.5.6 or lower:
 ```markdown
 ###### Update From Version 3.5.6 or Lower
-If you update from version 3.5.6 or lower, please follow the [update guidelines](https://github.com/Christian-2003/password-vault/blob/master/docs/manual/Update%20to%20Newer%Versions.md) for updating to the newer versions.
+If you update from version 3.5.6 or lower, please follow the [update guidelines](https://github.com/Christian-2003/password-vault/blob/master/docs/manual/Update%20to%20Newer%20Versions.md) for updating to the newer versions.
 ```
 
 A complete release description could be as follows:
@@ -193,7 +193,7 @@ Due to backwards-incompatible changes...
 Minor changes to application UI as well as some bugfixes.
 
 ###### Update From Version 3.5.6 or Lower
-If you update from version 3.5.6 or lower, please follow the [update guidelines](https://github.com/Christian-2003/password-vault/blob/master/docs/manual/Update%20to%20Newer%Versions.md) for updating to the newer versions.
+If you update from version 3.5.6 or lower, please follow the [update guidelines](https://github.com/Christian-2003/password-vault/blob/master/docs/manual/Update%20to%20Newer%20Versions.md) for updating to the newer versions.
 ```
 
 After that, you may publish the release to GitHub.
@@ -230,5 +230,5 @@ This is a complete checklist of all steps that need to be taken to release a new
 <br/>
 
 ***
-2024-06-06  
+2024-09-28  
 &copy; Christian-2003

@@ -20,7 +20,7 @@ import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
  * Class implements a dialog through which the user can configure a security question.
  *
  * @author  Christian-2003
- * @version 3.6.0
+ * @version 3.7.0
  */
 public class SecurityQuestionDialog extends PasswordVaultBottomSheetDialog<SecurityQuestionViewModel> {
 
@@ -78,7 +78,7 @@ public class SecurityQuestionDialog extends PasswordVaultBottomSheetDialog<Secur
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         Bundle args = getArguments();
-        if (args != null && viewModel.getCallback() == null) {
+        if (args != null) {
             viewModel.processArguments(args);
         }
 
@@ -103,7 +103,9 @@ public class SecurityQuestionDialog extends PasswordVaultBottomSheetDialog<Secur
                     //Some necessary data was not entered:
                     return;
                 }
-                viewModel.getCallback().onCallback(this, Callback.RESULT_SUCCESS);
+                if (callback != null) {
+                    callback.onCallback(this, Callback.RESULT_SUCCESS);
+                }
                 dismiss();
             });
 

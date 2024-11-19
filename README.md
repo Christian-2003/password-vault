@@ -5,11 +5,12 @@
 ![GitHub](https://img.shields.io/github/issues/Christian-2003/password-vault?color=purple)
 ![GitHub](https://img.shields.io/github/repo-size/Christian-2003/password-vault?color=blue)
 
-Securely manage all your most sensitive account data locally on your Android device.
+Are you tired of managing all your account data? Password Vault stores your most sensitive account data like passwords or e-mail addresses with the highest industrial encryption standards on your device locally.
 
 <div align="center">
     <img src="docs/img/preview_1.png" height="390">
     <img src="docs/img/preview_2.png" height="390">
+    <img src="docs/img/preview_3.png" height="390">
 </div>
 
 
@@ -19,7 +20,6 @@ Securely manage all your most sensitive account data locally on your Android dev
 3. [Contributors](#contributors)
 4. [License](#license)
 5. [How to contribute](#how-to-contribute)
-5. [Other Images](#other-images)
 
 <br/>
 
@@ -27,7 +27,7 @@ Securely manage all your most sensitive account data locally on your Android dev
 Password Vault allows you to securely store your most sensitive account data on your device locally. You can add as many accounts to the app as you wish. Each account can contain as many details as you like, such as passwords, e-mail addresses, security questions, etc.
 
 ###### Used Technologies
-The application is developed with Java and XML through the Android Studio IDE. Therefore, the app is built using Gradle.
+The application is developed with Android Views and Java through the Android Studio IDE. Therefore, the app is built using Gradle.
 
 The app uses Google's Material Design to implement a comfortable and visually pleasing design, that users can intuitively work with.
 
@@ -77,16 +77,6 @@ The project will be developed in English.
 
 <br/>
 
-## Other Images
-
-<div align="center">
-    <img src="docs/img/preview_3.png" height="390">
-    <img src="docs/img/preview_4.png" height="390">
-    <img src="docs/img/preview_5.png" height="390">
-</div>
-
-<br/>
-
 ***
-2024-05-11  
+2024-11-16  
 &copy; Christian-2003

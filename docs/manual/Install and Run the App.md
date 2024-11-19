@@ -13,6 +13,9 @@ This page describes how you can install and run Password Vault on your Android d
 ## System Requirements
 The minimum required Android version to run Password Vault is **Android 12L** (SDK 32), since Password Vault requires numerous security features from the device's operating system to secure your data to the highest industrial standards.
 
+> [!IMPORTANT]  
+> Make sure that your Android device is updated to version Android 12.
+
 Android Version 12 consists of two feature releases, 12 and 12L respectively. Password Vault requires the feature release 12L from March 2022. Read more about Android releases [here](https://developer.android.com/tools/releases/platforms).
 
 If you do not know which Android version is installed on your device, go to **Settings > About phone > Software information > Android version**. If this does not work on your device, please consolidate your device's manual in order to find your current Android version.
@@ -46,7 +49,12 @@ If you encounter any problems after installing the app, try reinstalling. If thi
 <br>
 
 ## Cloning This Repository
-An alternative to downloading a release APK is to clone this repository instead. This gives you access to all features that are currently in development. To do so, follow these steps:
+An alternative to downloading a release APK is to clone this repository instead. This gives you access to all features that are currently in development.
+
+> [!CAUTION]
+> We do not recommend to install the app using this method, since this will include features that might not work correctly and harm your app data.
+
+To do so, follow these steps:
 
 ###### Clone the Repository
 Firstly, you need to clone this repository, you can do this through GitHub Desktop or through the Git command line interface (CLI), by entering this command:  
@@ -62,10 +70,8 @@ Please note that many features within the repository are being developed. Such f
 
 Furthermore, features may be changed or removed which could result in a complete loss of your data.
 
-Please note that we do not recommend to run the project this way. This is only intended for debugging and development.
-
 <br>
 
 ***
-2024-02-23  
+2024-11-08 
 &copy; Christian-2003

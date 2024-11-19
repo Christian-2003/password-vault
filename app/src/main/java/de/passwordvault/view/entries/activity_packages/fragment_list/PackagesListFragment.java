@@ -1,26 +1,18 @@
 package de.passwordvault.view.entries.activity_packages.fragment_list;
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
+import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
 import de.passwordvault.model.packages.Package;
-import de.passwordvault.model.packages.PackagesManager;
 import de.passwordvault.view.entries.activity_packages.PackagesActivity;
-import de.passwordvault.view.utils.recycler_view.OnRecyclerItemClickListener;
-import de.passwordvault.view.entries.activity_packages.PackagesRecyclerViewAdapter;
-import de.passwordvault.view.utils.components.PasswordVaultBaseFragment;
-import de.passwordvault.view.utils.components.SearchBarView;
+import de.passwordvault.view.utils.components.PasswordVaultFragment;
 import de.passwordvault.view.entries.activity_packages.PackagesViewModel;
 
 
@@ -31,12 +23,7 @@ import de.passwordvault.view.entries.activity_packages.PackagesViewModel;
  * @author  Christian-2003
  * @version 3.5.2
  */
-public class PackagesListFragment extends PasswordVaultBaseFragment implements OnRecyclerItemClickListener<Package> {
-
-    /**
-     * Attribute stores the view model of the fragment and it's host activity.
-     */
-    private PackagesViewModel viewModel;
+public class PackagesListFragment extends PasswordVaultFragment<PackagesViewModel> {
 
     /**
      * Attribute stores the view of the fragment.
@@ -46,12 +33,13 @@ public class PackagesListFragment extends PasswordVaultBaseFragment implements O
     /**
      * Attribute stores the adapter to display installed packages.
      */
-    private PackagesRecyclerViewAdapter adapter;
+    @Nullable
+    private PackagesListRecyclerViewAdapter adapter;
 
-    /**
-     * Attribute stores the search bar.
-     */
-    private SearchBarView searchBar;
+
+    public PackagesListFragment() {
+        super(PackagesViewModel.class, R.layout.fragment_packages_list);
+    }
 
 
     /**
@@ -65,68 +53,11 @@ public class PackagesListFragment extends PasswordVaultBaseFragment implements O
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_packages_list, container, false);
-        viewModel = new ViewModelProvider(requireActivity()).get(PackagesViewModel.class);
+        view = super.onCreateView(inflater, container, savedInstanceState);
 
-        searchBar = view.findViewById(R.id.search_bar);
-        searchBar.setVisibility(viewModel.isSearchBarVisible() ? View.VISIBLE : View.GONE);
-        searchBar.addTextChangeListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (adapter != null) {
-                    adapter.getFilter().filter(editable);
-                }
-            }
-        });
-
-        loadData();
+        viewModel.loadPackages(this::onDataLoaded);
 
         return view;
-    }
-
-
-    /**
-     * Method is called when the item which is passed as argument is clicked by the user.
-     *
-     * @param item      Clicked item.
-     * @param position  Index of the clicked item.
-     */
-    @Override
-    public void onItemClick(Package item, int position) {
-        if (!viewModel.getPackages().containsPackageName(item.getPackageName())) {
-            viewModel.getPackages().add(item);
-            FragmentActivity activity = requireActivity();
-            if (activity instanceof PackagesActivity) {
-                ((PackagesActivity)activity).notifyPackageAdded();
-            }
-            adapter.notifyItemChanged(position);
-        }
-    }
-
-
-    /**
-     * Method is called by the host activity when the search button is clicked.
-     */
-    public void searchButtonClicked() {
-        viewModel.setSearchBarVisible(!viewModel.isSearchBarVisible());
-        if (viewModel.isSearchBarVisible()) {
-            searchBar.setVisibility(View.VISIBLE);
-            searchBar.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left));
-        }
-        else {
-            searchBar.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_left));
-            searchBar.postDelayed(() -> searchBar.setVisibility(View.GONE), getResources().getInteger(R.integer.default_anim_duration));
-        }
     }
 
 
@@ -140,43 +71,50 @@ public class PackagesListFragment extends PasswordVaultBaseFragment implements O
     }
 
 
-    private void loadData() {
-        View progressBarContainer = view.findViewById(R.id.container_progress_bar);
-        View contentContainer = view.findViewById(R.id.container_content);
-        progressBarContainer.setVisibility(View.VISIBLE);
-        contentContainer.setVisibility(View.GONE);
+    public void filter(String searchQuery) {
+        if (adapter != null) {
+            adapter.filter(searchQuery);
+        }
+    }
 
-        Thread thread = new Thread(() -> {
-            PackagesManager.getInstance().getSortedPackages();
-            try {
-                dataLoadedCallback();
-            }
-            catch (Exception e) {
-                //Cannot update UI (maybe, the activity no longer exists)...
-                Log.w("PackagesListFragment", "Thread finished when fragment nonexistent");
-            }
-        });
-        thread.start();
+    public void resetFilter() {
+        if (adapter != null) {
+            adapter.resetFilter();
+        }
     }
 
 
-    private void dataLoadedCallback() {
+    private void onDataLoaded() {
         requireActivity().runOnUiThread(() -> {
-            View progressBarContainer = view.findViewById(R.id.container_progress_bar);
-            View contentContainer = view.findViewById(R.id.container_content);
+            ProgressBar progressBar = view.findViewById(R.id.progress_bar);
+            progressBar.setVisibility(View.GONE);
 
             if (adapter == null) {
-                adapter = new PackagesRecyclerViewAdapter(PackagesManager.getInstance().getSortedPackages(), viewModel.getPackages(), this, null);
-                RecyclerView recyclerView = view.findViewById(R.id.packages_list_recycler_view);
+                adapter = new PackagesListRecyclerViewAdapter(requireActivity(), viewModel);
+                adapter.setItemClickListener(this::onPackageClicked);
+                RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
                 recyclerView.setAdapter(adapter);
             }
             else {
                 adapter.notifyDataSetChanged();
             }
-
-            progressBarContainer.setVisibility(View.GONE);
-            contentContainer.setVisibility(View.VISIBLE);
         });
+    }
+
+
+    private void onPackageClicked(int position) {
+        if (adapter == null) {
+            return;
+        }
+        Package clickedPackage = adapter.getPackageForAdapterPosition(position);
+        if (!viewModel.getSelectedPackages().containsPackageName(clickedPackage.getPackageName())) {
+            viewModel.getSelectedPackages().add(clickedPackage);
+            FragmentActivity activity = requireActivity();
+            if(activity instanceof PackagesActivity) {
+                ((PackagesActivity)activity).notifyPackageAdded();
+            }
+            adapter.notifyItemChanged(position);
+        }
     }
 
 }

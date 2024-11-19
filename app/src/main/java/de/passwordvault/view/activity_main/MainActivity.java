@@ -2,135 +2,114 @@ package de.passwordvault.view.activity_main;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProvider;
-import android.annotation.SuppressLint;
+import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
-import android.widget.Toast;
-import com.google.android.material.navigation.NavigationBarView;
+import android.view.View;
+import android.widget.ProgressBar;
 import de.passwordvault.R;
 import de.passwordvault.model.UpdateManager;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryManager;
-import de.passwordvault.view.entries.activity_add_entry.AddEntryActivity;
+import de.passwordvault.view.activity_search.SearchActivity;
 import de.passwordvault.view.entries.activity_entry.EntryActivity;
-import de.passwordvault.view.utils.recycler_view.OnRecyclerItemClickListener;
-import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
+import de.passwordvault.view.settings.activity_settings.SettingsActivity;
+import de.passwordvault.view.utils.components.PasswordVaultActivity;
 
 
 /**
- * Class implements the MainActivity for this application. This MainActivity resembles the starting
- * point for the application and contains multiple fragments with different functionalities.
+ * Class implements the MainActivity for this application, displaying a list of all entries.
  *
  * @author  Christian-2003
- * @version 3.5.2
+ * @version 3.7.0
  */
-public class MainActivity extends PasswordVaultBaseActivity implements NavigationBarView.OnItemSelectedListener, OnRecyclerItemClickListener<EntryAbbreviated> {
+public class MainActivity extends PasswordVaultActivity<MainViewModel> implements UpdateManager.UpdateStatusChangedCallback {
 
     /**
-     * Attribute stores the {@linkplain androidx.lifecycle.ViewModel} for this activity.
+     * Attribute stores the adapter for the recycler view which displays the abbreviated entries.
      */
-    private MainViewModel viewModel;
+    private MainRecyclerViewAdapter adapter;
 
     /**
-     * Attribute stores the activity result launcher used to start the activity which shows an entry.
+     * Attribute stores the launcher used to start the {@link EntryActivity}.
      */
-    private final ActivityResultLauncher<Intent> showEntryLauncher;
+    private final ActivityResultLauncher<Intent> entryLauncher;
 
     /**
-     * Attribute stores the activity result launcher used to start the activity through which to add
-     * a new entry.
+     * Attribute stores the launcher used to launch the {@link SettingsActivity}.
      */
-    private final ActivityResultLauncher<Intent> addEntryLauncher;
+    private final ActivityResultLauncher<Intent> settingsLauncher;
 
     /**
-     * Attribute stores the navigation bar / navigation rail of the activity.
+     * Attribute stores the launcher used to launch the {@link SearchActivity}.
      */
-    private NavigationBarView navigationBarView;
+    private final ActivityResultLauncher<Intent> searchLauncher;
+
+    /**
+     * Attribute stores the progress bar displaying that entries are being loaded.
+     */
+    private ProgressBar progressBar;
+
+    /**
+     * Attribute stores the recycler view displaying the main page content.
+     */
+    private RecyclerView recyclerView;
 
 
     /**
      * Constructor instantiates a new activity.
      */
     public MainActivity() {
+        super(MainViewModel.class, R.layout.activity_main);
+
         //Show entry:
-        showEntryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result != null && (result.getResultCode() == EntryActivity.RESULT_EDITED || result.getResultCode() == EntryActivity.RESULT_DELETED)) {
-                viewModel.getHomeFragment().update(EntryManager.getInstance());
-                viewModel.getEntriesFragment().updateDataset();
+        entryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (adapter != null) {
+                int adapterPosition = viewModel.getOpenedEntryAdapterPosition();
+                if (adapterPosition >= MainRecyclerViewAdapter.OFFSET_ENTRIES && adapterPosition <= MainRecyclerViewAdapter.OFFSET_ENTRIES + adapter.getItemCount()) {
+                    if (result.getResultCode() == EntryActivity.RESULT_DELETED) {
+                        adapter.notifyItemRemoved(adapterPosition);
+                    }
+                    else if (result.getResultCode() == EntryActivity.RESULT_EDITED) {
+                        adapter.notifyDataSetChanged(); //Need to update entire adapter since data is sorted alphabetically
+                    }
+                }
+                else if (adapterPosition == -1 && result.getResultCode() == EntryActivity.RESULT_EDITED) {
+                    adapter.notifyDataSetChanged(); //Need to update entire adapter since data is sorted alphabetically
+                }
             }
         });
 
-        //Add entry:
-        addEntryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            Log.d("AddEntry", "MainActivity: ResultCode=" + result.getResultCode());
-            if (result != null && result.getResultCode() == RESULT_OK) {
-                viewModel.getHomeFragment().update(EntryManager.getInstance());
-                viewModel.getEntriesFragment().updateDataset();
+        settingsLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (viewModel.isChangedSinceLastCacheGeneration() && adapter != null) {
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        searchLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == SearchActivity.RESULT_DELETED && adapter != null) {
+                adapter.notifyDataSetChanged();
             }
         });
     }
 
 
     /**
-     * Method is called whenever a menu item in the {@linkplain NavigationBarView} is selected and
-     * changes the view that is displayed within this MainActivity to the corresponding fragment.
+     * Callback is invoked when the update manager determines whether a new update is available or
+     * not.
      *
-     * @param item  Menu item that was selected.
-     * @return      Whether clicked menu item could change the fragment successfully.
-     */
-    @SuppressLint("NonConstantResourceId")
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return switchToFragment(item.getItemId(), false);
-    }
-
-
-    /**
-     * Method switches to the fragment of the passed id. This method is needed for fragments of this
-     * activity to change the displayed fragment. This will update the {@linkplain NavigationBarView}
-     * to display the item that is switched to as "selected".
-     *
-     * @param id    Id of the fragment to which to switch.
-     * @return      Whether the fragment was switched successfully.
-     */
-    public boolean switchToFragment(int id) {
-        return switchToFragment(id, true);
-    }
-
-
-    /**
-     * Method is called whenever an entry within any recycler view is clicked.
-     *
-     * @param item      Clicked item.
-     * @param position  Index of the clicked item.
+     * @param updateAvailable   Whether an update is available.
      */
     @Override
-    public void onItemClick(EntryAbbreviated item, int position) {
-        Intent intent = new Intent(this, EntryActivity.class);
-        intent.putExtra("uuid", item.getUuid());
-        try {
-            showEntryLauncher.launch(intent);
-        }
-        catch (Exception e) {
-            Toast.makeText(this, "Cannot show entry", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-    /**
-     * Method starts the activity which allows the user to add a new entry.
-     */
-    public void addNewEntry() {
-        Intent intent = new Intent(this, AddEntryActivity.class);
-        try {
-            addEntryLauncher.launch(intent);
-        }
-        catch (Exception e) {
-            Toast.makeText(this, "Cannot add new entry", Toast.LENGTH_SHORT).show();
+    public void onUpdateStatusChanged(boolean updateAvailable) {
+        if (updateAvailable) {
+            viewModel.updateAvailable();
+            if (adapter != null) {
+                runOnUiThread(() -> {
+                    adapter.notifyItemChanged(MainRecyclerViewAdapter.POSITION_UPDATE_INFO);
+                });
+            }
         }
     }
 
@@ -143,19 +122,22 @@ public class MainActivity extends PasswordVaultBaseActivity implements Navigatio
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         //Add action listener to FAB:
-        findViewById(R.id.main_fab).setOnClickListener(view -> addNewEntry());
+        findViewById(R.id.main_fab).setOnClickListener(view -> onAddEntry());
 
-        //Configure navigation bar:
-        navigationBarView = findViewById(R.id.main_navigation);
-        navigationBarView.setOnItemSelectedListener(this);
-        navigationBarView.setSelectedItemId(viewModel.getSelectedItem());
+        //Setup app bar:
+        findViewById(R.id.button_settings).setOnClickListener(view -> settingsLauncher.launch(new Intent(this, SettingsActivity.class)));
+        findViewById(R.id.search_bar).setOnClickListener(view -> searchLauncher.launch(new Intent(this, SearchActivity.class)));
 
-        //Check for updates:
-        UpdateManager.getInstance(this, this::onUpdateStatusChanged);
+        //Load entries:
+        recyclerView = findViewById(R.id.recycler_view);
+        progressBar = findViewById(R.id.progress_bar);
+        recyclerView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        viewModel.loadAllEntries(this::onEntriesLoaded, false);
+
+        UpdateManager.getInstance(this, this);
     }
 
 
@@ -184,53 +166,53 @@ public class MainActivity extends PasswordVaultBaseActivity implements Navigatio
 
 
     /**
-     * Method switches to the fragment of the passed id. This method is needed for fragments of this
-     * activity to change the displayed fragment. Pass {@code true} as argument {@code updateUi}
-     * if the {@link NavigationBarView} shall be updated by this method. This is not required if
-     * the method is called when the user clicks on the respective item.
+     * Method is called whenever an entry is clicked.
      *
-     * @param id        Id of the fragment to which to switch.
-     * @param updateUi  Whether the UI shall be updated or not.
-     * @return          Whether the fragment was switched successfully.
+     * @param position  Adapter position of the entry clicked.
      */
-    private boolean switchToFragment(int id, boolean updateUi) {
-        switch (id) {
-            case R.id.menu_home:
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, viewModel.getHomeFragment()).commit();
-                viewModel.setSelectedItem(R.id.menu_home);
-                if (updateUi) {
-                    ((NavigationBarView)findViewById(R.id.main_navigation)).setSelectedItemId(R.id.menu_home);
-                }
-                return true;
-            case R.id.menu_entries:
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, viewModel.getEntriesFragment()).commit();
-                viewModel.setSelectedItem(R.id.menu_entries);
-                if (updateUi) {
-                    ((NavigationBarView)findViewById(R.id.main_navigation)).setSelectedItemId(R.id.menu_entries);
-                }
-                return true;
-
-            case R.id.menu_settings:
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, viewModel.getSettingsFragment()).commit();
-                viewModel.setSelectedItem(R.id.menu_settings);
-                if (updateUi) {
-                    ((NavigationBarView)findViewById(R.id.main_navigation)).setSelectedItemId(R.id.menu_settings);
-                }
-                return true;
+    private void onEntryClicked(int position) {
+        EntryAbbreviated entry = adapter.getEntryForAdapterPosition(position);
+        if (entry != null) {
+            Intent intent = new Intent(this, EntryActivity.class);
+            intent.putExtra(EntryActivity.KEY_ID, entry.getUuid());
+            viewModel.setOpenedEntryAdapterPosition(position);
+            entryLauncher.launch(intent);
         }
-        return false;
     }
 
 
     /**
-     * Method is called when the update state is registered the first time.
-     *
-     * @param updateAvailable   Whether an update is available.
+     * Method is called whenever to add a new entry.
      */
-    private void onUpdateStatusChanged(boolean updateAvailable) {
-        if (updateAvailable) {
-            navigationBarView.getOrCreateBadge(R.id.menu_settings);
-        }
+    private void onAddEntry() {
+        Intent intent = new Intent(this, EntryActivity.class);
+        viewModel.setOpenedEntryAdapterPosition(-1);
+        entryLauncher.launch(intent);
+    }
+
+
+    /**
+     * Method requests to download the newest version of the app.
+     *
+     * @param position  Adapter position which invoked the click event.
+     */
+    private void onUpdateClicked(int position) {
+        UpdateManager.getInstance(this).requestDownload(this);
+    }
+
+
+    /**
+     * Method is called as callback once all entries are loaded and available to display.
+     */
+    private void onEntriesLoaded() {
+        runOnUiThread(() -> {
+            progressBar.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            adapter = new MainRecyclerViewAdapter(this, viewModel);
+            adapter.setItemClickListener(this::onEntryClicked);
+            adapter.setUpdateClickListener(this::onUpdateClicked);
+            recyclerView.setAdapter(adapter);
+        });
     }
 
 }

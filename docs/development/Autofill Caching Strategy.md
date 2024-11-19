@@ -22,7 +22,15 @@ The autofill service uses three different caches to fulfill it's task. All of th
 ###### Mapping Cache
 The `MappingCache` maps a _package name_ to a list of _UUIDs_. Each UUID represents an account that contains autofill data for the respective app. The cache is stored in the file _autofill_mapping.cache_ within the internal app storage.
 
-The mapping cache looks as follows:
+The Backus-Naur form (BNF) for the mapping cache looks as follows:
+```bnf
+      <mapping-cache> ::= <mapping-cache-list>
+ <mapping-cache-list> ::= <mapping-cache-entry> "\n" <mapping-cache-list> | ""
+<mapping-cache-entry> ::= <package-name> ";" <uuid-list>
+          <uuid-list> ::= <uuid> "," <uuid-list> | <uuid>
+```
+
+Therefore, the mapping cache looks as follows:
 ```csv
 <package_name1>;<uuid11>,<uuid12>,<uuid13>,...
 <package_name2>;<uuid21>,<uuid22>,<uuid23>,...
@@ -40,7 +48,14 @@ com.companyname.test;29911ca7-2c1e-49c2-a346-6089dc3692ed,19cb7668-f16a-4780-81f
 ###### Content Cache
 The `ContentCache` stores _username_, _password_ and _entry name_ for an account, which is represented through it's _UUID_ within the cache. The cache is stored in the file _autofill_content.cache_ within the internal app storage.
 
-The content cache looks as follows:
+The BNF for the content cache looks as follows:
+```bnf
+      <content-cache> ::= <content-cache-list>
+ <content-cache-list> ::= <content-cache-entry> "\n" <content-cache-list> | ""
+<content-cache-entry> ::= <uuid> ";" <username> "," <password> "," <entry-name>
+```
+
+Therefore, the content cache looks as follows:
 ```csv
 <uuid1>;<username1>,<password1>,<entry1>
 <uuid2>;<username2>,<password2>,<entry2>
@@ -62,7 +77,14 @@ If no password or username is available with an account, the respective column i
 ###### Invalidation Cache
 The `InvalidationCache` stores the _UUID_ of each entry that has been changed by the user and is no longer valid. The invalidation cache is stored in _autofill_invalidation.cache_ within the internal app storage.
 
-The invalidation cache looks as follows:
+The BNF for the content cache looks as follows:
+```bnf
+      <invalidation-cache> ::= <invalidation-cache-list>
+ <invalidation-cache-list> ::= <invalidation-cache-entry> ";\n" <invalidation-cache-list> | ""
+<invalidation-cache-entry> ::= <uuid>
+```
+
+Therefore, the invalidation cache looks as follows:
 ```csv
 <uuid1>;
 <uuid2>;
@@ -80,5 +102,5 @@ bd4fc592-f9c9-4d39-8705-164789a2df32;
 <br/>
 
 ***
-2024-04-02  
+2024-11-08 
 &copy; Christian-2003

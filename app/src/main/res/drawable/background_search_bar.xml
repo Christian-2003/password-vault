@@ -5,6 +5,6 @@
 
     <corners android:radius="100dp"/>
 
-    <solid android:color="@color/pv_container"/>
+    <solid android:color="@color/background_container"/>
 
 </shape>

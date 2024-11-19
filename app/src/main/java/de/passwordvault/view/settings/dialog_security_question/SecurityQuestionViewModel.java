@@ -16,11 +16,6 @@ import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
 public class SecurityQuestionViewModel extends ViewModel {
 
     /**
-     * Attribute stores the callback listener for the dialog.
-     */
-    private PasswordVaultBottomSheetDialog.Callback callback;
-
-    /**
      * Attribute stores the security question that is edited by the user.
      */
     private SecurityQuestion question;
@@ -48,22 +43,12 @@ public class SecurityQuestionViewModel extends ViewModel {
      * Constructor instantiates a new view model.
      */
     public SecurityQuestionViewModel() {
-        callback = null;
         question = null;
         availableQuestions = null;
         allQuestions = SecurityQuestion.getAllQuestions();
         selectedQuestionIndex = -1;
     }
 
-
-    /**
-     * Method returns the callback for the dialog.
-     *
-     * @return  Callback.
-     */
-    public PasswordVaultBottomSheetDialog.Callback getCallback() {
-        return callback;
-    }
 
     /**
      * Method returns the security question that is being edited by the dialog.
@@ -120,16 +105,6 @@ public class SecurityQuestionViewModel extends ViewModel {
     public void processArguments(Bundle args) {
         if (args == null) {
             return;
-        }
-
-        //Get callback:
-        if (args.containsKey(SecurityQuestionDialog.ARG_CALLBACK)) {
-            try {
-                callback = (PasswordVaultBottomSheetDialog.Callback)args.getSerializable(SecurityQuestionDialog.ARG_CALLBACK);
-            }
-            catch (ClassCastException e) {
-                //Ignore...
-            }
         }
 
         //Get available security questions:

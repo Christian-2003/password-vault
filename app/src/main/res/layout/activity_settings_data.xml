@@ -46,7 +46,8 @@
     <!-- Content for the activity -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -220,7 +221,7 @@
                 android:layout_height="@dimen/progress_bar_thickness_large"
                 android:layout_marginHorizontal="@dimen/space_horizontal"
                 android:background="@drawable/pill"
-                android:backgroundTint="@color/pv_container_detail"
+                android:backgroundTint="@color/background_container"
                 android:clipToOutline="true"/>
 
             <GridLayout
@@ -233,15 +234,15 @@
 
                 <View
                     android:layout_gravity="center_vertical"
-                    android:backgroundTint="@color/pv_text_secondary"
+                    android:backgroundTint="@color/text_light"
                     android:layout_marginEnd="@dimen/space_horizontal_between"
-                    style="@style/pv.progess_bar_legend"/>
+                    style="@style/data_progress_bar_legend"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_data_storage_used"
-                    style="@style/pv.text"/>
+                    style="@style/text"/>
 
                 <TextView
                     android:id="@+id/used"
@@ -249,19 +250,19 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_horizontal_between"
                     tools:text="0 GB"
-                    style="@style/pv.text"/>
+                    style="@style/text"/>
 
                 <View
                     android:layout_gravity="center_vertical"
-                    android:backgroundTint="@color/pv_primary"
+                    android:backgroundTint="@color/primary"
                     android:layout_marginEnd="@dimen/space_horizontal_between"
-                    style="@style/pv.progess_bar_legend"/>
+                    style="@style/data_progress_bar_legend"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_data_storage_app"
-                    style="@style/pv.text"/>
+                    style="@style/text"/>
 
                 <TextView
                     android:id="@+id/app"
@@ -269,19 +270,19 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_horizontal_between"
                     tools:text="0 MB"
-                    style="@style/pv.text"/>
+                    style="@style/text"/>
 
                 <View
                     android:layout_gravity="center_vertical"
-                    android:backgroundTint="@color/pv_green"
+                    android:backgroundTint="@color/green"
                     android:layout_marginEnd="@dimen/space_horizontal_between"
-                    style="@style/pv.progess_bar_legend"/>
+                    style="@style/data_progress_bar_legend"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_data_storage_data"
-                    style="@style/pv.text"/>
+                    style="@style/text"/>
 
                 <TextView
                     android:id="@+id/data"
@@ -289,19 +290,19 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_horizontal_between"
                     tools:text="0 MB"
-                    style="@style/pv.text"/>
+                    style="@style/text"/>
 
                 <View
                     android:layout_gravity="center_vertical"
-                    android:backgroundTint="@color/pv_yellow"
+                    android:backgroundTint="@color/yellow"
                     android:layout_marginEnd="@dimen/space_horizontal_between"
-                    style="@style/pv.progess_bar_legend"/>
+                    style="@style/data_progress_bar_legend"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_data_storage_cache"
-                    style="@style/pv.text"/>
+                    style="@style/text"/>
 
                 <TextView
                     android:id="@+id/cache"
@@ -309,19 +310,19 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_horizontal_between"
                     tools:text="0 MB"
-                    style="@style/pv.text"/>
+                    style="@style/text"/>
 
                 <View
                     android:layout_gravity="center_vertical"
-                    android:backgroundTint="@color/pv_container_detail"
+                    android:backgroundTint="@color/background_container"
                     android:layout_marginEnd="@dimen/space_horizontal_between"
-                    style="@style/pv.progess_bar_legend"/>
+                    style="@style/data_progress_bar_legend"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_data_storage_free"
-                    style="@style/pv.text"/>
+                    style="@style/text"/>
 
                 <TextView
                     android:id="@+id/free"
@@ -329,7 +330,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_horizontal_between"
                     tools:text="0 GB"
-                    style="@style/pv.text"/>
+                    style="@style/text"/>
 
             </GridLayout>
 
@@ -394,14 +395,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_search_qualitygates"
-                style="@style/pv.material.button.different"/>
+                style="@style/button.different"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_search_masterpassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_search_masterpassword"
-                style="@style/pv.material.button.different"/>
+                style="@style/button.different"/>
 
         </LinearLayout>
 

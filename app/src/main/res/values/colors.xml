@@ -9,11 +9,19 @@
     <color name="background_nav_bar">#EFEdF2</color>
     <color name="background_container">#E9E7EC</color>
     <color name="background_critical">#FFDAD6</color>
+    <color name="background_warning">#FFEBD6</color>
 
     <color name="text">#1B1A1F</color>
     <color name="text_light">#444750</color>
     <color name="text_critical">#BA1A1A</color>
+    <color name="text_warning">#BB5E1B</color>
+    <color name="text_warning_translucent">#33BB5E1B</color>
+    <color name="text_on_primary">#FAFAFA</color>
     <color name="divider">#C5C7C6</color>
+
+    <color name="red">#D14147</color>
+    <color name="yellow">#BAB41B</color>
+    <color name="green">#86C03F</color>
 
     <!-- Light / dark variants needed for dialog to switch darkmode -->
     <color name="light_background">#FAF9FE</color>
@@ -22,39 +30,4 @@
     <color name="dark_background">#121317</color>
     <color name="dark_container">#292A2E</color>
     <color name="dark_highlight">#9929A7A1</color>
-
-
-
-    <!-- DEPRECATED BELOW -->
-    <color name="pv_primary">#1D7874</color>
-    <color name="pv_primary_translucent">#991D7874</color>
-    <color name="pv_background">#FAF9FE</color>
-
-    <color name="pv_container">#F5F3F8</color>
-    <color name="pv_container_highlight">#BFE3E2</color>
-    <color name="pv_container_detail">#F2F2F2</color>
-
-    <color name="pv_text">#1B1A1F</color>
-    <color name="pv_text_secondary">#44474E</color>
-    <color name="pv_text_primary">#1D7874</color>
-    <color name="pv_text_onPrimary">#FAFAFA</color>
-
-    <color name="pv_red">#FB5F2E</color>
-    <color name="pv_green">#03D58A</color>
-    <color name="pv_yellow">#F0C430</color>
-
-    <color name="pv_icon_green">#11A960</color>
-
-    <color name="pv_detail_blue">#3A21D1</color>
-    <color name="pv_detail_green">#00A66A</color>
-    <color name="pv_detail_red">#B74E4E</color>
-    <color name="pv_detail_yellow">#CBA622</color>
-
-    <!-- Light / dark variants needed for dialog to switch darkmode -->
-    <color name="pv_background_light">#F6F6F8</color>
-    <color name="pv_container_light">#FCFCFE</color>
-    <color name="pv_container_highlight_light">#BFE3E2</color>
-    <color name="pv_background_dark">#505357</color>
-    <color name="pv_container_dark">#666b70</color>
-    <color name="pv_container_highlight_dark">#5029A7A1</color>
 </resources>

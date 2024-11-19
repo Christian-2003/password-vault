@@ -12,7 +12,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import de.passwordvault.App;
 import de.passwordvault.R;
@@ -23,8 +22,8 @@ import de.passwordvault.model.storage.settings.Config;
 import de.passwordvault.service.autofill.caching.ContentCache;
 import de.passwordvault.service.autofill.caching.InvalidationCache;
 import de.passwordvault.service.autofill.caching.MappingCache;
-import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
-import de.passwordvault.view.activity_main.fragment_settings.SettingsViewModel;
+import de.passwordvault.view.utils.components.PasswordVaultActivity;
+import de.passwordvault.view.settings.activity_settings.SettingsViewModel;
 
 
 /**
@@ -33,7 +32,7 @@ import de.passwordvault.view.activity_main.fragment_settings.SettingsViewModel;
  * @author  Christian-2003
  * @version 3.5.3
  */
-public class SettingsAutofillActivity extends PasswordVaultBaseActivity implements AuthenticationCallback, CompoundButton.OnCheckedChangeListener {
+public class SettingsAutofillActivity extends PasswordVaultActivity<SettingsViewModel> implements AuthenticationCallback, CompoundButton.OnCheckedChangeListener {
 
     /**
      * Field stores the tag used for authentication when autofill authentication is deactivated.
@@ -47,11 +46,6 @@ public class SettingsAutofillActivity extends PasswordVaultBaseActivity implemen
 
 
     /**
-     * Attribute stores the view model for the activity.
-     */
-    private SettingsViewModel viewModel;
-
-    /**
      * Attribute stores the activity result launcher used to activate the autofill service.
      */
     private final ActivityResultLauncher<Intent> activateAutofillLauncher;
@@ -61,6 +55,8 @@ public class SettingsAutofillActivity extends PasswordVaultBaseActivity implemen
      * Constructor instantiates a new activity.
      */
     public SettingsAutofillActivity() {
+        super(SettingsViewModel.class, R.layout.activity_settings_autofill);
+
         //Autofill:
         activateAutofillLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             findViewById(R.id.settings_autofill_toggle_container).setVisibility(viewModel.useAutofillService() ? View.GONE : View.VISIBLE);
@@ -146,8 +142,6 @@ public class SettingsAutofillActivity extends PasswordVaultBaseActivity implemen
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings_autofill);
-        viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
 
         findViewById(R.id.button_back).setOnClickListener(view -> finish());
 
@@ -177,7 +171,7 @@ public class SettingsAutofillActivity extends PasswordVaultBaseActivity implemen
 
 
     /**
-     * Method starts the process of enabeling the autofill service.
+     * Method starts the process of enabling the autofill service.
      */
     private void enableAutofill() {
         Intent intent = new Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE, Uri.parse("package: " + App.getContext().getPackageName()));
@@ -191,7 +185,7 @@ public class SettingsAutofillActivity extends PasswordVaultBaseActivity implemen
 
 
     /**
-     * Method deletes all autofull caches.
+     * Method deletes all autofill caches.
      */
     private void clearAutofillCaches() {
         boolean errorOccurred = !MappingCache.deleteCache();

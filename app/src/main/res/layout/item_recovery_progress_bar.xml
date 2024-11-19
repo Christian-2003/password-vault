@@ -14,7 +14,7 @@
         android:layout_height="@dimen/progress_bar_thickness_large"
         android:layout_gravity="center"
         android:orientation="horizontal"
-        style="@style/pv.eyecatcher.pill">
+        style="@style/pill">
 
         <TextView
             android:id="@+id/text_score"
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/space_horizontal_between"
-            android:textColor="@color/pv_primary"
+            android:textColor="@color/text"
             android:textStyle="bold"
             tools:text="0 / 0"
             style="@style/text"/>

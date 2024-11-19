@@ -2,15 +2,14 @@ package de.passwordvault.view.entries.activity_packages;
 
 import android.os.Bundle;
 import android.util.Log;
-
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
 import com.google.android.material.tabs.TabLayout;
-
 import java.util.ArrayList;
-
 import de.passwordvault.R;
 import de.passwordvault.model.packages.Package;
 import de.passwordvault.model.packages.PackageCollection;
+import de.passwordvault.model.packages.PackagesManager;
 import de.passwordvault.model.packages.SerializablePackage;
 import de.passwordvault.model.packages.SerializablePackageCollection;
 import de.passwordvault.view.entries.activity_packages.fragment_list.PackagesListFragment;
@@ -20,34 +19,36 @@ import de.passwordvault.view.entries.activity_packages.fragment_list.PackagesLis
  * Class implements a view model for {@link PackagesActivity}.
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.7.0
  */
 public class PackagesViewModel extends ViewModel {
 
     /**
      * Attribute stores the packages that are selected by the activity.
      */
-    private PackageCollection packages;
+    private PackageCollection selectedPackages;
 
     /**
-     * Attribute stores whether the search bar of the {@link PackagesListFragment}
-     * is visible.
+     * Attribute stores a list of all packages.
      */
-    private boolean searchBarVisible;
-
-    /**
-     * Attribute stores all packages to be displayed by the activity.
-     */
+    @Nullable
     private ArrayList<Package> allPackages;
+
+    /**
+     * Attribute stores the search query entered by the user. If this is {@code null}, the search
+     * bar is currently invisible.
+     */
+    @Nullable
+    private String searchQuery;
 
 
     /**
      * Constructor instantiates a new view model for the {@link PackagesActivity} and it's fragments.
      */
     public PackagesViewModel() {
-        packages = null;
-        searchBarVisible = false;
+        selectedPackages = null;
         allPackages = null;
+        searchQuery = null;
     }
 
 
@@ -57,39 +58,53 @@ public class PackagesViewModel extends ViewModel {
      *
      * @return  Selected packages.
      */
-    public PackageCollection getPackages() {
-        return packages;
+    public PackageCollection getSelectedPackages() {
+        return selectedPackages;
     }
 
     /**
      * Method changes the selected packages to the passed argument.
      *
-     * @param packages              New collection of selected packages.
+     * @param selectedPackages              New collection of selected packages.
      * @throws NullPointerException The passed argument is {@code null}.
      */
-    public void setPackages(PackageCollection packages) throws NullPointerException {
-        if (packages == null) {
+    public void setSelectedPackages(PackageCollection selectedPackages) throws NullPointerException {
+        if (selectedPackages == null) {
             throw new NullPointerException();
         }
-        this.packages = packages;
+        this.selectedPackages = selectedPackages;
     }
 
     /**
-     * Method returns whether the search bar is visible.
+     * Method returns a list of all packages.
      *
-     * @return  Whether the search bar is visible.
+     * @return  List of all packages.
      */
-    public boolean isSearchBarVisible() {
-        return searchBarVisible;
+    @Nullable
+    public ArrayList<Package> getAllPackages() {
+        return allPackages;
+    }
+
+
+    /**
+     * Method changes the search query entered by the user. Pass {@code null} to indicate that the
+     * search query is currently not enabled.
+     *
+     * @param searchQuery   Search query entered by the user.
+     */
+    public void setSearchQuery(@Nullable String searchQuery) {
+        this.searchQuery = searchQuery;
     }
 
     /**
-     * Method changes whether the search bar is visible.
+     * Method returns the search query entered by the user. This is {@code null} if the search bar
+     * is currently not visible.
      *
-     * @param searchBarVisible  Whether the search bar is visible.
+     * @return  Search query entered by the user.
      */
-    public void setSearchBarVisible(boolean searchBarVisible) {
-        this.searchBarVisible = searchBarVisible;
+    @Nullable
+    public String getSearchQuery() {
+        return searchQuery;
     }
 
 
@@ -101,14 +116,14 @@ public class PackagesViewModel extends ViewModel {
      */
     public boolean processArguments(Bundle args) {
         if (args == null) {
-            setPackages(new PackageCollection());
+            setSelectedPackages(new PackageCollection());
             return true;
         }
         if (args.containsKey(PackagesActivity.KEY_PACKAGES)) {
             try {
                 ArrayList<SerializablePackage> packages = (ArrayList<SerializablePackage>)args.getSerializable(PackagesActivity.KEY_PACKAGES);
                 SerializablePackageCollection serializablePackages = new SerializablePackageCollection(packages);
-                setPackages(serializablePackages.toPackageCollection());
+                setSelectedPackages(serializablePackages.toPackageCollection());
             }
             catch (Exception e) {
                 Log.d("PA", e.getMessage());
@@ -135,6 +150,27 @@ public class PackagesViewModel extends ViewModel {
                 tab.setText(R.string.packages_list_title);
                 break;
         }
+    }
+
+
+    /**
+     * Method loads all packages and invokes the passed runnable afterwards.
+     *
+     * @param runnable  Runnable to invoke after the packages are loaded.
+     */
+    public void loadPackages(@Nullable Runnable runnable) {
+        Thread thread = new Thread(() -> {
+            allPackages = PackagesManager.getInstance().getSortedPackages();
+            if (runnable != null) {
+                try {
+                    runnable.run();
+                }
+                catch (Exception e) {
+                    Log.w("PackagesViewModel", "Cannot update UI after packages loaded: " + e.getMessage());
+                }
+            }
+        });
+        thread.start();
     }
 
 }

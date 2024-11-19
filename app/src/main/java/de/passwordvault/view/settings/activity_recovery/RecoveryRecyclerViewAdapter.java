@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -79,9 +79,9 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
         public final TextView answerTextView;
 
         /**
-         * Attribute stores the container which contains the answer which can be collapsed.
+         * Attribute stores the button to display more options.
          */
-        public final LinearLayout containerAnswer;
+        public final ImageButton moreButton;
 
 
         /**
@@ -93,7 +93,7 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
             super(itemView);
             questionTextView = itemView.findViewById(R.id.text_question);
             answerTextView = itemView.findViewById(R.id.text_answer);
-            containerAnswer = itemView.findViewById(R.id.container_answer);
+            moreButton = itemView.findViewById(R.id.button_more);
         }
 
     }
@@ -112,7 +112,17 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
     /**
      * Field stores the offset with which the security questions are positioned within the adapter.
      */
-    public static final int QUESTIONS_OFFSET = 4;
+    public static final int OFFSET_QUESTIONS = 5;
+
+    /**
+     * Field stores the position of the progress bar.
+     */
+    public static final int POSITION_PROGRESS_BAR = 2;
+
+    /**
+     * Field stores the position of the empty placeholder
+     */
+    public static final int POSITION_EMPTY_PLACEHOLDER = 4;
 
 
     /**
@@ -120,6 +130,12 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
      */
     @Nullable
     private OnRecyclerViewActionListener addQuestionListener;
+
+    /**
+     * Attribute stores the listener invoked to show more options for a question.
+     */
+    @Nullable
+    private OnRecyclerViewActionListener questionMoreListener;
 
 
     /**
@@ -130,6 +146,8 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
      */
     public RecoveryRecyclerViewAdapter(@NonNull Context context, @NonNull RecoveryViewModel viewModel) {
         super(context, viewModel);
+        addQuestionListener = null;
+        questionMoreListener = null;
     }
 
 
@@ -140,6 +158,15 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
      */
     public void setAddQuestionListener(@Nullable OnRecyclerViewActionListener addQuestionListener) {
         this.addQuestionListener = addQuestionListener;
+    }
+
+    /**
+     * Method changes the listener invoked when more options for a question shall be displayed.
+     *
+     * @param questionMoreListener  New listener.
+     */
+    public void setQuestionMoreListener(@Nullable OnRecyclerViewActionListener questionMoreListener) {
+        this.questionMoreListener = questionMoreListener;
     }
 
 
@@ -171,6 +198,10 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
             case TYPE_RECOVERY_PROGRESS_BAR:
                 view = layoutInflater.inflate(R.layout.item_recovery_progress_bar, parent, false);
                 holder = new RecoveryProgressBarViewHolder(view);
+                break;
+            case TYPE_GENERIC_EMPTY_PLACEHOLDER:
+                view = layoutInflater.inflate(R.layout.item_generic_empty_placeholder, parent, false);
+                holder = new GenericEmptyPlaceholderViewHolder(view);
                 break;
             default:
                 view = layoutInflater.inflate(R.layout.item_recovery_question, parent, false);
@@ -219,23 +250,43 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
                     viewHolder.buttonImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_add));
                     viewHolder.itemView.setOnClickListener(view -> {
                         if (addQuestionListener != null) {
-                            addQuestionListener.onAction(holder);
+                            addQuestionListener.onAction(holder.getAdapterPosition());
                         }
                     });
                     break;
                 }
+                case 4: {
+                    GenericEmptyPlaceholderViewHolder viewHolder = (GenericEmptyPlaceholderViewHolder)holder;
+                    if (viewModel.getSecurityQuestions().isEmpty()) {
+                        viewHolder.imageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.el_security_question));
+                        viewHolder.headlineTextView.setText(context.getString(R.string.recovery_questions_empty_headline));
+                        viewHolder.supportTextView.setText(context.getString(R.string.recovery_questions_empty_support));
+                        viewHolder.itemView.setVisibility(View.VISIBLE);
+                        viewHolder.itemView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    }
+                    else {
+                        viewHolder.itemView.setVisibility(View.VISIBLE);
+                        viewHolder.itemView.setLayoutParams(new ViewGroup.LayoutParams(0, 0));
+                    }
+                    break;
+                }
                 default: {
                     RecoveryQuestionViewHolder viewHolder = (RecoveryQuestionViewHolder)holder;
-                    SecurityQuestion question = viewModel.getSecurityQuestions().get(position - QUESTIONS_OFFSET);
+                    SecurityQuestion question = viewModel.getSecurityQuestions().get(position - OFFSET_QUESTIONS);
                     String[] allQuestions = context.getResources().getStringArray(R.array.security_questions);
                     viewHolder.questionTextView.setText(allQuestions[question.getQuestion()]);
                     viewHolder.answerTextView.setText(question.getAnswer());
-                    viewHolder.containerAnswer.setVisibility(question.isExpanded() ? View.VISIBLE : View.GONE);
+                    viewHolder.answerTextView.setVisibility(question.isExpanded() ? View.VISIBLE : View.GONE);
                     viewHolder.itemView.setOnClickListener(view -> {
                         if (!recyclerView.isAnimating()) {
-                            viewHolder.containerAnswer.setVisibility(question.isExpanded() ? View.GONE : View.VISIBLE);
+                            viewHolder.answerTextView.setVisibility(question.isExpanded() ? View.GONE : View.VISIBLE);
                             question.setExpanded(!question.isExpanded());
                             notifyItemChanged(position);
+                        }
+                    });
+                    viewHolder.moreButton.setOnClickListener(view -> {
+                        if (questionMoreListener != null) {
+                            questionMoreListener.onAction(holder.getAdapterPosition());
                         }
                     });
                     break;
@@ -255,7 +306,7 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
      */
     @Override
     public int getItemCount() {
-        return viewModel.getSecurityQuestions().size() + QUESTIONS_OFFSET;
+        return viewModel.getSecurityQuestions().size() + OFFSET_QUESTIONS;
     }
 
 
@@ -276,6 +327,8 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
                 return TYPE_RECOVERY_PROGRESS_BAR;
             case 3:
                 return TYPE_GENERIC_HEADLINE_BUTTON;
+            case 4:
+                return TYPE_GENERIC_EMPTY_PLACEHOLDER;
             default:
                 return TYPE_RECOVERY_QUESTION;
         }
@@ -289,7 +342,7 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
      * @return          Whether the view at the specified position supports swiping.
      */
     public boolean supportsSwipe(int position) {
-        return position >= QUESTIONS_OFFSET;
+        return position >= OFFSET_QUESTIONS;
     }
 
 }

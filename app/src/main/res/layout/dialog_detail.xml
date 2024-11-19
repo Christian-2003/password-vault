@@ -1,97 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!--
-LinearLayout models the structure for the custom layout of the DialogDetailFragment
-class.
--->
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/space_horizontal"
         android:paddingVertical="@dimen/space_vertical"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/pv.material.text_input_layout.exposed_dropdown"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/space_vertical"
+            android:layout_marginEnd="@dimen/space_horizontal_between"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_edit"
+            style="@style/image.light"/>
+
+        <TextView
+            android:id="@+id/text_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/detail_dialog_type">
-
-            <AutoCompleteTextView
-                android:id="@+id/detail_dialog_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="none"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/detail_dialog_name_hint"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/detail_dialog_name">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/detail_dialog_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:inputType="text"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/detail_dialog_content_hint"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:passwordToggleDrawable="@drawable/drawable_password"
-            android:hint="@string/detail_dialog_content">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/detail_dialog_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textNoSuggestions|textVisiblePassword"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <CheckBox
-            android:id="@+id/detail_dialog_obfuscated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/detail_dialog_obfuscated"
-            style="@style/pv.text"/>
-
-        <CheckBox
-            android:id="@+id/detail_dialog_visible"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/detail_dialog_visible"
-            android:checked="true"
-            style="@style/pv.text"/>
-
-        <CheckBox
-            android:id="@+id/detail_dialog_username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/detail_dialog_username"
-            android:checked="false"
-            style="@style/pv.text"/>
-
-        <CheckBox
-            android:id="@+id/detail_dialog_password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/detail_dialog_password"
-            android:checked="false"
-            style="@style/pv.text"/>
+            android:layout_gravity="center"
+            tools:text="@string/detail_dialog_title_edit"
+            style="@style/text.headline"/>
 
     </LinearLayout>
 
-</ScrollView>
+    <View style="@style/divider"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/space_vertical"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
+                android:hint="@string/detail_dialog_type"
+                style="@style/component.text_input_layout.exposed_dropdown">
+
+                <AutoCompleteTextView
+                    android:id="@+id/input_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    tools:text="Password"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/container_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
+                android:hint="@string/detail_dialog_name">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:inputType="text"
+                    tools:text="Account Password"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/container_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/space_vertical"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
+                app:passwordToggleDrawable="@drawable/drawable_password"
+                android:hint="@string/detail_dialog_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textNoSuggestions|textVisiblePassword"
+                    tools:text="*********"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <de.passwordvault.ui.checkbox.CheckboxUiView
+                android:id="@+id/checkbox_obfuscate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:text="@string/detail_dialog_obfuscated"/>
+
+            <de.passwordvault.ui.checkbox.CheckboxUiView
+                android:id="@+id/checkbox_visible"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:text="@string/detail_dialog_visible"/>
+
+            <de.passwordvault.ui.checkbox.CheckboxUiView
+                android:id="@+id/checkbox_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:text="@string/detail_dialog_username"/>
+
+            <de.passwordvault.ui.checkbox.CheckboxUiView
+                android:id="@+id/checkbox_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:text="@string/detail_dialog_password"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
+                android:layout_marginVertical="@dimen/space_vertical"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/button_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/space_horizontal_between"
+                    android:text="@string/button_cancel"/>
+
+                <Button
+                    android:id="@+id/button_save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/button_save"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

@@ -12,8 +12,6 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/space_horizontal"
         android:paddingVertical="@dimen/space_vertical"
-        style="@style/pv.text"/>
-
-    <View style="@style/pv.divider"/>
+        style="@style/text"/>
 
 </LinearLayout>

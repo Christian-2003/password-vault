@@ -2,6 +2,9 @@ package de.passwordvault.model.packages;
 
 import android.content.pm.ApplicationInfo;
 import android.graphics.drawable.Drawable;
+
+import java.util.Objects;
+
 import de.passwordvault.model.Identifiable;
 import de.passwordvault.model.entry.EntryAbbreviated;
 
@@ -135,6 +138,34 @@ public class Package extends SerializablePackage implements Comparable<Package> 
      */
     public boolean matchesFilter(CharSequence s) {
         return getAppName().toLowerCase().contains(s) || getPackageName().toLowerCase().contains(s);
+    }
+
+
+    /**
+     * Method tests whether the package name of the passed package is identical to the package name
+     * of this instance.
+     *
+     * @param obj   Package to test.
+     * @return      Whether both package names are identical.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Package) {
+            Package p = (Package)obj;
+            return p.getPackageName().equals(packageName);
+        }
+        return false;
+    }
+
+
+    /**
+     * Method returns the hash code for this package.
+     *
+     * @return  Hash code.
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(packageName);
     }
 
 }

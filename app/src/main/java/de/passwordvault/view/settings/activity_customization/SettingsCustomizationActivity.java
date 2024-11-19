@@ -2,27 +2,27 @@ package de.passwordvault.view.settings.activity_customization;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
 import de.passwordvault.R;
 import de.passwordvault.view.settings.dialog_darkmode.DarkmodeDialog;
 import de.passwordvault.view.settings.dialog_swipe.SwipeDialog;
-import de.passwordvault.view.settings.dialog_recently_edited.RecentlyEditedDialog;
-import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
-import de.passwordvault.view.activity_main.fragment_settings.SettingsViewModel;
+import de.passwordvault.view.utils.components.PasswordVaultActivity;
+import de.passwordvault.view.settings.activity_settings.SettingsViewModel;
 
 
 /**
  * Class implements the activity which allows the user to customize the app.
  *
  * @author  Christian-2003
- * @version 3.5.2
+ * @version 3.7.0
  */
-public class SettingsCustomizationActivity extends PasswordVaultBaseActivity {
+public class SettingsCustomizationActivity extends PasswordVaultActivity<SettingsViewModel> {
 
     /**
-     * Attribute stores the view model for the activity.
+     * Constructor instantiates a new activity.
      */
-    private SettingsViewModel viewModel;
+    public SettingsCustomizationActivity() {
+        super(SettingsViewModel.class, R.layout.activity_settings_customization);
+    }
 
 
     /**
@@ -33,18 +33,11 @@ public class SettingsCustomizationActivity extends PasswordVaultBaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings_customization);
-        viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
 
         findViewById(R.id.button_back).setOnClickListener(view -> finish());
 
         //Appearance:
         findViewById(R.id.settings_customization_appearance_darkmode_conatainer).setOnClickListener(view -> changeDarkmode());
-
-        //Home page:
-        findViewById(R.id.settings_customization_home_recentlyedited_conatainer).setOnClickListener(view -> changeNumberOfMostRecentlyEditedEntries());
-
-        //Details:
         findViewById(R.id.settings_customization_details_swipe_conatainer).setOnClickListener(view -> changeSwipeActions());
     }
 
@@ -54,15 +47,6 @@ public class SettingsCustomizationActivity extends PasswordVaultBaseActivity {
      */
     private void changeDarkmode() {
         DarkmodeDialog dialog = new DarkmodeDialog();
-        dialog.show(getSupportFragmentManager(), "");
-    }
-
-    /**
-     * Method shows the dialog to change the number of most recently edited entries on the home
-     * fragment.
-     */
-    private void changeNumberOfMostRecentlyEditedEntries() {
-        RecentlyEditedDialog dialog = new RecentlyEditedDialog();
         dialog.show(getSupportFragmentManager(), "");
     }
 

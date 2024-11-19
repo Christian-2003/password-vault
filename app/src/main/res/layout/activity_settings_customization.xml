@@ -46,7 +46,8 @@
     <!-- Content for the activity -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -131,61 +132,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/settings_customization_details_swipe_info"
-                        style="@style/text.light"/>
-
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/space_horizontal_between"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_next"
-                    tools:ignore="ContentDescription"
-                    style="@style/image.item"/>
-
-            </LinearLayout>
-
-            <View style="@style/divider"/>
-
-
-
-            <!-- Home page -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/settings_customization_home"
-                android:layout_marginHorizontal="@dimen/space_horizontal"
-                android:layout_marginVertical="@dimen/space_vertical"
-                style="@style/text.headline"/>
-
-            <LinearLayout
-                android:id="@+id/settings_customization_home_recentlyedited_conatainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:foreground="?attr/selectableItemBackground"
-                android:paddingHorizontal="@dimen/space_horizontal"
-                android:paddingVertical="@dimen/space_vertical"
-                android:clickable="true"
-                android:focusable="true"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_customization_home_recentlyedited"
-                        style="@style/text"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_customization_home_recentlyedited_info"
                         style="@style/text.light"/>
 
                 </LinearLayout>

@@ -20,7 +20,7 @@
             android:layout_marginVertical="@dimen/space_vertical"
             android:layout_marginEnd="@dimen/space_horizontal_between"
             android:layout_gravity="center"
-            android:src="@drawable/ic_help"
+            android:src="@drawable/ic_edit"
             style="@style/image.light"/>
 
         <TextView
@@ -51,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/recovery_question"
-                style="@style/pv.material.text_input_layout.exposed_dropdown">
+                style="@style/component.text_input_layout.exposed_dropdown">
 
                 <AutoCompleteTextView
                     android:id="@+id/input_question"

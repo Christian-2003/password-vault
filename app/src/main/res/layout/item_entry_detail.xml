@@ -9,42 +9,53 @@
     android:layout_height="wrap_content"
     android:paddingVertical="@dimen/space_vertical_between"
     android:orientation="horizontal"
-    android:background="?attr/selectableItemBackground"
-    android:clickable="true">
+    android:foreground="?attr/selectableItemBackground"
+    android:background="@color/background"
+    android:longClickable="true"
+    android:focusable="true">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="@dimen/image_l"
-        android:layout_height="@dimen/image_l"
-        android:layout_gravity="center"
+    <ImageView
+        android:id="@+id/image_detail"
+        android:layout_width="@dimen/image_m"
+        android:layout_height="@dimen/image_m"
         android:layout_marginStart="@dimen/space_horizontal"
-        app:cardCornerRadius="28dp">
+        android:background="@drawable/background_logo_abbreviation"
+        app:tint="@color/primary"
+        tools:src="@drawable/detail_text"
+        tools:ignore="contentDescription"/>
 
-        <ImageView
-            android:id="@+id/image_detail"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:src="@drawable/detail_text"
-            tools:ignore="contentDescription"/>
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_marginHorizontal="@dimen/space_horizontal_between"
+        android:layout_gravity="center"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/text_name"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:ellipsize="end"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Detail name"
-            style="@style/pv.text.title"/>
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/image_autofill"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/space_horizontal_small"
+                tools:src="@drawable/ic_password"
+                style="@style/image.light.small"/>
+
+            <TextView
+                android:id="@+id/text_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Detail name"
+                style="@style/text.light"/>
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/text_content"
@@ -54,29 +65,37 @@
             android:ellipsize="end"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_name"
-            tools:text="Detail name"
-            style="@style/pv.text"/>
+            tools:text="Detail content that is soo long that it takes two lines of space"
+            style="@style/text"/>
 
-        <TextView
-            android:id="@+id/text_date"
-            style="@style/pv.text.secondary"
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/image_m"
+        android:layout_marginEnd="@dimen/space_horizontal_end_button"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/button_obfuscate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:text="2024-07-24" />
+            android:layout_gravity="center"
+            android:src="@drawable/ic_show"
+            android:visibility="gone"
+            tools:ignore="contentDescription"
+            tools:visibility="visible"
+            style="@style/button.image"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageButton
+            android:id="@+id/button_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_more"
+            tools:ignore="contentDescription"
+            style="@style/button.image"/>
 
-    <ImageButton
-        android:id="@+id/button_copy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginEnd="@dimen/space_horizontal"
-        android:src="@drawable/ic_copy"
-        tools:ignore="contentDescription"
-        style="@style/pv.button.image_button"/>
+    </LinearLayout>
 
 </LinearLayout>

@@ -8,7 +8,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -17,7 +16,7 @@ import de.passwordvault.R;
 import de.passwordvault.model.security.authentication.AuthenticationCallback;
 import de.passwordvault.model.security.authentication.AuthenticationFailure;
 import de.passwordvault.model.security.authentication.Authenticator;
-import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
+import de.passwordvault.view.utils.components.PasswordVaultActivity;
 
 
 /**
@@ -27,7 +26,7 @@ import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
  * @author  Christian-2003
  * @version 3.6.0
  */
-public class SecurityQuestionActivity extends PasswordVaultBaseActivity implements AuthenticationCallback {
+public class SecurityQuestionActivity extends PasswordVaultActivity<SecurityQuestionViewModel> implements AuthenticationCallback {
 
     /**
      * Class implements a callback for when the displayed security question is changed.
@@ -92,11 +91,6 @@ public class SecurityQuestionActivity extends PasswordVaultBaseActivity implemen
 
 
     /**
-     * Attribute stores the view model of the activity.
-     */
-    private SecurityQuestionViewModel viewModel;
-
-    /**
      * Attribute stores the adapter for the security questions.
      */
     private EnterSecurityAnswerRecyclerViewAdapter adapter;
@@ -118,6 +112,14 @@ public class SecurityQuestionActivity extends PasswordVaultBaseActivity implemen
 
 
     /**
+     * Constructor instantiates a new activity.
+     */
+    public SecurityQuestionActivity() {
+        super(SecurityQuestionViewModel.class, R.layout.activity_security_question);
+    }
+
+
+    /**
      * Method is called whenever the activity is created.
      *
      * @param savedInstanceState    Previously saved state of the instance.
@@ -125,8 +127,6 @@ public class SecurityQuestionActivity extends PasswordVaultBaseActivity implemen
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_security_question);
-        viewModel = new ViewModelProvider(this).get(SecurityQuestionViewModel.class);
 
         //Back button:
         findViewById(R.id.button_back).setOnClickListener(view -> finish());

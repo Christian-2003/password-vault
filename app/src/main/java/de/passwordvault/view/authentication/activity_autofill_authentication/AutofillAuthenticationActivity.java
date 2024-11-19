@@ -11,6 +11,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.textfield.TextInputEditText;
@@ -20,7 +21,6 @@ import de.passwordvault.R;
 import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.storage.settings.Config;
 import de.passwordvault.view.authentication.activity_login.LoginActivity;
-import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
 
 
 /**
@@ -33,7 +33,7 @@ import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
  * @author  Christian-2003
  * @version 3.5.0
  */
-public class AutofillAuthenticationActivity extends PasswordVaultBaseActivity {
+public class AutofillAuthenticationActivity extends AppCompatActivity {
 
     /**
      * Field stores the key that must be used when passing a list of datasets that shall be displayed
@@ -91,7 +91,7 @@ public class AutofillAuthenticationActivity extends PasswordVaultBaseActivity {
         });
 
         findViewById(R.id.autofill_authentication_authenticate_button).setOnClickListener(view -> authenticate());
-        findViewById(R.id.autofill_authentication_back_button).setOnClickListener(view -> onFailure());
+        findViewById(R.id.button_back).setOnClickListener(view -> onFailure());
 
         if (biometricPrompt == null) {
             biometricPrompt = new BiometricPrompt(AutofillAuthenticationActivity.this, viewModel.getExecutor(), new BiometricPrompt.AuthenticationCallback() {

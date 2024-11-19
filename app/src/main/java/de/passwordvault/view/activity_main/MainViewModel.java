@@ -1,10 +1,11 @@
 package de.passwordvault.view.activity_main;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
-import de.passwordvault.R;
-import de.passwordvault.view.activity_main.fragment_entries.EntriesFragment;
-import de.passwordvault.view.activity_main.fragment_home.HomeFragment;
-import de.passwordvault.view.activity_main.fragment_settings.SettingsFragment;
+import java.util.ArrayList;
+import de.passwordvault.model.entry.EntryAbbreviated;
+import de.passwordvault.model.entry.EntryManager;
+import de.passwordvault.model.storage.app.StorageException;
 
 
 /**
@@ -12,86 +13,151 @@ import de.passwordvault.view.activity_main.fragment_settings.SettingsFragment;
  * that shall be persistent throughout activity changes.
  *
  * @author  Christian-2003
- * @version 1.0.0
+ * @version 3.7.0
  */
 public class MainViewModel extends ViewModel {
 
     /**
-     * Attribute stores the HomeFragment of the activity.
+     * Attribute stores the adapter position of an entry that is currently opened from the MainActivity.
      */
-    private final HomeFragment homeFragment;
+    private int openedEntryAdapterPosition;
 
     /**
-     * Attribute stores the EntriesFragment of the activity.
+     * Attribute stores whether the warning to download a new version is dismissed.
      */
-    private final EntriesFragment entriesFragment;
+    private boolean downloadWarningDismissed;
 
     /**
-     * Attribute stores the SettingsFragment of the activity.
+     * Attribute stores whether an update for the app is available.
      */
-    private final SettingsFragment settingsFragment;
+    private boolean updateAvailable;
 
     /**
-     * Attribute stores the ID of the item that was selected in the
-     * {@linkplain com.google.android.material.bottomnavigation.BottomNavigationView}.
+     * Attribute stores whether the entries have been loaded.
      */
-    private int selectedItem;
+    private boolean loaded;
+
+    /**
+     * Attribute stores whether the entries are currently loading.
+     */
+    private boolean loading;
 
 
     /**
      * Constructor instantiates a new MainViewModel with default values.
      */
     public MainViewModel() {
-        homeFragment = new HomeFragment();
-        entriesFragment = new EntriesFragment();
-        settingsFragment = new SettingsFragment();
-        selectedItem = R.id.menu_home;
+        openedEntryAdapterPosition = -1;
+        downloadWarningDismissed = false;
+        updateAvailable = false;
+        loaded = false;
+        loading = false;
     }
 
 
     /**
-     * Method returns the home fragment.
+     * Method returns the adapter position of the entry that is currently opened from the MainActivity.
      *
-     * @return  Home fragment.
+     * @return  Adapter position of the entry currently opened.
      */
-    public HomeFragment getHomeFragment() {
-        return homeFragment;
+    public int getOpenedEntryAdapterPosition() {
+        return openedEntryAdapterPosition;
     }
 
     /**
-     * Method returns the entries fragment.
+     * Method changes the adapter position of the entry that is currently opened from the MainActivity.
      *
-     * @return  Entries fragment.
+     * @param openedEntryAdapterPosition    Adapter position for the entry currently opened.
      */
-    public EntriesFragment getEntriesFragment() {
-        return entriesFragment;
+    public void setOpenedEntryAdapterPosition(int openedEntryAdapterPosition) {
+        this.openedEntryAdapterPosition = openedEntryAdapterPosition;
     }
 
     /**
-     * Method returns the settings fragment.
+     * Method returns whether the download warning is dismissed.
      *
-     * @return  Settings fragment.
+     * @return  Whether the download warning is dismissed.
      */
-    public SettingsFragment getSettingsFragment() {
-        return settingsFragment;
+    public boolean isDownloadWarningDismissed() {
+        return downloadWarningDismissed;
     }
 
     /**
-     * Method returns the index of the currently selected fragment.
-     *
-     * @return  Index of the currently selected fragment.
+     * Method dismisses the download warning.
      */
-    public int getSelectedItem() {
-        return selectedItem;
+    public void dismissDownloadWarning() {
+        downloadWarningDismissed = true;
     }
 
     /**
-     * Method changes the index of the currently selected fragment.
+     * Method returns whether an update for the app is available.
      *
-     * @param selectedItem  Index of the new selected fragment.
+     * @return  Whether an update is available.
      */
-    public void setSelectedItem(int selectedItem) {
-        this.selectedItem = selectedItem;
+    public boolean isUpdateAvailable() {
+        return updateAvailable;
+    }
+
+    /**
+     * Method informs the view model that an update is available.
+     */
+    public void updateAvailable() {
+        updateAvailable = true;
+    }
+
+
+    public boolean isChangedSinceLastCacheGeneration() {
+        return EntryManager.getInstance().isChangedSinceLastCacheGeneration();
+    }
+
+
+    /**
+     * Method loads the entries from storage.
+     *
+     * @param callback  Callback to invoke after the entries are loaded.
+     * @param force     Whether to force (re)load the entries after they were already loaded.
+     */
+    public void loadAllEntries(@Nullable Runnable callback, boolean force) {
+        if (!loading) {
+            if (!loaded || force) {
+                loading = true;
+                Thread thread = new Thread(() -> {
+                    try {
+                        EntryManager.getInstance().load();
+                    }
+                    catch (StorageException e) {
+                        //We can ignore this exception and treat this case as if the user opens
+                        //the app for the first time and has no data to load.
+                    }
+                    EntryManager.getInstance().sortByName(false);
+                    EntryManager.getInstance().getData(); //Sorts data
+                    loaded = true;
+                    loading = false;
+                    if (callback != null) {
+                        callback.run();
+                    }
+                });
+                thread.start();
+                return;
+            }
+            if (callback != null) {
+                callback.run();
+            }
+        }
+    }
+
+
+    /**
+     * Method returns a list of all entries.
+     *
+     * @return  List of all entries.
+     */
+    @Nullable
+    public ArrayList<EntryAbbreviated> getAllEntries() {
+        if (!loaded) {
+            return null;
+        }
+        return EntryManager.getInstance().getData();
     }
 
 }

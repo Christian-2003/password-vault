@@ -33,6 +33,8 @@
 
     <!-- Entries fragment -->
     <string name="entries_none">Keine</string>
+    <string name="entries_empty_headline">Keine Konten</string>
+    <string name="entries_empty_support">Konten werden hier angezeigt</string>
 
 
     <!-- Settings -->
@@ -192,6 +194,15 @@
     <string name="entry_package">Apps</string>
     <string name="entry_package_none">Keine ausgewählt</string>
     <string name="entry_automatically_created">Dieses Konto wurde durch automatisches Ausfüllen hinzugefügt</string>
+    <string name="entry_details_empty_headline">Buh</string>
+    <string name="entry_details_empty_support">Informationen werden hier angezeigt</string>
+    <string name="entry_edit">Konto bearbeiten</string>
+    <string name="entry_name_placeholder">Neues Konto {arg}</string>
+    <string name="entry_more_edit">Konto bearbeiten</string>
+    <string name="entry_more_delete">Konto löschen</string>
+    <string name="entry_more_add_detail">Information hinzufügen</string>
+    <string name="entry_more_select_app">App für autom. Ausfüllen wählen</string>
+    <string name="entry_more_info">Details</string>
 
 
     <!-- PasswordAnalysis activity -->
@@ -218,6 +229,8 @@
     <string name="password_results_list_none">Keine Passwörter</string>
     <string name="password_results_weak_title">Einfache Passwörter</string>
     <string name="password_results_weak_none">Keine einfachen Passwörter</string>
+    <string name="password_all_empty_title">Keine Passwörter</string>
+    <string name="password_all_empty_info">Verfügbare Passwörter werden hier angezeigt</string>
 
 
     <!-- Packages activity -->
@@ -226,6 +239,10 @@
     <string name="packages_selected_title">Ausgewählte Apps</string>
     <string name="packages_selected_none">Keine ausgewählt</string>
     <string name="packages_list_none">Keine Verfügbar</string>
+    <string name="packages_list_empty_headline">Keine Apps verfügbar</string>
+    <string name="packages_list_empty_support">Apps, die dem Filter entsprechen, werden hier angezeigt</string>
+    <string name="packages_selected_empty_headline">Keine Apps ausgewählt</string>
+    <string name="packages_selected_empty_support">Ausgewählte Apps werden hier angezeigt</string>
 
 
     <!-- Login activity -->
@@ -253,6 +270,8 @@
     <string name="recovery_progress">Fortschritt</string>
     <string name="recovery_score">{arg} / {max}</string>
     <string name="recovery_questions">Sicherheitsfragen</string>
+    <string name="recovery_questions_empty_headline">Keine Sicherheitsfragen</string>
+    <string name="recovery_questions_empty_support">Sicherheitsfragen werden hier angezeigt</string>
     <string name="recovery_question">Frage</string>
     <string name="recovery_answer">Antwort</string>
     <string name="recovery_configure_question">Frage bearbeiten</string>
@@ -260,6 +279,11 @@
     <string name="recovery_password">Passwort zurücksetzen</string>
     <string name="recovery_success">Passwort wurde erfolreich geändert.</string>
     <string name="recovery_login_info">Um das Master Passwort zurückzusetzen, musst du die Sicherheitsfragen korrekt beantworten.</string>
+
+
+    <!-- Search activity -->
+    <string name="search_empty_headline">Keine Ergebnisse</string>
+    <string name="search_empty_support">Passende Ergebnisse werden hier angezeigt</string>
 
 
     <!-- Detail dialog -->
@@ -271,8 +295,8 @@
     <string name="detail_dialog_obfuscated">Unkenntlich</string>
     <string name="detail_dialog_encrypted">Verschlüsselt</string>
     <string name="detail_dialog_visible">Sichtbar</string>
-    <string name="detail_dialog_username">Als Benutzernamen für automatisches Ausfüllen verwenden</string>
-    <string name="detail_dialog_password">Als Passwort für automatisches Ausfüllen verwenden</string>
+    <string name="detail_dialog_username">Benutzername für autom. Ausfüllen</string>
+    <string name="detail_dialog_password">Passwort für autom. Ausfüllen</string>
 
 
     <!-- Tag dialog -->
@@ -282,6 +306,7 @@
 
     <!-- ConfirmDelete dialog -->
     <string name="confirm_delete_dialog_confirm">Soll {arg} wirklich gelöscht werden?</string>
+    <string name="delete_dialog_message">Soll \"{arg}\" wirklich gelöscht werden? Diese Aktion kann nicht rückgängig gemacht werden.</string>
 
 
     <!-- Buttons -->
@@ -306,6 +331,9 @@
     <string name="button_previous">Zurück</string>
     <string name="button_forgot_password">Passwort vergessen?</string>
     <string name="button_recover_password">Master Passwort wiederherstellen</string>
+    <string name="button_copy_detail">Inhalt kopieren</string>
+    <string name="button_later">Später</string>
+    <string name="button_download">Download</string>
 
 
     <!-- Input hints -->
@@ -343,7 +371,7 @@
     <string name="detail_username">Benutzername</string>
 
 
-    <!-- Error messages that are sent to the user -->
+    <!-- Error messages and warnings that are sent to the user -->
     <string name="error_cannot_show_entry">Eintrag kann nicht angezeigt werden.</string>
     <string name="error_empty_input">Dieses Feld darf nicht leer sein.</string>
     <string name="error_passwords_incorrect">Falsches Passwort.</string>
@@ -351,12 +379,15 @@
     <string name="error_invalid_regex">RegEx ist inkorrekt.</string>
     <string name="error_not_enough_security_questions">Du benötigst mindestens 5 Sicherheitsfragen.</string>
     <string name="error_master_password_recovery">Die eingegebenen Antworten sind inkorrekt.</string>
+    <string name="warning_new_app_version">Eine neue Version der App ist zum Download bereit. Soll die neue Version jetzt heruntergeladen werden?</string>
 
 
     <!-- Password quality gates -->
     <string name="quality_gates">Sicherheitskriterien</string>
     <string name="quality_gates_info">Definiere Sicherheitskriterien um die Sicherheit deiner Passwörter zu verbessern.</string>
     <string name="quality_gates_custom">Eigene Sicherheitskriterien</string>
+    <string name="quality_gates_custom_empty_headline">Keine Sicherheitskriterien</string>
+    <string name="quality_gates_custom_empty_support">Sicherheitskriterien werden hier angezeigt</string>
     <string name="quality_gates_default">Standard Sicherheitskriterien</string>
     <string name="quality_gates_enabled">Aktiv</string>
     <string name="quality_gate_enabled">Aktiviert</string>

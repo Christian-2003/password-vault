@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/space_horizontal"
+    android:layout_marginVertical="@dimen/space_vertical"
+    android:orientation="vertical"
+    style="@style/card.warning">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/space_vertical_between"
+        android:src="@drawable/ic_alert"
+        style="@style/image.warning"/>
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:text="A new app version is available to download and install. We recommend to download and install the new version as soon as possible to ensure maximum security."
+        style="@style/text.info"/>
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:flexDirection="row"
+        app:justifyContent="flex_end">
+
+        <Button
+            android:id="@+id/button_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Dismiss"
+            style="@style/button.warning"/>
+
+        <Button
+            android:id="@+id/button_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Download"
+            style="@style/button.warning"/>
+
+    </com.google.android.flexbox.FlexboxLayout>
+
+</LinearLayout>

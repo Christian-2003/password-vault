@@ -10,10 +10,13 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModel;
+
 import java.util.Locale;
 import de.passwordvault.R;
 import de.passwordvault.model.storage.LocalizedAssetManager;
-import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
+import de.passwordvault.view.utils.components.PasswordVaultActivity;
 
 
 /**
@@ -26,7 +29,7 @@ import de.passwordvault.view.utils.components.PasswordVaultBaseActivity;
  * @author  Christian-2003
  * @version 3.5.6
  */
-public class LocalizedAssetViewerActivity extends PasswordVaultBaseActivity {
+public class LocalizedAssetViewerActivity extends PasswordVaultActivity<ViewModel> {
 
     /**
      * Class implements a custom web view client for the help activity.
@@ -96,6 +99,11 @@ public class LocalizedAssetViewerActivity extends PasswordVaultBaseActivity {
     private WebView webView;
 
 
+    public LocalizedAssetViewerActivity() {
+        super(null, R.layout.activity_localized_asset_viewer);
+    }
+
+
     /**
      * Method is called whenever the activity is created.
      *
@@ -104,7 +112,6 @@ public class LocalizedAssetViewerActivity extends PasswordVaultBaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_localized_asset_viewer);
 
         findViewById(R.id.button_back).setOnClickListener(view -> finish());
         progressBar = findViewById(R.id.progress_bar);

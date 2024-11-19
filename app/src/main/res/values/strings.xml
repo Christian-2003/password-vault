@@ -34,6 +34,8 @@
 
     <!-- Entries fragment -->
     <string name="entries_none">None</string>
+    <string name="entries_empty_headline">No accounts</string>
+    <string name="entries_empty_support">Accounts are displayed here</string>
 
 
     <!-- Settings -->
@@ -186,7 +188,7 @@
     <string name="entry_tags">Tags</string>
     <string name="entry_uuid">UUID</string>
     <string name="entry_created">Created</string>
-    <string name="entry_changed">Changed</string>
+    <string name="entry_changed">Edited</string>
     <string name="entry_general_info">General</string>
     <string name="entry_details_info">Details</string>
     <string name="entry_hidden_details_info">Hidden Details</string>
@@ -194,6 +196,15 @@
     <string name="entry_package">Apps</string>
     <string name="entry_package_none">None selected</string>
     <string name="entry_automatically_created">This account was automatically created by the autofill service</string>
+    <string name="entry_details_empty_headline">Wooo</string>
+    <string name="entry_details_empty_support">Details are shown here</string>
+    <string name="entry_edit">Edit account</string>
+    <string name="entry_name_placeholder">New account {arg}</string>
+    <string name="entry_more_edit">Edit account</string>
+    <string name="entry_more_delete">Delete account</string>
+    <string name="entry_more_add_detail">Add detail</string>
+    <string name="entry_more_select_app">Select app for autofill</string>
+    <string name="entry_more_info">Information</string>
 
 
     <!-- PasswordAnalysis activity -->
@@ -220,6 +231,8 @@
     <string name="password_results_list_none">No passwords</string>
     <string name="password_results_weak_title">Weak passwords</string>
     <string name="password_results_weak_none">No weak passwords</string>
+    <string name="password_all_empty_title">No passwords</string>
+    <string name="password_all_empty_info">Available passwords are shown here</string>
 
 
     <!-- Packages activity -->
@@ -228,6 +241,10 @@
     <string name="packages_selected_title">Selected apps</string>
     <string name="packages_selected_none">None selected</string>
     <string name="packages_list_none">None available</string>
+    <string name="packages_list_empty_headline">No apps available</string>
+    <string name="packages_list_empty_support">Apps are shown here that match the query</string>
+    <string name="packages_selected_empty_headline">No apps selected</string>
+    <string name="packages_selected_empty_support">Selected apps are shown here</string>
 
 
     <!-- Login activity -->
@@ -255,6 +272,8 @@
     <string name="recovery_progress">Progress</string>
     <string name="recovery_score">{arg} / {max}</string>
     <string name="recovery_questions">Security Questions</string>
+    <string name="recovery_questions_empty_headline">No security questions</string>
+    <string name="recovery_questions_empty_support">Added security questions will be displayed here</string>
     <string name="recovery_question">Question</string>
     <string name="recovery_answer">Answer</string>
     <string name="recovery_configure_question">Configure Question</string>
@@ -262,6 +281,11 @@
     <string name="recovery_password">Reset password</string>
     <string name="recovery_success">Successfully changed password</string>
     <string name="recovery_login_info">In order to recover the master password, you need to answer the security questions correctly.</string>
+
+
+    <!-- Search activity -->
+    <string name="search_empty_headline">Nothing found</string>
+    <string name="search_empty_support">Matching results are shown here</string>
 
 
     <!-- Detail dialog -->
@@ -284,6 +308,7 @@
 
     <!-- ConfirmDelete dialog -->
     <string name="confirm_delete_dialog_confirm">Are you sure you want to delete {arg}?</string>
+    <string name="delete_dialog_message">Are you sure you want to delete \"{arg}\"? This action cannot be undone.</string>
 
 
     <!-- Buttons -->
@@ -293,7 +318,7 @@
     <string name="button_delete">Delete</string>
     <string name="button_save">Save</string>
     <string name="button_cancel">Cancel</string>
-    <string name="button_ok">Ok</string>
+    <string name="button_ok">OK</string>
     <string name="button_login">Login</string>
     <string name="button_biometrics">Use biometrics</string>
     <string name="button_add_quality_gate">Add quality gate</string>
@@ -308,6 +333,9 @@
     <string name="button_previous">Previous</string>
     <string name="button_forgot_password">Forgot password?</string>
     <string name="button_recover_password">Recover master password</string>
+    <string name="button_copy_detail">Copy content</string>
+    <string name="button_later">Later</string>
+    <string name="button_download">Download</string>
 
 
     <!-- Input hints -->
@@ -345,7 +373,7 @@
     <string name="detail_username">Username</string>
 
 
-    <!-- Error messages that are sent to the user -->
+    <!-- Error messages and warning that are sent to the user -->
     <string name="error_cannot_show_entry">Cannot show entry.</string>
     <string name="error_empty_input">This field cannot be empty.</string>
     <string name="error_passwords_incorrect">Incorrect password.</string>
@@ -353,12 +381,15 @@
     <string name="error_invalid_regex">RegEx is invalid.</string>
     <string name="error_not_enough_security_questions">You need to have at least 5 security questions.</string>
     <string name="error_master_password_recovery">The entered answers are incorrect.</string>
+    <string name="warning_new_app_version">A new app version is available for download. Do you want to download the new version now?</string>
 
 
     <!-- Password quality gates -->
     <string name="quality_gates">Quality Gates</string>
     <string name="quality_gates_info">Specify quality gates to enhance the security of your passwords.</string>
     <string name="quality_gates_custom">Custom quality gates</string>
+    <string name="quality_gates_custom_empty_headline">No quality gates</string>
+    <string name="quality_gates_custom_empty_support">Added quality gates will be displayed here</string>
     <string name="quality_gates_default">Default quality gates</string>
     <string name="quality_gates_enabled">Enabled</string>
     <string name="quality_gate_enabled">Enabled</string>

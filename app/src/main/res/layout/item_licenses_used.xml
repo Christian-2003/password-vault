@@ -31,6 +31,6 @@
         android:layout_marginStart="@dimen/space_horizontal_between"
         android:src="@drawable/ic_next"
         tools:ignore="contentDescription"
-        style="@style/pv.icon"/>
+        style="@style/image"/>
 
 </LinearLayout>

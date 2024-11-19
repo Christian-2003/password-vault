@@ -1,6 +1,9 @@
 <img src="../img/icon.png" height="150" align="right"/>
 
 # Quickstart Guide
+> [!NOTE]  
+> This quickstart guide covers the older Password Vault version 3.3.0.
+
 This document contains a guide on how to use Password Vault.
 
 If you have not already installed Password Vault, there is a [guide](Install%20and%20Run%20the%20App.md) that explains the installation process.

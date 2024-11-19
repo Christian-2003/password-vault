@@ -2,9 +2,9 @@
 
 # Changelog
 
-## 3.7.0 (XXXX-XX-XX)
+## 3.7.0 (2024-11-19)
 ###### Release Highlights
-n/a
+Added extensive search functionality and reworked entire user interface.
 
 ###### Features
 * Introduced new app icons.
@@ -14,6 +14,29 @@ n/a
 * Fixed a bug where the `DarkmodeDialog` did not display the UI mode of the Android OS but instead used the UI mode of the app.
 * Changed color of background when swiping an item to delete from _@color/pv\_red_ to _@color/text\_critical_.
 * Implemented new framework for recycler item swiping.
+* Added `MoreDialog` which dynamically displays a list of clickable items to the user.
+* Introduced new base class `PasswordVaultFragment` for all fragments that handles basic tasks like view model management.
+* Fixed a bug where the logos of other apps were cropped off on all sides on devices that use squircles as launcher icons.
+* Changed shape displaying the abbreviation of an entry if no app logo is available to a square with rounded corners instead of a circle.
+* Upgrade project files to support _Android Studio Koala_.
+* Added new reusable `CheckboxUiView` as checkbox component for the app.
+* Added branding drawable to splash screen.
+* Added `androidx.core:core-splashscreen:1.0.1` library to enable animated splash screens and branding drawables.
+* Added animated splash screen.
+* Removed bottom navigation bar from `MainActivity`, since the home screen is completely empty and useless. The main activity now displays the list of entries and the settings can be opened by clicking a button within the app bar.
+* Viewing and editing entries now happens through the same activity.
+* Removed all Google Play related contents from this repository such as the "play"-folder, since the app is no longer intended to be published on Google Play.
+* Decreased size for all image buttons from `48dp` to `32dp`, to reduce size of borderless ripple effect when clicked.
+* Established Material Design 3 compliance for all activities, fragments and dialogs to create a seemless UI integration with the Android OS on all devices.
+* Removed all old colors with the `pv_<name>`-notation since they have been superseded by the newer material design colors.
+* Removed all old global styles from the app.
+* Removed `PasswordVaultBaseActivity` for newer `PasswordVaultActivity<V extends ViewModel>` which handles view models.
+* Removed `PasswordVaultBaseFragment` for newer `PasswordVaultFragment<V extends ViewModel>` which handles view models.
+* Remove deprecated recycler view adapter framework.
+* `MainActivity` displays a warning at the top of the page if a newer version of the app is available for download. This is done to immediately inform the user about a newer version.
+* Fixed bug where entries were sometimes not displayed after being loaded.
+* Added search functionality that searches entries and details.
+* Changes to styles of embedde help and legal pages to better match the overall app style of Password Vault.
 
 <br/>
 
