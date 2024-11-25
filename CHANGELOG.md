@@ -7,7 +7,7 @@
 n./a.
 
 ###### Features
-* n./a.
+* Deleting all data through settings no longer deletes default quality gates.
 
 <br/>
 
