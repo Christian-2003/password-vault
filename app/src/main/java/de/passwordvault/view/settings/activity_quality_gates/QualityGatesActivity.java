@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+
 import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGate;
@@ -164,20 +166,22 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
             case TAG_DELETE_QUALITY_GATE:
                 onDeleteQualityGate(adapterPosition);
                 break;
-            case TAG_ENABLE_QUALITY_GATE:
-                if (viewModel.getCustomQualityGates().size() < adapterPosition) {
-                    int index = adapterPosition - QualityGatesRecyclerViewAdapter.OFFSET_DEFAULT_QUALITY_GATES;
+            case TAG_ENABLE_QUALITY_GATE: {
+                int index = adapterPosition - QualityGatesRecyclerViewAdapter.OFFSET_DEFAULT_QUALITY_GATES;
+                if (index < viewModel.getCustomQualityGates().size()) {
                     viewModel.getCustomQualityGates().get(index).setEnabled(!viewModel.getCustomQualityGates().get(index).isEnabled());
                 }
                 break;
-            case TAG_SHARE_QUALITY_GATE:
-                if (viewModel.getCustomQualityGates().size() < adapterPosition) {
-                    int index = adapterPosition - QualityGatesRecyclerViewAdapter.OFFSET_DEFAULT_QUALITY_GATES;
+            }
+            case TAG_SHARE_QUALITY_GATE: {
+                int index = adapterPosition - QualityGatesRecyclerViewAdapter.OFFSET_DEFAULT_QUALITY_GATES;
+                if (index < viewModel.getCustomQualityGates().size()) {
                     String url = viewModel.createShareUrl(viewModel.getCustomQualityGates().get(index));
                     if (url != null) {
                         shareDataWithSheet(url, "text/uri-list");
                     }
                 }
+            }
         }
     }
 
