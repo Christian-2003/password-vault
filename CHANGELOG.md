@@ -8,6 +8,7 @@ n./a.
 
 ###### Features
 * Deleting all data through settings no longer deletes default quality gates.
+* Details show more than two lines of content.
 
 <br/>
 
