@@ -6,9 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGate;
@@ -41,6 +43,16 @@ public class QualityGatesRecyclerViewAdapter extends RecyclerViewAdapter<Quality
         public final TextView regexTextView;
 
         /**
+         * Attribute stores the text view displaying the author of the quality gate.
+         */
+        public final TextView authorTextView;
+
+        /**
+         * Attribute stores the image view displaying the icon for the author.
+         */
+        public final ImageView authorImageView;
+
+        /**
          * Attribute stores the checkbox through which to (de-)activate the quality gate.
          */
         public final CheckBox activeCheckBox;
@@ -60,6 +72,8 @@ public class QualityGatesRecyclerViewAdapter extends RecyclerViewAdapter<Quality
             super(itemView);
             descriptionTextView = itemView.findViewById(R.id.text_description);
             regexTextView = itemView.findViewById(R.id.text_regex);
+            authorTextView = itemView.findViewById(R.id.text_author);
+            authorImageView = itemView.findViewById(R.id.image_author);
             activeCheckBox = itemView.findViewById(R.id.checkbox);
             moreButton = itemView.findViewById(R.id.button_more);
         }
@@ -219,6 +233,16 @@ public class QualityGatesRecyclerViewAdapter extends RecyclerViewAdapter<Quality
                             qualityGatesMoreListener.onAction(holder.getAdapterPosition());
                         }
                     });
+                    if (qualityGate.getAuthor() == null) {
+                        viewHolder.authorTextView.setText(R.string.quality_gates_author_user);
+                        viewHolder.authorImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_verified));
+                        viewHolder.authorImageView.setColorFilter(ContextCompat.getColor(context, R.color.primary));
+                    }
+                    else {
+                        viewHolder.authorTextView.setText(qualityGate.getAuthor());
+                        viewHolder.authorImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_person));
+                        viewHolder.authorImageView.setColorFilter(ContextCompat.getColor(context, R.color.text_light));
+                    }
                 }
                 else {
                     //Default quality gate:
@@ -227,6 +251,9 @@ public class QualityGatesRecyclerViewAdapter extends RecyclerViewAdapter<Quality
                     viewHolder.activeCheckBox.setChecked(qualityGate.isEnabled());
                     viewHolder.activeCheckBox.setOnCheckedChangeListener((view, checked) -> qualityGate.setEnabled(checked));
                     viewHolder.moreButton.setVisibility(View.GONE);
+                    viewHolder.authorTextView.setText(R.string.quality_gates_author_password_vault);
+                    viewHolder.authorImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_verified));
+                    viewHolder.authorImageView.setColorFilter(ContextCompat.getColor(context, R.color.primary));
                 }
                 viewHolder.descriptionTextView.setText(qualityGate.getDescription());
                 viewHolder.regexTextView.setText(qualityGate.getRegex());

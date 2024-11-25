@@ -47,6 +47,11 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
      */
     private static final String TAG_ENABLE_QUALITY_GATE = "enable";
 
+    /**
+     * Field stores the tag for the more dialog item to share a quality gate.
+     */
+    private static final String TAG_SHARE_QUALITY_GATE = "share";
+
 
     /**
      * Attribute stores the adapter of the activity.
@@ -111,7 +116,7 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
      * @param resultCode    Result code is either {@link #RESULT_SUCCESS} or {@link #RESULT_CANCEL}
      *                      and indicates how the dialog is closed.
      */
-    public void onCallback (PasswordVaultBottomSheetDialog<? extends ViewModel> dialog, int resultCode) {
+    public void onCallback(PasswordVaultBottomSheetDialog<? extends ViewModel> dialog, int resultCode) {
         if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS) {
             try {
                 if (dialog.getTag() == null) {
@@ -165,6 +170,14 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
                     viewModel.getCustomQualityGates().get(index).setEnabled(!viewModel.getCustomQualityGates().get(index).isEnabled());
                 }
                 break;
+            case TAG_SHARE_QUALITY_GATE:
+                if (viewModel.getCustomQualityGates().size() < adapterPosition) {
+                    int index = adapterPosition - QualityGatesRecyclerViewAdapter.OFFSET_DEFAULT_QUALITY_GATES;
+                    String url = viewModel.createShareUrl(viewModel.getCustomQualityGates().get(index));
+                    if (url != null) {
+                        shareDataWithSheet(url, "text/uri-list");
+                    }
+                }
         }
     }
 
@@ -255,6 +268,7 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
         items.add(new ItemButton(getString(R.string.button_delete),TAG_DELETE_QUALITY_GATE + ":" + position , R.drawable.ic_delete));
         items.add(new ItemDivider());
         items.add(new ItemCheckbox(getString(R.string.quality_gate_enabled), TAG_ENABLE_QUALITY_GATE + ":" + position, qualityGate.isEnabled()));
+        items.add(new ItemButton(getString(R.string.quality_gates_share), TAG_SHARE_QUALITY_GATE + ":" + position, R.drawable.ic_share));
         args.putSerializable(MoreDialog.ARG_ITEMS, items);
         dialog.setArguments(args);
         dialog.show(getSupportFragmentManager(), null);

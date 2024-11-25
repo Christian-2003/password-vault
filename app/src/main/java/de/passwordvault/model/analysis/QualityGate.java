@@ -1,9 +1,10 @@
 package de.passwordvault.model.analysis;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.regex.PatternSyntaxException;
-
 import de.passwordvault.model.storage.app.Storable;
 import de.passwordvault.model.storage.app.StorageException;
 import de.passwordvault.model.storage.csv.CsvBuilder;
@@ -22,12 +23,21 @@ public class QualityGate implements Serializable, Storable {
     /**
      * Attribute stores the regex of the quality gate.
      */
+    @NonNull
     private String regex;
 
     /**
      * Attribute stores the description of the quality gate.
      */
+    @NonNull
     private String description;
+
+    /**
+     * Attribute stores the author for the quality gate. {@code null} indicates that the user is the
+     * author.
+     */
+    @Nullable
+    private String author;
 
     /**
      * Attribute stores whether the quality gate is enabled.
@@ -38,17 +48,18 @@ public class QualityGate implements Serializable, Storable {
      * Attribute stores whether the quality gate is editable. This shall be {@code true} for all
      * quality gates created by the user and {@code false} for all default quality gates.
      */
-    private boolean editable;
+    private final boolean editable;
 
 
     /**
      * Constructor instantiates a new {@code QualityGate} without any content.
      */
     public QualityGate() {
-        setRegex("");
-        setDescription("");
-        setEnabled(true);
-        setEditable(true);
+        this.regex = "";
+        this.description = "";
+        this.enabled = true;
+        this.editable = true;
+        this.author = null;
     }
 
     /**
@@ -58,13 +69,31 @@ public class QualityGate implements Serializable, Storable {
      * @param description           Description for the quality gate.
      * @param enabled               Whether the quality gate is enabled.
      * @param editable              Whether the quality gate is editable.
-     * @throws NullPointerException One of the passed arguments is {@code null}.
      */
-    public QualityGate(String regex, String description, boolean enabled, boolean editable) throws NullPointerException {
-        setRegex(regex);
-        setDescription(description);
-        setEnabled(enabled);
-        setEditable(editable);
+    public QualityGate(@NonNull String regex, @NonNull String description, boolean enabled, boolean editable) {
+        this.regex = regex;
+        this.description = description;
+        this.enabled = enabled;
+        this.editable = editable;
+        this.author = null;
+    }
+
+    /**
+     * Constructor instantiates a new {@code QualityGate} without the passed arguments.
+     *
+     * @param regex                 Regex for the quality gate.
+     * @param description           Description for the quality gate.
+     * @param enabled               Whether the quality gate is enabled.
+     * @param editable              Whether the quality gate is editable.
+     * @param author                Author for the quality gate. Pass {@code null} to indicate that
+     *                              the user is the author.
+     */
+    public QualityGate(@NonNull String regex, @NonNull String description, boolean enabled, boolean editable, @Nullable String author) {
+        this.regex = regex;
+        this.description = description;
+        this.enabled = enabled;
+        this.editable = editable;
+        this.author = author;
     }
 
 
@@ -73,6 +102,7 @@ public class QualityGate implements Serializable, Storable {
      *
      * @return  Regex of the quality gate.
      */
+    @NonNull
     public String getRegex() {
         return regex;
     }
@@ -80,13 +110,9 @@ public class QualityGate implements Serializable, Storable {
     /**
      * Method changes the regex of the quality gate to the passed argument.
      *
-     * @param regex                 New regex for the quality gate.
-     * @throws NullPointerException The passed regex is {@code null}.
+     * @param regex New regex for the quality gate.
      */
-    public void setRegex(String regex) throws NullPointerException {
-        if (regex == null) {
-            throw new NullPointerException();
-        }
+    public void setRegex(@NonNull String regex) {
         this.regex = regex;
     }
 
@@ -95,6 +121,7 @@ public class QualityGate implements Serializable, Storable {
      *
      * @return  Description of the quality gate.
      */
+    @NonNull
     public String getDescription() {
         return description;
     }
@@ -102,13 +129,9 @@ public class QualityGate implements Serializable, Storable {
     /**
      * Method changes the description of the quality gate to the passed argument.
      *
-     * @param description           New description for the quality gate.
-     * @throws NullPointerException The passed description is {@code null}.
+     * @param description   New description for the quality gate.
      */
-    public void setDescription(String description) throws NullPointerException {
-        if (description == null) {
-            throw new NullPointerException();
-        }
+    public void setDescription(@NonNull String description) {
         this.description = description;
     }
 
@@ -140,12 +163,24 @@ public class QualityGate implements Serializable, Storable {
     }
 
     /**
-     * Method changes whether the quality gate is editable or not.
+     * Method changes the author for the quality gate. Pass {@code null} to indicate that the
+     * current user is the author.
      *
-     * @param editable  Whether the quality gate shall be editable or not.
+     * @param author    Author for the quality gate.
      */
-    public void setEditable(boolean editable) {
-        this.editable = editable;
+    public void setAuthor(@Nullable String author) {
+        this.author = author;
+    }
+
+    /**
+     * Method returns the author of the quality gate. {@code null} indicates that the user is the
+     * author.
+     *
+     * @return  Author for the quality gate.
+     */
+    @Nullable
+    public String getAuthor() {
+        return author;
     }
 
 
@@ -156,7 +191,7 @@ public class QualityGate implements Serializable, Storable {
      * @param s String to be tested.
      * @return  Whether the argument matches the quality gate.
      */
-    public boolean matches(String s) {
+    public boolean matches(@Nullable String s) {
         if (s == null) {
             return false;
         }
@@ -182,6 +217,7 @@ public class QualityGate implements Serializable, Storable {
         builder.append(getRegex());
         builder.append(getDescription());
         builder.append(isEnabled());
+        builder.append(getAuthor());
         return builder.toString();
     }
 
@@ -212,6 +248,9 @@ public class QualityGate implements Serializable, Storable {
                         break;
                     case 2:
                         setEnabled(Boolean.parseBoolean(cell));
+                        break;
+                    case 3:
+                        author = cell;
                         break;
                 }
             }

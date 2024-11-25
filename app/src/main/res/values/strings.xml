@@ -387,6 +387,9 @@
     <!-- Password quality gates -->
     <string name="quality_gates">Quality Gates</string>
     <string name="quality_gates_info">Specify quality gates to enhance the security of your passwords.</string>
+    <string name="quality_gates_author_password_vault">Password Vault</string>
+    <string name="quality_gates_author_user">You</string>
+    <string name="quality_gates_share">Share link to quality gate</string>
     <string name="quality_gates_custom">Custom quality gates</string>
     <string name="quality_gates_custom_empty_headline">No quality gates</string>
     <string name="quality_gates_custom_empty_support">Added quality gates will be displayed here</string>
@@ -459,5 +462,10 @@
     <string name="preferences_quality_gates_default" translatable="false">quality_gates_default</string>
     <string name="preferences_quality_gates_custom" translatable="false">quality_gates_custom</string>
     <string name="preferences_tags" translatable="false">entry_tags</string>
+
+
+
+    <!-- URL exports -->
+    <string name="url_quality_gate" translatable="false">https://passwordvault.christian2003.de/data/quality_gate?d={description}&amp;ref={author}&amp;regex={regex}</string>
 
 </resources>

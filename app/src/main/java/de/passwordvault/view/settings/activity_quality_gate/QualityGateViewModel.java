@@ -131,6 +131,7 @@ public class QualityGateViewModel extends ViewModel {
         qualityGate.setDescription(description);
         qualityGate.setRegex(regex);
         qualityGate.setEnabled(enabledCheckBox.isChecked());
+        qualityGate.setAuthor(null);
 
         return true;
     }

@@ -385,6 +385,9 @@
     <!-- Password quality gates -->
     <string name="quality_gates">Sicherheitskriterien</string>
     <string name="quality_gates_info">Definiere Sicherheitskriterien um die Sicherheit deiner Passwörter zu verbessern.</string>
+    <string name="quality_gates_author_password_vault">Password Vault</string>
+    <string name="quality_gates_author_user">Du</string>
+    <string name="quality_gates_share">Link zu Sicherheitskriterium teilen</string>
     <string name="quality_gates_custom">Eigene Sicherheitskriterien</string>
     <string name="quality_gates_custom_empty_headline">Keine Sicherheitskriterien</string>
     <string name="quality_gates_custom_empty_support">Sicherheitskriterien werden hier angezeigt</string>
