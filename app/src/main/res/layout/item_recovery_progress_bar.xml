@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/space_horizontal_between"
-            android:textColor="@color/text"
+            android:textColor="@color/primary"
             android:textStyle="bold"
             tools:text="0 / 0"
             style="@style/text"/>
