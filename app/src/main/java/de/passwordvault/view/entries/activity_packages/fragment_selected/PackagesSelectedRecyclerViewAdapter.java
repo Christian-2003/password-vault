@@ -1,6 +1,7 @@
 package de.passwordvault.view.entries.activity_packages.fragment_selected;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
@@ -17,7 +18,7 @@ import de.passwordvault.view.entries.activity_packages.PackagesRecyclerViewAdapt
  * Class implements the recycler view adapter for the {@link PackagesSelectedFragment}.
  *
  * @author  Christian-2003
- * @version 3.7.0
+ * @version 3.7.1
  */
 public class PackagesSelectedRecyclerViewAdapter extends PackagesRecyclerViewAdapter {
 
@@ -47,7 +48,7 @@ public class PackagesSelectedRecyclerViewAdapter extends PackagesRecyclerViewAda
             viewHolder.headlineTextView.setText(context.getString(R.string.packages_selected_empty_headline));
             viewHolder.supportTextView.setText(context.getString(R.string.packages_selected_empty_support));
             viewHolder.imageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.el_packages));
-            if (viewModel.getSelectedPackages() == null || viewModel.getSelectedPackages().size() == 0) {
+            if (viewModel.getSelectedPackages() == null || viewModel.getSelectedPackages().isEmpty()) {
                 viewHolder.itemView.setVisibility(View.VISIBLE);
                 viewHolder.itemView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             }
@@ -62,7 +63,12 @@ public class PackagesSelectedRecyclerViewAdapter extends PackagesRecyclerViewAda
             }
             PackageViewHolder viewHolder = (PackageViewHolder)holder;
             Package p = viewModel.getSelectedPackages().get(position - OFFSET_PACKAGES);
-            viewHolder.nameTextView.setText(p.getAppName());
+            if (p.getAppName() == null || p.getAppName().isEmpty()) {
+                viewHolder.nameTextView.setText(p.getPackageName());
+            }
+            else {
+                viewHolder.nameTextView.setText(p.getAppName());
+            }
             viewHolder.logoImageView.setImageDrawable(p.getLogo());
             viewHolder.selectedImageView.setVisibility(View.GONE);
             viewHolder.itemView.setClickable(false);
@@ -117,7 +123,7 @@ public class PackagesSelectedRecyclerViewAdapter extends PackagesRecyclerViewAda
      * Method notifies the adapter that a package has been added (to the end of the adapter's dataset).
      */
     public void notifyPackageAdded() {
-        if (viewModel.getSelectedPackages().size() > 0) {
+        if (!viewModel.getSelectedPackages().isEmpty()) {
             filteredPackages.add(viewModel.getSelectedPackages().get(viewModel.getSelectedPackages().size() - 1));
             notifyItemInserted(getItemCount());
         }

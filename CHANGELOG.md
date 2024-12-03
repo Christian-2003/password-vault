@@ -10,6 +10,7 @@ n./a.
 * Deleting all data through settings no longer deletes default quality gates.
 * Details show more than two lines of content.
 * Used correct color to display score when configuring master password recovery.
+* Fixed a bug through which the of all selected apps for an entry does not show the package name of an app if it is not installed or does not have a name.
 
 <br/>
 

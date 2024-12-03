@@ -12,7 +12,7 @@ import de.passwordvault.model.search.SearchResult;
  * Class implements the view model for the {@link SearchActivity}.
  *
  * @author  Christian-2003
- * @version 3.7.0
+ * @version 3.7.1
  */
 public class SearchViewModel extends ViewModel {
 
@@ -144,7 +144,7 @@ public class SearchViewModel extends ViewModel {
             return;
         }
         int first = 0;
-        int last = -1;
+        int last;
 
         //Determine first position:
         if (searchResults.get(position).getType() == SearchResult.TYPE_ENTRY) {
