@@ -65,8 +65,8 @@ public class QualityGatesViewModel extends ViewModel {
     /**
      * Method loads all quality gates if they were not loaded previously.
      */
-    public void loadQualityGatesIfRequired() {
-        if (defaultQualityGates == null) {
+    public void loadQualityGatesIfRequired(boolean force) {
+        if (defaultQualityGates == null || force) {
             defaultQualityGates = new ArrayList<>();
             customQualityGates = new ArrayList<>();
             ArrayList<QualityGate> allQualityGates = QualityGateManager.getInstance().getData();

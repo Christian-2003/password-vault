@@ -336,6 +336,7 @@
     <string name="button_copy_detail">Copy content</string>
     <string name="button_later">Later</string>
     <string name="button_download">Download</string>
+    <string name="button_import">Import</string>
 
 
     <!-- Input hints -->
@@ -354,6 +355,7 @@
     <string name="hint_name">Name</string>
     <string name="hint_recently_edited_accounts">Recently edited accounts</string>
     <string name="hint_security_question_answer">Answer</string>
+    <string name="hint_url_quality_gate">URL</string>
 
 
     <!-- Password / Passcode security -->
@@ -381,6 +383,8 @@
     <string name="error_invalid_regex">RegEx is invalid.</string>
     <string name="error_not_enough_security_questions">You need to have at least 5 security questions.</string>
     <string name="error_master_password_recovery">The entered answers are incorrect.</string>
+    <string name="error_quality_gate_url_invalid">Cannot import quality gate from URL</string>
+    <string name="error_quality_gate_import">Could not import the quality gate</string>
     <string name="warning_new_app_version">A new app version is available for download. Do you want to download the new version now?</string>
 
 
@@ -395,6 +399,8 @@
     <string name="quality_gates_custom_empty_support">Added quality gates will be displayed here</string>
     <string name="quality_gates_default">Default quality gates</string>
     <string name="quality_gates_enabled">Enabled</string>
+    <string name="quality_gates_import_title">Import Quality Gate</string>
+    <string name="quality_gates_import_headline">Import the following quality gate</string>
     <string name="quality_gate_enabled">Enabled</string>
     <string name="quality_gate_configure">Configure quality gate</string>
     <string name="quality_gate_test">Test quality gate</string>

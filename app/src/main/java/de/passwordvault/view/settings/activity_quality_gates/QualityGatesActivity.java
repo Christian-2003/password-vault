@@ -21,6 +21,7 @@ import de.passwordvault.view.general.dialog_more.ItemDivider;
 import de.passwordvault.view.general.dialog_more.MoreDialog;
 import de.passwordvault.view.general.dialog_more.MoreDialogCallback;
 import de.passwordvault.view.settings.activity_quality_gate.QualityGateActivity;
+import de.passwordvault.view.settings.activity_url_import.SettingsImportQualityGateActivity;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
 import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
 import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
@@ -54,6 +55,16 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
      */
     private static final String TAG_SHARE_QUALITY_GATE = "share";
 
+    /**
+     * Field stores the tag for the more dialog item to add a new quality gate.
+     */
+    private static final String TAG_NEW_QUALITY_GATE = "new";
+
+    /**
+     * Field stores the tag for the more dialog item to import a new quality gate.
+     */
+    private static final String TAG_IMPORT_QUALITY_GATE = "import";
+
 
     /**
      * Attribute stores the adapter of the activity.
@@ -65,6 +76,12 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
      * gate.
      */
     private final ActivityResultLauncher<Intent> qualityGateResultLauncher;
+
+    /**
+     * Attribute stores the result launcher used to get a result from the activity to import a quality
+     * gate.
+     */
+    private final ActivityResultLauncher<Intent> importQualityGateResultLauncher;
 
 
     /**
@@ -96,6 +113,13 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
                     viewModel.getCustomQualityGates().set(position, qualityGate);
                     adapter.notifyItemChanged(QualityGatesRecyclerViewAdapter.OFFSET_DEFAULT_QUALITY_GATES + position);
                 }
+            }
+        });
+
+        importQualityGateResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == RESULT_OK && adapter != null) {
+                viewModel.loadQualityGatesIfRequired(true);
+                adapter.notifyItemInserted(QualityGatesRecyclerViewAdapter.OFFSET_DEFAULT_QUALITY_GATES + viewModel.getCustomQualityGates().size());
             }
         });
     }
@@ -182,6 +206,15 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
                     }
                 }
             }
+            case TAG_NEW_QUALITY_GATE: {
+                onAddQualityGate(0);
+                break;
+            }
+            case TAG_IMPORT_QUALITY_GATE: {
+                Intent intent = new Intent(this, SettingsImportQualityGateActivity.class);
+                importQualityGateResultLauncher.launch(intent);
+                break;
+            }
         }
     }
 
@@ -193,7 +226,7 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel.loadQualityGatesIfRequired();
+        viewModel.loadQualityGatesIfRequired(false);
 
         //Back button:
         findViewById(R.id.button_back).setOnClickListener(view -> finish());
@@ -209,6 +242,9 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
         RecyclerViewSwipeCallback callback = new RecyclerViewSwipeCallback(adapter, leftSwipe, rightSwipe);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(recyclerView);
+
+        //More button:
+        findViewById(R.id.button_more).setOnClickListener(view -> showMoreDialog());
     }
 
 
@@ -269,10 +305,27 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
         args.putInt(MoreDialog.ARG_ICON, R.drawable.ic_shield);
         ArrayList<Item> items = new ArrayList<>();
         items.add(new ItemButton(getString(R.string.button_edit), TAG_EDIT_QUALITY_GATE + ":" + position, R.drawable.ic_edit));
-        items.add(new ItemButton(getString(R.string.button_delete),TAG_DELETE_QUALITY_GATE + ":" + position , R.drawable.ic_delete));
+        items.add(new ItemButton(getString(R.string.button_delete),TAG_DELETE_QUALITY_GATE + ":" + position, R.drawable.ic_delete));
         items.add(new ItemDivider());
         items.add(new ItemCheckbox(getString(R.string.quality_gate_enabled), TAG_ENABLE_QUALITY_GATE + ":" + position, qualityGate.isEnabled()));
         items.add(new ItemButton(getString(R.string.quality_gates_share), TAG_SHARE_QUALITY_GATE + ":" + position, R.drawable.ic_share));
+        args.putSerializable(MoreDialog.ARG_ITEMS, items);
+        dialog.setArguments(args);
+        dialog.show(getSupportFragmentManager(), null);
+    }
+
+
+    /**
+     * Method shows the dialog displaying more options for the activity.
+     */
+    private void showMoreDialog() {
+        MoreDialog dialog = new MoreDialog();
+        Bundle args = new Bundle();
+        args.putString(MoreDialog.ARG_TITLE, getString(R.string.quality_gates));
+        args.putInt(MoreDialog.ARG_ICON, R.drawable.ic_shield);
+        ArrayList<Item> items = new ArrayList<>();
+        items.add(new ItemButton(getString(R.string.button_add_quality_gate), TAG_NEW_QUALITY_GATE + ":0", R.drawable.ic_add));
+        items.add(new ItemButton(getString(R.string.quality_gates_import_title),TAG_IMPORT_QUALITY_GATE + ":0", R.drawable.ic_import));
         args.putSerializable(MoreDialog.ARG_ITEMS, items);
         dialog.setArguments(args);
         dialog.show(getSupportFragmentManager(), null);
