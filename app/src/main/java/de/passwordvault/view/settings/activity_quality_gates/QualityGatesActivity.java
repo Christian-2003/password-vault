@@ -8,8 +8,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-
 import java.util.ArrayList;
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGate;
@@ -31,7 +29,7 @@ import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
  * Class implements an activity which can add (or edit) quality gates.
  *
  * @author  Christian-2003
- * @version 3.6.0
+ * @version 3.7.1
  */
 public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesViewModel> implements PasswordVaultBottomSheetDialog.Callback, MoreDialogCallback {
 

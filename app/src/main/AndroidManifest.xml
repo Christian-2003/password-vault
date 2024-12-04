@@ -56,7 +56,7 @@
         <activity android:name=".view.activity_search.SearchActivity" android:exported="false"/>
 
         <activity android:name=".view.settings.activity_url_import.SettingsImportQualityGateActivity" android:exported="true">
-            <intent-filter>
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>

@@ -1,9 +1,6 @@
 package de.passwordvault.view.settings.activity_quality_gates;
 
-import android.os.Build;
 import android.provider.Settings;
-import android.util.Log;
-
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
 import java.io.IOException;
