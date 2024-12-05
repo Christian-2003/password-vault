@@ -8,7 +8,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.Objects;
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.Account;
-import de.passwordvault.view.authentication.dialog_change_password.ChangePasswordDialog;
 
 
 /**
