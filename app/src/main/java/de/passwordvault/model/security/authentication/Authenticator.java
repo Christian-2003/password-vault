@@ -6,12 +6,15 @@ import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModel;
+
 import java.io.Serializable;
 import java.util.concurrent.Executor;
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.Account;
 import de.passwordvault.view.authentication.dialog_authentication.PasswordAuthenticationDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
+import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
 
 
 /**
@@ -74,27 +77,23 @@ public class Authenticator {
      * Class implements the callback for the password authentication dialog. This class handles all
      * callbacks of the authenticator.
      */
-    private class PasswordAuthenticationCallback implements DialogCallbackListener, Serializable {
+    private class PasswordAuthenticationCallback implements PasswordVaultBottomSheetDialog.Callback, Serializable {
 
         /**
-         * Method is called whenever the password authentication succeeded.
+         * Method is called once the callback for the dialog is invoked.
          *
-         * @param dialog    Dialog which called the method.
+         * @param dialog     Dialog that was closed.
+         * @param resultCode Result code is either {@link #RESULT_SUCCESS} or {@link #RESULT_CANCEL}
+         *                   and indicates how the dialog is closed.
          */
         @Override
-        public void onPositiveCallback(DialogFragment dialog) {
-            Authenticator.this.callback.onAuthenticationSuccess(Authenticator.this.tag);
-        }
-
-        /**
-         * Method is called whenever the password authentication failed. This means that the user
-         * cancelled the authentication.
-         *
-         * @param dialog    Dialog which called the method.
-         */
-        @Override
-        public void onNegativeCallback(DialogFragment dialog) {
-            Authenticator.this.callback.onAuthenticationFailure(Authenticator.this.tag, AuthenticationFailure.CANCELLED);
+        public void onCallback(PasswordVaultBottomSheetDialog<? extends ViewModel> dialog, int resultCode) {
+            if (resultCode == PasswordVaultBottomSheetDialog.Callback.RESULT_SUCCESS) {
+                Authenticator.this.callback.onAuthenticationSuccess(Authenticator.this.tag);
+            }
+            else {
+                Authenticator.this.callback.onAuthenticationFailure(Authenticator.this.tag, AuthenticationFailure.CANCELLED);
+            }
         }
 
     }
@@ -247,11 +246,10 @@ public class Authenticator {
     private void passwordAuthentication(int typeOption) {
         PasswordAuthenticationCallback passwordAuthenticationCallback = new PasswordAuthenticationCallback();
         Bundle args = new Bundle();
-        args.putSerializable(PasswordAuthenticationDialog.KEY_CALLBACK, passwordAuthenticationCallback);
-        args.putInt(PasswordAuthenticationDialog.KEY_TITLE_ID, titleId);
-        args.putBoolean(PasswordAuthenticationDialog.KEY_REGISTER, typeOption == TYPE_REGISTER);
+        args.putInt(PasswordAuthenticationDialog.ARG_TITLE_ID, titleId);
+        args.putBoolean(PasswordAuthenticationDialog.ARG_REGISTER, typeOption == TYPE_REGISTER);
 
-        PasswordAuthenticationDialog dialog = new PasswordAuthenticationDialog();
+        PasswordAuthenticationDialog dialog = new PasswordAuthenticationDialog(passwordAuthenticationCallback);
         dialog.setArguments(args);
         dialog.show(context.getSupportFragmentManager(), "");
     }
