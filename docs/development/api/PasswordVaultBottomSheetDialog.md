@@ -152,6 +152,9 @@ Parameter | Description
 `container` | Parent view group for the dialog.
 `savedInstanceState` | Previously saved state of the instance.
 
+###### Returns
+Inflated view for the dialog.
+
 <br/>
 
 ## onCreateDialog
@@ -165,6 +168,9 @@ Method is called whenever the dialog is created.
 Parameter | Description
 --- | ---
 `savedInstanceState` | Previously saved state of the instance.
+
+###### Returns
+Created dialog.
 
 <br/>
 

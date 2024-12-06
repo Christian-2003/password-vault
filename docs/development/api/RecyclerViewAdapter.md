@@ -114,6 +114,7 @@ Field | Description
 
 ###### Public Constructors
 Constructor | Description
+--- | ---
 [`RecyclerViewAdapter(Context, V)`](#recyclerviewadapter) | Constructor to create a new recycler view adapter.
 
 ###### Public Methods
