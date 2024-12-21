@@ -19,7 +19,7 @@ import de.passwordvault.view.general.dialog_more.ItemDivider;
 import de.passwordvault.view.general.dialog_more.MoreDialog;
 import de.passwordvault.view.general.dialog_more.MoreDialogCallback;
 import de.passwordvault.view.settings.activity_quality_gate.QualityGateActivity;
-import de.passwordvault.view.settings.activity_url_import.SettingsImportQualityGateActivity;
+import de.passwordvault.view.settings.activity_import_quality_gate.SettingsImportQualityGateActivity;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
 import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
 import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;

@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.settings.activity_url_import.SettingsImportQualityGateActivity">
+    tools:context=".view.settings.activity_import_quality_gate.SettingsImportQualityGateActivity">
 
     <!-- Appbar for the activity -->
     <LinearLayout

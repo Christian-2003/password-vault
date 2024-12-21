@@ -1,4 +1,4 @@
-package de.passwordvault.view.settings.activity_url_import;
+package de.passwordvault.view.settings.activity_import_quality_gate;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -12,6 +12,9 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.regex.PatternSyntaxException;
+
 import de.passwordvault.R;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
 
@@ -55,8 +58,14 @@ public class SettingsImportQualityGateActivity extends PasswordVaultActivity<Set
             try {
                 viewModel.setUri(s.toString());
             }
+            catch (PatternSyntaxException e) {
+                //Invalid RegEx:
+                mainContainer.setVisibility(View.GONE);
+                urlContainer.setError(getString(R.string.error_invalid_regex));
+                return;
+            }
             catch (IllegalArgumentException e) {
-                //Invalid UR...
+                //Invalid URI...
                 mainContainer.setVisibility(View.GONE);
                 if (s.toString().isEmpty()) {
                     urlContainer.setError(getString(R.string.error_empty_input));

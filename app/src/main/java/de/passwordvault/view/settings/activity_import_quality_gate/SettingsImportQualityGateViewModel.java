@@ -1,9 +1,13 @@
-package de.passwordvault.view.settings.activity_url_import;
+package de.passwordvault.view.settings.activity_import_quality_gate;
 
 import android.net.Uri;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import de.passwordvault.model.analysis.QualityGate;
 import de.passwordvault.model.analysis.QualityGateManager;
 
@@ -54,17 +58,20 @@ public class SettingsImportQualityGateViewModel extends ViewModel {
 
     /**
      * Method sets the URI for the quality gate to import. If the URI entered is invalid (e.g. wrong
-     * website or missing query parameters), an exception is thrown.
+     * website, missing query parameters or invalid RegEx), an exception is thrown. If an exception
+     * is thrown, all attributes of the view model relating to the URI are set to {@code null}.
      *
      * @param uriString                 String representation of the URI.
+     * @throws PatternSyntaxException   The RegEx encoded in the URI is invalid.
      * @throws IllegalArgumentException The URI passed is invalid.
      */
-    public void setUri(@NonNull String uriString) throws IllegalArgumentException {
+    public void setUri(@NonNull String uriString) throws PatternSyntaxException, IllegalArgumentException {
         Uri uri;
         try {
             uri = Uri.parse(uriString);
         }
         catch (Exception e) {
+            resetUriAttributes();
             throw new IllegalArgumentException(e.getMessage());
         }
         this.uri = uri;
@@ -72,7 +79,17 @@ public class SettingsImportQualityGateViewModel extends ViewModel {
         String regexParam = uri.getQueryParameter("regex");
         String refParam = uri.getQueryParameter("ref");
         if (dParam == null || dParam.isEmpty() || regexParam == null || regexParam.isEmpty() || refParam == null || refParam.isEmpty()) {
+            resetUriAttributes();
             throw new IllegalArgumentException("Missing query parameter");
+        }
+        try {
+            Pattern.compile(regexParam);
+        }
+        catch (Exception e) {
+            //Always pass 0 as position since I sincerely do not give a shit at which position the
+            //regex is invalid:
+            resetUriAttributes();
+            throw new PatternSyntaxException("Invalid RegEx pattern", regexParam, 0);
         }
         description = dParam;
         regex = regexParam;
@@ -140,6 +157,18 @@ public class SettingsImportQualityGateViewModel extends ViewModel {
         QualityGateManager.getInstance().addQualityGate(qualityGate);
         QualityGateManager.getInstance().saveAllQualityGates();
         return true;
+    }
+
+
+    /**
+     * Method resets the attributes of the view model. This method can be called whenever an invalid
+     * URI is passed and the
+     */
+    private void resetUriAttributes() {
+        this.uri = null;
+        this.author = null;
+        this.description = null;
+        this.regex = null;
     }
 
 }
