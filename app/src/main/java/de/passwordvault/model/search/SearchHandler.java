@@ -17,7 +17,7 @@ import de.passwordvault.model.tags.Tag;
  * immediately after the instance of {@link SearchResultEntry} of which the detail is a member.
  *
  * @author  Christian-2003
- * @version 3.7.0
+ * @version 3.7.1
  */
 public class SearchHandler {
 
@@ -64,6 +64,8 @@ public class SearchHandler {
             }
         }
 
+        reorderAccordingToPriority(searchResults);
+
         return searchResults;
     }
 
@@ -76,18 +78,28 @@ public class SearchHandler {
      */
     private boolean addEntryToSearchResults(EntryAbbreviated entry) {
         SearchResultEntry searchResult = null;
-        if (entry.getName().toLowerCase().contains(query) || entry.getDescription().toLowerCase().contains(query)) {
-            searchResult = new SearchResultEntry(entry);
+        int priority = 0;
+        ArrayList<Tag> matchingTags = new ArrayList<>();
+        if (entry.getName().toLowerCase().contains(query)) {
+            priority += SearchResult.PRIORITY_MATCHING_ENTRY_NAME;
+        }
+        if (entry.getDescription().toLowerCase().contains(query)) {
+            priority += SearchResult.PRIORITY_MATCHING_ENTRY_DESCRIPTION;
         }
         for (Tag tag : entry.getTags()) {
             if (tag.getName().toLowerCase().contains(query)) {
-                if (searchResult == null) {
-                    searchResult = new SearchResultEntry(entry);
+                if (matchingTags.isEmpty()) {
+                    priority += SearchResult.PRIORITY_MATCHING_ENTRY_TAG;
                 }
+                matchingTags.add(tag);
+            }
+        }
+        if (priority != 0) {
+            searchResult = new SearchResultEntry(entry, priority);
+            for (Tag tag : matchingTags) {
                 searchResult.addMatchingTag(tag);
             }
         }
-
         if (searchResult != null) {
             searchResults.add(searchResult);
         }
@@ -106,17 +118,95 @@ public class SearchHandler {
      */
     private boolean addDetailToSearchResults(Detail detail, EntryAbbreviated entry, boolean entryAddedBeforehand) {
         SearchResultDetail searchResult = null;
-        if (detail.getName().toLowerCase().contains(query) || (!detail.isObfuscated() && detail.getContent().toLowerCase().contains(query))) {
+        int priority = 0;
+        if (detail.getName().toLowerCase().contains(query)) {
+            priority += SearchResult.PRIORITY_MATCHING_DETAIL_NAME;
+        }
+        if (!detail.isObfuscated() && detail.getContent().toLowerCase().contains(query)) {
+            priority += SearchResult.PRIORITY_MATCHING_DETAIL_CONTENT;
+        }
+        if (priority != 0) {
             searchResult = new SearchResultDetail(detail, entry);
         }
 
         if (searchResult != null) {
             if (!entryAddedBeforehand) {
-                searchResults.add(new SearchResultEntry(entry));
+                searchResults.add(new SearchResultEntry(entry, priority));
             }
             searchResults.add(searchResult);
         }
         return searchResult != null;
+    }
+
+
+    /**
+     * Method uses a quicksort algorithm to reorder the passed list of search results based on their
+     * priority. Afterwards, search results with a high priority will be placed at the beginning of
+     * the list while search results with a low priority are placed at the end.
+     *
+     * @param list  List to sort.
+     */
+    private void reorderAccordingToPriority(@NonNull ArrayList<SearchResult> list) {
+        if (list.isEmpty()) {
+            return;
+        }
+        ArrayList<SearchResult> leftBlocks = new ArrayList<>();
+        ArrayList<SearchResult> rightBlocks = new ArrayList<>();
+        ArrayList<SearchResult> pivotBlocks = new ArrayList<>();
+
+        //Determine pivot blocks:
+        pivotBlocks.add(list.get(0));
+        for (int i = 1; i < list.size(); i++) {
+            if (list.get(i) instanceof SearchResultDetail) {
+                pivotBlocks.add(list.get(i));
+            }
+            else {
+                break;
+            }
+        }
+        int pivotPriority = pivotBlocks.get(0).getPriority();
+
+        //Divide list into left or right:
+        for (int i = pivotBlocks.size(); i < list.size(); i++) {
+            //Insert first item of current block (entry search result) into left or right:
+            SearchResult searchResult = list.get(i);
+            boolean left;
+            if (searchResult.getPriority() > pivotPriority) {
+                left = true;
+                leftBlocks.add(searchResult);
+            }
+            else {
+                left = false;
+                rightBlocks.add(searchResult);
+            }
+
+            //Insert other items of block (detail search results) into left or right:
+            if (++i < list.size()) {
+                searchResult = list.get(i);
+                while (searchResult instanceof SearchResultDetail) {
+                    if (left) {
+                        leftBlocks.add(searchResult);
+                    }
+                    else {
+                        rightBlocks.add(searchResult);
+                    }
+                    if (++i < list.size()) {
+                        searchResult = list.get(i);
+                    }
+                    else {
+                        break;
+                    }
+                }
+                i--;
+            }
+        }
+
+        reorderAccordingToPriority(leftBlocks);
+        reorderAccordingToPriority(rightBlocks);
+        list.clear();
+        list.addAll(leftBlocks);
+        list.addAll(pivotBlocks);
+        list.addAll(rightBlocks);
     }
 
 }

@@ -10,7 +10,7 @@ import de.passwordvault.model.tags.Tag;
  * Class models a search result for an entry.
  *
  * @author  Christian-2003
- * @version 3.7.0
+ * @version 3.7.1
  */
 public class SearchResultEntry extends SearchResult {
 
@@ -30,10 +30,11 @@ public class SearchResultEntry extends SearchResult {
     /**
      * Constructor instantiates a new search result for an entry.
      *
-     * @param entry Entry for which to create the search result.
+     * @param entry     Entry for which to create the search result.
+     * @param priority  Priority for the search result.
      */
-    public SearchResultEntry(@NonNull EntryAbbreviated entry) {
-        super(TYPE_ENTRY);
+    public SearchResultEntry(@NonNull EntryAbbreviated entry, int priority) {
+        super(TYPE_ENTRY, priority);
         this.entry = entry;
         matchingTags = new ArrayList<>();
     }

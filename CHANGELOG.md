@@ -13,6 +13,7 @@ n./a.
 * Fixed a bug through which the of all selected apps for an entry does not show the package name of an app if it is not installed or does not have a name.
 * Implemented Material Design for remaining activities and dialogs.
 * Search results now highlight the query entered by the user through yellow background.
+* Search results are sorted according to their priority to the user.
 
 <br/>
 
