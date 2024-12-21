@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    tools:background="@color/background_container">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -51,6 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/space_horizontal"
+                android:layout_marginTop="@dimen/space_vertical"
                 android:text="@string/settings_customization_details_swipe_right"
                 style="@style/text.headline"/>
 
@@ -276,6 +276,7 @@
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="@dimen/space_horizontal"
                 android:paddingVertical="@dimen/space_vertical"
+                android:layout_marginBottom="@dimen/space_vertical"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"

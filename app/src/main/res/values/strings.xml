@@ -337,6 +337,8 @@
     <string name="button_later">Later</string>
     <string name="button_download">Download</string>
     <string name="button_import">Import</string>
+    <string name="button_enable">Enable</string>
+    <string name="button_disable">Disable</string>
 
 
     <!-- Input hints -->

@@ -1,7 +1,6 @@
 package de.passwordvault.view.authentication.activity_security_question;
 
-import android.util.Log;
-
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +13,7 @@ import de.passwordvault.model.security.login.SecurityQuestion;
  * questions in order to restore the master password.
  *
  * @author  Christian-2003
- * @version 3.6.1
+ * @version 3.7.1
  */
 public class SecurityQuestionViewModel extends ViewModel {
 
@@ -23,12 +22,31 @@ public class SecurityQuestionViewModel extends ViewModel {
      */
     private ArrayList<SecurityQuestion> questions;
 
+    /**
+     * Attribute stores the security questions the user needs to answer as string.
+     */
+    @Nullable
+    private ArrayList<String> questionStrings;
+
+    /**
+     * Attribute stores whether the answers are valid.
+     */
+    private boolean answersValid;
+
+    /**
+     * Attribute stores whether {@link #areAnswersValid(ArrayList)} has ever been called.
+     */
+    private boolean answersTested;
+
 
     /**
      * Constructor instantiates a new view model.
      */
     public SecurityQuestionViewModel() {
         questions = null;
+        questionStrings = null;
+        answersValid = false;
+        answersTested = false;
     }
 
 
@@ -38,7 +56,7 @@ public class SecurityQuestionViewModel extends ViewModel {
      * @return  List of selected questions.
      */
     public ArrayList<String> getQuestions() {
-        if (questions == null) {
+        if (questions == null || questionStrings == null) {
             ArrayList<SecurityQuestion> allQuestions = new ArrayList<>(Account.getInstance().getSecurityQuestions());
             Collections.shuffle(allQuestions);
             if (allQuestions.size() > Account.REQUIRED_SECURITY_QUESTIONS) {
@@ -50,13 +68,13 @@ public class SecurityQuestionViewModel extends ViewModel {
             else {
                 questions = allQuestions;
             }
+            questionStrings = new ArrayList<>();
+            String[] allQuestionStrings = SecurityQuestion.getAllQuestions();
+            for (SecurityQuestion q : questions) {
+                questionStrings.add(allQuestionStrings[q.getQuestion()]);
+            }
         }
-        ArrayList<String> questionStrings = new ArrayList<>();
-        String[] allQuestionStrings = SecurityQuestion.getAllQuestions();
-        for (SecurityQuestion q : questions) {
-            questionStrings.add(allQuestionStrings[q.getQuestion()]);
-        }
-        return questionStrings;
+        return this.questionStrings;
     }
 
 
@@ -70,21 +88,42 @@ public class SecurityQuestionViewModel extends ViewModel {
      */
     public boolean areAnswersValid(ArrayList<String> answers) {
         if (answers.size() != questions.size()) {
+            answersValid = false;
+            answersTested = true;
             return false;
         }
-        Log.d("SQ", "Number of answers=" + answers.size() + ", number of questions=" + questions.size());
         int numberOfCorrectAnswers = 0;
         for (int i = 0; i < answers.size(); i++) {
             if (answers.get(i) == null) {
-                Log.d("SQ", "null");
                 continue;
             }
-            Log.d("SQ", "Testing answer '" + answers.get(i) + " with correct value '" + questions.get(i).getAnswer() + "'.");
             if (answers.get(i).equalsIgnoreCase(questions.get(i).getAnswer())) {
                 numberOfCorrectAnswers++;
             }
         }
-        return numberOfCorrectAnswers >= Account.REQUIRED_CORRECT_ANSWERS;
+        answersValid = numberOfCorrectAnswers >= Account.REQUIRED_CORRECT_ANSWERS;
+        answersTested = true;
+        return answersValid;
+    }
+
+    /**
+     * Method returns whether the answers tested previously through {@link #areAnswersValid(ArrayList)}
+     * are valid.
+     *
+     * @return  Whether the answers are valid.
+     */
+    public boolean areAnswersValid() {
+        return answersValid;
+    }
+
+    /**
+     * Method returns whether the validity of answers has ever been tested through calling
+     * {@link #areAnswersValid(ArrayList)}.
+     *
+     * @return  Whether answers have ever been tested.
+     */
+    public boolean areAnswersTested() {
+        return answersTested;
     }
 
 }

@@ -305,7 +305,7 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
         items.add(new ItemButton(getString(R.string.button_edit), TAG_EDIT_QUALITY_GATE + ":" + position, R.drawable.ic_edit));
         items.add(new ItemButton(getString(R.string.button_delete),TAG_DELETE_QUALITY_GATE + ":" + position, R.drawable.ic_delete));
         items.add(new ItemDivider());
-        items.add(new ItemCheckbox(getString(R.string.quality_gate_enabled), TAG_ENABLE_QUALITY_GATE + ":" + position, qualityGate.isEnabled()));
+        items.add(new ItemCheckbox(qualityGate.isEnabled() ? getString(R.string.button_disable) : getString(R.string.button_enable), TAG_ENABLE_QUALITY_GATE + ":" + position, qualityGate.isEnabled()));
         items.add(new ItemButton(getString(R.string.quality_gates_share), TAG_SHARE_QUALITY_GATE + ":" + position, R.drawable.ic_share));
         args.putSerializable(MoreDialog.ARG_ITEMS, items);
         dialog.setArguments(args);

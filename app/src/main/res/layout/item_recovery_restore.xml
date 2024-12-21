@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="@dimen/space_vertical"
+    android:layout_marginHorizontal="@dimen/space_horizontal">
+
+    <Button
+        android:id="@+id/button_recover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/button_recover_password"/>
+
+    <TextView
+        android:id="@+id/text_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="@string/error_master_password_recovery"
+        android:visibility="invisible"
+        android:textColor="?attr/colorError"
+        tools:visibility="visible"
+        style="@style/text"/>
+
+</LinearLayout>
