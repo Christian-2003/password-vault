@@ -76,12 +76,12 @@ public class DuplicatePasswordEntriesActivity extends PasswordVaultActivity<Dupl
                 if (result.getResultCode() == EntryActivity.RESULT_EDITED) {
                     EntryAbbreviated editedEntry = EntryManager.getInstance().get(viewModel.getDisplayedEntry().getUuid());
                     viewModel.getEntries().set(index, editedEntry);
-                    adapter.notifyItemChanged(index + DuplicatePasswordEntriesRecyclerViewAdapter.OFFSET_ENTRIES);
+                    adapter.notifyItemChanged(index - DuplicatePasswordEntriesRecyclerViewAdapter.OFFSET_ENTRIES);
                     viewModel.setDisplayedEntry(null);
                 }
                 else if (result.getResultCode() == EntryActivity.RESULT_DELETED) {
                     viewModel.getEntries().remove(index);
-                    adapter.notifyItemRemoved(index + DuplicatePasswordEntriesRecyclerViewAdapter.OFFSET_ENTRIES);
+                    adapter.notifyItemRemoved(index - DuplicatePasswordEntriesRecyclerViewAdapter.OFFSET_ENTRIES);
                     viewModel.setDisplayedEntry(null);
                 }
             }

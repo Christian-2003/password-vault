@@ -15,6 +15,7 @@ n./a.
 * Search results now highlight the query entered by the user through yellow background.
 * Search results are sorted according to their priority to the user.
 * Changed icons used by password analysis from outlined icons to filled icons.
+* List of duplicate passwords displays password and security score.
 
 <br/>
 
