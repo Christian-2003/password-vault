@@ -3,7 +3,6 @@ package de.passwordvault.view.passwords.activity_duplicates;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -13,15 +12,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.imageview.ShapeableImageView;
-
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGateManager;
 import de.passwordvault.model.analysis.passwords.Password;
-import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.view.utils.recycler_view.OnRecyclerViewActionListener;
@@ -200,7 +195,6 @@ public class DuplicatePasswordEntriesRecyclerViewAdapter extends RecyclerViewAda
      */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Log.d(TAG, "Bind view holder for position " + position + ": " + holder.getClass().getSimpleName());
         if (holder instanceof EntryViewHolder) {
             EntryViewHolder viewHolder = (EntryViewHolder)holder;
             EntryAbbreviated entry = filteredEntries.get(position - OFFSET_ENTRIES);
@@ -214,7 +208,7 @@ public class DuplicatePasswordEntriesRecyclerViewAdapter extends RecyclerViewAda
             viewHolder.descriptionTextView.setText(entry.getDescription());
             viewHolder.itemView.setOnClickListener(view -> {
                 if (itemClickListener != null) {
-                    itemClickListener.onAction(viewHolder.getAdapterPosition());
+                    itemClickListener.onAction(holder.getAdapterPosition());
                 }
             });
         }
@@ -285,7 +279,6 @@ public class DuplicatePasswordEntriesRecyclerViewAdapter extends RecyclerViewAda
      * Method resets the filter for the adapter.
      */
     public void resetFilter() {
-        int count = filteredEntries.size();
         filteredEntries.clear();
         filteredEntries.addAll(viewModel.getEntries());
         notifyDataSetChanged();

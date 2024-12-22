@@ -30,6 +30,7 @@ import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
 import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -337,6 +338,7 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
             }
         }
         setResult(viewModel.getResultCode());
+        Log.d("EntryActivity", "Set result " + (viewModel.getResultCode() == RESULT_EDITED ? "EDITED" : "DELETED") + " for entry " + viewModel.getEntry().getName());
         super.finish();
     }
 

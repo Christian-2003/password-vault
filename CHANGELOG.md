@@ -16,6 +16,7 @@ n./a.
 * Search results are sorted according to their priority to the user.
 * Changed icons used by password analysis from outlined icons to filled icons.
 * List of duplicate passwords displays password and security score.
+* App no longer crashes when editing or deleting an account through the password security analysis.
 
 <br/>
 
