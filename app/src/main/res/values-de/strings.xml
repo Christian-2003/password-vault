@@ -230,6 +230,7 @@
     <string name="password_results_weak_title">Einfache Passwörter</string>
     <string name="password_results_weak_none">Keine einfachen Passwörter</string>
     <string name="password_results_duplicates_accounts">Konten</string>
+    <string name="password_results_duplicates_number">{arg} Konten verwenden dieses Passwort</string>
     <string name="password_all_empty_title">Keine Passwörter</string>
     <string name="password_all_empty_info">Verfügbare Passwörter werden hier angezeigt</string>
 

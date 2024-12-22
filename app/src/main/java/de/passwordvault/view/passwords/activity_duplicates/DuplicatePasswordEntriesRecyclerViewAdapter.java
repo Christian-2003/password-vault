@@ -90,6 +90,11 @@ public class DuplicatePasswordEntriesRecyclerViewAdapter extends RecyclerViewAda
         public final ImageButton obfuscateButton;
 
         /**
+         * Attribute stores the text view displaying the number of accounts using the password.
+         */
+        public final TextView numberTextView;
+
+        /**
          * Attribute stores the progress bar displaying the password security score.
          */
         public final ProgressBar scoreProgressBar;
@@ -104,17 +109,13 @@ public class DuplicatePasswordEntriesRecyclerViewAdapter extends RecyclerViewAda
             super(itemView);
             passwordTextView = itemView.findViewById(R.id.text_password);
             obfuscateButton = itemView.findViewById(R.id.button_obfuscate);
+            numberTextView = itemView.findViewById(R.id.text_number);
             scoreProgressBar = itemView.findViewById(R.id.progress_bar);
             scoreTextView = itemView.findViewById(R.id.text_score);
         }
 
     }
 
-
-    /**
-     * Field stores the offset for the list of entries within the adapter.
-     */
-    public static final int OFFSET_ENTRIES = 2;
 
     /**
      * Field stores the view type for entries.
@@ -125,6 +126,16 @@ public class DuplicatePasswordEntriesRecyclerViewAdapter extends RecyclerViewAda
      * Field stores the view type for the header displayed at the top of the page.
      */
     private static final int TYPE_DUPLICATES_HEADER = 3;
+
+    /**
+     * Field stores the offset for the list of entries within the adapter.
+     */
+    public static final int OFFSET_ENTRIES = 2;
+
+    /**
+     * Attribute stores the position for the header within the recycler view.
+     */
+    public static final int POSITION_HEADER = 0;
 
 
     /**
@@ -216,6 +227,7 @@ public class DuplicatePasswordEntriesRecyclerViewAdapter extends RecyclerViewAda
             HeaderViewHolder viewHolder = (HeaderViewHolder)holder;
             Password password = viewModel.getPasswords().get(0);
             viewHolder.passwordTextView.setText(Utils.obfuscate(password.getCleartextPassword()));
+            viewHolder.numberTextView.setText(context.getString(R.string.password_results_duplicates_number).replace("{arg}", "" + viewModel.getEntries().size()));
             viewHolder.scoreTextView.setText("" + password.getSecurityScore() + " / " + QualityGateManager.getInstance().numberOfQualityGates());
             viewHolder.scoreTextView.setTextColor(Utils.getPasswordSecurityScoreColor(password.getSecurityScore()));
 

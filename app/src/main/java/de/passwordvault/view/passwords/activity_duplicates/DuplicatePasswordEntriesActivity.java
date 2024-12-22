@@ -83,6 +83,7 @@ public class DuplicatePasswordEntriesActivity extends PasswordVaultActivity<Dupl
                     viewModel.getEntries().remove(index);
                     adapter.resetFilter();
                     adapter.notifyItemRemoved(index + DuplicatePasswordEntriesRecyclerViewAdapter.OFFSET_ENTRIES);
+                    adapter.notifyItemChanged(DuplicatePasswordEntriesRecyclerViewAdapter.POSITION_HEADER);
                 }
                 viewModel.setDisplayedEntry(null);
                 searchBarEditText.setText("");
