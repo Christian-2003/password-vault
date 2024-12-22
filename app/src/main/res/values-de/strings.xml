@@ -339,6 +339,7 @@
     <string name="button_import">Importieren</string>
     <string name="button_enable">Aktivieren</string>
     <string name="button_disable">Deaktivieren</string>
+    <string name="button_analyze_password_security">Passwortsicherheit analysieren</string>
 
 
     <!-- Input hints -->
