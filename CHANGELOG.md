@@ -14,6 +14,7 @@ n./a.
 * Implemented Material Design for remaining activities and dialogs.
 * Search results now highlight the query entered by the user through yellow background.
 * Search results are sorted according to their priority to the user.
+* Changed icons used by password analysis from outlined icons to filled icons.
 
 <br/>
 

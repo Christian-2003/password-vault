@@ -1,7 +1,6 @@
 package de.passwordvault.view.passwords.activity_list;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -10,14 +9,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGateManager;
 import de.passwordvault.model.analysis.passwords.Password;
-import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.view.utils.recycler_view.OnRecyclerViewActionListener;
 import de.passwordvault.view.utils.recycler_view.RecyclerViewAdapter;
@@ -173,15 +170,15 @@ public class PasswordAnalysisListRecyclerViewAdapter extends RecyclerViewAdapter
                 //Score display:
                 viewHolder.scoreTextView.setText(password.getSecurityScore() + " / " + QualityGateManager.getInstance().numberOfQualityGates());
                 if (password.getSecurityScore() > QualityGateManager.getInstance().numberOfQualityGates() * 0.67) {
-                    viewHolder.statusImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_ok));
+                    viewHolder.statusImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_ok_filled));
                     viewHolder.statusImageView.setColorFilter(ContextCompat.getColor(context, R.color.green));
                 }
                 else if (password.getSecurityScore() > QualityGateManager.getInstance().numberOfQualityGates() * 0.34) {
-                    viewHolder.statusImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_info));
+                    viewHolder.statusImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_info_filled));
                     viewHolder.statusImageView.setColorFilter(ContextCompat.getColor(context, R.color.yellow));
                 }
                 else {
-                    viewHolder.statusImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_alert));
+                    viewHolder.statusImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_alert_filled));
                     viewHolder.statusImageView.setColorFilter(ContextCompat.getColor(context, R.color.red));
                 }
 
