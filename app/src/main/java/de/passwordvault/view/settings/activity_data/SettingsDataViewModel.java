@@ -29,23 +29,28 @@ import de.passwordvault.view.utils.Utils;
  * Class implements the view model for the {@link SettingsDataActivity}.
  *
  * @author  Christian-2003
- * @version 3.6.1
+ * @version 3.7.1
  */
 public class SettingsDataViewModel extends ViewModel {
 
     /**
-     * Attribute stores the total free disk space.
+     * Attribute stores the total space used by the app on all volumes.
      */
-    private double totalFreeDiskSpace;
-
-    private double totalUsedDiskSpace;
-
     private double totalAppSpace;
 
+    /**
+     * Attribute stores the total space used by the app for it's data on all volumes.
+     */
     private double totalDataSpace;
 
+    /**
+     * Attribute stores the total space used by the app for it's caches on all volumes.
+     */
     private double totalCacheSpace;
 
+    /**
+     * Attribute indicates whether the storage spaces have been calculated yet.
+     */
     private boolean calculatedDiskSpaces;
 
 
@@ -53,8 +58,6 @@ public class SettingsDataViewModel extends ViewModel {
      * Constructor instantiates a new view model.
      */
     public SettingsDataViewModel() {
-        totalFreeDiskSpace = 0;
-        totalUsedDiskSpace = 0;
         totalAppSpace = 0;
         totalDataSpace = 0;
         totalCacheSpace = 0;
@@ -78,8 +81,6 @@ public class SettingsDataViewModel extends ViewModel {
         StorageStatsManager storageStatsManager = (StorageStatsManager)context.getSystemService(Context.STORAGE_STATS_SERVICE);
         List<StorageVolume> storageVolumes = storageManager.getStorageVolumes();
         UserHandle user = Process.myUserHandle();
-        long freeDiskBytes = 0;
-        long usedDiskBytes = 0;
         long appBytes = 0;
         long dataBytes = 0;
         long cacheBytes = 0;
@@ -87,8 +88,6 @@ public class SettingsDataViewModel extends ViewModel {
             UUID storageVolumeUuid = storageVolume.getStorageUuid();
             if (storageVolumeUuid != null) {
                 try {
-                    freeDiskBytes += storageStatsManager.getFreeBytes(storageVolumeUuid);
-                    usedDiskBytes += storageStatsManager.getTotalBytes(storageVolumeUuid);
                     StorageStats stats = storageStatsManager.queryStatsForPackage(storageVolumeUuid, context.getPackageName(), user);
                     appBytes += stats.getAppBytes();
                     dataBytes += stats.getDataBytes();
@@ -99,8 +98,6 @@ public class SettingsDataViewModel extends ViewModel {
                 }
             }
         }
-        totalFreeDiskSpace = freeDiskBytes / 1024.0 / 1024;
-        totalUsedDiskSpace = (usedDiskBytes - freeDiskBytes) / 1024.0 / 1024;
         totalAppSpace = appBytes / 1024.0 / 1024;
         totalDataSpace = (appBytes - dataBytes) / 1024.0 / 1024;
         totalCacheSpace = cacheBytes / 1024.0 / 1024;
@@ -151,31 +148,45 @@ public class SettingsDataViewModel extends ViewModel {
         Toast.makeText(context, context.getString(R.string.settings_data_export_html_success), Toast.LENGTH_LONG).show();
     }
 
-
-    public double getTotalFreeDiskSpace() {
-        return totalFreeDiskSpace;
-    }
-
-    public double getTotalUsedDiskSpace() {
-        return totalUsedDiskSpace;
-    }
-
+    /**
+     * Method returns the total space used by the app on all volumes.
+     *
+     * @return  Total space used by the app.
+     */
     public double getTotalAppSpace() {
         return totalAppSpace;
     }
 
+    /**
+     * Method returns the space used by the app to store it's data on all volumes.
+     *
+     * @return  Spaced used to store app data.
+     */
     public double getTotalDataSpace() {
         return totalDataSpace;
     }
 
+    /**
+     * Method returns the space used by the app to store it's cache data on all volumes.
+     *
+     * @return  Space used to store cache data.
+     */
     public double getTotalCacheSpace() {
         return totalCacheSpace;
     }
 
 
-
-    public String formatStorageSpace(String orig, double space, String unit) {
-        String formatted = orig;
+    /**
+     * Method formats the passed placeholder to contain the specified space of the specified unit.
+     *
+     * @param placeholder   Placeholder in which to replace {@code {unit}} and {@code {space}} with
+     *                      the specified unit and space.
+     * @param space         Space used to format (e.g. {@code 19300.12}).
+     * @param unit          Unit used to format (e.g. {@code MB}).
+     * @return              Formatted string.
+     */
+    public String formatStorageSpace(String placeholder, double space, String unit) {
+        String formatted = placeholder;
         formatted = formatted.replace("{unit}", unit);
         formatted = formatted.replace("{space}", Utils.formatNumber(space));
         return formatted;

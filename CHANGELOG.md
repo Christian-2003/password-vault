@@ -18,6 +18,7 @@ n./a.
 * List of duplicate passwords displays password and security score.
 * App no longer crashes when editing or deleting an account through the password security analysis.
 * List of password quality gates no longer shows RegEx since the average end user does not have any knowledge of RegEx.
+* Segmented progress bar in `SettingsDataActivity` now only displays storage used by Password Vault.
 
 <br/>
 

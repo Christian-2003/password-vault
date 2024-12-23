@@ -31,7 +31,7 @@ import de.passwordvault.view.utils.components.SegmentedProgressBar;
  * Class implements the settings data activity.
  *
  * @author  Christian-2003
- * @version 3.7.0
+ * @version 3.7.1
  */
 public class SettingsDataActivity extends PasswordVaultActivity<SettingsDataViewModel> implements AuthenticationCallback, PasswordVaultBottomSheetDialog.Callback {
 
@@ -212,29 +212,21 @@ public class SettingsDataActivity extends PasswordVaultActivity<SettingsDataView
         App.getExecutor().execute(() -> {
             viewModel.calculateStorageStats(this, force);
             String placeholder = getString(R.string.settings_data_storage_placeholder);
-            double usedSpaceMb = viewModel.getTotalUsedDiskSpace();
-            double freeSpaceMb = viewModel.getTotalFreeDiskSpace();
             double appSpaceMb = viewModel.getTotalAppSpace();
             double dataSpaceMb = viewModel.getTotalDataSpace();
             double cacheSpaceMb = viewModel.getTotalCacheSpace();
-            double totalSpace = usedSpaceMb + freeSpaceMb + appSpaceMb + dataSpaceMb + cacheSpaceMb;
-            float usedSpacePercentage = (float)(usedSpaceMb / totalSpace);
+            double totalSpace = appSpaceMb + dataSpaceMb + cacheSpaceMb;
             float appSpacePercentage = (float)(appSpaceMb / totalSpace);
             float dataSpacePercentage = (float)(dataSpaceMb / totalSpace);
             float cacheSpacePercentage = (float)(cacheSpaceMb / totalSpace);
-            String usedSpaceText = viewModel.formatStorageSpace(placeholder, usedSpaceMb / 1024, "GB");
-            String freeSpaceText = viewModel.formatStorageSpace(placeholder, freeSpaceMb / 1024, "GB");
             String appSpaceText = viewModel.formatStorageSpace(placeholder, appSpaceMb, "MB");
             String dataSpaceText = viewModel.formatStorageSpace(placeholder, dataSpaceMb, "MB");
             String cacheSpaceText = viewModel.formatStorageSpace(placeholder, cacheSpaceMb, "MB");
             progressBar.clearSegments();
-            progressBar.addSegment(new SegmentedProgressBar.Segment(usedSpacePercentage, getColor(R.color.text_light)));
-            progressBar.addSegment(new SegmentedProgressBar.Segment(appSpacePercentage, getColor(R.color.primary)));
-            progressBar.addSegment(new SegmentedProgressBar.Segment(dataSpacePercentage, getColor(R.color.green)));
-            progressBar.addSegment(new SegmentedProgressBar.Segment(cacheSpacePercentage, getColor(R.color.yellow)));
+            progressBar.addSegment(new SegmentedProgressBar.Segment(appSpacePercentage, getColor(R.color.text_light)));
+            progressBar.addSegment(new SegmentedProgressBar.Segment(dataSpacePercentage, getColor(R.color.primary)));
+            progressBar.addSegment(new SegmentedProgressBar.Segment(cacheSpacePercentage, getColor(R.color.green)));
             mainExecutor.execute(() -> {
-                ((TextView)findViewById(R.id.used)).setText(usedSpaceText);
-                ((TextView)findViewById(R.id.free)).setText(freeSpaceText);
                 ((TextView)findViewById(R.id.app)).setText(appSpaceText);
                 ((TextView)findViewById(R.id.data)).setText(dataSpaceText);
                 ((TextView)findViewById(R.id.cache)).setText(cacheSpaceText);
