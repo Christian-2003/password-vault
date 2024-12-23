@@ -17,6 +17,7 @@ n./a.
 * Changed icons used by password analysis from outlined icons to filled icons.
 * List of duplicate passwords displays password and security score.
 * App no longer crashes when editing or deleting an account through the password security analysis.
+* List of password quality gates no longer shows RegEx since the average end user does not have any knowledge of RegEx.
 
 <br/>
 

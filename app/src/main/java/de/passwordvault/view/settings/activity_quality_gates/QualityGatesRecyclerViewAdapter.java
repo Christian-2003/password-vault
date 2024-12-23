@@ -23,7 +23,7 @@ import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
  * Class implements the recycler view adapter for the activity displaying all quality gates.
  *
  * @author  Christian-2003
- * @version 3.7.0
+ * @version 3.7.1
  */
 public class QualityGatesRecyclerViewAdapter extends RecyclerViewAdapter<QualityGatesViewModel> implements RecyclerViewSwipeCallback.SwipeContract {
 
@@ -36,11 +36,6 @@ public class QualityGatesRecyclerViewAdapter extends RecyclerViewAdapter<Quality
          * Attribute stores the text view displaying the description of the quality gate.
          */
         public final TextView descriptionTextView;
-
-        /**
-         * Attribute stores the text view displaying the regex of the quality gate.
-         */
-        public final TextView regexTextView;
 
         /**
          * Attribute stores the text view displaying the author of the quality gate.
@@ -71,7 +66,6 @@ public class QualityGatesRecyclerViewAdapter extends RecyclerViewAdapter<Quality
         public QualityGatesItemViewHolder(View itemView) {
             super(itemView);
             descriptionTextView = itemView.findViewById(R.id.text_description);
-            regexTextView = itemView.findViewById(R.id.text_regex);
             authorTextView = itemView.findViewById(R.id.text_author);
             authorImageView = itemView.findViewById(R.id.image_author);
             activeCheckBox = itemView.findViewById(R.id.checkbox);
@@ -236,13 +230,12 @@ public class QualityGatesRecyclerViewAdapter extends RecyclerViewAdapter<Quality
                     if (qualityGate.getAuthor() == null) {
                         viewHolder.authorTextView.setText(R.string.quality_gates_author_user);
                         viewHolder.authorImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_verified));
-                        viewHolder.authorImageView.setColorFilter(ContextCompat.getColor(context, R.color.primary));
                     }
                     else {
                         viewHolder.authorTextView.setText(qualityGate.getAuthor());
                         viewHolder.authorImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_person));
-                        viewHolder.authorImageView.setColorFilter(ContextCompat.getColor(context, R.color.text_light));
                     }
+                    viewHolder.authorImageView.setColorFilter(ContextCompat.getColor(context, R.color.text_light));
                 }
                 else {
                     //Default quality gate:
@@ -256,7 +249,6 @@ public class QualityGatesRecyclerViewAdapter extends RecyclerViewAdapter<Quality
                     viewHolder.authorImageView.setColorFilter(ContextCompat.getColor(context, R.color.primary));
                 }
                 viewHolder.descriptionTextView.setText(qualityGate.getDescription());
-                viewHolder.regexTextView.setText(qualityGate.getRegex());
             }
         }
         catch (ClassCastException e) {
