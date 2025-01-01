@@ -2,9 +2,9 @@
 
 # Changelog
 
-## 3.7.1 (XXXX-XX-XX)
+## 3.7.1 (2025-01-01)
 ###### Release Highlights
-n./a.
+Password quality gates can be imported using URI-links and enhancements to search functionality as well as bugfixes and general improvements.
 
 ###### Features
 * Deleting all data through settings no longer deletes default quality gates.
