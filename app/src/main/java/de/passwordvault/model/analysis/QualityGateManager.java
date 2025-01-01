@@ -144,11 +144,17 @@ public class QualityGateManager implements Observable<ArrayList<QualityGate>> {
 
 
     /**
-     * Method removes all quality gates.
+     * Method removes all custom quality gates.
      */
     public void clearQualityGates() {
-        qualityGates.clear();
+        for (int i = qualityGates.size() - 1; i >= 0; i--) {
+            if (qualityGates.get(i).isEditable()) {
+                qualityGates.remove(i);
+            }
+        }
     }
+
+
 
 
     /**
@@ -162,7 +168,7 @@ public class QualityGateManager implements Observable<ArrayList<QualityGate>> {
         if (qualityGates == null) {
             throw new NullPointerException();
         }
-        clearQualityGates();
+        this.qualityGates.clear();
         if (loadDefault) {
             loadDefaultQualityGates();
         }

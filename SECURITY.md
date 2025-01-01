@@ -15,10 +15,11 @@ Password Vault encrypts your data using **AES / GCM** to ensure maximum security
 
 Code | Version | Data | Backup | User Password | Autofill Cache | Password Recovery
 --- | --- | --- | --- | --- | --- | ---
+26 | 3.7.1 | :white_check_mark: | :white_check_mark:<sup>1</sup> | :white_check_mark: | :white_check_mark: | :white_check_mark:
 24 | 3.7.0 | :white_check_mark: | :white_check_mark:<sup>1</sup> | :white_check_mark: | :white_check_mark: | :white_check_mark:
 22 | 3.6.2 | :white_check_mark: | :white_check_mark:<sup>1</sup> | :white_check_mark: | :white_check_mark: | :white_check_mark:
 21 | 3.6.1 | :white_check_mark: | :white_check_mark:<sup>1</sup> | :white_check_mark: | :white_check_mark: | :white_check_mark:
-20 | 3.6.0 | :white_check_mark: | :white_check_mark:<sup>1</sup> | :white_check_mark: | :white_check_mark: | :white_check_mark:
+20<sup>2</sup> | 3.6.0<sup>2</sup> | :white_check_mark: | :white_check_mark:<sup>1</sup> | :white_check_mark: | :white_check_mark: | :white_check_mark:
 19 | 3.5.6 | :white_check_mark: | :white_check_mark:<sup>1</sup> | :white_check_mark: | :white_check_mark: |
 18 | 3.5.5 | :white_check_mark: | :white_check_mark:<sup>1</sup> | :white_check_mark: | :white_check_mark: |
 1 | 3.5.4 | :white_check_mark: | :white_check_mark:<sup>1</sup> | :white_check_mark: | :white_check_mark: |
@@ -39,15 +40,13 @@ Code | Version | Data | Backup | User Password | Autofill Cache | Password Recov
 1 | 1.0.1 | :x: | | | |
 1 | 1.0.0 | :x: | | | |
 
-_<sup>1</sup> Backups can be encrypted, but they do not have to be encrypted._ 
+_<sup>1</sup> Backups can be encrypted, but they do not have to be encrypted._  
+_<sup>2</sup> Version 3.6.0 is only available on the Gooogle Play Store for internal testing._
 
 <br/>
 
 ## Security Updates
-Security vulnerabilities are patched as soon as they are noticed. However, such patches are only provided to the newest version. Users are not notified about security updates.
-
-###### Recommendations for Updating to Password Vault 3
-It is highly recommended for users of **Password Vault 1** and **Password Vault 2** to immediately update to **Password Vault 3**. This version is intended to be supported long term.
+Security vulnerabilities are patched as soon as they are noticed. However, such patches are only provided to the newest version. Users are not notified about security updates and are advised to update to new app versions as soon as they are released. Notifications on app updates are provided through the app.
 
 <br/>
 
@@ -57,5 +56,5 @@ If you find any security-related bugs in our product, please notify our developm
 <br/>
 
 ***
-2024-11-19  
+2025-01-01  
 &copy; Christian-2003  

@@ -2,6 +2,26 @@
 
 # Changelog
 
+## 3.7.1 (2025-01-01)
+###### Release Highlights
+Password quality gates can be imported using URI-links and enhancements to search functionality as well as bugfixes and general improvements.
+
+###### Features
+* Deleting all data through settings no longer deletes default quality gates.
+* Details show more than two lines of content.
+* Used correct color to display score when configuring master password recovery.
+* Fixed a bug through which the of all selected apps for an entry does not show the package name of an app if it is not installed or does not have a name.
+* Implemented Material Design for remaining activities and dialogs.
+* Search results now highlight the query entered by the user through yellow background.
+* Search results are sorted according to their priority to the user.
+* Changed icons used by password analysis from outlined icons to filled icons.
+* List of duplicate passwords displays password and security score.
+* App no longer crashes when editing or deleting an account through the password security analysis.
+* List of password quality gates no longer shows RegEx since the average end user does not have any knowledge of RegEx.
+* Segmented progress bar in `SettingsDataActivity` now only displays storage used by Password Vault.
+
+<br/>
+
 ## 3.7.0 (2024-11-19)
 ###### Release Highlights
 Added extensive search functionality and reworked entire user interface.

@@ -1,20 +1,24 @@
 package de.passwordvault.view.passwords.activity_duplicates;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.imageview.ShapeableImageView;
-
 import java.util.ArrayList;
-
+import java.util.concurrent.atomic.AtomicBoolean;
 import de.passwordvault.R;
+import de.passwordvault.model.analysis.QualityGateManager;
+import de.passwordvault.model.analysis.passwords.Password;
 import de.passwordvault.model.entry.EntryAbbreviated;
+import de.passwordvault.view.utils.Utils;
 import de.passwordvault.view.utils.recycler_view.OnRecyclerViewActionListener;
 import de.passwordvault.view.utils.recycler_view.RecyclerViewAdapter;
 
@@ -69,16 +73,69 @@ public class DuplicatePasswordEntriesRecyclerViewAdapter extends RecyclerViewAda
 
     }
 
-
     /**
-     * Field stores the offset for the list of entries within the adapter.
+     * Class models the view holder for the header displayed on the page.
      */
-    public static final int OFFSET_ENTRIES = 0;
+    public static class HeaderViewHolder extends RecyclerView.ViewHolder {
+
+        /**
+         * Attribute stores the text view displaying the duplicate password.
+         */
+        public final TextView passwordTextView;
+
+        /**
+         * Attribute stores the text view displaying the button through which to obfuscate the
+         * password displayed.
+         */
+        public final ImageButton obfuscateButton;
+
+        /**
+         * Attribute stores the text view displaying the number of accounts using the password.
+         */
+        public final TextView numberTextView;
+
+        /**
+         * Attribute stores the progress bar displaying the password security score.
+         */
+        public final ProgressBar scoreProgressBar;
+
+        /**
+         * Attribute stores the text view displaying the password security score.
+         */
+        public final TextView scoreTextView;
+
+
+        public HeaderViewHolder(View itemView) {
+            super(itemView);
+            passwordTextView = itemView.findViewById(R.id.text_password);
+            obfuscateButton = itemView.findViewById(R.id.button_obfuscate);
+            numberTextView = itemView.findViewById(R.id.text_number);
+            scoreProgressBar = itemView.findViewById(R.id.progress_bar);
+            scoreTextView = itemView.findViewById(R.id.text_score);
+        }
+
+    }
+
 
     /**
      * Field stores the view type for entries.
      */
-    private static final int TYPE_DUPLICATES_ENTRY = 0;
+    private static final int TYPE_DUPLICATES_ENTRY = 1;
+
+    /**
+     * Field stores the view type for the header displayed at the top of the page.
+     */
+    private static final int TYPE_DUPLICATES_HEADER = 3;
+
+    /**
+     * Field stores the offset for the list of entries within the adapter.
+     */
+    public static final int OFFSET_ENTRIES = 2;
+
+    /**
+     * Attribute stores the position for the header within the recycler view.
+     */
+    public static final int POSITION_HEADER = 0;
 
 
     /**
@@ -126,8 +183,18 @@ public class DuplicatePasswordEntriesRecyclerViewAdapter extends RecyclerViewAda
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.item_entry, parent, false);
-        return new EntryViewHolder(view);
+        View view;
+        switch (viewType) {
+            case TYPE_DUPLICATES_HEADER:
+                view = layoutInflater.inflate(R.layout.item_password_duplicate_header, parent, false);
+                return new HeaderViewHolder(view);
+            case TYPE_GENERIC_HEADLINE:
+                view = layoutInflater.inflate(R.layout.item_generic_headline, parent, false);
+                return new GenericHeadlineViewHolder(view);
+            default:
+                view = layoutInflater.inflate(R.layout.item_entry, parent, false);
+                return new EntryViewHolder(view);
+        }
     }
 
 
@@ -139,21 +206,54 @@ public class DuplicatePasswordEntriesRecyclerViewAdapter extends RecyclerViewAda
      */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        EntryViewHolder viewHolder = (EntryViewHolder)holder;
-        EntryAbbreviated entry = filteredEntries.get(position);
-        Drawable logo = entry.getLogo();
-        viewHolder.logoImageView.setImageDrawable(logo);
-        if (logo == null) {
-            viewHolder.abbreviationTextView.setText("" + entry.getName().charAt(0));
-        }
-        viewHolder.abbreviationTextView.setVisibility(logo == null ? View.VISIBLE : View.GONE);
-        viewHolder.nameTextView.setText(entry.getName());
-        viewHolder.descriptionTextView.setText(entry.getDescription());
-        viewHolder.itemView.setOnClickListener(view -> {
-            if (itemClickListener != null) {
-                itemClickListener.onAction(viewHolder.getAdapterPosition());
+        if (holder instanceof EntryViewHolder) {
+            EntryViewHolder viewHolder = (EntryViewHolder)holder;
+            EntryAbbreviated entry = filteredEntries.get(position - OFFSET_ENTRIES);
+            Drawable logo = entry.getLogo();
+            viewHolder.logoImageView.setImageDrawable(logo);
+            if (logo == null) {
+                viewHolder.abbreviationTextView.setText("" + entry.getName().charAt(0));
             }
-        });
+            viewHolder.abbreviationTextView.setVisibility(logo == null ? View.VISIBLE : View.GONE);
+            viewHolder.nameTextView.setText(entry.getName());
+            viewHolder.descriptionTextView.setText(entry.getDescription());
+            viewHolder.itemView.setOnClickListener(view -> {
+                if (itemClickListener != null) {
+                    itemClickListener.onAction(holder.getAdapterPosition());
+                }
+            });
+        }
+        else if (holder instanceof HeaderViewHolder) {
+            HeaderViewHolder viewHolder = (HeaderViewHolder)holder;
+            Password password = viewModel.getPasswords().get(0);
+            viewHolder.passwordTextView.setText(Utils.obfuscate(password.getCleartextPassword()));
+            viewHolder.numberTextView.setText(context.getString(R.string.password_results_duplicates_number).replace("{arg}", "" + viewModel.getEntries().size()));
+            viewHolder.scoreTextView.setText("" + password.getSecurityScore() + " / " + QualityGateManager.getInstance().numberOfQualityGates());
+            viewHolder.scoreTextView.setTextColor(Utils.getPasswordSecurityScoreColor(password.getSecurityScore()));
+
+            viewHolder.scoreProgressBar.setMax(QualityGateManager.getInstance().numberOfQualityGates() * 1000);
+            if (!viewModel.isScoreBarAnimated()) {
+                ValueAnimator animator = ValueAnimator.ofInt(0, password.getSecurityScore() * 1000);
+                animator.setDuration(context.getResources().getInteger(R.integer.default_anim_duration) * 5L);
+                animator.addUpdateListener(animation -> viewHolder.scoreProgressBar.setProgress((int) animation.getAnimatedValue()));
+                animator.start();
+                viewModel.setScoreBarAnimated(true);
+            }
+            else {
+                viewHolder.scoreProgressBar.setProgress(password.getSecurityScore() * 1000);
+            }
+
+            AtomicBoolean obfuscated = new AtomicBoolean(true);
+            viewHolder.obfuscateButton.setOnClickListener(view -> {
+                viewHolder.passwordTextView.setText(obfuscated.get() ? password.getCleartextPassword() : Utils.obfuscate(password.getCleartextPassword()));
+                obfuscated.set(!obfuscated.get());
+            });
+        }
+        else if (holder instanceof GenericHeadlineViewHolder) {
+            GenericHeadlineViewHolder viewHolder = (GenericHeadlineViewHolder)holder;
+            viewHolder.headlineTextView.setText(context.getString(R.string.password_results_duplicates_accounts));
+            viewHolder.dividerView.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -165,7 +265,14 @@ public class DuplicatePasswordEntriesRecyclerViewAdapter extends RecyclerViewAda
      */
     @Override
     public int getItemViewType(int position) {
-        return TYPE_DUPLICATES_ENTRY;
+        switch (position) {
+            case 0:
+                return TYPE_DUPLICATES_HEADER;
+            case 1:
+                return TYPE_GENERIC_HEADLINE;
+            default:
+                return TYPE_DUPLICATES_ENTRY;
+        }
     }
 
 
@@ -176,7 +283,7 @@ public class DuplicatePasswordEntriesRecyclerViewAdapter extends RecyclerViewAda
      */
     @Override
     public int getItemCount() {
-        return filteredEntries.size();
+        return filteredEntries.size() + 2;
     }
 
 
@@ -199,6 +306,7 @@ public class DuplicatePasswordEntriesRecyclerViewAdapter extends RecyclerViewAda
             resetFilter();
             return;
         }
+        int count = filteredEntries.size();
         filteredEntries.clear();
         query = query.toLowerCase();
         for (EntryAbbreviated entry : viewModel.getEntries()) {

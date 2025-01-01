@@ -7,7 +7,9 @@ import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
+import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
 import de.passwordvault.model.detail.Detail;
+import de.passwordvault.model.detail.DetailType;
 import de.passwordvault.model.entry.EntryExtended;
 import de.passwordvault.model.entry.EntryManager;
 import de.passwordvault.model.packages.SerializablePackage;
@@ -24,12 +26,14 @@ import de.passwordvault.view.general.dialog_more.ItemButton;
 import de.passwordvault.view.general.dialog_more.ItemDivider;
 import de.passwordvault.view.general.dialog_more.MoreDialog;
 import de.passwordvault.view.general.dialog_more.MoreDialogCallback;
+import de.passwordvault.view.passwords.activity_analysis.PasswordAnalysisActivity;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
 import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
 import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -103,6 +107,12 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
      * Field stores the tag for the more dialog item to show additional info of the entry.
      */
     private static final String TAG_SHOW_INFO = "info";
+
+    /**
+     * Field stores the tag for the more dialog item to analyze the password security of all
+     * passwords.
+     */
+    private static final String TAG_PASSWORD_ANALYSIS = "analysis";
 
     /**
      * Field stores the tag for the {@link DetailDialog} to add a new detail.
@@ -286,6 +296,11 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
                         }
                         break;
                     }
+                    case TAG_PASSWORD_ANALYSIS: {
+                        Intent intent = new Intent(this, PasswordAnalysisActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
                 }
             }
             else if (dialog.getTag().equals(TAG_DIALOG_ENTRY)) {
@@ -337,6 +352,7 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
             }
         }
         setResult(viewModel.getResultCode());
+        Log.d("EntryActivity", "Set result " + (viewModel.getResultCode() == RESULT_EDITED ? "EDITED" : "DELETED") + " for entry " + viewModel.getEntry().getName());
         super.finish();
     }
 
@@ -505,6 +521,9 @@ public class EntryActivity extends PasswordVaultActivity<EntryViewModel> impleme
         items.add(new ItemButton(getString(R.string.button_delete), TAG_DELETE_DETAIL + ":" + position, R.drawable.ic_delete));
         items.add(new ItemDivider());
         items.add(new ItemButton(getString(R.string.button_copy_detail), TAG_COPY_DETAIL + ":" + position, R.drawable.ic_copy));
+        if (detail.getType() == DetailType.PASSWORD) {
+            items.add(new ItemButton(getString(R.string.button_analyze_password_security), TAG_PASSWORD_ANALYSIS + ":" + position, R.drawable.ic_lock));
+        }
         args.putSerializable(MoreDialog.ARG_ITEMS, items);
 
         MoreDialog dialog = new MoreDialog();

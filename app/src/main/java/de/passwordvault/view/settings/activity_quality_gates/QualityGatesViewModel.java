@@ -1,7 +1,13 @@
 package de.passwordvault.view.settings.activity_quality_gates;
 
+import android.provider.Settings;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import de.passwordvault.App;
+import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGate;
 import de.passwordvault.model.analysis.QualityGateManager;
 
@@ -56,8 +62,8 @@ public class QualityGatesViewModel extends ViewModel {
     /**
      * Method loads all quality gates if they were not loaded previously.
      */
-    public void loadQualityGatesIfRequired() {
-        if (defaultQualityGates == null) {
+    public void loadQualityGatesIfRequired(boolean force) {
+        if (defaultQualityGates == null || force) {
             defaultQualityGates = new ArrayList<>();
             customQualityGates = new ArrayList<>();
             ArrayList<QualityGate> allQualityGates = QualityGateManager.getInstance().getData();
@@ -82,6 +88,33 @@ public class QualityGatesViewModel extends ViewModel {
             QualityGateManager.getInstance().getData().addAll(defaultQualityGates);
             QualityGateManager.getInstance().getData().addAll(customQualityGates);
             QualityGateManager.getInstance().saveAllQualityGates();
+        }
+    }
+
+
+    /**
+     * Method creates the URL to share the specified quality gate. If the URL cannot be created,
+     * {@code null} is returned.
+     *
+     * @param qualityGate   Quality gate to share.
+     * @return              URL to share the quality gate.
+     */
+    @Nullable
+    public String createShareUrl(QualityGate qualityGate) {
+        try {
+            String url = App.getContext().getString(R.string.url_quality_gate);
+            url = url.replace("{description}", URLEncoder.encode(qualityGate.getDescription(), "UTF-8"));
+            url = url.replace("{regex}", URLEncoder.encode(qualityGate.getRegex(), "UTF-8"));
+            if (qualityGate.getAuthor() == null) {
+                url = url.replace("{author}", URLEncoder.encode(Settings.Global.getString(App.getContext().getContentResolver(), "device_name"), "UTF-8"));
+            }
+            else {
+                url = url.replace("{author}", URLEncoder.encode(qualityGate.getAuthor(), "UTF-8"));
+            }
+            return url;
+        }
+        catch (IOException e) {
+            return null;
         }
     }
 

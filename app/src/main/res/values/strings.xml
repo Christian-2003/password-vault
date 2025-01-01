@@ -231,6 +231,8 @@
     <string name="password_results_list_none">No passwords</string>
     <string name="password_results_weak_title">Weak passwords</string>
     <string name="password_results_weak_none">No weak passwords</string>
+    <string name="password_results_duplicates_accounts">Accounts</string>
+    <string name="password_results_duplicates_number">{arg} accounts use this password</string>
     <string name="password_all_empty_title">No passwords</string>
     <string name="password_all_empty_info">Available passwords are shown here</string>
 
@@ -336,6 +338,10 @@
     <string name="button_copy_detail">Copy content</string>
     <string name="button_later">Later</string>
     <string name="button_download">Download</string>
+    <string name="button_import">Import</string>
+    <string name="button_enable">Enable</string>
+    <string name="button_disable">Disable</string>
+    <string name="button_analyze_password_security">Analyze password security</string>
 
 
     <!-- Input hints -->
@@ -354,6 +360,7 @@
     <string name="hint_name">Name</string>
     <string name="hint_recently_edited_accounts">Recently edited accounts</string>
     <string name="hint_security_question_answer">Answer</string>
+    <string name="hint_url_quality_gate">URL</string>
 
 
     <!-- Password / Passcode security -->
@@ -381,17 +388,24 @@
     <string name="error_invalid_regex">RegEx is invalid.</string>
     <string name="error_not_enough_security_questions">You need to have at least 5 security questions.</string>
     <string name="error_master_password_recovery">The entered answers are incorrect.</string>
+    <string name="error_quality_gate_url_invalid">Cannot import quality gate from URL</string>
+    <string name="error_quality_gate_import">Could not import the quality gate</string>
     <string name="warning_new_app_version">A new app version is available for download. Do you want to download the new version now?</string>
 
 
     <!-- Password quality gates -->
     <string name="quality_gates">Quality Gates</string>
     <string name="quality_gates_info">Specify quality gates to enhance the security of your passwords.</string>
+    <string name="quality_gates_author_password_vault">Password Vault</string>
+    <string name="quality_gates_author_user">You</string>
+    <string name="quality_gates_share">Share link to quality gate</string>
     <string name="quality_gates_custom">Custom quality gates</string>
     <string name="quality_gates_custom_empty_headline">No quality gates</string>
     <string name="quality_gates_custom_empty_support">Added quality gates will be displayed here</string>
     <string name="quality_gates_default">Default quality gates</string>
     <string name="quality_gates_enabled">Enabled</string>
+    <string name="quality_gates_import_title">Import Quality Gate</string>
+    <string name="quality_gates_import_headline">Import the following quality gate</string>
     <string name="quality_gate_enabled">Enabled</string>
     <string name="quality_gate_configure">Configure quality gate</string>
     <string name="quality_gate_test">Test quality gate</string>
@@ -459,5 +473,10 @@
     <string name="preferences_quality_gates_default" translatable="false">quality_gates_default</string>
     <string name="preferences_quality_gates_custom" translatable="false">quality_gates_custom</string>
     <string name="preferences_tags" translatable="false">entry_tags</string>
+
+
+
+    <!-- URL exports -->
+    <string name="url_quality_gate" translatable="false">https://passwordvault.christian2003.de/data/quality_gate?d={description}&amp;ref={author}&amp;regex={regex}</string>
 
 </resources>

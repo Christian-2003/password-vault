@@ -1,18 +1,16 @@
 package de.passwordvault.view.authentication.dialog_authentication;
 
-import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.ViewModelProvider;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import de.passwordvault.R;
+import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
 
 
 /**
@@ -23,103 +21,65 @@ import de.passwordvault.R;
  * @author  Christian-2003
  * @version 3.5.3
  */
-public class PasswordAuthenticationDialog extends DialogFragment {
-
-    /**
-     * Field stores the key that needs to be used when passing the callback listener for the dialog.
-     */
-    public static final String KEY_CALLBACK = "callback_listener";
+public class PasswordAuthenticationDialog extends PasswordVaultBottomSheetDialog<PasswordAuthenticationViewModel> {
 
     /**
      * Field stores the key that needs to be used when passing the ID of the resource-string used
      * as title.
      */
-    public static final String KEY_TITLE_ID = "title_id";
+    public static final String ARG_TITLE_ID = "title_id";
 
     /**
      * Field stores the key that needs to be used to when passing a flag indicating whether the
      * dialog shall be used to register a new password.
      */
-    public static final String KEY_REGISTER = "register";
+    public static final String ARG_REGISTER = "register";
 
 
-    /**
-     * Attribute stores the view model of the dialog.
-     */
-    private PasswordAuthenticationViewModel viewModel;
-
-    /**
-     * Attribute stores the inflated view of the dialog.
-     */
-    private View view;
+    public PasswordAuthenticationDialog(@Nullable Callback attachableCallback) {
+        super(PasswordAuthenticationViewModel.class, R.layout.dialog_password_authentication, attachableCallback);
+    }
 
 
-    /**
-     * Method is called whenever the dialog is created.
-     *
-     * @param savedInstanceState    Previously saved state of the instance.
-     * @return                      Created dialog.
-     */
-    @SuppressLint("InflateParams") //Ignore passing 'null' as root for the dialog's view.
-    @NonNull
+    @Nullable
     @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        super.onCreateDialog(savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(PasswordAuthenticationViewModel.class);
-
-        view = requireActivity().getLayoutInflater().inflate(R.layout.dialog_password_authentication, null);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        if (view == null) {
+            return null;
+        }
 
         viewModel.processArguments(getArguments());
-
         if (!viewModel.isRegistering()) {
             view.findViewById(R.id.dialog_password_authentication_confirm_container).setVisibility(View.GONE);
         }
 
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity());
-        builder.setTitle(viewModel.getTitleId());
-        builder.setView(view);
-
-        builder.setPositiveButton(R.string.button_ok, (dialog, id) -> {
-            //Action implemented in onStart()-method!
-        });
-        builder.setNegativeButton(R.string.button_cancel, (dialog, id) -> {
-            //Action implemented in onStart()-method!
-        });
-
-        return builder.create();
-    }
-
-
-    /**
-     * Method is called whenever the dialog is started. The method's purpose is to attach actions
-     * to the buttons of the dialog.
-     */
-    @Override
-    public void onStart() {
-        super.onStart();
-        AlertDialog dialog = (AlertDialog)getDialog();
-        if (dialog == null) {
-            //No dialog available:
-            return;
-        }
+        //Configure title:
+        ((TextView)view.findViewById(R.id.text_title)).setText(viewModel.getTitleId());
 
         //Configure positive button:
-        Button positiveButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
-        positiveButton.setOnClickListener(view -> {
-            if (!viewModel.processUserInput(PasswordAuthenticationDialog.this.view)) {
+        Button okButton = view.findViewById(R.id.button_ok);
+        okButton.setOnClickListener(v -> {
+            if (!viewModel.processUserInput(view)) {
                 //Some inputs are incorrect:
                 return;
             }
             dismiss();
-            viewModel.getCallbackListener().onPositiveCallback(PasswordAuthenticationDialog.this);
+            if (callback != null) {
+                callback.onCallback(this, Callback.RESULT_SUCCESS);
+            }
         });
 
         //Configure negative button:
-        Button negativeButton = dialog.getButton(Dialog.BUTTON_NEGATIVE);
-        negativeButton.setOnClickListener(view -> {
+        Button cancelButton = view.findViewById(R.id.button_cancel);
+        cancelButton.setOnClickListener(v -> {
             dismiss();
-            viewModel.getCallbackListener().onNegativeCallback(PasswordAuthenticationDialog.this);
+            if (callback != null) {
+                callback.onCallback(this, Callback.RESULT_CANCEL);
+            }
         });
+
+        return view;
     }
 
 
@@ -131,7 +91,9 @@ public class PasswordAuthenticationDialog extends DialogFragment {
      */
     @Override
     public void onCancel(@NonNull DialogInterface dialog) {
-        viewModel.getCallbackListener().onNegativeCallback(this);
+        if (callback != null) {
+            callback.onCallback(this, Callback.RESULT_CANCEL);
+        }
         super.onCancel(dialog);
     }
 

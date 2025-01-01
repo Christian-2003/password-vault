@@ -1,5 +1,10 @@
 package de.passwordvault.view.activity_search;
 
+import android.graphics.Color;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
@@ -12,7 +17,7 @@ import de.passwordvault.model.search.SearchResult;
  * Class implements the view model for the {@link SearchActivity}.
  *
  * @author  Christian-2003
- * @version 3.7.0
+ * @version 3.7.1
  */
 public class SearchViewModel extends ViewModel {
 
@@ -27,6 +32,13 @@ public class SearchViewModel extends ViewModel {
      */
     @NonNull
     private final SearchHandler searchHandler;
+
+    /**
+     * Attribute stores the query searched in lowercase. This is {@code null} before any query is
+     * searched.
+     */
+    @Nullable
+    private String lowercaseQuery;
 
     /**
      * Attribute stores whether the {@link #searchHandler} is currently searching.
@@ -62,6 +74,7 @@ public class SearchViewModel extends ViewModel {
     public SearchViewModel() {
         searchResults = new ArrayList<>();
         searchHandler = new SearchHandler();
+        lowercaseQuery = null;
         searching = false;
         finished = false;
         firstOpenedPosition = -1;
@@ -144,7 +157,7 @@ public class SearchViewModel extends ViewModel {
             return;
         }
         int first = 0;
-        int last = -1;
+        int last;
 
         //Determine first position:
         if (searchResults.get(position).getType() == SearchResult.TYPE_ENTRY) {
@@ -185,6 +198,7 @@ public class SearchViewModel extends ViewModel {
             if (!finished || force) {
                 searching = true;
                 Thread thread = new Thread(() -> {
+                    this.lowercaseQuery = query.toLowerCase();
                     searchResults = searchHandler.search(query);
                     finished = true;
                     searching = false;
@@ -200,6 +214,27 @@ public class SearchViewModel extends ViewModel {
                 }
             }
         }
+    }
+
+
+    /**
+     * Method converts the passed string to a spannable highlighting the query entered by the user.
+     *
+     * @param s String to convert to a spannable.
+     * @return  Spannable created from the passed string.
+     */
+    @NonNull
+    public SpannableString toSpannable(@NonNull String s) {
+        SpannableString spannable = new SpannableString(s);
+        int index = -1;
+        if (lowercaseQuery != null) {
+            index = s.toLowerCase().indexOf(lowercaseQuery);
+        }
+        if (index != -1) {
+            spannable.setSpan(new BackgroundColorSpan(Color.YELLOW), index, index + lowercaseQuery.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new ForegroundColorSpan(Color.BLACK), index, index + lowercaseQuery.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return spannable;
     }
 
 }

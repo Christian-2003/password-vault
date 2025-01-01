@@ -23,7 +23,7 @@ import java.io.Serializable;
  *
  * @param <V>   Type of the view model to use for the dialog.
  * @author      Christian-2003
- * @version     3.7.0
+ * @version     3.7.1
  */
 public class PasswordVaultBottomSheetDialog<V extends ViewModel> extends BottomSheetDialogFragment {
 
@@ -62,6 +62,13 @@ public class PasswordVaultBottomSheetDialog<V extends ViewModel> extends BottomS
     private final Class<V> viewModelType;
 
     /**
+     * Attribute stores the callback for the dialog to use in case the host for the dialog is not
+     * suitable to be used as callback.
+     */
+    @Nullable
+    private final Callback attachableCallback;
+
+    /**
      * Attribute stores the ID of the layout resource to use for the dialog.
      */
     @LayoutRes
@@ -90,6 +97,23 @@ public class PasswordVaultBottomSheetDialog<V extends ViewModel> extends BottomS
      */
     public PasswordVaultBottomSheetDialog(@Nullable Class<V> viewModelType, @LayoutRes int layoutRes) {
         this.viewModelType = viewModelType;
+        this.attachableCallback = null;
+        this.layoutRes = layoutRes;
+        callback = null;
+    }
+
+    /**
+     * Constructor instantiates a new dialog.
+     *
+     * @param viewModelType         Type of the view model for the dialog. Pass {@code null} if no
+     *                              view model is used for the dialog.
+     * @param layoutRes             ID of the layout resource to use for the dialog.
+     * @param attachableCallback    Callback to use for the dialog in case the host is not suitable
+     *                              to use as callback.
+     */
+    public PasswordVaultBottomSheetDialog(@Nullable Class<V> viewModelType, @LayoutRes int layoutRes, @Nullable Callback attachableCallback) {
+        this.viewModelType = viewModelType;
+        this.attachableCallback = attachableCallback;
         this.layoutRes = layoutRes;
         callback = null;
     }
@@ -144,7 +168,10 @@ public class PasswordVaultBottomSheetDialog<V extends ViewModel> extends BottomS
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (getHost() instanceof Callback) {
+        if (attachableCallback != null) {
+            callback = attachableCallback;
+        }
+        else if (getHost() instanceof Callback) {
             callback = (Callback)getHost();
         }
     }

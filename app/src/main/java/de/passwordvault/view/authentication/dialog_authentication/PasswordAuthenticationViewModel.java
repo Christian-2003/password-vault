@@ -8,7 +8,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.Objects;
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.Account;
-import de.passwordvault.view.authentication.dialog_authentication.PasswordAuthenticationDialog;
 import de.passwordvault.view.utils.DialogCallbackListener;
 
 
@@ -22,11 +21,6 @@ import de.passwordvault.view.utils.DialogCallbackListener;
 public class PasswordAuthenticationViewModel extends ViewModel {
 
     /**
-     * Attribute stores the callback listener for the dialog.
-     */
-    private DialogCallbackListener callbackListener;
-
-    /**
      * Attribute stores the ID of the resource-string containing the title for the dialog.
      */
     private int titleId;
@@ -36,15 +30,6 @@ public class PasswordAuthenticationViewModel extends ViewModel {
      */
     private boolean registering;
 
-
-    /**
-     * Method returns the callback listener for the dialog.
-     *
-     * @return  Callback listener.
-     */
-    public DialogCallbackListener getCallbackListener() {
-        return callbackListener;
-    }
 
     /**
      * Method returns the ID of the resource-string containing the title for the dialog.
@@ -77,27 +62,15 @@ public class PasswordAuthenticationViewModel extends ViewModel {
             return false;
         }
 
-        if (args.containsKey(PasswordAuthenticationDialog.KEY_CALLBACK)) {
-            try {
-                callbackListener = (DialogCallbackListener) args.getSerializable(PasswordAuthenticationDialog.KEY_CALLBACK);
-            }
-            catch (ClassCastException e) {
-                return false;
-            }
+        if (args.containsKey(PasswordAuthenticationDialog.ARG_TITLE_ID)) {
+            titleId = args.getInt(PasswordAuthenticationDialog.ARG_TITLE_ID);
         }
         else {
             return false;
         }
 
-        if (args.containsKey(PasswordAuthenticationDialog.KEY_TITLE_ID)) {
-            titleId = args.getInt(PasswordAuthenticationDialog.KEY_TITLE_ID);
-        }
-        else {
-            return false;
-        }
-
-        if (args.containsKey(PasswordAuthenticationDialog.KEY_REGISTER)) {
-            registering = args.getBoolean(PasswordAuthenticationDialog.KEY_REGISTER);
+        if (args.containsKey(PasswordAuthenticationDialog.ARG_REGISTER)) {
+            registering = args.getBoolean(PasswordAuthenticationDialog.ARG_REGISTER);
         }
         else {
             return false;

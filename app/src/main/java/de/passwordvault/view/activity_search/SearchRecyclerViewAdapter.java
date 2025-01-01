@@ -186,8 +186,8 @@ public class SearchRecyclerViewAdapter extends RecyclerViewAdapter<SearchViewMod
                 case SearchResult.TYPE_ENTRY: {
                     SearchResultEntry result = (SearchResultEntry)searchResult;
                     EntryViewHolder viewHolder = (EntryViewHolder)holder;
-                    viewHolder.nameTextView.setText(result.getEntry().getName());
-                    viewHolder.descriptionTextView.setText(result.getEntry().getDescription());
+                    viewHolder.nameTextView.setText(viewModel.toSpannable(result.getEntry().getName()));
+                    viewHolder.descriptionTextView.setText(viewModel.toSpannable(result.getEntry().getDescription()));
                     Drawable logo = result.getEntry().getLogo();
                     if (logo == null) {
                         viewHolder.logoImageView.setVisibility(View.GONE);
@@ -202,7 +202,7 @@ public class SearchRecyclerViewAdapter extends RecyclerViewAdapter<SearchViewMod
                     viewHolder.tagsContainer.removeAllViews();
                     for (Tag tag : result.getMatchingTags()) {
                         Chip chip = new Chip(context);
-                        chip.setText(tag.getName());
+                        chip.setText(viewModel.toSpannable(tag.getName()));
                         viewHolder.tagsContainer.addView(chip);
                     }
                     viewHolder.itemView.setOnClickListener(view -> {
@@ -215,12 +215,12 @@ public class SearchRecyclerViewAdapter extends RecyclerViewAdapter<SearchViewMod
                 case SearchResult.TYPE_DETAIL: {
                     SearchResultDetail result = (SearchResultDetail)searchResult;
                     DetailViewHolder viewHolder = (DetailViewHolder)holder;
-                    viewHolder.nameTextView.setText(result.getDetail().getName());
+                    viewHolder.nameTextView.setText(viewModel.toSpannable(result.getDetail().getName()));
                     if (result.getDetail().isObfuscated()) {
                         viewHolder.contentTextView.setText(Utils.obfuscate(result.getDetail().getContent()));
                     }
                     else {
-                        viewHolder.contentTextView.setText(result.getDetail().getContent());
+                        viewHolder.contentTextView.setText(viewModel.toSpannable(result.getDetail().getContent()));
                     }
                     viewHolder.itemView.setOnClickListener(view -> {
                         if (searchResultClicked != null) {

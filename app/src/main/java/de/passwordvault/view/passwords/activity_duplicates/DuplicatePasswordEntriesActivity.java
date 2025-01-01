@@ -76,14 +76,17 @@ public class DuplicatePasswordEntriesActivity extends PasswordVaultActivity<Dupl
                 if (result.getResultCode() == EntryActivity.RESULT_EDITED) {
                     EntryAbbreviated editedEntry = EntryManager.getInstance().get(viewModel.getDisplayedEntry().getUuid());
                     viewModel.getEntries().set(index, editedEntry);
+                    adapter.resetFilter();
                     adapter.notifyItemChanged(index + DuplicatePasswordEntriesRecyclerViewAdapter.OFFSET_ENTRIES);
-                    viewModel.setDisplayedEntry(null);
                 }
                 else if (result.getResultCode() == EntryActivity.RESULT_DELETED) {
                     viewModel.getEntries().remove(index);
+                    adapter.resetFilter();
                     adapter.notifyItemRemoved(index + DuplicatePasswordEntriesRecyclerViewAdapter.OFFSET_ENTRIES);
-                    viewModel.setDisplayedEntry(null);
+                    adapter.notifyItemChanged(DuplicatePasswordEntriesRecyclerViewAdapter.POSITION_HEADER);
                 }
+                viewModel.setDisplayedEntry(null);
+                searchBarEditText.setText("");
             }
         });
     }
@@ -200,6 +203,7 @@ public class DuplicatePasswordEntriesActivity extends PasswordVaultActivity<Dupl
      */
     private void onItemClicked(int position) {
         EntryAbbreviated entry = adapter.getEntryForAdapterPosition(position);
+        viewModel.setDisplayedEntry(entry);
         Intent intent = new Intent(this, EntryActivity.class);
         intent.putExtra("uuid", entry.getUuid());
         try {

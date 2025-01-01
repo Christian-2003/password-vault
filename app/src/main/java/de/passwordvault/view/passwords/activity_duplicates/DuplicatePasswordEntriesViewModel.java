@@ -41,6 +41,12 @@ public class DuplicatePasswordEntriesViewModel extends ViewModel {
     @Nullable
     private String searchQuery;
 
+    /**
+     * Attribute stores whether the progress bar displaying the password security score has been
+     * animated since creating the activity for the first time.
+     */
+    private boolean scoreBarAnimated;
+
 
     /**
      * Constructor instantiates a new view model.
@@ -50,6 +56,7 @@ public class DuplicatePasswordEntriesViewModel extends ViewModel {
         entries = null;
         displayedEntry = null;
         searchQuery = null;
+        scoreBarAnimated = false;
     }
 
 
@@ -133,6 +140,26 @@ public class DuplicatePasswordEntriesViewModel extends ViewModel {
      */
     public void setSearchQuery(@Nullable String searchQuery) {
         this.searchQuery = searchQuery;
+    }
+
+    /**
+     * Method returns whether the progress bar displaying the password security score has been
+     * animated since the activity has been created.
+     *
+     * @return  Whether the progress bar has been animated.
+     */
+    public boolean isScoreBarAnimated() {
+        return scoreBarAnimated;
+    }
+
+    /**
+     * Method changes whether the progress bar displaying the password security score has been
+     * animated since the activity has been created.
+     *
+     * @param scoreBarAnimated  Whether the progress bar has been animated.
+     */
+    public void setScoreBarAnimated(boolean scoreBarAnimated) {
+        this.scoreBarAnimated = scoreBarAnimated;
     }
 
 }

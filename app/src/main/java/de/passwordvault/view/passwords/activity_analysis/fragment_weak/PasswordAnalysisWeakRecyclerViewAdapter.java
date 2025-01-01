@@ -165,15 +165,15 @@ public class PasswordAnalysisWeakRecyclerViewAdapter extends RecyclerViewAdapter
                 //Score display:
                 viewHolder.scoreTextView.setText(password.getSecurityScore() + " / " + QualityGateManager.getInstance().numberOfQualityGates());
                 if (password.getSecurityScore() > QualityGateManager.getInstance().numberOfQualityGates() * 0.67) {
-                    viewHolder.statusImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_ok));
+                    viewHolder.statusImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_ok_filled));
                     viewHolder.statusImageView.setColorFilter(ContextCompat.getColor(context, R.color.green));
                 }
                 else if (password.getSecurityScore() > QualityGateManager.getInstance().numberOfQualityGates() * 0.34) {
-                    viewHolder.statusImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_info));
+                    viewHolder.statusImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_info_filled));
                     viewHolder.statusImageView.setColorFilter(ContextCompat.getColor(context, R.color.yellow));
                 }
                 else {
-                    viewHolder.statusImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_alert));
+                    viewHolder.statusImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_alert_filled));
                     viewHolder.statusImageView.setColorFilter(ContextCompat.getColor(context, R.color.red));
                 }
 

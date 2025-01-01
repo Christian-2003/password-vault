@@ -229,32 +229,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/space_horizontal"
                 android:layout_marginVertical="@dimen/space_vertical"
-                android:rowCount="5"
+                android:rowCount="3"
                 android:columnCount="3">
 
                 <View
                     android:layout_gravity="center_vertical"
                     android:backgroundTint="@color/text_light"
-                    android:layout_marginEnd="@dimen/space_horizontal_between"
-                    style="@style/data_progress_bar_legend"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/settings_data_storage_used"
-                    style="@style/text"/>
-
-                <TextView
-                    android:id="@+id/used"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/space_horizontal_between"
-                    tools:text="0 GB"
-                    style="@style/text"/>
-
-                <View
-                    android:layout_gravity="center_vertical"
-                    android:backgroundTint="@color/primary"
                     android:layout_marginEnd="@dimen/space_horizontal_between"
                     style="@style/data_progress_bar_legend"/>
 
@@ -274,7 +254,7 @@
 
                 <View
                     android:layout_gravity="center_vertical"
-                    android:backgroundTint="@color/green"
+                    android:backgroundTint="@color/primary"
                     android:layout_marginEnd="@dimen/space_horizontal_between"
                     style="@style/data_progress_bar_legend"/>
 
@@ -294,7 +274,7 @@
 
                 <View
                     android:layout_gravity="center_vertical"
-                    android:backgroundTint="@color/yellow"
+                    android:backgroundTint="@color/green"
                     android:layout_marginEnd="@dimen/space_horizontal_between"
                     style="@style/data_progress_bar_legend"/>
 
@@ -310,26 +290,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_horizontal_between"
                     tools:text="0 MB"
-                    style="@style/text"/>
-
-                <View
-                    android:layout_gravity="center_vertical"
-                    android:backgroundTint="@color/background_container"
-                    android:layout_marginEnd="@dimen/space_horizontal_between"
-                    style="@style/data_progress_bar_legend"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/settings_data_storage_free"
-                    style="@style/text"/>
-
-                <TextView
-                    android:id="@+id/free"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/space_horizontal_between"
-                    tools:text="0 GB"
                     style="@style/text"/>
 
             </GridLayout>

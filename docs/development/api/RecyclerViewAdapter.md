@@ -114,6 +114,7 @@ Field | Description
 
 ###### Public Constructors
 Constructor | Description
+--- | ---
 [`RecyclerViewAdapter(Context, V)`](#recyclerviewadapter) | Constructor to create a new recycler view adapter.
 
 ###### Public Methods
@@ -230,6 +231,7 @@ Method is called whenever the adapter is attached to a recycler view.
 
 ###### Parameters
 Parameter | Description
+--- | ---
 `recyclerView` | Recycler view to which the adapter is attached.
 
 <br/>
@@ -242,7 +244,3 @@ public Context getContext()
 Returns the [context](#context) of the recycler view adapter. This contextis not always identical to the context of the [`recyclerView`](#recyclerview).
 
 <br/>
-
-***
-2024-08-25  
-&copy; Christian-2003

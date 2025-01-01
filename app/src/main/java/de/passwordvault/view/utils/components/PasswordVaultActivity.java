@@ -4,13 +4,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.WindowManager;
-
 import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-
 import de.passwordvault.model.storage.settings.Config;
 
 
@@ -89,6 +88,28 @@ public class PasswordVaultActivity<V extends ViewModel> extends AppCompatActivit
     protected void openUrl(String url) {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(browserIntent);
+    }
+
+
+    /**
+     * Method shares the specified data through the ShareSheet. If the passed mime type is
+     * {@code null}, the mime type "text/plain" is used.
+     *
+     * @param data      Data to share.
+     * @param mimeType  Mime type for the data.
+     */
+    protected void shareDataWithSheet(@NonNull String data, @Nullable String mimeType) {
+        if (mimeType == null) {
+            mimeType = "text/plain";
+        }
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, data);
+        sendIntent.setType(mimeType);
+
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
     }
 
 }

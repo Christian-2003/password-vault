@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * Class implements a parser which can parse CSV (that was generated through {@link CsvBuilder}).
  *
  * @author  Christian-2003
- * @version 3.0.0
+ * @version 3.7.1
  */
 public class CsvParser extends CsvConfiguration {
 
@@ -78,7 +78,12 @@ public class CsvParser extends CsvConfiguration {
                         column.append(currentChar);
                     }
                     else {
-                        columns.add(column.toString());
+                        if (column.toString().equals("\0")) {
+                            columns.add(null);
+                        }
+                        else {
+                            columns.add(column.toString());
+                        }
                         //Add (i + 2) to index if the current char is string separator, since
                         //character after string separator must always be a column divider:
                         currentIndex = currentChar == STRING_SEPARATOR ? i + 2 : i + 1;
@@ -109,7 +114,12 @@ public class CsvParser extends CsvConfiguration {
         }
         //Parsed the last column in the last row:
         currentIndex = csv.length();
-        columns.add(column.toString());
+        if (column.toString().equals("\0")) {
+            columns.add(null);
+        }
+        else {
+            columns.add(column.toString());
+        }
     }
 
 }

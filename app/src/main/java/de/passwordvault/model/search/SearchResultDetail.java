@@ -9,7 +9,7 @@ import de.passwordvault.model.entry.EntryAbbreviated;
  * Class models a search result for a detail.
  *
  * @author  Christian-2003
- * @version 3.7.0
+ * @version 3.7.1
  */
 public class SearchResultDetail extends SearchResult {
 
@@ -33,7 +33,7 @@ public class SearchResultDetail extends SearchResult {
      * @param entry     Entry of which the detail is a part of.
      */
     public SearchResultDetail(@NonNull Detail detail, @NonNull EntryAbbreviated entry) {
-        super(TYPE_DETAIL);
+        super(TYPE_DETAIL, 0);
         this.detail = detail;
         this.entry = entry;
     }

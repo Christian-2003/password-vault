@@ -39,6 +39,21 @@
             android:text="@string/quality_gates"
             style="@style/text.app_bar"/>
 
+        <FrameLayout
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize">
+
+            <ImageButton
+                android:id="@+id/button_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_more"
+                android:layout_gravity="center"
+                tools:ignore="contentDescription"
+                style="@style/button.image.app_bar"/>
+
+        </FrameLayout>
+
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
