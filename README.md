@@ -38,6 +38,8 @@ The version numbers for this project are determined based on the guidelines prov
 
 The project contains a [changelog](CHANGELOG.md) which documents all changes that were made to the application in between software versions.
 
+The app implements multiple frameworks that are reused multiple times within the app. An API documentation for these frameworks can be found [here](docs/development/api/README.md).
+
 <br/>
 
 ## Install and Use the Project
@@ -78,5 +80,5 @@ The project will be developed in English.
 <br/>
 
 ***
-2024-11-16  
+2025-01-12  
 &copy; Christian-2003
