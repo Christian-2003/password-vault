@@ -2,6 +2,16 @@
 
 # Changelog
 
+## 3.7.2 (XXXX-XX-XX)
+###### Release Highlights
+n/a
+
+###### Features
+* Authentication for autofill no longer shows activity that covers entire page. Instead a smaller dialog is displayed at the bottom of the screen.
+
+<br/>
+
+
 ## 3.7.1 (2025-01-01)
 ###### Release Highlights
 Password quality gates can be imported using URI-links and enhancements to search functionality as well as bugfixes and general improvements.
