@@ -29,7 +29,7 @@ import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
  * Class implements an activity which can add (or edit) quality gates.
  *
  * @author  Christian-2003
- * @version 3.7.1
+ * @version 3.7.2
  */
 public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesViewModel> implements PasswordVaultBottomSheetDialog.Callback, MoreDialogCallback {
 
@@ -203,6 +203,7 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
                         shareDataWithSheet(url, "text/uri-list");
                     }
                 }
+                break;
             }
             case TAG_NEW_QUALITY_GATE: {
                 onAddQualityGate(0);

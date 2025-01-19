@@ -24,13 +24,9 @@ import de.passwordvault.view.authentication.activity_login.LoginActivity;
 
 /**
  * Class implements an activity that can be used to authenticate the user through the autofill service.
- * The class basically works identically to the {@link LoginActivity}. I have decided to reimplement
- * the activity (instead of expanding the login activity) since the login activity contains additional
- * code that is used to convert data when in between version updates. This is not required when
- * authenticating for the autofill service.
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.7.2
  */
 public class AutofillAuthenticationActivity extends AppCompatActivity {
 
