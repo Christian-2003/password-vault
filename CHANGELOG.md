@@ -9,6 +9,7 @@ n/a
 ###### Features
 * Authentication for autofill no longer shows activity that covers entire page. Instead a smaller dialog is displayed at the bottom of the screen.
 * Sharing a password quality gate no longer opens activity to edit quality gate before showing share dialog.
+* Reduced number of paths in some vector drawables to optimize performance.
 
 <br/>
 
