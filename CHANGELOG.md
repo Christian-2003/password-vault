@@ -11,6 +11,7 @@ n/a
 * Sharing a password quality gate no longer opens activity to edit quality gate before showing share dialog.
 * Reduced number of paths in some vector drawables to optimize performance.
 * Added tooltip texts for all (image-)buttons that do not have any text on screen. This enables screen readers to work and helps users to navigate the app.
+* Changed style for HTML help and legal pages, so that they can no longer be scrolled horizontally.
 
 <br/>
 

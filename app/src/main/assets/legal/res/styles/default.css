@@ -55,9 +55,10 @@ body {
 }
 
 hr {
-    width: 100%;
+    display: block;
+    border: 1px solid var(--color-divider);
     margin: 0px;
-    color: var(--color-divider);
+    padding: 0px;
 }
 
 a {
