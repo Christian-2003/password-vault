@@ -26,6 +26,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_cancel"
                 android:layout_gravity="center"
+                android:tooltipText="@string/tooltip_cancel"
                 tools:ignore="contentDescription"
                 style="@style/button.image.app_bar"/>
 
@@ -49,6 +50,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_save"
                 android:layout_gravity="center"
+                android:tooltipText="@string/tooltip_save"
                 style="@style/button.image.app_bar"/>
 
         </FrameLayout>
@@ -121,7 +123,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:tooltipText="@string/tooltip_enable_disable_quality_gate">
 
                 <CheckBox
                     android:id="@+id/checkbox_enabled"

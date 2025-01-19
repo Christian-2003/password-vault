@@ -444,4 +444,31 @@
     <string name="autofill_authentication_presentation">Authentifizieren für {value}</string>
     <string name="autofill_save_request_description">Automatisch hinzugefügt</string>
 
+
+
+    <!-- Tooltip texts -->
+    <string name="tooltip_back">Zurück</string>
+    <string name="tooltip_cancel">Abbrechen und schließen</string>
+    <string name="tooltip_save">Speichern und schließen</string>
+    <string name="tooltip_more">Weitere Aktionen</string>
+    <string name="tooltip_open_settings">Einstellungen öffnen</string>
+    <string name="tooltip_add_entry">Neues Konto hinzufügen</string>
+    <string name="tooltip_search_duplicate_passwords">Doppelte Passwörter durchsuchen</string>
+    <string name="tooltip_search_packages">Installierte Apps durchsuchen</string>
+    <string name="tooltip_reload_password_analysis">Passwortanalyse neu starten</string>
+    <string name="tooltip_search_analyzed_passwords">Analysierte Passwörter durchsuchen</string>
+    <string name="tooltip_enable_disable_quality_gate">Sicherheitskriterium für Passwortanalysie aktivieren oder deaktivieren</string>
+    <string name="tooltip_search_app">Alle Konten durchsuchen</string>
+    <string name="tooltip_add_tag">Neuen Tag hinzufügen</string>
+    <string name="tooltip_show_hide_content">Inhalt anzeigen / ausblenden</string>
+    <string name="tooltip_show_hide_password">Passwort anzeigen / ausblenden</string>
+    <string name="tooltip_select_app_for_autofill">App für autom. Ausfüllen auswählen</string>
+    <string name="tooltip_remove_package">App für autom. Ausfüllen entfernen</string>
+    <string name="tooltip_add_quality_gate">Eigenes Sicherheitskriterium hinzufügen</string>
+    <string name="tooltip_add_security_question">Sicherheitsfrage hinzufügen</string>
+    <string name="tooltip_add_detail">Kontoinformation hinzufügen</string>
+    <string name="tooltip_reorder_details">Zum anordnen gedrückt halten</string>
+    <string name="tooltip_edit_entry_name">Kontonamen bearbeiten</string>
+
+
 </resources>

@@ -394,6 +394,7 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
             holder.dividerView.setVisibility(View.VISIBLE);
             holder.buttonImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_add));
             holder.headlineTextView.setText(R.string.entry_details_info);
+            holder.itemView.setTooltipText(context.getString(R.string.tooltip_add_detail));
             holder.itemView.setOnClickListener(view -> {
                 if (addDetailListener != null) {
                     addDetailListener.onAction(holder.getAdapterPosition());

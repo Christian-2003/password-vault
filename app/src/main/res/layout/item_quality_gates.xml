@@ -55,6 +55,7 @@
         android:layout_gravity="center"
         android:layout_marginEnd="@dimen/space_horizontal"
         android:layout_marginStart="@dimen/space_horizontal_between"
+        android:tooltipText="@string/tooltip_enable_disable_quality_gate"
         tools:checked="true"/>
 
     <ImageButton
@@ -64,6 +65,7 @@
         android:layout_gravity="center"
         android:layout_marginEnd="@dimen/space_horizontal_end_button"
         android:src="@drawable/ic_more"
+        android:tooltipText="@string/tooltip_more"
         tools:ignore="contentDescription"
         style="@style/button.image"/>
 

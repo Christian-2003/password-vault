@@ -447,6 +447,32 @@
     <string name="autofill_save_request_description">Automatically added</string>
 
 
+
+    <!-- Tooltip texts -->
+    <string name="tooltip_back">Go back</string>
+    <string name="tooltip_cancel">Cancel and close</string>
+    <string name="tooltip_save">Save and close</string>
+    <string name="tooltip_more">More actions</string>
+    <string name="tooltip_open_settings">Open settings</string>
+    <string name="tooltip_add_entry">Add new account</string>
+    <string name="tooltip_search_duplicate_passwords">Search duplicate passwords</string>
+    <string name="tooltip_search_packages">Search installed apps</string>
+    <string name="tooltip_reload_password_analysis">Reload password analysis</string>
+    <string name="tooltip_search_analyzed_passwords">Search analyzed passwords</string>
+    <string name="tooltip_enable_disable_quality_gate">Enable or disable quality gate for password analysis</string>
+    <string name="tooltip_search_app">Search all accounts</string>
+    <string name="tooltip_add_tag">Add new tag</string>
+    <string name="tooltip_show_hide_content">Show or hide content</string>
+    <string name="tooltip_show_hide_password">Show or hide password</string>
+    <string name="tooltip_select_app_for_autofill">Select app for autofill</string>
+    <string name="tooltip_remove_package">Remove app for autofill</string>
+    <string name="tooltip_add_quality_gate">Add custom quality gate</string>
+    <string name="tooltip_add_security_question">Add security question</string>
+    <string name="tooltip_add_detail">Add account detail</string>
+    <string name="tooltip_reorder_details">Hold to reorder</string>
+    <string name="tooltip_edit_entry_name">Edit account name</string>
+
+
     <!--
     ================================================================================================
     ATTENTION:

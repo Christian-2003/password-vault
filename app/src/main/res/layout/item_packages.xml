@@ -37,6 +37,7 @@
         android:layout_gravity="center"
         android:layout_marginEnd="@dimen/space_horizontal_end_button"
         android:src="@drawable/ic_cancel"
+        android:tooltipText="@string/tooltip_remove_package"
         tools:ignore="contentDescription"
         style="@style/button.image"/>
 

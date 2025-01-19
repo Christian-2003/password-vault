@@ -41,6 +41,7 @@
                     android:id="@+id/button_settings"
                     android:src="@drawable/ic_settings"
                     android:layout_gravity="center"
+                    android:tooltipText="@string/tooltip_open_settings"
                     style="@style/button.image.app_bar"/>
 
             </FrameLayout>
@@ -66,6 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_add"
+        android:tooltipText="@string/tooltip_add_entry"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

@@ -28,6 +28,7 @@
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
             android:clipToOutline="true"
+            android:tooltipText="@string/tooltip_select_app_for_autofill"
             tools:text="A"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -42,6 +43,7 @@
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
             android:clipToOutline="true"
+            android:tooltipText="@string/tooltip_select_app_for_autofill"
             tools:background="@mipmap/ic_launcher"
             tools:ignore="contentDescription"/>
 

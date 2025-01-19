@@ -26,6 +26,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_back"
                 android:layout_gravity="center"
+                android:tooltipText="@string/tooltip_back"
                 tools:ignore="contentDescription"
                 style="@style/button.image.app_bar"/>
 

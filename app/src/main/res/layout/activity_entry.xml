@@ -30,6 +30,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_back"
                 android:layout_gravity="center"
+                android:tooltipText="@string/tooltip_back"
                 tools:ignore="contentDescription"
                 style="@style/button.image.app_bar"/>
 
@@ -42,6 +43,7 @@
             android:layout_weight="1"
             android:layout_gravity="center"
             android:layout_marginEnd="0dp"
+            android:tooltipText="@string/tooltip_edit_entry_name"
             tools:text="App name"
             style="@style/text.app_bar"/>
 
@@ -55,6 +57,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_more"
                 android:layout_gravity="center"
+                android:tooltipText="@string/tooltip_more"
                 tools:ignore="contentDescription"
                 style="@style/button.image.app_bar"/>
 

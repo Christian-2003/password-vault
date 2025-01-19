@@ -190,6 +190,7 @@ public class QualityGatesRecyclerViewAdapter extends RecyclerViewAdapter<Quality
                 viewHolder.headlineTextView.setText(R.string.quality_gates_custom);
                 viewHolder.buttonImageView.setImageResource(R.drawable.ic_add);
                 viewHolder.dividerView.setVisibility(View.GONE);
+                viewHolder.itemView.setTooltipText(context.getString(R.string.tooltip_add_quality_gate));
                 viewHolder.itemView.setOnClickListener(view -> {
                     if (addQualityGateListener != null) {
                         addQualityGateListener.onAction(holder.getAdapterPosition());

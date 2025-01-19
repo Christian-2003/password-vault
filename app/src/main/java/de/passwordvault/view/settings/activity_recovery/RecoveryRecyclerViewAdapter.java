@@ -248,6 +248,7 @@ public class RecoveryRecyclerViewAdapter extends RecyclerViewAdapter<RecoveryVie
                     GenericHeadlineButtonViewHolder viewHolder = (GenericHeadlineButtonViewHolder)holder;
                     viewHolder.headlineTextView.setText(R.string.recovery_questions);
                     viewHolder.buttonImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_add));
+                    viewHolder.itemView.setTooltipText(context.getString(R.string.tooltip_add_security_question));
                     viewHolder.itemView.setOnClickListener(view -> {
                         if (addQuestionListener != null) {
                             addQuestionListener.onAction(holder.getAdapterPosition());
