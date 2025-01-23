@@ -12,6 +12,9 @@ n/a
 * Reduced number of paths in some vector drawables to optimize performance.
 * Added tooltip texts for all (image-)buttons that do not have any text on screen. This enables screen readers to work and helps users to navigate the app.
 * Changed style for HTML help and legal pages, so that they can no longer be scrolled horizontally.
+* Changed icon for settings from outlined icon to filled icon.
+* Moved button for settings in `MainActivity` to the end of the search bar, so that it is easier to reach with one hand.
+* Changed button in `SearchActivity` from search-button to clear-button, to comply with Material Design 3 guidelines.
 
 <br/>
 

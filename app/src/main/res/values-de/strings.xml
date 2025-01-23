@@ -459,6 +459,7 @@
     <string name="tooltip_search_analyzed_passwords">Analysierte Passwörter durchsuchen</string>
     <string name="tooltip_enable_disable_quality_gate">Sicherheitskriterium für Passwortanalysie aktivieren oder deaktivieren</string>
     <string name="tooltip_search_app">Alle Konten durchsuchen</string>
+    <string name="tooltip_clear_search">Suchabfrage löschen</string>
     <string name="tooltip_add_tag">Neuen Tag hinzufügen</string>
     <string name="tooltip_show_hide_content">Inhalt anzeigen / ausblenden</string>
     <string name="tooltip_show_hide_password">Passwort anzeigen / ausblenden</string>

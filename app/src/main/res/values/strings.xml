@@ -461,6 +461,7 @@
     <string name="tooltip_search_analyzed_passwords">Search analyzed passwords</string>
     <string name="tooltip_enable_disable_quality_gate">Enable or disable quality gate for password analysis</string>
     <string name="tooltip_search_app">Search all accounts</string>
+    <string name="tooltip_clear_search">Clear search query</string>
     <string name="tooltip_add_tag">Add new tag</string>
     <string name="tooltip_show_hide_content">Show or hide content</string>
     <string name="tooltip_show_hide_password">Show or hide password</string>
