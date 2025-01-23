@@ -128,9 +128,10 @@
     <string name="settings_about_github_update_info">Neueste Version herunterladen</string>
     <string name="settings_about_github_update_link" translatable="false">https://github.com/Christian-2003/password-vault/releases/latest</string>
     <string name="settings_about_software">Software</string>
-    <string name="settings_about_software_version">App-Version</string>
     <string name="settings_about_software_more">Weitere Infos</string>
     <string name="settings_about_software_more_info">Öffne die App in den Systemeinstellungen</string>
+    <string name="settings_about_software_version">Version {arg}</string>
+    <string name="settings_about_software_copyright">© {arg} Christian-2003</string>
 
     <string name="settings_data">Daten</string>
     <string name="settings_data_info">Backup • Export • Alle Daten Löschen</string>

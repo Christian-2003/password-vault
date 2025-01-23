@@ -15,6 +15,7 @@ n/a
 * Changed icon for settings from outlined icon to filled icon.
 * Moved button for settings in `MainActivity` to the end of the search bar, so that it is easier to reach with one hand.
 * Changed button in `SearchActivity` from search-button to clear-button, to comply with Material Design 3 guidelines.
+* Changes to `SettingsAboutActivity`.
 
 <br/>
 

@@ -40,6 +40,22 @@
             android:text="@string/settings_about"
             style="@style/text.app_bar"/>
 
+        <FrameLayout
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize">
+
+            <ImageButton
+                android:id="@+id/button_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_more"
+                android:layout_gravity="center"
+                android:tooltipText="@string/tooltip_more"
+                tools:ignore="contentDescription"
+                style="@style/button.image.app_bar"/>
+
+        </FrameLayout>
+
     </LinearLayout>
 
 
@@ -55,138 +71,47 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Usage -->
-            <TextView
-                android:layout_width="wrap_content"
+            <!-- Software -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_about_usage"
                 android:layout_marginHorizontal="@dimen/space_horizontal"
                 android:layout_marginVertical="@dimen/space_vertical"
-                style="@style/text.headline"/>
-
-            <LinearLayout
-                android:id="@+id/settings_about_usage_tos_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:foreground="?attr/selectableItemBackground"
-                android:paddingHorizontal="@dimen/space_horizontal"
-                android:paddingVertical="@dimen/space_vertical"
-                android:clickable="true"
-                android:focusable="true"
                 android:orientation="horizontal">
 
+                <ImageView
+                    android:layout_width="@dimen/image_l"
+                    android:layout_height="@dimen/image_l"
+                    android:src="@mipmap/ic_launcher"/>
+
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/space_horizontal_between"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/settings_about_usage_tos"
+                        android:text="@string/app_name"
                         style="@style/text"/>
 
                     <TextView
+                        android:id="@+id/settings_about_software_version"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/settings_about_usage_tos_info"
+                        android:layout_marginBottom="@dimen/space_vertical"
+                        tools:text="Version 1.2.3"
+                        style="@style/text.light"/>
+
+                    <TextView
+                        android:id="@+id/settings_about_software_copyright"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="(c) 2023 Christian-2003"
                         style="@style/text.light"/>
 
                 </LinearLayout>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/space_horizontal_between"
-                    android:src="@drawable/ic_next"
-                    tools:ignore="ContentDescription"
-                    style="@style/image.item"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/settings_about_usage_dependencies_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/space_horizontal"
-                android:paddingVertical="@dimen/space_vertical"
-                android:foreground="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_about_usage_dependencies"
-                        style="@style/text"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_about_usage_dependencies_info"
-                        style="@style/text.light"/>
-
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/space_horizontal_between"
-                    android:src="@drawable/ic_next"
-                    tools:ignore="ContentDescription"
-                    style="@style/image.item"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/settings_about_usage_privacypolicy_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/space_horizontal"
-                android:paddingVertical="@dimen/space_vertical"
-                android:foreground="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_about_usage_privacypolicy"
-                        style="@style/text"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_about_usage_privacypolicy_info"
-                        style="@style/text.light"/>
-
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/space_horizontal_between"
-                    android:src="@drawable/ic_next"
-                    tools:ignore="ContentDescription"
-                    style="@style/image.item"/>
 
             </LinearLayout>
 
@@ -287,6 +212,21 @@
 
             </LinearLayout>
 
+
+
+            <View style="@style/divider"/>
+
+
+
+            <!-- Software -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_about_software"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
+                android:layout_marginVertical="@dimen/space_vertical"
+                style="@style/text.headline"/>
+
             <LinearLayout
                 android:id="@+id/settings_about_github_update_container"
                 android:layout_width="match_parent"
@@ -321,41 +261,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_about_github_update_info"
-                    style="@style/text.light"/>
-
-            </LinearLayout>
-
-            <View style="@style/divider"/>
-
-
-
-            <!-- Software -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/settings_about_software"
-                android:layout_marginHorizontal="@dimen/space_horizontal"
-                android:layout_marginVertical="@dimen/space_vertical"
-                style="@style/text.headline"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/space_horizontal"
-                android:paddingVertical="@dimen/space_vertical"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/settings_about_software_version"
-                    style="@style/text"/>
-
-                <TextView
-                    android:id="@+id/settings_about_software_version"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="1.2.3"
                     style="@style/text.light"/>
 
             </LinearLayout>
