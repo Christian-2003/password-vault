@@ -3,7 +3,6 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -82,7 +81,8 @@
                 <ImageView
                     android:layout_width="@dimen/image_l"
                     android:layout_height="@dimen/image_l"
-                    android:src="@mipmap/ic_launcher"/>
+                    android:src="@mipmap/ic_launcher"
+                    android:contentDescription="@string/app_name"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"

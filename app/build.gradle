@@ -12,8 +12,8 @@ android {
         minSdk 32
         //noinspection EditedTargetSdkVersion
         targetSdk 34
-        versionCode 26
-        versionName '3.7.2-pre1'
+        versionCode 27
+        versionName '3.7.2-pre2'
         setProperty('archivesBaseName', 'password-vault-v' + versionName)
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
@@ -53,6 +53,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-oss-licenses:17.1.0'
     implementation 'com.github.supersu-man:apkupdater-library:v2.1.0'
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
+    implementation 'com.google.code.gson:gson:2.11.0'
 
     testImplementation 'junit:junit:4.13.2'
     //noinspection GradleDependency

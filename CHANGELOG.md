@@ -16,6 +16,7 @@ n/a
 * Moved button for settings in `MainActivity` to the end of the search bar, so that it is easier to reach with one hand.
 * Changed button in `SearchActivity` from search-button to clear-button, to comply with Material Design 3 guidelines.
 * Changes to `SettingsAboutActivity`.
+* Help pages are no longer part of the app. Instead, the app fetches available help pages from a REST API.
 
 <br/>
 

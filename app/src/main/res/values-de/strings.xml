@@ -107,6 +107,13 @@
     <string name="settings_help_autofill_configuration">Automatisches Ausfüllen konfigurieren</string>
     <string name="settings_help_login_configuration">App-Login konfigurieren</string>
     <string name="settings_help_backup">Backups verwalten</string>
+    <string name="settings_help_locale">de</string>
+    <string name="settings_help_empty_headline_internet">Keine Verbinding zum Internet möglich</string>
+    <string name="settings_help_empty_headline_404">Server nicht erreichbar</string>
+    <string name="settings_help_empty_headline_serialization">Anfrage korrupt</string>
+    <string name="settings_help_empty_support">Hilfeseiten werden hier angezeigt</string>
+    <string name="settings_help_language_supported">In deiner Sprache verfügbar</string>
+    <string name="settings_help_language_not_supported">Nur auf Englisch verfügbar</string>
 
     <string name="settings_about">Über</string>
     <string name="settings_about_info">Rechtliches • GitHub • App-Infos</string>
