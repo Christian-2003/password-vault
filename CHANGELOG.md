@@ -17,6 +17,7 @@ n/a
 * Changed button in `SearchActivity` from search-button to clear-button, to comply with Material Design 3 guidelines.
 * Changes to `SettingsAboutActivity`.
 * Help pages are no longer part of the app. Instead, the app fetches available help pages from a REST API.
+* Remove in-app help pages which reduces the size of the app by 50 %.
 
 <br/>
 
