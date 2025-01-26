@@ -28,7 +28,7 @@ public class HelpRestClient {
     /**
      * Field stores the URL of the REST API endpoint.
      */
-    private static final String URL = "https://api.passwordvault.christian2003.de/data/help.json";
+    private static final String URL = "https://api.passwordvault.christian2003.de/rest/help.json";
 
 
     /**
@@ -121,6 +121,9 @@ public class HelpRestClient {
             String response = null;
             try {
                 response = getResult();
+                if (response == null || response.isEmpty()) {
+                    throw new NullPointerException("Response is null");
+                }
             }
             catch (Exception e) {
                 error = RestError.ERROR_404;
@@ -179,6 +182,7 @@ public class HelpRestClient {
      * @return              Response from the REST API.
      * @throws Exception    Data could not be fetched.
      */
+    @Nullable
     private String getResult() throws Exception {
         URL url = new URL(URL);
         HttpURLConnection connection = (HttpURLConnection)url.openConnection();
