@@ -16,8 +16,7 @@ public class HelpResponse {
      * Attribute stores the version of the REST response.
      */
     @SerializedName("version")
-    @NonNull
-    private String version;
+    private int version;
 
     /**
      * Attribute stores the array of help pages.
@@ -31,7 +30,7 @@ public class HelpResponse {
      * Constructor instantiates a new help response.
      */
     public HelpResponse() {
-        version = "";
+        version = -1;
         helpPages = new HelpPage[0];
     }
 
@@ -41,8 +40,7 @@ public class HelpResponse {
      *
      * @return  Version of the response.
      */
-    @NonNull
-    public String getVersion() {
+    public int getVersion() {
         return version;
     }
 
