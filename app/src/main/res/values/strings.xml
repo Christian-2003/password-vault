@@ -141,6 +141,12 @@
     <string name="settings_about_software_more_info">Show app in system settings</string>
     <string name="settings_about_software_version">Version {arg}</string>
     <string name="settings_about_software_copyright">© {arg} Christian-2003</string>
+    <string name="settings_about_empty_headline_internet">Cannot connect to internet</string>
+    <string name="settings_about_empty_headline_404">Cannot reach server</string>
+    <string name="settings_about_empty_headline_serialization">Request corrupted</string>
+    <string name="settings_about_empty_support">Legal pages are shown here</string>
+    <string name="settings_about_language_supported">Available in your language</string>
+    <string name="settings_about_language_not_supported">Only available in English</string>
 
     <string name="settings_data">Data</string>
     <string name="settings_data_info">Backup • Export • Delete all data</string>

@@ -1,4 +1,4 @@
-package de.passwordvault.view.settings.activity_help;
+package de.passwordvault.view.settings.activity_about;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -6,23 +6,23 @@ import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 import de.passwordvault.model.rest.RestCallback;
 import de.passwordvault.model.rest.RestError;
-import de.passwordvault.model.rest.help.HelpRestClient;
-import de.passwordvault.model.rest.help.LocalizedHelpPage;
+import de.passwordvault.model.rest.legal.LegalRestClient;
+import de.passwordvault.model.rest.legal.LocalizedLegalPage;
 
 
 /**
- * Class implements the view model for the {@link SettingsHelpActivity}.
+ * Class implements the view model for the {@link SettingsAboutActivity}.
  *
  * @author  Christian-2003
- * @version 3.7.2
+ * @version 3.7.0
  */
-public class SettingsHelpViewModel extends ViewModel {
+public class SettingsAboutViewModel extends ViewModel {
 
     /**
      * Attribute stores the REST client fetching data.
      */
     @NonNull
-    private final HelpRestClient restClient;
+    private final LegalRestClient restClient;
 
     /**
      * Attribute stores the REST error generated when fetching data.
@@ -34,20 +34,20 @@ public class SettingsHelpViewModel extends ViewModel {
     /**
      * Constructor instantiates a new view model.
      */
-    public SettingsHelpViewModel() {
-        restClient = new HelpRestClient();
+    public SettingsAboutViewModel() {
+        restClient = new LegalRestClient();
         error = null;
     }
 
 
     /**
-     * Method returns the list of localized help pages fetched from the REST API.
+     * Method returns the list of localized legal pages fetched from the REST API.
      *
-     * @return  List of localized help pages.
+     * @return  List of localized legal pages.
      */
     @NonNull
-    public ArrayList<LocalizedHelpPage> getHelpPages() {
-        return restClient.getHelpPages();
+    public ArrayList<LocalizedLegalPage> getLegalPages() {
+        return restClient.getLegalPages();
     }
 
     /**

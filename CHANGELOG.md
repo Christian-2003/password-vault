@@ -18,6 +18,7 @@ n/a
 * Changes to `SettingsAboutActivity`.
 * Help pages are no longer part of the app. Instead, the app fetches available help pages from a REST API.
 * Remove in-app help pages which reduces the size of the app by 50 %.
+* Privacy Policy and Terms of Service are no longer part of the app. Instead, the app fetches these pages from a REST API.
 
 <br/>
 

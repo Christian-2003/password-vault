@@ -139,6 +139,12 @@
     <string name="settings_about_software_more_info">Öffne die App in den Systemeinstellungen</string>
     <string name="settings_about_software_version">Version {arg}</string>
     <string name="settings_about_software_copyright">© {arg} Christian-2003</string>
+    <string name="settings_about_empty_headline_internet">Keine Verbindung zum Internet möglich</string>
+    <string name="settings_about_empty_headline_404">Server nicht erreichbar</string>
+    <string name="settings_about_empty_headline_serialization">Anfrage korrupt</string>
+    <string name="settings_about_empty_support">Legal pages are shown here</string>
+    <string name="settings_about_language_supported">In deiner Sprache verfügbar</string>
+    <string name="settings_about_language_not_supported">Nur auf Englisch verfügbar</string>
 
     <string name="settings_data">Daten</string>
     <string name="settings_data_info">Backup • Export • Alle Daten Löschen</string>
