@@ -55,10 +55,6 @@
     <string name="settings_customization_appearance_darkmode_light">Light</string>
     <string name="settings_customization_appearance_darkmode_dark">Dark</string>
     <string name="settings_customization_appearance_darkmode_system">Like system</string>
-    <string name="settings_customization_home">Home Page</string>
-    <string name="settings_customization_home_recentlyedited">Recently edited accounts</string>
-    <string name="settings_customization_home_recentlyedited_info">Change number of recently edited accounts on home page</string>
-    <string name="settings_customization_home_recentlyedited_number_option">{arg} accounts</string>
     <string name="settings_customization_details">Details</string>
     <string name="settings_customization_details_swipe">Swipe actions</string>
     <string name="settings_customization_details_swipe_info">Change swipe actions</string>
@@ -66,6 +62,9 @@
     <string name="settings_customization_details_swipe_right">Right swipe action</string>
     <string name="settings_customization_details_swipe_delete">Delete item</string>
     <string name="settings_customization_details_swipe_edit">Edit item</string>
+    <string name="settings_customization_navigation">Navigation</string>
+    <string name="settings_customization_navigation_resources">Open help pages in browser</string>
+    <string name="settings_customization_navigation_resources_info">Open help pages in browser instead of the app</string>
 
     <string name="settings_security">Security</string>
     <string name="settings_security_info">App login • Biometrics • Password security</string>

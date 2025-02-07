@@ -2,6 +2,9 @@ package de.passwordvault.view.settings.activity_customization;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;
+
+import com.google.android.material.materialswitch.MaterialSwitch;
+
 import de.passwordvault.R;
 import de.passwordvault.view.settings.dialog_darkmode.DarkmodeDialog;
 import de.passwordvault.view.settings.dialog_swipe.SwipeDialog;
@@ -15,13 +18,13 @@ import de.passwordvault.view.settings.activity_settings.SettingsViewModel;
  * @author  Christian-2003
  * @version 3.7.0
  */
-public class SettingsCustomizationActivity extends PasswordVaultActivity<SettingsViewModel> {
+public class SettingsCustomizationActivity extends PasswordVaultActivity<SettingsCustomizationViewModel> {
 
     /**
      * Constructor instantiates a new activity.
      */
     public SettingsCustomizationActivity() {
-        super(SettingsViewModel.class, R.layout.activity_settings_customization);
+        super(SettingsCustomizationViewModel.class, R.layout.activity_settings_customization);
     }
 
 
@@ -39,6 +42,15 @@ public class SettingsCustomizationActivity extends PasswordVaultActivity<Setting
         //Appearance:
         findViewById(R.id.settings_customization_appearance_darkmode_conatainer).setOnClickListener(view -> changeDarkmode());
         findViewById(R.id.settings_customization_details_swipe_conatainer).setOnClickListener(view -> changeSwipeActions());
+
+        //Navigation:
+        MaterialSwitch resourcesSwitch = findViewById(R.id.switch_resources);
+        resourcesSwitch.setChecked(viewModel.openResourcesInBrowser());
+        resourcesSwitch.setOnCheckedChangeListener((view, checked) -> viewModel.openResourcesInBrowser(checked));
+        findViewById(R.id.container_resources).setOnClickListener(view -> {
+            viewModel.openResourcesInBrowser(!viewModel.openResourcesInBrowser());
+            resourcesSwitch.setChecked(viewModel.openResourcesInBrowser());
+        });
     }
 
 

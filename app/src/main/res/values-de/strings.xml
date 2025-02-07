@@ -54,10 +54,6 @@
     <string name="settings_customization_appearance_darkmode_light">Hell</string>
     <string name="settings_customization_appearance_darkmode_dark">Dunkel</string>
     <string name="settings_customization_appearance_darkmode_system">Wie System</string>
-    <string name="settings_customization_home">Startseite</string>
-    <string name="settings_customization_home_recentlyedited">Zuletzt bearbeitete Konten</string>
-    <string name="settings_customization_home_recentlyedited_info">Anzahl der zuletzt bearbeiteten Konten bearbeiten</string>
-    <string name="settings_customization_home_recentlyedited_number_option">{arg} Konten</string>
     <string name="settings_customization_details">Kontoinformationen</string>
     <string name="settings_customization_details_swipe">Wischgesten</string>
     <string name="settings_customization_details_swipe_info">Aktionen beim Wischen bearbeiten</string>
@@ -65,6 +61,9 @@
     <string name="settings_customization_details_swipe_right">Nach rechts wischen</string>
     <string name="settings_customization_details_swipe_delete">Eintrag löschen</string>
     <string name="settings_customization_details_swipe_edit">Eintrag bearbeiten</string>
+    <string name="settings_customization_navigation">Navigation</string>
+    <string name="settings_customization_navigation_resources">Hilfeseiten im Browser öffnen</string>
+    <string name="settings_customization_navigation_resources_info">Öffne Hilfeseiten im Browser, anstatt in der App</string>
 
     <string name="settings_security">Sicherheit</string>
     <string name="settings_security_info">App-Login • Biometrie • Passwortsicherheit</string>

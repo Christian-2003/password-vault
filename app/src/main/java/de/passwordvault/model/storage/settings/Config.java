@@ -20,7 +20,7 @@ import de.passwordvault.model.storage.settings.items.SwipeActionItem;
  * Class implements the configuration for the app.
  *
  * @author  Christian-2003
- * @version 3.6.0
+ * @version 3.7.2
  */
 public class Config implements ConfigSettingContract {
 
@@ -136,6 +136,12 @@ public class Config implements ConfigSettingContract {
      * Setting indicates whether to prevent screenshots of sensitive data.
      */
     public final BooleanItem preventScreenshots = new BooleanItem(this, "prevent_screenshots", true);
+
+    /**
+     * Setting indicates whether to open resources (e.g. help or legal pages) in a browser (true) or
+     * within the app (false).
+     */
+    public final BooleanItem openResourcesInBrowser = new BooleanItem(this, "open_resources_in_browser", false);
 
 
     /**

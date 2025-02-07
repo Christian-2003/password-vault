@@ -101,17 +101,8 @@ public class SettingsHelpActivity extends PasswordVaultActivity<SettingsHelpView
      * @param position  Position of the localized help page to show to the user.
      */
     private void showHelpPage(int position) {
-        LocalizedHelpPage helpPage = viewModel.getHelpPages().get(position - SettingsHelpRecyclerViewAdapter.OFFSET_HELP_PAGES);
-        Uri uri;
-        try {
-            uri = Uri.parse(helpPage.getUrl());
-        }
-        catch (Exception e) {
-            return;
-        }
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(uri);
-        startActivity(intent);
+        LocalizedHelpPage page = viewModel.getHelpPages().get(position - SettingsHelpRecyclerViewAdapter.OFFSET_HELP_PAGES);
+        openUrlInBrowserOrApp(page.getUrl());
     }
 
 }

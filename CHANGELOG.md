@@ -21,6 +21,8 @@ n/a
 * Privacy Policy and Terms of Service are no longer part of the app. Instead, the app fetches these pages from a REST API.
 * `LicensesActivity` displays license name and dependency version to match the look and feel of Petrol Index.
 * `SettingsActivity` no longer shows indicator if app update is available, since the user is informed about app updates in the `MainActivity`.
+* Help (and legal) pages fetched from the web are displayed within the app by default to keep the user within the app (instead of transferring them to a webbrowser).
+* Added setting through which the user can decide whether open help pages inside the app or a webbrowser.
 
 <br/>
 

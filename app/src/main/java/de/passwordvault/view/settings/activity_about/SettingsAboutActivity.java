@@ -16,6 +16,7 @@ import de.passwordvault.model.rest.RestCallback;
 import de.passwordvault.model.rest.RestError;
 import de.passwordvault.model.rest.legal.LocalizedLegalPage;
 import de.passwordvault.view.settings.activity_licenses.LicensesActivity;
+import de.passwordvault.view.settings.activity_webview.WebviewActivity;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
 
 
@@ -119,16 +120,7 @@ public class SettingsAboutActivity extends PasswordVaultActivity<SettingsAboutVi
      * @param page  Legal page to show.
      */
     private void showLegalPage(LocalizedLegalPage page) {
-        Uri uri;
-        try {
-            uri = Uri.parse(page.getUrl());
-        }
-        catch (Exception e) {
-            return;
-        }
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(uri);
-        startActivity(intent);
+        openUrlInBrowserOrApp(page.getUrl());
     }
 
 

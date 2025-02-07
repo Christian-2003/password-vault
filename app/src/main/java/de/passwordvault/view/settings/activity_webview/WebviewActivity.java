@@ -1,4 +1,4 @@
-package de.passwordvault.view.settings.activity_localized_asset_viewer;
+package de.passwordvault.view.settings.activity_webview;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -10,26 +10,19 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModel;
-
-import java.util.Locale;
 import de.passwordvault.R;
-import de.passwordvault.model.storage.LocalizedAssetManager;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
 
 
 /**
- * Class implements an activity that can display a localized HTML assets within a {@link WebView}.
- * The filename of the asset that shall be displayed needs to be passed as extra with key
- * {@link #KEY_PAGE}. The folder of the corresponding filename needs to be passed as extra with
- * kex {@link #KEY_FOLDER}.
- * For further information about localized assets, see {@link LocalizedAssetManager}.
+ * Class implements an activity that can display a web page within the app withou opening an external
+ * browser. Pass the URL to display as argument with key {@link #EXTRA_URL}.
  *
  * @author  Christian-2003
- * @version 3.5.6
+ * @version 3.7.2
  */
-public class LocalizedAssetViewerActivity extends PasswordVaultActivity<ViewModel> {
+public class WebviewActivity extends PasswordVaultActivity<ViewModel> {
 
     /**
      * Class implements a custom web view client for the help activity.
@@ -45,10 +38,10 @@ public class LocalizedAssetViewerActivity extends PasswordVaultActivity<ViewMode
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            TextView activityTitleTextView = LocalizedAssetViewerActivity.this.findViewById(R.id.title);
+            TextView activityTitleTextView = WebviewActivity.this.findViewById(R.id.title);
             activityTitleTextView.setText(view.getTitle());
-            LocalizedAssetViewerActivity.this.progressBar.setVisibility(View.GONE);
-            LocalizedAssetViewerActivity.this.webView.setVisibility(View.VISIBLE);
+            WebviewActivity.this.progressBar.setVisibility(View.GONE);
+            WebviewActivity.this.webView.setVisibility(View.VISIBLE);
         }
 
 
@@ -78,14 +71,9 @@ public class LocalizedAssetViewerActivity extends PasswordVaultActivity<ViewMode
 
 
     /**
-     * Field stores the key with which to pass the filename of the page to open.
+     * Field stores the key for the argument with which to pass the URL to display.
      */
-    public static final String KEY_PAGE = "filename";
-
-    /**
-     * Field stores the key with which to pass the folder name of the page to open.
-     */
-    public static final String KEY_FOLDER = "folder";
+    public static final String EXTRA_URL = "url";
 
 
     /**
@@ -99,8 +87,8 @@ public class LocalizedAssetViewerActivity extends PasswordVaultActivity<ViewMode
     private WebView webView;
 
 
-    public LocalizedAssetViewerActivity() {
-        super(null, R.layout.activity_localized_asset_viewer);
+    public WebviewActivity() {
+        super(null, R.layout.activity_webview);
     }
 
 
@@ -118,18 +106,12 @@ public class LocalizedAssetViewerActivity extends PasswordVaultActivity<ViewMode
         webView = findViewById(R.id.web_view);
 
         //Get filename:
-        String filename = null;
-        String folder = null;
+        String url = null;
         Bundle args = getIntent().getExtras();
-        if (args != null) {
-            if (args.containsKey(KEY_PAGE)) {
-                filename = args.getString(KEY_PAGE, null);
-            }
-            if (args.containsKey(KEY_FOLDER)) {
-                folder = args.getString(KEY_FOLDER, null);
-            }
+        if (args != null && args.containsKey(EXTRA_URL)) {
+            url = args.getString(EXTRA_URL, null);
         }
-        if (filename == null || folder == null) {
+        if (url == null) {
             finish();
             return;
         }
@@ -139,9 +121,8 @@ public class LocalizedAssetViewerActivity extends PasswordVaultActivity<ViewMode
 
         //Load help page:
         try {
-            LocalizedAssetManager assetManager = new LocalizedAssetManager(folder, Locale.getDefault());
             webView.setWebViewClient(new CustomWebViewClient());
-            webView.loadUrl(assetManager.getFileUri(filename));
+            webView.loadUrl(url);
         }
         catch (Exception e) {
             finish();
