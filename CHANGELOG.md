@@ -20,6 +20,7 @@ n/a
 * Remove in-app help pages which reduces the size of the app by 50 %.
 * Privacy Policy and Terms of Service are no longer part of the app. Instead, the app fetches these pages from a REST API.
 * `LicensesActivity` displays license name and dependency version to match the look and feel of Petrol Index.
+* `SettingsActivity` no longer shows indicator if app update is available, since the user is informed about app updates in the `MainActivity`.
 
 <br/>
 
