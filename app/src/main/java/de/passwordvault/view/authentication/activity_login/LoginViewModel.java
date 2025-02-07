@@ -35,12 +35,24 @@ public class LoginViewModel extends ViewModel {
      */
     private final Executor executor = ContextCompat.getMainExecutor(App.getContext());
 
+    /**
+     * Attribute stores whether the splash screen is currently visible.
+     */
+    private boolean splashScreenVisible;
+
+    /**
+     * Attribute stores whether the splash screen timer has been started.
+     */
+    private boolean splashScreenTimerStarted;
+
 
     /**
      * Constructor instantiates a new view model.
      */
     public LoginViewModel() {
         biometricAuthenticationCancelled = false;
+        splashScreenVisible = true;
+        splashScreenTimerStarted = false;
     }
 
 
@@ -122,6 +134,40 @@ public class LoginViewModel extends ViewModel {
      */
     public boolean usePasswordRecovery() {
         return Account.getInstance().getSecurityQuestions().size() >= Account.REQUIRED_SECURITY_QUESTIONS;
+    }
+
+
+    /**
+     * Method returns whether the splash screen is visible.
+     *
+     * @return  Whether the splash screen is visible.
+     */
+    public boolean isSplashScreenVisible() {
+        return splashScreenVisible;
+    }
+
+
+    /**
+     * Method starts the timer for the splash screen.
+     *
+     * @param milliseconds  Time that the splash screen should be visible.
+     */
+    public void startSplashScreenTimer(int milliseconds) {
+        if (!splashScreenTimerStarted) {
+            splashScreenTimerStarted = true;
+            Thread thread = new Thread(() -> {
+                try {
+                    Thread.sleep(milliseconds);
+                }
+                catch (InterruptedException e) {
+                    //Ignore...
+                }
+                finally {
+                    splashScreenVisible = false;
+                }
+            });
+            thread.start();
+        }
     }
 
 }

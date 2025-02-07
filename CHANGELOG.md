@@ -23,6 +23,8 @@ n/a
 * `SettingsActivity` no longer shows indicator if app update is available, since the user is informed about app updates in the `MainActivity`.
 * Help (and legal) pages fetched from the web are displayed within the app by default to keep the user within the app (instead of transferring them to a webbrowser).
 * Added setting through which the user can decide whether open help pages inside the app or a webbrowser.
+* Splash screen stays open for it's full animation duration.
+* Changed splash screen animation.
 
 <br/>
 
