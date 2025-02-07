@@ -6,6 +6,8 @@ import android.net.NetworkCapabilities;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -32,7 +34,7 @@ public abstract class RestClient<ResponseType> {
      * Attribute stores the tag to identify a REST callback.
      */
     @Nullable
-    private String tag;
+    private final String tag;
 
     /**
      * Attribute stores the error code generated during the response.
@@ -53,7 +55,7 @@ public abstract class RestClient<ResponseType> {
     /**
      * Constructor instantiates a new REST client.
      *
-     * @patam tag   Tag to use with this client.
+     * @param tag   Tag to use with this client.
      */
     public RestClient(@Nullable String tag) {
         error = null;
@@ -111,10 +113,10 @@ public abstract class RestClient<ResponseType> {
             }
 
             //Fetch data:
-            String response = null;
+            String response;
             try {
                 response = fetchData(url);
-                if (response == null || response.isEmpty()) {
+                if (response.isEmpty()) {
                     throw new NullPointerException("Response is null");
                 }
             }
@@ -132,7 +134,7 @@ public abstract class RestClient<ResponseType> {
             try {
                 this.response = deserializeResponse(response, clazz);
             }
-            catch (Exception e) {
+            catch (JsonSyntaxException e) {
                 error = RestError.ERROR_SERIALIZATION;
                 finished = true;
                 fetching = false;
@@ -215,12 +217,12 @@ public abstract class RestClient<ResponseType> {
     /**
      * Method deserializes the response returned from the REST API.
      *
-     * @param response      Response to deserialize.
-     * @param clazz         Class type of the response type.
-     * @return              Deserialized response.
-     * @throws Exception    The response cannot be deserialized.
+     * @param response              Response to deserialize.
+     * @param clazz                 Class type of the response type.
+     * @return                      Deserialized response.
+     * @throws JsonSyntaxException  The response cannot be deserialized.
      */
-    private ResponseType deserializeResponse(@NonNull String response, @NonNull Class<ResponseType> clazz) throws Exception {
+    private ResponseType deserializeResponse(@NonNull String response, @NonNull Class<ResponseType> clazz) throws JsonSyntaxException {
         Gson gson = new Gson();
         return gson.fromJson(response, clazz);
     }

@@ -57,15 +57,13 @@ public class SettingsAboutActivity extends PasswordVaultActivity<SettingsAboutVi
     public void onFetchFinished(@Nullable String tag,@NonNull RestError error) {
         if (tag != null) {
             runOnUiThread(() -> {
-                if (tag.equals(SettingsAboutViewModel.TAG_PRIVACY) && viewModel.getPrivacyError() == RestError.SUCCESS) {
+                if (tag.equals(SettingsAboutViewModel.TAG_PRIVACY)) {
                     //Privacy policy:
-                    Log.d("REST", "Callback privacy");
                     viewModel.setPrivacyError(error);
                     privacyContainer.setVisibility(viewModel.getPrivacyError() == RestError.SUCCESS ? View.VISIBLE : View.GONE);
                 }
                 else if (tag.equals(SettingsAboutViewModel.TAG_TOS)) {
                     //Terms of service:
-                    Log.d("REST", "Callback TOS");
                     viewModel.setTosError(error);
                     tosContainer.setVisibility(viewModel.getTosError() == RestError.SUCCESS ? View.VISIBLE : View.GONE);
                 }
