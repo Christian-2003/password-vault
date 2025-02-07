@@ -29,6 +29,12 @@ public abstract class RestClient<ResponseType> {
     private ResponseType response;
 
     /**
+     * Attribute stores the tag to identify a REST callback.
+     */
+    @Nullable
+    private String tag;
+
+    /**
      * Attribute stores the error code generated during the response.
      */
     private RestError error;
@@ -46,11 +52,14 @@ public abstract class RestClient<ResponseType> {
 
     /**
      * Constructor instantiates a new REST client.
+     *
+     * @patam tag   Tag to use with this client.
      */
-    public RestClient() {
+    public RestClient(@Nullable String tag) {
         error = null;
         fetching = false;
         finished = false;
+        this.tag = tag;
     }
 
 
@@ -85,7 +94,7 @@ public abstract class RestClient<ResponseType> {
     public void fetch(@NonNull String url, @NonNull Class<ResponseType> clazz, @Nullable RestCallback callback, @Nullable RestPostFetchCallback<ResponseType> restPostFetchCallback) {
         if (fetching || finished) {
             if (callback != null) {
-                callback.onFetchFinished(error);
+                callback.onFetchFinished(tag, error);
             }
             return;
         }
@@ -96,7 +105,7 @@ public abstract class RestClient<ResponseType> {
                 finished = true;
                 fetching = false;
                 if (callback != null) {
-                    callback.onFetchFinished(error);
+                    callback.onFetchFinished(tag, error);
                 }
                 return;
             }
@@ -114,7 +123,7 @@ public abstract class RestClient<ResponseType> {
                 finished = true;
                 fetching = false;
                 if (callback != null) {
-                    callback.onFetchFinished(error);
+                    callback.onFetchFinished(tag, error);
                 }
                 return;
             }
@@ -128,7 +137,7 @@ public abstract class RestClient<ResponseType> {
                 finished = true;
                 fetching = false;
                 if (callback != null) {
-                    callback.onFetchFinished(error);
+                    callback.onFetchFinished(tag, error);
                 }
                 return;
             }
@@ -139,7 +148,7 @@ public abstract class RestClient<ResponseType> {
                 finished = true;
                 fetching = false;
                 if (callback != null) {
-                    callback.onFetchFinished(error);
+                    callback.onFetchFinished(tag, error);
                 }
                 return;
             }
@@ -149,7 +158,7 @@ public abstract class RestClient<ResponseType> {
             finished = true;
             fetching = false;
             if (callback != null) {
-                callback.onFetchFinished(error);
+                callback.onFetchFinished(tag, error);
             }
         });
         thread.start();

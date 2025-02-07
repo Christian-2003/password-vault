@@ -6,20 +6,16 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
-import android.widget.ProgressBar;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
-import java.util.ArrayList;
+import java.util.Calendar;
+import de.passwordvault.BuildConfig;
 import de.passwordvault.R;
 import de.passwordvault.model.rest.RestCallback;
 import de.passwordvault.model.rest.RestError;
 import de.passwordvault.model.rest.legal.LocalizedLegalPage;
-import de.passwordvault.view.general.dialog_more.Item;
-import de.passwordvault.view.general.dialog_more.ItemButton;
-import de.passwordvault.view.general.dialog_more.ItemDivider;
-import de.passwordvault.view.general.dialog_more.MoreDialog;
-import de.passwordvault.view.general.dialog_more.MoreDialogCallback;
 import de.passwordvault.view.settings.activity_licenses.LicensesActivity;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
 
@@ -28,45 +24,19 @@ import de.passwordvault.view.utils.components.PasswordVaultActivity;
  * Class implements the activity which shows the user information about the application.
  *
  * @author  Christian-2003
- * @version 3.6.0
+ * @version 3.7.2
  */
-public class SettingsAboutActivity extends PasswordVaultActivity<SettingsAboutViewModel> implements MoreDialogCallback, RestCallback {
+public class SettingsAboutActivity extends PasswordVaultActivity<SettingsAboutViewModel> implements RestCallback {
 
     /**
-     * Field stores the tag for the more dialog to show the list of dependencies.
+     * Attribute stores the container showing the privacy policy.
      */
-    private static final String TAG_DEPENDENCIES = "dependencies";
+    private LinearLayout privacyContainer;
 
     /**
-     * Field stores the tag for the more dialog to show the GitHub repository.
+     * Attribute stores the container showing the terms of service.
      */
-    private static final String TAG_REPOSITORY = "repo";
-
-    /**
-     * Field stores the tag for the more dialog to show the GitHub issues.
-     */
-    private static final String TAG_ISSUES = "issues";
-
-    /**
-     * Field stores the tag for the more dialog to show the app in system settings.
-     */
-    private static final String TAG_SETTINGS = "settings";
-
-
-    /**
-     * Attribute stores the adapter for the activity.
-     */
-    private SettingsAboutRecyclerViewAdapter adapter;
-
-    /**
-     * Attribute stores the recycler view.
-     */
-    private RecyclerView recyclerView;
-
-    /**
-     * Attribute stores the progress bar.
-     */
-    private ProgressBar progressBar;
+    private LinearLayout tosContainer;
 
 
     /**
@@ -77,36 +47,6 @@ public class SettingsAboutActivity extends PasswordVaultActivity<SettingsAboutVi
     }
 
 
-    /**
-     * @param dialog   Dialog in which the action was invoked.
-     * @param tag      Tag from the {@link Item} whose action is invoked.
-     * @param position Position of the {@link Item} within the dialog.
-     */
-    @Override
-    public void onDialogItemClicked(MoreDialog dialog, String tag, int position) {
-        switch (tag) {
-            case TAG_DEPENDENCIES: {
-                startActivity(new Intent(this, LicensesActivity.class));
-                break;
-            }
-            case TAG_REPOSITORY: {
-                openUrl(getString(R.string.settings_about_github_repo_link));
-                break;
-            }
-            case TAG_ISSUES: {
-                openUrl(getString(R.string.settings_about_github_issues_link));
-                break;
-            }
-            case TAG_SETTINGS: {
-                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                Uri uri = Uri.fromParts("package", getPackageName(), null);
-                intent.setData(uri);
-                startActivity(intent);
-                break;
-            }
-        }
-    }
-
 
     /**
      * Method is called once the data has been fetched.
@@ -114,14 +54,21 @@ public class SettingsAboutActivity extends PasswordVaultActivity<SettingsAboutVi
      * @param error Error generated during the call to the REST API.
      */
     @Override
-    public void onFetchFinished(@NonNull RestError error) {
-        if (viewModel.isFinished()) {
-            viewModel.setError(error);
-            Log.d("REST", "Error code: " + error.ordinal());
+    public void onFetchFinished(@Nullable String tag,@NonNull RestError error) {
+        if (tag != null) {
             runOnUiThread(() -> {
-                progressBar.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
-                adapter.notifyDataSetChanged();
+                if (tag.equals(SettingsAboutViewModel.TAG_PRIVACY) && viewModel.getPrivacyError() == RestError.SUCCESS) {
+                    //Privacy policy:
+                    Log.d("REST", "Callback privacy");
+                    viewModel.setPrivacyError(error);
+                    privacyContainer.setVisibility(viewModel.getPrivacyError() == RestError.SUCCESS ? View.VISIBLE : View.GONE);
+                }
+                else if (tag.equals(SettingsAboutViewModel.TAG_TOS)) {
+                    //Terms of service:
+                    Log.d("REST", "Callback TOS");
+                    viewModel.setTosError(error);
+                    tosContainer.setVisibility(viewModel.getTosError() == RestError.SUCCESS ? View.VISIBLE : View.GONE);
+                }
             });
         }
     }
@@ -137,19 +84,31 @@ public class SettingsAboutActivity extends PasswordVaultActivity<SettingsAboutVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_about);
 
-        progressBar = findViewById(R.id.progress_bar);
-        progressBar.setVisibility(View.VISIBLE);
-
         //Menu bar:
         findViewById(R.id.button_back).setOnClickListener(view -> finish());
-        findViewById(R.id.button_more).setOnClickListener(view -> onShowMoreDialog());
 
-        //Recycler view:
-        adapter = new SettingsAboutRecyclerViewAdapter(this, viewModel);
-        adapter.setLegalPageClickListener(this::showLegalPage);
-        recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setVisibility(View.GONE);
+        //Software
+        String version = BuildConfig.VERSION_NAME;
+        if (BuildConfig.DEBUG) {
+            version += " (Debug Build)";
+        }
+        String copyright = "" + Calendar.getInstance().get(Calendar.YEAR);
+        ((TextView)findViewById(R.id.settings_about_software_version)).setText(getString(R.string.settings_about_software_version).replace("{arg}", version));
+        ((TextView)findViewById(R.id.settings_about_software_copyright)).setText(getString(R.string.settings_about_software_copyright).replace("{arg}", copyright));
+        findViewById(R.id.container_more).setOnClickListener(view -> showSettingsPage());
+
+        //GitHub
+        findViewById(R.id.container_repo).setOnClickListener(view -> openUrl(getString(R.string.settings_about_github_repo_link)));
+        findViewById(R.id.container_issues).setOnClickListener(view -> openUrl(getString(R.string.settings_about_github_issues_link)));
+
+        //Legal
+        findViewById(R.id.container_dependencies).setOnClickListener(view -> startActivity(new Intent(this, LicensesActivity.class)));
+        privacyContainer = findViewById(R.id.container_privacy);
+        privacyContainer.setVisibility(viewModel.getPrivacyError() == RestError.SUCCESS ? View.VISIBLE : View.GONE);
+        privacyContainer.setOnClickListener(view -> showLegalPage(viewModel.getPrivacyPage()));
+        tosContainer = findViewById(R.id.container_tos);
+        tosContainer.setVisibility(viewModel.getTosError() == RestError.SUCCESS ? View.VISIBLE : View.GONE);
+        tosContainer.setOnClickListener(view -> showLegalPage(viewModel.getTosPage()));
 
         //Fetch data:
         viewModel.fetchData(this);
@@ -157,40 +116,31 @@ public class SettingsAboutActivity extends PasswordVaultActivity<SettingsAboutVi
 
 
 
-    private void onShowMoreDialog() {
-        Bundle args = new Bundle();
-        args.putString(MoreDialog.ARG_TITLE , getString(R.string.settings_about));
-        args.putInt(MoreDialog.ARG_ICON, R.drawable.ic_launcher_foreground_noscale);
-        ArrayList<Item> items = new ArrayList<>();
-        items.add(new ItemButton(getString(R.string.settings_about_usage_dependencies), TAG_DEPENDENCIES, R.drawable.ic_license));
-        items.add(new ItemDivider());
-        items.add(new ItemButton(getString(R.string.settings_about_github_repo), TAG_REPOSITORY, R.drawable.ic_repository));
-        items.add(new ItemButton(getString(R.string.settings_about_github_issues), TAG_ISSUES, R.drawable.ic_bug));
-        items.add(new ItemDivider());
-        items.add(new ItemButton(getString(R.string.settings_about_software_more), TAG_SETTINGS, R.drawable.ic_settings));
-        args.putSerializable(MoreDialog.ARG_ITEMS, items);
-
-        MoreDialog dialog = new MoreDialog();
-        dialog.setArguments(args);
-        dialog.show(getSupportFragmentManager(), null);
-    }
-
-
     /**
      * Method hows the legal page whose position is passed to the user.
      *
-     * @param position  Position of the localized legal page to show to the user.
+     * @param page  Legal page to show.
      */
-    private void showLegalPage(int position) {
-        LocalizedLegalPage legalPage = viewModel.getLegalPages().get(position - SettingsAboutRecyclerViewAdapter.OFFSET_LEGAL_PAGES);
+    private void showLegalPage(LocalizedLegalPage page) {
         Uri uri;
         try {
-            uri = Uri.parse(legalPage.getUrl());
+            uri = Uri.parse(page.getUrl());
         }
         catch (Exception e) {
             return;
         }
         Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(uri);
+        startActivity(intent);
+    }
+
+
+    /**
+     * Method shows the app's page in the system settings.
+     */
+    private void showSettingsPage() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
         intent.setData(uri);
         startActivity(intent);
     }

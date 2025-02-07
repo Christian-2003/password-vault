@@ -7,6 +7,7 @@ import de.passwordvault.App;
 import de.passwordvault.R;
 import de.passwordvault.model.rest.RestCallback;
 import de.passwordvault.model.rest.RestClient;
+import de.passwordvault.model.rest.RestError;
 
 
 /**
@@ -20,20 +21,29 @@ public class LegalRestClient extends RestClient<LegalResponse> {
     /**
      * Field stores the URL of the REST API endpoint.
      */
-    private static final String URL = "https://api.passwordvault.christian2003.de/rest/legal.json";
+    private static final String URL = "https://api.passwordvault.christian2003.de/rest/{arg}.json";
 
+
+    @NonNull
+    private final String url;
 
     /**
      * Attribute stores the list of localized legal pages fetched from the server.
      */
-    private final ArrayList<LocalizedLegalPage> legalPages;
+    @Nullable
+    private LocalizedLegalPage page;
 
 
     /**
-     * Constructor instantiates a new REST client.
+     * Constructor instantiates a new REST client to fetch data for the page specified.
+     *
+     * @param tag   Tag to use with the REST client.
+     * @param page  Page name to fetch (e.g. "privacy" or "tos").
      */
-    public LegalRestClient() {
-        legalPages = new ArrayList<>();
+    public LegalRestClient(@Nullable String tag, @NonNull String page) {
+        super(tag);
+        this.page = null;
+        this.url = URL.replace("{arg}", page);
     }
 
 
@@ -42,9 +52,9 @@ public class LegalRestClient extends RestClient<LegalResponse> {
      *
      * @return  List of localized legal pages.
      */
-    @NonNull
-    public ArrayList<LocalizedLegalPage> getLegalPages() {
-        return legalPages;
+    @Nullable
+    public LocalizedLegalPage getLegalPage() {
+        return page;
     }
 
 
@@ -54,7 +64,7 @@ public class LegalRestClient extends RestClient<LegalResponse> {
      * @param callback  Callback to invoke once the client finishes fetching data.
      */
     public void fetch(@Nullable RestCallback callback) {
-        super.fetch(URL, LegalResponse.class, callback, this::filterResponse);
+        super.fetch(url, LegalResponse.class, callback, this::filterResponse);
     }
 
 
@@ -71,35 +81,32 @@ public class LegalRestClient extends RestClient<LegalResponse> {
 
         String locale = App.getContext().getString(R.string.settings_help_locale);
         String defaultLocale = App.getContext().getString(R.string.settings_help_locale_default);
-        legalPages.clear();
 
-        for (LegalPage legalPage : response.getLegalPages()) {
-            boolean pageAdded = false;
+        boolean pageAdded = false;
 
-            //Find legal page for locale:
-            for (LocalizedLegalPage localizedLegalPage : legalPage.getLocalizedLegalPages()) {
-                if (localizedLegalPage.getLanguage().equals(locale)) {
-                    legalPages.add(localizedLegalPage);
+        //Find legal page for locale:
+        for (LocalizedLegalPage localizedLegalPage : response.getLegalPages()) {
+            if (localizedLegalPage.getLanguage().equals(locale)) {
+                page = localizedLegalPage;
+                pageAdded = true;
+                break;
+            }
+        }
+
+        if (!pageAdded) {
+            //Find english legal page:
+            for (LocalizedLegalPage localizedLegalPage : response.getLegalPages()) {
+                if (localizedLegalPage.getLanguage().equals(defaultLocale)) {
+                    page = localizedLegalPage;
                     pageAdded = true;
                     break;
                 }
             }
+        }
 
-            if (!pageAdded) {
-                //Find english legal page:
-                for (LocalizedLegalPage localizedLegalPage : legalPage.getLocalizedLegalPages()) {
-                    if (localizedLegalPage.getLanguage().equals(defaultLocale)) {
-                        legalPages.add(localizedLegalPage);
-                        pageAdded = true;
-                        break;
-                    }
-                }
-            }
-
-            if (!pageAdded && legalPage.getLocalizedLegalPages().length != 0) {
-                //Add first legal page since no other legal page is available:
-                legalPages.add(legalPage.getLocalizedLegalPages()[0]);
-            }
+        if (!pageAdded && response.getLegalPages().length != 0) {
+            //Add first legal page since no other legal page is available:
+            page = response.getLegalPages()[0];
         }
 
         return true;

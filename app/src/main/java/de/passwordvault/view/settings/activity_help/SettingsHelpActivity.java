@@ -51,10 +51,11 @@ public class SettingsHelpActivity extends PasswordVaultActivity<SettingsHelpView
     /**
      * Method is called once the data has been fetched.
      *
+     * @param tag   Tag used with the REST client.
      * @param error Error generated during the call to the REST API.
      */
     @Override
-    public void onFetchFinished(@NonNull RestError error) {
+    public void onFetchFinished(@Nullable String tag, @NonNull RestError error) {
         if (viewModel.isFinished()) {
             viewModel.setError(error);
             Log.d("REST", "Error code: " + error.ordinal());

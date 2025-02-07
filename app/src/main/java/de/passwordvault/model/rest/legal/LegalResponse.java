@@ -19,11 +19,17 @@ public class LegalResponse {
     private int version;
 
     /**
-     * Attribute stores the array of legal pages.
+     * Attribute stores the string representation of the date on which the legal page takes effect.
      */
-    @SerializedName("legal")
+    @SerializedName("valid")
+    private String valid;
+
+    /**
+     * Attribute stores the array of localized legal pages.
+     */
+    @SerializedName("pages")
     @NonNull
-    private LegalPage[] legalPages;
+    private LocalizedLegalPage[] legalPages;
 
 
     /**
@@ -31,7 +37,7 @@ public class LegalResponse {
      */
     public LegalResponse() {
         version = -1;
-        legalPages = new LegalPage[0];
+        legalPages = new LocalizedLegalPage[0];
     }
 
 
@@ -51,7 +57,7 @@ public class LegalResponse {
      * @return  Array of legal pages.
      */
     @NonNull
-    public LegalPage[] getLegalPages() {
+    public LocalizedLegalPage[] getLegalPages() {
         return legalPages;
     }
 

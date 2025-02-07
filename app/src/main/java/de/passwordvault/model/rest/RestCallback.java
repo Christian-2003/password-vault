@@ -1,6 +1,7 @@
 package de.passwordvault.model.rest;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 
 /**
@@ -14,8 +15,9 @@ public interface RestCallback {
     /**
      * Method is called once the REST client finishes the API call.
      *
+     * @param tag   Tag used with the REST client.
      * @param error Error generated during the call to the REST API.
      */
-    void onFetchFinished(@NonNull RestError error);
+    void onFetchFinished(@Nullable String tag, @NonNull RestError error);
 
 }

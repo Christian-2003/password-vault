@@ -35,7 +35,7 @@ public class SettingsHelpViewModel extends ViewModel {
      * Constructor instantiates a new view model.
      */
     public SettingsHelpViewModel() {
-        restClient = new HelpRestClient();
+        restClient = new HelpRestClient(null);
         error = null;
     }
 

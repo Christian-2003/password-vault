@@ -31,8 +31,11 @@ public class HelpRestClient extends RestClient<HelpResponse> {
 
     /**
      * Constructor instantiates a new REST client.
+     *
+     * @param tag   Tag to use with the REST client.
      */
-    public HelpRestClient() {
+    public HelpRestClient(@Nullable String tag) {
+        super(tag);
         helpPages = new ArrayList<>();
     }
 
