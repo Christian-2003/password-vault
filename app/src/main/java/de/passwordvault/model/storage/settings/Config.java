@@ -100,12 +100,7 @@ public class Config implements ConfigSettingContract {
     /**
      * Setting indicate whether to use the darkmode.
      */
-    public final IntItem darkmode = new IntItem(this, "darkmode", 0); //TODO: Replace '0' with constant.
-
-    /**
-     * Setting indicates how many recently edited entries to show on home screen.
-     */
-    public final IntItem numRecentlyEdited = new IntItem(this, "num_recently_edited", 5);
+    public final IntItem darkmode = new IntItem(this, "darkmode", Constants.DARKMODE_SYSTEM);
 
     /**
      * Setting indicates what to do on left swipe.

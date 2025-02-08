@@ -265,7 +265,7 @@
 
     <!-- Login activity -->
     <string name="login_info">Confirm identity through master password</string>
-    <string name="login_biometrics_title">PasswordVault biometric login</string>
+    <string name="login_biometrics_title">Password Vault biometric login</string>
     <string name="login_biometrics_error">Authentication error</string>
     <string name="login_biometrics_fail">Authentication failed.</string>
 
@@ -302,6 +302,17 @@
     <!-- Search activity -->
     <string name="search_empty_headline">Nothing found</string>
     <string name="search_empty_support">Matching results are shown here</string>
+
+
+    <!-- Legal activity -->
+    <string name="legal_title">Important</string>
+    <string name="legal_change_privacy">Our privacy policy has changed</string>
+    <string name="legal_change_tos">Our terms of service have changed</string>
+    <string name="legal_change_privacy_tos">Our privacy policy and terms of service have changed</string>
+    <string name="legal_confirm">You need to accept these changes in order to continue using our app.</string>
+    <string name="legal_date">These changes take effect on {arg}.</string>
+    <string name="legal_changes">Changes</string>
+    <string name="legal_denied">You need to accept the changes</string>
 
 
     <!-- Detail dialog -->
@@ -356,6 +367,8 @@
     <string name="button_enable">Enable</string>
     <string name="button_disable">Disable</string>
     <string name="button_analyze_password_security">Analyze password security</string>
+    <string name="button_accept">Accept changes</string>
+    <string name="button_deny">Deny changes</string>
 
 
     <!-- Input hints -->

@@ -25,6 +25,7 @@ n/a
 * Added setting through which the user can decide whether open help pages inside the app or a webbrowser.
 * Splash screen stays open for it's full animation duration.
 * Changed splash screen animation.
+* User needs to accept privacy policy and terms of service immediately after app start if they changed.
 
 <br/>
 

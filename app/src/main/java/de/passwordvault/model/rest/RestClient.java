@@ -28,7 +28,7 @@ public abstract class RestClient<ResponseType> {
      * Attribute stores the response fetched from the server.
      */
     @Nullable
-    private ResponseType response;
+    protected ResponseType response;
 
     /**
      * Attribute stores the tag to identify a REST callback.

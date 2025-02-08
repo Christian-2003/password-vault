@@ -2,12 +2,11 @@ package de.passwordvault.model.rest.legal;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import java.util.ArrayList;
+
 import de.passwordvault.App;
 import de.passwordvault.R;
 import de.passwordvault.model.rest.RestCallback;
 import de.passwordvault.model.rest.RestClient;
-import de.passwordvault.model.rest.RestError;
 
 
 /**
@@ -55,6 +54,17 @@ public class LegalRestClient extends RestClient<LegalResponse> {
     @Nullable
     public LocalizedLegalPage getLegalPage() {
         return page;
+    }
+
+
+    /**
+     * Method converts the data fetched to a DAO.
+     *
+     * @return  Legal page DTO which can be transferred in between activities.
+     */
+    @NonNull
+    public LegalPageDto toDto() {
+        return new LegalPageDto(page, response); //Both are never null when called!
     }
 
 

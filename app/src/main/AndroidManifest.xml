@@ -57,6 +57,7 @@
         <activity android:name=".view.settings.activity_licenses.LicensesActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_settings.SettingsActivity" android:exported="false"/>
         <activity android:name=".view.activity_search.SearchActivity" android:exported="false"/>
+        <activity android:name=".view.activity_legal.LegalActivity" android:exported="false"/>
 
         <activity android:name=".view.settings.activity_import_quality_gate.SettingsImportQualityGateActivity" android:exported="true">
             <intent-filter android:autoVerify="true">

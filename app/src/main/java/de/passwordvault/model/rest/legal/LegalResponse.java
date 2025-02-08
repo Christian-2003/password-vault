@@ -1,7 +1,18 @@
 package de.passwordvault.model.rest.legal;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.Objects;
+
+import kotlinx.coroutines.internal.ExceptionsConstructorKt;
 
 
 /**
@@ -48,6 +59,25 @@ public class LegalResponse {
      */
     public int getVersion() {
         return version;
+    }
+
+    /**
+     * Method returns the date from which the legal page is valid as calendar instance. If something
+     * goes wrong, this will be null.
+     *
+     * @return  Date from which the legal page is valid.
+     */
+    @Nullable
+    public Calendar getValidDate() {
+        try {
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            calendar.setTime(Objects.requireNonNull(format.parse(valid)));
+            return calendar;
+        }
+        catch (Exception e) {
+            return null;
+        }
     }
 
 

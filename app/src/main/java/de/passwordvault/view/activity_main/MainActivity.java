@@ -2,16 +2,25 @@ package de.passwordvault.view.activity_main;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 import de.passwordvault.R;
 import de.passwordvault.model.UpdateManager;
 import de.passwordvault.model.entry.EntryAbbreviated;
 import de.passwordvault.model.entry.EntryManager;
+import de.passwordvault.model.rest.RestCallback;
+import de.passwordvault.model.rest.RestError;
+import de.passwordvault.model.rest.legal.LegalPageDto;
+import de.passwordvault.view.activity_legal.LegalActivity;
 import de.passwordvault.view.activity_search.SearchActivity;
 import de.passwordvault.view.entries.activity_entry.EntryActivity;
 import de.passwordvault.view.settings.activity_settings.SettingsActivity;
@@ -22,9 +31,9 @@ import de.passwordvault.view.utils.components.PasswordVaultActivity;
  * Class implements the MainActivity for this application, displaying a list of all entries.
  *
  * @author  Christian-2003
- * @version 3.7.0
+ * @version 3.7.2
  */
-public class MainActivity extends PasswordVaultActivity<MainViewModel> implements UpdateManager.UpdateStatusChangedCallback {
+public class MainActivity extends PasswordVaultActivity<MainViewModel> implements UpdateManager.UpdateStatusChangedCallback, RestCallback {
 
     /**
      * Attribute stores the adapter for the recycler view which displays the abbreviated entries.
@@ -45,6 +54,11 @@ public class MainActivity extends PasswordVaultActivity<MainViewModel> implement
      * Attribute stores the launcher used to launch the {@link SearchActivity}.
      */
     private final ActivityResultLauncher<Intent> searchLauncher;
+
+    /**
+     * Attribute stores the launcher used to launch the {@link LegalActivity}.
+     */
+    private final ActivityResultLauncher<Intent> legalLauncher;
 
     /**
      * Attribute stores the progress bar displaying that entries are being loaded.
@@ -81,15 +95,25 @@ public class MainActivity extends PasswordVaultActivity<MainViewModel> implement
             }
         });
 
+        //Show settings:
         settingsLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (viewModel.isChangedSinceLastCacheGeneration() && adapter != null) {
                 adapter.notifyDataSetChanged();
             }
         });
 
+        //Show search page:
         searchLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == SearchActivity.RESULT_DELETED && adapter != null) {
                 adapter.notifyDataSetChanged();
+            }
+        });
+
+        //Show legal page:
+        legalLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == LegalActivity.RESULT_DENIED) {
+                Toast.makeText(this, R.string.legal_denied, Toast.LENGTH_LONG).show();
+                finish();
             }
         });
     }
@@ -110,6 +134,48 @@ public class MainActivity extends PasswordVaultActivity<MainViewModel> implement
                     adapter.notifyItemChanged(MainRecyclerViewAdapter.POSITION_UPDATE_INFO);
                 });
             }
+        }
+    }
+
+
+    /**
+     * Method is called once the data from the REST API is fetched.
+     *
+     * @param tag   Tag used with the REST client.
+     * @param error Error generated during the call to the REST API.
+     */
+    @Override
+    public void onFetchFinished(@Nullable String tag, @NonNull RestError error) {
+        if (tag != null) {
+            if (tag.equals(MainViewModel.TAG_PRIVACY)) {
+                viewModel.setPrivacyError(error);
+            }
+            else if (tag.equals(MainViewModel.TAG_TOS)) {
+                viewModel.setTosError(error);
+            }
+        }
+        if (viewModel.getTosError() != null && viewModel.getPrivacyError() != null) {
+            SharedPreferences preferences = getSharedPreferences("settings", Context.MODE_PRIVATE);
+            int privacyVersion = preferences.getInt("privacy_version", 0);
+            int tosVersion = preferences.getInt("tos_version", 0);
+            LegalPageDto privacyDto = viewModel.getPrivacyDto();
+            LegalPageDto tosDto = viewModel.getTosDto();
+            Bundle extras = new Bundle();
+            if (privacyDto != null && privacyVersion < privacyDto.getVersion()) {
+                extras.putSerializable(LegalActivity.EXTRA_PRIVACY, privacyDto);
+            }
+            if (tosDto != null && tosVersion < tosDto.getVersion()) {
+                extras.putSerializable(LegalActivity.EXTRA_TOS, tosDto);
+            }
+
+            runOnUiThread(() -> {
+                if (!extras.isEmpty() && !viewModel.isLegalPageDisplayed()) {
+                    viewModel.setLegalPageDisplayed(true);
+                    Intent intent = new Intent(this, LegalActivity.class);
+                    intent.putExtras(extras);
+                    legalLauncher.launch(intent);
+                }
+            });
         }
     }
 
@@ -138,6 +204,8 @@ public class MainActivity extends PasswordVaultActivity<MainViewModel> implement
         viewModel.loadAllEntries(this::onEntriesLoaded, false);
 
         UpdateManager.getInstance(this, this);
+
+        viewModel.fetchRestData(this);
     }
 
 

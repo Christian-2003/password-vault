@@ -2,6 +2,7 @@ package de.passwordvault.model.rest.legal;
 
 import androidx.annotation.NonNull;
 import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
 
 
 /**
@@ -10,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
  * @author  Christian-2003
  * @version 3.7.2
  */
-public class LocalizedLegalPage {
+public class LocalizedLegalPage implements Serializable {
 
     /**
      * Attribute stores the language of the legal page.
