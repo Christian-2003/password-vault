@@ -26,6 +26,7 @@ n/a
 * Splash screen stays open for it's full animation duration.
 * Changed splash screen animation.
 * User needs to accept privacy policy and terms of service immediately after app start if they changed.
+* Image button changes icon if the password visibility is toggled in `PasswordAnalysisDuplicatesActivity`.
 
 <br/>
 
