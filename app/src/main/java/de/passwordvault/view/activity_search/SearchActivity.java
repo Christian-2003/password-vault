@@ -24,7 +24,7 @@ import de.passwordvault.view.utils.components.PasswordVaultActivity;
  * Class implements the activity through which the user can search their entries.
  *
  * @author  Christian-2003
- * @version 3.7.0
+ * @version 3.7.2
  */
 public class SearchActivity extends PasswordVaultActivity<SearchViewModel> {
 
@@ -118,11 +118,20 @@ public class SearchActivity extends PasswordVaultActivity<SearchViewModel> {
         queryInput.requestFocus();
         inputMethodManager.showSoftInput(queryInput, 0);
 
-        findViewById(R.id.button_search).setOnClickListener(view -> onSearchClicked());
+        findViewById(R.id.button_clear).setOnClickListener(view -> onClearQueryClicked());
 
         if (viewModel.isFinished()) {
             onSearchFinished();
         }
+    }
+
+
+    /**
+     * Method clears the entered search query (it does not remove search results or cancel any
+     * ongoing searches).
+     */
+    private void onClearQueryClicked() {
+        queryInput.setText("");
     }
 
 

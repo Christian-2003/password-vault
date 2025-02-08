@@ -10,6 +10,9 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
 
+    <!-- Permission needed to test whether internet is available before fetching for help pages -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
 
 
     <application
@@ -46,7 +49,7 @@
         <activity android:name=".view.settings.activity_autofill.SettingsAutofillActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_customization.SettingsCustomizationActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_help.SettingsHelpActivity" android:exported="false"/>
-        <activity android:name=".view.settings.activity_localized_asset_viewer.LocalizedAssetViewerActivity" android:exported="false"/>
+        <activity android:name=".view.settings.activity_webview.WebviewActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_create_backup.CreateBackupActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_restore_backup.RestoreBackupActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_recovery.RecoveryActivity" android:exported="false"/>
@@ -54,6 +57,7 @@
         <activity android:name=".view.settings.activity_licenses.LicensesActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_settings.SettingsActivity" android:exported="false"/>
         <activity android:name=".view.activity_search.SearchActivity" android:exported="false"/>
+        <activity android:name=".view.activity_legal.LegalActivity" android:exported="false"/>
 
         <activity android:name=".view.settings.activity_import_quality_gate.SettingsImportQualityGateActivity" android:exported="true">
             <intent-filter android:autoVerify="true">
@@ -68,7 +72,10 @@
         </activity>
 
         <!-- Activity used for authentication with autofill requests -->
-        <activity android:name=".view.authentication.activity_autofill_authentication.AutofillAuthenticationActivity" android:exported="false"/>
+        <activity
+            android:name=".view.authentication.activity_autofill_authentication.AutofillAuthenticationActivity"
+            android:exported="false"
+            android:theme="@style/Theme.PasswordVault.AutofillAuthentication"/>
 
         <!-- Autofill service for password manager -->
         <service

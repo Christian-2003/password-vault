@@ -3,9 +3,9 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".view.settings.activity_about.SettingsAboutActivity">
 
@@ -26,6 +26,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_back"
                 android:layout_gravity="center"
+                android:tooltipText="@string/tooltip_back"
                 tools:ignore="contentDescription"
                 style="@style/button.image.app_bar"/>
 
@@ -46,87 +47,118 @@
     <!-- Content for the activity -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:animateLayoutChanges="true">
 
-            <!-- Usage -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/settings_about_usage"
-                android:layout_marginHorizontal="@dimen/space_horizontal"
-                android:layout_marginVertical="@dimen/space_vertical"
-                style="@style/text.headline"/>
-
+            <!-- Password Vault -->
             <LinearLayout
-                android:id="@+id/settings_about_usage_tos_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:foreground="?attr/selectableItemBackground"
-                android:paddingHorizontal="@dimen/space_horizontal"
-                android:paddingVertical="@dimen/space_vertical"
-                android:clickable="true"
-                android:focusable="true"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
+                android:layout_marginVertical="@dimen/space_vertical"
                 android:orientation="horizontal">
 
+                <ImageView
+                    android:layout_width="@dimen/image_l"
+                    android:layout_height="@dimen/image_l"
+                    android:src="@mipmap/ic_launcher"
+                    android:contentDescription="@string/app_name"/>
+
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/space_horizontal_between"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/settings_about_usage_tos"
+                        android:text="@string/app_name"
                         style="@style/text"/>
 
                     <TextView
+                        android:id="@+id/settings_about_software_version"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/settings_about_usage_tos_info"
+                        android:layout_marginBottom="@dimen/space_vertical"
+                        tools:text="Version 1.2.3"
+                        style="@style/text.light"/>
+
+                    <TextView
+                        android:id="@+id/settings_about_software_copyright"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="(c) 2023 Christian-2003"
                         style="@style/text.light"/>
 
                 </LinearLayout>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/space_horizontal_between"
-                    android:src="@drawable/ic_next"
-                    tools:ignore="ContentDescription"
-                    style="@style/image.item"/>
-
             </LinearLayout>
 
+
+
+            <!-- Usage -->
+            <View style="@style/divider"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
+                android:layout_marginVertical="@dimen/space_vertical"
+                android:text="@string/settings_about_usage"
+                style="@style/text.headline"/>
+
             <LinearLayout
-                android:id="@+id/settings_about_usage_dependencies_container"
+                android:id="@+id/container_dependencies"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="@dimen/space_horizontal"
                 android:paddingVertical="@dimen/space_vertical"
-                android:foreground="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
                 android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_license"
+                    tools:ignore="ContentDescription"
+                    style="@style/image.item.light"/>
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/space_horizontal_between"
                     android:orientation="vertical">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/settings_about_usage_dependencies"
-                        style="@style/text"/>
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_about_usage_dependencies"
+                            style="@style/text"/>
+
+                        <ImageView
+                            android:layout_width="@dimen/image_xxs"
+                            android:layout_height="@dimen/image_xxs"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="@dimen/space_horizontal_small"
+                            android:src="@drawable/ic_next"
+                            tools:ignore="ContentDescription"
+                            style="@style/image.item"/>
+
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -136,39 +168,56 @@
 
                 </LinearLayout>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/space_horizontal_between"
-                    android:src="@drawable/ic_next"
-                    tools:ignore="ContentDescription"
-                    style="@style/image.item"/>
-
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/settings_about_usage_privacypolicy_container"
+                android:id="@+id/container_privacy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="@dimen/space_horizontal"
                 android:paddingVertical="@dimen/space_vertical"
-                android:foreground="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
-                android:orientation="horizontal">
+                android:foreground="?attr/selectableItemBackground"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_privacy"
+                    tools:ignore="ContentDescription"
+                    style="@style/image.item.light"/>
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/space_horizontal_between"
                     android:orientation="vertical">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/settings_about_usage_privacypolicy"
-                        style="@style/text"/>
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_about_usage_privacypolicy"
+                            style="@style/text"/>
+
+                        <ImageView
+                            android:layout_width="@dimen/image_xxs"
+                            android:layout_height="@dimen/image_xxs"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="@dimen/space_horizontal_small"
+                            android:src="@drawable/ic_external"
+                            tools:ignore="ContentDescription"
+                            style="@style/image.item"/>
+
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -178,32 +227,82 @@
 
                 </LinearLayout>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/space_horizontal_between"
-                    android:src="@drawable/ic_next"
-                    tools:ignore="ContentDescription"
-                    style="@style/image.item"/>
-
             </LinearLayout>
 
-            <View style="@style/divider"/>
+            <LinearLayout
+                android:id="@+id/container_tos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/space_horizontal"
+                android:paddingVertical="@dimen/space_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_legal"
+                    tools:ignore="ContentDescription"
+                    style="@style/image.item.light"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/space_horizontal_between"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_about_usage_tos"
+                            style="@style/text"/>
+
+                        <ImageView
+                            android:layout_width="@dimen/image_xxs"
+                            android:layout_height="@dimen/image_xxs"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="@dimen/space_horizontal_small"
+                            android:src="@drawable/ic_external"
+                            tools:ignore="ContentDescription"
+                            style="@style/image.item"/>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_about_usage_tos_info"
+                        style="@style/text.light"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
 
 
 
             <!-- GitHub -->
+            <View style="@style/divider"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_about_github"
                 android:layout_marginHorizontal="@dimen/space_horizontal"
                 android:layout_marginVertical="@dimen/space_vertical"
+                android:text="@string/settings_about_github"
                 style="@style/text.headline"/>
 
             <LinearLayout
-                android:id="@+id/settings_about_github_repo_container"
+                android:id="@+id/container_repo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="@dimen/space_horizontal"
@@ -213,17 +312,41 @@
                 android:foreground="?attr/selectableItemBackground"
                 android:orientation="horizontal">
 
+                <ImageView
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_repository"
+                    tools:ignore="ContentDescription"
+                    style="@style/image.item.light"/>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/space_horizontal_between"
                     android:orientation="vertical">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/settings_about_github_repo"
-                        style="@style/text"/>
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_about_github_repo"
+                            style="@style/text"/>
+
+                        <ImageView
+                            android:layout_width="@dimen/image_xxs"
+                            android:layout_height="@dimen/image_xxs"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="@dimen/space_horizontal_small"
+                            android:src="@drawable/ic_external"
+                            tools:ignore="ContentDescription"
+                            style="@style/image.item"/>
+
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -233,19 +356,10 @@
 
                 </LinearLayout>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/space_horizontal_between"
-                    android:src="@drawable/ic_external"
-                    tools:ignore="ContentDescription"
-                    style="@style/image.item"/>
-
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/settings_about_github_issues_container"
+                android:id="@+id/container_issues"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="@dimen/space_horizontal"
@@ -255,17 +369,41 @@
                 android:foreground="?attr/selectableItemBackground"
                 android:orientation="horizontal">
 
+                <ImageView
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_bug"
+                    tools:ignore="ContentDescription"
+                    style="@style/image.item.light"/>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/space_horizontal_between"
                     android:orientation="vertical">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/settings_about_github_issues"
-                        style="@style/text"/>
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_about_github_issues"
+                            style="@style/text"/>
+
+                        <ImageView
+                            android:layout_width="@dimen/image_xxs"
+                            android:layout_height="@dimen/image_xxs"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="@dimen/space_horizontal_small"
+                            android:src="@drawable/ic_external"
+                            tools:ignore="ContentDescription"
+                            style="@style/image.item"/>
+
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -275,92 +413,23 @@
 
                 </LinearLayout>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/space_horizontal_between"
-                    android:src="@drawable/ic_external"
-                    tools:ignore="ContentDescription"
-                    style="@style/image.item"/>
-
             </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/settings_about_github_update_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/space_horizontal"
-                android:paddingVertical="@dimen/space_vertical"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_about_github_update"
-                        style="@style/text"/>
-
-                    <View
-                        android:id="@+id/badge_update"
-                        style="@style/eyecatcher"/>
-
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/settings_about_github_update_info"
-                    style="@style/text.light"/>
-
-            </LinearLayout>
-
-            <View style="@style/divider"/>
 
 
 
             <!-- Software -->
+            <View style="@style/divider"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_about_software"
                 android:layout_marginHorizontal="@dimen/space_horizontal"
                 android:layout_marginVertical="@dimen/space_vertical"
+                android:text="@string/settings_about_software"
                 style="@style/text.headline"/>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/space_horizontal"
-                android:paddingVertical="@dimen/space_vertical"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/settings_about_software_version"
-                    style="@style/text"/>
-
-                <TextView
-                    android:id="@+id/settings_about_software_version"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="1.2.3"
-                    style="@style/text.light"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/settings_about_software_more_container"
+                android:id="@+id/container_more"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="@dimen/space_horizontal"
@@ -370,17 +439,41 @@
                 android:foreground="?attr/selectableItemBackground"
                 android:orientation="horizontal">
 
+                <ImageView
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_settings"
+                    tools:ignore="ContentDescription"
+                    style="@style/image.item.light"/>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/space_horizontal_between"
                     android:orientation="vertical">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/settings_about_software_more"
-                        style="@style/text"/>
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_about_software_more"
+                            style="@style/text"/>
+
+                        <ImageView
+                            android:layout_width="@dimen/image_xxs"
+                            android:layout_height="@dimen/image_xxs"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="@dimen/space_horizontal_small"
+                            android:src="@drawable/ic_external"
+                            tools:ignore="ContentDescription"
+                            style="@style/image.item"/>
+
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -389,15 +482,6 @@
                         style="@style/text.light"/>
 
                 </LinearLayout>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/space_horizontal_between"
-                    android:src="@drawable/ic_external"
-                    tools:ignore="ContentDescription"
-                    style="@style/image.item"/>
 
             </LinearLayout>
 

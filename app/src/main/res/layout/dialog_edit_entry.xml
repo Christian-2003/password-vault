@@ -93,7 +93,8 @@
                 android:paddingHorizontal="@dimen/space_horizontal"
                 android:clickable="true"
                 android:focusable="true"
-                android:foreground="?attr/selectableItemBackground">
+                android:foreground="?attr/selectableItemBackground"
+                android:tooltipText="@string/tooltip_add_tag">
 
                 <TextView
                     android:layout_width="0dp"

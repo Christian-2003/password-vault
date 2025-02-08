@@ -533,7 +533,6 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
      */
     private void generateCacheAfterChangesMade() {
         generateAbbreviatedEntriesArrayListCache();
-        generateMostRecentlyEditedEntriesArrayListCache();
         changesMadeSinceCachedAbbreviatedList = false;
     }
 
@@ -545,47 +544,6 @@ public class EntryManager implements CachableManager<EntryExtended>, Observable<
         abbreviatedEntriesArrayListCache.addAll(abbreviatedEntries.values());
         if (abbreviatedEntriesArrayListCacheSortingAlgorithm != null) {
             abbreviatedEntriesArrayListCache.sort(abbreviatedEntriesArrayListCacheSortingAlgorithm);
-        }
-    }
-
-    /**
-     * Method generates the cached array list of the most recently changed entries.
-     * <b>Important:</b> Only ever call this method AFTER calling
-     * {@link #generateAbbreviatedEntriesArrayListCache()}!
-     */
-    private void generateMostRecentlyEditedEntriesArrayListCache() {
-        if (abbreviatedEntriesArrayListCache.isEmpty()) {
-            mostRecentlyEditedEntriesCache.clear();
-            return;
-
-        }
-        mostRecentlyEditedEntriesCache.clear();
-        EntryAbbreviated mostRecentlyChanged = abbreviatedEntriesArrayListCache.get(0);
-        for (int i = 0; i < abbreviatedEntriesArrayListCache.size(); i++) {
-            if (abbreviatedEntriesArrayListCache.get(i).getChanged().compareTo(mostRecentlyChanged.getChanged()) > 0) {
-                mostRecentlyChanged = abbreviatedEntriesArrayListCache.get(i);
-            }
-        }
-        mostRecentlyEditedEntriesCache.add(mostRecentlyChanged);
-
-        for (int i = 0; i < Config.getInstance().numRecentlyEdited.get() - 1; i++) {
-            EntryAbbreviated newMostRecentlyChanged = null;
-            for (int j = 0; j < abbreviatedEntriesArrayListCache.size(); j++) {
-                if (abbreviatedEntriesArrayListCache.get(j).getChanged().compareTo(mostRecentlyChanged.getChanged()) < 0) {
-                    newMostRecentlyChanged = abbreviatedEntriesArrayListCache.get(j);
-                    break;
-                }
-            }
-            if (newMostRecentlyChanged == null) {
-                break;
-            }
-            for (int j = 1; j < abbreviatedEntriesArrayListCache.size(); j++) {
-                if (abbreviatedEntriesArrayListCache.get(j).getChanged().compareTo(newMostRecentlyChanged.getChanged()) > 0 && abbreviatedEntriesArrayListCache.get(j).getChanged().compareTo(mostRecentlyChanged.getChanged()) < 0) {
-                    newMostRecentlyChanged = abbreviatedEntriesArrayListCache.get(j);
-                }
-            }
-            mostRecentlyChanged = newMostRecentlyChanged;
-            mostRecentlyEditedEntriesCache.add(mostRecentlyChanged);
         }
     }
 

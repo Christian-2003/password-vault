@@ -46,4 +46,14 @@
         <item name="bottomSheetDialogTheme">@style/component.bottomSheet</item>
     </style>
 
+
+    <!-- Theme for the activity used to authenticate with autofill -->
+    <style name="Theme.PasswordVault.AutofillAuthentication" parent="Theme.PasswordVault">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
 </resources>

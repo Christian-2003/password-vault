@@ -20,7 +20,7 @@ import de.passwordvault.model.storage.settings.items.SwipeActionItem;
  * Class implements the configuration for the app.
  *
  * @author  Christian-2003
- * @version 3.6.0
+ * @version 3.7.2
  */
 public class Config implements ConfigSettingContract {
 
@@ -100,12 +100,7 @@ public class Config implements ConfigSettingContract {
     /**
      * Setting indicate whether to use the darkmode.
      */
-    public final IntItem darkmode = new IntItem(this, "darkmode", 0); //TODO: Replace '0' with constant.
-
-    /**
-     * Setting indicates how many recently edited entries to show on home screen.
-     */
-    public final IntItem numRecentlyEdited = new IntItem(this, "num_recently_edited", 5);
+    public final IntItem darkmode = new IntItem(this, "darkmode", Constants.DARKMODE_SYSTEM);
 
     /**
      * Setting indicates what to do on left swipe.
@@ -136,6 +131,12 @@ public class Config implements ConfigSettingContract {
      * Setting indicates whether to prevent screenshots of sensitive data.
      */
     public final BooleanItem preventScreenshots = new BooleanItem(this, "prevent_screenshots", true);
+
+    /**
+     * Setting indicates whether to open resources (e.g. help or legal pages) in a browser (true) or
+     * within the app (false).
+     */
+    public final BooleanItem openResourcesInBrowser = new BooleanItem(this, "open_resources_in_browser", false);
 
 
     /**

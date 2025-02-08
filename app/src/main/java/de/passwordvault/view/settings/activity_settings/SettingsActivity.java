@@ -2,10 +2,8 @@ package de.passwordvault.view.settings.activity_settings;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import java.io.Serializable;
 import de.passwordvault.R;
-import de.passwordvault.model.UpdateManager;
 import de.passwordvault.view.settings.activity_about.SettingsAboutActivity;
 import de.passwordvault.view.settings.activity_autofill.SettingsAutofillActivity;
 import de.passwordvault.view.settings.activity_customization.SettingsCustomizationActivity;
@@ -19,7 +17,7 @@ import de.passwordvault.view.utils.components.PasswordVaultActivity;
  * Class implements the activity displaying a list of settings for the app.
  *
  * @author  Christian-2003
- * @version 3.7.0
+ * @version 3.7.2
  */
 public class SettingsActivity extends PasswordVaultActivity<SettingsViewModel> implements Serializable {
 
@@ -49,10 +47,6 @@ public class SettingsActivity extends PasswordVaultActivity<SettingsViewModel> i
 
         findViewById(R.id.settings_help_container).setOnClickListener(view -> startActivity(new Intent(this, SettingsHelpActivity.class)));
         findViewById(R.id.settings_about_container).setOnClickListener(view -> startActivity(new Intent(this, SettingsAboutActivity.class)));
-
-        if (UpdateManager.getInstance(this).isUpdateAvailable()) {
-            findViewById(R.id.badge_update).setVisibility(View.VISIBLE);
-        }
     }
 
 }

@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -27,7 +28,7 @@ import de.passwordvault.view.utils.recycler_view.RecyclerViewAdapter;
  * Class implements the recycler view adapter for the {@link DuplicatePasswordEntriesActivity}.
  *
  * @author  Christian-2003
- * @version 3.7.0
+ * @version 3.7.2
  */
 public class DuplicatePasswordEntriesRecyclerViewAdapter extends RecyclerViewAdapter<DuplicatePasswordEntriesViewModel> {
 
@@ -246,6 +247,7 @@ public class DuplicatePasswordEntriesRecyclerViewAdapter extends RecyclerViewAda
             AtomicBoolean obfuscated = new AtomicBoolean(true);
             viewHolder.obfuscateButton.setOnClickListener(view -> {
                 viewHolder.passwordTextView.setText(obfuscated.get() ? password.getCleartextPassword() : Utils.obfuscate(password.getCleartextPassword()));
+                viewHolder.obfuscateButton.setImageDrawable(ContextCompat.getDrawable(context, obfuscated.get() ? R.drawable.ic_show_off : R.drawable.ic_show));
                 obfuscated.set(!obfuscated.get());
             });
         }

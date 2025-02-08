@@ -54,10 +54,6 @@
     <string name="settings_customization_appearance_darkmode_light">Hell</string>
     <string name="settings_customization_appearance_darkmode_dark">Dunkel</string>
     <string name="settings_customization_appearance_darkmode_system">Wie System</string>
-    <string name="settings_customization_home">Startseite</string>
-    <string name="settings_customization_home_recentlyedited">Zuletzt bearbeitete Konten</string>
-    <string name="settings_customization_home_recentlyedited_info">Anzahl der zuletzt bearbeiteten Konten bearbeiten</string>
-    <string name="settings_customization_home_recentlyedited_number_option">{arg} Konten</string>
     <string name="settings_customization_details">Kontoinformationen</string>
     <string name="settings_customization_details_swipe">Wischgesten</string>
     <string name="settings_customization_details_swipe_info">Aktionen beim Wischen bearbeiten</string>
@@ -65,6 +61,9 @@
     <string name="settings_customization_details_swipe_right">Nach rechts wischen</string>
     <string name="settings_customization_details_swipe_delete">Eintrag löschen</string>
     <string name="settings_customization_details_swipe_edit">Eintrag bearbeiten</string>
+    <string name="settings_customization_navigation">Navigation</string>
+    <string name="settings_customization_navigation_resources">Hilfeseiten im Browser öffnen</string>
+    <string name="settings_customization_navigation_resources_info">Öffne Hilfeseiten im Browser, anstatt in der App</string>
 
     <string name="settings_security">Sicherheit</string>
     <string name="settings_security_info">App-Login • Biometrie • Passwortsicherheit</string>
@@ -107,6 +106,13 @@
     <string name="settings_help_autofill_configuration">Automatisches Ausfüllen konfigurieren</string>
     <string name="settings_help_login_configuration">App-Login konfigurieren</string>
     <string name="settings_help_backup">Backups verwalten</string>
+    <string name="settings_help_locale">de</string>
+    <string name="settings_help_empty_headline_internet">Keine Verbinding zum Internet möglich</string>
+    <string name="settings_help_empty_headline_404">Server nicht erreichbar</string>
+    <string name="settings_help_empty_headline_serialization">Anfrage korrupt</string>
+    <string name="settings_help_empty_support">Hilfeseiten werden hier angezeigt</string>
+    <string name="settings_help_language_supported">In deiner Sprache verfügbar</string>
+    <string name="settings_help_language_not_supported">Nur auf Englisch verfügbar</string>
 
     <string name="settings_about">Über</string>
     <string name="settings_about_info">Rechtliches • GitHub • App-Infos</string>
@@ -128,9 +134,16 @@
     <string name="settings_about_github_update_info">Neueste Version herunterladen</string>
     <string name="settings_about_github_update_link" translatable="false">https://github.com/Christian-2003/password-vault/releases/latest</string>
     <string name="settings_about_software">Software</string>
-    <string name="settings_about_software_version">App-Version</string>
     <string name="settings_about_software_more">Weitere Infos</string>
     <string name="settings_about_software_more_info">Öffne die App in den Systemeinstellungen</string>
+    <string name="settings_about_software_version">Version {arg}</string>
+    <string name="settings_about_software_copyright">© {arg} Christian-2003</string>
+    <string name="settings_about_empty_headline_internet">Keine Verbindung zum Internet möglich</string>
+    <string name="settings_about_empty_headline_404">Server nicht erreichbar</string>
+    <string name="settings_about_empty_headline_serialization">Anfrage korrupt</string>
+    <string name="settings_about_empty_support">Legal pages are shown here</string>
+    <string name="settings_about_language_supported">In deiner Sprache verfügbar</string>
+    <string name="settings_about_language_not_supported">Nur auf Englisch verfügbar</string>
 
     <string name="settings_data">Daten</string>
     <string name="settings_data_info">Backup • Export • Alle Daten Löschen</string>
@@ -249,7 +262,7 @@
 
     <!-- Login activity -->
     <string name="login_info">Identität mit Master-Passwort bestätigen</string>
-    <string name="login_biometrics_title">PasswordVault biometrischer Login</string>
+    <string name="login_biometrics_title">Password Vault biometrischer Login</string>
     <string name="login_biometrics_error">Authentifizierungsfehler</string>
     <string name="login_biometrics_fail">Authentifizierung fehlgeschlagen</string>
 
@@ -286,6 +299,17 @@
     <!-- Search activity -->
     <string name="search_empty_headline">Keine Ergebnisse</string>
     <string name="search_empty_support">Passende Ergebnisse werden hier angezeigt</string>
+
+
+    <!-- Legal activity -->
+    <string name="legal_title">Wichtig</string>
+    <string name="legal_change_privacy">Änderungen unserer Datenschutzerklärung</string>
+    <string name="legal_change_tos">Änderungen unserer Nutzungsbedingungen</string>
+    <string name="legal_change_privacy_tos">Änderungen unserer Datenschutzerklärung und Nutzungsbedingungen</string>
+    <string name="legal_confirm">Du musst diesen Änderungen zustimmen um unsere App weiter zu verwenden.</string>
+    <string name="legal_date">Die Änderungen gelten ab dem {arg}.</string>
+    <string name="legal_changes">Änderungen</string>
+    <string name="legal_denied">Du musst den Änderungen zustimmen</string>
 
 
     <!-- Detail dialog -->
@@ -340,6 +364,8 @@
     <string name="button_enable">Aktivieren</string>
     <string name="button_disable">Deaktivieren</string>
     <string name="button_analyze_password_security">Passwortsicherheit analysieren</string>
+    <string name="button_accept">Änderungen akzeptieren</string>
+    <string name="button_deny">Änderungen ablehnen</string>
 
 
     <!-- Input hints -->
@@ -443,5 +469,33 @@
     <string name="autofill_password_presentation">Passwort für {value}</string>
     <string name="autofill_authentication_presentation">Authentifizieren für {value}</string>
     <string name="autofill_save_request_description">Automatisch hinzugefügt</string>
+
+
+
+    <!-- Tooltip texts -->
+    <string name="tooltip_back">Zurück</string>
+    <string name="tooltip_cancel">Abbrechen und schließen</string>
+    <string name="tooltip_save">Speichern und schließen</string>
+    <string name="tooltip_more">Weitere Aktionen</string>
+    <string name="tooltip_open_settings">Einstellungen öffnen</string>
+    <string name="tooltip_add_entry">Neues Konto hinzufügen</string>
+    <string name="tooltip_search_duplicate_passwords">Doppelte Passwörter durchsuchen</string>
+    <string name="tooltip_search_packages">Installierte Apps durchsuchen</string>
+    <string name="tooltip_reload_password_analysis">Passwortanalyse neu starten</string>
+    <string name="tooltip_search_analyzed_passwords">Analysierte Passwörter durchsuchen</string>
+    <string name="tooltip_enable_disable_quality_gate">Sicherheitskriterium für Passwortanalysie aktivieren oder deaktivieren</string>
+    <string name="tooltip_search_app">Alle Konten durchsuchen</string>
+    <string name="tooltip_clear_search">Suchabfrage löschen</string>
+    <string name="tooltip_add_tag">Neuen Tag hinzufügen</string>
+    <string name="tooltip_show_hide_content">Inhalt anzeigen / ausblenden</string>
+    <string name="tooltip_show_hide_password">Passwort anzeigen / ausblenden</string>
+    <string name="tooltip_select_app_for_autofill">App für autom. Ausfüllen auswählen</string>
+    <string name="tooltip_remove_package">App für autom. Ausfüllen entfernen</string>
+    <string name="tooltip_add_quality_gate">Eigenes Sicherheitskriterium hinzufügen</string>
+    <string name="tooltip_add_security_question">Sicherheitsfrage hinzufügen</string>
+    <string name="tooltip_add_detail">Kontoinformation hinzufügen</string>
+    <string name="tooltip_reorder_details">Zum anordnen gedrückt halten</string>
+    <string name="tooltip_edit_entry_name">Kontonamen bearbeiten</string>
+
 
 </resources>

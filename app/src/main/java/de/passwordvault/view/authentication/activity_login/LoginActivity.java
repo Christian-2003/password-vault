@@ -8,6 +8,8 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.biometric.BiometricPrompt;
+import androidx.core.splashscreen.SplashScreen;
+import androidx.core.splashscreen.SplashScreenViewProvider;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import java.util.Objects;
@@ -23,9 +25,9 @@ import de.passwordvault.view.utils.components.PasswordVaultActivity;
  * Class implements the {@link LoginActivity} which allows the user to login to the activity.
  *
  * @author  Christian-2003
- * @version 3.7.0
+ * @version 3.7.2
  */
-public class LoginActivity extends PasswordVaultActivity<LoginViewModel> {
+public class LoginActivity extends PasswordVaultActivity<LoginViewModel> implements SplashScreen.OnExitAnimationListener {
 
     /**
      * Attribute stores the biometric prompt which is used for biometric login.
@@ -42,6 +44,20 @@ public class LoginActivity extends PasswordVaultActivity<LoginViewModel> {
 
 
     /**
+     * Method is called once the splash screen finishes.
+     *
+     * @param splashScreenViewProvider  Splash screen view provider.
+     */
+    @Override
+    public void onSplashScreenExit(@NonNull SplashScreenViewProvider splashScreenViewProvider) {
+        splashScreenViewProvider.remove();
+        if (viewModel.useBiometrics() && !viewModel.isBiometricAuthenticationCancelled()) {
+            showBiometricLoginDialog(); //Initially open dialog.
+        }
+    }
+
+
+    /**
      * Method is called whenever the {@link LoginActivity} is created or recreated.
      *
      * @param savedInstanceState    Previously saved state of the activity.
@@ -49,6 +65,11 @@ public class LoginActivity extends PasswordVaultActivity<LoginViewModel> {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
+        splashScreen.setKeepOnScreenCondition(() -> viewModel.isSplashScreenVisible());
+        splashScreen.setOnExitAnimationListener(this);
+        viewModel.startSplashScreenTimer(getResources().getInteger(R.integer.anim_duration_splash));
 
         Config.Methods.applyDarkmode();
 
@@ -100,9 +121,6 @@ public class LoginActivity extends PasswordVaultActivity<LoginViewModel> {
         Button biometricLoginButton = findViewById(R.id.login_button_biometrics);
         if (viewModel.useBiometrics()) {
             biometricLoginButton.setOnClickListener(view -> showBiometricLoginDialog());
-            if (!viewModel.isBiometricAuthenticationCancelled()) {
-                showBiometricLoginDialog(); //Initially open dialog.
-            }
         }
         else {
             biometricLoginButton.setVisibility(View.GONE);

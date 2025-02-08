@@ -27,6 +27,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_back"
                 android:layout_gravity="center"
+                android:tooltipText="@string/tooltip_back"
                 tools:ignore="contentDescription"
                 style="@style/button.image.app_bar"/>
 
@@ -44,112 +45,23 @@
 
 
 
-    <!-- Content for the activity -->
-    <ScrollView
-        android:layout_width="match_parent"
+    <!-- Progress bar displayed while help pages are fetched -->
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scrollbars="none">
+        android:indeterminate="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/settings_help_login_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:paddingHorizontal="@dimen/space_horizontal"
-                android:paddingVertical="@dimen/space_vertical"
-                android:clickable="true"
-                android:focusable="true"
-                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:paddingVertical="@dimen/space_vertical"
-                    android:text="@string/settings_help_login_configuration"
-                    style="@style/text"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/space_horizontal_between"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_next"
-                    tools:ignore="ContentDescription"
-                    style="@style/image.item"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/settings_help_autofill_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:paddingHorizontal="@dimen/space_horizontal"
-                android:paddingVertical="@dimen/space_vertical"
-                android:clickable="true"
-                android:focusable="true"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:paddingVertical="@dimen/space_vertical"
-                    android:text="@string/settings_help_autofill_configuration"
-                    style="@style/text"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/space_horizontal_between"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_next"
-                    tools:ignore="ContentDescription"
-                    style="@style/image.item"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/settings_help_backup_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:paddingHorizontal="@dimen/space_horizontal"
-                android:paddingVertical="@dimen/space_vertical"
-                android:clickable="true"
-                android:focusable="true"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:paddingVertical="@dimen/space_vertical"
-                    android:text="@string/settings_help_backup"
-                    style="@style/text"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/space_horizontal_between"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_next"
-                    tools:ignore="ContentDescription"
-                    style="@style/image.item"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </ScrollView>
+    <!-- Content for the activity -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
 </LinearLayout>

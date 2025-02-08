@@ -12,7 +12,8 @@
     android:foreground="?attr/selectableItemBackground"
     android:background="@color/background"
     android:longClickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:tooltipText="@string/tooltip_reorder_details">
 
     <ImageView
         android:id="@+id/image_detail"
@@ -82,6 +83,7 @@
             android:layout_gravity="center"
             android:src="@drawable/ic_show"
             android:visibility="gone"
+            android:tooltipText="@string/tooltip_show_hide_content"
             tools:ignore="contentDescription"
             tools:visibility="visible"
             style="@style/button.image"/>
@@ -92,6 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@drawable/ic_more"
+            android:tooltipText="@string/tooltip_more"
             tools:ignore="contentDescription"
             style="@style/button.image"/>
 

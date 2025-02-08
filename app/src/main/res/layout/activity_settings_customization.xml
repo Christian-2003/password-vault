@@ -26,6 +26,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_back"
                 android:layout_gravity="center"
+                android:tooltipText="@string/tooltip_back"
                 tools:ignore="contentDescription"
                 style="@style/button.image.app_bar"/>
 
@@ -144,6 +145,60 @@
                     android:src="@drawable/ic_next"
                     tools:ignore="ContentDescription"
                     style="@style/image.item"/>
+
+            </LinearLayout>
+
+
+
+            <!-- Navigation -->
+            <View style="@style/divider"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_customization_navigation"
+                android:layout_marginHorizontal="@dimen/space_horizontal"
+                android:layout_marginVertical="@dimen/space_vertical"
+                style="@style/text.headline"/>
+
+            <LinearLayout
+                android:id="@+id/container_resources"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/space_horizontal"
+                android:paddingVertical="@dimen/space_vertical"
+                android:focusable="true"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_customization_navigation_resources"
+                        style="@style/text"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_customization_navigation_resources_info"
+                        style="@style/text.light"/>
+
+                </LinearLayout>
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switch_resources"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_horizontal_between"
+                    android:layout_gravity="center"/>
 
             </LinearLayout>
 

@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import de.passwordvault.model.storage.settings.Config;
+import de.passwordvault.view.settings.activity_webview.WebviewActivity;
 
 
 /**
@@ -20,7 +21,7 @@ import de.passwordvault.model.storage.settings.Config;
  * @param <V>   Type of the view model. If no view model is used, use the superclass {@linkplain ViewModel}
  *              and pass {@code null} as reflection type with the constructor.
  * @author      Christian-2003
- * @version     3.7.0
+ * @version     3.7.2
  */
 public class PasswordVaultActivity<V extends ViewModel> extends AppCompatActivity {
 
@@ -88,6 +89,33 @@ public class PasswordVaultActivity<V extends ViewModel> extends AppCompatActivit
     protected void openUrl(String url) {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(browserIntent);
+    }
+
+
+    /**
+     * Method opens the specified URL either in a browser, or within the app-internal web view.
+     * This depends on the settings of the user within the app.
+     *
+     * @param url   URL to open.
+     */
+    protected void openUrlInBrowserOrApp(String url) {
+        if (Config.getInstance().openResourcesInBrowser.get()) {
+            Uri uri;
+            try {
+                uri = Uri.parse(url);
+            }
+            catch (Exception e) {
+                return;
+            }
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(uri);
+            startActivity(intent);
+        }
+        else {
+            Intent intent = new Intent(this, WebviewActivity.class);
+            intent.putExtra(WebviewActivity.EXTRA_URL, url);
+            startActivity(intent);
+        }
     }
 
 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CsvFileAttributes">
+    <option name="attributeMap">
+      <map>
+        <entry key="C:\Users\chst0\AppData\Local\Google\AndroidStudio2024.1\device-explorer\samsung SM-A546B\_\data\data\de.christian2003.passwordvault.debug\files\entries\entry_1030adda-e1c7-42d0-b1fd-0ce1ba6ef856.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="C:\Users\chst0\AppData\Local\Google\AndroidStudio2024.1\device-explorer\samsung SM-A546B\_\data\data\de.christian2003.passwordvault.debug\files\entries_list.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\app\src\main\res\raw\licenses.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

@@ -143,6 +143,13 @@ guidelines.
         <item name="android:layout_width">@dimen/image_xs</item>
     </style>
 
+    <!-- Light Images for recycler view adapter items -->
+    <style name="image.item.light" parent="image.item">
+        <item name="android:layout_height">@dimen/image_xs</item>
+        <item name="android:layout_width">@dimen/image_xs</item>
+        <item name="android:tint">@color/text_light</item>
+    </style>
+
     <!-- Empty list placeholder image -->
     <style name="image.emptyPlaceholder" parent="image">
         <item name="android:layout_width">@dimen/image_xxl</item>

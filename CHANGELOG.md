@@ -2,6 +2,34 @@
 
 # Changelog
 
+## 3.7.2 (2025-02-08)
+###### Release Highlights
+Introduction of new online help and legal pages that are accessed through a REST-API from the app, as well as bugfixes and minor performance improvements.
+
+###### Features
+* Authentication for autofill no longer shows activity that covers entire page. Instead a smaller dialog is displayed at the bottom of the screen.
+* Sharing a password quality gate no longer opens activity to edit quality gate before showing share dialog.
+* Reduced number of paths in some vector drawables to optimize performance.
+* Added tooltip texts for all (image-)buttons that do not have any text on screen. This enables screen readers to work and helps users to navigate the app.
+* Changed style for HTML help and legal pages, so that they can no longer be scrolled horizontally.
+* Changed icon for settings from outlined icon to filled icon.
+* Moved button for settings in `MainActivity` to the end of the search bar, so that it is easier to reach with one hand.
+* Changed button in `SearchActivity` from search-button to clear-button, to comply with Material Design 3 guidelines.
+* Changes to `SettingsAboutActivity`.
+* Help pages are no longer part of the app. Instead, the app fetches available help pages from a REST API.
+* Remove in-app help pages which reduces the size of the app by 50 %.
+* Privacy Policy and Terms of Service are no longer part of the app. Instead, the app fetches these pages from a REST API.
+* `LicensesActivity` displays license name and dependency version to match the look and feel of Petrol Index.
+* `SettingsActivity` no longer shows indicator if app update is available, since the user is informed about app updates in the `MainActivity`.
+* Help (and legal) pages fetched from the web are displayed within the app by default to keep the user within the app (instead of transferring them to a webbrowser).
+* Added setting through which the user can decide whether open help pages inside the app or a webbrowser.
+* Splash screen stays open for it's full animation duration.
+* Changed splash screen animation.
+* User needs to accept privacy policy and terms of service immediately after app start if they changed.
+* Image button changes icon if the password visibility is toggled in `PasswordAnalysisDuplicatesActivity`.
+
+<br/>
+
 ## 3.7.1 (2025-01-01)
 ###### Release Highlights
 Password quality gates can be imported using URI-links and enhancements to search functionality as well as bugfixes and general improvements.

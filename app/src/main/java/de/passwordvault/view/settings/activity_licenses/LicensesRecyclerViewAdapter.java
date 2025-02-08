@@ -31,6 +31,16 @@ public class LicensesRecyclerViewAdapter extends RecyclerViewAdapter<LicensesVie
          */
         public final TextView softwareTextView;
 
+        /**
+         * Attribute stores the text view used to show the software license.
+         */
+        public final TextView licenseTextView;
+
+        /**
+         * Attribute stores the text view used to show the software version.
+         */
+        public final TextView versionTextView;
+
 
         /**
          * Constructor instantiates a new view holder.
@@ -40,6 +50,8 @@ public class LicensesRecyclerViewAdapter extends RecyclerViewAdapter<LicensesVie
         public LicenseViewHolder(View itemView) {
             super(itemView);
             softwareTextView = itemView.findViewById(R.id.text_software);
+            licenseTextView = itemView.findViewById(R.id.text_license);
+            versionTextView = itemView.findViewById(R.id.text_version);
         }
 
     }
@@ -80,6 +92,8 @@ public class LicensesRecyclerViewAdapter extends RecyclerViewAdapter<LicensesVie
             LicenseViewHolder viewHolder = (LicenseViewHolder)holder;
             LicensesViewModel.UsedSoftware usedSoftware = viewModel.getUsedSoftware().get(position);
             viewHolder.softwareTextView.setText(usedSoftware.getName());
+            viewHolder.licenseTextView.setText(usedSoftware.getLicenseName());
+            viewHolder.versionTextView.setText(usedSoftware.getVersion());
             viewHolder.itemView.setOnClickListener(view -> {
                 Bundle args = new Bundle();
                 args.putString(LicenseDialog.ARG_TITLE, usedSoftware.getLicenseName());

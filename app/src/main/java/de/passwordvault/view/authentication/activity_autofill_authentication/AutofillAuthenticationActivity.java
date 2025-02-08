@@ -19,19 +19,13 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.Objects;
 import de.passwordvault.R;
 import de.passwordvault.model.security.login.Account;
-import de.passwordvault.model.storage.settings.Config;
-import de.passwordvault.view.authentication.activity_login.LoginActivity;
 
 
 /**
  * Class implements an activity that can be used to authenticate the user through the autofill service.
- * The class basically works identically to the {@link LoginActivity}. I have decided to reimplement
- * the activity (instead of expanding the login activity) since the login activity contains additional
- * code that is used to convert data when in between version updates. This is not required when
- * authenticating for the autofill service.
  *
  * @author  Christian-2003
- * @version 3.5.0
+ * @version 3.7.2
  */
 public class AutofillAuthenticationActivity extends AppCompatActivity {
 
@@ -72,8 +66,6 @@ public class AutofillAuthenticationActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Config.Methods.applyDarkmode();
-
         if (!Account.getInstance().hasPassword()) {
             onFailure();
             return;
@@ -91,7 +83,7 @@ public class AutofillAuthenticationActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.autofill_authentication_authenticate_button).setOnClickListener(view -> authenticate());
-        findViewById(R.id.button_back).setOnClickListener(view -> onFailure());
+        findViewById(R.id.container_frame).setOnClickListener(view -> onFailure());
 
         if (biometricPrompt == null) {
             biometricPrompt = new BiometricPrompt(AutofillAuthenticationActivity.this, viewModel.getExecutor(), new BiometricPrompt.AuthenticationCallback() {
