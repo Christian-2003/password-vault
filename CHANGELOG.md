@@ -2,9 +2,9 @@
 
 # Changelog
 
-## 3.7.2 (XXXX-XX-XX)
+## 3.7.2 (2025-02-08)
 ###### Release Highlights
-n/a
+Introduction of new online help and legal pages that are accessed through a REST-API from the app, as well as bugfixes and minor performance improvements.
 
 ###### Features
 * Authentication for autofill no longer shows activity that covers entire page. Instead a smaller dialog is displayed at the bottom of the screen.
@@ -29,7 +29,6 @@ n/a
 * Image button changes icon if the password visibility is toggled in `PasswordAnalysisDuplicatesActivity`.
 
 <br/>
-
 
 ## 3.7.1 (2025-01-01)
 ###### Release Highlights
