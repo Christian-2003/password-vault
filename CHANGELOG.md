@@ -2,6 +2,15 @@
 
 # Changelog
 
+## 3.7.3 (XXXX-XX-XX)
+###### Release Highlights
+n./a.
+
+###### Features
+* n./a.
+
+<br/>
+
 ## 3.7.2 (2025-02-08)
 ###### Release Highlights
 Introduction of new online help and legal pages that are accessed through a REST-API from the app, as well as bugfixes and minor performance improvements.
