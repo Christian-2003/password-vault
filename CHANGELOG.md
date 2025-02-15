@@ -7,7 +7,7 @@
 n./a.
 
 ###### Features
-* n./a.
+* Fixed a bug where the app storage size was not calculated correctly resulting in a negative storage used.
 
 <br/>
 
