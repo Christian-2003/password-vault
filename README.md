@@ -52,7 +52,7 @@ Information about app updates can be found in the installation guide as well. Ke
 Steps to build and run the project through the Android Studio IDE are covered within the installation guide as well: [Cloning This Repository](docs/manual/Install%20and%20Run%20the%20App.md#cloning-this-repository).
 
 ###### How to Use the Application
-A detailed quickstart guide can be found [here](docs/manual/Quickstart%20Guide.md). This guide covers all steps to add a new account to the app.
+A detailed quickstart guide can be found [here](https://passwordvault.christian2003.de/en/blog/quickstart/). This guide covers all steps to add a new account to the app.
 
 <br/>
 
