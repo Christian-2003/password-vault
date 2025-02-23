@@ -5,6 +5,9 @@
 ![GitHub](https://img.shields.io/github/issues/Christian-2003/password-vault?color=purple)
 ![GitHub](https://img.shields.io/github/repo-size/Christian-2003/password-vault?color=blue)
 
+The following diagram describes the new module architecture for the app:
+![Modules](docs/img/development/modules.drawio.svg)
+
 Are you tired of managing all your account data? Password Vault stores your most sensitive account data like passwords or e-mail addresses with the highest industrial encryption standards on your device locally.
 
 <div align="center">

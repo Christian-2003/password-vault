@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "PasswordVault"
 include(":app")
- 
+include(":core")
