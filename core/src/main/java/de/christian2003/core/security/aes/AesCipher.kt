@@ -86,7 +86,7 @@ class AesCipher {
      */
     private fun deriveHmac(bytes: ByteArray): ByteArray {
         val mac = Mac.getInstance("HmacSHA512")
-        mac.init(getOrCreateHMACKey())
+        mac.init(getOrCreateHmacKey())
         return mac.doFinal(bytes)
     }
 
@@ -97,7 +97,7 @@ class AesCipher {
      * @return              Secret key to use with HMAC.
      * @throws Exception    Cannot get or create secret key.
      */
-    private fun getOrCreateHMACKey(): SecretKey {
+    private fun getOrCreateHmacKey(): SecretKey {
         val keyStore: KeyStore = KeyStore.getInstance("AndroidKeyStore").apply {
             load(null)
         }
