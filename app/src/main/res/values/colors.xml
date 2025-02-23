@@ -1,33 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
-    <color name="primary">#1D7874</color>
-    <color name="primary_translucent">#991D7874</color>
-
-    <color name="background">#FAF9FE</color>
-    <color name="background_app_bar">#F5F3F8</color>
-    <color name="background_nav_bar">#EFEdF2</color>
-    <color name="background_container">#E9E7EC</color>
-    <color name="background_critical">#FFDAD6</color>
-    <color name="background_warning">#FFEBD6</color>
-
-    <color name="text">#1B1A1F</color>
-    <color name="text_light">#444750</color>
-    <color name="text_critical">#BA1A1A</color>
-    <color name="text_warning">#BB5E1B</color>
-    <color name="text_warning_translucent">#33BB5E1B</color>
-    <color name="text_on_primary">#FAFAFA</color>
-    <color name="divider">#C5C7C6</color>
-
-    <color name="red">#D14147</color>
-    <color name="yellow">#BAB41B</color>
-    <color name="green">#86C03F</color>
-
-    <!-- Light / dark variants needed for dialog to switch darkmode -->
-    <color name="light_background">#FAF9FE</color>
-    <color name="light_container">#E9E7EC</color>
-    <color name="light_highlight">#991D7874</color>
-    <color name="dark_background">#121317</color>
-    <color name="dark_container">#292A2E</color>
-    <color name="dark_highlight">#9929A7A1</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
 </resources>
