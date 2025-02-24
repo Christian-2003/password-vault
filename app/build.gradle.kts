@@ -64,6 +64,8 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.room)
+    implementation(libs.room.runtime)
     implementation(platform(libs.androidx.compose.bom))
     implementation(project(":core"))
     implementation(project(":feature:accounts"))

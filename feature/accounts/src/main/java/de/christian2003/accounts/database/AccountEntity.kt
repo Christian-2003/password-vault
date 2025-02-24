@@ -2,11 +2,12 @@ package de.christian2003.accounts.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalDateTime
 import java.util.UUID
 
 
 @Entity(tableName = "accounts")
-data class AccountEntity (
+class AccountEntity (
 
     /**
      * UUID of the account.
@@ -15,28 +16,23 @@ data class AccountEntity (
     val id: UUID = UUID.randomUUID(),
 
     /**
-     * Encrypted content of the account.
+     * Name of the account.
      */
-    val content: ByteArray = ByteArray(0)
+    var name: String,
 
-) {
+    /**
+     * Description of the account.
+     */
+    var description: String,
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
+    /**
+     * Date at which the account was created.
+     */
+    val created: LocalDateTime = LocalDateTime.now(),
 
-        other as AccountEntity
+    /**
+     * Date at which the account was edited the last time.
+     */
+    var changed: LocalDateTime = LocalDateTime.now()
 
-        if (id != other.id) return false
-        if (!content.contentEquals(other.content)) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = id.hashCode()
-        result = 31 * result + content.contentHashCode()
-        return result
-    }
-
-}
+)

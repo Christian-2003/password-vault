@@ -35,7 +35,7 @@ class CsvBuilder(
      * @return      This CSV builder.
      */
     fun append(arg: Int): CsvBuilder {
-        if (isCurrentLineEmpty) {
+        if (!isCurrentLineEmpty) {
             csv.append(config.columnDivider)
         }
         csv.append(arg)
@@ -51,7 +51,7 @@ class CsvBuilder(
      * @return      This CSV builder.
      */
     fun append(arg: Long): CsvBuilder {
-        if (isCurrentLineEmpty) {
+        if (!isCurrentLineEmpty) {
             csv.append(config.columnDivider)
         }
         csv.append(arg)
@@ -67,7 +67,7 @@ class CsvBuilder(
      * @return      This CSV builder.
      */
     fun append(arg: Float): CsvBuilder {
-        if (isCurrentLineEmpty) {
+        if (!isCurrentLineEmpty) {
             csv.append(config.columnDivider)
         }
         csv.append(arg)
@@ -83,7 +83,7 @@ class CsvBuilder(
      * @return      This CSV builder.
      */
     fun append(arg: Double): CsvBuilder {
-        if (isCurrentLineEmpty) {
+        if (!isCurrentLineEmpty) {
             csv.append(config.columnDivider)
         }
         csv.append(arg)
@@ -99,7 +99,7 @@ class CsvBuilder(
      * @return      This CSV builder.
      */
     fun append(arg: Char): CsvBuilder {
-        if (isCurrentLineEmpty) {
+        if (!isCurrentLineEmpty) {
             csv.append(config.columnDivider)
         }
         csv.append(arg)
@@ -115,7 +115,7 @@ class CsvBuilder(
      * @return      This CSV builder.
      */
     fun append(arg: Boolean): CsvBuilder {
-        if (isCurrentLineEmpty) {
+        if (!isCurrentLineEmpty) {
             csv.append(config.columnDivider)
         }
         csv.append(arg)
@@ -132,7 +132,7 @@ class CsvBuilder(
      * @return      This CSV builder.
      */
     fun append(arg: String): CsvBuilder {
-        if (isCurrentLineEmpty) {
+        if (!isCurrentLineEmpty) {
             csv.append(config.columnDivider)
         }
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <string name="accountslistview_title">Accounts</string>
+
+    <string name="account_title_placeholder">Enter name</string>
+    <string name="account_button_ok">Ok</string>
+
+</resources>

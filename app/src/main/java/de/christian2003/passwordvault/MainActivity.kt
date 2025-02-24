@@ -4,48 +4,75 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import de.christian2003.accounts.database.AccountRepository
+import de.christian2003.accounts.database.AccountsDatabase
+import de.christian2003.accounts.view.account.AccountView
+import de.christian2003.accounts.view.account.AccountViewModel
+import de.christian2003.accounts.view.accountslist.AccountsListView
+import de.christian2003.accounts.view.accountslist.AccountsListViewModel
 import de.christian2003.core.ui.theme.PasswordVaultTheme
+import java.util.UUID
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            PasswordVaultTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+            PasswordVault()
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier,
-        color = MaterialTheme.colorScheme.primary,
-        fontWeight = FontWeight.Bold
-    )
-}
 
-@Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun PasswordVault() {
+    val navController = rememberNavController()
+    val database = AccountsDatabase.getInstance(LocalContext.current)
+    val repository = AccountRepository(database.accountDao)
+
     PasswordVaultTheme {
-        Greeting("Android")
+        NavHost(
+            navController = navController,
+            startDestination = "AccountsListView"
+        ) {
+            composable("AccountsListView") {
+                val viewModel: AccountsListViewModel = viewModel()
+                viewModel.init(repository)
+
+                AccountsListView(
+                    viewModel = viewModel,
+                    onAddAccountClicked = {
+                        navController.navigate("AccountView/")
+                    },
+                    onEditAccountClicked = { account ->
+                        navController.navigate("AccountView/${account.id}")
+                    }
+                )
+            }
+            composable("AccountView/{id}") { backStackEntry ->
+                val id: UUID? = try {
+                    UUID.fromString(backStackEntry.arguments?.getString("id"))
+                } catch (e: Exception) {
+                    null
+                }
+                val viewModel: AccountViewModel = viewModel()
+                viewModel.init(repository, id)
+
+                AccountView(
+                    viewModel = viewModel,
+                    onNavigateUp = {
+                        navController.navigateUp()
+                    }
+                )
+            }
+        }
     }
 }

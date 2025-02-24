@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 
 
 @Database(entities = [AccountEntity::class], version = 1, exportSchema = false)
-@TypeConverters(UUIDConverter::class)
+@TypeConverters(UUIDConverter::class, LocalDateTimeConverter::class)
 abstract class AccountsDatabase: RoomDatabase() {
 
     abstract val accountDao: AccountDao

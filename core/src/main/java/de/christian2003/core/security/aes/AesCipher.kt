@@ -87,7 +87,10 @@ class AesCipher {
     private fun deriveHmac(bytes: ByteArray): ByteArray {
         val mac = Mac.getInstance("HmacSHA512")
         mac.init(getOrCreateHmacKey())
-        return mac.doFinal(bytes)
+        val fullHmacOutput = mac.doFinal(bytes)
+
+        //Use only the first 32 bytes of the key, since AES does not support 64 byte keys:
+        return fullHmacOutput.copyOf(32)
     }
 
 
