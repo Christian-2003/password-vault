@@ -4,8 +4,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.UUID
 
+
 @Entity(tableName = "accounts")
-class AccountEntity (
+data class AccountEntity (
 
     /**
      * UUID of the account.
@@ -20,6 +21,22 @@ class AccountEntity (
 
 ) {
 
-    //TODO: Implement methods to access decrypted data
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as AccountEntity
+
+        if (id != other.id) return false
+        if (!content.contentEquals(other.content)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + content.contentHashCode()
+        return result
+    }
 
 }
