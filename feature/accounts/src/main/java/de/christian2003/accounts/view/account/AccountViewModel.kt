@@ -19,6 +19,8 @@ class AccountViewModel: ViewModel() {
 
     private var account: AccountEntity? = null
 
+    var isCreatingNewAccount: Boolean by mutableStateOf(true)
+
     var name: String by mutableStateOf("")
 
     var description: String by mutableStateOf("")
@@ -26,6 +28,8 @@ class AccountViewModel: ViewModel() {
     var isEditNameSheetVisible: Boolean by mutableStateOf(false)
 
     var isEditDescriptionSheetVisible: Boolean by mutableStateOf(false)
+
+    var isDeleteSheetVisible: Boolean by mutableStateOf(false)
 
 
     fun init(repository: AccountRepository, id: UUID?) {
@@ -36,6 +40,7 @@ class AccountViewModel: ViewModel() {
                 if (account != null) {
                     name = account!!.name
                     description = account!!.description
+                    isCreatingNewAccount = false
                 }
             }
         }
@@ -43,26 +48,33 @@ class AccountViewModel: ViewModel() {
 
 
     fun save() = viewModelScope.launch(Dispatchers.IO) {
-
-        if (account == null) {
-            //Create new account:
-            val account = AccountEntity(
-                id = UUID.randomUUID(),
-                name = name,
-                description = description
-            )
-            repository.insertAccount(account)
+        if (name.isNotEmpty()) {
+            if (account == null) {
+                //Create new account:
+                val account = AccountEntity(
+                    id = UUID.randomUUID(),
+                    name = name,
+                    description = description
+                )
+                repository.insertAccount(account)
+            }
+            else {
+                //Edit account:
+                val account = AccountEntity(
+                    id = account!!.id,
+                    name = name,
+                    description = description,
+                    created = account!!.created,
+                    changed = LocalDateTime.now()
+                )
+                repository.updateAccount(account)
+            }
         }
-        else {
-            //Edit account:
-            val account = AccountEntity(
-                id = account!!.id,
-                name = name,
-                description = description,
-                created = account!!.created,
-                changed = LocalDateTime.now()
-            )
-            repository.updateAccount(account)
+    }
+
+    fun delete() = viewModelScope.launch(Dispatchers.IO) {
+        if (account != null) {
+            repository.deleteAccount(account!!)
         }
     }
 

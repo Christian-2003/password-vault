@@ -5,11 +5,16 @@
     <string name="accountslistview_title">Accounts</string>
 
     <string name="account_name_label">Enter name</string>
+    <string name="account_name_title">Account name</string>
     <string name="account_name_info">You can identify the account through a short and concise name</string>
     <string name="account_name_error">The name cannot be empty</string>
     <string name="account_description_label">Enter description</string>
+    <string name="account_description_title">Account description</string>
     <string name="account_description_info">A short description helps you identify accounts</string>
+    <string name="account_deleteAccount_title">Delete account</string>
+    <string name="account_deleteAccount_message">Are you sure you want to delete the account? This cannot be undone!</string>
     <string name="account_button_ok">Okay</string>
     <string name="account_button_cancel">Cancel</string>
+    <string name="account_button_delete">Delete</string>
 
 </resources>

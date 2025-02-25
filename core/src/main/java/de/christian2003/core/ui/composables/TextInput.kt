@@ -3,10 +3,8 @@ package de.christian2003.core.ui.composables
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
@@ -25,6 +23,21 @@ import de.christian2003.core.R
 import kotlinx.coroutines.launch
 
 
+/**
+ * Composable displays an outlined text field through which the user can edit a value.
+ *
+ * @param value             Value to edit.
+ * @param onValueChange     Callback invoked once the value changes.
+ * @param label             Label for the text field.
+ * @param modifier          Modifier.
+ * @param prefixIcon        Optional Icon to display in front of the text input.
+ * @param keyboardOptions   Optional keyboard options.
+ * @param suffixLabel       Optional suffix label to display within the text input.
+ * @param trailingIcon      Optional trailing icon to display within the text input. If the error
+ *                          message passed is not null, this icon will be replaced with an error
+ *                          icon.
+ * @param errorMessage      Error message to display.
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TextInput(

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <string name="deleteDialog_title">Confirm deletion</string>
+    <string name="deleteDialog_button_confirm">Confirm</string>
+    <string name="deleteDialog_button_cancel">Cancel</string>
+
+</resources>

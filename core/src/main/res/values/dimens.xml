@@ -13,9 +13,9 @@
 
     <dimen name="padding_material_text_field_top">8dp</dimen>
 
-    <dimen name="image_extraSmall">16dp</dimen>
-    <dimen name="image_small">24dp</dimen>
-    <dimen name="image_medium">48dp</dimen>
-    <dimen name="image_large">98dp</dimen>
+    <dimen name="image_extraSmall">16sp</dimen>
+    <dimen name="image_small">24sp</dimen>
+    <dimen name="image_medium">48sp</dimen>
+    <dimen name="image_large">98sp</dimen>
 
 </resources>
