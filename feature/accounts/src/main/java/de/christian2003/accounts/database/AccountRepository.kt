@@ -24,4 +24,8 @@ class AccountRepository(
         accountDao.delete(account)
     }
 
+    suspend fun updateAccount(account: AccountEntity) {
+        accountDao.update(account)
+    }
+
 }

@@ -4,7 +4,12 @@
 
     <string name="accountslistview_title">Accounts</string>
 
-    <string name="account_title_placeholder">Enter name</string>
-    <string name="account_button_ok">Ok</string>
+    <string name="account_name_label">Enter name</string>
+    <string name="account_name_info">You can identify the account through a short and concise name</string>
+    <string name="account_name_error">The name cannot be empty</string>
+    <string name="account_description_label">Enter description</string>
+    <string name="account_description_info">A short description helps you identify accounts</string>
+    <string name="account_button_ok">Okay</string>
+    <string name="account_button_cancel">Cancel</string>
 
 </resources>

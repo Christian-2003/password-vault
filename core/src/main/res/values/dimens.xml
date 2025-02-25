@@ -5,8 +5,17 @@
     <dimen name="padding_horizontal">24dp</dimen>
     <dimen name="padding_horizontal_between">12dp</dimen>
     <dimen name="padding_horizontal_activity">16dp</dimen>
+    <dimen name="padding_horizontal_small">12dp</dimen>
     <dimen name="padding_vertical">16dp</dimen>
     <dimen name="padding_vertical_between">8dp</dimen>
     <dimen name="padding_vertical_activity">20dp</dimen>
+    <dimen name="padding_vertical_small">4dp</dimen>
+
+    <dimen name="padding_material_text_field_top">8dp</dimen>
+
+    <dimen name="image_extraSmall">16dp</dimen>
+    <dimen name="image_small">24dp</dimen>
+    <dimen name="image_medium">48dp</dimen>
+    <dimen name="image_large">98dp</dimen>
 
 </resources>
