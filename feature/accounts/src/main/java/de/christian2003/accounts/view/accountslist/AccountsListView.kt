@@ -30,7 +30,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.room.util.TableInfo
 import de.christian2003.accounts.database.AccountEntity
 import de.christian2003.accounts.R
 
@@ -72,6 +71,7 @@ fun AccountsListView(
             accounts = accounts,
             onAccountClicked = onEditAccountClicked,
             modifier = Modifier
+                .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surface)
                 .padding(innerPadding)
         )

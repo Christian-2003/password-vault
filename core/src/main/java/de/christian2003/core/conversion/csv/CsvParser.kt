@@ -12,14 +12,14 @@ package de.christian2003.core.conversion.csv
 class CsvParser(
 
     /**
-     * Config to use when parsing the CSV.
-     */
-    private val config: CsvConfig = CsvConfig(),
-
-    /**
      * CSV to parse.
      */
-    private val csv: String
+    private val csv: String,
+
+    /**
+     * Config to use when parsing the CSV.
+     */
+    private val config: CsvConfig = CsvConfig()
 
 ) {
 

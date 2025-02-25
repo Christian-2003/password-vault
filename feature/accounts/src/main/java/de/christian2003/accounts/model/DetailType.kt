@@ -1,25 +1,55 @@
 package de.christian2003.accounts.model
 
-enum class DetailType {
+enum class DetailType(
 
-    TEXT,
+    val persistentId: Byte
 
-    NUMBER,
+) {
 
-    SECURITY_QUESTION,
+    TEXT(0),
 
-    ADDRESS,
+    NUMBER(1),
 
-    DATE,
+    SECURITY_QUESTION(2),
 
-    EMAIL,
+    ADDRESS(3),
 
-    PASSWORD,
+    DATE(4),
 
-    URL,
+    EMAIL(5),
 
-    PIN,
+    PASSWORD(6),
 
-    UNDEFINED
+    URL(7),
+
+    PIN(8),
+
+    UNDEFINED(-1);
+
+
+    companion object {
+
+        /**
+         * Returns the detail type from it's persistent ID.
+         *
+         * @param persistentId  Persistent ID whose type to return.
+         * @return              Type for the persistent ID specified.
+         */
+        fun fromPersistentId(persistentId: Byte): DetailType {
+            return when (persistentId) {
+                TEXT.persistentId -> TEXT
+                NUMBER.persistentId -> NUMBER
+                SECURITY_QUESTION.persistentId -> SECURITY_QUESTION
+                ADDRESS.persistentId -> ADDRESS
+                DATE.persistentId -> DATE
+                EMAIL.persistentId -> EMAIL
+                PASSWORD.persistentId -> PASSWORD
+                URL.persistentId -> URL
+                PIN.persistentId -> PIN
+                else -> UNDEFINED
+            }
+        }
+
+    }
 
 }

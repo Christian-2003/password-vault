@@ -16,7 +16,7 @@ class Detail(
 
     val created: LocalDateTime,
 
-    var edited: LocalDateTime,
+    var changed: LocalDateTime,
 
     var type: DetailType = DetailType.TEXT,
 
