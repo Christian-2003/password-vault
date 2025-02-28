@@ -10,6 +10,7 @@ n./a.
 * Fixed a bug where the app storage size was not calculated correctly resulting in a negative storage used.
 * Change the text color for the warning container displaying that a new version is available to download.
 * Change text color for button through which to delete accounts.
+* Change text color for button to delete items in DeleteDialog. This better indicates the irreversible action the user is about to take.
 
 <br/>
 
