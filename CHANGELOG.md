@@ -12,6 +12,7 @@ n./a.
 * Change text color for button through which to delete accounts.
 * Change text color for button to delete items in DeleteDialog. This better indicates the irreversible action the user is about to take.
 * Change corner radii for cards in DarkmodeDialog and SwipeDialog.
+* Migrate dependency management to version catalogs with _libs.versions.toml_.
 
 <br/>
 

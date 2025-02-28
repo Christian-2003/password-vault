@@ -40,24 +40,20 @@ android {
 }
 
 dependencies {
-    //noinspection GradleDependency
-    implementation 'androidx.appcompat:appcompat:1.5.1' //Use of older version to compile for Android SDK 32
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.core:core-splashscreen:1.0.1'
-    //noinspection GradleDependency
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
-    implementation 'androidx.security:security-crypto:1.0.0'
-    implementation 'androidx.biometric:biometric:1.1.0'
-    //noinspection GradleDependency
-    implementation 'com.google.android.material:material:1.9.0' //Use of older version to compile for Android SDK 32
-    implementation 'com.google.android.gms:play-services-oss-licenses:17.1.0'
-    implementation 'com.github.supersu-man:apkupdater-library:v2.1.0'
-    implementation 'com.google.android.flexbox:flexbox:3.0.0'
-    implementation 'com.google.code.gson:gson:2.11.0'
+    implementation libs.appcompat
+    implementation libs.constraintlayout
+    implementation libs.core.splashscreen
+    implementation libs.lifecycle.viewmodel.ktx
+    implementation libs.security.crypto
+    implementation libs.biometric
+    implementation libs.material
+    implementation libs.play.services.oss.licenses
+    implementation libs.apkupdater.library
+    implementation libs.flexbox
+    implementation libs.gson
 
-    testImplementation 'junit:junit:4.13.2'
-    //noinspection GradleDependency
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    //noinspection GradleDependency
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    testImplementation libs.junit
+
+    androidTestImplementation libs.ext.junit
+    androidTestImplementation libs.espresso.core
 }
