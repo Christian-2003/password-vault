@@ -264,6 +264,11 @@ guidelines.
         <item name="android:paddingVertical">@dimen/space_vertical</item>
     </style>
 
+    <!-- Styles for cards -->
+    <style name="card.small" parent="card">
+        <item name="android:background">@drawable/background_small</item>
+    </style>
+
     <!-- Styles for warning cards -->
     <style name="card.warning" parent="card">
         <item name="android:backgroundTint">@color/background_warning</item>
