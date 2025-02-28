@@ -41,13 +41,16 @@ import androidx.compose.ui.unit.sp
 import de.christian2003.core.ui.composables.BottomSheetDialog
 import de.christian2003.core.ui.composables.DeleteDialog
 import de.christian2003.core.ui.composables.TextInput
+import java.util.UUID
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountView(
     viewModel: AccountViewModel,
-    onNavigateUp: () -> Unit
+    onNavigateUp: () -> Unit,
+    onAddDetail: () -> Unit,
+    onEditDetail: (UUID) -> Unit
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -80,6 +83,19 @@ fun AccountView(
                     ) {
                         Icon(
                             painter = painterResource(de.christian2003.core.R.drawable.ic_back),
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            contentDescription = ""
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(
+                        onClick = {
+                            onAddDetail()
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(de.christian2003.core.R.drawable.ic_add),
                             tint = MaterialTheme.colorScheme.onSurface,
                             contentDescription = ""
                         )
@@ -119,7 +135,8 @@ fun AccountView(
                 accountAbbreviation = if (viewModel.name.isNotEmpty()) { "" + viewModel.name[0] } else { "?" },
                 onDismiss = {
                     viewModel.isEditNameSheetVisible = false
-                }
+                },
+                errorMessage = if (viewModel.name.isEmpty()) { stringResource(R.string.account_name_error) } else { null }
             )
         }
         if (viewModel.isEditDescriptionSheetVisible) {
@@ -263,7 +280,8 @@ fun ContentEditor(
     label: String,
     info: String,
     accountAbbreviation: String,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    errorMessage: String? = null
 ) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -303,7 +321,7 @@ fun ContentEditor(
                 value = value,
                 onValueChange = onValueChange,
                 label = label,
-                errorMessage = if (value.isEmpty()) { stringResource(R.string.account_name_error) } else { null },
+                errorMessage = errorMessage,
             )
             FlowRow(
                 modifier = Modifier

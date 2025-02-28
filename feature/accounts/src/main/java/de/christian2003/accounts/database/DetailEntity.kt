@@ -2,6 +2,7 @@ package de.christian2003.accounts.database
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import de.christian2003.accounts.model.Detail
@@ -13,25 +14,57 @@ import java.time.ZoneOffset
 import java.util.UUID
 
 
-@Entity("details")
+/**
+ * Class models a detail that is stored within the database.
+ *
+ * @author  Christian-2003
+ * @since   3.8.0
+ */
+@Entity(
+    tableName = "details",
+    foreignKeys = [ForeignKey(
+        entity = AccountEntity::class,
+        parentColumns = arrayOf("id"),
+        childColumns = arrayOf("account"),
+        onDelete = ForeignKey.CASCADE
+    )]
+)
 class DetailEntity(
 
+    /**
+     * UUID of the detail.
+     */
     @PrimaryKey
     @ColumnInfo(name = "id")
     val id: UUID = UUID.randomUUID(),
 
+    /**
+     * UUID of the account to which the detail belongs.
+     */
     @ColumnInfo(name = "account")
     val account: UUID,
 
+    /**
+     * Byte array stores the encrypted detail content.
+     */
     @ColumnInfo(name = "encrypted")
     val encrypted: ByteArray
 
 ) {
 
+    /**
+     * Stores the decrypted detail.
+     */
     @Ignore
     private var decryptedDetail: Detail? = null
 
 
+    /**
+     * Returns the decrypted detail.
+     *
+     * @param hmacSeed  HMAC seed from which to derive the key for decryption.
+     * @return          Decrypted detail.
+     */
     fun toDetail(hmacSeed: ByteArray): Detail {
         if (decryptedDetail == null) {
             //Decrypt content:

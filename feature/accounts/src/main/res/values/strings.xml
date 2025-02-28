@@ -17,4 +17,13 @@
     <string name="account_button_cancel">Cancel</string>
     <string name="account_button_delete">Delete</string>
 
+    <string name="detail_title_edit">Edit Detail</string>
+    <string name="detail_title_create">Create Detail</string>
+    <string name="detail_type_label">Type</string>
+    <string name="detail_type_error">Please select type</string>
+    <string name="detail_name_label">Name</string>
+    <string name="detail_name_error">The name cannot be empty</string>
+    <string name="detail_content_label">Content</string>
+    <string name="detail_content_error">The content cannot be empty</string>
+
 </resources>

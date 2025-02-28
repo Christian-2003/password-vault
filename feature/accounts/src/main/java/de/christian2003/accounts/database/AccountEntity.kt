@@ -7,6 +7,12 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 
+/**
+ * Class models the entity for accounts stored within a room database.
+ *
+ * @author  Christian-2003
+ * @since   3.8.0
+ */
 @Entity(tableName = "accounts")
 class AccountEntity (
 

@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.christian2003.accounts.database.AccountEntity
-import de.christian2003.accounts.database.AccountRepository
+import de.christian2003.accounts.database.AccountsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -15,7 +15,7 @@ import java.util.UUID
 
 class AccountViewModel: ViewModel() {
 
-    private lateinit var repository: AccountRepository
+    private lateinit var repository: AccountsRepository
 
     private var account: AccountEntity? = null
 
@@ -32,7 +32,7 @@ class AccountViewModel: ViewModel() {
     var isDeleteSheetVisible: Boolean by mutableStateOf(false)
 
 
-    fun init(repository: AccountRepository, id: UUID?) {
+    fun init(repository: AccountsRepository, id: UUID?) {
         this.repository = repository
         if (id != null) {
             viewModelScope.launch {
