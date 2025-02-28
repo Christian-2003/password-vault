@@ -50,6 +50,23 @@ class CsvBuilder(
      * @param arg   Value to append to the current CSV row.
      * @return      This CSV builder.
      */
+    fun append(arg: Byte): CsvBuilder {
+        if (!isCurrentLineEmpty) {
+            csv.append(config.columnDivider)
+        }
+        csv.append(arg)
+        isCurrentLineEmpty = false
+        return this
+    }
+
+
+
+    /**
+     * Appends the argument specified to the current CSV row.
+     *
+     * @param arg   Value to append to the current CSV row.
+     * @return      This CSV builder.
+     */
     fun append(arg: Long): CsvBuilder {
         if (!isCurrentLineEmpty) {
             csv.append(config.columnDivider)

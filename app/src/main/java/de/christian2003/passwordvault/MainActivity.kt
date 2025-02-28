@@ -1,5 +1,6 @@
 package de.christian2003.passwordvault
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -7,9 +8,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import de.christian2003.accounts.database.AccountsRepository
 import de.christian2003.accounts.database.AccountsDatabase
 import de.christian2003.accounts.view.account.AccountView
@@ -51,16 +54,22 @@ fun PasswordVault() {
                 AccountsListView(
                     viewModel = viewModel,
                     onAddAccountClicked = {
-                        navController.navigate("AccountView/")
+                        navController.navigate("AccountView")
                     },
                     onEditAccountClicked = { account ->
-                        navController.navigate("AccountView/${account.id}")
+                        val encodedId = Uri.encode(account.id.toString())
+                        navController.navigate("AccountView?id=$encodedId")
                     }
                 )
             }
-            composable("AccountView/{id}") { backStackEntry ->
+            composable(
+                route = "AccountView?id={id}",
+                arguments = listOf(
+                    navArgument("id") { nullable = true; type = NavType.StringType; defaultValue = null }
+                )
+            ) { backStackEntry ->
                 val id: UUID? = try {
-                    UUID.fromString(backStackEntry.arguments?.getString("id"))
+                    UUID.fromString(Uri.decode(backStackEntry.arguments?.getString("id")))
                 } catch (e: Exception) {
                     null
                 }
@@ -72,29 +81,45 @@ fun PasswordVault() {
                     onNavigateUp = {
                         navController.navigateUp()
                     },
-                    onAddDetail = {
-                        navController.navigate("DetailView/")
+                    onAddDetail = { accountId ->
+                        val accountIdEncoded = Uri.encode(accountId.toString())
+                        navController.navigate("DetailView?accountId=$accountIdEncoded")
                     },
-                    onEditDetail = { detailId ->
-                        navController.navigate("DetailView/$detailId")
+                    onEditDetail = { detailId, accountId ->
+                        val detailIdEncoded = Uri.encode(detailId.toString())
+                        val accountIdEncoded = Uri.encode(accountId.toString())
+                        navController.navigate("DetailView?detailId=$detailIdEncoded&accountId=$accountIdEncoded")
                     }
                 )
             }
-            composable("DetailView/{id}") { backStackEntry ->
-                val id: UUID? = try {
-                    UUID.fromString(backStackEntry.arguments?.getString("id"))
+            composable(
+                route = "DetailView?detailId={detailId}&accountId={accountId}",
+                arguments = listOf(
+                    navArgument("detailId") { nullable = true; type = NavType.StringType; defaultValue = null },
+                    navArgument("accountId") { nullable = false; type = NavType.StringType }
+                )
+            ) { backStackEntry ->
+                val detailId: UUID? = try {
+                    UUID.fromString(Uri.decode(backStackEntry.arguments?.getString("detailId")))
                 } catch (e: Exception) {
                     null
                 }
-                val viewModel: DetailViewModel = viewModel()
-                viewModel.init(repository, id)
+                val accountId: UUID? = try {
+                    UUID.fromString(Uri.decode(backStackEntry.arguments?.getString("accountId")))
+                } catch (e: Exception) {
+                    null
+                }
+                if (accountId != null) {
+                    val viewModel: DetailViewModel = viewModel()
+                    viewModel.init(repository, accountId, detailId)
 
-                DetailView(
-                    viewModel = viewModel,
-                    onNavigateUp = {
-                        navController.navigateUp()
-                    }
-                )
+                    DetailView(
+                        viewModel = viewModel,
+                        onNavigateUp = {
+                            navController.navigateUp()
+                        }
+                    )
+                }
             }
         }
     }

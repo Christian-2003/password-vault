@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -26,6 +28,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +42,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import de.christian2003.accounts.R
 import kotlinx.coroutines.launch
 import androidx.compose.ui.unit.sp
+import de.christian2003.accounts.model.Detail
 import de.christian2003.core.ui.composables.BottomSheetDialog
 import de.christian2003.core.ui.composables.DeleteDialog
 import de.christian2003.core.ui.composables.TextInput
@@ -49,9 +54,11 @@ import java.util.UUID
 fun AccountView(
     viewModel: AccountViewModel,
     onNavigateUp: () -> Unit,
-    onAddDetail: () -> Unit,
-    onEditDetail: (UUID) -> Unit
+    onAddDetail: (UUID) -> Unit,
+    onEditDetail: (UUID, UUID) -> Unit
 ) {
+    val details by viewModel.details.collectAsState()
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -91,7 +98,7 @@ fun AccountView(
                 actions = {
                     IconButton(
                         onClick = {
-                            onAddDetail()
+                            onAddDetail(viewModel.accountId)
                         }
                     ) {
                         Icon(
@@ -122,6 +129,16 @@ fun AccountView(
                     viewModel.isDeleteSheetVisible = !viewModel.isDeleteSheetVisible
                 }
             )
+            LazyColumn {
+                items(details) { detail ->
+                    DetailsListItem(
+                        detail = detail,
+                        onEditDetail = {
+                            onEditDetail(detail.id, viewModel.accountId)
+                        }
+                    )
+                }
+            }
         }
         if (viewModel.isEditNameSheetVisible) {
             ContentEditor(
@@ -346,5 +363,27 @@ fun ContentEditor(
                 }
             }
         }
+    }
+}
+
+
+@Composable
+fun DetailsListItem(
+    detail: Detail,
+    onEditDetail: (Detail) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                onEditDetail(detail)
+            }
+            .padding(
+                horizontal = dimensionResource(de.christian2003.core.R.dimen.padding_horizontal_activity),
+                vertical = dimensionResource(de.christian2003.core.R.dimen.padding_horizontal_between)
+            )
+    ) {
+        Text(detail.name)
+        Text(detail.content)
     }
 }

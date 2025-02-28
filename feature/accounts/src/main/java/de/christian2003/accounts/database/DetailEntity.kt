@@ -62,14 +62,13 @@ class DetailEntity(
     /**
      * Returns the decrypted detail.
      *
-     * @param hmacSeed  HMAC seed from which to derive the key for decryption.
-     * @return          Decrypted detail.
+     * @return  Decrypted detail.
      */
-    fun toDetail(hmacSeed: ByteArray): Detail {
+    fun toDetail(): Detail {
         if (decryptedDetail == null) {
             //Decrypt content:
             val cipher = AesCipher()
-            val decrypted: ByteArray = cipher.decryptWithHmac(encrypted, hmacSeed)
+            val decrypted: ByteArray = cipher.decryptWithHmac(encrypted, account.toString().toByteArray())
             val csv = String(decrypted)
 
             //Parse content:
