@@ -9,6 +9,7 @@ n./a.
 ###### Features
 * Fixed a bug where the app storage size was not calculated correctly resulting in a negative storage used.
 * Change the text color for the warning container displaying that a new version is available to download.
+* Change text color for button through which to delete accounts.
 
 <br/>
 
