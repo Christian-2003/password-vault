@@ -3,9 +3,11 @@ package de.passwordvault.view.passwords.activity_analysis
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
+import de.passwordvault.model.analysis.QualityGateManager
+import de.passwordvault.model.entry.EntryManager
 import de.passwordvault.ui.theme.PasswordVaultTheme
+
 
 class PasswordAnalysisActivity: ComponentActivity() {
 
@@ -14,7 +16,15 @@ class PasswordAnalysisActivity: ComponentActivity() {
 
         setContent {
             PasswordVaultTheme {
-                PasswordAnalysisScreen()
+                val viewModel: PasswordAnalysisViewModel = viewModel()
+                viewModel.init(EntryManager.getInstance(), QualityGateManager.getInstance())
+
+                PasswordAnalysisScreen(
+                    viewModel = viewModel,
+                    onNavigateUp = {
+                        this@PasswordAnalysisActivity.finish()
+                    }
+                )
             }
         }
     }

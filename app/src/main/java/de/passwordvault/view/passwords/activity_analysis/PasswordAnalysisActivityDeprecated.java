@@ -21,7 +21,7 @@ import de.passwordvault.view.utils.components.PasswordVaultActivity;
  * @author  Christian-2003
  * @version 3.4.0
  */
-public class PasswordAnalysisActivityDeprecated extends PasswordVaultActivity<PasswordAnalysisViewModel> implements Observer<ArrayList<Password>> {
+public class PasswordAnalysisActivityDeprecated extends PasswordVaultActivity<PasswordAnalysisViewModelDeprecated> implements Observer<ArrayList<Password>> {
 
     /**
      * Attribute stores the adapter for the view pager which shows the different tabs of the activity.
@@ -35,7 +35,7 @@ public class PasswordAnalysisActivityDeprecated extends PasswordVaultActivity<Pa
 
 
     public PasswordAnalysisActivityDeprecated() {
-        super(PasswordAnalysisViewModel.class, R.layout.activity_password_analysis);
+        super(PasswordAnalysisViewModelDeprecated.class, R.layout.activity_password_analysis);
     }
 
 

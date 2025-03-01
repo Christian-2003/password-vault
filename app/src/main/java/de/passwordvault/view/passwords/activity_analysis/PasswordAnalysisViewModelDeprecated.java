@@ -17,7 +17,7 @@ import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
  * @author  Christian-2003
  * @version 3.5.2
  */
-public class PasswordAnalysisViewModel extends ViewModel {
+public class PasswordAnalysisViewModelDeprecated extends ViewModel {
 
     /**
      * Attribute stores a list of all weak passwords.
@@ -28,7 +28,7 @@ public class PasswordAnalysisViewModel extends ViewModel {
     /**
      * Constructor instantiates a new view model.
      */
-    public PasswordAnalysisViewModel() {
+    public PasswordAnalysisViewModelDeprecated() {
         weakPasswords = null;
     }
 

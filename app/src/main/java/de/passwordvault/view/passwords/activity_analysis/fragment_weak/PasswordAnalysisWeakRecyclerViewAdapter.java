@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGateManager;
 import de.passwordvault.model.analysis.passwords.Password;
-import de.passwordvault.view.passwords.activity_analysis.PasswordAnalysisViewModel;
+import de.passwordvault.view.passwords.activity_analysis.PasswordAnalysisViewModelDeprecated;
 import de.passwordvault.view.passwords.activity_analysis.fragment_duplicates.PasswordAnalysisDuplicatesRecyclerViewAdapter;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.view.utils.recycler_view.OnRecyclerViewActionListener;
@@ -27,7 +27,7 @@ import de.passwordvault.view.utils.recycler_view.RecyclerViewAdapter;
  * @author  Christian-2003
  * @version 3.7.0
  */
-public class PasswordAnalysisWeakRecyclerViewAdapter extends RecyclerViewAdapter<PasswordAnalysisViewModel> {
+public class PasswordAnalysisWeakRecyclerViewAdapter extends RecyclerViewAdapter<PasswordAnalysisViewModelDeprecated> {
 
     /**
      * Class implements a view holder for the password entry.
@@ -101,7 +101,7 @@ public class PasswordAnalysisWeakRecyclerViewAdapter extends RecyclerViewAdapter
      * @param context   Context for the adapter.
      * @param viewModel View model for the adapter.
      */
-    public PasswordAnalysisWeakRecyclerViewAdapter(@NonNull Context context, @NonNull PasswordAnalysisViewModel viewModel) {
+    public PasswordAnalysisWeakRecyclerViewAdapter(@NonNull Context context, @NonNull PasswordAnalysisViewModelDeprecated viewModel) {
         super(context, viewModel);
     }
 

@@ -16,7 +16,7 @@ import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
 import de.passwordvault.view.passwords.activity_analysis.PasswordAnalysisActivityDeprecated;
 import de.passwordvault.view.passwords.activity_list.PasswordAnalysisListActivity;
 import de.passwordvault.view.utils.Utils;
-import de.passwordvault.view.passwords.activity_analysis.PasswordAnalysisViewModel;
+import de.passwordvault.view.passwords.activity_analysis.PasswordAnalysisViewModelDeprecated;
 import de.passwordvault.view.utils.components.PasswordVaultFragment;
 
 
@@ -27,10 +27,10 @@ import de.passwordvault.view.utils.components.PasswordVaultFragment;
  * @author  Christian-2003
  * @version 3.5.2
  */
-public class PasswordAnalysisGeneralFragment extends PasswordVaultFragment<PasswordAnalysisViewModel> {
+public class PasswordAnalysisGeneralFragment extends PasswordVaultFragment<PasswordAnalysisViewModelDeprecated> {
 
     public PasswordAnalysisGeneralFragment() {
-        super(PasswordAnalysisViewModel.class, R.layout.fragment_password_analysis_general);
+        super(PasswordAnalysisViewModelDeprecated.class, R.layout.fragment_password_analysis_general);
     }
 
 
@@ -42,7 +42,7 @@ public class PasswordAnalysisGeneralFragment extends PasswordVaultFragment<Passw
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = new ViewModelProvider(requireActivity()).get(PasswordAnalysisViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(PasswordAnalysisViewModelDeprecated.class);
     }
 
 

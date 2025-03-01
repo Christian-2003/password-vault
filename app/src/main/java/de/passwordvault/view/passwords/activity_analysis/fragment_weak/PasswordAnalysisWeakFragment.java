@@ -10,7 +10,7 @@ import de.passwordvault.R;
 import de.passwordvault.model.analysis.passwords.Password;
 import de.passwordvault.view.entries.activity_entry.EntryActivity;
 import de.passwordvault.view.utils.components.PasswordVaultFragment;
-import de.passwordvault.view.passwords.activity_analysis.PasswordAnalysisViewModel;
+import de.passwordvault.view.passwords.activity_analysis.PasswordAnalysisViewModelDeprecated;
 
 
 /**
@@ -19,7 +19,7 @@ import de.passwordvault.view.passwords.activity_analysis.PasswordAnalysisViewMod
  * @author  Christian-2003
  * @version 3.7.0
  */
-public class PasswordAnalysisWeakFragment extends PasswordVaultFragment<PasswordAnalysisViewModel> {
+public class PasswordAnalysisWeakFragment extends PasswordVaultFragment<PasswordAnalysisViewModelDeprecated> {
 
     /**
      * Attribute stores the adapter for the fragment.
@@ -31,7 +31,7 @@ public class PasswordAnalysisWeakFragment extends PasswordVaultFragment<Password
      * Constructor instantiates a new fragment.
      */
     public PasswordAnalysisWeakFragment() {
-        super(PasswordAnalysisViewModel.class, R.layout.fragment_password_analysis_weak);
+        super(PasswordAnalysisViewModelDeprecated.class, R.layout.fragment_password_analysis_weak);
     }
 
 
