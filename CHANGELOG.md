@@ -14,6 +14,7 @@ n./a.
 * Change corner radii for cards in DarkmodeDialog and SwipeDialog.
 * Migrate dependency management to version catalogs with _libs.versions.toml_.
 * Change icon indicating english laguage for help pages from the United States flag to the flag of the United Kingdom.
+* Change colors indicatin good, bad, and neutral passwords.
 
 <br/>
 
