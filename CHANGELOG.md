@@ -15,6 +15,9 @@ n./a.
 * Migrate dependency management to version catalogs with _libs.versions.toml_.
 * Change icon indicating english laguage for help pages from the United States flag to the flag of the United Kingdom.
 * Change colors indicatin good, bad, and neutral passwords.
+* Change Gradle version from 7.4 to 8.7, in order to support plugin definitions in _libs.versions.toml_
+* Change `minSdk` and `compileSdk` from 32 (Android 12L) to 34 (Android 14).
+* Upgrade all dependencies to latest versions that can be used with SDK 34.
 
 <br/>
 

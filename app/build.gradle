@@ -1,15 +1,17 @@
 plugins {
-    id 'com.android.application'
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
 }
 
 android {
     namespace 'de.passwordvault'
     //noinspection GradleDependency,GradleCompatible
-    compileSdk 32
+    compileSdk 34
 
     defaultConfig {
         applicationId 'de.christian2003.passwordvault'
-        minSdk 32
+        minSdk 34
         //noinspection EditedTargetSdkVersion
         targetSdk 34
         versionCode 31
@@ -33,9 +35,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
     buildFeatures {
         viewBinding false
+        buildConfig true
     }
 }
 
@@ -47,10 +52,17 @@ dependencies {
     implementation libs.security.crypto
     implementation libs.biometric
     implementation libs.material
-    implementation libs.play.services.oss.licenses
     implementation libs.apkupdater.library
     implementation libs.flexbox
     implementation libs.gson
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
 
     testImplementation libs.junit
 
