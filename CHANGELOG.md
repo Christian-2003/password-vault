@@ -18,6 +18,8 @@ n./a.
 * Change Gradle version from 7.4 to 8.7, in order to support plugin definitions in _libs.versions.toml_
 * Change `minSdk` and `compileSdk` from 32 (Android 12L) to 34 (Android 14).
 * Upgrade all dependencies to latest versions that can be used with SDK 34.
+* Remove OSS Licenses dependency, as it was still referred from build.gradle without being used within the app.
+* Setup app to support Jetpack Compose.
 
 <br/>
 

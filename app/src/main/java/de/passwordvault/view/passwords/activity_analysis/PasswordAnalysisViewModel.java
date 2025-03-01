@@ -12,7 +12,7 @@ import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
 
 
 /**
- * Class implements a view model for the {@link PasswordAnalysisActivity}.
+ * Class implements a view model for the {@link PasswordAnalysisActivityDeprecated}.
  *
  * @author  Christian-2003
  * @version 3.5.2

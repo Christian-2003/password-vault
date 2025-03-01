@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGateManager;
 import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
-import de.passwordvault.view.passwords.activity_analysis.PasswordAnalysisActivity;
+import de.passwordvault.view.passwords.activity_analysis.PasswordAnalysisActivityDeprecated;
 import de.passwordvault.view.passwords.activity_list.PasswordAnalysisListActivity;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.view.passwords.activity_analysis.PasswordAnalysisViewModel;
@@ -122,7 +122,7 @@ public class PasswordAnalysisGeneralFragment extends PasswordVaultFragment<Passw
      */
     private void showDuplicatePasswords() {
         try {
-            PasswordAnalysisActivity activity = (PasswordAnalysisActivity)requireActivity();
+            PasswordAnalysisActivityDeprecated activity = (PasswordAnalysisActivityDeprecated)requireActivity();
             activity.showFragmentPage(2);
         }
         catch (ClassCastException e) {
@@ -136,7 +136,7 @@ public class PasswordAnalysisGeneralFragment extends PasswordVaultFragment<Passw
      */
     private void showWeakPasswords() {
         try {
-            PasswordAnalysisActivity activity = (PasswordAnalysisActivity)requireActivity();
+            PasswordAnalysisActivityDeprecated activity = (PasswordAnalysisActivityDeprecated)requireActivity();
             activity.showFragmentPage(1);
         }
         catch (ClassCastException e) {

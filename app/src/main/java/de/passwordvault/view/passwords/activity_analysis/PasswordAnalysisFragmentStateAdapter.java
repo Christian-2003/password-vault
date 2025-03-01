@@ -11,7 +11,7 @@ import de.passwordvault.view.passwords.activity_analysis.fragment_weak.PasswordA
 
 /**
  * Class implements a fragment state adapter for the fragments within the
- * {@link PasswordAnalysisActivity}.
+ * {@link PasswordAnalysisActivityDeprecated}.
  *
  * @author  Christian-2003
  * @version 3.5.2

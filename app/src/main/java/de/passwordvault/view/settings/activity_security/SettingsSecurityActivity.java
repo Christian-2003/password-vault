@@ -7,8 +7,7 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
+
 import com.google.android.material.materialswitch.MaterialSwitch;
 import de.passwordvault.R;
 import de.passwordvault.model.security.authentication.AuthenticationCallback;
@@ -17,6 +16,7 @@ import de.passwordvault.model.security.authentication.Authenticator;
 import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.storage.settings.Config;
 import de.passwordvault.view.passwords.activity_analysis.PasswordAnalysisActivity;
+import de.passwordvault.view.passwords.activity_analysis.PasswordAnalysisActivityDeprecated;
 import de.passwordvault.view.settings.activity_autofill.SettingsAutofillActivity;
 import de.passwordvault.view.settings.activity_data.SettingsDataActivity;
 import de.passwordvault.view.authentication.dialog_change_password.ChangePasswordDialog;

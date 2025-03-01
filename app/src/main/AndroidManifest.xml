@@ -39,6 +39,7 @@
         <activity android:name=".view.entries.activity_entry.EntryActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_quality_gates.QualityGatesActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_quality_gate.QualityGateActivity" android:exported="false"/>
+        <activity android:name=".view.passwords.activity_analysis.PasswordAnalysisActivityDeprecated" android:exported="false"/>
         <activity android:name=".view.passwords.activity_analysis.PasswordAnalysisActivity" android:exported="false"/>
         <activity android:name=".view.passwords.activity_list.PasswordAnalysisListActivity" android:exported="false"/>
         <activity android:name=".view.passwords.activity_duplicates.DuplicatePasswordEntriesActivity" android:exported="false"/>
