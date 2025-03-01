@@ -31,7 +31,7 @@ import de.passwordvault.view.utils.components.PasswordVaultActivity;
  * Class implements the MainActivity for this application, displaying a list of all entries.
  *
  * @author  Christian-2003
- * @version 3.7.2
+ * @version 3.7.3
  */
 public class MainActivity extends PasswordVaultActivity<MainViewModel> implements UpdateManager.UpdateStatusChangedCallback, RestCallback {
 
@@ -154,7 +154,7 @@ public class MainActivity extends PasswordVaultActivity<MainViewModel> implement
                 viewModel.setTosError(error);
             }
         }
-        if (viewModel.getTosError() != null && viewModel.getPrivacyError() != null) {
+        if (viewModel.getTosError() != null && viewModel.getPrivacyError() != null && viewModel.getTosError() == RestError.SUCCESS && viewModel.getPrivacyError() == RestError.SUCCESS) {
             SharedPreferences preferences = getSharedPreferences("settings", Context.MODE_PRIVATE);
             int privacyVersion = preferences.getInt("privacy_version", 0);
             int tosVersion = preferences.getInt("tos_version", 0);

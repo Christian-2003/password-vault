@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import de.passwordvault.model.analysis.QualityGateManager
 import de.passwordvault.model.analysis.passwords.Password
 import de.passwordvault.model.detail.DetailType
