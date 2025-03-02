@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -38,11 +39,13 @@ fun GenericTextButton(
         ) {
             Text(
                 text = title,
-                color = LocalPasswordVaultColors.current.text
+                color = LocalPasswordVaultColors.current.text,
+                style = MaterialTheme.typography.bodyLarge
             )
             Text(
                 text = description,
-                color = LocalPasswordVaultColors.current.textVariant
+                color = LocalPasswordVaultColors.current.textVariant,
+                style = MaterialTheme.typography.bodyMedium
             )
         }
     }

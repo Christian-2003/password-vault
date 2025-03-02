@@ -12,7 +12,6 @@ import de.passwordvault.model.detail.DetailType
 import de.passwordvault.model.entry.EntryExtended
 import de.passwordvault.model.entry.EntryManager
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -22,10 +21,13 @@ class PasswordAnalysisViewModel: ViewModel() {
 
     private lateinit var qualityGateManager: QualityGateManager
 
+    private var isAnalysisFinished = false
+
     var maxSecurityScore: Int? = null
 
+    var thresholdGood: Float? = null
 
-    var isAnalysisFinished: Boolean by mutableStateOf(false)
+    var thresholdNeutral: Float? = null
 
     var isAnalysisStarted: Boolean by mutableStateOf(false)
 
@@ -42,6 +44,8 @@ class PasswordAnalysisViewModel: ViewModel() {
         this.entryManager = entryManager
         this.qualityGateManager = qualityGateManager
         maxSecurityScore = qualityGateManager.numberOfQualityGates()
+        thresholdGood = maxSecurityScore!! * 0.67f
+        thresholdNeutral = maxSecurityScore!! * 0.34f
         if (!isAnalysisStarted && !isAnalysisFinished) {
             analyze()
         }
@@ -51,7 +55,6 @@ class PasswordAnalysisViewModel: ViewModel() {
     fun analyze() = viewModelScope.launch(Dispatchers.IO) {
         isAnalysisStarted = true
         isAnalysisFinished = false
-        delay(1000)
         val passwords: MutableList<Password> = mutableListOf()
         val weakPasswords: MutableList<Password> = mutableListOf()
         val identicalPasswords: MutableList<MutableList<Password>> = mutableListOf()

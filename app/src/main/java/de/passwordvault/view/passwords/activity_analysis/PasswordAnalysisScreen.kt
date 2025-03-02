@@ -4,33 +4,33 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import de.passwordvault.ui.composables.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import de.passwordvault.ui.theme.LocalPasswordVaultColors
 import de.passwordvault.R
-import de.passwordvault.ui.composables.GenericTextButton
-import de.passwordvault.ui.composables.GradientProgressBar
-import de.passwordvault.ui.composables.Headline
+import de.passwordvault.model.analysis.passwords.Password
+import kotlinx.coroutines.launch
+import kotlin.math.max
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -92,16 +92,15 @@ fun PasswordAnalysisScreen(
                 ContentSection(
                     securityScore = viewModel.securityScore,
                     maxSecurityScore = viewModel.maxSecurityScore!!,
+                    thresholdGood = viewModel.thresholdGood!!,
+                    thresholdNeutral = viewModel.thresholdNeutral!!,
                     numberOfAnalyzedPasswords = viewModel.analyzedPasswords.size,
-                    numberOfWeakPasswords = viewModel.weakPasswords.size,
                     numberOfIdenticalPasswords = viewModel.identicalPasswords.size,
                     onAnalyzedPasswordsClicked = {
 
                     },
-                    onWeakPasswordsClicked = {
-
-                    },
-                    onIdenticalPasswordsClicked = {
+                    weakPasswords = viewModel.weakPasswords,
+                    onPasswordClicked = { password ->
 
                     }
                 )
@@ -126,83 +125,93 @@ private fun LoadingSection() {
 private fun ContentSection(
     securityScore: Double,
     maxSecurityScore: Int,
+    thresholdGood: Float,
+    thresholdNeutral: Float,
     numberOfAnalyzedPasswords: Int,
-    numberOfWeakPasswords: Int,
     numberOfIdenticalPasswords: Int,
     onAnalyzedPasswordsClicked: () -> Unit,
-    onWeakPasswordsClicked: () -> Unit,
-    onIdenticalPasswordsClicked: () -> Unit
+    weakPasswords: List<Password>,
+    onPasswordClicked: (Password) -> Unit
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-    ) {
-        Headline(title = stringResource(R.string.password_results_general_title))
-        Text(
-            text = stringResource(R.string.password_results_general_average_score),
-            color = LocalPasswordVaultColors.current.text,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    horizontal = dimensionResource(R.dimen.space_horizontal),
-                    vertical = dimensionResource(R.dimen.space_vertical)
-                )
-        )
-        Text(
-            text = stringResource(R.string.password_results_general_average_score_display)
-                .replace("{arg}", "" + securityScore)
-                .replace("{max}", "" + maxSecurityScore),
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier
-                .clip(RoundedCornerShape(dimensionResource(R.dimen.corner_l)))
-                .background(LocalPasswordVaultColors.current.backgroundContainer)
-                .padding(
-                    horizontal = dimensionResource(R.dimen.space_horizontal),
-                    vertical = dimensionResource(R.dimen.space_vertical)
-                )
-        )
-        GradientProgressBar(
-            progress = securityScore.toFloat() / maxSecurityScore,
-            colors = listOf(
-                LocalPasswordVaultColors.current.red,
-                LocalPasswordVaultColors.current.yellow,
-                LocalPasswordVaultColors.current.green
-            ),
-            modifier = Modifier.padding(
-                horizontal = dimensionResource(R.dimen.space_horizontal),
-                vertical = dimensionResource(R.dimen.space_vertical)
+    val pagerState = rememberPagerState(pageCount = { 3 })
+    val scope = rememberCoroutineScope()
+
+    TabRow(
+        selectedTabIndex = pagerState.currentPage,
+        containerColor = LocalPasswordVaultColors.current.backgroundAppBar,
+        indicator = { tabPositions ->
+            TabRowDefaults.PrimaryIndicator(
+                modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage])
             )
-        )
-        GenericTextButton(
-            title = stringResource(R.string.password_results_general_analyzed),
-            description = if (numberOfAnalyzedPasswords == 1) {
-                    stringResource(R.string.password_results_general_analyzed_hint_singular).replace("{arg}","" + numberOfAnalyzedPasswords)
-                } else {
-                    stringResource(R.string.password_results_general_analyzed_hint).replace("{arg}","" + numberOfAnalyzedPasswords)
+        },
+        tabs = {
+            Tab(
+                title = stringResource(R.string.password_analysis_menu_general),
+                index = 0,
+                selectedIndex = pagerState.currentPage,
+                onClick = {
+                    scope.launch {
+                        pagerState.animateScrollToPage(it)
+                    }
+                }
+            )
+            Tab(
+                title = stringResource(R.string.password_analysis_menu_weak),
+                index = 1,
+                selectedIndex = pagerState.currentPage,
+                onClick = {
+                    scope.launch {
+                        pagerState.animateScrollToPage(it)
+                    }
+                }
+            )
+            Tab(
+                title = stringResource(R.string.password_analysis_menu_duplicates),
+                index = 2,
+                selectedIndex = pagerState.currentPage,
+                onClick = {
+                    scope.launch {
+                        pagerState.animateScrollToPage(it)
+                    }
+                }
+            )
+        }
+    )
+    HorizontalPager(
+        state = pagerState,
+        modifier = Modifier.fillMaxSize()
+    ) { page ->
+        when (page) {
+            0 -> GeneralTab(
+                securityScore = securityScore,
+                maxSecurityScore = maxSecurityScore,
+                thresholdGood = thresholdGood,
+                thresholdNeutral = thresholdNeutral,
+                numberOfAnalyzedPasswords = numberOfAnalyzedPasswords,
+                numberOfWeakPasswords = weakPasswords.size,
+                numberOfIdenticalPasswords = numberOfIdenticalPasswords,
+                onAnalyzedPasswordsClicked = {
+
                 },
-            onClick = onAnalyzedPasswordsClicked
-        )
-        HorizontalDivider()
-        Headline(title = stringResource(R.string.password_results_general_problems))
-        GenericTextButton(
-            title = stringResource(R.string.password_results_general_duplicates),
-            description = if (numberOfIdenticalPasswords == 1) {
-                stringResource(R.string.password_results_general_duplicates_hint_singular).replace("{arg}","" + numberOfIdenticalPasswords)
-            } else {
-                stringResource(R.string.password_results_general_duplicates_hint).replace("{arg}","" + numberOfIdenticalPasswords)
-            },
-            onClick = onIdenticalPasswordsClicked
-        )
-        GenericTextButton(
-            title = stringResource(R.string.password_results_general_weak),
-            description = if (numberOfWeakPasswords == 1) {
-                stringResource(R.string.password_results_general_weak_hint_singular).replace("{arg}","" + numberOfWeakPasswords)
-            } else {
-                stringResource(R.string.password_results_general_weak_hint).replace("{arg}","" + numberOfWeakPasswords)
-            },
-            onClick = onWeakPasswordsClicked
-        )
+                onWeakPasswordsClicked = {
+                    scope.launch {
+                        pagerState.animateScrollToPage(1)
+                    }
+                },
+                onIdenticalPasswordsClicked = {
+                    scope.launch {
+                        pagerState.animateScrollToPage(2)
+                    }
+                }
+            )
+            1 -> WeakPasswordsTab(
+                weakPasswords = weakPasswords,
+                onWeakPasswordClicked = onPasswordClicked,
+                thresholdGood = thresholdGood,
+                thresholdNeutral = thresholdNeutral,
+                maxSecurityScore = maxSecurityScore
+            )
+            2 -> IdenticalPasswordsTab()
+        }
     }
 }
