@@ -22,6 +22,7 @@ import de.passwordvault.ui.composables.GenericTextButton
 import de.passwordvault.ui.composables.GradientProgressBar
 import de.passwordvault.ui.composables.Headline
 import de.passwordvault.ui.theme.LocalPasswordVaultColors
+import de.passwordvault.view.utils.Utils
 
 
 @Composable
@@ -56,7 +57,7 @@ fun GeneralTab(
         )
         Text(
             text = stringResource(R.string.password_results_general_average_score_display)
-                .replace("{arg}", "" + securityScore)
+                .replace("{arg}", "" + Utils.formatNumber(securityScore))
                 .replace("{max}", "" + maxSecurityScore),
             fontWeight = FontWeight.Bold,
             color = if (securityScore > thresholdGood) {
