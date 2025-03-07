@@ -32,6 +32,13 @@ import de.passwordvault.model.entry.EntryAbbreviated
 import kotlinx.coroutines.launch
 
 
+/**
+ * Composable displays the screen for the password security analysis.
+ *
+ * @param viewModel         View model for the screen.
+ * @param onNavigateUp      Callback invoked to navigate up on the navigation stack.
+ * @param onNavigateToEntry Callback invoked to navigate to the entry of the specified UUID.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PasswordAnalysisScreen(
@@ -110,6 +117,9 @@ fun PasswordAnalysisScreen(
 }
 
 
+/**
+ * Composable displays the loading section while passwords are being analyzed.
+ */
 @Composable
 private fun LoadingSection() {
     Box(
@@ -121,6 +131,19 @@ private fun LoadingSection() {
 }
 
 
+/**
+ * Composable displays the content section after passwords have been loaded.
+ *
+ * @param securityScore                 Average security score.
+ * @param maxSecurityScore              Max possible security score.
+ * @param thresholdGood                 Threshold with which a password is considered 'good'.
+ * @param thresholdNeutral              Threshold with which a password is considered 'neutral'.
+ * @param numberOfIdenticalPasswords    Number of identical passwords.
+ * @param weakPasswords                 List of weak passwords.
+ * @param identicalPasswords            List of identical passwords.
+ * @param onPasswordClicked             Callback invoked once a password is clicked.
+ * @param onEntryClicked                Callback invoked once an entry is clicked.
+ */
 @Composable
 private fun ContentSection(
     securityScore: Double,

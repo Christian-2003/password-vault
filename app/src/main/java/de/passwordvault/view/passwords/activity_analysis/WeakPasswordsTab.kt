@@ -40,6 +40,15 @@ import de.passwordvault.ui.theme.LocalPasswordVaultColors
 import de.passwordvault.view.utils.Utils
 
 
+/**
+ * Composable displays the tab containing a list of all weak passwords.
+ *
+ * @param weakPasswords         List of weak passwords.
+ * @param onWeakPasswordClicked Callback invoked once a weak password is clicked.
+ * @param thresholdGood         Threshold with which a password is considered 'good'.
+ * @param thresholdNeutral      Threshold with which a password is considered 'neutral'.
+ * @param maxSecurityScore      Max possible security score.
+ */
 @Composable
 fun WeakPasswordsTab(
     weakPasswords: List<AnalyzedPassword>,
@@ -79,6 +88,15 @@ fun WeakPasswordsTab(
 }
 
 
+/**
+ * Composable displays a single password.
+ *
+ * @param password          Password to display.
+ * @param onClick           Callback invoked once the password is clicked.
+ * @param thresholdGood     Threshold with which a password is considered 'good'.
+ * @param thresholdNeutral  Threshold with which a password is considered 'neutral'.
+ * @param maxSecurityScore  Max possible security score.
+ */
 @Composable
 private fun PasswordListRow(
     password: AnalyzedPassword,

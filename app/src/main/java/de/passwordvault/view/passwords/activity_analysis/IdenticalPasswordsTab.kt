@@ -18,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -33,6 +32,12 @@ import de.passwordvault.ui.theme.LocalPasswordVaultColors
 import de.passwordvault.view.utils.Utils
 
 
+/**
+ * Composable displays the tab which contains a list of all identical passwords.
+ *
+ * @param identicalPasswords    List of identical passwords.
+ * @param onEntryClicked        Callback invoked once an entry is clicked.
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun IdenticalPasswordsTab(
@@ -74,6 +79,11 @@ fun IdenticalPasswordsTab(
 }
 
 
+/**
+ * Composable displays a sticky group header.
+ *
+ * @param group Group for which to display the sticky header.
+ */
 @Composable
 private fun GroupHeader(
     group: List<AnalyzedPassword>

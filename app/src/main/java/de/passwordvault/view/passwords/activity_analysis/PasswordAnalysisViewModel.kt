@@ -15,31 +15,76 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
+/**
+ * Class implements the view model for the screen displaying the password security analysis.
+ *
+ * @author  Christian-2003
+ * @since   3.7.3
+ */
 class PasswordAnalysisViewModel: ViewModel() {
 
+    /**
+     * Stores the entry manager.
+     */
     private lateinit var entryManager: EntryManager
 
+    /**
+     * Stores the quality gate manager.
+     */
     private lateinit var qualityGateManager: QualityGateManager
 
+    /**
+     * Stores whether the analysis has finished.
+     */
     private var isAnalysisFinished = false
 
+    /**
+     * Stores the max security score that is possible.
+     */
     var maxSecurityScore: Int? = null
 
+    /**
+     * Stores the threshold with which a password is considered 'good'.
+     */
     var thresholdGood: Float? = null
 
+    /**
+     * Stores the threshold with which a password is considered 'neutral'.
+     */
     var thresholdNeutral: Float? = null
 
+    /**
+     * Stores whether the analysis has started.
+     */
     var isAnalysisStarted: Boolean by mutableStateOf(false)
 
+    /**
+     * Stores the average security score.
+     */
     var securityScore: Double by mutableDoubleStateOf(0.0)
 
+    /**
+     * Stores the list of analyzed passwords.
+     */
     var analyzedPasswords: List<AnalyzedPassword> = emptyList()
 
+    /**
+     * Stores the list of weak passwords.
+     */
     var weakPasswords: List<AnalyzedPassword> = emptyList()
 
+    /**
+     * Stores the list of identical passwords.
+     */
     var identicalPasswords: List<List<AnalyzedPassword>> = emptyList()
 
 
+    /**
+     * Initializes the view model.
+     *
+     * @param entryManager          Entry manager.
+     * @param qualityGateManager    Quality gate manager.
+     */
     fun init(entryManager: EntryManager, qualityGateManager: QualityGateManager) {
         this.entryManager = entryManager
         this.qualityGateManager = qualityGateManager
@@ -52,6 +97,9 @@ class PasswordAnalysisViewModel: ViewModel() {
     }
 
 
+    /**
+     * Method analyzes the password security.
+     */
     fun analyze() = viewModelScope.launch(Dispatchers.IO) {
         isAnalysisStarted = true
         isAnalysisFinished = false

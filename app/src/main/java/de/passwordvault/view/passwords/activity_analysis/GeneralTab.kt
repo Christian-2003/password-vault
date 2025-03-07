@@ -25,6 +25,21 @@ import de.passwordvault.ui.theme.LocalPasswordVaultColors
 import de.passwordvault.view.utils.Utils
 
 
+/**
+ * Composable displays the tab which informs the user about the general results of the password
+ * analysis, like the average security score as well as important vulnerabilities.
+ *
+ * @param securityScore                 Average security score.
+ * @param maxSecurityScore              Max possible security score.
+ * @param thresholdGood                 Threshold with which a security score is considered 'good'.
+ * @param thresholdNeutral              Threshold with which a security score is considered 'neutral'.
+ * @param numberOfWeakPasswords         Number of weak passwords.
+ * @param numberOfIdenticalPasswords    Number of identical passwords.
+ * @param onWeakPasswordsClicked        Callback invoked once the button displaying weak passwords
+ *                                      is clicked.
+ * @param onIdenticalPasswordsClicked   Callback invoked once the button displaying identical
+ *                                      passwords is clicked.
+ */
 @Composable
 fun GeneralTab(
     securityScore: Double,

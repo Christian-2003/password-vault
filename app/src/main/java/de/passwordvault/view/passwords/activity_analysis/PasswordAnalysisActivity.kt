@@ -11,8 +11,19 @@ import de.passwordvault.ui.theme.PasswordVaultTheme
 import de.passwordvault.view.entries.activity_entry.EntryActivity
 
 
+/**
+ * Class implements the activity displaying a list of weak passwords.
+ *
+ * @author  Christian-2003
+ * @since   3.7.3
+ */
 class PasswordAnalysisActivity: ComponentActivity() {
 
+    /**
+     * Method is called once the activity is created.
+     *
+     * @param savedInstanceState    Previously saved state of the instance.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
