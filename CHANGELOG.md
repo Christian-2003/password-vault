@@ -2,9 +2,9 @@
 
 # Changelog
 
-## 3.7.3 (XXXX-XX-XX)
+## 3.7.3 (2025-03-07)
 ###### Release Highlights
-n./a.
+Increased minimum required version from SDK 32 (Android 12L) to SDK 34 (Android 14). Furthermore, the update focuses on Bugfixes and begins migration to Jetpack Compose.
 
 ###### Features
 * Fixed a bug where the app storage size was not calculated correctly resulting in a negative storage used.
