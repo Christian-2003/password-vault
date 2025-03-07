@@ -28,6 +28,12 @@ import de.passwordvault.model.entry.EntryAbbreviated
 import de.passwordvault.ui.theme.LocalPasswordVaultColors
 
 
+/**
+ * Composable displays an (abbreviated) entry.
+ *
+ * @param entry     Entry to display.
+ * @param onClick   Callback invoked once the entry is clicked.
+ */
 @Composable
 fun EntryListRow(
     entry: EntryAbbreviated,

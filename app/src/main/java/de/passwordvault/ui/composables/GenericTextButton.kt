@@ -14,6 +14,14 @@ import de.passwordvault.ui.theme.LocalPasswordVaultColors
 import de.passwordvault.R
 
 
+/**
+ * Composable displays a generic text button.
+ *
+ * @param title         Title for the button.
+ * @param description   Description for the button.
+ * @param modifier      Modifier.
+ * @param onClick       Callback invoked once the button is clicked.
+ */
 @Composable
 fun GenericTextButton(
     title: String,

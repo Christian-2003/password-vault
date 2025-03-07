@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +16,14 @@ import de.passwordvault.ui.theme.LocalPasswordVaultColors
 import de.passwordvault.R
 
 
+/**
+ * Composable displays an empty placeholder.
+ *
+ * @param title     Title for the empty placeholder.
+ * @param text      Text for the empty placeholder.
+ * @param painter   Painter for the icon of the empty placeholder.
+ * @param modifier  Modifier.
+ */
 @Composable
 fun EmptyPlaceholder(
     title: String,
