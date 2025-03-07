@@ -56,7 +56,7 @@ guidelines.
 
     <!-- Text within info boxes -->
     <style name="text.warning" parent="text.info">
-        <item name="android:textColor">@color/text_critical</item>
+        <item name="android:textColor">@color/text_warning</item>
     </style>
 
     <!-- Searchbar text -->
@@ -102,7 +102,7 @@ guidelines.
 
     <!-- Style for buttons used with "Searching for something different" -->
     <style name="button.warning" parent="Widget.Material3.Button.TextButton">
-        <item name="android:textColor">@color/text_warning</item>
+        <item name="android:textColor">@color/text_warning_interactive</item>
         <item name="rippleColor">@color/text_warning_translucent</item>
     </style>
 
@@ -262,6 +262,11 @@ guidelines.
         <item name="android:backgroundTint">@color/background_container</item>
         <item name="android:paddingHorizontal">@dimen/space_horizontal</item>
         <item name="android:paddingVertical">@dimen/space_vertical</item>
+    </style>
+
+    <!-- Styles for cards -->
+    <style name="card.small" parent="card">
+        <item name="android:background">@drawable/background_small</item>
     </style>
 
     <!-- Styles for warning cards -->

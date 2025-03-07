@@ -1,19 +1,22 @@
 plugins {
-    id 'com.android.application'
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
     namespace 'de.passwordvault'
     //noinspection GradleDependency,GradleCompatible
-    compileSdk 32
+    compileSdk 34
 
     defaultConfig {
         applicationId 'de.christian2003.passwordvault'
-        minSdk 32
+        minSdk 34
         //noinspection EditedTargetSdkVersion
         targetSdk 34
-        versionCode 29
-        versionName '3.7.2'
+        versionCode 33
+        versionName '3.7.3'
         setProperty('archivesBaseName', 'password-vault-v' + versionName)
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
@@ -33,31 +36,47 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
     buildFeatures {
         viewBinding false
+        buildConfig true
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
 }
 
 dependencies {
-    //noinspection GradleDependency
-    implementation 'androidx.appcompat:appcompat:1.5.1' //Use of older version to compile for Android SDK 32
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.core:core-splashscreen:1.0.1'
-    //noinspection GradleDependency
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
-    implementation 'androidx.security:security-crypto:1.0.0'
-    implementation 'androidx.biometric:biometric:1.1.0'
-    //noinspection GradleDependency
-    implementation 'com.google.android.material:material:1.9.0' //Use of older version to compile for Android SDK 32
-    implementation 'com.google.android.gms:play-services-oss-licenses:17.1.0'
-    implementation 'com.github.supersu-man:apkupdater-library:v2.1.0'
-    implementation 'com.google.android.flexbox:flexbox:3.0.0'
-    implementation 'com.google.code.gson:gson:2.11.0'
+    implementation libs.appcompat
+    implementation libs.constraintlayout
+    implementation libs.core.splashscreen
+    implementation libs.lifecycle.viewmodel.ktx
+    implementation libs.security.crypto
+    implementation libs.biometric
+    implementation libs.material
+    implementation libs.apkupdater.library
+    implementation libs.flexbox
+    implementation libs.gson
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.accompanist.pager)
 
-    testImplementation 'junit:junit:4.13.2'
-    //noinspection GradleDependency
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    //noinspection GradleDependency
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    testImplementation libs.junit
+
+    androidTestImplementation libs.ext.junit
+    androidTestImplementation libs.espresso.core
 }

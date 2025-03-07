@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import de.passwordvault.R;
-import de.passwordvault.model.analysis.passwords.PasswordSecurityAnalysis;
 import de.passwordvault.model.detail.Detail;
 import de.passwordvault.model.detail.DetailType;
 import de.passwordvault.model.entry.EntryExtended;

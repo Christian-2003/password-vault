@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
     <!-- Formats -->
     <string name="date_format">MM/dd/yyyy</string>
@@ -230,6 +230,7 @@
     <string name="password_analysis_hint">Passwords are being analyzed. This might take some time, please be patient.</string>
     <string name="password_results_general_title">General</string>
     <string name="password_results_general_average_score">Average security score</string>
+    <string name="password_results_general_average_score_display">{arg} / {max}</string>
     <string name="password_results_general_duplicates">Duplicate Passwords</string>
     <string name="password_results_general_duplicates_hint">Show {arg} duplicate passwords</string>
     <string name="password_results_general_duplicates_hint_singular">Show {arg} duplicate password</string>

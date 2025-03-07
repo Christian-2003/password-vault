@@ -7,8 +7,7 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
+
 import com.google.android.material.materialswitch.MaterialSwitch;
 import de.passwordvault.R;
 import de.passwordvault.model.security.authentication.AuthenticationCallback;

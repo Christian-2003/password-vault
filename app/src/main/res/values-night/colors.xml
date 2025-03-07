@@ -14,14 +14,15 @@
     <color name="text">#E3E2E7</color>
     <color name="text_light">#C4C7D0</color>
     <color name="text_critical">#FFB4AB</color>
-    <color name="text_warning">#FFD8AD</color>
+    <color name="text_warning">#E6C6A8</color>
+    <color name="text_warning_interactive">#FFD8AD</color>
     <color name="text_warning_translucent">#33FFD8AD</color>
     <color name="text_on_primary">#FAFAFA</color>
     <color name="divider">#454746</color>
 
-    <color name="red">#A7292F</color>
-    <color name="yellow">#A7A129</color>
-    <color name="green">#6EA729</color>
+    <color name="red">#eb928e</color>
+    <color name="yellow">#fcbd00</color>
+    <color name="green">#6ed58c</color>
 
     <!-- Light / dark variants needed for dialog to switch darkmode -->
     <color name="light_background">#FAF9FE</color>

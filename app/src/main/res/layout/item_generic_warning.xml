@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:text="A new app version is available to download and install. We recommend to download and install the new version as soon as possible to ensure maximum security."
-        style="@style/text.info"/>
+        style="@style/text.warning"/>
 
     <com.google.android.flexbox.FlexboxLayout
         android:layout_width="match_parent"

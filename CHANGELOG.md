@@ -2,6 +2,30 @@
 
 # Changelog
 
+## 3.7.3 (2025-03-07)
+###### Release Highlights
+Increased minimum required version from SDK 32 (Android 12L) to SDK 34 (Android 14). Furthermore, the update focuses on Bugfixes and begins migration to Jetpack Compose.
+
+###### Features
+* Fixed a bug where the app storage size was not calculated correctly resulting in a negative storage used.
+* Change the text color for the warning container displaying that a new version is available to download.
+* Change text color for button through which to delete accounts.
+* Change text color for button to delete items in DeleteDialog. This better indicates the irreversible action the user is about to take.
+* Change corner radii for cards in DarkmodeDialog and SwipeDialog.
+* Migrate dependency management to version catalogs with _libs.versions.toml_.
+* Change icon indicating english laguage for help pages from the United States flag to the flag of the United Kingdom.
+* Change colors indicatin good, bad, and neutral passwords.
+* Change Gradle version from 7.4 to 8.7, in order to support plugin definitions in _libs.versions.toml_
+* Change `minSdk` and `compileSdk` from 32 (Android 12L) to 34 (Android 14).
+* Upgrade all dependencies to latest versions that can be used with SDK 34.
+* Remove OSS Licenses dependency, as it was still referred from build.gradle without being used within the app.
+* Setup app to support Jetpack Compose.
+* Fix bug which caused the app to crash on startup if no internet was available.
+* Migrate activity displaying analyzed passwords to Jetpack Compose.
+* Change tab displaying weak passwords in `PasswordAnalysisActivity` to use sticky headers.
+
+<br/>
+
 ## 3.7.2 (2025-02-08)
 ###### Release Highlights
 Introduction of new online help and legal pages that are accessed through a REST-API from the app, as well as bugfixes and minor performance improvements.

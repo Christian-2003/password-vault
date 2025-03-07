@@ -5,6 +5,7 @@ Password Vault contains some limited (and optional) features that make the app i
 
 ###### Table of Contents
 1. [App Links](#app-links)
+2. [Help and Legal Pages](#help-and-legal-pages)
 
 <br/>
 
@@ -32,6 +33,88 @@ This file must contain the following code:
 
 <br/>
 
+## Help and Legal Pages
+The app accesses a REST API to get information about available help and legal pages in different languages.
+
+###### Help Pages
+The REST endpoint to get information about help pages is available at the following URL [https://api.passwordvault.christian2003.de/rest/help.json](https://api.passwordvault.christian2003.de/rest/help.json).
+
+This file must contain the following code:
+```json
+{
+  "version": 1,
+  "tutorials": [
+    {
+      "pages": [
+        {
+          "lang": "en",
+          "title": "Quickstart Guide",
+          "url": "https://passwordvault.christian2003.de/en/blog/quickstart/"
+        },
+        {
+          "lang": "de",
+          "title": "Schnellstart",
+          "url": "https://passwordvault.christian2003.de/de/blog/quickstart/"
+        }
+      ]
+    },
+    //Put other help pages into this array.
+  ]
+}
+```
+
+###### Terms of Service
+The REST endpoint to get information about the terms of service is available at the following URL [https://api.passwordvault.christian2003.de/rest/tos.json](https://api.passwordvault.christian2003.de/rest/tos.json).
+
+This file must contain the following code:
+```json
+{
+  "version": 3,
+  "valid": "2025-02-08",
+  "pages": [
+    {
+      "lang": "en",
+      "title": "Terms of Service",
+      "url": "https://passwordvault.christian2003.de/en/legal/tos/"
+    },
+    {
+      "lang": "de",
+      "title": "Nutzungsbedingungen",
+      "url": "https://passwordvault.christian2003.de/de/legal/tos/"
+    }
+  ]
+}
+```
+
+If the version code is incremented, the user is notified about changes to the terms of service.
+
+###### Privacy Policy
+The REST endpoint to get information about the privacy policy is available at the following URL [https://api.passwordvault.christian2003.de/rest/privacy.json](https://api.passwordvault.christian2003.de/rest/privacy.json).
+
+This file must contain the following code:
+```json
+{
+  "version": 3,
+  "valid": "2025-02-08",
+  "pages": [
+    {
+      "lang": "en",
+      "title": "Privacy Policy",
+      "url": "https://passwordvault.christian2003.de/en/legal/privacy/"
+    },
+    {
+      "lang": "de",
+      "title": "Datenschutzerklärung",
+      "url": "https://passwordvault.christian2003.de/de/legal/privacy/"
+    }
+  ]
+}
+```
+
+If the version code is incremented, the user is notified about changes to the privacy policy.
+
+<br/>
+
 ***
-2024-12-04  
+2025-02-18  
 &copy; Christian-2003

@@ -29,24 +29,24 @@ import de.passwordvault.view.utils.Utils;
  * Class implements the view model for the {@link SettingsDataActivity}.
  *
  * @author  Christian-2003
- * @version 3.7.1
+ * @version 3.7.3
  */
 public class SettingsDataViewModel extends ViewModel {
 
     /**
      * Attribute stores the total space used by the app on all volumes.
      */
-    private double totalAppSpace;
+    private long appBytes;
 
     /**
      * Attribute stores the total space used by the app for it's data on all volumes.
      */
-    private double totalDataSpace;
+    private long dataBytes;
 
     /**
      * Attribute stores the total space used by the app for it's caches on all volumes.
      */
-    private double totalCacheSpace;
+    private long cacheBytes;
 
     /**
      * Attribute indicates whether the storage spaces have been calculated yet.
@@ -58,9 +58,9 @@ public class SettingsDataViewModel extends ViewModel {
      * Constructor instantiates a new view model.
      */
     public SettingsDataViewModel() {
-        totalAppSpace = 0;
-        totalDataSpace = 0;
-        totalCacheSpace = 0;
+        appBytes = 0;
+        dataBytes = 0;
+        cacheBytes = 0;
         calculatedDiskSpaces = false;
     }
 
@@ -81,26 +81,31 @@ public class SettingsDataViewModel extends ViewModel {
         StorageStatsManager storageStatsManager = (StorageStatsManager)context.getSystemService(Context.STORAGE_STATS_SERVICE);
         List<StorageVolume> storageVolumes = storageManager.getStorageVolumes();
         UserHandle user = Process.myUserHandle();
-        long appBytes = 0;
-        long dataBytes = 0;
-        long cacheBytes = 0;
+        appBytes = 0;
+        dataBytes = 0;
+        cacheBytes = 0;
         for (StorageVolume storageVolume : storageVolumes) {
             UUID storageVolumeUuid = storageVolume.getStorageUuid();
             if (storageVolumeUuid != null) {
                 try {
                     StorageStats stats = storageStatsManager.queryStatsForPackage(storageVolumeUuid, context.getPackageName(), user);
-                    appBytes += stats.getAppBytes();
-                    dataBytes += stats.getDataBytes();
-                    cacheBytes += stats.getCacheBytes();
+                    long volumeAppBytes = stats.getAppBytes();
+                    long volumeDateBytes = stats.getDataBytes();
+                    long volumeCacheBytes = stats.getCacheBytes();
+
+                    appBytes += volumeAppBytes < 0 ? -volumeAppBytes : volumeAppBytes;
+                    dataBytes += volumeDateBytes < 0 ? -volumeDateBytes : volumeDateBytes;
+                    cacheBytes += volumeCacheBytes < 0 ? -volumeCacheBytes : volumeCacheBytes;
                 }
                 catch (IOException | PackageManager.NameNotFoundException e) {
                     continue;
                 }
             }
         }
-        totalAppSpace = appBytes / 1024.0 / 1024;
-        totalDataSpace = (appBytes - dataBytes) / 1024.0 / 1024;
-        totalCacheSpace = cacheBytes / 1024.0 / 1024;
+        dataBytes = dataBytes - cacheBytes;
+        if (dataBytes < 0) {
+            dataBytes = -dataBytes;
+        }
         calculatedDiskSpaces = true;
     }
 
@@ -153,8 +158,8 @@ public class SettingsDataViewModel extends ViewModel {
      *
      * @return  Total space used by the app.
      */
-    public double getTotalAppSpace() {
-        return totalAppSpace;
+    public long getAppBytes() {
+        return appBytes;
     }
 
     /**
@@ -162,8 +167,8 @@ public class SettingsDataViewModel extends ViewModel {
      *
      * @return  Spaced used to store app data.
      */
-    public double getTotalDataSpace() {
-        return totalDataSpace;
+    public long getDataBytes() {
+        return dataBytes;
     }
 
     /**
@@ -171,8 +176,8 @@ public class SettingsDataViewModel extends ViewModel {
      *
      * @return  Space used to store cache data.
      */
-    public double getTotalCacheSpace() {
-        return totalCacheSpace;
+    public long getCacheBytes() {
+        return cacheBytes;
     }
 
 
@@ -181,12 +186,21 @@ public class SettingsDataViewModel extends ViewModel {
      *
      * @param placeholder   Placeholder in which to replace {@code {unit}} and {@code {space}} with
      *                      the specified unit and space.
-     * @param space         Space used to format (e.g. {@code 19300.12}).
-     * @param unit          Unit used to format (e.g. {@code MB}).
+     * @param bytes         Space used to format (e.g. {@code 19300}).
      * @return              Formatted string.
      */
-    public String formatStorageSpace(String placeholder, double space, String unit) {
+    public String formatStorageSpace(String placeholder, long bytes) {
         String formatted = placeholder;
+        String unit = "B";
+        double space = bytes;
+        if (space >= 1024) {
+            unit = "KB";
+            space /= 1024;
+            if (space >= 1024) {
+                unit = "MB";
+                space /= 1024;
+            }
+        }
         formatted = formatted.replace("{unit}", unit);
         formatted = formatted.replace("{space}", Utils.formatNumber(space));
         return formatted;
