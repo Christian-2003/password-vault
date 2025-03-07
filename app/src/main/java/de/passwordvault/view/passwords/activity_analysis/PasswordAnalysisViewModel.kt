@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.passwordvault.model.analysis.QualityGateManager
+import de.passwordvault.model.analysis.passwords.AnalyzedPassword
 import de.passwordvault.model.analysis.passwords.Password
 import de.passwordvault.model.detail.DetailType
 import de.passwordvault.model.entry.EntryExtended
@@ -33,11 +34,11 @@ class PasswordAnalysisViewModel: ViewModel() {
 
     var securityScore: Double by mutableDoubleStateOf(0.0)
 
-    var analyzedPasswords: List<Password> = emptyList()
+    var analyzedPasswords: List<AnalyzedPassword> = emptyList()
 
-    var weakPasswords: List<Password> = emptyList()
+    var weakPasswords: List<AnalyzedPassword> = emptyList()
 
-    var identicalPasswords: List<List<Password>> = emptyList()
+    var identicalPasswords: List<List<AnalyzedPassword>> = emptyList()
 
 
     fun init(entryManager: EntryManager, qualityGateManager: QualityGateManager) {
@@ -55,9 +56,9 @@ class PasswordAnalysisViewModel: ViewModel() {
     fun analyze() = viewModelScope.launch(Dispatchers.IO) {
         isAnalysisStarted = true
         isAnalysisFinished = false
-        val passwords: MutableList<Password> = mutableListOf()
-        val weakPasswords: MutableList<Password> = mutableListOf()
-        val identicalPasswords: MutableList<MutableList<Password>> = mutableListOf()
+        val passwords: MutableList<AnalyzedPassword> = mutableListOf()
+        val weakPasswords: MutableList<AnalyzedPassword> = mutableListOf()
+        val identicalPasswords: MutableList<MutableList<AnalyzedPassword>> = mutableListOf()
         var securityScore = 0.0
         val requiredQualityGates: Int = Math.round(qualityGateManager.numberOfQualityGates().toDouble() * 0.5).toInt()
 
@@ -66,21 +67,22 @@ class PasswordAnalysisViewModel: ViewModel() {
             val extended: EntryExtended? = entryManager.get(abbreviated.uuid, false)
             extended?.details?.forEach { detail ->
                 if (detail.type == DetailType.PASSWORD) {
-                    passwords.add(Password(detail.content, extended.uuid, extended.name))
+                    val passwordSecurityScore: Int = qualityGateManager.calculatePassedQualityGates(detail.content)
+                    passwords.add(AnalyzedPassword(passwordSecurityScore, detail.content, abbreviated))
                 }
             }
         }
 
         //Security analysis:
         for (i in 0..<passwords.size) {
-            val password: Password = passwords[i]
+            val password: AnalyzedPassword = passwords[i]
             securityScore += password.securityScore
             for (j in (i + 1)..<passwords.size) {
-                val comparedPassword: Password = passwords[j]
-                if (password.cleartextPassword.equals(comparedPassword.cleartextPassword)) {
+                val comparedPassword: AnalyzedPassword = passwords[j]
+                if (password.password.equals(comparedPassword.password)) {
                     var passwordFound = false
                     identicalPasswords.forEach { identicalPasswordsGroup ->
-                        if (identicalPasswordsGroup[0].cleartextPassword.equals(password.cleartextPassword)) {
+                        if (identicalPasswordsGroup[0].password.equals(password.password)) {
                             if (!identicalPasswordsGroup.contains(comparedPassword)) {
                                 identicalPasswordsGroup.add(comparedPassword)
                             }
@@ -89,7 +91,7 @@ class PasswordAnalysisViewModel: ViewModel() {
                         }
                     }
                     if (!passwordFound) {
-                        val identicalPasswordGroup: MutableList<Password> = mutableListOf()
+                        val identicalPasswordGroup: MutableList<AnalyzedPassword> = mutableListOf()
                         identicalPasswordGroup.add(password)
                         identicalPasswordGroup.add(comparedPassword)
                         identicalPasswords.add(identicalPasswordGroup)

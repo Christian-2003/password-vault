@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import de.passwordvault.ui.theme.LocalPasswordVaultColors
 import de.passwordvault.R
+import de.passwordvault.model.analysis.passwords.AnalyzedPassword
 import de.passwordvault.model.analysis.passwords.Password
 import kotlinx.coroutines.launch
 
@@ -100,7 +101,7 @@ fun PasswordAnalysisScreen(
                     },
                     weakPasswords = viewModel.weakPasswords,
                     onPasswordClicked = { password ->
-                        onNavigateToEntry(password.entryUuid)
+                        onNavigateToEntry(password.entry.uuid)
                     }
                 )
             }
@@ -129,8 +130,8 @@ private fun ContentSection(
     numberOfAnalyzedPasswords: Int,
     numberOfIdenticalPasswords: Int,
     onAnalyzedPasswordsClicked: () -> Unit,
-    weakPasswords: List<Password>,
-    onPasswordClicked: (Password) -> Unit
+    weakPasswords: List<AnalyzedPassword>,
+    onPasswordClicked: (AnalyzedPassword) -> Unit
 ) {
     val pagerState = rememberPagerState(pageCount = { 3 })
     val scope = rememberCoroutineScope()
@@ -138,6 +139,7 @@ private fun ContentSection(
     TabRow(
         selectedTabIndex = pagerState.currentPage,
         containerColor = LocalPasswordVaultColors.current.backgroundAppBar,
+        divider = {},
         indicator = { tabPositions ->
             TabRowDefaults.PrimaryIndicator(
                 modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage])
