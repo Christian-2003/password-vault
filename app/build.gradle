@@ -15,8 +15,8 @@ android {
         minSdk 34
         //noinspection EditedTargetSdkVersion
         targetSdk 34
-        versionCode 33
-        versionName '3.7.3'
+        versionCode 34
+        versionName '3.7.4-pre1'
         setProperty('archivesBaseName', 'password-vault-v' + versionName)
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
@@ -73,7 +73,6 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.accompanist.pager)
-
 
     testImplementation libs.junit
 
