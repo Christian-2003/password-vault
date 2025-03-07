@@ -28,7 +28,6 @@ import androidx.compose.ui.res.stringResource
 import de.passwordvault.ui.theme.LocalPasswordVaultColors
 import de.passwordvault.R
 import de.passwordvault.model.analysis.passwords.AnalyzedPassword
-import de.passwordvault.model.analysis.passwords.Password
 import de.passwordvault.model.entry.EntryAbbreviated
 import kotlinx.coroutines.launch
 

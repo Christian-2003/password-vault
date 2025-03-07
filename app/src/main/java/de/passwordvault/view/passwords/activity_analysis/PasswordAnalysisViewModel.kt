@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.passwordvault.model.analysis.QualityGateManager
 import de.passwordvault.model.analysis.passwords.AnalyzedPassword
-import de.passwordvault.model.analysis.passwords.Password
 import de.passwordvault.model.detail.DetailType
 import de.passwordvault.model.entry.EntryExtended
 import de.passwordvault.model.entry.EntryManager

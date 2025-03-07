@@ -26,7 +26,6 @@ import de.passwordvault.view.general.dialog_more.ItemDivider;
 import de.passwordvault.view.general.dialog_more.MoreDialog;
 import de.passwordvault.view.general.dialog_more.MoreDialogCallback;
 import de.passwordvault.view.passwords.activity_analysis.PasswordAnalysisActivity;
-import de.passwordvault.view.passwords.activity_analysis.PasswordAnalysisActivityDeprecated;
 import de.passwordvault.view.utils.Utils;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
 import de.passwordvault.view.utils.components.PasswordVaultBottomSheetDialog;
