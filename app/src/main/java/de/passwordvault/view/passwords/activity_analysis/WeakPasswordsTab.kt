@@ -1,11 +1,5 @@
 package de.passwordvault.view.passwords.activity_analysis
 
-import android.graphics.Bitmap
-import android.graphics.drawable.AdaptiveIconDrawable
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.shapes.RoundRectShape
-import android.provider.CalendarContract.Colors
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -15,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,7 +24,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
@@ -40,13 +32,11 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.core.graphics.drawable.toBitmap
 import de.passwordvault.R
 import de.passwordvault.model.analysis.passwords.AnalyzedPassword
+import de.passwordvault.ui.composables.EmptyPlaceholder
 import de.passwordvault.ui.theme.LocalPasswordVaultColors
-import de.passwordvault.ui.theme.textWarningInteractiveDark
 import de.passwordvault.view.utils.Utils
 
 
@@ -58,17 +48,32 @@ fun WeakPasswordsTab(
     thresholdNeutral: Float,
     maxSecurityScore: Int
 ) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        items(weakPasswords) { password ->
-            PasswordListRow(
-                password = password,
-                onClick = onWeakPasswordClicked,
-                thresholdGood = thresholdGood,
-                thresholdNeutral = thresholdNeutral,
-                maxSecurityScore = maxSecurityScore
-            )
+    if (weakPasswords.isEmpty()) {
+        EmptyPlaceholder(
+            title = stringResource(R.string.password_all_empty_title),
+            text = stringResource(R.string.password_all_empty_info),
+            painter = painterResource(R.drawable.el_passwords),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = dimensionResource(R.dimen.space_horizontal),
+                    vertical = dimensionResource(R.dimen.space_vertical)
+                )
+        )
+    }
+    else {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            items(weakPasswords) { password ->
+                PasswordListRow(
+                    password = password,
+                    onClick = onWeakPasswordClicked,
+                    thresholdGood = thresholdGood,
+                    thresholdNeutral = thresholdNeutral,
+                    maxSecurityScore = maxSecurityScore
+                )
+            }
         }
     }
 }

@@ -21,6 +21,8 @@ n./a.
 * Remove OSS Licenses dependency, as it was still referred from build.gradle without being used within the app.
 * Setup app to support Jetpack Compose.
 * Fix bug which caused the app to crash on startup if no internet was available.
+* Migrate activity displaying analyzed passwords to Jetpack Compose.
+* Change tab displaying weak passwords in `PasswordAnalysisActivity` to use sticky headers.
 
 <br/>
 

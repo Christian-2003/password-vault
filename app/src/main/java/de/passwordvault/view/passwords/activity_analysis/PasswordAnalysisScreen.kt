@@ -29,6 +29,7 @@ import de.passwordvault.ui.theme.LocalPasswordVaultColors
 import de.passwordvault.R
 import de.passwordvault.model.analysis.passwords.AnalyzedPassword
 import de.passwordvault.model.analysis.passwords.Password
+import de.passwordvault.model.entry.EntryAbbreviated
 import kotlinx.coroutines.launch
 
 
@@ -94,14 +95,14 @@ fun PasswordAnalysisScreen(
                     maxSecurityScore = viewModel.maxSecurityScore!!,
                     thresholdGood = viewModel.thresholdGood!!,
                     thresholdNeutral = viewModel.thresholdNeutral!!,
-                    numberOfAnalyzedPasswords = viewModel.analyzedPasswords.size,
                     numberOfIdenticalPasswords = viewModel.identicalPasswords.size,
-                    onAnalyzedPasswordsClicked = {
-
-                    },
                     weakPasswords = viewModel.weakPasswords,
+                    identicalPasswords = viewModel.identicalPasswords,
                     onPasswordClicked = { password ->
                         onNavigateToEntry(password.entry.uuid)
+                    },
+                    onEntryClicked = { entry ->
+                        onNavigateToEntry(entry.uuid)
                     }
                 )
             }
@@ -127,11 +128,11 @@ private fun ContentSection(
     maxSecurityScore: Int,
     thresholdGood: Float,
     thresholdNeutral: Float,
-    numberOfAnalyzedPasswords: Int,
     numberOfIdenticalPasswords: Int,
-    onAnalyzedPasswordsClicked: () -> Unit,
     weakPasswords: List<AnalyzedPassword>,
-    onPasswordClicked: (AnalyzedPassword) -> Unit
+    identicalPasswords: List<List<AnalyzedPassword>>,
+    onPasswordClicked: (AnalyzedPassword) -> Unit,
+    onEntryClicked: (EntryAbbreviated) -> Unit
 ) {
     val pagerState = rememberPagerState(pageCount = { 3 })
     val scope = rememberCoroutineScope()
@@ -188,12 +189,8 @@ private fun ContentSection(
                 maxSecurityScore = maxSecurityScore,
                 thresholdGood = thresholdGood,
                 thresholdNeutral = thresholdNeutral,
-                numberOfAnalyzedPasswords = numberOfAnalyzedPasswords,
                 numberOfWeakPasswords = weakPasswords.size,
                 numberOfIdenticalPasswords = numberOfIdenticalPasswords,
-                onAnalyzedPasswordsClicked = {
-
-                },
                 onWeakPasswordsClicked = {
                     scope.launch {
                         pagerState.animateScrollToPage(1)
@@ -212,7 +209,10 @@ private fun ContentSection(
                 thresholdNeutral = thresholdNeutral,
                 maxSecurityScore = maxSecurityScore
             )
-            2 -> IdenticalPasswordsTab()
+            2 -> IdenticalPasswordsTab(
+                identicalPasswords = identicalPasswords,
+                onEntryClicked = onEntryClicked
+            )
         }
     }
 }

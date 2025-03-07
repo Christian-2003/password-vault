@@ -31,10 +31,8 @@ fun GeneralTab(
     maxSecurityScore: Int,
     thresholdGood: Float,
     thresholdNeutral: Float,
-    numberOfAnalyzedPasswords: Int,
     numberOfWeakPasswords: Int,
     numberOfIdenticalPasswords: Int,
-    onAnalyzedPasswordsClicked: () -> Unit,
     onWeakPasswordsClicked: () -> Unit,
     onIdenticalPasswordsClicked: () -> Unit
 ) {
@@ -86,15 +84,6 @@ fun GeneralTab(
                 horizontal = dimensionResource(R.dimen.space_horizontal),
                 vertical = dimensionResource(R.dimen.space_vertical)
             )
-        )
-        GenericTextButton(
-            title = stringResource(R.string.password_results_general_analyzed),
-            description = if (numberOfAnalyzedPasswords == 1) {
-                stringResource(R.string.password_results_general_analyzed_hint_singular).replace("{arg}","" + numberOfAnalyzedPasswords)
-            } else {
-                stringResource(R.string.password_results_general_analyzed_hint).replace("{arg}","" + numberOfAnalyzedPasswords)
-            },
-            onClick = onAnalyzedPasswordsClicked
         )
         HorizontalDivider()
         Headline(title = stringResource(R.string.password_results_general_problems))
