@@ -424,6 +424,7 @@
     <!-- Password quality gates -->
     <string name="quality_gates">Quality Gates</string>
     <string name="quality_gates_info">Specify quality gates to enhance the security of your passwords.</string>
+    <string name="quality_gates_title">Quality Gates</string>
     <string name="quality_gates_author_password_vault">Password Vault</string>
     <string name="quality_gates_author_user">You</string>
     <string name="quality_gates_share">Share link to quality gate</string>

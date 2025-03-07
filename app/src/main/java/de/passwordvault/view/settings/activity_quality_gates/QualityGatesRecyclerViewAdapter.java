@@ -25,7 +25,7 @@ import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
  * @author  Christian-2003
  * @version 3.7.1
  */
-public class QualityGatesRecyclerViewAdapter extends RecyclerViewAdapter<QualityGatesViewModel> implements RecyclerViewSwipeCallback.SwipeContract {
+public class QualityGatesRecyclerViewAdapter extends RecyclerViewAdapter<QualityGatesViewModelDeprecated> implements RecyclerViewSwipeCallback.SwipeContract {
 
     /**
      * Class models the view holder for the item displaying a quality gate.
@@ -111,7 +111,7 @@ public class QualityGatesRecyclerViewAdapter extends RecyclerViewAdapter<Quality
      * @param context   Context for the adapter.
      * @param viewModel View model for the adapter.
      */
-    public QualityGatesRecyclerViewAdapter(@NonNull Context context, @NonNull QualityGatesViewModel viewModel) {
+    public QualityGatesRecyclerViewAdapter(@NonNull Context context, @NonNull QualityGatesViewModelDeprecated viewModel) {
         super(context, viewModel);
     }
 

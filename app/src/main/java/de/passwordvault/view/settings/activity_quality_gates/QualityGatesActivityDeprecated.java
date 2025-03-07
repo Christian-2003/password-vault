@@ -31,7 +31,8 @@ import de.passwordvault.view.utils.recycler_view.RecyclerViewSwipeCallback;
  * @author  Christian-2003
  * @version 3.7.2
  */
-public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesViewModel> implements PasswordVaultBottomSheetDialog.Callback, MoreDialogCallback {
+@Deprecated
+public class QualityGatesActivityDeprecated extends PasswordVaultActivity<QualityGatesViewModelDeprecated> implements PasswordVaultBottomSheetDialog.Callback, MoreDialogCallback {
 
     /**
      * Field stores the tag for the more dialog item to edit a quality gate.
@@ -85,8 +86,8 @@ public class QualityGatesActivity extends PasswordVaultActivity<QualityGatesView
     /**
      * Constructor instantiates a new activity.
      */
-    public QualityGatesActivity() {
-        super(QualityGatesViewModel.class, R.layout.activity_quality_gates);
+    public QualityGatesActivityDeprecated() {
+        super(QualityGatesViewModelDeprecated.class, R.layout.activity_quality_gates);
 
         qualityGateResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == QualityGateActivity.RESULT_EDITED) {

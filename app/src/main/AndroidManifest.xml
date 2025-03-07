@@ -37,11 +37,10 @@
         <!-- Other activities of the application -->
         <activity android:name=".view.activity_main.MainActivity" android:exported="false"/>
         <activity android:name=".view.entries.activity_entry.EntryActivity" android:exported="false"/>
+        <activity android:name=".view.settings.activity_quality_gates.QualityGatesActivityDeprecated" android:exported="false"/>
         <activity android:name=".view.settings.activity_quality_gates.QualityGatesActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_quality_gate.QualityGateActivity" android:exported="false"/>
         <activity android:name=".view.passwords.activity_analysis.PasswordAnalysisActivity" android:exported="false"/>
-        <activity android:name=".view.passwords.activity_list.PasswordAnalysisListActivity" android:exported="false"/>
-        <activity android:name=".view.passwords.activity_duplicates.DuplicatePasswordEntriesActivity" android:exported="false"/>
         <activity android:name=".view.entries.activity_packages.PackagesActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_about.SettingsAboutActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_data.SettingsDataActivity" android:exported="false"/>

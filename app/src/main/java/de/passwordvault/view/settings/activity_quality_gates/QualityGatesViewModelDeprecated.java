@@ -18,7 +18,8 @@ import de.passwordvault.model.analysis.QualityGateManager;
  * @author  Christian-2003
  * @version 3.6.0
  */
-public class QualityGatesViewModel extends ViewModel {
+@Deprecated
+public class QualityGatesViewModelDeprecated extends ViewModel {
 
     /**
      * Attribute stores the default quality gates.
@@ -34,7 +35,7 @@ public class QualityGatesViewModel extends ViewModel {
     /**
      * Constructor instantiates a new view model.
      */
-    public QualityGatesViewModel() {
+    public QualityGatesViewModelDeprecated() {
         defaultQualityGates = null;
         customQualityGates = null;
     }
