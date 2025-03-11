@@ -57,11 +57,11 @@ fun EntryListRow(
                 modifier = Modifier
                     .size(dimensionResource(R.dimen.image_m))
                     .clip(RoundedCornerShape(dimensionResource(R.dimen.corner_xs)))
-                    .background(LocalPasswordVaultColors.current.backgroundContainer)
+                    .background(MaterialTheme.colorScheme.surfaceContainer)
             ) {
                 Text(
                     text = if (entry.name.isNotEmpty()) { "" + entry.name[0] } else { "" },
-                    color = LocalPasswordVaultColors.current.primary,
+                    color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold
                 )
@@ -84,13 +84,13 @@ fun EntryListRow(
         ) {
             Text(
                 text = entry.name,
-                color = LocalPasswordVaultColors.current.text,
+                color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.bodyLarge
             )
             if (entry.description.isNotEmpty()) {
                 Text(
                     text = entry.description,
-                    color = LocalPasswordVaultColors.current.textVariant,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodyMedium
                 )
             }

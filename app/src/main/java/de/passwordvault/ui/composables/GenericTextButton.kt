@@ -47,12 +47,12 @@ fun GenericTextButton(
         ) {
             Text(
                 text = title,
-                color = LocalPasswordVaultColors.current.text,
+                color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.bodyLarge
             )
             Text(
                 text = description,
-                color = LocalPasswordVaultColors.current.textVariant,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.bodyMedium
             )
         }

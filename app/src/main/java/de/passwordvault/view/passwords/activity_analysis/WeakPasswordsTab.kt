@@ -128,11 +128,11 @@ private fun PasswordListRow(
                     modifier = Modifier
                         .size(dimensionResource(R.dimen.image_m))
                         .clip(RoundedCornerShape(dimensionResource(R.dimen.corner_xs)))
-                        .background(LocalPasswordVaultColors.current.backgroundContainer)
+                        .background(MaterialTheme.colorScheme.surfaceContainer)
                 ) {
                     Text(
                         text = if (password.entry.name.isNotEmpty()) { "" + password.entry.name[0] } else { "" },
-                        color = LocalPasswordVaultColors.current.primary,
+                        color = MaterialTheme.colorScheme.primary,
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold
                     )
@@ -197,12 +197,12 @@ private fun PasswordListRow(
         ) {
             Text(
                 text = if (obfuscated) { Utils.obfuscate(password.password) } else { password.password },
-                color = LocalPasswordVaultColors.current.text,
+                color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.bodyLarge
             )
             Text(
                 text = password.entry.name,
-                color = LocalPasswordVaultColors.current.textVariant,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.bodyMedium
             )
             Row(
@@ -210,7 +210,7 @@ private fun PasswordListRow(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_lock),
-                    tint = LocalPasswordVaultColors.current.textVariant,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     contentDescription = "",
                     modifier = Modifier.size(dimensionResource(R.dimen.image_xxs))
                 )
@@ -218,7 +218,7 @@ private fun PasswordListRow(
                     text = stringResource(R.string.password_results_general_average_score_display)
                         .replace("{arg}", "" + password.securityScore)
                         .replace("{max}", "" + maxSecurityScore),
-                    color = LocalPasswordVaultColors.current.textVariant,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.space_horizontal_small))
                 )
@@ -233,7 +233,7 @@ private fun PasswordListRow(
         ) {
             Icon(
                 painter = if (obfuscated) { painterResource(R.drawable.ic_show) } else { painterResource(R.drawable.ic_show_off) },
-                tint = LocalPasswordVaultColors.current.text,
+                tint = MaterialTheme.colorScheme.onSurface,
                 contentDescription = ""
             )
         }

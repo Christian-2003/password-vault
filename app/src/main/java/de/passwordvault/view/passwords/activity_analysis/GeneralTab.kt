@@ -9,6 +9,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -60,7 +61,7 @@ fun GeneralTab(
         Headline(title = stringResource(R.string.password_results_general_title))
         Text(
             text = stringResource(R.string.password_results_general_average_score),
-            color = LocalPasswordVaultColors.current.text,
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
@@ -82,7 +83,7 @@ fun GeneralTab(
             },
             modifier = Modifier
                 .clip(RoundedCornerShape(dimensionResource(R.dimen.corner_l)))
-                .background(LocalPasswordVaultColors.current.backgroundContainer)
+                .background(MaterialTheme.colorScheme.surfaceContainer)
                 .padding(
                     horizontal = dimensionResource(R.dimen.space_horizontal),
                     vertical = dimensionResource(R.dimen.space_vertical)

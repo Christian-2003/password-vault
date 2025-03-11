@@ -24,8 +24,8 @@ import de.passwordvault.ui.theme.LocalPasswordVaultColors
 fun Card(
     text: String,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = LocalPasswordVaultColors.current.backgroundContainer,
-    foregroundColor: Color = LocalPasswordVaultColors.current.textVariant,
+    backgroundColor: Color = MaterialTheme.colorScheme.surfaceContainer,
+    foregroundColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     icon: Painter = painterResource(R.drawable.ic_info_filled)
 ) {
     Row(

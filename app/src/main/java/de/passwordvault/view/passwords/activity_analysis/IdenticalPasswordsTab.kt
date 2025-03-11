@@ -93,7 +93,7 @@ private fun GroupHeader(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(LocalPasswordVaultColors.current.background)
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         HorizontalDivider()
         Row(
@@ -111,12 +111,12 @@ private fun GroupHeader(
             ) {
                 Text(
                     text = if (obfuscated) { Utils.obfuscate(group[0].password) } else { group[0].password },
-                    color = LocalPasswordVaultColors.current.text,
+                    color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Text(
                     text = stringResource(R.string.password_results_duplicates_number).replace("{arg}", "" + group.size),
-                    color = LocalPasswordVaultColors.current.textVariant,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -127,7 +127,7 @@ private fun GroupHeader(
             ) {
                 Icon(
                     painter = if (obfuscated) { painterResource(R.drawable.ic_show) } else { painterResource(R.drawable.ic_show_off) },
-                    tint = LocalPasswordVaultColors.current.text,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     contentDescription = ""
                 )
             }

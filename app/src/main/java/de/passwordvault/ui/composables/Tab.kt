@@ -3,6 +3,7 @@ package de.passwordvault.ui.composables
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Badge
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -34,8 +35,8 @@ fun Tab(
 ) {
     androidx.compose.material3.Tab(
         selected = selectedIndex == index,
-        selectedContentColor = LocalPasswordVaultColors.current.primary,
-        unselectedContentColor = LocalPasswordVaultColors.current.text,
+        selectedContentColor = MaterialTheme.colorScheme.primary,
+        unselectedContentColor = MaterialTheme.colorScheme.onSurface,
         onClick = {
             onClick(index)
         },

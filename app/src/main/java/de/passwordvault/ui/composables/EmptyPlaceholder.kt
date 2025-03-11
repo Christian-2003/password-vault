@@ -43,13 +43,13 @@ fun EmptyPlaceholder(
         )
         Text(
             text = title,
-            color = LocalPasswordVaultColors.current.text,
+            color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center
         )
         Text(
             text = text,
-            color = LocalPasswordVaultColors.current.textVariant,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center
         )

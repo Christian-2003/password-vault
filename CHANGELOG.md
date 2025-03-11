@@ -7,7 +7,7 @@
 n./a.
 
 ###### Features
-* n./a.
+* Switch from `LocalPasswordVaultColors.current` to `MaterialTheme.colorScheme` as much as possible to better align with Material Theme 3.
 
 <br/>
 

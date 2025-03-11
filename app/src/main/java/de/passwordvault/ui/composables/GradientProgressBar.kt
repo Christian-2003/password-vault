@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -68,7 +69,7 @@ fun GradientProgressBar(
                 .fillMaxWidth()
                 .height(height)
                 .clip(RoundedCornerShape(dimensionResource(R.dimen.corner_l)))
-                .background(LocalPasswordVaultColors.current.backgroundContainer)
+                .background(MaterialTheme.colorScheme.surfaceContainer)
         ) {
             val brush = Brush.horizontalGradient(colors)
             drawRoundRect(

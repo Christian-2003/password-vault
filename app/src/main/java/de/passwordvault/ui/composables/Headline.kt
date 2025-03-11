@@ -47,7 +47,7 @@ fun Headline(
     ) {
         Text(
             text = title,
-            color = LocalPasswordVaultColors.current.textVariant,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.weight(1f)
@@ -55,7 +55,7 @@ fun Headline(
         if (endIcon != null) {
             Icon(
                 painter = endIcon,
-                tint = LocalPasswordVaultColors.current.textVariant,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 contentDescription = "",
                 modifier = Modifier.padding(start = dimensionResource(R.dimen.space_horizontal_between))
             )
