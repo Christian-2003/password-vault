@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -32,6 +34,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.core.graphics.drawable.toBitmap
 import de.passwordvault.R
 import de.passwordvault.model.analysis.passwords.AnalyzedPassword
@@ -115,13 +118,15 @@ private fun PasswordListRow(
             }
             .padding(
                 start = dimensionResource(R.dimen.space_horizontal),
-                top = dimensionResource(R.dimen.space_vertical_between),
+                top = dimensionResource(R.dimen.space_vertical),
                 end = dimensionResource(R.dimen.space_horizontal_end_button),
-                bottom = dimensionResource(R.dimen.space_vertical_between)
+                bottom = dimensionResource(R.dimen.space_vertical)
             )
     ) {
         //Logo of the entry:
-        Box {
+        Box(
+            contentAlignment = Alignment.BottomEnd
+        ) {
             if (password.entry.logo == null) {
                 Box(
                     contentAlignment = Alignment.Center,
@@ -150,24 +155,12 @@ private fun PasswordListRow(
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
+                    .clip(RoundedCornerShape(topStart = dimensionResource(R.dimen.corner_s)))
+                    .background(MaterialTheme.colorScheme.surface)
                     .padding(
-                        start = dimensionResource(R.dimen.image_m) - dimensionResource(R.dimen.image_xxs) - dimensionResource(R.dimen.image_xxs) / 2,
-                        top = dimensionResource(R.dimen.image_m) - dimensionResource(R.dimen.image_xxs) - dimensionResource(R.dimen.image_xxs) / 2
+                        start = dimensionResource(R.dimen.image_xxs) / 4,
+                        top = dimensionResource(R.dimen.image_xxs) / 4
                     )
-                    .align(Alignment.BottomEnd)
-                    .size(dimensionResource(R.dimen.image_xxs) * 2)
-                    .padding(
-                        horizontal = dimensionResource(R.dimen.image_xxs) / 4,
-                        vertical = dimensionResource(R.dimen.image_xxs) / 4
-                    )
-                    .clip(RoundedCornerShape(50))
-                    .background(if (password.securityScore > thresholdGood) {
-                        LocalPasswordVaultColors.current.backgroundGreen
-                    } else if (password.securityScore > thresholdNeutral) {
-                        LocalPasswordVaultColors.current.backgroundYellow
-                    } else {
-                        LocalPasswordVaultColors.current.backgroundRed
-                    })
             ) {
                 Icon(
                     painter = if (password.securityScore > thresholdGood) {
@@ -194,37 +187,47 @@ private fun PasswordListRow(
             modifier = Modifier
                 .weight(1f)
                 .padding(horizontal = dimensionResource(R.dimen.space_horizontal_between))
+                .align(Alignment.CenterVertically)
         ) {
             Text(
-                text = if (obfuscated) { Utils.obfuscate(password.password) } else { password.password },
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyLarge
-            )
-            Text(
                 text = password.entry.name,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                style = MaterialTheme.typography.bodyMedium
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyLarge,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_lock),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    contentDescription = "",
-                    modifier = Modifier.size(dimensionResource(R.dimen.image_xxs))
-                )
+            if (password.entry.description.isNotEmpty()) {
                 Text(
-                    text = stringResource(R.string.password_results_general_average_score_display)
-                        .replace("{arg}", "" + password.securityScore)
-                        .replace("{max}", "" + maxSecurityScore),
+                    text = password.entry.description,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.space_horizontal_small))
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }
 
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.align(Alignment.CenterVertically)
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_lock),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                contentDescription = "",
+                modifier = Modifier.size(dimensionResource(R.dimen.image_xxs))
+            )
+            Text(
+                text = stringResource(R.string.password_results_general_average_score_display)
+                    .replace("{arg}", "" + password.securityScore)
+                    .replace("{max}", "" + maxSecurityScore),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.space_horizontal_small))
+            )
+        }
+
+        /*
         IconButton(
             onClick = {
                 obfuscated = !obfuscated
@@ -236,6 +239,6 @@ private fun PasswordListRow(
                 tint = MaterialTheme.colorScheme.onSurface,
                 contentDescription = ""
             )
-        }
+        }*/
     }
 }

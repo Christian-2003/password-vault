@@ -8,6 +8,7 @@ n./a.
 
 ###### Features
 * Switch from `LocalPasswordVaultColors.current` to `MaterialTheme.colorScheme` as much as possible to better align with Material Theme 3.
+* Visual changes to tab displaying weak passwords in `PasswordAnalysisScreen`, to reduce visual elements for each weak passwords. This is done to reduce information visible to the user.
 
 <br/>
 
