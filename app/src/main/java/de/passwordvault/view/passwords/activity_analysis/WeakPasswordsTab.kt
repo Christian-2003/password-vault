@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
@@ -125,7 +127,8 @@ private fun PasswordListRow(
     ) {
         //Logo of the entry:
         Box(
-            contentAlignment = Alignment.BottomEnd
+            contentAlignment = Alignment.BottomEnd,
+            modifier = Modifier.clipToBounds()
         ) {
             if (password.entry.logo == null) {
                 Box(
@@ -155,12 +158,13 @@ private fun PasswordListRow(
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .clip(RoundedCornerShape(topStart = dimensionResource(R.dimen.corner_s)))
-                    .background(MaterialTheme.colorScheme.surface)
-                    .padding(
-                        start = dimensionResource(R.dimen.image_xxs) / 4,
-                        top = dimensionResource(R.dimen.image_xxs) / 4
+                    .offset(
+                        x = dimensionResource(R.dimen.image_xxs) / 4,
+                        y = dimensionResource(R.dimen.image_xxs) / 4
                     )
+                    .clip(RoundedCornerShape(50))
+                    .background(MaterialTheme.colorScheme.surface)
+                    .padding(dimensionResource(R.dimen.image_xxs) / 4)
             ) {
                 Icon(
                     painter = if (password.securityScore > thresholdGood) {
