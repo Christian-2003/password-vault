@@ -9,7 +9,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import de.passwordvault.model.storage.settings.Config
 import de.passwordvault.ui.theme.PasswordVaultTheme
 import de.passwordvault.view.settings.activity_licenses.LicensesActivity
-import de.passwordvault.view.settings.activity_webview.WebviewActivity
+import de.passwordvault.view.settings.activity_webview.WebViewActivity
 
 
 /**
@@ -70,8 +70,8 @@ class SettingsAboutActivity: ComponentActivity() {
             startActivity(intent)
         }
         else {
-            val intent = Intent(this, WebviewActivity::class.java)
-            intent.putExtra(WebviewActivity.EXTRA_URL, url)
+            val intent = Intent(this, WebViewActivity::class.java)
+            intent.putExtra(WebViewActivity.EXTRA_URL, url)
             startActivity(intent)
         }
     }

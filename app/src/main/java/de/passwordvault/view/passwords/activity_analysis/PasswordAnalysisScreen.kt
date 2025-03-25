@@ -210,8 +210,6 @@ private fun ContentSection(
             0 -> GeneralTab(
                 securityScore = securityScore,
                 maxSecurityScore = maxSecurityScore,
-                thresholdGood = thresholdGood,
-                thresholdNeutral = thresholdNeutral,
                 numberOfWeakPasswords = weakPasswords.size,
                 numberOfIdenticalPasswords = numberOfIdenticalPasswords,
                 onWeakPasswordsClicked = {

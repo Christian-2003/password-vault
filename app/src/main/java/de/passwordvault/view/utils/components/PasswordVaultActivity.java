@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import de.passwordvault.model.storage.settings.Config;
-import de.passwordvault.view.settings.activity_webview.WebviewActivity;
+import de.passwordvault.view.settings.activity_webview.WebViewActivity;
 
 
 /**
@@ -112,8 +112,8 @@ public class PasswordVaultActivity<V extends ViewModel> extends AppCompatActivit
             startActivity(intent);
         }
         else {
-            Intent intent = new Intent(this, WebviewActivity.class);
-            intent.putExtra(WebviewActivity.EXTRA_URL, url);
+            Intent intent = new Intent(this, WebViewActivity.class);
+            intent.putExtra(WebViewActivity.EXTRA_URL, url);
             startActivity(intent);
         }
     }

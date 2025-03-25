@@ -1,12 +1,10 @@
 package de.passwordvault.view.passwords.activity_analysis
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -14,16 +12,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import de.passwordvault.R
 import de.passwordvault.ui.composables.GenericTextButton
 import de.passwordvault.ui.composables.GradientProgressBar
 import de.passwordvault.ui.composables.Headline
 import de.passwordvault.ui.theme.LocalPasswordVaultColors
-import de.passwordvault.view.utils.Utils
 
 
 /**
@@ -45,8 +40,6 @@ import de.passwordvault.view.utils.Utils
 fun GeneralTab(
     securityScore: Double,
     maxSecurityScore: Int,
-    thresholdGood: Float,
-    thresholdNeutral: Float,
     numberOfWeakPasswords: Int,
     numberOfIdenticalPasswords: Int,
     onWeakPasswordsClicked: () -> Unit,

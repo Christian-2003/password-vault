@@ -45,7 +45,7 @@
         <activity android:name=".view.settings.activity_autofill.SettingsAutofillActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_customization.SettingsCustomizationActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_help.SettingsHelpActivity" android:exported="false"/>
-        <activity android:name=".view.settings.activity_webview.WebviewActivity" android:exported="false"/>
+        <activity android:name=".view.settings.activity_webview.WebViewActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_create_backup.CreateBackupActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_restore_backup.RestoreBackupActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_recovery.RecoveryActivity" android:exported="false"/>

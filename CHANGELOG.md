@@ -13,6 +13,7 @@ n./a.
 * Migrate `LicensesActivity` to Jetpack Compose.
 * Include library "Coil Compose" to load images with Jetpack Compose.
 * Migrate `SettingsAboutActivity` to Jetpack Compose.
+* Migrate `WebViewActivity` to Jetpack Compose.
 
 <br/>
 
