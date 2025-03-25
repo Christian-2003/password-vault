@@ -31,6 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import de.passwordvault.R
 import de.passwordvault.model.licenses.License
+import de.passwordvault.ui.composables.BottomSheetDialog
 
 
 /**
@@ -192,39 +193,23 @@ private fun LicenseDialog(
 ) {
     val sheetState = rememberModalBottomSheetState()
 
-    ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        sheetState = sheetState
+    BottomSheetDialog(
+        sheetState = sheetState,
+        title = licenseName,
+        onDismiss = onDismiss,
+        icon = painterResource(R.drawable.ic_license)
     ) {
-        Column(
+        Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = dimensionResource(R.dimen.space_horizontal))
                 .verticalScroll(rememberScrollState())
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    modifier = Modifier.padding(end = dimensionResource(R.dimen.space_horizontal_between)),
-                    painter = painterResource(R.drawable.ic_license),
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    contentDescription = ""
-                )
-                Text(
-                    text = licenseName,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.headlineSmall
-                )
-            }
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = dimensionResource(R.dimen.space_vertical)),
-                text = licenseText,
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
+                .padding(
+                    horizontal = dimensionResource(R.dimen.space_horizontal),
+                    vertical = dimensionResource(R.dimen.space_vertical)
+                ),
+            text = licenseText,
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.bodyMedium
+        )
     }
 }
