@@ -1,6 +1,5 @@
 package de.passwordvault.ui.composables
 
-import android.graphics.Paint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,23 +12,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import de.passwordvault.R
-import de.passwordvault.ui.theme.LocalPasswordVaultColors
 
 
 /**
  * Displays a headline.
  *
- * @param title     Title of the headline.
- * @param endIcon   End icon for the headline.
- * @param onClick   Optional callback invoked once the headline is clicked.
+ * @param title                 Title of the headline.
+ * @param modifier              Modifier.
+ * @param indentToPrefixIcon    Whether to indent the headline with the same start padding used with
+ *                              a prefix icon on GenericTextButton.
+ * @param endIcon               End icon for the headline.
+ * @param onClick               Callback invoked once the headline is clicked.
  */
 @Composable
 fun Headline(
     title: String,
     modifier: Modifier = Modifier,
+    indentToPrefixIcon: Boolean = false,
     endIcon: Painter? = null,
     onClick: (() -> Unit)? = null
 ) {
@@ -41,8 +42,10 @@ fun Headline(
                 onClick!!()
             }
             .padding(
-                horizontal = dimensionResource(R.dimen.space_horizontal),
-                vertical = dimensionResource(R.dimen.space_vertical)
+                start = if (!indentToPrefixIcon) { dimensionResource(R.dimen.space_horizontal) } else { dimensionResource(R.dimen.space_horizontal) + dimensionResource(R.dimen.image_xs) + dimensionResource(R.dimen.space_horizontal_between) },
+                top = dimensionResource(R.dimen.space_vertical),
+                end = dimensionResource(R.dimen.space_horizontal),
+                bottom = dimensionResource(R.dimen.space_vertical)
             )
     ) {
         Text(

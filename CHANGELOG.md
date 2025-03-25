@@ -10,7 +10,9 @@ n./a.
 * Switch from `LocalPasswordVaultColors.current` to `MaterialTheme.colorScheme` as much as possible to better align with Material Theme 3.
 * Visual changes to tab displaying weak passwords in `PasswordAnalysisScreen`, to reduce visual elements for each weak passwords. This is done to reduce information visible to the user.
 * Remove custom password quality gates from the app, since using RegEx is way too complicated to understand for regular people.
-* Migrate activity displaying used software (i.e. licenses) to Jetpack Compose.
+* Migrate `LicensesActivity` to Jetpack Compose.
+* Include library "Coil Compose" to load images with Jetpack Compose.
+* Migrate `SettingsAboutActivity` to Jetpack Compose.
 
 <br/>
 

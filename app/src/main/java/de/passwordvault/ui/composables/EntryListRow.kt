@@ -25,7 +25,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.core.graphics.drawable.toBitmap
 import de.passwordvault.R
 import de.passwordvault.model.entry.EntryAbbreviated
-import de.passwordvault.ui.theme.LocalPasswordVaultColors
 
 
 /**

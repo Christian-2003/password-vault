@@ -5,7 +5,7 @@ package de.passwordvault.model.licenses
  * Class models license for a software used by the app.
  *
  * @author  Christian-2003
- * @since   1.0.0
+ * @since   3.7.4
  */
 data class License (
 

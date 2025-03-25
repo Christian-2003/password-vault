@@ -16,10 +16,17 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import de.passwordvault.R
-import de.passwordvault.ui.theme.LocalPasswordVaultColors
 
 
-
+/**
+ * Composable displays a card to the user.
+ *
+ * @param text              Text for the card.
+ * @param modifier          Modifier.
+ * @param backgroundColor   Background color for the card.
+ * @param foregroundColor   Foreground color for the card.
+ * @param icon              Icon for the card.
+ */
 @Composable
 fun Card(
     text: String,
