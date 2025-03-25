@@ -69,26 +69,6 @@ fun GeneralTab(
                     vertical = dimensionResource(R.dimen.space_vertical)
                 )
         )
-        Text(
-            text = stringResource(R.string.password_results_general_average_score_display)
-                .replace("{arg}", "" + Utils.formatNumber(securityScore))
-                .replace("{max}", "" + maxSecurityScore),
-            fontWeight = FontWeight.Bold,
-            color = if (securityScore > thresholdGood) {
-                LocalPasswordVaultColors.current.green
-            } else if (securityScore > thresholdNeutral) {
-                LocalPasswordVaultColors.current.yellow
-            } else {
-                LocalPasswordVaultColors.current.red
-            },
-            modifier = Modifier
-                .clip(RoundedCornerShape(dimensionResource(R.dimen.corner_l)))
-                .background(MaterialTheme.colorScheme.surfaceContainer)
-                .padding(
-                    horizontal = dimensionResource(R.dimen.space_horizontal),
-                    vertical = dimensionResource(R.dimen.space_vertical)
-                )
-        )
         GradientProgressBar(
             progress = securityScore.toFloat() / maxSecurityScore,
             colors = listOf(

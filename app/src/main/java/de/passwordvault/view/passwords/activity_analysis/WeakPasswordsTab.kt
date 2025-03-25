@@ -110,8 +110,6 @@ private fun PasswordListRow(
     thresholdNeutral: Float,
     maxSecurityScore: Int
 ) {
-    var obfuscated: Boolean by remember { mutableStateOf(true) }
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -210,39 +208,5 @@ private fun PasswordListRow(
                 )
             }
         }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.align(Alignment.CenterVertically)
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_lock),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                contentDescription = "",
-                modifier = Modifier.size(dimensionResource(R.dimen.image_xxs))
-            )
-            Text(
-                text = stringResource(R.string.password_results_general_average_score_display)
-                    .replace("{arg}", "" + password.securityScore)
-                    .replace("{max}", "" + maxSecurityScore),
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.space_horizontal_small))
-            )
-        }
-
-        /*
-        IconButton(
-            onClick = {
-                obfuscated = !obfuscated
-            },
-            modifier = Modifier.align(Alignment.CenterVertically)
-        ) {
-            Icon(
-                painter = if (obfuscated) { painterResource(R.drawable.ic_show) } else { painterResource(R.drawable.ic_show_off) },
-                tint = MaterialTheme.colorScheme.onSurface,
-                contentDescription = ""
-            )
-        }*/
     }
 }

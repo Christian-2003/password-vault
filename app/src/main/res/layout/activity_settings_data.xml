@@ -338,33 +338,6 @@
 
             </LinearLayout>
 
-            <View style="@style/divider"/>
-
-
-
-            <!-- Search -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/settings_search"
-                android:layout_marginHorizontal="@dimen/space_horizontal"
-                android:layout_marginVertical="@dimen/space_vertical"
-                style="@style/text.headline"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_search_qualitygates"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/settings_search_qualitygates"
-                style="@style/button.different"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_search_masterpassword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/settings_search_masterpassword"
-                style="@style/button.different"/>
-
         </LinearLayout>
 
     </ScrollView>

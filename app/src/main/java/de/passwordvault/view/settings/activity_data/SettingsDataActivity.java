@@ -18,7 +18,6 @@ import de.passwordvault.model.security.authentication.AuthenticationFailure;
 import de.passwordvault.model.security.authentication.Authenticator;
 import de.passwordvault.view.general.dialog_delete.DeleteDialog;
 import de.passwordvault.view.settings.activity_create_backup.CreateBackupActivity;
-import de.passwordvault.view.settings.activity_quality_gates.QualityGatesActivity;
 import de.passwordvault.view.settings.activity_restore_backup.RestoreBackupActivity;
 import de.passwordvault.view.settings.activity_security.SettingsSecurityActivity;
 import de.passwordvault.view.utils.Utils;
@@ -142,10 +141,6 @@ public class SettingsDataActivity extends PasswordVaultActivity<SettingsDataView
 
         //Delete:
         findViewById(R.id.settings_data_delete_all_container).setOnClickListener(view -> deleteAllData());
-
-        //Search:
-        findViewById(R.id.button_search_qualitygates).setOnClickListener(view -> startActivity(new Intent(this, QualityGatesActivity.class)));
-        findViewById(R.id.button_search_masterpassword).setOnClickListener(view -> startActivity(new Intent(this, SettingsSecurityActivity.class)));
     }
 
 
