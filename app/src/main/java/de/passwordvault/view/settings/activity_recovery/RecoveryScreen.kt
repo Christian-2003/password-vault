@@ -1,5 +1,6 @@
 package de.passwordvault.view.settings.activity_recovery
 
+import androidx.appcompat.widget.PopupMenu.OnDismissListener
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -15,18 +16,26 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -34,15 +43,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.modifier.modifierLocalOf
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import de.passwordvault.R
 import de.passwordvault.model.security.login.SecurityQuestion
+import de.passwordvault.ui.composables.BottomSheetDialog
 import de.passwordvault.ui.composables.Card
 import de.passwordvault.ui.composables.EmptyPlaceholder
 import de.passwordvault.ui.composables.Headline
+import de.passwordvault.ui.composables.TextInput
+import de.passwordvault.view.settings.dialog_security_question.SecurityQuestionDialog
+import kotlin.math.exp
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -115,7 +129,7 @@ fun RecoveryScreen(
                     SecurityQuestionListRow(
                         securityQuestion = securityQuestion,
                         onEdit = { securityQuestion ->
-                            //TODO
+                            viewModel.editedSecurityQuestion = securityQuestion
                         },
                         onDelete = { securityQuestion ->
                             //TODO
@@ -123,6 +137,25 @@ fun RecoveryScreen(
                     )
                 }
             }
+        }
+        if (viewModel.editedSecurityQuestion != null) {
+            de.passwordvault.view.settings.activity_recovery.SecurityQuestionDialog(
+                question = viewModel.editedSecurityQuestion!!.question,
+                answer = viewModel.editedSecurityQuestion!!.answer,
+                onQuestionChange = {
+                    viewModel.editedSecurityQuestion!!.question = it
+                },
+                onAnswerChange = {
+                    viewModel.editedSecurityQuestion!!.answer = it
+                },
+                onDismiss = {
+                    viewModel.editedSecurityQuestion = null
+                },
+                onSave = {
+                    //TODO
+                    viewModel.editedSecurityQuestion = null
+                }
+            )
         }
     }
 }
@@ -230,6 +263,113 @@ private fun SecurityQuestionListRow(
                     onClick = {
                         onDelete(securityQuestion)
                     }
+                )
+            }
+        }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SecurityQuestionDialog(
+    question: Int,
+    answer: String,
+    onQuestionChange: (Int) -> Unit,
+    onAnswerChange: (String) -> Unit,
+    onDismiss: () -> Unit,
+    onSave: () -> Unit
+) {
+    val sheetState = rememberModalBottomSheetState()
+    var question: Int by remember { mutableStateOf(question) }
+    var answer: String by remember { mutableStateOf(answer) }
+
+    BottomSheetDialog(
+        sheetState = sheetState,
+        title = "SSS",
+        onDismiss = onDismiss,
+        icon = painterResource(R.drawable.ic_edit)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = dimensionResource(R.dimen.space_horizontal),
+                    vertical = dimensionResource(R.dimen.space_vertical)
+                )
+        ) {
+            DropdownInput(
+                label = stringResource(R.string.recovery_question),
+                options = stringArrayResource(R.array.security_questions).toList()
+            )
+            TextInput(
+                value = answer,
+                onValueChange = {
+                    answer = it
+                },
+                label = stringResource(R.string.recovery_answer)
+            )
+        }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DropdownInput(
+    label: String,
+    options: List<String>
+) {
+    var expanded: Boolean by remember { mutableStateOf(false) }
+    val textFieldState = rememberTextFieldState(options[0])
+    var selectedOption: Int by remember { mutableIntStateOf(0) }
+
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = {
+            expanded = it
+        }
+    ) {
+        OutlinedTextField(
+            readOnly = true,
+            value = options[selectedOption],
+            onValueChange = { },
+            label = {
+                Text(label)
+            },
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(
+                    expanded = expanded
+                )
+            },
+            colors = ExposedDropdownMenuDefaults.textFieldColors(),
+            modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable)
+        )
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = {
+                expanded = false
+            }
+        ) {
+            options.forEach { option ->
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = option,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    },
+                    onClick = {
+                        var i = 0
+                        options.forEach { o ->
+                            if (o == option) {
+                                selectedOption = i
+                            }
+                            i++
+                        }
+                        expanded = false
+                    },
+                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
                 )
             }
         }
