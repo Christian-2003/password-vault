@@ -34,7 +34,7 @@
     <dimen name="space_horizontal_small">6dp</dimen>
     <dimen name="space_vertical_title">16dp</dimen>
     <dimen name="space_vertical_list_button">16dp</dimen>
-    <dimen name="space_material_text_field_top">4dp</dimen>
+    <dimen name="space_material_text_field_top">8dp</dimen>
 
     <dimen name="image_xxl">136dp</dimen>
     <dimen name="image_xl">98dp</dimen>

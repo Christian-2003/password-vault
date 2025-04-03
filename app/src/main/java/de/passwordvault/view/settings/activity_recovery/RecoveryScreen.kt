@@ -39,6 +39,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,6 +53,7 @@ import de.passwordvault.model.security.login.SecurityQuestion
 import de.passwordvault.ui.composables.BottomSheetDialog
 import de.passwordvault.ui.composables.Card
 import de.passwordvault.ui.composables.DeleteDialog
+import de.passwordvault.ui.composables.DropdownInput
 import de.passwordvault.ui.composables.EmptyPlaceholder
 import de.passwordvault.ui.composables.Headline
 import de.passwordvault.ui.composables.TextInput
@@ -287,8 +289,10 @@ private fun SecurityQuestionDialog(
 ) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
-    var question: Int by remember { mutableIntStateOf(question) }
-    var answer: String by remember { mutableStateOf(answer) }
+    var question: Int by rememberSaveable { mutableIntStateOf(question) }
+    var answer: String by rememberSaveable { mutableStateOf(answer) }
+    var answerError: Boolean by rememberSaveable { mutableStateOf(false) }
+    var questionError: Boolean by rememberSaveable { mutableStateOf(false) }
     val allQuestions: Array<String> = stringArrayResource(R.array.security_questions)
 
     BottomSheetDialog(
@@ -306,10 +310,8 @@ private fun SecurityQuestionDialog(
                 )
         ) {
             DropdownInput(
-                label = stringResource(R.string.recovery_question),
-                options = securityQuestions,
-                selectedOption = if (question != -1) { stringArrayResource(R.array.security_questions)[question] } else { null },
-                onSelectionChange = {
+                selected = if (question != -1) { stringArrayResource(R.array.security_questions)[question] } else { null },
+                onSelectedChange = {
                     var i = 0
                     allQuestions.forEach { q ->
                         if (q == it) {
@@ -317,14 +319,21 @@ private fun SecurityQuestionDialog(
                         }
                         i++
                     }
-                }
+                },
+                label = stringResource(R.string.recovery_question),
+                options = securityQuestions,
+                prefixIcon = painterResource(R.drawable.ic_security_question),
+                errorMessage = if (questionError) { stringResource(R.string.error_empty_input) } else { null }
             )
             TextInput(
                 value = answer,
                 onValueChange = {
                     answer = it
                 },
-                label = stringResource(R.string.recovery_answer)
+                label = stringResource(R.string.recovery_answer),
+                prefixIcon = painterResource(R.drawable.ic_answer),
+                errorMessage = if (answerError) { stringResource(R.string.error_empty_input) } else { null },
+                modifier = Modifier.padding(vertical = dimensionResource(R.dimen.space_vertical))
             )
             FlowRow(
                 horizontalArrangement = Arrangement.End,
@@ -346,79 +355,20 @@ private fun SecurityQuestionDialog(
                 TextButton(
                     modifier = Modifier.padding(start = dimensionResource(R.dimen.space_horizontal_between)),
                     onClick = {
-                        scope.launch {
-                            sheetState.hide()
-                        }.invokeOnCompletion {
-                            onSave(question, answer)
+                        answerError = answer.isEmpty()
+                        questionError = question == -1
+
+                        if (!answerError && !questionError) {
+                            scope.launch {
+                                sheetState.hide()
+                            }.invokeOnCompletion {
+                                onSave(question, answer)
+                            }
                         }
                     }
                 ) {
                     Text(text = stringResource(R.string.button_save))
                 }
-            }
-        }
-    }
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun DropdownInput(
-    label: String,
-    selectedOption: String?,
-    options: List<String>,
-    onSelectionChange: (String) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    var expanded: Boolean by remember { mutableStateOf(false) }
-
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = {
-            expanded = it
-        },
-        modifier = modifier
-    ) {
-        OutlinedTextField(
-            readOnly = true,
-            value = selectedOption ?: "",
-            onValueChange = { },
-            label = {
-                Text(label)
-            },
-            trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(
-                    expanded = expanded
-                )
-            },
-            colors = ExposedDropdownMenuDefaults.textFieldColors(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .menuAnchor(MenuAnchorType.PrimaryEditable)
-        )
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = {
-                expanded = false
-            }
-        ) {
-            options.forEach { option ->
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = option,
-                            style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.padding(
-                                vertical = dimensionResource(R.dimen.space_vertical_between)
-                            )
-                        )
-                    },
-                    onClick = {
-                        expanded = false
-                        onSelectionChange(option)
-                    },
-                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
-                )
             }
         }
     }

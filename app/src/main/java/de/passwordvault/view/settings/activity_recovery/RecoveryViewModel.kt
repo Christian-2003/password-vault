@@ -13,7 +13,6 @@ import de.passwordvault.model.security.login.SecurityQuestion
 import de.passwordvault.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.ArrayList
 
 
 class RecoveryViewModel(application: Application): AndroidViewModel(application) {
@@ -34,7 +33,11 @@ class RecoveryViewModel(application: Application): AndroidViewModel(application)
     }
 
 
-    fun saveSecurityQuestion(question: Int, answer: String) {
+    fun saveSecurityQuestion(question: Int, answer: String) = viewModelScope.launch(Dispatchers.IO) {
+        if (question == -1 || answer.isEmpty()) {
+            editedSecurityQuestion = null
+            return@launch
+        }
         val index: Int = securityQuestions.indexOf(editedSecurityQuestion)
         editedSecurityQuestion = null
         if (index >= 0) {

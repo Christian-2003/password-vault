@@ -115,7 +115,7 @@ fun TextInput(
                 modifier = Modifier
                     .padding(
                         top = dimensionResource(R.dimen.space_material_text_field_top),
-                        end = dimensionResource(R.dimen.space_horizontal)
+                        end = dimensionResource(R.dimen.space_horizontal_between)
                     )
                     .size(dimensionResource(R.dimen.image_xs))
             )
