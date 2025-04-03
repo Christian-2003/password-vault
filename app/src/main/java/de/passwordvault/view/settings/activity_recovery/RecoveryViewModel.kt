@@ -15,17 +15,38 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
+/**
+ * Implements the view model for the screen through which to configure recovery methods.
+ *
+ * @author  Christian-2003
+ * @since   3.7.4
+ */
 class RecoveryViewModel(application: Application): AndroidViewModel(application) {
 
+    /**
+     * Account for which to edit the recovery methods.
+     */
     private lateinit var account: Account
 
+    /**
+     * List of security questions configured for the account.
+     */
     val securityQuestions: MutableList<SecurityQuestion> = mutableStateListOf()
 
+    /**
+     * Security question currently being edited.
+     */
     var editedSecurityQuestion: SecurityQuestion? by mutableStateOf(null)
 
+    /**
+     * Security question currently being deleted.
+     */
     var deleteSecurityQuestion: SecurityQuestion? by mutableStateOf(null)
 
 
+    /**
+     * Initializes the view model.
+     */
     fun init(account: Account) {
         this.account = account
         securityQuestions.clear()
@@ -33,6 +54,13 @@ class RecoveryViewModel(application: Application): AndroidViewModel(application)
     }
 
 
+    /**
+     * Method saves the security question passed as arguments. Afterwards, the edited list of
+     * security questions is saved.
+     *
+     * @param question  Question to save.
+     * @param answer    Answer to save.
+     */
     fun saveSecurityQuestion(question: Int, answer: String) = viewModelScope.launch(Dispatchers.IO) {
         if (question == -1 || answer.isEmpty()) {
             editedSecurityQuestion = null
@@ -52,6 +80,13 @@ class RecoveryViewModel(application: Application): AndroidViewModel(application)
         account.save()
     }
 
+
+    /**
+     * Deletes the security question passed as argument. Afterwards, the edited list of security
+     * questions is saved.
+     *
+     * @param securityQuestion  Security question to delete.
+     */
     fun deleteSecurityQuestion(securityQuestion: SecurityQuestion) = viewModelScope.launch(Dispatchers.IO) {
         val removed: Boolean = securityQuestions.remove(securityQuestion)
         deleteSecurityQuestion = null

@@ -20,13 +20,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuAnchorType
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -48,6 +44,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import de.passwordvault.R
 import de.passwordvault.model.security.login.SecurityQuestion
 import de.passwordvault.ui.composables.BottomSheetDialog
@@ -60,6 +57,12 @@ import de.passwordvault.ui.composables.TextInput
 import kotlinx.coroutines.launch
 
 
+/**
+ * Screen through which to configure recovery methods for the account.
+ *
+ * @param viewModel     View model for the screen.
+ * @param onNavigateUp  Callback invoked to navigate up on the navigation stack.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecoveryScreen(
@@ -72,7 +75,9 @@ fun RecoveryScreen(
                 title = {
                     Text(
                         text = stringResource(R.string.settings_security_login_recovery),
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 },
                 navigationIcon = {
@@ -92,6 +97,7 @@ fun RecoveryScreen(
             )
         }
     ) { innerPadding ->
+        //Display list of security questions:
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -139,6 +145,8 @@ fun RecoveryScreen(
                 }
             }
         }
+
+        //Display dialog to edit security question:
         if (viewModel.editedSecurityQuestion != null) {
             SecurityQuestionDialog(
                 question = viewModel.editedSecurityQuestion!!.question,
@@ -152,6 +160,8 @@ fun RecoveryScreen(
                 }
             )
         }
+
+        //Display dialog to delete security question:
         if (viewModel.deleteSecurityQuestion != null) {
             DeleteDialog(
                 message = stringResource(R.string.recovery_delete_message),
@@ -167,6 +177,13 @@ fun RecoveryScreen(
 }
 
 
+/**
+ * Composable displays a single security question within the list of security questions.
+ *
+ * @param securityQuestion  Security question to display.
+ * @param onEdit            Callback invoked to edit the security question.
+ * @param onDelete          Callback invoked to delete the security question.
+ */
 @Composable
 private fun SecurityQuestionListRow(
     securityQuestion: SecurityQuestion,
@@ -278,6 +295,15 @@ private fun SecurityQuestionListRow(
 }
 
 
+/**
+ * Composable displays a dialog through which to edit the security question.
+ *
+ * @param question          Question to edit.
+ * @param answer            Answer to edit.
+ * @param securityQuestions List of security questions to display.
+ * @param onDismiss         Callback invoked to dismiss the dialog.
+ * @param onSave            Callback invoked to save the security question.
+ */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 private fun SecurityQuestionDialog(
