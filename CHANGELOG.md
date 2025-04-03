@@ -14,6 +14,9 @@ n./a.
 * Include library "Coil Compose" to load images with Jetpack Compose.
 * Migrate `SettingsAboutActivity` to Jetpack Compose.
 * Migrate `WebViewActivity` to Jetpack Compose.
+* Change delete-icon to a Material Design 3 icon.
+* Change edit-icon to a Material Design 3 icon.
+* Remove slide to edit / delete for security questions.
 
 <br/>
 

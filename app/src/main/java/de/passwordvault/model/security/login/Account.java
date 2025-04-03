@@ -3,6 +3,8 @@ package de.passwordvault.model.security.login;
 import android.content.Context;
 import android.content.SharedPreferences;
 import java.util.ArrayList;
+import java.util.List;
+
 import de.passwordvault.App;
 import de.passwordvault.model.storage.app.StorageException;
 import de.passwordvault.model.storage.csv.CsvConfiguration;
@@ -70,7 +72,7 @@ public class Account {
      * Attribute stores the security questions that were provided by the user to restore the master
      * password. If no security questions are available, this is {@code null} or empty.
      */
-    private ArrayList<SecurityQuestion> securityQuestions;
+    private List<SecurityQuestion> securityQuestions;
 
 
     /**
@@ -130,7 +132,7 @@ public class Account {
      *
      * @return  Security questions of the account.
      */
-    public ArrayList<SecurityQuestion> getSecurityQuestions() {
+    public List<SecurityQuestion> getSecurityQuestions() {
         if (securityQuestions == null) {
             securityQuestions = new ArrayList<>();
             SharedPreferences preferences = App.getContext().getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
@@ -169,7 +171,7 @@ public class Account {
      *
      * @param securityQuestions List of security questions for the account.
      */
-    public void setSecurityQuestions(ArrayList<SecurityQuestion> securityQuestions) {
+    public void setSecurityQuestions(List<SecurityQuestion> securityQuestions) {
         if (securityQuestions == null) {
             this.securityQuestions = new ArrayList<>();
         }
