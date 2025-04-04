@@ -1,6 +1,7 @@
 package de.passwordvault.ui.composables
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,6 +22,7 @@ import de.passwordvault.R
  *
  * @param title                 Title of the headline.
  * @param modifier              Modifier.
+ * @param isEyecatcherVisible   Whether an eyecatcher is displayed for the endIcon.
  * @param indentToPrefixIcon    Whether to indent the headline with the same start padding used with
  *                              a prefix icon on GenericTextButton.
  * @param endIcon               End icon for the headline.
@@ -30,6 +32,7 @@ import de.passwordvault.R
 fun Headline(
     title: String,
     modifier: Modifier = Modifier,
+    isEyecatcherVisible: Boolean = false,
     indentToPrefixIcon: Boolean = false,
     endIcon: Painter? = null,
     onClick: (() -> Unit)? = null
@@ -56,12 +59,21 @@ fun Headline(
             modifier = Modifier.weight(1f)
         )
         if (endIcon != null) {
-            Icon(
-                painter = endIcon,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                contentDescription = "",
-                modifier = Modifier.padding(start = dimensionResource(R.dimen.space_horizontal_between))
-            )
+            Box(
+                contentAlignment = Alignment.BottomEnd
+            ) {
+                Icon(
+                    painter = endIcon,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    contentDescription = "",
+                    modifier = Modifier.padding(start = dimensionResource(R.dimen.space_horizontal_between))
+                )
+                if (isEyecatcherVisible) {
+                    Eyecatcher(
+                        eyecatcherDefaults = EyecatcherDefaults.helpEyecatcherDefaults
+                    )
+                }
+            }
         }
     }
 }

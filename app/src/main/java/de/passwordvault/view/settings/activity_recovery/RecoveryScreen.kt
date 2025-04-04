@@ -132,6 +132,7 @@ fun RecoveryScreen(
                     }
                     Headline(
                         title = stringResource(R.string.recovery_questions),
+                        isEyecatcherVisible = viewModel.isHelpMode && viewModel.securityQuestions.size < 5,
                         endIcon = painterResource(R.drawable.ic_add),
                         onClick = {
                             viewModel.editedSecurityQuestion = SecurityQuestion(-1, "")
