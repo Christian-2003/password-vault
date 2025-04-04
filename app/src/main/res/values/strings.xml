@@ -298,10 +298,12 @@
     <string name="recovery_password">Reset password</string>
     <string name="recovery_success">Successfully changed password</string>
     <string name="recovery_login_info">In order to recover the master password, you need to answer the security questions correctly.</string>
-    <string name="recovery_amount_info_disabled">Add at least 5 security questions to enable the recovery</string>
-    <string name="recovery_amount_info_disabled_singular">Add {arg} more security question to enable the recovery</string>
-    <string name="recovery_amount_info_disabled_plural">Add {arg} more security questions to enable the recovery</string>
-    <string name="recovery_amount_info_enabled">Recovery is enabled</string>
+    <string name="recovery_title">Password recovery</string>
+    <string name="recovery_subtitle_expanded_disabled">Add at least 5 security questions to enable the recovery</string>
+    <string name="recovery_subtitle_expanded_disabledSingular">Add {arg} more security question to enable the recovery</string>
+    <string name="recovery_subtitle_expanded_disabledPlural">Add {arg} more security questions to enable the recovery</string>
+    <string name="recovery_subtitle_expanded_enabled">Recovery is enabled</string>
+    <string name="recovery_subtitle_collapsed">{arg} / 5 security questions</string>
 
 
     <!-- Search activity -->

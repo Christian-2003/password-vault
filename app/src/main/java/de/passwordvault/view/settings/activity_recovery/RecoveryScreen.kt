@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,28 +12,24 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -46,6 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
@@ -55,7 +51,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import de.passwordvault.R
 import de.passwordvault.model.security.login.SecurityQuestion
 import de.passwordvault.ui.composables.BottomSheetDialog
-import de.passwordvault.ui.composables.Card
 import de.passwordvault.ui.composables.DeleteDialog
 import de.passwordvault.ui.composables.DropdownInput
 import de.passwordvault.ui.composables.EmptyPlaceholder
@@ -77,15 +72,15 @@ fun RecoveryScreen(
     viewModel: RecoveryViewModel,
     onNavigateUp: () -> Unit
 ) {
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+
     Scaffold(
         topBar = {
-            TopAppBar(
+            LargeTopAppBar(
                 title = {
-                    Text(
-                        text = stringResource(R.string.settings_security_login_recovery),
-                        color = MaterialTheme.colorScheme.onSurface,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                    AppBarTitle(
+                        collapsedFraction = scrollBehavior.state.collapsedFraction,
+                        amount = viewModel.securityQuestions.size
                     )
                 },
                 navigationIcon = {
@@ -101,71 +96,66 @@ fun RecoveryScreen(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors().copy(containerColor = MaterialTheme.colorScheme.surfaceContainerHighest)
+                scrollBehavior = scrollBehavior,
+                colors = TopAppBarDefaults.largeTopAppBarColors().copy(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest
+                )
             )
-        }
+        },
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { innerPadding ->
-        Column(
+        //Display list of security questions:
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface)
                 .padding(innerPadding)
         ) {
-            StateView(
-                amount = viewModel.securityQuestions.size
-            )
-            HorizontalDivider()
-
-            //Display list of security questions:
-            LazyColumn(
-                modifier = Modifier
-                    .background(MaterialTheme.colorScheme.surface)
-                    .weight(1f)
-            ) {
-                item {
-                    AnimatedVisibility(viewModel.isHelpMode && viewModel.securityQuestions.size < 5) {
-                        HelpCard(
-                            text = stringResource(R.string.recovery_info),
-                            onDismiss = {
-                                viewModel.dismissHelpMode()
-                            }
-                        )
-                    }
-                    Headline(
-                        title = stringResource(R.string.recovery_questions),
-                        isEyecatcherVisible = viewModel.isHelpMode && viewModel.securityQuestions.size < 5,
-                        endIcon = painterResource(R.drawable.ic_add),
-                        onClick = {
-                            viewModel.editedSecurityQuestion = SecurityQuestion(-1, "")
+            item {
+                AnimatedVisibility(viewModel.isHelpMode && viewModel.securityQuestions.size < 5) {
+                    HelpCard(
+                        text = stringResource(R.string.recovery_info),
+                        onDismiss = {
+                            viewModel.dismissHelpMode()
                         }
                     )
                 }
-                if (viewModel.securityQuestions.isEmpty()) {
-                    item {
-                        EmptyPlaceholder(
-                            title = stringResource(R.string.recovery_questions_empty_headline),
-                            text = stringResource(R.string.recovery_questions_empty_support),
-                            painter = painterResource(R.drawable.el_security_question),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(
-                                    horizontal = dimensionResource(R.dimen.space_horizontal),
-                                    vertical = dimensionResource(R.dimen.space_vertical)
-                                )
-                        )
+                Headline(
+                    title = stringResource(R.string.recovery_questions),
+                    isEyecatcherVisible = viewModel.isHelpMode && viewModel.securityQuestions.size < 5,
+                    endIcon = painterResource(R.drawable.ic_add),
+                    onClick = {
+                        viewModel.editedSecurityQuestion = SecurityQuestion(-1, "")
                     }
+                )
+            }
+            if (viewModel.securityQuestions.isEmpty()) {
+                item {
+                    EmptyPlaceholder(
+                        title = stringResource(R.string.recovery_questions_empty_headline),
+                        text = stringResource(R.string.recovery_questions_empty_support),
+                        painter = painterResource(R.drawable.el_security_question),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                horizontal = dimensionResource(R.dimen.space_horizontal),
+                                vertical = dimensionResource(R.dimen.space_vertical)
+                            )
+                    )
                 }
-                else {
-                    items(viewModel.securityQuestions) { securityQuestion ->
-                        SecurityQuestionListRow(
-                            securityQuestion = securityQuestion,
-                            onEdit = {
-                                viewModel.editedSecurityQuestion = it
-                            },
-                            onDelete = {
-                                viewModel.deleteSecurityQuestion = it
-                            }
-                        )
-                    }
+            }
+            else {
+                items(viewModel.securityQuestions) { securityQuestion ->
+                    SecurityQuestionListRow(
+                        securityQuestion = securityQuestion,
+                        onEdit = {
+                            viewModel.editedSecurityQuestion = it
+                        },
+                        onDelete = {
+                            viewModel.deleteSecurityQuestion = it
+                        }
+                    )
                 }
             }
         }
@@ -201,32 +191,48 @@ fun RecoveryScreen(
 }
 
 
+/**
+ * Displays the title for the app bar.
+ *
+ * @param collapsedFraction Fraction to which the app bar is collapsed.
+ * @param amount            Number of security questions that are configured.
+ */
 @Composable
-private fun StateView(
+private fun AppBarTitle(
+    collapsedFraction: Float,
     amount: Int
 ) {
-    val stateText = if (amount == 0) {
-        stringResource(R.string.recovery_amount_info_disabled)
-    } else if (amount >= 5) {
-        stringResource(R.string.recovery_amount_info_enabled)
-    } else if (amount == 4) {
-        stringResource(R.string.recovery_amount_info_disabled_singular).replace("{arg}", (5 - amount).toString())
+    val collapsedThreshold = 0.7f
+    val stateText = if (collapsedFraction > collapsedThreshold) {
+        stringResource(R.string.recovery_subtitle_collapsed).replace("{arg}", amount.toString())
     } else {
-        stringResource(R.string.recovery_amount_info_disabled_plural).replace("{arg}", (5 - amount).toString())
+        if (amount == 0) {
+            stringResource(R.string.recovery_subtitle_expanded_disabled)
+        } else if (amount >= 5) {
+            stringResource(R.string.recovery_subtitle_expanded_enabled)
+        } else if (amount == 4) {
+            stringResource(R.string.recovery_subtitle_expanded_disabledSingular).replace("{arg}", (5 - amount).toString())
+        } else {
+            stringResource(R.string.recovery_subtitle_expanded_disabledPlural).replace("{arg}", (5 - amount).toString())
+        }
     }
 
-    Text(
-        text = stateText,
-        color = if (amount >= 5) { MaterialTheme.colorScheme.onSurfaceVariant } else { MaterialTheme.colorScheme.error },
-        style = MaterialTheme.typography.bodySmall,
-        textAlign = TextAlign.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                horizontal = dimensionResource(R.dimen.space_horizontal),
-                vertical = dimensionResource(R.dimen.space_vertical)
-            )
-    )
+    Column {
+        Text(
+            text = stringResource(R.string.recovery_title),
+            color = MaterialTheme.colorScheme.onSurface,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        Text(
+            text = stateText,
+            color = if (amount >= 5) { MaterialTheme.colorScheme.onSurfaceVariant } else { MaterialTheme.colorScheme.error },
+            style = MaterialTheme.typography.bodySmall,
+            textAlign = TextAlign.Center,
+            maxLines = if (collapsedFraction > collapsedThreshold) { 1 } else { Int.MAX_VALUE },
+            overflow = TextOverflow.Ellipsis
+        )
+    }
 }
 
 

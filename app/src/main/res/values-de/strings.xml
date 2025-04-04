@@ -295,10 +295,12 @@
     <string name="recovery_password">Passwort zurücksetzen</string>
     <string name="recovery_success">Passwort wurde erfolreich geändert.</string>
     <string name="recovery_login_info">Um das Master Passwort zurückzusetzen, musst du die Sicherheitsfragen korrekt beantworten.</string>
-    <string name="recovery_amount_info_disabled">Wähle mindestens 5 Sicherheitsfragen, um die Wiederherstellung zu aktivieren</string>
-    <string name="recovery_amount_info_disabled_singular">Wähle {arg} weitere Sicherheitsfrage um die Wiederherstellung zu aktivieren</string>
-    <string name="recovery_amount_info_disabled_plural">Wähle {arg} weitere Sicherheitsfragen um die Wiederherstellung zu aktivieren</string>
-    <string name="recovery_amount_info_enabled">Wiederherstellung ist aktiv</string>
+    <string name="recovery_title">Passwort-Wiederherstellung</string>
+    <string name="recovery_subtitle_expanded_disabled">Wähle mindestens 5 Sicherheitsfragen, um die Wiederherstellung zu aktivieren</string>
+    <string name="recovery_subtitle_expanded_disabledSingular">Wähle {arg} weitere Sicherheitsfrage um die Wiederherstellung zu aktivieren</string>
+    <string name="recovery_subtitle_expanded_disabledPlural">Wähle {arg} weitere Sicherheitsfragen um die Wiederherstellung zu aktivieren</string>
+    <string name="recovery_subtitle_expanded_enabled">Wiederherstellung ist aktiv</string>
+    <string name="recovery_subtitle_collapsed">{arg} / 5 Sicherheitsfragen</string>
 
 
     <!-- Search activity -->
