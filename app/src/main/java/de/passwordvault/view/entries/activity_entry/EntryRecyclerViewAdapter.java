@@ -178,11 +178,6 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
     public static class DetailPasswordViewHolder extends DetailViewHolder {
 
         /**
-         * Attribute stores the text view displaying the password security score.
-         */
-        public final TextView scoreTextView;
-
-        /**
          * Attribute stores the progress bar displaying the score progress bar.
          */
         public final ProgressBar scoreProgressBar;
@@ -195,7 +190,6 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
          */
         public DetailPasswordViewHolder(View itemView) {
             super(itemView);
-            scoreTextView = itemView.findViewById(R.id.text_score);
             scoreProgressBar = itemView.findViewById(R.id.progress_bar);
         }
 
@@ -479,9 +473,6 @@ public class EntryRecyclerViewAdapter extends RecyclerViewAdapter<EntryViewModel
                 animator.setDuration(context.getResources().getInteger(R.integer.default_anim_duration) * 5L);
                 animator.addUpdateListener(anim -> passwordHolder.scoreProgressBar.setProgress((int)anim.getAnimatedValue()));
                 animator.start();
-                //passwordHolder.scoreProgressBar.setProgress(securityScore * 100);
-                String securityScoreString = securityScore + " / " + maxSecurityScore;
-                passwordHolder.scoreTextView.setText(securityScoreString);
             }
         }
         else if (viewHolder instanceof MoreButtonViewHolder) {

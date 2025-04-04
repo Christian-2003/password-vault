@@ -15,6 +15,7 @@ Password Vault encrypts your data using **AES / GCM** to ensure maximum security
 
 Code | Version | Data | Backup | User Password | Autofill Cache | Password Recovery
 --- | --- | --- | --- | --- | --- | ---
+37 | 3.7.4 | :white_check_mark: | :white_check_mark:<sup>1</sup> | :white_check_mark: | :white_check_mark: | :white_check_mark:
 33 | 3.7.3 | :white_check_mark: | :white_check_mark:<sup>1</sup> | :white_check_mark: | :white_check_mark: | :white_check_mark:
 29 | 3.7.2 | :white_check_mark: | :white_check_mark:<sup>1</sup> | :white_check_mark: | :white_check_mark: | :white_check_mark:
 26 | 3.7.1 | :white_check_mark: | :white_check_mark:<sup>1</sup> | :white_check_mark: | :white_check_mark: | :white_check_mark:
@@ -58,5 +59,5 @@ If you find any security-related bugs in our product, please notify our developm
 <br/>
 
 ***
-2025-02-08  
+2025-04-04  
 &copy; Christian-2003  

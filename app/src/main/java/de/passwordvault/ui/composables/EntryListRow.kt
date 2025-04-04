@@ -25,7 +25,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.core.graphics.drawable.toBitmap
 import de.passwordvault.R
 import de.passwordvault.model.entry.EntryAbbreviated
-import de.passwordvault.ui.theme.LocalPasswordVaultColors
 
 
 /**
@@ -46,8 +45,8 @@ fun EntryListRow(
                 onClick!!(entry)
             }
             .padding(
-                horizontal = dimensionResource(R.dimen.space_horizontal),
-                vertical = dimensionResource(R.dimen.space_vertical)
+                horizontal = dimensionResource(R.dimen.padding_horizontal),
+                vertical = dimensionResource(R.dimen.padding_vertical)
             )
     ) {
         //Logo of the app / or name abbreviation:
@@ -57,11 +56,11 @@ fun EntryListRow(
                 modifier = Modifier
                     .size(dimensionResource(R.dimen.image_m))
                     .clip(RoundedCornerShape(dimensionResource(R.dimen.corner_xs)))
-                    .background(LocalPasswordVaultColors.current.backgroundContainer)
+                    .background(MaterialTheme.colorScheme.surfaceContainer)
             ) {
                 Text(
                     text = if (entry.name.isNotEmpty()) { "" + entry.name[0] } else { "" },
-                    color = LocalPasswordVaultColors.current.primary,
+                    color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold
                 )
@@ -80,17 +79,17 @@ fun EntryListRow(
         //Name and description:
         Column(
             modifier = Modifier
-                .padding(start = dimensionResource(R.dimen.space_horizontal_between))
+                .padding(start = dimensionResource(R.dimen.padding_horizontal_between))
         ) {
             Text(
                 text = entry.name,
-                color = LocalPasswordVaultColors.current.text,
+                color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.bodyLarge
             )
             if (entry.description.isNotEmpty()) {
                 Text(
                     text = entry.description,
-                    color = LocalPasswordVaultColors.current.textVariant,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodyMedium
                 )
             }

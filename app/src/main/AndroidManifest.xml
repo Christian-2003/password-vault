@@ -37,11 +37,7 @@
         <!-- Other activities of the application -->
         <activity android:name=".view.activity_main.MainActivity" android:exported="false"/>
         <activity android:name=".view.entries.activity_entry.EntryActivity" android:exported="false"/>
-        <activity android:name=".view.settings.activity_quality_gates.QualityGatesActivity" android:exported="false"/>
-        <activity android:name=".view.settings.activity_quality_gate.QualityGateActivity" android:exported="false"/>
         <activity android:name=".view.passwords.activity_analysis.PasswordAnalysisActivity" android:exported="false"/>
-        <activity android:name=".view.passwords.activity_list.PasswordAnalysisListActivity" android:exported="false"/>
-        <activity android:name=".view.passwords.activity_duplicates.DuplicatePasswordEntriesActivity" android:exported="false"/>
         <activity android:name=".view.entries.activity_packages.PackagesActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_about.SettingsAboutActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_data.SettingsDataActivity" android:exported="false"/>
@@ -49,7 +45,7 @@
         <activity android:name=".view.settings.activity_autofill.SettingsAutofillActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_customization.SettingsCustomizationActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_help.SettingsHelpActivity" android:exported="false"/>
-        <activity android:name=".view.settings.activity_webview.WebviewActivity" android:exported="false"/>
+        <activity android:name=".view.settings.activity_webview.WebViewActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_create_backup.CreateBackupActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_restore_backup.RestoreBackupActivity" android:exported="false"/>
         <activity android:name=".view.settings.activity_recovery.RecoveryActivity" android:exported="false"/>
@@ -58,18 +54,6 @@
         <activity android:name=".view.settings.activity_settings.SettingsActivity" android:exported="false"/>
         <activity android:name=".view.activity_search.SearchActivity" android:exported="false"/>
         <activity android:name=".view.activity_legal.LegalActivity" android:exported="false"/>
-
-        <activity android:name=".view.settings.activity_import_quality_gate.SettingsImportQualityGateActivity" android:exported="true">
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data
-                    android:scheme="https"
-                    android:host="passwordvault.christian2003.de"
-                    android:pathPrefix="/data"/>
-            </intent-filter>
-        </activity>
 
         <!-- Activity used for authentication with autofill requests -->
         <activity

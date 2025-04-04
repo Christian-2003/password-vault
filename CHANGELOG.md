@@ -2,6 +2,26 @@
 
 # Changelog
 
+## 3.7.4 (2025-04-04)
+###### Release Highlights
+The update focuses on the Jetpack Compose migration as well as a reduction in feature scope to enhance user experience.
+
+###### Features
+* Switch from `LocalPasswordVaultColors.current` to `MaterialTheme.colorScheme` as much as possible to better align with Material Theme 3.
+* Visual changes to tab displaying weak passwords in `PasswordAnalysisScreen`, to reduce visual elements for each weak passwords. This is done to reduce information visible to the user.
+* Remove custom password quality gates from the app, since using RegEx is way too complicated to understand for regular people.
+* Migrate `LicensesActivity` to Jetpack Compose.
+* Include library "Coil Compose" to load images with Jetpack Compose.
+* Migrate `SettingsAboutActivity` to Jetpack Compose.
+* Migrate `WebViewActivity` to Jetpack Compose.
+* Change delete-icon to a Material Design 3 icon.
+* Change edit-icon to a Material Design 3 icon.
+* Remove slide to edit / delete for security questions.
+* App settings no longer provide a way to change between dark- and light mode.
+* Migrate `RecoveryActivty` to Jetpack Compose.
+
+<br/>
+
 ## 3.7.3 (2025-03-07)
 ###### Release Highlights
 Increased minimum required version from SDK 32 (Android 12L) to SDK 34 (Android 14). Furthermore, the update focuses on Bugfixes and begins migration to Jetpack Compose.

@@ -25,69 +25,6 @@ import de.passwordvault.model.storage.settings.items.SwipeActionItem;
 public class Config implements ConfigSettingContract {
 
     /**
-     * Class contains all constants that are being used with the config.
-     */
-    public static class Constants {
-
-        /**
-         * Field stores a value indicating that the app uses light- or dark mode depending on the system
-         * settings.
-         */
-        public static final int DARKMODE_SYSTEM = 0;
-
-        /**
-         * Field stores a value indicating that the app uses light mode.
-         */
-        public static final int DARKMODE_LIGHT = 1;
-
-        /**
-         * Field stores a value indicating that the app uses dark mode.
-         */
-        public static final int DARKMODE_DARK = 2;
-
-    }
-
-
-    /**
-     * Class contains all methods that are being used with the config.
-     */
-    public static class Methods {
-
-        /**
-         * Method applies the darkmode setting to the app. This needs to be called whenever the darkmode
-         * changes and when the app starts.
-         */
-        public static void applyDarkmode() {
-            int darkmode = Config.getInstance().darkmode.get();
-            switch (darkmode) {
-                case Constants.DARKMODE_LIGHT:
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    break;
-                case Constants.DARKMODE_DARK:
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    break;
-                default:
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                    break;
-            }
-        }
-
-
-        /**
-         * Method applies all settings to the app. This can be called whenever a large
-         * number of settings is changed (e.g. when a backup is restored).
-         */
-        public static void applyAllSettings() {
-            App.getContext().getMainExecutor().execute(() -> {
-                applyDarkmode();
-            });
-        }
-
-    }
-
-
-
-    /**
      * Setting indicates whether to use autofill caching.
      */
     public final BooleanItem useAutofillCaching = new BooleanItem(this, "autofill_caching", false);
@@ -96,11 +33,6 @@ public class Config implements ConfigSettingContract {
      * Setting indicates whether to use autofill authentication.
      */
     public final BooleanItem useAutofillAuth = new BooleanItem(this, "autofill_auth", true);
-
-    /**
-     * Setting indicate whether to use the darkmode.
-     */
-    public final IntItem darkmode = new IntItem(this, "darkmode", Constants.DARKMODE_SYSTEM);
 
     /**
      * Setting indicates what to do on left swipe.

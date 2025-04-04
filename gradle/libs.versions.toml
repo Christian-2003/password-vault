@@ -1,6 +1,7 @@
 [versions]
 accompanistPager = "0.36.0"
 activityCompose = "1.9.3"
+coilCompose = "2.7.0"
 securityCrypto = "1.0.0"
 apkupdaterLibrary = "v2.1.0"
 appcompat = "1.7.0"
@@ -28,6 +29,7 @@ kotlin = "2.1.0"
 [libraries]
 accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPager" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 security-crypto = { module = "androidx.security:security-crypto", version.ref = "securityCrypto" }
 apkupdater-library = { module = "com.github.supersu-man:apkupdater-library", version.ref = "apkupdaterLibrary" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }

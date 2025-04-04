@@ -11,6 +11,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import de.passwordvault.ui.composables.Tab
 import androidx.compose.material3.TabRow
@@ -52,7 +53,7 @@ fun PasswordAnalysisScreen(
                 title = {
                     Text(
                         text = stringResource(R.string.password_analysis_title),
-                        color = LocalPasswordVaultColors.current.text
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 },
                 navigationIcon = {
@@ -63,7 +64,7 @@ fun PasswordAnalysisScreen(
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.ic_back),
-                            tint = LocalPasswordVaultColors.current.text,
+                            tint = MaterialTheme.colorScheme.onSurface,
                             contentDescription = ""
                         )
                     }
@@ -77,19 +78,19 @@ fun PasswordAnalysisScreen(
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.ic_reload),
-                            tint = if (viewModel.isAnalysisStarted) { LocalPasswordVaultColors.current.text.copy(0.5f) } else { LocalPasswordVaultColors.current.text },
+                            tint = if (viewModel.isAnalysisStarted) { MaterialTheme.colorScheme.onSurface.copy(0.5f) } else { MaterialTheme.colorScheme.onSurface },
                             contentDescription = ""
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = LocalPasswordVaultColors.current.backgroundAppBar)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHighest)
             )
         }
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(LocalPasswordVaultColors.current.background)
+                .background(MaterialTheme.colorScheme.surface)
                 .padding(innerPadding)
         ) {
             if (viewModel.isAnalysisStarted) {
@@ -161,7 +162,7 @@ private fun ContentSection(
 
     TabRow(
         selectedTabIndex = pagerState.currentPage,
-        containerColor = LocalPasswordVaultColors.current.backgroundAppBar,
+        containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
         divider = {},
         indicator = { tabPositions ->
             TabRowDefaults.PrimaryIndicator(
@@ -209,8 +210,6 @@ private fun ContentSection(
             0 -> GeneralTab(
                 securityScore = securityScore,
                 maxSecurityScore = maxSecurityScore,
-                thresholdGood = thresholdGood,
-                thresholdNeutral = thresholdNeutral,
                 numberOfWeakPasswords = weakPasswords.size,
                 numberOfIdenticalPasswords = numberOfIdenticalPasswords,
                 onWeakPasswordsClicked = {

@@ -285,7 +285,7 @@
 
 
     <!-- Recovery activity -->
-    <string name="recovery_info">Select at least five security questions that are used to login into Password Vault in case you forget the master password. When you login to the app with these questions, you need to answer at least four questions correctly. Otherwise, the login fails.</string>
+    <string name="recovery_info">Select security questions with which to access Password Vault if you forget your master password.</string>
     <string name="recovery_progress">Progress</string>
     <string name="recovery_score">{arg} / {max}</string>
     <string name="recovery_questions">Security Questions</string>
@@ -298,6 +298,12 @@
     <string name="recovery_password">Reset password</string>
     <string name="recovery_success">Successfully changed password</string>
     <string name="recovery_login_info">In order to recover the master password, you need to answer the security questions correctly.</string>
+    <string name="recovery_title">Password recovery</string>
+    <string name="recovery_subtitle_expanded_disabled">Add at least 5 security questions to enable the recovery</string>
+    <string name="recovery_subtitle_expanded_disabledSingular">Add {arg} more security question to enable the recovery</string>
+    <string name="recovery_subtitle_expanded_disabledPlural">Add {arg} more security questions to enable the recovery</string>
+    <string name="recovery_subtitle_expanded_enabled">Recovery is enabled</string>
+    <string name="recovery_subtitle_collapsed">{arg} / 5 security questions</string>
 
 
     <!-- Search activity -->
@@ -335,6 +341,7 @@
 
 
     <!-- ConfirmDelete dialog -->
+    <string name="delete_dialog_title">Confirm deletion</string>
     <string name="confirm_delete_dialog_confirm">Are you sure you want to delete {arg}?</string>
     <string name="delete_dialog_message">Are you sure you want to delete \"{arg}\"? This action cannot be undone.</string>
 
@@ -370,6 +377,7 @@
     <string name="button_analyze_password_security">Analyze password security</string>
     <string name="button_accept">Accept changes</string>
     <string name="button_deny">Deny changes</string>
+    <string name="button_dismiss_help">Do not show</string>
 
 
     <!-- Input hints -->
@@ -424,6 +432,7 @@
     <!-- Password quality gates -->
     <string name="quality_gates">Quality Gates</string>
     <string name="quality_gates_info">Specify quality gates to enhance the security of your passwords.</string>
+    <string name="quality_gates_title">Quality Gates</string>
     <string name="quality_gates_author_password_vault">Password Vault</string>
     <string name="quality_gates_author_user">You</string>
     <string name="quality_gates_share">Share link to quality gate</string>

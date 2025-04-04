@@ -7,7 +7,6 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.google.android.material.materialswitch.MaterialSwitch;
 import de.passwordvault.R;
 import de.passwordvault.model.security.authentication.AuthenticationCallback;
@@ -19,7 +18,6 @@ import de.passwordvault.view.passwords.activity_analysis.PasswordAnalysisActivit
 import de.passwordvault.view.settings.activity_autofill.SettingsAutofillActivity;
 import de.passwordvault.view.settings.activity_data.SettingsDataActivity;
 import de.passwordvault.view.authentication.dialog_change_password.ChangePasswordDialog;
-import de.passwordvault.view.settings.activity_quality_gates.QualityGatesActivity;
 import de.passwordvault.view.settings.activity_recovery.RecoveryActivity;
 import de.passwordvault.view.settings.activity_settings.SettingsViewModel;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
@@ -194,14 +192,6 @@ public class SettingsSecurityActivity extends PasswordVaultActivity<SettingsView
         screenshotSwitch.setChecked(Config.getInstance().preventScreenshots.get());
         screenshotSwitch.setOnCheckedChangeListener(this);
         findViewById(R.id.settings_security_data_screenshot_clickable).setOnClickListener(view -> screenshotSwitch.setChecked(!screenshotSwitch.isChecked()));
-
-        //Passwords:
-        findViewById(R.id.settings_security_password_qualitygates_container).setOnClickListener(view -> startActivity(new Intent(this, QualityGatesActivity.class)));
-        findViewById(R.id.settings_security_password_analysis_container).setOnClickListener(view -> startActivity(new Intent(this, PasswordAnalysisActivity.class)));
-
-        //Search:
-        findViewById(R.id.button_search_backup).setOnClickListener(view -> startActivity(new Intent(this, SettingsDataActivity.class)));
-        findViewById(R.id.button_search_autofillauthentication).setOnClickListener(view -> startActivity(new Intent(this, SettingsAutofillActivity.class)));
     }
 
 

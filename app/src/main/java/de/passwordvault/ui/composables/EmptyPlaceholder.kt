@@ -12,7 +12,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
-import de.passwordvault.ui.theme.LocalPasswordVaultColors
 import de.passwordvault.R
 
 
@@ -43,13 +42,13 @@ fun EmptyPlaceholder(
         )
         Text(
             text = title,
-            color = LocalPasswordVaultColors.current.text,
+            color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center
         )
         Text(
             text = text,
-            color = LocalPasswordVaultColors.current.textVariant,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center
         )
