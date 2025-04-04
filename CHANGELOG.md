@@ -2,9 +2,9 @@
 
 # Changelog
 
-## 3.7.4 (XXXX-XX-XX)
+## 3.7.4 (2025-04-04)
 ###### Release Highlights
-n./a.
+The update focuses on the Jetpack Compose migration as well as a reduction in feature scope to enhance user experience.
 
 ###### Features
 * Switch from `LocalPasswordVaultColors.current` to `MaterialTheme.colorScheme` as much as possible to better align with Material Theme 3.
@@ -18,6 +18,7 @@ n./a.
 * Change edit-icon to a Material Design 3 icon.
 * Remove slide to edit / delete for security questions.
 * App settings no longer provide a way to change between dark- and light mode.
+* Migrate `RecoveryActivty` to Jetpack Compose.
 
 <br/>
 
