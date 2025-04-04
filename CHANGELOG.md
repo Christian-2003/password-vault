@@ -17,6 +17,7 @@ n./a.
 * Change delete-icon to a Material Design 3 icon.
 * Change edit-icon to a Material Design 3 icon.
 * Remove slide to edit / delete for security questions.
+* App settings no longer provide a way to change between dark- and light mode.
 
 <br/>
 

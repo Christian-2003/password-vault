@@ -743,7 +743,6 @@ public class Backup {
                 //Continue with next setting...
             }
         }
-        Config.Methods.applyAllSettings();
     }
 
 

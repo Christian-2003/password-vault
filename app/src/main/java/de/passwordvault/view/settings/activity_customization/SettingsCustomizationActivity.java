@@ -2,14 +2,10 @@ package de.passwordvault.view.settings.activity_customization;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;
-
 import com.google.android.material.materialswitch.MaterialSwitch;
-
 import de.passwordvault.R;
-import de.passwordvault.view.settings.dialog_darkmode.DarkmodeDialog;
 import de.passwordvault.view.settings.dialog_swipe.SwipeDialog;
 import de.passwordvault.view.utils.components.PasswordVaultActivity;
-import de.passwordvault.view.settings.activity_settings.SettingsViewModel;
 
 
 /**
@@ -40,7 +36,6 @@ public class SettingsCustomizationActivity extends PasswordVaultActivity<Setting
         findViewById(R.id.button_back).setOnClickListener(view -> finish());
 
         //Appearance:
-        findViewById(R.id.settings_customization_appearance_darkmode_conatainer).setOnClickListener(view -> changeDarkmode());
         findViewById(R.id.settings_customization_details_swipe_conatainer).setOnClickListener(view -> changeSwipeActions());
 
         //Navigation:
@@ -53,14 +48,6 @@ public class SettingsCustomizationActivity extends PasswordVaultActivity<Setting
         });
     }
 
-
-    /**
-     * Method shows the dialog to change between dark / light mode.
-     */
-    private void changeDarkmode() {
-        DarkmodeDialog dialog = new DarkmodeDialog();
-        dialog.show(getSupportFragmentManager(), "");
-    }
 
     /**
      * Method shows the dialog to change the swipe actions for swiping details.

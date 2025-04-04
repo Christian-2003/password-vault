@@ -71,8 +71,6 @@ public class LoginActivity extends PasswordVaultActivity<LoginViewModel> impleme
         splashScreen.setOnExitAnimationListener(this);
         viewModel.startSplashScreenTimer(getResources().getInteger(R.integer.anim_duration_splash));
 
-        Config.Methods.applyDarkmode();
-
         if (!Account.getInstance().hasPassword()) {
             //No login required:
             continueToMainActivity();
