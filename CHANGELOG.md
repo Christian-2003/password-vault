@@ -2,6 +2,15 @@
 
 # Changelog
 
+## 3.7.5 (XXXX-XX-XX)
+###### Release Highlights
+n./a.
+
+###### Features
+* n./a.
+
+<br/>
+
 ## 3.7.4 (2025-04-04)
 ###### Release Highlights
 The update focuses on the Jetpack Compose migration as well as a reduction in feature scope to enhance user experience.
