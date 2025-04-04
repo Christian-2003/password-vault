@@ -62,7 +62,9 @@ fun BottomSheetDialog(
         dragHandle = null
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface)
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surface)
         ) {
             header()
             HorizontalDivider()

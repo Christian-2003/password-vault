@@ -29,6 +29,16 @@ class RecoveryViewModel(application: Application): AndroidViewModel(application)
     private lateinit var account: Account
 
     /**
+     * Preferences to store simple key-value pairs of data.
+     */
+    private val preferences = getApplication<Application>().baseContext.getSharedPreferences("settings", Context.MODE_PRIVATE)
+
+    /**
+     * Stores whether the help mode is activated.
+     */
+    var isHelpMode: Boolean by mutableStateOf(preferences.getBoolean("help_recovery", true))
+
+    /**
      * List of security questions configured for the account.
      */
     val securityQuestions: MutableList<SecurityQuestion> = mutableStateListOf()
@@ -124,6 +134,15 @@ class RecoveryViewModel(application: Application): AndroidViewModel(application)
         }
 
         return availableQuestions.toList()
+    }
+
+
+    /**
+     * Dismisses the help mode for the recovery.
+     */
+    fun dismissHelpMode() = viewModelScope.launch(Dispatchers.IO) {
+        isHelpMode = false
+        preferences.edit().putBoolean("help_recovery", false).apply()
     }
 
 }

@@ -298,6 +298,10 @@
     <string name="recovery_password">Reset password</string>
     <string name="recovery_success">Successfully changed password</string>
     <string name="recovery_login_info">In order to recover the master password, you need to answer the security questions correctly.</string>
+    <string name="recovery_amount_info_disabled">Add at least 5 security questions to enable the recovery</string>
+    <string name="recovery_amount_info_disabled_singular">Add {arg} more security question to enable the recovery</string>
+    <string name="recovery_amount_info_disabled_plural">Add {arg} more security questions to enable the recovery</string>
+    <string name="recovery_amount_info_enabled">Recovery is enabled</string>
 
 
     <!-- Search activity -->
@@ -371,6 +375,7 @@
     <string name="button_analyze_password_security">Analyze password security</string>
     <string name="button_accept">Accept changes</string>
     <string name="button_deny">Deny changes</string>
+    <string name="button_dismiss_help">Do not show</string>
 
 
     <!-- Input hints -->

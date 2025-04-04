@@ -1,6 +1,7 @@
 package de.passwordvault.ui.composables
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,6 +27,7 @@ import de.passwordvault.R
  * @param backgroundColor   Background color for the card.
  * @param foregroundColor   Foreground color for the card.
  * @param icon              Icon for the card.
+ * @param content           Content to display below the card text.
  */
 @Composable
 fun Card(
@@ -33,10 +35,10 @@ fun Card(
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colorScheme.surfaceContainer,
     foregroundColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
-    icon: Painter = painterResource(R.drawable.ic_info_filled)
+    icon: Painter = painterResource(R.drawable.ic_info_filled),
+    content: (@Composable () -> Unit)? = null
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+    Column(
         modifier = modifier
             .padding(
                 horizontal = dimensionResource(R.dimen.space_horizontal),
@@ -49,16 +51,23 @@ fun Card(
                 vertical = dimensionResource(R.dimen.space_vertical)
             )
     ) {
-        Icon(
-            painter = icon,
-            tint = foregroundColor,
-            contentDescription = "",
-            modifier = Modifier.padding(end = dimensionResource(R.dimen.space_horizontal_between))
-        )
-        Text(
-            text = text,
-            color = foregroundColor,
-            style = MaterialTheme.typography.bodyLarge
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = icon,
+                tint = foregroundColor,
+                contentDescription = "",
+                modifier = Modifier.padding(end = dimensionResource(R.dimen.space_horizontal_between))
+            )
+            Text(
+                text = text,
+                color = foregroundColor,
+                style = MaterialTheme.typography.bodyLarge
+            )
+        }
+        if (content != null) {
+            content()
+        }
     }
 }

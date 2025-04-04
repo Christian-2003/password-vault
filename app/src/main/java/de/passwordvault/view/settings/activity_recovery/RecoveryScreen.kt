@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,14 +13,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -44,6 +50,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import de.passwordvault.R
 import de.passwordvault.model.security.login.SecurityQuestion
@@ -53,6 +60,7 @@ import de.passwordvault.ui.composables.DeleteDialog
 import de.passwordvault.ui.composables.DropdownInput
 import de.passwordvault.ui.composables.EmptyPlaceholder
 import de.passwordvault.ui.composables.Headline
+import de.passwordvault.ui.composables.HelpCard
 import de.passwordvault.ui.composables.TextInput
 import kotlinx.coroutines.launch
 
@@ -97,51 +105,66 @@ fun RecoveryScreen(
             )
         }
     ) { innerPadding ->
-        //Display list of security questions:
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surface)
                 .padding(innerPadding)
         ) {
-            item {
-                Card(
-                    text = stringResource(R.string.recovery_info)
-                )
-                Headline(
-                    title = stringResource(R.string.recovery_questions),
-                    endIcon = painterResource(R.drawable.ic_add),
-                    onClick = {
-                        viewModel.editedSecurityQuestion = SecurityQuestion(-1, "")
-                    }
-                )
-            }
-            if (viewModel.securityQuestions.isEmpty()) {
+            StateView(
+                amount = viewModel.securityQuestions.size
+            )
+            HorizontalDivider()
+
+            //Display list of security questions:
+            LazyColumn(
+                modifier = Modifier
+                    .background(MaterialTheme.colorScheme.surface)
+                    .weight(1f)
+            ) {
                 item {
-                    EmptyPlaceholder(
-                        title = stringResource(R.string.recovery_questions_empty_headline),
-                        text = stringResource(R.string.recovery_questions_empty_support),
-                        painter = painterResource(R.drawable.el_security_question),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(
-                                horizontal = dimensionResource(R.dimen.space_horizontal),
-                                vertical = dimensionResource(R.dimen.space_vertical)
-                            )
-                    )
-                }
-            }
-            else {
-                items(viewModel.securityQuestions) { securityQuestion ->
-                    SecurityQuestionListRow(
-                        securityQuestion = securityQuestion,
-                        onEdit = {
-                            viewModel.editedSecurityQuestion = it
-                        },
-                        onDelete = {
-                            viewModel.deleteSecurityQuestion = it
+                    AnimatedVisibility(viewModel.isHelpMode && viewModel.securityQuestions.size < 5) {
+                        HelpCard(
+                            text = stringResource(R.string.recovery_info),
+                            onDismiss = {
+                                viewModel.dismissHelpMode()
+                            }
+                        )
+                    }
+                    Headline(
+                        title = stringResource(R.string.recovery_questions),
+                        endIcon = painterResource(R.drawable.ic_add),
+                        onClick = {
+                            viewModel.editedSecurityQuestion = SecurityQuestion(-1, "")
                         }
                     )
+                }
+                if (viewModel.securityQuestions.isEmpty()) {
+                    item {
+                        EmptyPlaceholder(
+                            title = stringResource(R.string.recovery_questions_empty_headline),
+                            text = stringResource(R.string.recovery_questions_empty_support),
+                            painter = painterResource(R.drawable.el_security_question),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    horizontal = dimensionResource(R.dimen.space_horizontal),
+                                    vertical = dimensionResource(R.dimen.space_vertical)
+                                )
+                        )
+                    }
+                }
+                else {
+                    items(viewModel.securityQuestions) { securityQuestion ->
+                        SecurityQuestionListRow(
+                            securityQuestion = securityQuestion,
+                            onEdit = {
+                                viewModel.editedSecurityQuestion = it
+                            },
+                            onDelete = {
+                                viewModel.deleteSecurityQuestion = it
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -174,6 +197,35 @@ fun RecoveryScreen(
             )
         }
     }
+}
+
+
+@Composable
+private fun StateView(
+    amount: Int
+) {
+    val stateText = if (amount == 0) {
+        stringResource(R.string.recovery_amount_info_disabled)
+    } else if (amount >= 5) {
+        stringResource(R.string.recovery_amount_info_enabled)
+    } else if (amount == 4) {
+        stringResource(R.string.recovery_amount_info_disabled_singular).replace("{arg}", (5 - amount).toString())
+    } else {
+        stringResource(R.string.recovery_amount_info_disabled_plural).replace("{arg}", (5 - amount).toString())
+    }
+
+    Text(
+        text = stateText,
+        color = if (amount >= 5) { MaterialTheme.colorScheme.onSurfaceVariant } else { MaterialTheme.colorScheme.error },
+        style = MaterialTheme.typography.bodySmall,
+        textAlign = TextAlign.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                horizontal = dimensionResource(R.dimen.space_horizontal),
+                vertical = dimensionResource(R.dimen.space_vertical)
+            )
+    )
 }
 
 
@@ -313,7 +365,7 @@ private fun SecurityQuestionDialog(
     onDismiss: () -> Unit,
     onSave: (Int, String) -> Unit
 ) {
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
     var question: Int by rememberSaveable { mutableIntStateOf(question) }
     var answer: String by rememberSaveable { mutableStateOf(answer) }
@@ -325,7 +377,7 @@ private fun SecurityQuestionDialog(
         sheetState = sheetState,
         title = stringResource(R.string.recovery_configure_question),
         onDismiss = onDismiss,
-        icon = painterResource(R.drawable.ic_edit)
+        icon = painterResource(R.drawable.ic_edit),
     ) {
         Column(
             modifier = Modifier

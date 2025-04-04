@@ -295,6 +295,10 @@
     <string name="recovery_password">Passwort zurücksetzen</string>
     <string name="recovery_success">Passwort wurde erfolreich geändert.</string>
     <string name="recovery_login_info">Um das Master Passwort zurückzusetzen, musst du die Sicherheitsfragen korrekt beantworten.</string>
+    <string name="recovery_amount_info_disabled">Wähle mindestens 5 Sicherheitsfragen, um die Wiederherstellung zu aktivieren</string>
+    <string name="recovery_amount_info_disabled_singular">Wähle {arg} weitere Sicherheitsfrage um die Wiederherstellung zu aktivieren</string>
+    <string name="recovery_amount_info_disabled_plural">Wähle {arg} weitere Sicherheitsfragen um die Wiederherstellung zu aktivieren</string>
+    <string name="recovery_amount_info_enabled">Wiederherstellung ist aktiv</string>
 
 
     <!-- Search activity -->
@@ -368,6 +372,7 @@
     <string name="button_analyze_password_security">Passwortsicherheit analysieren</string>
     <string name="button_accept">Änderungen akzeptieren</string>
     <string name="button_deny">Änderungen ablehnen</string>
+    <string name="button_dismiss_help">Nicht erneut anzeigen</string>
 
 
     <!-- Input hints -->
