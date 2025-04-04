@@ -41,14 +41,14 @@ fun Card(
     Column(
         modifier = modifier
             .padding(
-                horizontal = dimensionResource(R.dimen.space_horizontal),
-                vertical = dimensionResource(R.dimen.space_vertical)
+                horizontal = dimensionResource(R.dimen.padding_horizontal),
+                vertical = dimensionResource(R.dimen.padding_vertical)
             )
             .clip(RoundedCornerShape(dimensionResource(R.dimen.corner_l)))
             .background(backgroundColor)
             .padding(
-                horizontal = dimensionResource(R.dimen.space_horizontal),
-                vertical = dimensionResource(R.dimen.space_vertical)
+                horizontal = dimensionResource(R.dimen.padding_horizontal),
+                vertical = dimensionResource(R.dimen.padding_vertical)
             )
     ) {
         Row(
@@ -58,7 +58,7 @@ fun Card(
                 painter = icon,
                 tint = foregroundColor,
                 contentDescription = "",
-                modifier = Modifier.padding(end = dimensionResource(R.dimen.space_horizontal_between))
+                modifier = Modifier.padding(end = dimensionResource(R.dimen.padding_horizontal_between))
             )
             Text(
                 text = text,

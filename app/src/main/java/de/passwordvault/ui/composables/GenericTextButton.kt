@@ -46,8 +46,8 @@ fun GenericTextButton(
                 }
             }
             .padding(
-                horizontal = dimensionResource(R.dimen.space_horizontal),
-                vertical = dimensionResource(R.dimen.space_vertical)
+                horizontal = dimensionResource(R.dimen.padding_horizontal),
+                vertical = dimensionResource(R.dimen.padding_vertical)
             )
     ) {
         if (prefixIcon != null) {
@@ -56,7 +56,7 @@ fun GenericTextButton(
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 contentDescription = "",
                 modifier = Modifier
-                    .padding(end = dimensionResource(R.dimen.space_horizontal_between))
+                    .padding(end = dimensionResource(R.dimen.padding_horizontal_between))
                     .size(dimensionResource(R.dimen.image_xs))
             )
         }
@@ -77,7 +77,7 @@ fun GenericTextButton(
                         tint = MaterialTheme.colorScheme.onSurface,
                         contentDescription = "",
                         modifier = Modifier
-                            .padding(start = dimensionResource(R.dimen.space_horizontal_small))
+                            .padding(start = dimensionResource(R.dimen.padding_horizontal_small))
                             .size(dimensionResource(R.dimen.image_xxs))
                     )
                 }

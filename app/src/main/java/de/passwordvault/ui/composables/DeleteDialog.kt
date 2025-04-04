@@ -51,19 +51,19 @@ fun DeleteDialog(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = dimensionResource(R.dimen.space_horizontal))
+                .padding(horizontal = dimensionResource(R.dimen.padding_horizontal))
         ) {
             Text(
                 text = message,
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(vertical = dimensionResource(R.dimen.space_vertical))
+                modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_vertical))
             )
             FlowRow(
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier
                     .align(Alignment.End)
-                    .padding(bottom = dimensionResource(R.dimen.space_vertical))
+                    .padding(bottom = dimensionResource(R.dimen.padding_vertical))
             ) {
                 TextButton(
                     onClick = {
@@ -77,7 +77,7 @@ fun DeleteDialog(
                     Text(text = stringResource(R.string.button_cancel))
                 }
                 TextButton(
-                    modifier = Modifier.padding(start = dimensionResource(R.dimen.space_horizontal_between)),
+                    modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal_between)),
                     onClick = {
                         scope.launch {
                             sheetState.hide()

@@ -45,10 +45,10 @@ fun Headline(
                 onClick!!()
             }
             .padding(
-                start = if (!indentToPrefixIcon) { dimensionResource(R.dimen.space_horizontal) } else { dimensionResource(R.dimen.space_horizontal) + dimensionResource(R.dimen.image_xs) + dimensionResource(R.dimen.space_horizontal_between) },
-                top = dimensionResource(R.dimen.space_vertical),
-                end = dimensionResource(R.dimen.space_horizontal),
-                bottom = dimensionResource(R.dimen.space_vertical)
+                start = if (!indentToPrefixIcon) { dimensionResource(R.dimen.padding_horizontal) } else { dimensionResource(R.dimen.padding_horizontal) + dimensionResource(R.dimen.image_xs) + dimensionResource(R.dimen.padding_horizontal_between) },
+                top = dimensionResource(R.dimen.padding_vertical),
+                end = dimensionResource(R.dimen.padding_horizontal),
+                bottom = dimensionResource(R.dimen.padding_vertical)
             )
     ) {
         Text(
@@ -66,7 +66,7 @@ fun Headline(
                     painter = endIcon,
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     contentDescription = "",
-                    modifier = Modifier.padding(start = dimensionResource(R.dimen.space_horizontal_between))
+                    modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal_between))
                 )
                 if (isEyecatcherVisible) {
                     Eyecatcher(

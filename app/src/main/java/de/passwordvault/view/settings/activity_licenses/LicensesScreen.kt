@@ -145,8 +145,8 @@ private fun LicensesListRow(
                 onLicenseClicked(license)
             }
             .padding(
-                vertical = dimensionResource(R.dimen.space_vertical),
-                horizontal = dimensionResource(R.dimen.space_horizontal)
+                vertical = dimensionResource(R.dimen.padding_vertical),
+                horizontal = dimensionResource(R.dimen.padding_horizontal)
             ),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -200,8 +200,8 @@ private fun LicenseDialog(
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
                 .padding(
-                    horizontal = dimensionResource(R.dimen.space_horizontal),
-                    vertical = dimensionResource(R.dimen.space_vertical)
+                    horizontal = dimensionResource(R.dimen.padding_horizontal),
+                    vertical = dimensionResource(R.dimen.padding_vertical)
                 ),
             text = licenseText,
             color = MaterialTheme.colorScheme.onSurface,

@@ -71,8 +71,8 @@ fun DropdownInput(
                 contentDescription = "",
                 modifier = Modifier
                     .padding(
-                        top = dimensionResource(R.dimen.space_material_text_field_top),
-                        end = dimensionResource(R.dimen.space_horizontal_between)
+                        top = dimensionResource(R.dimen.padding_material_text_field_top),
+                        end = dimensionResource(R.dimen.padding_horizontal_between)
                     )
                     .size(dimensionResource(R.dimen.image_xs))
             )
@@ -116,7 +116,7 @@ fun DropdownInput(
                                 text = option,
                                 style = MaterialTheme.typography.bodyMedium,
                                 modifier = Modifier.padding(
-                                    vertical = dimensionResource(R.dimen.space_vertical_between)
+                                    vertical = dimensionResource(R.dimen.padding_vertical_between)
                                 )
                             )
                         },

@@ -187,8 +187,8 @@ private fun GeneralSection() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                horizontal = dimensionResource(R.dimen.space_horizontal),
-                vertical = dimensionResource(R.dimen.space_vertical)
+                horizontal = dimensionResource(R.dimen.padding_horizontal),
+                vertical = dimensionResource(R.dimen.padding_vertical)
             )
     ) {
         Image(
@@ -199,7 +199,7 @@ private fun GeneralSection() {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = dimensionResource(R.dimen.space_horizontal_between))
+                .padding(start = dimensionResource(R.dimen.padding_horizontal_between))
         ) {
             Text(
                 text = stringResource(R.string.app_name),
@@ -215,7 +215,7 @@ private fun GeneralSection() {
                 text = stringResource(R.string.settings_about_software_copyright).replace("{arg}", "" + LocalDate.now().year),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(top = dimensionResource(R.dimen.space_vertical))
+                modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
             )
         }
     }

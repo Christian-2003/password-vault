@@ -52,8 +52,8 @@ fun IdenticalPasswordsTab(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    horizontal = dimensionResource(R.dimen.space_horizontal),
-                    vertical = dimensionResource(R.dimen.space_vertical)
+                    horizontal = dimensionResource(R.dimen.padding_horizontal),
+                    vertical = dimensionResource(R.dimen.padding_vertical)
                 )
         )
     }
@@ -100,10 +100,10 @@ private fun GroupHeader(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    start = dimensionResource(R.dimen.space_horizontal),
-                    top = dimensionResource(R.dimen.space_vertical),
-                    end = dimensionResource(R.dimen.space_horizontal_end_button),
-                    bottom = dimensionResource(R.dimen.space_vertical)
+                    start = dimensionResource(R.dimen.padding_horizontal),
+                    top = dimensionResource(R.dimen.padding_vertical),
+                    end = dimensionResource(R.dimen.padding_horizontal_end_button),
+                    bottom = dimensionResource(R.dimen.padding_vertical)
                 )
         ) {
             Column(

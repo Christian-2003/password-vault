@@ -139,8 +139,8 @@ fun RecoveryScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(
-                                horizontal = dimensionResource(R.dimen.space_horizontal),
-                                vertical = dimensionResource(R.dimen.space_vertical)
+                                horizontal = dimensionResource(R.dimen.padding_horizontal),
+                                vertical = dimensionResource(R.dimen.padding_vertical)
                             )
                     )
                 }
@@ -268,10 +268,10 @@ private fun SecurityQuestionListRow(
                 securityQuestion.isExpanded = isExpanded
             }
             .padding(
-                start = dimensionResource(R.dimen.space_horizontal),
-                top = dimensionResource(R.dimen.space_vertical),
-                end = dimensionResource(R.dimen.space_horizontal_end_button),
-                bottom = dimensionResource(R.dimen.space_vertical)
+                start = dimensionResource(R.dimen.padding_horizontal),
+                top = dimensionResource(R.dimen.padding_vertical),
+                end = dimensionResource(R.dimen.padding_horizontal_end_button),
+                bottom = dimensionResource(R.dimen.padding_vertical)
             )
     ) {
         Column(
@@ -304,7 +304,7 @@ private fun SecurityQuestionListRow(
                 onClick = {
                     isDropdownVisible = true
                 },
-                modifier = Modifier.padding(start = dimensionResource(R.dimen.space_horizontal_between))
+                modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal_between))
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_more),
@@ -390,8 +390,8 @@ private fun SecurityQuestionDialog(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    horizontal = dimensionResource(R.dimen.space_horizontal),
-                    vertical = dimensionResource(R.dimen.space_vertical)
+                    horizontal = dimensionResource(R.dimen.padding_horizontal),
+                    vertical = dimensionResource(R.dimen.padding_vertical)
                 )
         ) {
             DropdownInput(
@@ -418,13 +418,13 @@ private fun SecurityQuestionDialog(
                 label = stringResource(R.string.recovery_answer),
                 prefixIcon = painterResource(R.drawable.ic_answer),
                 errorMessage = if (answerError) { stringResource(R.string.error_empty_input) } else { null },
-                modifier = Modifier.padding(vertical = dimensionResource(R.dimen.space_vertical))
+                modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_vertical))
             )
             FlowRow(
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier
                     .align(Alignment.End)
-                    .padding(bottom = dimensionResource(R.dimen.space_vertical))
+                    .padding(bottom = dimensionResource(R.dimen.padding_vertical))
             ) {
                 TextButton(
                     onClick = {
@@ -438,7 +438,7 @@ private fun SecurityQuestionDialog(
                     Text(text = stringResource(R.string.button_cancel))
                 }
                 TextButton(
-                    modifier = Modifier.padding(start = dimensionResource(R.dimen.space_horizontal_between)),
+                    modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal_between)),
                     onClick = {
                         answerError = answer.isEmpty()
                         questionError = question == -1

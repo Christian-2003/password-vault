@@ -45,8 +45,8 @@ fun EntryListRow(
                 onClick!!(entry)
             }
             .padding(
-                horizontal = dimensionResource(R.dimen.space_horizontal),
-                vertical = dimensionResource(R.dimen.space_vertical)
+                horizontal = dimensionResource(R.dimen.padding_horizontal),
+                vertical = dimensionResource(R.dimen.padding_vertical)
             )
     ) {
         //Logo of the app / or name abbreviation:
@@ -79,7 +79,7 @@ fun EntryListRow(
         //Name and description:
         Column(
             modifier = Modifier
-                .padding(start = dimensionResource(R.dimen.space_horizontal_between))
+                .padding(start = dimensionResource(R.dimen.padding_horizontal_between))
         ) {
             Text(
                 text = entry.name,

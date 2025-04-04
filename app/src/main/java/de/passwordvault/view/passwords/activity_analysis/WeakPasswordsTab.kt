@@ -70,8 +70,8 @@ fun WeakPasswordsTab(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    horizontal = dimensionResource(R.dimen.space_horizontal),
-                    vertical = dimensionResource(R.dimen.space_vertical)
+                    horizontal = dimensionResource(R.dimen.padding_horizontal),
+                    vertical = dimensionResource(R.dimen.padding_vertical)
                 )
         )
     }
@@ -117,10 +117,10 @@ private fun PasswordListRow(
                 onClick(password)
             }
             .padding(
-                start = dimensionResource(R.dimen.space_horizontal),
-                top = dimensionResource(R.dimen.space_vertical),
-                end = dimensionResource(R.dimen.space_horizontal_end_button),
-                bottom = dimensionResource(R.dimen.space_vertical)
+                start = dimensionResource(R.dimen.padding_horizontal),
+                top = dimensionResource(R.dimen.padding_vertical),
+                end = dimensionResource(R.dimen.padding_horizontal_end_button),
+                bottom = dimensionResource(R.dimen.padding_vertical)
             )
     ) {
         //Logo of the entry:
@@ -188,7 +188,7 @@ private fun PasswordListRow(
         Column(
             modifier = Modifier
                 .weight(1f)
-                .padding(horizontal = dimensionResource(R.dimen.space_horizontal_between))
+                .padding(horizontal = dimensionResource(R.dimen.padding_horizontal_between))
                 .align(Alignment.CenterVertically)
         ) {
             Text(

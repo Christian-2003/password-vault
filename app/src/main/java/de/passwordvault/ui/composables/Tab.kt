@@ -46,8 +46,8 @@ fun Tab(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .padding(
-                    vertical = dimensionResource(R.dimen.space_vertical),
-                    horizontal = dimensionResource(R.dimen.space_horizontal_between)
+                    vertical = dimensionResource(R.dimen.padding_vertical),
+                    horizontal = dimensionResource(R.dimen.padding_horizontal_between)
                 )
         ) {
             Text(
@@ -57,7 +57,7 @@ fun Tab(
             )
             if (badgeText != null) {
                 Badge(
-                    modifier = Modifier.padding(start = dimensionResource(R.dimen.space_horizontal_small))
+                    modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal_small))
                 ) {
                     Text(
                         text = badgeText

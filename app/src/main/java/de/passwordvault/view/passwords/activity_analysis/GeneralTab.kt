@@ -58,8 +58,8 @@ fun GeneralTab(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    horizontal = dimensionResource(R.dimen.space_horizontal),
-                    vertical = dimensionResource(R.dimen.space_vertical)
+                    horizontal = dimensionResource(R.dimen.padding_horizontal),
+                    vertical = dimensionResource(R.dimen.padding_vertical)
                 )
         )
         GradientProgressBar(
@@ -70,8 +70,8 @@ fun GeneralTab(
                 LocalPasswordVaultColors.current.green
             ),
             modifier = Modifier.padding(
-                horizontal = dimensionResource(R.dimen.space_horizontal),
-                vertical = dimensionResource(R.dimen.space_vertical)
+                horizontal = dimensionResource(R.dimen.padding_horizontal),
+                vertical = dimensionResource(R.dimen.padding_vertical)
             )
         )
         HorizontalDivider()

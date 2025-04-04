@@ -91,8 +91,8 @@ private fun BottomSheetDialogHeaderWithIcon(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .padding(
-                horizontal = dimensionResource(R.dimen.space_horizontal),
-                vertical = dimensionResource(R.dimen.space_vertical) * 2
+                horizontal = dimensionResource(R.dimen.padding_horizontal),
+                vertical = dimensionResource(R.dimen.padding_vertical) * 2
             )
     ) {
         Icon(
@@ -105,7 +105,7 @@ private fun BottomSheetDialogHeaderWithIcon(
             text = title,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(start = dimensionResource(R.dimen.space_horizontal_between))
+            modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal_between))
         )
     }
 }
@@ -128,8 +128,8 @@ private fun BottomSheetDialogHeaderWithComposable(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .padding(
-                horizontal = dimensionResource(R.dimen.space_horizontal),
-                vertical = dimensionResource(R.dimen.space_vertical) * 2
+                horizontal = dimensionResource(R.dimen.padding_horizontal),
+                vertical = dimensionResource(R.dimen.padding_vertical) * 2
             )
     ) {
         composable()
@@ -137,7 +137,7 @@ private fun BottomSheetDialogHeaderWithComposable(
             text = title,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(start = dimensionResource(R.dimen.space_horizontal))
+            modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
         )
     }
 }
@@ -158,8 +158,8 @@ private fun BottomSheetDialogHeader(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .padding(
-                horizontal = dimensionResource(R.dimen.space_horizontal),
-                vertical = dimensionResource(R.dimen.space_vertical) * 2
+                horizontal = dimensionResource(R.dimen.padding_horizontal),
+                vertical = dimensionResource(R.dimen.padding_vertical) * 2
             )
     ) {
         Text(
