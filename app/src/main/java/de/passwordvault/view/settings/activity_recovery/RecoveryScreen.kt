@@ -46,7 +46,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import de.passwordvault.R
 import de.passwordvault.model.security.login.SecurityQuestion
@@ -228,7 +227,6 @@ private fun AppBarTitle(
             text = stateText,
             color = if (amount >= 5) { MaterialTheme.colorScheme.onSurfaceVariant } else { MaterialTheme.colorScheme.error },
             style = MaterialTheme.typography.bodySmall,
-            textAlign = TextAlign.Center,
             maxLines = if (collapsedFraction > collapsedThreshold) { 1 } else { Int.MAX_VALUE },
             overflow = TextOverflow.Ellipsis
         )
