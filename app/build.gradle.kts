@@ -67,8 +67,6 @@ dependencies {
     implementation(libs.room)
     implementation(libs.room.runtime)
     implementation(platform(libs.androidx.compose.bom))
-    implementation(project(":core"))
-    implementation(project(":feature:accounts"))
 
     testImplementation(libs.junit)
 
