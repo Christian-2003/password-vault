@@ -32,6 +32,7 @@ class PasswordVaultApplication(): Application() {
             database = PasswordVaultDatabase.getInstance(this)
             repository = PasswordVaultRepository(
                 entryDao = database.entryDao,
+                detailDao = database.detailDao,
                 cipherService = AesCipherService()
             )
         }

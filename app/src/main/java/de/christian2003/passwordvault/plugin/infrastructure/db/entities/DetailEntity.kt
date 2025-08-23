@@ -5,15 +5,17 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlin.uuid.Uuid
 
-
-@Entity(tableName = "entries")
-class EntryEntity (
+@Entity("details")
+class DetailEntity(
 
     @PrimaryKey
-    @ColumnInfo(name = "id")
+    @ColumnInfo("id")
     var id: Uuid,
 
-    @ColumnInfo(name = "payload")
+    @ColumnInfo("entry")
+    var entry: Uuid,
+
+    @ColumnInfo("payload")
     var payload: ByteArray
 
 ) {
@@ -24,7 +26,7 @@ class EntryEntity (
 
 
     override fun equals(other: Any?): Boolean {
-        return (other is EntryEntity) && (other.id == this.id)
+        return (other is DetailEntity) && (other.id == this.id)
     }
 
 }

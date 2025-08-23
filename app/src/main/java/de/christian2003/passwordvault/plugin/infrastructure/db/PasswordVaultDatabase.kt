@@ -6,13 +6,16 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import de.christian2003.passwordvault.plugin.infrastructure.db.converter.UuidConverter
+import de.christian2003.passwordvault.plugin.infrastructure.db.dao.DetailDao
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.EntryDao
+import de.christian2003.passwordvault.plugin.infrastructure.db.entities.DetailEntity
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.EntryEntity
 
 
 @Database(
     entities = [
-        EntryEntity::class
+        EntryEntity::class,
+        DetailEntity::class
     ],
     version = 1,
     exportSchema = false
@@ -26,6 +29,11 @@ abstract class PasswordVaultDatabase(): RoomDatabase() {
      * DAO through which to access the entries.
      */
     abstract val entryDao: EntryDao
+
+    /**
+     * DAO through which to access the details.
+     */
+    abstract val detailDao: DetailDao
 
 
     companion object {

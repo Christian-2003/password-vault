@@ -25,12 +25,12 @@ class Entry (
     var description: String = "",
 
     /**
-     * Date time on which the type was created. This is for statistical purposes.
+     * Date time on which the entry was created. This is for statistical purposes.
      */
     val created: LocalDateTime = LocalDateTime.now(),
 
     /**
-     * Date time on which the type was edited the last time. This is for statistical purposes.
+     * Date time on which the entry was edited the last time. This is for statistical purposes.
      */
     var edited: LocalDateTime = LocalDateTime.now()
 

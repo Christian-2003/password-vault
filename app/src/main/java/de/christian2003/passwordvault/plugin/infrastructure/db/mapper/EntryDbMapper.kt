@@ -58,7 +58,7 @@ class EntryDbMapper(
         )
 
         val serializedPayload: ByteArray = cbor.encodeToByteArray(EntryPayload.serializer(), payload)
-        val encryptedPayload = cipherService.encrypt(serializedPayload, domain.id.toByteArray())
+        val encryptedPayload: ByteArray = cipherService.encrypt(serializedPayload, domain.id.toByteArray())
 
         return EntryEntity(
             id = domain.id,
