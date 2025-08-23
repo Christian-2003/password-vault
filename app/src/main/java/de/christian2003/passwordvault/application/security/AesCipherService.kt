@@ -21,7 +21,7 @@ class AesCipherService: CipherService {
     /**
      * Alias with which to store the HMAC master key in the key store.
      */
-    private val HMAC_KEY_ALIAS = "HMACMasterKey"
+    private val hmacKeyAlias = "HMACMasterKey"
 
 
     /**
@@ -101,16 +101,16 @@ class AesCipherService: CipherService {
         val keyStore: KeyStore = KeyStore.getInstance("AndroidKeyStore").apply {
             load(null)
         }
-        if (keyStore.containsAlias(HMAC_KEY_ALIAS)) {
+        if (keyStore.containsAlias(hmacKeyAlias)) {
             //Get existing HMAC master key:
-            val entry: KeyStore.SecretKeyEntry = keyStore.getEntry(HMAC_KEY_ALIAS, null) as KeyStore.SecretKeyEntry
+            val entry: KeyStore.SecretKeyEntry = keyStore.getEntry(hmacKeyAlias, null) as KeyStore.SecretKeyEntry
             return entry.secretKey
         }
         else {
             //Create new HMAC master key:
             val keyGenerator: KeyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_HMAC_SHA512, "AndroidKeyStore")
             val keySpec: KeyGenParameterSpec = KeyGenParameterSpec.Builder(
-                HMAC_KEY_ALIAS,
+                hmacKeyAlias,
                 KeyProperties.PURPOSE_SIGN or KeyProperties.PURPOSE_VERIFY
             ).build()
             keyGenerator.init(keySpec)

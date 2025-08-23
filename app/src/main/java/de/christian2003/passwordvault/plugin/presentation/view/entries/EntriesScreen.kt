@@ -18,11 +18,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import de.christian2003.passwordvault.domain.entry.Entry
 import de.christian2003.passwordvault.R
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
 import kotlin.uuid.Uuid
 
 
@@ -38,7 +39,7 @@ fun EntriesScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(stringResource(R.string.app_name))
+                    Text(stringResource(R.string.entries_title))
                 },
                 navigationIcon = {
                     IconButton(
@@ -58,20 +59,29 @@ fun EntriesScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            Text("All entries")
-            LazyColumn(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(allEntries) { entry ->
-                    EntriesListRow(
-                        entry = entry,
-                        onEdit = {
-                            onNavigateToEntry(it.id)
-                        },
-                        onDelete = {
-                            viewModel.deleteEntry(it)
-                        }
-                    )
+            if (allEntries.isEmpty()) {
+                EmptyPlaceholder(
+                    title = stringResource(R.string.entries_emptyPlaceholder_title),
+                    subtitle = stringResource(R.string.entries_emptyPlaceholder_subtitle),
+                    painter = painterResource(R.drawable.el_entries),
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(allEntries) { entry ->
+                        EntriesListRow(
+                            entry = entry,
+                            onEdit = {
+                                onNavigateToEntry(it.id)
+                            },
+                            onDelete = {
+                                viewModel.deleteEntry(it)
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -91,20 +101,23 @@ private fun EntriesListRow(
             .clickable {
                 onEdit(entry)
             }
-            .padding(4.dp)
+            .padding(
+                horizontal = dimensionResource(R.dimen.margin_horizontal),
+                vertical = dimensionResource(R.dimen.padding_vertical)
+            )
     ) {
         Column(
             modifier = Modifier.weight(1f)
         ) {
             Text(
                 text = entry.name,
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface
             )
             Text(
                 text = entry.description,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
         IconButton(
@@ -114,6 +127,7 @@ private fun EntriesListRow(
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_delete),
+                tint = MaterialTheme.colorScheme.onSurface,
                 contentDescription = ""
             )
         }

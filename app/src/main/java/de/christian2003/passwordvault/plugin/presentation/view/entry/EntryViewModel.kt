@@ -1,6 +1,5 @@
 package de.christian2003.passwordvault.plugin.presentation.view.entry
 
-import androidx.compose.animation.defaultDecayAnimationSpec
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -27,6 +26,9 @@ class EntryViewModel(): ViewModel() {
 
     var description: String by mutableStateOf("")
 
+    var isNameDialogVisible: Boolean by mutableStateOf(false)
+
+    var isDescriptionDialogVisible: Boolean by mutableStateOf(false)
 
 
     fun init(entryRepository: EntryRepository, id: Uuid? = null) {

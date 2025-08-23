@@ -3,15 +3,12 @@ package de.christian2003.passwordvault.plugin.infrastructure.db.mapper
 import de.christian2003.passwordvault.domain.entry.Entry
 import de.christian2003.passwordvault.domain.security.CipherService
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.EntryEntity
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.cbor.Cbor
-import kotlin.uuid.ExperimentalUuidApi
 
 
 /**
  * Mapper maps the domain model 'Entry' to the database entity.
  */
-@OptIn(ExperimentalSerializationApi::class, ExperimentalUuidApi::class)
 class EntryDbMapper(
 
     /**

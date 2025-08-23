@@ -8,12 +8,12 @@ plugins {
 
 android {
     namespace = "de.christian2003.passwordvault"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "de.christian2003.passwordvault.compose" //TODO: Remove '.compose' suffix once migration finishes!
-        minSdk = 32
-        targetSdk = 34
+        minSdk = 35
+        targetSdk = 35
         versionCode = 38
         versionName = "3.8.0-pre1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -60,7 +60,8 @@ kotlin {
         freeCompilerArgs.addAll(
             "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
             "-opt-in=kotlin.uuid.ExperimentalUuidApi",
-            "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
+            "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
+            "-opt-in=androidx.compose.material3.ExperimentalMaterial3ExpressiveApi"
         )
     }
 }
