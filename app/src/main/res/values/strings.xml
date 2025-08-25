@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Password Vault</string>
+    <string name="placeholder_obfuscated">•••••</string> <!-- '•' is U+2022  -->
+    <string name="confirm_delete">Confirm deletion</string>
 
     <string name="entries_title">Your accounts</string>
     <string name="entries_emptyPlaceholder_title">No entries</string>
@@ -11,7 +13,23 @@
     <string name="entry_descriptionInfo">Use the description to describe the account. Unlike a name, descriptions can be longer and more detailed.</string>
     <string name="entry_namePlaceholder">Enter name</string>
     <string name="entry_descriptionPlaceholder">Enter description</string>
+    <string name="entry_detailsTitle">Details</string>
+    <string name="entry_editDetail">Edit detail</string>
+    <string name="entry_deleteDetail">Delete detail</string>
+    <string name="entry_copyDetail">Copy to clipboard</string>
+    <string name="entry_detailDetailText">Are you sure you want to delete "%1$s"? This cannot be undone.</string>
+
+    <string name="detail_titleCreate">Create detail</string>
+    <string name="detail_titleEdit">Edit detail</string>
+    <string name="detail_nameLabel">Name</string>
+    <string name="detail_contentLabel">Content</string>
+    <string name="detail_obfuscatedTitle">Obfuscated</string>
+    <string name="detail_obfuscatedText">Whether the content should be obfuscated</string>
+    <string name="detail_visibleTitle">Visible</string>
+    <string name="detail_visibleText">Whether the detail should be visible</string>
+    <string name="detail_iconsTitle">Choose an icon</string>
 
     <string name="button_save">Save</string>
     <string name="button_cancel">Cancel</string>
+    <string name="button_delete">Delete</string>
 </resources>

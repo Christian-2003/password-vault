@@ -12,7 +12,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +30,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,6 +41,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.Clipboard
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -43,17 +51,25 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.christian2003.passwordvault.R
+import de.christian2003.passwordvault.domain.entry.Detail
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDeleteDialog
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.Headline
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.TextInput
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.text.ifEmpty
+import kotlin.uuid.Uuid
 
 
 @Composable
 fun EntryScreen(
     viewModel: EntryViewModel,
-    onNavigateUp: () -> Unit
+    onNavigateUp: () -> Unit,
+    onEditDetail: (Uuid) -> Unit,
+    onCreateDetail: (Uuid) -> Unit
 ) {
+    val details: List<Detail> by viewModel.details.collectAsState(emptyList())
+    val clipboard: Clipboard = LocalClipboard.current
     Scaffold(
         topBar = {
             TopAppBar(
@@ -108,6 +124,29 @@ fun EntryScreen(
                 },
                 modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.margin_horizontal))
             )
+            Headline(
+                title = stringResource(R.string.entry_detailsTitle),
+                endIcon = painterResource(R.drawable.ic_add),
+                onClick = {
+                    onCreateDetail(viewModel.entryId)
+                }
+            )
+            LazyColumn {
+                items(details) { detail ->
+                    DetailListRow(
+                        detail = detail,
+                        onEditDetail = {
+                            onEditDetail(it.id)
+                        },
+                        onDeleteDetail = {
+                            viewModel.detailToDelete = it
+                        },
+                        onCopyToClipboard = {
+                            viewModel.copyToClipboard(it, clipboard)
+                        }
+                    )
+                }
+            }
         }
         if (viewModel.isNameDialogVisible) {
             EditDataDialog(
@@ -136,6 +175,21 @@ fun EntryScreen(
                 onSave = { description ->
                     viewModel.description = description
                     viewModel.isDescriptionDialogVisible = false
+                }
+            )
+        }
+        if (viewModel.detailToDelete != null) {
+            ConfirmDeleteDialog(
+                text = stringResource(R.string.entry_detailDetailText, viewModel.detailToDelete!!.name),
+                onDismiss = {
+                    viewModel.detailToDelete = null
+                },
+                onConfirm = {
+                    val detail: Detail? = viewModel.detailToDelete
+                    if (detail != null) {
+                        viewModel.deleteDetail(detail)
+                        viewModel.detailToDelete = null
+                    }
                 }
             )
         }
@@ -215,6 +269,140 @@ private fun GeneralSection(
             }
         }
         //Add tags here...
+    }
+}
+
+
+@Composable
+private fun DetailListRow(
+    detail: Detail,
+    onEditDetail: (Detail) -> Unit,
+    onDeleteDetail: (Detail) -> Unit,
+    onCopyToClipboard: (Detail) -> Unit
+) {
+    var isObfuscated: Boolean by remember { mutableStateOf(detail.isObfuscated) }
+    var isDropdownVisible: Boolean by remember { mutableStateOf(false) }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                onEditDetail(detail)
+            }
+            .padding(
+                start = dimensionResource(R.dimen.margin_horizontal),
+                top = dimensionResource(R.dimen.padding_vertical),
+                end = dimensionResource(R.dimen.margin_horizontal) - 12.dp,
+                bottom = dimensionResource(R.dimen.padding_vertical)
+            )
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .size(dimensionResource(R.dimen.image_m))
+                .clip(MaterialTheme.shapes.medium)
+                .background(MaterialTheme.colorScheme.surfaceContainer)
+        ) {
+            Icon(
+                painter = painterResource(if (detail.icon != null) { detail.icon!!.drawableResourceId } else { detail.type.defaultIcon.drawableResourceId }),
+                contentDescription = "",
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(dimensionResource(R.dimen.image_xs))
+            )
+        }
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = dimensionResource(R.dimen.padding_horizontal))
+        ) {
+            Text(
+                text = detail.name,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Text(
+                text = if (detail.isObfuscated && isObfuscated) { stringResource(R.string.placeholder_obfuscated) } else { detail.content },
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyLarge
+            )
+        }
+        Row(
+            modifier = Modifier.align(Alignment.CenterVertically)
+        ) {
+            if (detail.isObfuscated) {
+                IconButton(
+                    onClick = {
+                        isObfuscated = !isObfuscated
+                    }
+                ) {
+                    Icon(
+                        painter = if (isObfuscated) { painterResource(R.drawable.ic_visibility_on) } else { painterResource(R.drawable.ic_visibility_off) },
+                        contentDescription = ""
+                    )
+                }
+            }
+            IconButton(
+                onClick = {
+                    isDropdownVisible = !isDropdownVisible
+                }
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_more),
+                    contentDescription = ""
+                )
+                DropdownMenu(
+                    expanded = isDropdownVisible,
+                    onDismissRequest = {
+                        isDropdownVisible = false
+                    }
+                ) {
+                    DropdownMenuItem(
+                        text = {
+                            Text(stringResource(R.string.entry_editDetail))
+                        },
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_edit),
+                                contentDescription = ""
+                            )
+                        },
+                        onClick = {
+                            onEditDetail(detail)
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = {
+                            Text(stringResource(R.string.entry_deleteDetail))
+                        },
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_delete),
+                                contentDescription = ""
+                            )
+                        },
+                        onClick = {
+                            onDeleteDetail(detail)
+                        }
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+                    DropdownMenuItem(
+                        text = {
+                            Text(stringResource(R.string.entry_copyDetail))
+                        },
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_copy),
+                                contentDescription = ""
+                            )
+                        },
+                        onClick = {
+                            onCopyToClipboard(detail)
+                        }
+                    )
+                }
+            }
+        }
     }
 }
 

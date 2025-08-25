@@ -1,6 +1,5 @@
 package de.christian2003.passwordvault.plugin.presentation.ui.composables
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -105,7 +104,6 @@ fun TextInput(
  * @param visualTransformation  Visual transformation for the text displayed.
  * @param focusRequester        Focus requester.
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TextInput(
     value: TextFieldValue,

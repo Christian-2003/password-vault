@@ -20,6 +20,8 @@ import androidx.navigation.navArgument
 import de.christian2003.passwordvault.plugin.PasswordVaultApplication
 import de.christian2003.passwordvault.plugin.infrastructure.db.PasswordVaultRepository
 import de.christian2003.passwordvault.plugin.presentation.ui.theme.PasswordVaultTheme
+import de.christian2003.passwordvault.plugin.presentation.view.detail.DetailScreen
+import de.christian2003.passwordvault.plugin.presentation.view.detail.DetailViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.entries.EntriesScreen
 import de.christian2003.passwordvault.plugin.presentation.view.entries.EntriesViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.entry.EntryScreen
@@ -63,6 +65,7 @@ fun PasswordVault() {
                     }
                 )
             }
+
             composable("entries") {
                 val viewModel: EntriesViewModel = viewModel()
                 viewModel.init(repository)
@@ -77,6 +80,7 @@ fun PasswordVault() {
                     }
                 )
             }
+
             composable(
                 route = "entry/{entryId}",
                 arguments = listOf(
@@ -91,9 +95,49 @@ fun PasswordVault() {
                 val viewModel: EntryViewModel = viewModel()
                 viewModel.init(
                     entryRepository = repository,
+                    detailRepository = repository,
                     id = id
                 )
                 EntryScreen(
+                    viewModel = viewModel,
+                    onNavigateUp = {
+                        navController.navigateUp()
+                    },
+                    onEditDetail = { detailId ->
+                        val idAsString: String = detailId.toString()
+                        navController.navigate("detail/$idAsString/")
+                    },
+                    onCreateDetail = { entryId ->
+                        val idAsString: String = entryId.toString()
+                        navController.navigate("detail//$idAsString")
+                    }
+                )
+            }
+
+            composable(
+                route = "detail/{detailId}/{entryId}",
+                arguments = listOf(
+                    navArgument("detailId") { type = NavType.StringType },
+                    navArgument("entryId") { type = NavType.StringType }
+                )
+            ) { backStackEntry ->
+                val detailId: Uuid? = try {
+                    UUID.fromString(backStackEntry.arguments!!.getString("detailId")).toKotlinUuid()
+                } catch (_: Exception) {
+                    null
+                }
+                val entryId: Uuid? = try {
+                    UUID.fromString(backStackEntry.arguments!!.getString("entryId")).toKotlinUuid()
+                } catch (_: Exception) {
+                    null
+                }
+                val viewModel: DetailViewModel = viewModel()
+                viewModel.init(
+                    detailRepository = repository,
+                    detailId = detailId,
+                    entryId = entryId
+                )
+                DetailScreen(
                     viewModel = viewModel,
                     onNavigateUp = {
                         navController.navigateUp()
