@@ -17,7 +17,9 @@
     <string name="entry_editDetail">Edit detail</string>
     <string name="entry_deleteDetail">Delete detail</string>
     <string name="entry_copyDetail">Copy to clipboard</string>
-    <string name="entry_detailDetailText">Are you sure you want to delete "%1$s"? This cannot be undone.</string>
+    <string name="entry_detailDetailText">Are you sure you want to delete \"%1$s\"? This cannot be undone.</string>
+    <string name="entry_emptyPlaceholder_title">No details</string>
+    <string name="entry_emptyPlaceholder_subtitle">Available details are shown here</string>
 
     <string name="detail_titleCreate">Create detail</string>
     <string name="detail_titleEdit">Edit detail</string>

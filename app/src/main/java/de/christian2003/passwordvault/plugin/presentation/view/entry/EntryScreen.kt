@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.domain.entry.Detail
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDeleteDialog
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.Headline
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.TextInput
 import kotlinx.coroutines.CoroutineScope
@@ -131,20 +132,29 @@ fun EntryScreen(
                     onCreateDetail(viewModel.entryId)
                 }
             )
-            LazyColumn {
-                items(details) { detail ->
-                    DetailListRow(
-                        detail = detail,
-                        onEditDetail = {
-                            onEditDetail(it.id)
-                        },
-                        onDeleteDetail = {
-                            viewModel.detailToDelete = it
-                        },
-                        onCopyToClipboard = {
-                            viewModel.copyToClipboard(it, clipboard)
-                        }
-                    )
+            if (details.isEmpty()) {
+                EmptyPlaceholder(
+                    title = stringResource(R.string.entry_emptyPlaceholder_title),
+                    subtitle = stringResource(R.string.entry_emptyPlaceholder_subtitle),
+                    painter = painterResource(R.drawable.el_entries) //TODO: Change to custom placeholder
+                )
+            }
+            else {
+                LazyColumn {
+                    items(details) { detail ->
+                        DetailListRow(
+                            detail = detail,
+                            onEditDetail = {
+                                onEditDetail(it.id)
+                            },
+                            onDeleteDetail = {
+                                viewModel.detailToDelete = it
+                            },
+                            onCopyToClipboard = {
+                                viewModel.copyToClipboard(it, clipboard)
+                            }
+                        )
+                    }
                 }
             }
         }
