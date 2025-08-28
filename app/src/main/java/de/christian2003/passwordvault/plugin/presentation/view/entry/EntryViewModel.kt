@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipDescription
 import android.os.PersistableBundle
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ClipEntry
@@ -12,8 +13,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.christian2003.passwordvault.domain.entry.Detail
 import de.christian2003.passwordvault.domain.entry.Entry
+import de.christian2003.passwordvault.domain.entry.Tag
 import de.christian2003.passwordvault.domain.repository.DetailRepository
 import de.christian2003.passwordvault.domain.repository.EntryRepository
+import de.christian2003.passwordvault.domain.repository.TagRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -30,8 +33,11 @@ class EntryViewModel(): ViewModel() {
     private var entry: Entry? = null
     private var isInitialized = false
 
+    lateinit var tagRepository: TagRepository
 
     lateinit var details: Flow<List<Detail>>
+
+    lateinit var allTags: Flow<List<Tag>>
 
     lateinit var entryId: Uuid
 
@@ -43,27 +49,35 @@ class EntryViewModel(): ViewModel() {
 
     var isDescriptionDialogVisible: Boolean by mutableStateOf(false)
 
+    var isTagDialogVisible: Boolean by mutableStateOf(false)
+
     var detailToDelete: Detail? by mutableStateOf(null)
 
+    var tags: MutableList<Tag> = mutableStateListOf()
 
-    fun init(entryRepository: EntryRepository, detailRepository: DetailRepository, id: Uuid? = null) {
+
+    fun init(entryRepository: EntryRepository, detailRepository: DetailRepository, tagRepository: TagRepository, id: Uuid? = null) {
         if (isInitialized) {
             return
         }
         this.entryRepository = entryRepository
         this.detailRepository = detailRepository
+        this.tagRepository = tagRepository
         this.entryId = id ?: Uuid.random()
         details = detailRepository.getAllDetailsForEntry(entryId)
+        allTags = tagRepository.getAllTags()
         isInitialized = true
         viewModelScope.launch(Dispatchers.IO) {
             entry = entryRepository.getEntryById(entryId)
             if (entry == null) {
                 name = ""
                 description = ""
+                tags = mutableListOf()
             }
             else {
                 name = entry!!.name
                 description = entry!!.description
+                tags = entry!!.tags.toMutableList()
             }
         }
     }

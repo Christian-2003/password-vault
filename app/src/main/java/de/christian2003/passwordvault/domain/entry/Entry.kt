@@ -32,7 +32,12 @@ class Entry (
     /**
      * Date time on which the entry was edited the last time. This is for statistical purposes.
      */
-    var edited: LocalDateTime = LocalDateTime.now()
+    var edited: LocalDateTime = LocalDateTime.now(),
+
+    /**
+     * List of tags associated with the entry.
+     */
+    var tags: List<Tag> = listOf()
 
 ) {
 

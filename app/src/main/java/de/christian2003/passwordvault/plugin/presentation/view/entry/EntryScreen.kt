@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
@@ -24,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -50,12 +52,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.domain.entry.Detail
+import de.christian2003.passwordvault.domain.entry.Tag
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDeleteDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.Headline
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.TextInput
+import de.christian2003.passwordvault.plugin.presentation.view.tag.TagSheet
+import de.christian2003.passwordvault.plugin.presentation.view.tag.TagViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.text.ifEmpty
@@ -119,6 +125,10 @@ fun EntryScreen(
                     viewModel.isDescriptionDialogVisible = true
                 },
                 name = viewModel.name,
+                tags = viewModel.tags,
+                onEditTags = {
+                    viewModel.isTagDialogVisible = true
+                },
                 onSave = {
                     viewModel.save()
                     onNavigateUp()
@@ -190,7 +200,7 @@ fun EntryScreen(
         }
         if (viewModel.detailToDelete != null) {
             ConfirmDeleteDialog(
-                text = stringResource(R.string.entry_detailDetailText, viewModel.detailToDelete!!.name),
+                text = stringResource(R.string.entry_deleteDetailText, viewModel.detailToDelete!!.name),
                 onDismiss = {
                     viewModel.detailToDelete = null
                 },
@@ -204,6 +214,24 @@ fun EntryScreen(
             )
         }
     }
+    if (viewModel.isTagDialogVisible) {
+        val tagViewModel: TagViewModel = viewModel()
+        tagViewModel.init(
+            tagRepository = viewModel.tagRepository,
+            selectedTags = viewModel.tags
+        )
+        TagSheet(
+            viewModel = tagViewModel,
+            onDismiss = {
+                viewModel.isTagDialogVisible = false
+            },
+            onSave = { selectedTags ->
+                viewModel.isTagDialogVisible = false
+                viewModel.tags.clear()
+                viewModel.tags.addAll(selectedTags)
+            }
+        )
+    }
 }
 
 
@@ -212,6 +240,8 @@ private fun GeneralSection(
     description: String,
     onEditDescription: () -> Unit,
     name: String,
+    tags: List<Tag>,
+    onEditTags: () -> Unit,
     onSave: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -224,13 +254,15 @@ private fun GeneralSection(
                 shape = MaterialTheme.shapes.extraLarge
             )
             .clip(MaterialTheme.shapes.extraLarge)
-            .padding(
-                start = dimensionResource(R.dimen.padding_horizontal),
-                end = dimensionResource(R.dimen.padding_horizontal),
-                bottom = dimensionResource(R.dimen.padding_vertical)
-            )
     ) {
-        Row {
+        Row(
+            modifier = Modifier
+                .padding(
+                    start = dimensionResource(R.dimen.padding_horizontal),
+                    end = dimensionResource(R.dimen.padding_horizontal),
+                    bottom = dimensionResource(R.dimen.padding_vertical)
+                )
+        ) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
@@ -278,7 +310,57 @@ private fun GeneralSection(
                 }
             }
         }
-        //Add tags here...
+        if (tags.isEmpty()) {
+            //No tags:
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = dimensionResource(R.dimen.padding_horizontal)
+                    )
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_tag),
+                    contentDescription = "",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = stringResource(R.string.entry_tagsEmpty),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier
+                        .padding(
+                            horizontal = dimensionResource(R.dimen.padding_horizontal)
+                        )
+                        .weight(1f)
+                )
+                IconButton(
+                    onClick = onEditTags
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_edit),
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
+        }
+        else {
+            //List of tags:
+            LazyRow(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items(tags) { tag ->
+                    SuggestionChip(
+                        onClick = { },
+                        label = {
+                            Text(tag.name)
+                        }
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -376,6 +458,7 @@ private fun DetailListRow(
                             )
                         },
                         onClick = {
+                            isDropdownVisible = false
                             onEditDetail(detail)
                         }
                     )
@@ -390,6 +473,7 @@ private fun DetailListRow(
                             )
                         },
                         onClick = {
+                            isDropdownVisible = false
                             onDeleteDetail(detail)
                         }
                     )
@@ -407,6 +491,7 @@ private fun DetailListRow(
                             )
                         },
                         onClick = {
+                            isDropdownVisible = false
                             onCopyToClipboard(detail)
                         }
                     )

@@ -3,20 +3,18 @@ package de.christian2003.passwordvault.plugin.infrastructure.db.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.Relation
-import de.christian2003.passwordvault.domain.entry.Tag
 import kotlin.uuid.Uuid
 
 
-@Entity(tableName = "entries")
-class EntryEntity (
+@Entity("tags")
+class TagEntity(
 
     @PrimaryKey
-    @ColumnInfo(name = "id")
+    @ColumnInfo("id")
     var id: Uuid,
 
-    @ColumnInfo(name = "payload")
-    var payload: ByteArray
+    @ColumnInfo("name")
+    var name: String
 
 ) {
 
@@ -26,7 +24,7 @@ class EntryEntity (
 
 
     override fun equals(other: Any?): Boolean {
-        return (other is EntryEntity) && (other.id == this.id)
+        return (other is TagEntity) && (other.id == this.id)
     }
 
 }

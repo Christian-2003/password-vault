@@ -33,6 +33,7 @@ class PasswordVaultApplication(): Application() {
             repository = PasswordVaultRepository(
                 entryDao = database.entryDao,
                 detailDao = database.detailDao,
+                tagDao = database.tagDao,
                 cipherService = AesCipherService()
             )
         }

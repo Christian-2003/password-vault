@@ -96,6 +96,7 @@ fun PasswordVault() {
                 viewModel.init(
                     entryRepository = repository,
                     detailRepository = repository,
+                    tagRepository = repository,
                     id = id
                 )
                 EntryScreen(

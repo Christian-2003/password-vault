@@ -8,14 +8,19 @@ import androidx.room.TypeConverters
 import de.christian2003.passwordvault.plugin.infrastructure.db.converter.UuidConverter
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.DetailDao
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.EntryDao
+import de.christian2003.passwordvault.plugin.infrastructure.db.dao.TagDao
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.DetailEntity
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.EntryEntity
+import de.christian2003.passwordvault.plugin.infrastructure.db.entities.EntryTagCrossRef
+import de.christian2003.passwordvault.plugin.infrastructure.db.entities.TagEntity
 
 
 @Database(
     entities = [
         EntryEntity::class,
-        DetailEntity::class
+        DetailEntity::class,
+        TagEntity::class,
+        EntryTagCrossRef::class
     ],
     version = 1,
     exportSchema = false
@@ -34,6 +39,11 @@ abstract class PasswordVaultDatabase(): RoomDatabase() {
      * DAO through which to access the details.
      */
     abstract val detailDao: DetailDao
+
+    /**
+     * DAO through which to access the tags.
+     */
+    abstract val tagDao: TagDao
 
 
     companion object {

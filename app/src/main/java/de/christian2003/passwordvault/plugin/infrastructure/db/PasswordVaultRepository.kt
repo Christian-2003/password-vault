@@ -2,15 +2,20 @@ package de.christian2003.passwordvault.plugin.infrastructure.db
 
 import de.christian2003.passwordvault.domain.entry.Detail
 import de.christian2003.passwordvault.domain.entry.Entry
+import de.christian2003.passwordvault.domain.entry.Tag
 import de.christian2003.passwordvault.domain.repository.DetailRepository
 import de.christian2003.passwordvault.domain.repository.EntryRepository
+import de.christian2003.passwordvault.domain.repository.TagRepository
 import de.christian2003.passwordvault.domain.security.CipherService
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.DetailDao
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.EntryDao
+import de.christian2003.passwordvault.plugin.infrastructure.db.dao.TagDao
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.DetailEntity
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.EntryEntity
+import de.christian2003.passwordvault.plugin.infrastructure.db.entities.TagEntity
 import de.christian2003.passwordvault.plugin.infrastructure.db.mapper.DetailDbMapper
 import de.christian2003.passwordvault.plugin.infrastructure.db.mapper.EntryDbMapper
+import de.christian2003.passwordvault.plugin.infrastructure.db.mapper.TagDbMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.cbor.Cbor
@@ -33,11 +38,16 @@ class PasswordVaultRepository(
     private val detailDao: DetailDao,
 
     /**
+     * DAO through which to access the tags in the database.
+     */
+    private val tagDao: TagDao,
+
+    /**
      * Cipher service used for encryption and decryption.
      */
     private val cipherService: CipherService
 
-): EntryRepository, DetailRepository {
+): EntryRepository, DetailRepository, TagRepository {
 
     /**
      * Mapper maps the domain model 'Entry' to its entity.
@@ -56,10 +66,21 @@ class PasswordVaultRepository(
     )
 
     /**
-     * Flow contains a list of all entries. Can be null until "getAllEntries"
-     * is called the first time.
+     * Mapper maps the domain model 'Tag' to it's entity.
+     */
+    private val tagMapper: TagDbMapper = TagDbMapper()
+
+    /**
+     * Flow contains a list of all entries. Can be null until "getAllEntries" is called the first
+     * time.
      */
     private var entries: Flow<List<Entry>>? = null
+
+    /**
+     * Flow contains a list of all tags. Can be null until "getAllTags" is called for the first
+     * time.
+     */
+    private var tags: Flow<List<Tag>>? = null
 
 
     /**
@@ -86,7 +107,7 @@ class PasswordVaultRepository(
      * @return      Entry with the specified UUID or null.
      */
     override suspend fun getEntryById(id: Uuid): Entry? {
-        val entry: EntryEntity? = entryDao.selectById(id)
+        val entry: EntryEntity? = entryDao.selectEntryById(id)
         return if (entry != null) {
             entryMapper.toDomain(entry)
         } else {
@@ -101,7 +122,11 @@ class PasswordVaultRepository(
      * @param entry Entry to create.
      */
     override suspend fun createEntry(entry: Entry) {
-        entryDao.insert(entryMapper.toEntity(entry))
+        val tags: MutableList<TagEntity> = mutableListOf()
+        entry.tags.forEach { tag ->
+            tags.add(tagMapper.toEntity(tag))
+        }
+        entryDao.insertEntryWithTags(entryMapper.toEntity(entry), tags)
     }
 
 
@@ -111,7 +136,11 @@ class PasswordVaultRepository(
      * @param entry Entry to update.
      */
     override suspend fun updateEntry(entry: Entry) {
-        entryDao.update(entryMapper.toEntity(entry))
+        val tags: MutableList<TagEntity> = mutableListOf()
+        entry.tags.forEach { tag ->
+            tags.add(tagMapper.toEntity(tag))
+        }
+        entryDao.updateEntryWithTags(entryMapper.toEntity(entry), tags)
     }
 
 
@@ -121,7 +150,7 @@ class PasswordVaultRepository(
      * @param entry Entry to delete.
      */
     override suspend fun deleteEntry(entry: Entry) {
-        entryDao.delete(entryMapper.toEntity(entry))
+        entryDao.deleteEntry(entryMapper.toEntity(entry))
     }
 
 
@@ -184,6 +213,53 @@ class PasswordVaultRepository(
      */
     override suspend fun deleteDetail(detail: Detail) {
         detailDao.delete(detailMapper.toEntity(detail))
+    }
+
+
+    /**
+     * Returns a list containing all tags.
+     *
+     * @return  Flow containing a list of all tags.
+     */
+    override fun getAllTags(): Flow<List<Tag>> {
+        if (tags == null) {
+            tags = tagDao.selectAll().map { list ->
+                list.map { tag ->
+                    tagMapper.toDomain(tag)
+                }
+            }
+        }
+        return tags!!
+    }
+
+
+    /**
+     * Creates the new tag that is passed as argument.
+     *
+     * @param tag   Tag to create.
+     */
+    override suspend fun createTag(tag: Tag) {
+        tagDao.insert(tagMapper.toEntity(tag))
+    }
+
+
+    /**
+     * Updates the tag that is passed as argument.
+     *
+     * @param tag   Tag to update.
+     */
+    override suspend fun updateTag(tag: Tag) {
+        tagDao.update(tagMapper.toEntity(tag))
+    }
+
+
+    /**
+     * Deletes the tag that is passed as argument.
+     *
+     * @param tag   Tag to delete.
+     */
+    override suspend fun deleteTag(tag: Tag) {
+        tagDao.delete(tagMapper.toEntity(tag))
     }
 
 }
