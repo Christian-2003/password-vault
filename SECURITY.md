@@ -1,17 +1,71 @@
 <img src="docs/img/icon.png" height="150" align="right">
 
 # Security Policy
-This document contains information regarding the security of Password Vault.
+This policy defines the security measures, principles and practices that govern the design, architecture and implementations of the Password Vault password manager for Android. It's goal is to protect user data against unauthorized access, tampering or loss.
 
 ###### Table of Contents
-1. [Data Encryption](#data-encryption)
-2. [Security Updates](#security-updates)
-3. [Reporting a Vulnerability](#reporting-a-vulnerability)
+1. [Scope](#scope)
+2. [Data and Security](#data-and-security)
+3. [Development Practices](#development-practices)
+4. [Incident Response](#incident-response)
+5. [User Responsibilities](#user-responsibilities)
 
 <br/>
 
-## Data Encryption
-Password Vault encrypts your data using **AES / GCM** to ensure maximum security. The following table shows which versions use this encryption mode for different purposes:
+## Scope
+This policy applies to:
+
+* The Password Vault Android application
+* All user data stored by the application
+* All processes and development practices related to the application
+
+<br/>
+
+## Data and Security
+
+###### Security Principles
+* **Local-Only Storage:** All user data is stored exclusively on the user's device. No account data is transmitted to servers operated by us.
+* **Zero-Knowledge:** We have no access to user passwords, vault contents or encryption keys.
+* **Defense in Depth:** Multiple layers of protection are appliedm including strong encryption, key management and platform security features.
+* **Privacy by Design:** Only the minimal necessary metadata is stored. Sensitive data is nevver logged or exposed.
+
+###### Data Protection
+* **Encryption Algorithm:** All sensitive data is encrypted using AES-256 in Galois/Counter Mode (GCM) for confidentiality and integrity.
+* **Key Management:**
+    * A master key is generated and stored securely in the Android Keystore, marked as non-exportable.
+    * Each account record is associated with a unique type 4 UUID. A key is deterministically derived per record using HKDF / HMAC with the master key and UUID.
+    * Derived keys are never stored. They are generated on demand.
+* **Initialization Vectors (IVs):** Fresh cryptographically strong random IVs are generated for each encryption operation.
+* **Integrity Protection:** AES-GCM authentication tags ensure tamper detection.
+
+###### Authentication and Access Control
+* **Vault Access:** Protected by device-level authentication (PIN, password or biometrics).
+* **Session Locking:** The vault auto-locks when the app is in background or the device is locked.
+* **Clipboad Handling:** Data copied to the clipboard is cleared after a short time to reduce exposure.
+* **Screenshots:** Sensitive screens are protected by Android's `FLAG_SECURE` to prevent capture.
+
+###### Backup and Recovery
+* By default, no user data is backed up to the cloud or any external servers.
+* Users may optionally create an encrypted backup package, protected by a user-chosen passphrase.
+* If the device is lost or reset without a backup, vault data is unrecoverable.
+
+###### Threat Mitigation
+* **Malware / Rooted Devices:** Users are warned that rooted or compromised devices reduce protection guarantees.
+* **Downgrade / Replac Attacks:** All encrypted data includes versioning and integrity metadata to prevent rollbacks.
+* **Logging:** Secrets are never written to logs or analytics.
+
+<br/>
+
+## Development Practices
+
+###### Development and Testing
+* Cryptographic implementations use Android's official APIs (`Keystore`, `Cipher`).
+* Code is regularly reviewed for adherence to security coding practices.
+* Automated tests verify encryption correctness and tamper detection.
+* Dependencies are monitored and kept up to date.
+
+###### Encryption Usages
+The following table shows which versions use this encryption mode for different purposes:
 
 Code | Version | Data | Backup | User Password | Autofill Cache | Password Recovery
 --- | --- | --- | --- | --- | --- | ---
@@ -46,16 +100,22 @@ _<sup>2</sup> Version 3.6.0 is only available on the Gooogle Play Store for inte
 
 <br/>
 
-## Security Updates
-Security vulnerabilities are patched as soon as they are noticed. However, such patches are only provided to the newest version. Users are not notified about security updates and are advised to update to new app versions as soon as they are released. Notifications on app updates are provided through the app.
+## Incident Response
+If a vulnerability is discovered, users will be informed promptly. Security patches will be delivered through app updates on GitHub. The app will notify users once new versions are available for download.
+
+Users are encouraged to report vulnerabilities via [passwordvault@christian2003.de](mailto:passwordvault@christian2003.de).
 
 <br/>
 
-## Reporting a Vulnerability
-If you find any security-related bugs in our product, please notify our development team through [passwordvault@christian2003.de](mailto:passwordvault@christian2003.de) and provide as many details as possible, such as steps for reproduction.
+## User Responsibilities
+In order to ensure the security of user data, the app relies on the user. User responsibilities include, but are not limited to, the following:
+
+* Maintain a secure device lock (PIN, password or biometrics).
+* Do not root or jailbreak the device.
+* Create backups if recovery is desired.
 
 <br/>
 
 ***
-2025-02-08  
+2025-08-29  
 &copy; Christian-2003  
