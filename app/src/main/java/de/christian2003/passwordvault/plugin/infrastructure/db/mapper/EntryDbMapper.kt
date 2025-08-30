@@ -2,6 +2,7 @@ package de.christian2003.passwordvault.plugin.infrastructure.db.mapper
 
 import de.christian2003.passwordvault.domain.entry.Entry
 import de.christian2003.passwordvault.domain.security.CipherService
+import de.christian2003.passwordvault.plugin.infrastructure.db.dto.EntryPayload
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.EntryEntity
 import kotlinx.serialization.cbor.Cbor
 

@@ -1,4 +1,4 @@
-package de.christian2003.passwordvault.plugin.infrastructure.db.mapper
+package de.christian2003.passwordvault.plugin.infrastructure.db.dto
 
 import de.christian2003.passwordvault.plugin.infrastructure.db.serializer.LocalDateTimeSerializer
 import kotlinx.serialization.SerialName

@@ -11,7 +11,7 @@ import de.christian2003.passwordvault.plugin.infrastructure.db.dao.DetailDao
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.EntryDao
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.TagDao
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.DetailEntity
-import de.christian2003.passwordvault.plugin.infrastructure.db.entities.EntryEntity
+import de.christian2003.passwordvault.plugin.infrastructure.db.dto.EntryWithTags
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.TagEntity
 import de.christian2003.passwordvault.plugin.infrastructure.db.mapper.DetailDbMapper
 import de.christian2003.passwordvault.plugin.infrastructure.db.mapper.EntryDbMapper
@@ -92,7 +92,13 @@ class PasswordVaultRepository(
         if (entries == null) {
             entries = entryDao.selectAllEntries().map { list ->
                 list.map { entry ->
-                    entryMapper.toDomain(entry)
+                    val domain: Entry = entryMapper.toDomain(entry.entry)
+                    val tags: MutableList<Tag> = mutableListOf()
+                    entry.tags.forEach { tag ->
+                        tags.add(tagMapper.toDomain(tag))
+                    }
+                    domain.tags = tags
+                    domain
                 }
             }
         }
@@ -107,11 +113,18 @@ class PasswordVaultRepository(
      * @return      Entry with the specified UUID or null.
      */
     override suspend fun getEntryById(id: Uuid): Entry? {
-        val entry: EntryEntity? = entryDao.selectEntryById(id)
-        return if (entry != null) {
-            entryMapper.toDomain(entry)
-        } else {
-            null
+        val entry: EntryWithTags? = entryDao.selectEntryById(id)
+        if (entry != null) {
+            val domain: Entry = entryMapper.toDomain(entry.entry)
+            val tags: MutableList<Tag> = mutableListOf()
+            entry.tags.forEach { tag ->
+                tags.add(tagMapper.toDomain(tag))
+            }
+            domain.tags = tags
+            return domain
+        }
+        else {
+            return null
         }
     }
 
@@ -126,7 +139,11 @@ class PasswordVaultRepository(
         entry.tags.forEach { tag ->
             tags.add(tagMapper.toEntity(tag))
         }
-        entryDao.insertEntryWithTags(entryMapper.toEntity(entry), tags)
+        val entryWithTags = EntryWithTags(
+            entry = entryMapper.toEntity(entry),
+            tags = tags
+        )
+        entryDao.insertEntryWithTags(entryWithTags)
     }
 
 
@@ -140,7 +157,11 @@ class PasswordVaultRepository(
         entry.tags.forEach { tag ->
             tags.add(tagMapper.toEntity(tag))
         }
-        entryDao.updateEntryWithTags(entryMapper.toEntity(entry), tags)
+        val entryWithTags = EntryWithTags(
+            entry = entryMapper.toEntity(entry),
+            tags = tags
+        )
+        entryDao.updateEntryWithTags(entryWithTags)
     }
 
 

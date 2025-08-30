@@ -58,6 +58,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
+/**
+ * Displays a bottom sheet through which to select tags for an entry.
+ *
+ * @param viewModel View model from which to source data.
+ * @param onDismiss Callback invoked to dismiss the sheet without saving.
+ * @param onSave    Callback invoked to dismiss the sheet and save a list of selected tags.
+ */
 @Composable
 fun TagSheet(
     viewModel: TagViewModel,
@@ -204,6 +211,17 @@ fun TagSheet(
 }
 
 
+/**
+ * Displays a list of all tags.
+ *
+ * @param tags              List of all tags.
+ * @param selectedTags      List of all tags that are currently selected.
+ * @param onTagSelected     Callback invoked once a tag is selected.
+ * @param onTagDeselected   Callback invoked once a tag is deselected.
+ * @param onEditTag         Callback invoked to edit a tag.
+ * @param onDeleteTag       Callback invoked to delete a tag.
+ * @param modifier          Modifier.
+ */
 @Composable
 private fun TagList(
     tags: List<Tag>,
@@ -237,6 +255,15 @@ private fun TagList(
 }
 
 
+/**
+ * Displays a single tag within the tags list.
+ *
+ * @param tag               Tag to display.
+ * @param selected          Whether the tag is currently selected.
+ * @param onSelectedChange  Callback invoked once the tag selection has changed.
+ * @param onEditTag         Callback invoked to edit a tag.
+ * @param onDeleteTag       Callback invoked to delete a tag.
+ */
 @Composable
 private fun TagListRow(
     tag: Tag,
@@ -323,6 +350,14 @@ private fun TagListRow(
 }
 
 
+/**
+ * Displays a dialog through which to edit or create a tag.
+ *
+ * @param tag       Tag to edit. Pass null in order to create a new tag.
+ * @param onDismiss Callback invoked to dismiss the dialog without saving the tag.
+ * @param onSave    Callback invoked to dismiss the dialog and save the tag which has been edited
+ *                  or created.
+ */
 @Composable
 private fun EditTagDialog(
     tag: Tag?,

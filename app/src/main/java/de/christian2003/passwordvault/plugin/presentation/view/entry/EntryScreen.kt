@@ -1,5 +1,6 @@
 package de.christian2003.passwordvault.plugin.presentation.view.entry
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -229,6 +230,7 @@ fun EntryScreen(
                 viewModel.isTagDialogVisible = false
                 viewModel.tags.clear()
                 viewModel.tags.addAll(selectedTags)
+                Log.d("Entry", "${selectedTags.size} new tags")
             }
         )
     }

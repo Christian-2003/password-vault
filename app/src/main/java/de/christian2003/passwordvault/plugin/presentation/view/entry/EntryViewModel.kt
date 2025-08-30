@@ -72,12 +72,13 @@ class EntryViewModel(): ViewModel() {
             if (entry == null) {
                 name = ""
                 description = ""
-                tags = mutableListOf()
+                tags.clear()
             }
             else {
                 name = entry!!.name
                 description = entry!!.description
-                tags = entry!!.tags.toMutableList()
+                tags.clear()
+                tags.addAll(entry!!.tags)
             }
         }
     }
@@ -90,7 +91,8 @@ class EntryViewModel(): ViewModel() {
                 entry = Entry(
                     id = entryId,
                     name = name,
-                    description = description
+                    description = description,
+                    tags = tags
                 )
                 entryRepository.createEntry(entry!!)
             }
@@ -99,6 +101,7 @@ class EntryViewModel(): ViewModel() {
                 entry!!.name = name
                 entry!!.description = description
                 entry!!.edited = LocalDateTime.now()
+                entry!!.tags = tags
                 entryRepository.updateEntry(entry!!)
             }
         }
