@@ -51,7 +51,7 @@ This policy applies to:
 
 ###### Threat Mitigation
 * **Malware / Rooted Devices:** Users are warned that rooted or compromised devices reduce protection guarantees.
-* **Downgrade / Replac Attacks:** All encrypted data includes versioning and integrity metadata to prevent rollbacks.
+* **Downgrade / Replay Attacks:** All encrypted data includes versioning and integrity metadata to prevent rollbacks.
 * **Logging:** Secrets are never written to logs or analytics.
 
 <br/>
