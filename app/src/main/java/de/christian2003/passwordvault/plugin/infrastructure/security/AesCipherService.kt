@@ -1,4 +1,4 @@
-package de.christian2003.passwordvault.application.security
+package de.christian2003.passwordvault.plugin.infrastructure.security
 
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties

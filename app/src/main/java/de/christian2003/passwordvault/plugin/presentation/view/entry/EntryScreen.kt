@@ -77,7 +77,6 @@ fun EntryScreen(
     onCreateDetail: (Uuid) -> Unit
 ) {
     val details: List<Detail> by viewModel.details.collectAsState(emptyList())
-    val clipboard: Clipboard = LocalClipboard.current
     Scaffold(
         topBar = {
             TopAppBar(
@@ -162,7 +161,7 @@ fun EntryScreen(
                                 viewModel.detailToDelete = it
                             },
                             onCopyToClipboard = {
-                                viewModel.copyToClipboard(it, clipboard)
+                                viewModel.copyToClipboard(it)
                             }
                         )
                     }
@@ -355,10 +354,17 @@ private fun GeneralSection(
             ) {
                 items(tags) { tag ->
                     SuggestionChip(
-                        onClick = { },
+                        onClick = {
+                            onEditTags()
+                        },
                         label = {
                             Text(tag.name)
-                        }
+                        },
+                        modifier = Modifier
+                            .padding(
+                                start = if (tags.indexOf(tag) == 0) { dimensionResource(R.dimen.padding_horizontal) } else { 0.dp },
+                                end = dimensionResource(R.dimen.padding_horizontal)
+                            )
                     )
                 }
             }

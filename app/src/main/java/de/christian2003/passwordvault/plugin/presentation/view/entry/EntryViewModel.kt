@@ -2,7 +2,10 @@ package de.christian2003.passwordvault.plugin.presentation.view.entry
 
 import android.content.ClipData
 import android.content.ClipDescription
+import android.os.Handler
+import android.os.Looper
 import android.os.PersistableBundle
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -17,6 +20,7 @@ import de.christian2003.passwordvault.domain.entry.Tag
 import de.christian2003.passwordvault.domain.repository.DetailRepository
 import de.christian2003.passwordvault.domain.repository.EntryRepository
 import de.christian2003.passwordvault.domain.repository.TagRepository
+import de.christian2003.passwordvault.domain.security.ClipboardService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -29,6 +33,8 @@ class EntryViewModel(): ViewModel() {
     private lateinit var entryRepository: EntryRepository
 
     private lateinit var detailRepository: DetailRepository
+
+    private lateinit var clipboardService: ClipboardService
 
     private var entry: Entry? = null
     private var isInitialized = false
@@ -56,13 +62,20 @@ class EntryViewModel(): ViewModel() {
     var tags: MutableList<Tag> = mutableStateListOf()
 
 
-    fun init(entryRepository: EntryRepository, detailRepository: DetailRepository, tagRepository: TagRepository, id: Uuid? = null) {
+    fun init(
+        entryRepository: EntryRepository,
+        detailRepository: DetailRepository,
+        tagRepository: TagRepository,
+        clipboardService: ClipboardService,
+        id: Uuid? = null
+    ) {
         if (isInitialized) {
             return
         }
         this.entryRepository = entryRepository
         this.detailRepository = detailRepository
         this.tagRepository = tagRepository
+        this.clipboardService = clipboardService
         this.entryId = id ?: Uuid.random()
         details = detailRepository.getAllDetailsForEntry(entryId)
         allTags = tagRepository.getAllTags()
@@ -113,17 +126,12 @@ class EntryViewModel(): ViewModel() {
     }
 
 
-    fun copyToClipboard(detail: Detail, clipboard: Clipboard) = viewModelScope.launch(Dispatchers.IO) {
-        val data = ClipData.newPlainText(detail.name, detail.content)
-        if (detail.isObfuscated) {
-            data.apply {
-                description.extras = PersistableBundle().apply {
-                    putBoolean(ClipDescription.EXTRA_IS_SENSITIVE, true)
-                }
-            }
-        }
-        val entry = ClipEntry(data)
-        clipboard.setClipEntry(entry)
+    fun copyToClipboard(detail: Detail) = viewModelScope.launch(Dispatchers.IO) {
+        clipboardService.copyToClipboard(
+            label = detail.name,
+            data =detail.content,
+            isSensitive = detail.isObfuscated
+        )
     }
 
 }

@@ -9,6 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -17,8 +18,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import de.christian2003.passwordvault.domain.security.ClipboardService
 import de.christian2003.passwordvault.plugin.PasswordVaultApplication
 import de.christian2003.passwordvault.plugin.infrastructure.db.PasswordVaultRepository
+import de.christian2003.passwordvault.plugin.infrastructure.security.AndroidClipboardService
 import de.christian2003.passwordvault.plugin.presentation.ui.theme.PasswordVaultTheme
 import de.christian2003.passwordvault.plugin.presentation.view.detail.DetailScreen
 import de.christian2003.passwordvault.plugin.presentation.view.detail.DetailViewModel
@@ -48,6 +51,7 @@ fun PasswordVault() {
     val navController: NavHostController = rememberNavController()
     val context: Context = LocalContext.current
     val repository: PasswordVaultRepository = (context.applicationContext as PasswordVaultApplication).getRepository()
+    val clipboardService: ClipboardService = AndroidClipboardService(LocalClipboard.current.nativeClipboard)
 
     PasswordVaultTheme {
         NavHost(
@@ -97,6 +101,7 @@ fun PasswordVault() {
                     entryRepository = repository,
                     detailRepository = repository,
                     tagRepository = repository,
+                    clipboardService = clipboardService,
                     id = id
                 )
                 EntryScreen(

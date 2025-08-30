@@ -1,7 +1,7 @@
 package de.christian2003.passwordvault.plugin
 
 import android.app.Application
-import de.christian2003.passwordvault.application.security.AesCipherService
+import de.christian2003.passwordvault.plugin.infrastructure.security.AesCipherService
 import de.christian2003.passwordvault.plugin.infrastructure.db.PasswordVaultDatabase
 import de.christian2003.passwordvault.plugin.infrastructure.db.PasswordVaultRepository
 
