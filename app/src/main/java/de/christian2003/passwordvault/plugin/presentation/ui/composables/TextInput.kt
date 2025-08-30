@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -41,6 +42,7 @@ import androidx.compose.ui.unit.dp
  * @param modifier              Modifier.
  * @param prefixIcon            Optional Icon to display in front of the text input.
  * @param keyboardOptions       Optional keyboard options.
+ * @param keyboardActions       Optional keyboard actions.
  * @param suffixLabel           Optional suffix label to display within the text input.
  * @param trailingIcon          Optional trailing icon to display within the text input. If the error
  *                              message passed is not null, this icon will be replaced with an error
@@ -58,6 +60,7 @@ fun TextInput(
     modifier: Modifier = Modifier,
     prefixIcon: Painter? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     suffixLabel: String? = null,
     trailingIcon: Painter? = null,
     errorMessage: String? = null,
@@ -76,6 +79,7 @@ fun TextInput(
         modifier = modifier,
         prefixIcon = prefixIcon,
         keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
         suffixLabel = suffixLabel,
         trailingIcon = trailingIcon,
         errorMessage = errorMessage,
@@ -95,6 +99,7 @@ fun TextInput(
  * @param modifier              Modifier.
  * @param prefixIcon            Optional Icon to display in front of the text input.
  * @param keyboardOptions       Optional keyboard options.
+ * @param keyboardActions       Optional keyboard actions.
  * @param suffixLabel           Optional suffix label to display within the text input.
  * @param trailingIcon          Optional trailing icon to display within the text input. If the error
  *                              message passed is not null, this icon will be replaced with an error
@@ -112,6 +117,7 @@ fun TextInput(
     modifier: Modifier = Modifier,
     prefixIcon: Painter? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     suffixLabel: String? = null,
     trailingIcon: Painter? = null,
     errorMessage: String? = null,
@@ -198,6 +204,7 @@ fun TextInput(
                 )
             },
             keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
             enabled = enabled,
             suffix = suffixView,
             isError = errorMessage != null,

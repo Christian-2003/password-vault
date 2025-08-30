@@ -7,12 +7,14 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
@@ -29,6 +31,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,9 +40,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -47,10 +52,10 @@ import androidx.compose.ui.window.Dialog
 import de.christian2003.passwordvault.domain.entry.Tag
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDeleteDialog
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.TextInput
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.nio.file.WatchEvent
 
 
 @Composable
@@ -66,7 +71,8 @@ fun TagSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        dragHandle = null
+        dragHandle = null,
+        sheetGesturesEnabled = false
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
@@ -109,7 +115,19 @@ fun TagSheet(
 
             HorizontalDivider()
             if (tags.isEmpty()) {
-
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    EmptyPlaceholder(
+                        title = stringResource(R.string.tag_emptyPlaceholder_title),
+                        subtitle = stringResource(R.string.tag_emptyPlaceholder_subtitle),
+                        painter = painterResource(R.drawable.el_tags),
+                        modifier = Modifier.weight(1f)
+                    )
+                }
             }
             else {
                 TagList(
@@ -143,7 +161,7 @@ fun TagSheet(
                     )
                     .align(Alignment.End)
             ) {
-                Text(stringResource(R.string.button_add))
+                Text(stringResource(R.string.button_createTag))
             }
         }
     }
@@ -314,6 +332,30 @@ private fun EditTagDialog(
     var name: String by remember { mutableStateOf(tag?.name ?: "") }
     val nameError: String = stringResource(R.string.tag_nameError)
     var isNameErrorVisible: Boolean by remember { mutableStateOf(false) }
+    val focusRequester: FocusRequester = remember { FocusRequester() }
+
+    val onSaveClick: () -> Unit = {
+        if (name.isNotBlank()) {
+            if (tag != null) {
+                tag.name = name
+                onSave(tag)
+            }
+            else {
+                val newTag = Tag(
+                    name = name
+                )
+                onSave(newTag)
+            }
+        }
+        else {
+            isNameErrorVisible = true
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
+
     Dialog(
         onDismissRequest = onDismiss
     ) {
@@ -350,6 +392,15 @@ private fun EditTagDialog(
                     },
                     label = stringResource(R.string.tag_nameLabel),
                     errorMessage = if (isNameErrorVisible) { nameError } else { null },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            onSaveClick()
+                        }
+                    ),
+                    focusRequester = focusRequester,
                     modifier = Modifier
                         .padding(bottom = 24.dp)
                 )
@@ -366,21 +417,7 @@ private fun EditTagDialog(
                     }
                     TextButton(
                         onClick = {
-                            if (name.isNotBlank()) {
-                                if (tag != null) {
-                                    tag.name = name
-                                    onSave(tag)
-                                }
-                                else {
-                                    val newTag = Tag(
-                                        name = name
-                                    )
-                                    onSave(newTag)
-                                }
-                            }
-                            else {
-                                isNameErrorVisible = true
-                            }
+                            onSaveClick()
                         },
                         enabled = name.isNotBlank(),
                         modifier = Modifier.padding(start = 8.dp)
