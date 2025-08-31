@@ -146,7 +146,7 @@ fun EntryScreen(
                 EmptyPlaceholder(
                     title = stringResource(R.string.entry_emptyPlaceholder_title),
                     subtitle = stringResource(R.string.entry_emptyPlaceholder_subtitle),
-                    painter = painterResource(R.drawable.el_entries) //TODO: Change to custom placeholder
+                    painter = painterResource(R.drawable.el_details)
                 )
             }
             else {
