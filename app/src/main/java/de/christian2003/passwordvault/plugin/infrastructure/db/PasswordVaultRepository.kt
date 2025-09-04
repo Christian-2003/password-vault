@@ -237,6 +237,15 @@ class PasswordVaultRepository(
     }
 
 
+    override suspend fun saveAllDetailsForEntry(details: List<Detail>, entry: Uuid) {
+        val detailEntities: MutableList<DetailEntity> = mutableListOf()
+        details.forEach { detail ->
+            detailEntities.add(detailMapper.toEntity(detail))
+        }
+        detailDao.saveAllDetailsForEntry(detailEntities, entry)
+    }
+
+
     /**
      * Returns a list containing all tags.
      *

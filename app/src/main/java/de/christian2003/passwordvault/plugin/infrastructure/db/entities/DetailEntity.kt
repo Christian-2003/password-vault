@@ -2,10 +2,21 @@ package de.christian2003.passwordvault.plugin.infrastructure.db.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import kotlin.uuid.Uuid
 
-@Entity("details")
+@Entity(
+    tableName = "details",
+    foreignKeys = [
+        ForeignKey(
+            entity = EntryEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["entry"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
+)
 class DetailEntity(
 
     @PrimaryKey

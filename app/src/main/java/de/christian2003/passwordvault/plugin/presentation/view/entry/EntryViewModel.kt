@@ -122,6 +122,8 @@ class EntryViewModel(): ViewModel() {
                 entry!!.tags = tags
                 entryRepository.updateEntry(entry!!)
             }
+            //Save details:
+            detailRepository.saveAllDetailsForEntry(details, entryId)
         }
     }
 

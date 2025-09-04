@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.DetailEntity
 import kotlinx.coroutines.flow.Flow
@@ -27,5 +28,16 @@ interface DetailDao {
 
     @Update
     suspend fun update(detail: DetailEntity)
+
+    @Query("DELETE FROM details WHERE entry = :entry")
+    suspend fun deleteAllForEntry(entry: Uuid)
+
+    @Transaction
+    suspend fun saveAllDetailsForEntry(details: List<DetailEntity>, entry: Uuid) {
+        deleteAllForEntry(entry)
+        details.forEach { detail ->
+            insert(detail)
+        }
+    }
 
 }

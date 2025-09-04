@@ -51,4 +51,7 @@ interface DetailRepository {
      */
     suspend fun deleteDetail(detail: Detail)
 
+
+    suspend fun saveAllDetailsForEntry(details: List<Detail>, entry: Uuid)
+
 }
