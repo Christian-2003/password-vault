@@ -1,6 +1,5 @@
 package de.christian2003.passwordvault.plugin.presentation.view.entry
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -35,9 +34,6 @@ class EntryViewModel(): ViewModel() {
     private var isInitialized = false
 
     lateinit var tagRepository: TagRepository
-
-    @Deprecated("")
-    lateinit var detailsDeprecated: Flow<List<Detail>>
 
     lateinit var allTags: Flow<List<Tag>>
 
@@ -81,8 +77,6 @@ class EntryViewModel(): ViewModel() {
         this.tagRepository = tagRepository
         this.clipboardService = clipboardService
         this.entryId = id ?: Uuid.random()
-        detailsDeprecated = detailRepository.getAllDetailsForEntry(entryId)
-
 
         allTags = tagRepository.getAllTags()
         isInitialized = true

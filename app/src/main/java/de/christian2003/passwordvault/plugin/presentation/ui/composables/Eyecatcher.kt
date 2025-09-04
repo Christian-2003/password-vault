@@ -22,13 +22,9 @@ import androidx.compose.ui.unit.dp
 
 /**
  * Displays an eyecatcher to the user using a pulsating effect.
- *
- * @param eyecatcherDefaults    Defaults for the eyecatcher.
  */
 @Composable
-fun Eyecatcher(
-    eyecatcherDefaults: EyecatcherDefaults = EyecatcherDefaults.helpEyecatcherDefaults
-) {
+fun Eyecatcher() {
     val infiniteTransition: InfiniteTransition = rememberInfiniteTransition(label = "")
     val scale by infiniteTransition.animateFloat(
         initialValue = 0.8f,
@@ -45,32 +41,11 @@ fun Eyecatcher(
 
     Box(
         modifier = Modifier
-            .size(eyecatcherDefaults.size)
+            .size(12.dp)
             .scale(scale)
             .background(
                 color = MaterialTheme.colorScheme.tertiaryContainer,
                 shape = CircleShape
             )
     )
-}
-
-
-/**
- * Implements defaults for the eyecatcher.
- *
- * @param size  Size for the eyecatcher.
- */
-class EyecatcherDefaults(
-    val size: Dp = 12.dp
-) {
-
-    companion object {
-
-        /**
-         * Defaults for the help eyecatcher.
-         */
-        val helpEyecatcherDefaults = EyecatcherDefaults()
-
-    }
-
 }

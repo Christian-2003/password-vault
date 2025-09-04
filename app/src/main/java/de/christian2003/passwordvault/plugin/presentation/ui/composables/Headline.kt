@@ -73,9 +73,7 @@ fun Headline(
                     modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
                 )
                 if (isEyecatcherVisible) {
-                    Eyecatcher(
-                        eyecatcherDefaults = EyecatcherDefaults.helpEyecatcherDefaults
-                    )
+                    Eyecatcher()
                 }
             }
         }
