@@ -33,7 +33,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,8 +43,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.Clipboard
-import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -61,22 +58,20 @@ import de.christian2003.passwordvault.plugin.presentation.ui.composables.Confirm
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.Headline
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.TextInput
+import de.christian2003.passwordvault.plugin.presentation.view.detail.DetailSheet
+import de.christian2003.passwordvault.plugin.presentation.view.detail.DetailViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.tag.TagSheet
 import de.christian2003.passwordvault.plugin.presentation.view.tag.TagViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.text.ifEmpty
-import kotlin.uuid.Uuid
 
 
 @Composable
 fun EntryScreen(
     viewModel: EntryViewModel,
-    onNavigateUp: () -> Unit,
-    onEditDetail: (Uuid) -> Unit,
-    onCreateDetail: (Uuid) -> Unit
+    onNavigateUp: () -> Unit
 ) {
-    val details: List<Detail> by viewModel.details.collectAsState(emptyList())
     Scaffold(
         topBar = {
             TopAppBar(
@@ -139,10 +134,10 @@ fun EntryScreen(
                 title = stringResource(R.string.entry_detailsTitle),
                 endIcon = painterResource(R.drawable.ic_add),
                 onClick = {
-                    onCreateDetail(viewModel.entryId)
+                    viewModel.isDetailDialogVisible = true
                 }
             )
-            if (details.isEmpty()) {
+            if (viewModel.details.isEmpty()) {
                 EmptyPlaceholder(
                     title = stringResource(R.string.entry_emptyPlaceholder_title),
                     subtitle = stringResource(R.string.entry_emptyPlaceholder_subtitle),
@@ -151,11 +146,11 @@ fun EntryScreen(
             }
             else {
                 LazyColumn {
-                    items(details) { detail ->
+                    items(viewModel.details) { detail ->
                         DetailListRow(
                             detail = detail,
                             onEditDetail = {
-                                onEditDetail(it.id)
+                                viewModel.detailToEdit = it
                             },
                             onDeleteDetail = {
                                 viewModel.detailToDelete = it
@@ -215,7 +210,7 @@ fun EntryScreen(
         }
     }
     if (viewModel.isTagDialogVisible) {
-        val tagViewModel: TagViewModel = viewModel()
+        val tagViewModel: TagViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
         tagViewModel.init(
             tagRepository = viewModel.tagRepository,
             selectedTags = viewModel.tags
@@ -223,13 +218,42 @@ fun EntryScreen(
         TagSheet(
             viewModel = tagViewModel,
             onDismiss = {
-                viewModel.isTagDialogVisible = false
+                viewModel.dismissTagDialog()
             },
             onSave = { selectedTags ->
-                viewModel.isTagDialogVisible = false
-                viewModel.tags.clear()
-                viewModel.tags.addAll(selectedTags)
-                Log.d("Entry", "${selectedTags.size} new tags")
+                viewModel.dismissTagDialog(selectedTags)
+            }
+        )
+    }
+    if (viewModel.isDetailDialogVisible) {
+        val detailViewModel: DetailViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
+        detailViewModel.init(
+            entryId = viewModel.entryId,
+            detail = null
+        )
+        DetailSheet(
+            viewModel = detailViewModel,
+            onDismiss = {
+                viewModel.dismissDetailDialog()
+            },
+            onSave = { detail ->
+                viewModel.dismissDetailDialog(detail)
+            }
+        )
+    }
+    if (viewModel.detailToEdit != null) {
+        val detailViewModel: DetailViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
+        detailViewModel.init(
+            entryId = viewModel.entryId,
+            detail = viewModel.detailToEdit
+        )
+        DetailSheet(
+            viewModel = detailViewModel,
+            onDismiss = {
+                viewModel.dismissDetailDialog()
+            },
+            onSave = { detail ->
+                viewModel.dismissDetailDialog(detail)
             }
         )
     }
