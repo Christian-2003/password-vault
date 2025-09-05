@@ -1,6 +1,5 @@
 package de.christian2003.passwordvault.plugin.presentation.view.entry
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -52,8 +51,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.christian2003.passwordvault.R
-import de.christian2003.passwordvault.domain.entry.Detail
-import de.christian2003.passwordvault.domain.entry.Tag
+import de.christian2003.passwordvault.domain.model.detail.Detail
+import de.christian2003.passwordvault.domain.model.tag.Tag
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDeleteDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.Headline

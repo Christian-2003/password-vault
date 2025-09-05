@@ -1,4 +1,4 @@
-package de.christian2003.passwordvault.domain.entry
+package de.christian2003.passwordvault.domain.model.detail
 
 
 /**

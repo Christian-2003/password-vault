@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.christian2003.passwordvault.domain.entry.Tag
-import de.christian2003.passwordvault.domain.repository.TagRepository
+import de.christian2003.passwordvault.domain.model.tag.Tag
+import de.christian2003.passwordvault.application.repository.TagRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch

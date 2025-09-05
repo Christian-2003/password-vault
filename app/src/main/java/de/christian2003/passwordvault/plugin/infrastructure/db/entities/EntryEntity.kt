@@ -3,8 +3,7 @@ package de.christian2003.passwordvault.plugin.infrastructure.db.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.Relation
-import de.christian2003.passwordvault.domain.entry.Tag
+import java.time.LocalDateTime
 import kotlin.uuid.Uuid
 
 
@@ -16,7 +15,16 @@ class EntryEntity (
     var id: Uuid,
 
     @ColumnInfo(name = "payload")
-    var payload: ByteArray
+    var payload: ByteArray,
+
+    @ColumnInfo(name = "createdAt")
+    var createdAt: LocalDateTime,
+
+    @ColumnInfo(name = "editedAt")
+    var editedAt: LocalDateTime,
+
+    @ColumnInfo(name = "accessedAt")
+    var accessedAt: LocalDateTime
 
 ) {
 

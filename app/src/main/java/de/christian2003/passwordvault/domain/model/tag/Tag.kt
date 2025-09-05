@@ -1,7 +1,6 @@
-package de.christian2003.passwordvault.domain.entry
+package de.christian2003.passwordvault.domain.model.tag
 
 import kotlin.uuid.Uuid
-
 
 /**
  * Models a tag that can be assigned to an entry for easier grouping.
@@ -11,7 +10,7 @@ class Tag(
     /**
      * UUID of the tag.
      */
-    val id: Uuid = Uuid.random(),
+    val id: Uuid = Uuid.Companion.random(),
 
     /**
      * Name of the tag. This name is displayed to the user.

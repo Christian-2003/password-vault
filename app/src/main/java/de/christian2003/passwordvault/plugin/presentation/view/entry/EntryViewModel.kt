@@ -6,18 +6,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.christian2003.passwordvault.domain.entry.Detail
-import de.christian2003.passwordvault.domain.entry.Entry
-import de.christian2003.passwordvault.domain.entry.Tag
-import de.christian2003.passwordvault.domain.repository.DetailRepository
-import de.christian2003.passwordvault.domain.repository.EntryRepository
-import de.christian2003.passwordvault.domain.repository.TagRepository
+import de.christian2003.passwordvault.domain.model.detail.Detail
+import de.christian2003.passwordvault.domain.model.entry.Entry
+import de.christian2003.passwordvault.domain.model.tag.Tag
+import de.christian2003.passwordvault.application.repository.DetailRepository
+import de.christian2003.passwordvault.application.repository.EntryRepository
+import de.christian2003.passwordvault.application.repository.TagRepository
 import de.christian2003.passwordvault.domain.security.ClipboardService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 import kotlin.uuid.Uuid
 
 
@@ -118,7 +117,6 @@ class EntryViewModel(): ViewModel() {
                 //Edit existing entry:
                 entry!!.name = name
                 entry!!.description = description
-                entry!!.edited = LocalDateTime.now()
                 entry!!.tags = tags
                 entryRepository.updateEntry(entry!!)
             }

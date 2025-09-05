@@ -1,7 +1,7 @@
 package de.christian2003.passwordvault.plugin.infrastructure.db.dto
 
-import de.christian2003.passwordvault.domain.entry.DetailIcon
-import de.christian2003.passwordvault.domain.entry.DetailType
+import de.christian2003.passwordvault.domain.model.detail.DetailIcon
+import de.christian2003.passwordvault.domain.model.detail.DetailType
 import de.christian2003.passwordvault.plugin.infrastructure.db.serializer.LocalDateTimeSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

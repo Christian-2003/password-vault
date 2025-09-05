@@ -49,7 +49,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import de.christian2003.passwordvault.domain.entry.Tag
+import de.christian2003.passwordvault.domain.model.tag.Tag
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDeleteDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder

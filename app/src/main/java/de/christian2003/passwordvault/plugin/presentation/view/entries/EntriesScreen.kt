@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import de.christian2003.passwordvault.domain.entry.Entry
+import de.christian2003.passwordvault.domain.model.entry.Entry
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
 import kotlin.uuid.Uuid

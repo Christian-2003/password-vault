@@ -6,9 +6,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import de.christian2003.passwordvault.domain.entry.Detail
-import de.christian2003.passwordvault.domain.entry.DetailIcon
-import de.christian2003.passwordvault.domain.entry.DetailType
+import de.christian2003.passwordvault.domain.model.detail.Detail
+import de.christian2003.passwordvault.domain.model.detail.DetailIcon
+import de.christian2003.passwordvault.domain.model.detail.DetailType
 import java.time.LocalDateTime
 import kotlin.uuid.Uuid
 

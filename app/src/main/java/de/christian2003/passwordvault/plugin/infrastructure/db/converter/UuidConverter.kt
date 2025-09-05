@@ -8,7 +8,6 @@ import kotlin.uuid.Uuid
 /**
  * Converter for Room database to convert a UUID field into a byte array and vice versa.
  */
-@OptIn(ExperimentalUuidApi::class)
 class UuidConverter {
 
     /**

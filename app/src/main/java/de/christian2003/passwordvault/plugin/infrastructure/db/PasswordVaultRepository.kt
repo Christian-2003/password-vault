@@ -1,11 +1,11 @@
 package de.christian2003.passwordvault.plugin.infrastructure.db
 
-import de.christian2003.passwordvault.domain.entry.Detail
-import de.christian2003.passwordvault.domain.entry.Entry
-import de.christian2003.passwordvault.domain.entry.Tag
-import de.christian2003.passwordvault.domain.repository.DetailRepository
-import de.christian2003.passwordvault.domain.repository.EntryRepository
-import de.christian2003.passwordvault.domain.repository.TagRepository
+import de.christian2003.passwordvault.domain.model.detail.Detail
+import de.christian2003.passwordvault.domain.model.entry.Entry
+import de.christian2003.passwordvault.domain.model.tag.Tag
+import de.christian2003.passwordvault.application.repository.DetailRepository
+import de.christian2003.passwordvault.application.repository.EntryRepository
+import de.christian2003.passwordvault.application.repository.TagRepository
 import de.christian2003.passwordvault.domain.security.CipherService
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.DetailDao
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.EntryDao

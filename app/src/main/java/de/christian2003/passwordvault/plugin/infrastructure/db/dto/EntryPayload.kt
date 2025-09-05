@@ -24,18 +24,4 @@ class EntryPayload (
     @SerialName("description")
     val description: String = "",
 
-    /**
-     * Date time on which the entry was created. This is for statistical purposes.
-     */
-    @SerialName("created")
-    @Serializable(with = LocalDateTimeSerializer::class)
-    val created: LocalDateTime = LocalDateTime.now(),
-
-    /**
-     * Date time on which the entry was edited the last time. This is for statistical purposes.
-     */
-    @SerialName("edited")
-    @Serializable(with = LocalDateTimeSerializer::class)
-    val edited: LocalDateTime = LocalDateTime.now()
-
 )

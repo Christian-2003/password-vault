@@ -1,6 +1,7 @@
 package de.christian2003.passwordvault.plugin.infrastructure.db.mapper
 
-import de.christian2003.passwordvault.domain.entry.Entry
+import de.christian2003.passwordvault.domain.model.entry.Entry
+import de.christian2003.passwordvault.domain.model.entry.EntryMetadata
 import de.christian2003.passwordvault.domain.security.CipherService
 import de.christian2003.passwordvault.plugin.infrastructure.db.dto.EntryPayload
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.EntryEntity
@@ -38,8 +39,11 @@ class EntryDbMapper(
             id = entity.id,
             name = payload.name,
             description = payload.description,
-            created = payload.created,
-            edited = payload.edited
+            metadata = EntryMetadata(
+                createdAt = entity.createdAt,
+                editedAt = entity.editedAt,
+                accessedAt = entity.accessedAt
+            )
         )
     }
 
@@ -53,9 +57,7 @@ class EntryDbMapper(
     fun toEntity(domain: Entry): EntryEntity {
         val payload = EntryPayload(
             name = domain.name,
-            description = domain.description,
-            created = domain.created,
-            edited = domain.edited
+            description = domain.description
         )
 
         val serializedPayload: ByteArray = cbor.encodeToByteArray(EntryPayload.serializer(), payload)
@@ -63,7 +65,10 @@ class EntryDbMapper(
 
         return EntryEntity(
             id = domain.id,
-            payload = encryptedPayload
+            payload = encryptedPayload,
+            createdAt = domain.metadata.createdAt,
+            editedAt = domain.metadata.editedAt,
+            accessedAt = domain.metadata.accessedAt
         )
     }
 

@@ -38,8 +38,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import de.christian2003.passwordvault.R
-import de.christian2003.passwordvault.domain.entry.Detail
-import de.christian2003.passwordvault.domain.entry.DetailIcon
+import de.christian2003.passwordvault.domain.model.detail.Detail
+import de.christian2003.passwordvault.domain.model.detail.DetailIcon
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.Checkbox
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.Headline
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.TextInput

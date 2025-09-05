@@ -1,6 +1,6 @@
 package de.christian2003.passwordvault.plugin.infrastructure.db.mapper
 
-import de.christian2003.passwordvault.domain.entry.Tag
+import de.christian2003.passwordvault.domain.model.tag.Tag
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.TagEntity
 
 

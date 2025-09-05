@@ -1,6 +1,6 @@
-package de.christian2003.passwordvault.domain.repository
+package de.christian2003.passwordvault.application.repository
 
-import de.christian2003.passwordvault.domain.entry.Detail
+import de.christian2003.passwordvault.domain.model.detail.Detail
 import kotlinx.coroutines.flow.Flow
 import kotlin.uuid.Uuid
 

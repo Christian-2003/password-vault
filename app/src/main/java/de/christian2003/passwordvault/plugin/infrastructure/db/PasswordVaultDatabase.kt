@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import de.christian2003.passwordvault.plugin.infrastructure.db.converter.LocalDateTimeConverter
 import de.christian2003.passwordvault.plugin.infrastructure.db.converter.UuidConverter
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.DetailDao
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.EntryDao
@@ -26,7 +27,8 @@ import de.christian2003.passwordvault.plugin.infrastructure.db.entities.TagEntit
     exportSchema = false
 )
 @TypeConverters(
-    UuidConverter::class
+    UuidConverter::class,
+    LocalDateTimeConverter::class
 )
 abstract class PasswordVaultDatabase(): RoomDatabase() {
 
