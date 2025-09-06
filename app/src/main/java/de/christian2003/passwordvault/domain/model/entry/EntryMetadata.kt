@@ -47,7 +47,7 @@ class EntryMetadata(
 
 
     /**
- * Initializes the metadata instance.
+     * Initializes the metadata instance.
      */
     init {
         this.createdAt = createdAt

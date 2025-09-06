@@ -403,7 +403,7 @@ private fun DetailListRow(
     onDeleteDetail: (Detail) -> Unit,
     onCopyToClipboard: (Detail) -> Unit
 ) {
-    var isObfuscated: Boolean by remember { mutableStateOf(detail.isObfuscated) }
+    var isObfuscated: Boolean by remember { mutableStateOf(detail.metadata.isObfuscated) }
     var isDropdownVisible: Boolean by remember { mutableStateOf(false) }
     Row(
         modifier = Modifier
@@ -443,7 +443,7 @@ private fun DetailListRow(
                 style = MaterialTheme.typography.bodyMedium
             )
             Text(
-                text = if (detail.isObfuscated && isObfuscated) { stringResource(R.string.placeholder_obfuscated) } else { detail.content },
+                text = if (detail.metadata.isObfuscated && isObfuscated) { stringResource(R.string.placeholder_obfuscated) } else { detail.content },
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.bodyLarge
             )
@@ -451,7 +451,7 @@ private fun DetailListRow(
         Row(
             modifier = Modifier.align(Alignment.CenterVertically)
         ) {
-            if (detail.isObfuscated) {
+            if (detail.metadata.isObfuscated) {
                 IconButton(
                     onClick = {
                         isObfuscated = !isObfuscated

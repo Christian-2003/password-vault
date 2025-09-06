@@ -2,10 +2,8 @@ package de.christian2003.passwordvault.plugin.infrastructure.db.dto
 
 import de.christian2003.passwordvault.domain.model.detail.DetailIcon
 import de.christian2003.passwordvault.domain.model.detail.DetailType
-import de.christian2003.passwordvault.plugin.infrastructure.db.serializer.LocalDateTimeSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.time.LocalDateTime
 
 
 /**
@@ -38,32 +36,5 @@ class DetailPayload (
      */
     @SerialName("icon")
     val icon: DetailIcon? = null,
-
-    /**
-     * Whether the detail content is obfuscated.
-     */
-    @SerialName("isObfuscated")
-    val isObfuscated: Boolean = false,
-
-    /**
-     * Whether the detail content is visible by default or hidden beneath the "Show more details"
-     * button.
-     */
-    @SerialName("isVisible")
-    val isVisible: Boolean = true,
-
-    /**
-     * Date time on which the detail was created. This is for statistical purposes.
-     */
-    @SerialName("created")
-    @Serializable(with = LocalDateTimeSerializer::class)
-    val created: LocalDateTime = LocalDateTime.now(),
-
-    /**
-     * Date time on which the detail was edited the last time. This is for statistical purposes.
-     */
-    @SerialName("isEdited")
-    @Serializable(with = LocalDateTimeSerializer::class)
-    val edited: LocalDateTime = LocalDateTime.now()
 
 )

@@ -135,7 +135,7 @@ class EntryViewModel(): ViewModel() {
         clipboardService.copyToClipboard(
             label = detail.name,
             data =detail.content,
-            isSensitive = detail.isObfuscated
+            isSensitive = detail.metadata.isObfuscated
         )
     }
 

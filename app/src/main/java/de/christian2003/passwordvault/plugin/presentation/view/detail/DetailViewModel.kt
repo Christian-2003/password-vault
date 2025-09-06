@@ -8,8 +8,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import de.christian2003.passwordvault.domain.model.detail.Detail
 import de.christian2003.passwordvault.domain.model.detail.DetailIcon
+import de.christian2003.passwordvault.domain.model.detail.DetailMetadata
 import de.christian2003.passwordvault.domain.model.detail.DetailType
-import java.time.LocalDateTime
 import kotlin.uuid.Uuid
 
 
@@ -56,8 +56,8 @@ class DetailViewModel: ViewModel() {
             //Edit detail:
             name = detail.name
             content = detail.content
-            isObfuscated = detail.isObfuscated
-            isVisible = detail.isVisible
+            isObfuscated = detail.metadata.isObfuscated
+            isVisible = detail.metadata.isVisible
             type = detail.type
             icon = detail.icon
             isCreatingNewDetail = false
@@ -80,8 +80,10 @@ class DetailViewModel: ViewModel() {
                     content = content,
                     type = type,
                     icon = icon,
-                    isObfuscated = isObfuscated,
-                    isVisible = isVisible
+                    metadata = DetailMetadata(
+                        isObfuscated = isObfuscated,
+                        isVisible = isVisible
+                    )
                 )
                 return newDetail
             }
@@ -94,9 +96,10 @@ class DetailViewModel: ViewModel() {
                     content = content,
                     type = type,
                     icon = icon,
-                    isObfuscated = isObfuscated,
-                    isVisible = isVisible,
-                    edited = LocalDateTime.now()
+                    metadata = detail.metadata.copy(
+                        isObfuscated = isObfuscated,
+                        isVisible = isVisible
+                    )
                 )
                 return editedDetail
             }

@@ -9,7 +9,7 @@ import kotlin.uuid.Uuid
 /**
  * Domain entity models an entry (i.e. an account).
  *
- * @param id            Version 4 UUID for the entry.
+ * @param id            Type 4 UUID for the entry.
  * @param name          Name for the entry which is displayed to the user.
  * @param description   Description for the entry which is displayed to the user.
  * @param tags          List of tags associated with the entry.
@@ -18,7 +18,7 @@ import kotlin.uuid.Uuid
  */
 class Entry (
     id: Uuid = Uuid.random(),
-    name: String = "",
+    name: String,
     description: String = "",
     tags: List<Tag> = listOf(),
     targets: List<Target> = listOf(),
