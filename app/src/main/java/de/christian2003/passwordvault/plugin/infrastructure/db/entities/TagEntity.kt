@@ -3,6 +3,7 @@ package de.christian2003.passwordvault.plugin.infrastructure.db.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalDateTime
 import kotlin.uuid.Uuid
 
 
@@ -14,7 +15,13 @@ class TagEntity(
     var id: Uuid,
 
     @ColumnInfo("name")
-    var name: String
+    var name: String,
+
+    @ColumnInfo("createdAt")
+    var createdAt: LocalDateTime,
+
+    @ColumnInfo("editedAt")
+    var editedAt: LocalDateTime
 
 ) {
 
