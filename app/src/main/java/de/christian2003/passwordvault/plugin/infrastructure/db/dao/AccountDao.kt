@@ -20,6 +20,9 @@ interface AccountDao {
     @Transaction
     fun selectAllAccounts(): Flow<List<AccountWithTags>>
 
+    @Query("SELECT * FROM entries")
+    fun selectAllAccountsWithoutTags(): Flow<List<AccountEntity>>
+
     @Query("SELECT * FROM entries WHERE id = :id")
     @Transaction
     fun selectAccountById(id: Uuid): AccountWithTags?

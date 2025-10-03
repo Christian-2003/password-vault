@@ -1,6 +1,7 @@
 package de.christian2003.passwordvault.application.repository
 
 import de.christian2003.passwordvault.domain.model.account.Account
+import de.christian2003.passwordvault.domain.model.account.AccountDescriptor
 import kotlinx.coroutines.flow.Flow
 import kotlin.uuid.Uuid
 
@@ -15,7 +16,15 @@ interface AccountRepository {
      *
      * @return  Flow containing a list of all accounts.
      */
+    @Deprecated("Use getAllAccountDescriptors instead")
     fun getAllAccounts(): Flow<List<Account>>
+
+    /**
+     * Returns a list which contains the account descriptors of all accounts.
+     *
+     * @return  List of all account descriptors.
+     */
+    fun getAllAccountDescriptors(): Flow<List<AccountDescriptor>>
 
 
     /**

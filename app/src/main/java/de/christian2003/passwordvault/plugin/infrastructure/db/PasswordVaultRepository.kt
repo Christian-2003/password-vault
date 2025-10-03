@@ -6,6 +6,7 @@ import de.christian2003.passwordvault.domain.model.tag.Tag
 import de.christian2003.passwordvault.application.repository.DetailRepository
 import de.christian2003.passwordvault.application.repository.AccountRepository
 import de.christian2003.passwordvault.application.repository.TagRepository
+import de.christian2003.passwordvault.domain.model.account.AccountDescriptor
 import de.christian2003.passwordvault.domain.security.CipherService
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.DetailDao
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.AccountDao
@@ -52,7 +53,7 @@ class PasswordVaultRepository(
     /**
      * Mapper maps the domain model 'Entry' to its entity.
      */
-    private val entryMapper: AccountDbMapper = AccountDbMapper(
+    private val accountMapper: AccountDbMapper = AccountDbMapper(
         cbor = Cbor { ignoreUnknownKeys = true },
         cipherService = cipherService
     )
@@ -77,6 +78,12 @@ class PasswordVaultRepository(
     private var entries: Flow<List<Account>>? = null
 
     /**
+     * Flow contains a list of all account descriptors. This can be null until
+     * "getAllAccountDescriptors" is called for the first time.
+     */
+    private var accountDescriptors: Flow<List<AccountDescriptor>>? = null
+
+    /**
      * Flow contains a list of all tags. Can be null until "getAllTags" is called for the first
      * time.
      */
@@ -88,11 +95,12 @@ class PasswordVaultRepository(
      *
      * @return  Flow containing a list of all accounts.
      */
+    @Deprecated("Use getAllAccountDescriptors instead")
     override fun getAllAccounts(): Flow<List<Account>> {
         if (entries == null) {
             entries = accountDao.selectAllAccounts().map { list ->
                 list.map { entry ->
-                    val domain: Account = entryMapper.toDomain(entry.account)
+                    val domain: Account = accountMapper.toDomain(entry.account)
                     val tags: MutableList<Tag> = mutableListOf()
                     entry.tags.forEach { tag ->
                         tags.add(tagMapper.toDomain(tag))
@@ -107,6 +115,24 @@ class PasswordVaultRepository(
 
 
     /**
+     * Returns a list which contains the account descriptors of all accounts.
+     *
+     * @return  List of all account descriptors.
+     */
+    override fun getAllAccountDescriptors(): Flow<List<AccountDescriptor>> {
+        if (accountDescriptors == null) {
+            accountDescriptors = accountDao.selectAllAccountsWithoutTags().map { list ->
+                list.map { account ->
+                    val descriptor: AccountDescriptor = accountMapper.toDescriptor(account)
+                    return@map descriptor
+                }
+            }
+        }
+        return accountDescriptors!!
+    }
+
+
+    /**
      * Returns the account with the passed UUID. If no account exists, null is returned.
      *
      * @param id    UUID of the account to return.
@@ -115,7 +141,7 @@ class PasswordVaultRepository(
     override suspend fun getAccountById(id: Uuid): Account? {
         val entry: AccountWithTags? = accountDao.selectAccountById(id)
         if (entry != null) {
-            val domain: Account = entryMapper.toDomain(entry.account)
+            val domain: Account = accountMapper.toDomain(entry.account)
             val tags: MutableList<Tag> = mutableListOf()
             entry.tags.forEach { tag ->
                 tags.add(tagMapper.toDomain(tag))
@@ -140,7 +166,7 @@ class PasswordVaultRepository(
             tags.add(tagMapper.toEntity(tag))
         }
         val entryWithTags = AccountWithTags(
-            account = entryMapper.toEntity(account),
+            account = accountMapper.toEntity(account),
             tags = tags
         )
         accountDao.insertAccountWithTags(entryWithTags)
@@ -158,7 +184,7 @@ class PasswordVaultRepository(
             tags.add(tagMapper.toEntity(tag))
         }
         val entryWithTags = AccountWithTags(
-            account = entryMapper.toEntity(account),
+            account = accountMapper.toEntity(account),
             tags = tags
         )
         accountDao.updateAccountWithTags(entryWithTags)
@@ -171,7 +197,7 @@ class PasswordVaultRepository(
      * @param account   Account to delete.
      */
     override suspend fun deleteAccount(account: Account) {
-        accountDao.deleteAccount(entryMapper.toEntity(account))
+        accountDao.deleteAccount(accountMapper.toEntity(account))
     }
 
 

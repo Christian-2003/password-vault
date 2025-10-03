@@ -3,6 +3,12 @@
     <string name="placeholder_obfuscated">•••••</string> <!-- '•' is U+2022  -->
     <string name="confirm_delete">Confirm deletion</string>
 
+    <string name="main_emptyPlaceholder_title">No accounts</string>
+    <string name="main_emptyPlaceholder_subtitle">Create an account and it will show up here</string>
+    <string name="main_accounts_edit">Edit account</string>
+    <string name="main_accounts_delete">Delete account</string>
+    <string name="main_deleteAccountText">Are you sure you want to delete \"%1$s\"? This cannot be undone.</string>
+
     <string name="entries_title">Your accounts</string>
     <string name="entries_emptyPlaceholder_title">No entries</string>
     <string name="entries_emptyPlaceholder_subtitle">Available entries are shown here</string>

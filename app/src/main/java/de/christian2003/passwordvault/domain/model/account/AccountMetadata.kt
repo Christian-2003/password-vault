@@ -5,11 +5,11 @@ import java.time.format.DateTimeFormatter
 
 
 /**
- * Domain value object models the metadata for an entry.
+ * Domain value object models the metadata for an account.
  *
- * @param createdAt     Local date time at which the entry was created.
- * @param editedAt      Local date time at which the entry was edited.
- * @param accessedAt    Local date time at which the entry was accessed.
+ * @param createdAt     Local date time at which the account was created.
+ * @param editedAt      Local date time at which the account was edited.
+ * @param accessedAt    Local date time at which the account was accessed.
  */
 data class AccountMetadata(
     val createdAt: LocalDateTime = LocalDateTime.now(),

@@ -52,6 +52,24 @@ class AccountDbMapper(
 
 
     /**
+     * Maps the database entity that is passed as argument to the domain model 'AccountDescriptor'.
+     *
+     * @param entity    Database entity to map to the domain model 'AccountDescriptor'.
+     * @return          Domain model 'AccountDescriptor'.
+     */
+    fun toDescriptor(entity: AccountEntity): AccountDescriptor {
+        val decryptedPayload: ByteArray = cipherService.decrypt(entity.payload, entity.id.toByteArray())
+        val payload: AccountPayload = cbor.decodeFromByteArray(AccountPayload.serializer(), decryptedPayload)
+
+        return AccountDescriptor(
+            id = entity.id,
+            name = payload.name,
+            description = payload.description
+        )
+    }
+
+
+    /**
      * Maps the domain model 'Account' that is passed as argument to the database entity.
      *
      * @param domain    Domain model 'Account' ti map to the database entity.
