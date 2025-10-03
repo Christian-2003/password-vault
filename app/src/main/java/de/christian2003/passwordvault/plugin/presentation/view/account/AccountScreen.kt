@@ -1,4 +1,4 @@
-package de.christian2003.passwordvault.plugin.presentation.view.entry
+package de.christian2003.passwordvault.plugin.presentation.view.account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -67,8 +67,8 @@ import kotlin.text.ifEmpty
 
 
 @Composable
-fun EntryScreen(
-    viewModel: EntryViewModel,
+fun AccountScreen(
+    viewModel: AccountViewModel,
     onNavigateUp: () -> Unit
 ) {
     Scaffold(

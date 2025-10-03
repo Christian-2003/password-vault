@@ -8,7 +8,7 @@ import kotlin.uuid.Uuid
 
 
 @Entity(tableName = "entries")
-class EntryEntity (
+class AccountEntity (
 
     @PrimaryKey
     @ColumnInfo(name = "id")
@@ -34,7 +34,7 @@ class EntryEntity (
 
 
     override fun equals(other: Any?): Boolean {
-        return (other is EntryEntity) && (other.id == this.id)
+        return (other is AccountEntity) && (other.id == this.id)
     }
 
 }

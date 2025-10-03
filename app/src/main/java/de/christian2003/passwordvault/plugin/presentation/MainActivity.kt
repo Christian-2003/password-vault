@@ -23,10 +23,10 @@ import de.christian2003.passwordvault.plugin.PasswordVaultApplication
 import de.christian2003.passwordvault.plugin.infrastructure.db.PasswordVaultRepository
 import de.christian2003.passwordvault.plugin.infrastructure.security.AndroidClipboardService
 import de.christian2003.passwordvault.plugin.presentation.ui.theme.PasswordVaultTheme
-import de.christian2003.passwordvault.plugin.presentation.view.entries.EntriesScreen
-import de.christian2003.passwordvault.plugin.presentation.view.entries.EntriesViewModel
-import de.christian2003.passwordvault.plugin.presentation.view.entry.EntryScreen
-import de.christian2003.passwordvault.plugin.presentation.view.entry.EntryViewModel
+import de.christian2003.passwordvault.plugin.presentation.view.accounts.AccountsScreen
+import de.christian2003.passwordvault.plugin.presentation.view.accounts.AccountsViewModel
+import de.christian2003.passwordvault.plugin.presentation.view.account.AccountScreen
+import de.christian2003.passwordvault.plugin.presentation.view.account.AccountViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.main.MainScreen
 import java.util.UUID
 import kotlin.uuid.Uuid
@@ -59,50 +59,50 @@ fun PasswordVault() {
         ) {
             composable("main") {
                 MainScreen(
-                    onNavigateToEntries = {
-                        navController.navigate("entries")
+                    onNavigateToAccounts = {
+                        navController.navigate("accounts")
                     },
-                    onCreateNewEntry = {
-                        navController.navigate("entry/")
+                    onCreateNewAccount = {
+                        navController.navigate("account/")
                     }
                 )
             }
 
-            composable("entries") {
-                val viewModel: EntriesViewModel = viewModel()
+            composable("accounts") {
+                val viewModel: AccountsViewModel = viewModel()
                 viewModel.init(repository)
-                EntriesScreen(
+                AccountsScreen(
                     viewModel = viewModel,
                     onNavigateUp = {
                         navController.navigateUp()
                     },
-                    onNavigateToEntry = { id ->
+                    onNavigateToAccount = { id ->
                         val idAsString: String = id.toString()
-                        navController.navigate("entry/$idAsString")
+                        navController.navigate("account/$idAsString")
                     }
                 )
             }
 
             composable(
-                route = "entry/{entryId}",
+                route = "account/{accountId}",
                 arguments = listOf(
-                    navArgument("entryId") { type = NavType.StringType}
+                    navArgument("accountId") { type = NavType.StringType}
                 )
             ) { backStackEntry ->
                 val id: Uuid? = try {
-                    UUID.fromString(backStackEntry.arguments!!.getString("entryId")).toKotlinUuid() //Wtf is this shit?
+                    UUID.fromString(backStackEntry.arguments!!.getString("accountId")).toKotlinUuid() //Wtf is this shit?
                 } catch (_: Exception) {
                     null
                 }
-                val viewModel: EntryViewModel = viewModel()
+                val viewModel: AccountViewModel = viewModel()
                 viewModel.init(
-                    entryRepository = repository,
+                    accountRepository = repository,
                     detailRepository = repository,
                     tagRepository = repository,
                     clipboardService = clipboardService,
                     id = id
                 )
-                EntryScreen(
+                AccountScreen(
                     viewModel = viewModel,
                     onNavigateUp = {
                         navController.navigateUp()

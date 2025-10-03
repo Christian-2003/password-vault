@@ -11,7 +11,7 @@ import kotlin.uuid.Uuid
     tableName = "targets",
     foreignKeys = [
         ForeignKey(
-            entity = EntryEntity::class,
+            entity = AccountEntity::class,
             parentColumns = ["id"],
             childColumns = ["entry"],
             onDelete = ForeignKey.CASCADE

@@ -3,20 +3,21 @@ package de.christian2003.passwordvault.plugin.infrastructure.db.dto
 import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
-import de.christian2003.passwordvault.plugin.infrastructure.db.entities.EntryEntity
-import de.christian2003.passwordvault.plugin.infrastructure.db.entities.EntryTagCrossRef
+import de.christian2003.passwordvault.plugin.infrastructure.db.entities.AccountEntity
+import de.christian2003.passwordvault.plugin.infrastructure.db.entities.AccountTagCrossRef
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.TagEntity
 
-data class EntryWithTags(
+
+data class AccountWithTags(
 
     @Embedded
-    val entry: EntryEntity,
+    val account: AccountEntity,
 
     @Relation(
         parentColumn = "id",
         entityColumn = "id",
         associateBy = Junction(
-            value = EntryTagCrossRef::class,
+            value = AccountTagCrossRef::class,
             parentColumn = "entry",
             entityColumn = "tag"
         )

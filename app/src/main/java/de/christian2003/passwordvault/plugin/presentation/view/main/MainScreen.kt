@@ -12,8 +12,8 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun MainScreen(
-    onNavigateToEntries: () -> Unit,
-    onCreateNewEntry: () -> Unit
+    onNavigateToAccounts: () -> Unit,
+    onCreateNewAccount: () -> Unit
 ) {
     Scaffold { innerPadding ->
         Column(
@@ -22,12 +22,12 @@ fun MainScreen(
                 .fillMaxSize()
         ) {
             Button(
-                onClick = onNavigateToEntries
+                onClick = onNavigateToAccounts
             ) {
                 Text("All entries")
             }
             Button(
-                onClick = onCreateNewEntry
+                onClick = onCreateNewAccount
             ) {
                 Text("Create entry")
             }

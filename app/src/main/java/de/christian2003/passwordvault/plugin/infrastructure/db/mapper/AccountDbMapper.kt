@@ -1,17 +1,17 @@
 package de.christian2003.passwordvault.plugin.infrastructure.db.mapper
 
-import de.christian2003.passwordvault.domain.model.entry.Entry
-import de.christian2003.passwordvault.domain.model.entry.EntryMetadata
+import de.christian2003.passwordvault.domain.model.account.Account
+import de.christian2003.passwordvault.domain.model.account.AccountMetadata
 import de.christian2003.passwordvault.domain.security.CipherService
-import de.christian2003.passwordvault.plugin.infrastructure.db.dto.EntryPayload
-import de.christian2003.passwordvault.plugin.infrastructure.db.entities.EntryEntity
+import de.christian2003.passwordvault.plugin.infrastructure.db.dto.AccountPayload
+import de.christian2003.passwordvault.plugin.infrastructure.db.entities.AccountEntity
 import kotlinx.serialization.cbor.Cbor
 
 
 /**
- * Mapper maps the domain model 'Entry' to the database entity.
+ * Mapper maps the domain model 'Account' to the database entity.
  */
-class EntryDbMapper(
+class AccountDbMapper(
 
     /**
      * Cipher service to use for encryption and decryption.
@@ -26,20 +26,20 @@ class EntryDbMapper(
 ) {
 
     /**
-     * Maps the database entity that is passed as argument to the domain model 'Entry'.
+     * Maps the database entity that is passed as argument to the domain model 'Account'.
      *
-     * @param entity    Database entity to map to the domain model 'Entry'.
-     * @return          Domain model 'Entry'.
+     * @param entity    Database entity to map to the domain model 'Account'.
+     * @return          Domain model 'Account'.
      */
-    fun toDomain(entity: EntryEntity): Entry {
+    fun toDomain(entity: AccountEntity): Account {
         val decryptedPayload: ByteArray = cipherService.decrypt(entity.payload, entity.id.toByteArray())
-        val payload: EntryPayload = cbor.decodeFromByteArray(EntryPayload.serializer(), decryptedPayload)
+        val payload: AccountPayload = cbor.decodeFromByteArray(AccountPayload.serializer(), decryptedPayload)
 
-        return Entry(
+        return Account(
             id = entity.id,
             name = payload.name,
             description = payload.description,
-            metadata = EntryMetadata(
+            metadata = AccountMetadata(
                 createdAt = entity.createdAt,
                 editedAt = entity.editedAt,
                 accessedAt = entity.accessedAt
@@ -49,21 +49,21 @@ class EntryDbMapper(
 
 
     /**
-     * Maps the domain model 'Entry' that is passed as argument to the database entity.
+     * Maps the domain model 'Account' that is passed as argument to the database entity.
      *
-     * @param domain    Domain model 'Entry' ti map to the database entity.
+     * @param domain    Domain model 'Account' ti map to the database entity.
      * @return          Database entity.
      */
-    fun toEntity(domain: Entry): EntryEntity {
-        val payload = EntryPayload(
+    fun toEntity(domain: Account): AccountEntity {
+        val payload = AccountPayload(
             name = domain.name,
             description = domain.description
         )
 
-        val serializedPayload: ByteArray = cbor.encodeToByteArray(EntryPayload.serializer(), payload)
+        val serializedPayload: ByteArray = cbor.encodeToByteArray(AccountPayload.serializer(), payload)
         val encryptedPayload: ByteArray = cipherService.encrypt(serializedPayload, domain.id.toByteArray())
 
-        return EntryEntity(
+        return AccountEntity(
             id = domain.id,
             payload = encryptedPayload,
             createdAt = domain.metadata.createdAt,

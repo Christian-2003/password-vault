@@ -1,4 +1,4 @@
-package de.christian2003.passwordvault.plugin.presentation.view.entries
+package de.christian2003.passwordvault.plugin.presentation.view.accounts
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -21,19 +21,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import de.christian2003.passwordvault.domain.model.entry.Entry
+import de.christian2003.passwordvault.domain.model.account.Account
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
 import kotlin.uuid.Uuid
 
 
 @Composable
-fun EntriesScreen(
-    viewModel: EntriesViewModel,
+fun AccountsScreen(
+    viewModel: AccountsViewModel,
     onNavigateUp: () -> Unit,
-    onNavigateToEntry: (id: Uuid) -> Unit
+    onNavigateToAccount: (id: Uuid) -> Unit
 ) {
-    val allEntries: List<Entry> by viewModel.allEntries.collectAsState(emptyList())
+    val allAccounts: List<Account> by viewModel.allAccounts.collectAsState(emptyList())
 
     Scaffold(
         topBar = {
@@ -59,7 +59,7 @@ fun EntriesScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            if (allEntries.isEmpty()) {
+            if (allAccounts.isEmpty()) {
                 EmptyPlaceholder(
                     title = stringResource(R.string.entries_emptyPlaceholder_title),
                     subtitle = stringResource(R.string.entries_emptyPlaceholder_subtitle),
@@ -71,14 +71,14 @@ fun EntriesScreen(
                 LazyColumn(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    items(allEntries) { entry ->
-                        EntriesListRow(
-                            entry = entry,
+                    items(allAccounts) { account ->
+                        AccountsListRow(
+                            account = account,
                             onEdit = {
-                                onNavigateToEntry(it.id)
+                                onNavigateToAccount(it.id)
                             },
                             onDelete = {
-                                viewModel.deleteEntry(it)
+                                viewModel.deleteAccount(it)
                             }
                         )
                     }
@@ -90,16 +90,16 @@ fun EntriesScreen(
 
 
 @Composable
-private fun EntriesListRow(
-    entry: Entry,
-    onEdit: (Entry) -> Unit,
-    onDelete: (Entry) -> Unit
+private fun AccountsListRow(
+    account: Account,
+    onEdit: (Account) -> Unit,
+    onDelete: (Account) -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                onEdit(entry)
+                onEdit(account)
             }
             .padding(
                 horizontal = dimensionResource(R.dimen.margin_horizontal),
@@ -110,19 +110,19 @@ private fun EntriesListRow(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = entry.name,
+                text = account.name,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = entry.description,
+                text = account.description,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
         IconButton(
             onClick = {
-                onDelete(entry)
+                onDelete(account)
             }
         ) {
             Icon(

@@ -1,15 +1,15 @@
-package de.christian2003.passwordvault.domain.model.entry
+package de.christian2003.passwordvault.domain.model.account
 
 import org.junit.Assert
 import org.junit.Test
 import java.time.LocalDateTime
 
 
-class EntryMetadataUnitTest {
+class AccountMetadataUnitTest {
 
     @Test
     fun createValidEntryMetadata() {
-        EntryMetadata(
+        AccountMetadata(
             createdAt = LocalDateTime.of(2025, 10, 1, 12, 47),
             editedAt = LocalDateTime.of(2025, 10, 2, 12, 47),
             accessedAt = LocalDateTime.of(2025, 10, 3, 12, 47)
@@ -19,7 +19,7 @@ class EntryMetadataUnitTest {
 
     @Test
     fun createEntryMetadataWithIdenticalDates() {
-        EntryMetadata(
+        AccountMetadata(
             createdAt = LocalDateTime.of(2025, 10, 3, 12, 47),
             editedAt = LocalDateTime.of(2025, 10, 3, 12, 47),
             accessedAt = LocalDateTime.of(2025, 10, 3, 12, 47)
@@ -30,7 +30,7 @@ class EntryMetadataUnitTest {
     @Test
     fun createEntryMetadataWithEditedBeforeCreated() {
         Assert.assertThrows(IllegalArgumentException::class.java) {
-            EntryMetadata(
+            AccountMetadata(
                 createdAt = LocalDateTime.of(2025, 10, 2, 12, 47),
                 editedAt = LocalDateTime.of(2025, 10, 1, 12, 47),
                 accessedAt = LocalDateTime.of(2025, 10, 3, 12, 47)
@@ -42,7 +42,7 @@ class EntryMetadataUnitTest {
     @Test
     fun createEntryMetadataWithAccessedBeforeCreated() {
         Assert.assertThrows(IllegalArgumentException::class.java) {
-            EntryMetadata(
+            AccountMetadata(
                 createdAt = LocalDateTime.of(2025, 10, 2, 12, 47),
                 editedAt = LocalDateTime.of(2025, 10, 3, 12, 47),
                 accessedAt = LocalDateTime.of(2025, 10, 1, 12, 47)
@@ -55,7 +55,7 @@ class EntryMetadataUnitTest {
     fun createEntryMetadataWithCreatedAfterCurrentDate() {
         val createdAt = LocalDateTime.now().plusYears(1)
         Assert.assertThrows(IllegalArgumentException::class.java) {
-            EntryMetadata(
+            AccountMetadata(
                 createdAt = createdAt,
                 editedAt = createdAt,
                 accessedAt = createdAt
@@ -68,7 +68,7 @@ class EntryMetadataUnitTest {
     fun createEntryMetadataWithEditedAfterCurrentDate() {
         val editedAt = LocalDateTime.now().plusYears(1)
         Assert.assertThrows(IllegalArgumentException::class.java) {
-            EntryMetadata(
+            AccountMetadata(
                 createdAt = LocalDateTime.of(2025, 10, 3, 12, 47),
                 editedAt = editedAt,
                 accessedAt = editedAt
@@ -81,7 +81,7 @@ class EntryMetadataUnitTest {
     fun createEntryMetadataWithAccessedAfterCurrentDate() {
         val accessedAt = LocalDateTime.now().plusYears(1)
         Assert.assertThrows(IllegalArgumentException::class.java) {
-            EntryMetadata(
+            AccountMetadata(
                 createdAt = LocalDateTime.of(2025, 10, 3, 12, 47),
                 editedAt = LocalDateTime.of(2025, 10, 3, 12, 47),
                 accessedAt = accessedAt

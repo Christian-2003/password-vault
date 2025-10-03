@@ -1,4 +1,4 @@
-package de.christian2003.passwordvault.plugin.presentation.view.entry
+package de.christian2003.passwordvault.plugin.presentation.view.account
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -7,10 +7,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.christian2003.passwordvault.domain.model.detail.Detail
-import de.christian2003.passwordvault.domain.model.entry.Entry
+import de.christian2003.passwordvault.domain.model.account.Account
 import de.christian2003.passwordvault.domain.model.tag.Tag
 import de.christian2003.passwordvault.application.repository.DetailRepository
-import de.christian2003.passwordvault.application.repository.EntryRepository
+import de.christian2003.passwordvault.application.repository.AccountRepository
 import de.christian2003.passwordvault.application.repository.TagRepository
 import de.christian2003.passwordvault.domain.security.ClipboardService
 import kotlinx.coroutines.Dispatchers
@@ -20,15 +20,15 @@ import kotlinx.coroutines.launch
 import kotlin.uuid.Uuid
 
 
-class EntryViewModel(): ViewModel() {
+class AccountViewModel(): ViewModel() {
 
-    private lateinit var entryRepository: EntryRepository
+    private lateinit var accountRepository: AccountRepository
 
     private lateinit var detailRepository: DetailRepository
 
     private lateinit var clipboardService: ClipboardService
 
-    private var entry: Entry? = null
+    private var account: Account? = null
 
     private var isInitialized = false
 
@@ -36,7 +36,7 @@ class EntryViewModel(): ViewModel() {
 
     lateinit var allTags: Flow<List<Tag>>
 
-    lateinit var entryId: Uuid
+    lateinit var accountId: Uuid
 
     var name: String by mutableStateOf("")
 
@@ -62,7 +62,7 @@ class EntryViewModel(): ViewModel() {
 
 
     fun init(
-        entryRepository: EntryRepository,
+        accountRepository: AccountRepository,
         detailRepository: DetailRepository,
         tagRepository: TagRepository,
         clipboardService: ClipboardService,
@@ -71,30 +71,30 @@ class EntryViewModel(): ViewModel() {
         if (isInitialized) {
             return
         }
-        this.entryRepository = entryRepository
+        this.accountRepository = accountRepository
         this.detailRepository = detailRepository
         this.tagRepository = tagRepository
         this.clipboardService = clipboardService
-        this.entryId = id ?: Uuid.random()
+        this.accountId = id ?: Uuid.random()
 
         allTags = tagRepository.getAllTags()
         isInitialized = true
         viewModelScope.launch(Dispatchers.IO) {
-            entry = entryRepository.getEntryById(entryId)
-            if (entry == null) {
+            account = accountRepository.getAccountById(accountId)
+            if (account == null) {
                 name = ""
                 description = ""
                 tags.clear()
             }
             else {
-                name = entry!!.name
-                description = entry!!.description
+                name = account!!.name
+                description = account!!.description
                 tags.clear()
-                tags.addAll(entry!!.tags)
+                tags.addAll(account!!.tags)
             }
             details.clear()
-            val detailsForEntry: Flow<List<Detail>> = detailRepository.getAllDetailsForEntry(entryId)
-            detailsForEntry.first().forEach { detail ->
+            val detailsForAccount: Flow<List<Detail>> = detailRepository.getAllDetailsForAccount(accountId)
+            detailsForAccount.first().forEach { detail ->
                 details.add(detail)
             }
         }
@@ -103,25 +103,25 @@ class EntryViewModel(): ViewModel() {
 
     fun save() = viewModelScope.launch(Dispatchers.IO) {
         if (name.isNotEmpty() && description.isNotEmpty()) {
-            if (entry == null) {
-                //Create new entry:
-                entry = Entry(
-                    id = entryId,
+            if (account == null) {
+                //Create new account:
+                account = Account(
+                    id = accountId,
                     name = name,
                     description = description,
                     tags = tags
                 )
-                entryRepository.createEntry(entry!!)
+                accountRepository.createAccount(account!!)
             }
             else {
-                //Edit existing entry:
-                entry!!.name = name
-                entry!!.description = description
-                entry!!.tags = tags
-                entryRepository.updateEntry(entry!!)
+                //Edit existing account:
+                account!!.name = name
+                account!!.description = description
+                account!!.tags = tags
+                accountRepository.updateAccount(account!!)
             }
             //Save details:
-            detailRepository.saveAllDetailsForEntry(details, entryId)
+            detailRepository.saveAllDetailsForAccount(details, accountId)
         }
     }
 

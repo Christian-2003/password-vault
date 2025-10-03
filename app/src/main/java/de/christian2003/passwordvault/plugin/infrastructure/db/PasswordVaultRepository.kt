@@ -1,20 +1,20 @@
 package de.christian2003.passwordvault.plugin.infrastructure.db
 
 import de.christian2003.passwordvault.domain.model.detail.Detail
-import de.christian2003.passwordvault.domain.model.entry.Entry
+import de.christian2003.passwordvault.domain.model.account.Account
 import de.christian2003.passwordvault.domain.model.tag.Tag
 import de.christian2003.passwordvault.application.repository.DetailRepository
-import de.christian2003.passwordvault.application.repository.EntryRepository
+import de.christian2003.passwordvault.application.repository.AccountRepository
 import de.christian2003.passwordvault.application.repository.TagRepository
 import de.christian2003.passwordvault.domain.security.CipherService
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.DetailDao
-import de.christian2003.passwordvault.plugin.infrastructure.db.dao.EntryDao
+import de.christian2003.passwordvault.plugin.infrastructure.db.dao.AccountDao
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.TagDao
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.DetailEntity
-import de.christian2003.passwordvault.plugin.infrastructure.db.dto.EntryWithTags
+import de.christian2003.passwordvault.plugin.infrastructure.db.dto.AccountWithTags
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.TagEntity
 import de.christian2003.passwordvault.plugin.infrastructure.db.mapper.DetailDbMapper
-import de.christian2003.passwordvault.plugin.infrastructure.db.mapper.EntryDbMapper
+import de.christian2003.passwordvault.plugin.infrastructure.db.mapper.AccountDbMapper
 import de.christian2003.passwordvault.plugin.infrastructure.db.mapper.TagDbMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -30,7 +30,7 @@ class PasswordVaultRepository(
     /**
      * DAO through which to access the entries in the database.
      */
-    private val entryDao: EntryDao,
+    private val accountDao: AccountDao,
 
     /**
      * DAO through which to access the details in the database.
@@ -47,12 +47,12 @@ class PasswordVaultRepository(
      */
     private val cipherService: CipherService
 
-): EntryRepository, DetailRepository, TagRepository {
+): AccountRepository, DetailRepository, TagRepository {
 
     /**
      * Mapper maps the domain model 'Entry' to its entity.
      */
-    private val entryMapper: EntryDbMapper = EntryDbMapper(
+    private val entryMapper: AccountDbMapper = AccountDbMapper(
         cbor = Cbor { ignoreUnknownKeys = true },
         cipherService = cipherService
     )
@@ -74,7 +74,7 @@ class PasswordVaultRepository(
      * Flow contains a list of all entries. Can be null until "getAllEntries" is called the first
      * time.
      */
-    private var entries: Flow<List<Entry>>? = null
+    private var entries: Flow<List<Account>>? = null
 
     /**
      * Flow contains a list of all tags. Can be null until "getAllTags" is called for the first
@@ -84,15 +84,15 @@ class PasswordVaultRepository(
 
 
     /**
-     * Returns a list containing all entries.
+     * Returns a list containing all accounts.
      *
-     * @return  Flow containing a list of all entries.
+     * @return  Flow containing a list of all accounts.
      */
-    override fun getAllEntries(): Flow<List<Entry>> {
+    override fun getAllAccounts(): Flow<List<Account>> {
         if (entries == null) {
-            entries = entryDao.selectAllEntries().map { list ->
+            entries = accountDao.selectAllAccounts().map { list ->
                 list.map { entry ->
-                    val domain: Entry = entryMapper.toDomain(entry.entry)
+                    val domain: Account = entryMapper.toDomain(entry.account)
                     val tags: MutableList<Tag> = mutableListOf()
                     entry.tags.forEach { tag ->
                         tags.add(tagMapper.toDomain(tag))
@@ -107,15 +107,15 @@ class PasswordVaultRepository(
 
 
     /**
-     * Returns the entry with the passed UUID. If no entry exists, null is returned.
+     * Returns the account with the passed UUID. If no account exists, null is returned.
      *
-     * @param id    UUID of the entry to return.
-     * @return      Entry with the specified UUID or null.
+     * @param id    UUID of the account to return.
+     * @return      Account with the specified UUID or null.
      */
-    override suspend fun getEntryById(id: Uuid): Entry? {
-        val entry: EntryWithTags? = entryDao.selectEntryById(id)
+    override suspend fun getAccountById(id: Uuid): Account? {
+        val entry: AccountWithTags? = accountDao.selectAccountById(id)
         if (entry != null) {
-            val domain: Entry = entryMapper.toDomain(entry.entry)
+            val domain: Account = entryMapper.toDomain(entry.account)
             val tags: MutableList<Tag> = mutableListOf()
             entry.tags.forEach { tag ->
                 tags.add(tagMapper.toDomain(tag))
@@ -130,48 +130,48 @@ class PasswordVaultRepository(
 
 
     /**
-     * Creates the new entry that is passed as argument.
+     * Creates the new account that is passed as argument.
      *
-     * @param entry Entry to create.
+     * @param account   Account to create.
      */
-    override suspend fun createEntry(entry: Entry) {
+    override suspend fun createAccount(account: Account) {
         val tags: MutableList<TagEntity> = mutableListOf()
-        entry.tags.forEach { tag ->
+        account.tags.forEach { tag ->
             tags.add(tagMapper.toEntity(tag))
         }
-        val entryWithTags = EntryWithTags(
-            entry = entryMapper.toEntity(entry),
+        val entryWithTags = AccountWithTags(
+            account = entryMapper.toEntity(account),
             tags = tags
         )
-        entryDao.insertEntryWithTags(entryWithTags)
+        accountDao.insertAccountWithTags(entryWithTags)
     }
 
 
     /**
-     * Updates the entry that is passed as argument.
+     * Updates the account that is passed as argument.
      *
-     * @param entry Entry to update.
+     * @param account   Account to update.
      */
-    override suspend fun updateEntry(entry: Entry) {
+    override suspend fun updateAccount(account: Account) {
         val tags: MutableList<TagEntity> = mutableListOf()
-        entry.tags.forEach { tag ->
+        account.tags.forEach { tag ->
             tags.add(tagMapper.toEntity(tag))
         }
-        val entryWithTags = EntryWithTags(
-            entry = entryMapper.toEntity(entry),
+        val entryWithTags = AccountWithTags(
+            account = entryMapper.toEntity(account),
             tags = tags
         )
-        entryDao.updateEntryWithTags(entryWithTags)
+        accountDao.updateAccountWithTags(entryWithTags)
     }
 
 
     /**
-     * Deletes the entry that is passed as argument.
+     * Deletes the account that is passed as argument.
      *
-     * @param entry Entry to delete.
+     * @param account   Account to delete.
      */
-    override suspend fun deleteEntry(entry: Entry) {
-        entryDao.deleteEntry(entryMapper.toEntity(entry))
+    override suspend fun deleteAccount(account: Account) {
+        accountDao.deleteAccount(entryMapper.toEntity(account))
     }
 
 
@@ -181,8 +181,8 @@ class PasswordVaultRepository(
      * @param entry UUID of the entry whose details to return.
      * @return      Flow containing a list of all details for the entry.
      */
-    override fun getAllDetailsForEntry(entry: Uuid): Flow<List<Detail>> {
-        val details: Flow<List<Detail>> = detailDao.selectAllForEntry(entry).map { list ->
+    override fun getAllDetailsForAccount(entry: Uuid): Flow<List<Detail>> {
+        val details: Flow<List<Detail>> = detailDao.selectAllForAccount(entry).map { list ->
             list.map { detail ->
                 detailMapper.toDomain(detail)
             }
@@ -191,12 +191,12 @@ class PasswordVaultRepository(
     }
 
 
-    override suspend fun saveAllDetailsForEntry(details: List<Detail>, entry: Uuid) {
+    override suspend fun saveAllDetailsForAccount(details: List<Detail>, entry: Uuid) {
         val detailEntities: MutableList<DetailEntity> = mutableListOf()
         details.forEach { detail ->
             detailEntities.add(detailMapper.toEntity(detail, entry))
         }
-        detailDao.saveAllDetailsForEntry(detailEntities, entry)
+        detailDao.saveAllDetailsForAccount(detailEntities, entry)
     }
 
 

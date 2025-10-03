@@ -1,4 +1,4 @@
-package de.christian2003.passwordvault.domain.model.entry
+package de.christian2003.passwordvault.domain.model.account
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter
  * @param editedAt      Local date time at which the entry was edited.
  * @param accessedAt    Local date time at which the entry was accessed.
  */
-data class EntryMetadata(
+data class AccountMetadata(
     val createdAt: LocalDateTime = LocalDateTime.now(),
     val editedAt: LocalDateTime = LocalDateTime.now(),
     val accessedAt: LocalDateTime = LocalDateTime.now()

@@ -11,9 +11,7 @@ import de.christian2003.passwordvault.domain.security.ClipboardService
 
 
 class AndroidClipboardService(
-
     private val clipboardManager: ClipboardManager
-
 ): ClipboardService {
 
     override fun copyToClipboard(label: String, data: String, isSensitive: Boolean) {

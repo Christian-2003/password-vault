@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import java.nio.file.attribute.FileAttribute
 import java.time.LocalDateTime
 import kotlin.uuid.Uuid
 
@@ -12,7 +11,7 @@ import kotlin.uuid.Uuid
     tableName = "details",
     foreignKeys = [
         ForeignKey(
-            entity = EntryEntity::class,
+            entity = AccountEntity::class,
             parentColumns = ["id"],
             childColumns = ["entry"],
             onDelete = ForeignKey.CASCADE

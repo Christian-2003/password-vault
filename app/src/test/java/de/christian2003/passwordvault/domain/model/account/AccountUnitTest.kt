@@ -1,4 +1,4 @@
-package de.christian2003.passwordvault.domain.model.entry
+package de.christian2003.passwordvault.domain.model.account
 
 import de.christian2003.passwordvault.domain.model.tag.Tag
 import org.junit.Assert
@@ -7,11 +7,11 @@ import java.time.LocalDateTime
 import kotlin.uuid.Uuid
 
 
-class EntryUnitTest {
+class AccountUnitTest {
 
     @Test
     fun createValidEntry() {
-        Entry(
+        Account(
             name = "GitHub Account",
             description = "My personal account"
         )
@@ -20,18 +20,18 @@ class EntryUnitTest {
 
     @Test
     fun createEntryWithBlankDescription() {
-        val entry = Entry(
+        val account = Account(
             name = "GitHub Account",
             description = " "
         )
 
-        Assert.assertEquals("", entry.description)
+        Assert.assertEquals("", account.description)
     }
 
 
     @Test
     fun createEntryWithNoDescription() {
-        Entry(
+        Account(
             name = "GitHub Account",
             description = ""
         )
@@ -41,7 +41,7 @@ class EntryUnitTest {
     @Test
     fun createEntryWithBlankName() {
         Assert.assertThrows(IllegalArgumentException::class.java) {
-            Entry(
+            Account(
                 name = " "
             )
         }
@@ -51,7 +51,7 @@ class EntryUnitTest {
     @Test
     fun createEntryWithNoName() {
         Assert.assertThrows(IllegalArgumentException::class.java) {
-            Entry(
+            Account(
                 name = ""
             )
         }
@@ -64,58 +64,58 @@ class EntryUnitTest {
             Tag("Private"),
             Tag("Finance")
         )
-        val entry = Entry(
+        val account = Account(
             name = "Bank account",
             description = "",
             tags = tags
         )
-        val entryTags: MutableList<Tag> = entry.tags.toMutableList()
+        val entryTags: MutableList<Tag> = account.tags.toMutableList()
         entryTags.add(Tag("New tag"))
 
-        Assert.assertNotEquals(entry.tags, entryTags)
+        Assert.assertNotEquals(account.tags, entryTags)
 
-        entry.tags = entryTags
+        account.tags = entryTags
 
-        Assert.assertEquals(entry.tags, entryTags)
+        Assert.assertEquals(account.tags, entryTags)
     }
 
 
     @Test
     fun testUpdateOfMetadata() {
-        val entry = Entry(
+        val account = Account(
             name = "GitHub account",
-            metadata = EntryMetadata(
+            metadata = AccountMetadata(
                 createdAt = LocalDateTime.of(2025, 10, 1, 12, 45),
                 editedAt = LocalDateTime.of(2025, 10, 1, 12, 45),
                 accessedAt = LocalDateTime.of(2025, 10, 1, 12, 45)
             )
         )
 
-        val metadata1 = entry.metadata
+        val metadata1 = account.metadata
 
-        Assert.assertEquals(metadata1.createdAt, entry.metadata.createdAt)
-        Assert.assertEquals(metadata1.editedAt, entry.metadata.editedAt)
-        Assert.assertEquals(metadata1.accessedAt, entry.metadata.accessedAt)
+        Assert.assertEquals(metadata1.createdAt, account.metadata.createdAt)
+        Assert.assertEquals(metadata1.editedAt, account.metadata.editedAt)
+        Assert.assertEquals(metadata1.accessedAt, account.metadata.accessedAt)
 
         Thread.sleep(1)
-        entry.name = "Bank account"
-        val metadata2 = entry.metadata
+        account.name = "Bank account"
+        val metadata2 = account.metadata
 
         Assert.assertEquals(metadata2.createdAt, metadata1.createdAt)
         Assert.assertNotEquals(metadata2.editedAt, metadata1.editedAt)
         Assert.assertEquals(metadata2.accessedAt, metadata1.accessedAt)
 
         Thread.sleep(1)
-        entry.description = "My account"
-        val metadata3 = entry.metadata
+        account.description = "My account"
+        val metadata3 = account.metadata
 
         Assert.assertEquals(metadata3.createdAt, metadata2.createdAt)
         Assert.assertNotEquals(metadata3.editedAt, metadata2.editedAt)
         Assert.assertEquals(metadata3.accessedAt, metadata2.accessedAt)
 
         Thread.sleep(1)
-        entry.tags = listOf()
-        val metadata4 = entry.metadata
+        account.tags = listOf()
+        val metadata4 = account.metadata
 
         Assert.assertEquals(metadata4.createdAt, metadata3.createdAt)
         Assert.assertNotEquals(metadata4.editedAt, metadata3.editedAt)
@@ -126,24 +126,24 @@ class EntryUnitTest {
     @Test
     fun testEqualsAndHashCode() {
         val id = Uuid.random()
-        val entry1 = Entry(
+        val account1 = Account(
             id = id,
             name = "Entry 1"
         )
-        val entry2 = Entry(
+        val account2 = Account(
             id = id,
             name = "Entry 2"
         )
-        val entry3 = Entry(
+        val account3 = Account(
             id = Uuid.random(),
             name = "Entry 3"
         )
 
-        Assert.assertEquals(entry1, entry2)
-        Assert.assertNotEquals(entry1, entry3)
+        Assert.assertEquals(account1, account2)
+        Assert.assertNotEquals(account1, account3)
 
-        Assert.assertEquals(entry1.hashCode(), entry2.hashCode())
-        Assert.assertNotEquals(entry1.hashCode(), entry3.hashCode())
+        Assert.assertEquals(account1.hashCode(), account2.hashCode())
+        Assert.assertNotEquals(account1.hashCode(), account3.hashCode())
     }
 
 }

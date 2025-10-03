@@ -14,8 +14,8 @@ import kotlin.uuid.Uuid
 @Dao
 interface DetailDao {
 
-    @Query("SELECT * FROM details WHERE entry = :entry")
-    fun selectAllForEntry(entry: Uuid): Flow<List<DetailEntity>>
+    @Query("SELECT * FROM details WHERE entry = :account")
+    fun selectAllForAccount(account: Uuid): Flow<List<DetailEntity>>
 
     @Query("SELECT * FROM details WHERE id = :id")
     suspend fun selectById(id: Uuid): DetailEntity?
@@ -29,12 +29,12 @@ interface DetailDao {
     @Update
     suspend fun update(detail: DetailEntity)
 
-    @Query("DELETE FROM details WHERE entry = :entry")
-    suspend fun deleteAllForEntry(entry: Uuid)
+    @Query("DELETE FROM details WHERE entry = :account")
+    suspend fun deleteAllForAccount(account: Uuid)
 
     @Transaction
-    suspend fun saveAllDetailsForEntry(details: List<DetailEntity>, entry: Uuid) {
-        deleteAllForEntry(entry)
+    suspend fun saveAllDetailsForAccount(details: List<DetailEntity>, account: Uuid) {
+        deleteAllForAccount(account)
         details.forEach { detail ->
             insert(detail)
         }

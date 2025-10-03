@@ -1,4 +1,4 @@
-package de.christian2003.passwordvault.domain.model.entry
+package de.christian2003.passwordvault.domain.model.account
 
 import de.christian2003.passwordvault.domain.model.tag.Tag
 import de.christian2003.passwordvault.domain.model.target.Target
@@ -16,13 +16,13 @@ import kotlin.uuid.Uuid
  * @param targets       List of targets for the entry.
  * @param metadata      Metadata for the entry.
  */
-class Entry (
+class Account (
     name: String,
     val id: Uuid = Uuid.random(),
     description: String = "",
     tags: List<Tag> = listOf(),
     targets: List<Target> = listOf(),
-    metadata: EntryMetadata = EntryMetadata()
+    metadata: AccountMetadata = AccountMetadata()
 ) {
 
     /**
@@ -71,7 +71,7 @@ class Entry (
     /**
      * Metadata for the entry.
      */
-    var metadata: EntryMetadata = metadata
+    var metadata: AccountMetadata = metadata
         private set
 
 
@@ -106,7 +106,7 @@ class Entry (
      * @return      Whether the IDs of both objects are identical.
      */
     override fun equals(other: Any?): Boolean {
-        return (other is Entry) && (other.id == this.id)
+        return (other is Account) && (other.id == this.id)
     }
 
 

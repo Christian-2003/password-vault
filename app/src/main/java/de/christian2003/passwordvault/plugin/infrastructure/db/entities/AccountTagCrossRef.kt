@@ -11,7 +11,7 @@ import kotlin.uuid.Uuid
     primaryKeys = ["entry", "tag"],
     foreignKeys = [
         ForeignKey(
-            entity = EntryEntity::class,
+            entity = AccountEntity::class,
             parentColumns = ["id"],
             childColumns = ["entry"],
             onDelete = ForeignKey.CASCADE
@@ -24,7 +24,7 @@ import kotlin.uuid.Uuid
         )
     ]
 )
-class EntryTagCrossRef(
+class AccountTagCrossRef(
 
     @ColumnInfo("entry")
     val entry: Uuid,
