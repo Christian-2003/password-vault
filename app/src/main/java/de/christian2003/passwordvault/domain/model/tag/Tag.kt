@@ -7,24 +7,15 @@ import kotlin.uuid.Uuid
 /**
  * Models a tag that can be assigned to an entry for easier grouping.
  *
- * @parm id         UUID which identifies the tag.
  * @param name      Name for the tag which is displayed to the user.
+ * @param id        UUID which identifies the tag.
  * @param metadata  Metadata for the tag.
  */
 class Tag(
-    id: Uuid = Uuid.Companion.random(),
     name: String,
+    val id: Uuid = Uuid.random(),
     metadata: TagMetadata = TagMetadata()
 ) {
-
-    /**
-     * Type 4 UUID that identifies the tag.
-     */
-    var id: Uuid = id
-        private set(value) {
-            require(value != Uuid.NIL) { "Tag ID cannot be Nil-UUID" }
-            field = value
-        }
 
     /**
      * Name for the tag instance. This name is displayed to the user.
@@ -47,7 +38,7 @@ class Tag(
      * Initializes the tag instance.
      */
     init {
-        this.id = id
+        require(id != Uuid.NIL) { "Tag ID cannot be Nil-UUID" }
         this.name = name
         this.metadata = metadata
     }

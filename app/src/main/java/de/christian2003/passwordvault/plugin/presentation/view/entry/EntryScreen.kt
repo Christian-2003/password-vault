@@ -227,7 +227,6 @@ fun EntryScreen(
     if (viewModel.isDetailDialogVisible) {
         val detailViewModel: DetailViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
         detailViewModel.init(
-            entryId = viewModel.entryId,
             detail = null
         )
         DetailSheet(
@@ -243,7 +242,6 @@ fun EntryScreen(
     if (viewModel.detailToEdit != null) {
         val detailViewModel: DetailViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
         detailViewModel.init(
-            entryId = viewModel.entryId,
             detail = viewModel.detailToEdit
         )
         DetailSheet(

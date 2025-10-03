@@ -9,30 +9,21 @@ import kotlin.uuid.Uuid
 /**
  * Domain entity models an entry (i.e. an account).
  *
- * @param id            Type 4 UUID for the entry.
  * @param name          Name for the entry which is displayed to the user.
+ * @param id            UUID for the entry.
  * @param description   Description for the entry which is displayed to the user.
  * @param tags          List of tags associated with the entry.
  * @param targets       List of targets for the entry.
  * @param metadata      Metadata for the entry.
  */
 class Entry (
-    id: Uuid = Uuid.random(),
     name: String,
+    val id: Uuid = Uuid.random(),
     description: String = "",
     tags: List<Tag> = listOf(),
     targets: List<Target> = listOf(),
     metadata: EntryMetadata = EntryMetadata()
 ) {
-
-    /**
-     * Type 4 UUID that identifies the entry.
-     */
-    var id: Uuid = id
-        private set(value) {
-            require(value != Uuid.NIL) { "Entry ID cannot be Nil-UUID" }
-            field = value
-        }
 
     /**
      * Name of the entry which is shown to the user. This cannot be blank or empty.
@@ -86,7 +77,7 @@ class Entry (
      * Initializes the entry instance.
      */
     init {
-        this.id = id
+        require(id != Uuid.NIL) { "Entry ID cannot be Nil-UUID" }
         this.name = name
         this.description = description
         this.tags = tags

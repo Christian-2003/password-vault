@@ -6,6 +6,7 @@ import de.christian2003.passwordvault.domain.security.CipherService
 import de.christian2003.passwordvault.plugin.infrastructure.db.dto.DetailPayload
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.DetailEntity
 import kotlinx.serialization.cbor.Cbor
+import kotlin.uuid.Uuid
 
 
 /**
@@ -37,7 +38,6 @@ class DetailDbMapper(
 
         return Detail(
             id = entity.id,
-            entry = entity.entry,
             name = payload.name,
             content = payload.content,
             type = payload.type,
@@ -56,9 +56,10 @@ class DetailDbMapper(
      * Maps the domain model 'Detail' that is passed as argument to the database entity.
      *
      * @param domain    Domain model 'Detail' ti map to the database entity.
+     * @param entry     ID of the entry to which the detail is assigned.
      * @return          Database entity.
      */
-    fun toEntity(domain: Detail): DetailEntity {
+    fun toEntity(domain: Detail, entry: Uuid): DetailEntity {
         val payload = DetailPayload(
             name = domain.name,
             content = domain.content,
@@ -67,11 +68,11 @@ class DetailDbMapper(
         )
 
         val serializedPayload: ByteArray = cbor.encodeToByteArray(DetailPayload.serializer(), payload)
-        val encryptedPayload: ByteArray = cipherService.encrypt(serializedPayload, domain.entry.toByteArray())
+        val encryptedPayload: ByteArray = cipherService.encrypt(serializedPayload, entry.toByteArray())
 
         return DetailEntity(
             id = domain.id,
-            entry = domain.entry,
+            entry = entry,
             payload = encryptedPayload,
             createdAt = domain.metadata.createdAt,
             editedAt = domain.metadata.editedAt,

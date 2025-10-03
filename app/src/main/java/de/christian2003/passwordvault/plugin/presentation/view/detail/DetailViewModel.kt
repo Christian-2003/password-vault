@@ -19,8 +19,6 @@ class DetailViewModel: ViewModel() {
 
     private var detail: Detail? = null
 
-    private lateinit var entryId: Uuid
-
     var name: String by mutableStateOf("")
 
     var content: String by mutableStateOf("")
@@ -35,12 +33,11 @@ class DetailViewModel: ViewModel() {
 
     var isCreatingNewDetail: Boolean by mutableStateOf(false)
 
-    fun init(entryId: Uuid, detail: Detail?) {
+    fun init(detail: Detail?) {
         if (isInitialized) {
             return
         }
         this.detail = detail
-        this.entryId = entryId
         isInitialized = true
         if (detail == null) {
             //Create new detail:
@@ -75,7 +72,6 @@ class DetailViewModel: ViewModel() {
             if (detail == null) {
                 //Create new detail:
                 val newDetail = Detail(
-                    entry = entryId,
                     name = name,
                     content = content,
                     type = type,
@@ -91,7 +87,6 @@ class DetailViewModel: ViewModel() {
                 //Edit detail:
                 val editedDetail = Detail(
                     id = detail.id,
-                    entry = entryId,
                     name = name,
                     content = content,
                     type = type,

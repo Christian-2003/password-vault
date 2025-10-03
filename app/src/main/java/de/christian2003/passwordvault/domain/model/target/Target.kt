@@ -2,6 +2,7 @@ package de.christian2003.passwordvault.domain.model.target
 
 import kotlin.uuid.Uuid
 
+
 /**
  * Target for the autofill system. Each entry can have multiple targets, for which the app should
  * autofill login data. A target describes which app or website should receive autofill information.

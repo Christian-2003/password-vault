@@ -7,48 +7,28 @@ import kotlin.uuid.Uuid
 /**
  * Domain entity models a detail.
  *
- * @param id        Type 4 UUID for the detail.
- * @param entry     ID of the entry this detail is assigned to.
  * @param name      Name for the detail.
  * @param content   Content for the detail.
+ * @param id        Type 4 UUID for the detail.
  * @param type      Type for the detail provides additional autofill info.
  * @param icon      Icon for the detail. Can be null.
  * @param metadata  Metadata for the detail.
  */
 class Detail(
-    id: Uuid = Uuid.random(),
-    entry: Uuid,
     name: String,
     content: String,
+    val id: Uuid = Uuid.random(),
     type: DetailType = DetailType.TEXT,
     icon: DetailIcon? = null,
     metadata: DetailMetadata = DetailMetadata()
 ) {
 
     /**
-     * Type 4 UUID that identifies the detail.
-     */
-    var id: Uuid = id
-        private set(value) {
-            require(value != Uuid.NIL) { "Detail ID cannot be Nil-UUID" }
-            field = value
-        }
-
-    /**
-     * Stores the ID of the entry this detail is assigned to.
-     */
-    var entry: Uuid = entry
-        private set(value) {
-            require(value != Uuid.NIL) { "Detail must be assigned to an entry" }
-            field = value
-        }
-
-    /**
      * Name for the detail. This is displayed to the user so that they can identify the detail.
      * Examples might be "Password", "Email address" or "Payment Credit Card".
      */
     var name: String = name
-        private set(value) {
+        set(value) {
             require(value.isNotBlank()) { "Detail name cannot be blank" }
             field = value
             metadata = metadata.copy(editedAt = LocalDateTime.now())
@@ -59,13 +39,13 @@ class Detail(
      * email address or credit card number.
      */
     var content: String = content
-        private set(value) {
+        set(value) {
             require(value.isNotBlank()) { "Detail content cannot be blank" }
             field = value
             metadata = metadata.copy(editedAt = LocalDateTime.now())
         }
 
-    /**
+        /**
      * Type for the detail. This provides additional info for the autofill service.
      */
     var type: DetailType = type
@@ -95,8 +75,7 @@ class Detail(
      * Initializes the detail instance.
      */
     init {
-        this.id = id
-        this.entry = entry
+        require(id != Uuid.NIL) { "Detail ID cannot be Nil-UUID" }
         this.name = name
         this.content = content
         this.type = type

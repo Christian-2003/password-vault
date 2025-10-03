@@ -191,56 +191,10 @@ class PasswordVaultRepository(
     }
 
 
-    /**
-     * Returns the detail with the passed UUID. If no detail exists, null is returned.
-     *
-     * @param id    UUID of the detail to return.
-     * @return      Detail with the specified UUID or null.
-     */
-    override suspend fun getDetailById(id: Uuid): Detail? {
-        val detail: DetailEntity? = detailDao.selectById(id)
-        return if (detail != null) {
-            detailMapper.toDomain(detail)
-        } else {
-            null
-        }
-    }
-
-
-    /**
-     * Creates the new detail that is passed as argument.
-     *
-     * @param detail    Detail to create.
-     */
-    override suspend fun createDetail(detail: Detail) {
-        detailDao.insert(detailMapper.toEntity(detail))
-    }
-
-
-    /**
-     * Updates the detail that is passed as argument.
-     *
-     * @param detail    Detail to update.
-     */
-    override suspend fun updateDetail(detail: Detail) {
-        detailDao.update(detailMapper.toEntity(detail))
-    }
-
-
-    /**
-     * Deletes the detail that is passed as argument.
-     *
-     * @param detail    Detail to delete.
-     */
-    override suspend fun deleteDetail(detail: Detail) {
-        detailDao.delete(detailMapper.toEntity(detail))
-    }
-
-
     override suspend fun saveAllDetailsForEntry(details: List<Detail>, entry: Uuid) {
         val detailEntities: MutableList<DetailEntity> = mutableListOf()
         details.forEach { detail ->
-            detailEntities.add(detailMapper.toEntity(detail))
+            detailEntities.add(detailMapper.toEntity(detail, entry))
         }
         detailDao.saveAllDetailsForEntry(detailEntities, entry)
     }
