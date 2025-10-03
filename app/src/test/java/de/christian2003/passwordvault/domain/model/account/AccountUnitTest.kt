@@ -12,49 +12,11 @@ class AccountUnitTest {
     @Test
     fun createValidEntry() {
         Account(
-            name = "GitHub Account",
-            description = "My personal account"
-        )
-    }
-
-
-    @Test
-    fun createEntryWithBlankDescription() {
-        val account = Account(
-            name = "GitHub Account",
-            description = " "
-        )
-
-        Assert.assertEquals("", account.description)
-    }
-
-
-    @Test
-    fun createEntryWithNoDescription() {
-        Account(
-            name = "GitHub Account",
-            description = ""
-        )
-    }
-
-
-    @Test
-    fun createEntryWithBlankName() {
-        Assert.assertThrows(IllegalArgumentException::class.java) {
-            Account(
-                name = " "
+            descriptor = AccountDescriptor(
+                name = "GitHub Account",
+                description = "My personal account"
             )
-        }
-    }
-
-
-    @Test
-    fun createEntryWithNoName() {
-        Assert.assertThrows(IllegalArgumentException::class.java) {
-            Account(
-                name = ""
-            )
-        }
+        )
     }
 
 
@@ -65,8 +27,9 @@ class AccountUnitTest {
             Tag("Finance")
         )
         val account = Account(
-            name = "Bank account",
-            description = "",
+            descriptor = AccountDescriptor(
+                name = "Bank account"
+            ),
             tags = tags
         )
         val entryTags: MutableList<Tag> = account.tags.toMutableList()
@@ -83,7 +46,9 @@ class AccountUnitTest {
     @Test
     fun testUpdateOfMetadata() {
         val account = Account(
-            name = "GitHub account",
+            descriptor = AccountDescriptor(
+                name = "GitHub account"
+            ),
             metadata = AccountMetadata(
                 createdAt = LocalDateTime.of(2025, 10, 1, 12, 45),
                 editedAt = LocalDateTime.of(2025, 10, 1, 12, 45),
@@ -98,7 +63,7 @@ class AccountUnitTest {
         Assert.assertEquals(metadata1.accessedAt, account.metadata.accessedAt)
 
         Thread.sleep(1)
-        account.name = "Bank account"
+        account.descriptor = account.descriptor.copy(name = "Bank account")
         val metadata2 = account.metadata
 
         Assert.assertEquals(metadata2.createdAt, metadata1.createdAt)
@@ -106,7 +71,7 @@ class AccountUnitTest {
         Assert.assertEquals(metadata2.accessedAt, metadata1.accessedAt)
 
         Thread.sleep(1)
-        account.description = "My account"
+        account.descriptor = account.descriptor.copy(description = "My personal account")
         val metadata3 = account.metadata
 
         Assert.assertEquals(metadata3.createdAt, metadata2.createdAt)
@@ -114,7 +79,7 @@ class AccountUnitTest {
         Assert.assertEquals(metadata3.accessedAt, metadata2.accessedAt)
 
         Thread.sleep(1)
-        account.tags = listOf()
+        account.tags = listOf(Tag("MyTag"))
         val metadata4 = account.metadata
 
         Assert.assertEquals(metadata4.createdAt, metadata3.createdAt)
@@ -127,16 +92,22 @@ class AccountUnitTest {
     fun testEqualsAndHashCode() {
         val id = Uuid.random()
         val account1 = Account(
-            id = id,
-            name = "Entry 1"
+            descriptor = AccountDescriptor(
+                id = id,
+                name = "Account 1"
+            )
         )
         val account2 = Account(
-            id = id,
-            name = "Entry 2"
+            descriptor = AccountDescriptor(
+                id = id,
+                name = "Account 2"
+            )
         )
         val account3 = Account(
-            id = Uuid.random(),
-            name = "Entry 3"
+            descriptor = AccountDescriptor(
+                id = Uuid.random(),
+                name = "Account 3"
+            )
         )
 
         Assert.assertEquals(account1, account2)

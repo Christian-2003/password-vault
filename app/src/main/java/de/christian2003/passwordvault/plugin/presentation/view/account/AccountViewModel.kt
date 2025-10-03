@@ -12,6 +12,7 @@ import de.christian2003.passwordvault.domain.model.tag.Tag
 import de.christian2003.passwordvault.application.repository.DetailRepository
 import de.christian2003.passwordvault.application.repository.AccountRepository
 import de.christian2003.passwordvault.application.repository.TagRepository
+import de.christian2003.passwordvault.domain.model.account.AccountDescriptor
 import de.christian2003.passwordvault.domain.security.ClipboardService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -87,8 +88,8 @@ class AccountViewModel(): ViewModel() {
                 tags.clear()
             }
             else {
-                name = account!!.name
-                description = account!!.description
+                name = account!!.descriptor.name
+                description = account!!.descriptor.description
                 tags.clear()
                 tags.addAll(account!!.tags)
             }
@@ -106,17 +107,21 @@ class AccountViewModel(): ViewModel() {
             if (account == null) {
                 //Create new account:
                 account = Account(
-                    id = accountId,
-                    name = name,
-                    description = description,
+                    descriptor = AccountDescriptor(
+                        id = accountId,
+                        name = name,
+                        description = description
+                    ),
                     tags = tags
                 )
                 accountRepository.createAccount(account!!)
             }
             else {
                 //Edit existing account:
-                account!!.name = name
-                account!!.description = description
+                account!!.descriptor = account!!.descriptor.copy(
+                    name = name,
+                    description = description
+                )
                 account!!.tags = tags
                 accountRepository.updateAccount(account!!)
             }

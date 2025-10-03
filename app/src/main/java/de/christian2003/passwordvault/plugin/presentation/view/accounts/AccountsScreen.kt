@@ -75,7 +75,7 @@ fun AccountsScreen(
                         AccountsListRow(
                             account = account,
                             onEdit = {
-                                onNavigateToAccount(it.id)
+                                onNavigateToAccount(it.descriptor.id)
                             },
                             onDelete = {
                                 viewModel.deleteAccount(it)
@@ -110,12 +110,12 @@ private fun AccountsListRow(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = account.name,
+                text = account.descriptor.name,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = account.description,
+                text = account.descriptor.description,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

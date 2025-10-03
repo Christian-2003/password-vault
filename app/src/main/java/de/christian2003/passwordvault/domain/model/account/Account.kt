@@ -3,45 +3,33 @@ package de.christian2003.passwordvault.domain.model.account
 import de.christian2003.passwordvault.domain.model.tag.Tag
 import de.christian2003.passwordvault.domain.model.target.Target
 import java.time.LocalDateTime
-import kotlin.uuid.Uuid
 
 
 /**
  * Domain entity models an entry (i.e. an account).
  *
- * @param name          Name for the entry which is displayed to the user.
- * @param id            UUID for the entry.
- * @param description   Description for the entry which is displayed to the user.
+ * @param descriptor    Descriptor contains base information about the account, such as the name,
+ *                      description and ID.
  * @param tags          List of tags associated with the entry.
  * @param targets       List of targets for the entry.
  * @param metadata      Metadata for the entry.
  */
 class Account (
-    name: String,
-    val id: Uuid = Uuid.random(),
-    description: String = "",
+    descriptor: AccountDescriptor,
     tags: List<Tag> = listOf(),
     targets: List<Target> = listOf(),
     metadata: AccountMetadata = AccountMetadata()
 ) {
 
     /**
-     * Name of the entry which is shown to the user. This cannot be blank or empty.
+     * Descriptor contains base information about the account, such as the name, description and ID.
      */
-    var name: String = name
+    var descriptor: AccountDescriptor = descriptor
         set(value) {
-            require(value.isNotBlank()) { "Entry name cannot be blank" }
-            field = value
-            metadata = metadata.copy(editedAt = LocalDateTime.now())
-        }
-
-    /**
-     * Description of the entry which is shown to the user.
-     */
-    var description: String = description
-        set(value) {
-            field = value.ifBlank { "" }
-            metadata = metadata.copy(editedAt = LocalDateTime.now())
+            if (field != value) {
+                field = value
+                metadata = metadata.copy(editedAt = LocalDateTime.now())
+            }
         }
 
     /**
@@ -52,8 +40,10 @@ class Account (
             return field.toList()
         }
         set(value) {
-            field = value.toList()
-            metadata = metadata.copy(editedAt = LocalDateTime.now())
+            if (field != value) {
+                field = value.toList()
+                metadata = metadata.copy(editedAt = LocalDateTime.now())
+            }
         }
 
     /**
@@ -64,8 +54,10 @@ class Account (
             return field.toList()
         }
         set(value) {
-            field = value.toList()
-            metadata = metadata.copy(editedAt = LocalDateTime.now())
+            if (field != value) {
+                field = value.toList()
+                metadata = metadata.copy(editedAt = LocalDateTime.now())
+            }
         }
 
     /**
@@ -79,9 +71,7 @@ class Account (
      * Initializes the entry instance.
      */
     init {
-        require(id != Uuid.NIL) { "Entry ID cannot be Nil-UUID" }
-        this.name = name
-        this.description = description
+        this.descriptor = descriptor
         this.tags = tags
         this.targets = targets
         this.metadata = metadata
@@ -95,7 +85,7 @@ class Account (
      * @return  Hash code for the entry.
      */
     override fun hashCode(): Int {
-        return id.hashCode()
+        return descriptor.id.hashCode()
     }
 
 
@@ -106,7 +96,7 @@ class Account (
      * @return      Whether the IDs of both objects are identical.
      */
     override fun equals(other: Any?): Boolean {
-        return (other is Account) && (other.id == this.id)
+        return (other is Account) && (other.descriptor.id == this.descriptor.id)
     }
 
 
@@ -117,7 +107,7 @@ class Account (
      * @return  String representation of this entry instance.
      */
     override fun toString(): String {
-        return "[$id] [$name]"
+        return "[Descriptor: $descriptor] [Metadata: $metadata]"
     }
 
 }

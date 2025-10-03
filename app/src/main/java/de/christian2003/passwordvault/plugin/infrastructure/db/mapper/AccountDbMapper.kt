@@ -1,6 +1,7 @@
 package de.christian2003.passwordvault.plugin.infrastructure.db.mapper
 
 import de.christian2003.passwordvault.domain.model.account.Account
+import de.christian2003.passwordvault.domain.model.account.AccountDescriptor
 import de.christian2003.passwordvault.domain.model.account.AccountMetadata
 import de.christian2003.passwordvault.domain.security.CipherService
 import de.christian2003.passwordvault.plugin.infrastructure.db.dto.AccountPayload
@@ -36,9 +37,11 @@ class AccountDbMapper(
         val payload: AccountPayload = cbor.decodeFromByteArray(AccountPayload.serializer(), decryptedPayload)
 
         return Account(
-            id = entity.id,
-            name = payload.name,
-            description = payload.description,
+            descriptor = AccountDescriptor(
+                id = entity.id,
+                name = payload.name,
+                description = payload.description
+            ),
             metadata = AccountMetadata(
                 createdAt = entity.createdAt,
                 editedAt = entity.editedAt,
@@ -56,15 +59,15 @@ class AccountDbMapper(
      */
     fun toEntity(domain: Account): AccountEntity {
         val payload = AccountPayload(
-            name = domain.name,
-            description = domain.description
+            name = domain.descriptor.name,
+            description = domain.descriptor.description
         )
 
         val serializedPayload: ByteArray = cbor.encodeToByteArray(AccountPayload.serializer(), payload)
-        val encryptedPayload: ByteArray = cipherService.encrypt(serializedPayload, domain.id.toByteArray())
+        val encryptedPayload: ByteArray = cipherService.encrypt(serializedPayload, domain.descriptor.id.toByteArray())
 
         return AccountEntity(
-            id = domain.id,
+            id = domain.descriptor.id,
             payload = encryptedPayload,
             createdAt = domain.metadata.createdAt,
             editedAt = domain.metadata.editedAt,
