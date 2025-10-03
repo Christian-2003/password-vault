@@ -53,6 +53,7 @@ class Entry (
         }
         set(value) {
             field = value.toList()
+            metadata = metadata.copy(editedAt = LocalDateTime.now())
         }
 
     /**
@@ -64,6 +65,7 @@ class Entry (
         }
         set(value) {
             field = value.toList()
+            metadata = metadata.copy(editedAt = LocalDateTime.now())
         }
 
     /**
