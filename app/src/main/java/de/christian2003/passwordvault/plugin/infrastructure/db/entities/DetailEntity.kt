@@ -18,39 +18,58 @@ import kotlin.uuid.Uuid
         )
     ]
 )
-class DetailEntity(
+data class DetailEntity(
 
     @PrimaryKey
     @ColumnInfo(name = "id")
-    var id: Uuid,
+    val id: Uuid,
 
     @ColumnInfo(name = "entry")
-    var entry: Uuid,
+    val entry: Uuid,
 
     @ColumnInfo(name = "payload")
-    var payload: ByteArray,
+    val payload: ByteArray,
 
     @ColumnInfo(name = "createdAt")
-    var createdAt: LocalDateTime,
+    val createdAt: LocalDateTime,
 
     @ColumnInfo(name = "editedAt")
-    var editedAt: LocalDateTime,
+    val editedAt: LocalDateTime,
 
     @ColumnInfo(name = "isObfuscated")
-    var isObfuscated: Boolean,
+    val isObfuscated: Boolean,
 
     @ColumnInfo(name = "isVisible")
-    var isVisible: Boolean
+    val isVisible: Boolean
 
 ) {
 
-    override fun hashCode(): Int {
-        return id.hashCode()
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as DetailEntity
+
+        if (isObfuscated != other.isObfuscated) return false
+        if (isVisible != other.isVisible) return false
+        if (id != other.id) return false
+        if (entry != other.entry) return false
+        if (!payload.contentEquals(other.payload)) return false
+        if (createdAt != other.createdAt) return false
+        if (editedAt != other.editedAt) return false
+
+        return true
     }
 
-
-    override fun equals(other: Any?): Boolean {
-        return (other is DetailEntity) && (other.id == this.id)
+    override fun hashCode(): Int {
+        var hash = isObfuscated.hashCode()
+        hash = 31 * hash + isVisible.hashCode()
+        hash = 31 * hash + id.hashCode()
+        hash = 31 * hash + entry.hashCode()
+        hash = 31 * hash + payload.contentHashCode()
+        hash = 31 * hash + createdAt.hashCode()
+        hash = 31 * hash + editedAt.hashCode()
+        return hash
     }
 
 }

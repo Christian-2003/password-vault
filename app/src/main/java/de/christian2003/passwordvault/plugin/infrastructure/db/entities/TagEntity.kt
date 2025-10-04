@@ -8,30 +8,19 @@ import kotlin.uuid.Uuid
 
 
 @Entity("tags")
-class TagEntity(
+data class TagEntity(
 
     @PrimaryKey
     @ColumnInfo("id")
-    var id: Uuid,
+    val id: Uuid,
 
     @ColumnInfo("name")
-    var name: String,
+    val name: String,
 
     @ColumnInfo("createdAt")
-    var createdAt: LocalDateTime,
+    val createdAt: LocalDateTime,
 
     @ColumnInfo("editedAt")
-    var editedAt: LocalDateTime
+    val editedAt: LocalDateTime
 
-) {
-
-    override fun hashCode(): Int {
-        return id.hashCode()
-    }
-
-
-    override fun equals(other: Any?): Boolean {
-        return (other is TagEntity) && (other.id == this.id)
-    }
-
-}
+)

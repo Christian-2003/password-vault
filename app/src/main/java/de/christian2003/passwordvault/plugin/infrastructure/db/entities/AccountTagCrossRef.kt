@@ -24,7 +24,7 @@ import kotlin.uuid.Uuid
         )
     ]
 )
-class AccountTagCrossRef(
+data class AccountTagCrossRef(
 
     @ColumnInfo("entry")
     val entry: Uuid,

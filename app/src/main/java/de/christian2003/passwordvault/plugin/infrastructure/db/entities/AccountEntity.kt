@@ -8,33 +8,48 @@ import kotlin.uuid.Uuid
 
 
 @Entity(tableName = "entries")
-class AccountEntity (
+data class AccountEntity (
 
     @PrimaryKey
     @ColumnInfo(name = "id")
-    var id: Uuid,
+    val id: Uuid,
 
     @ColumnInfo(name = "payload")
-    var payload: ByteArray,
+    val payload: ByteArray,
 
     @ColumnInfo(name = "createdAt")
-    var createdAt: LocalDateTime,
+    val createdAt: LocalDateTime,
 
     @ColumnInfo(name = "editedAt")
-    var editedAt: LocalDateTime,
+    val editedAt: LocalDateTime,
 
     @ColumnInfo(name = "accessedAt")
-    var accessedAt: LocalDateTime
+    val accessedAt: LocalDateTime
 
 ) {
 
-    override fun hashCode(): Int {
-        return id.hashCode()
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as AccountEntity
+
+        if (id != other.id) return false
+        if (!payload.contentEquals(other.payload)) return false
+        if (createdAt != other.createdAt) return false
+        if (editedAt != other.editedAt) return false
+        if (accessedAt != other.accessedAt) return false
+
+        return true
     }
 
-
-    override fun equals(other: Any?): Boolean {
-        return (other is AccountEntity) && (other.id == this.id)
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + payload.contentHashCode()
+        result = 31 * result + createdAt.hashCode()
+        result = 31 * result + editedAt.hashCode()
+        result = 31 * result + accessedAt.hashCode()
+        return result
     }
 
 }
