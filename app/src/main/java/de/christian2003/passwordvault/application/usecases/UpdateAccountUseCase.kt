@@ -3,7 +3,6 @@ package de.christian2003.passwordvault.application.usecases
 import de.christian2003.passwordvault.application.repository.AccountRepository
 import de.christian2003.passwordvault.application.repository.TagRepository
 import de.christian2003.passwordvault.domain.model.account.Account
-import de.christian2003.passwordvault.domain.model.account.AccountDescriptor
 import de.christian2003.passwordvault.domain.model.detail.Detail
 import de.christian2003.passwordvault.domain.model.tag.Tag
 import de.christian2003.passwordvault.domain.model.target.Target

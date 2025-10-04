@@ -58,7 +58,7 @@ fun Headline(
         Text(
             text = title,
             color = MaterialTheme.colorScheme.primary,
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.titleSmall,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.weight(1f)
         )

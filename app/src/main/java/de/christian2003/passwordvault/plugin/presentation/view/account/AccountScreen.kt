@@ -168,10 +168,10 @@ fun AccountScreen(
                 items(details) { detail ->
                     DetailListRow(
                         detail = detail,
-                        onEditDetail = {
+                        onEdit = {
                             viewModel.detailToEdit = it
                         },
-                        onDeleteDetail = {
+                        onDelete = {
                             viewModel.detailToDelete = it
                         },
                         onCopyToClipboard = {
@@ -192,6 +192,8 @@ fun AccountScreen(
             windowInsets = WindowInsets(bottom = innerPadding.calculateBottomPadding())
         )
 
+
+        //Dialog to edit the account name:
         if (viewModel.isNameDialogVisible) {
             EditValueDialog(
                 value = viewModel.name,
@@ -208,6 +210,7 @@ fun AccountScreen(
             )
         }
 
+        //Dialog to edit the account description:
         if (viewModel.isDescriptionDialogVisible) {
             EditValueDialog(
                 value = viewModel.description,
@@ -224,6 +227,7 @@ fun AccountScreen(
             )
         }
 
+        //Dialog to delete a detail:
         if (viewModel.detailToDelete != null) {
             ConfirmDeleteDialog(
                 text = stringResource(R.string.account_details_confirmDeleteText, viewModel.detailToDelete!!.name),
@@ -241,6 +245,7 @@ fun AccountScreen(
         }
     }
 
+    //Dialog to edit the tags:
     if (viewModel.isTagDialogVisible) {
         val tagViewModel: TagViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
         tagViewModel.init(
@@ -258,6 +263,7 @@ fun AccountScreen(
         )
     }
 
+    //Dialog to create a detail:
     if (viewModel.isDetailDialogVisible) {
         val detailViewModel: DetailViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
         detailViewModel.init(
@@ -274,6 +280,7 @@ fun AccountScreen(
         )
     }
 
+    //Dialog to edit a detail:
     if (viewModel.detailToEdit != null) {
         val detailViewModel: DetailViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
         detailViewModel.init(
@@ -292,12 +299,23 @@ fun AccountScreen(
 }
 
 
+/**
+ * Displays the general section at the top of the page.
+ *
+ * @param description       Description of the account.
+ * @param name              Name of the account.
+ * @param tags              List of tags of the account.
+ * @param onEditDescription Callback invoked to edit the description.
+ * @param onEditTags        Callback invoked to edit the tags.
+ * @param onSave            Callback invoked to save the changes.
+ * @param modifier          Modifier.
+ */
 @Composable
 private fun GeneralSection(
     description: String,
-    onEditDescription: () -> Unit,
     name: String,
     tags: List<Tag>,
+    onEditDescription: () -> Unit,
     onEditTags: () -> Unit,
     onSave: () -> Unit,
     modifier: Modifier = Modifier
@@ -359,7 +377,7 @@ private fun GeneralSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    horizontal = dimensionResource(R.dimen.padding_horizontal)
+                    horizontal = dimensionResource(R.dimen.margin_horizontal)
                 )
         ) {
             Icon(
@@ -420,12 +438,19 @@ private fun GeneralSection(
     }
 }
 
-
+/**
+ * Displays a single account detail in a list row.
+ *
+ * @param detail            Detail to display.
+ * @param onEdit            Callback invoked to edit the detail.
+ * @param onDelete          Callback invoked to delete the detail.
+ * @param onCopyToClipboard Callback invoked to copy the detail content to the clipboard.
+ */
 @Composable
 private fun DetailListRow(
     detail: Detail,
-    onEditDetail: (Detail) -> Unit,
-    onDeleteDetail: (Detail) -> Unit,
+    onEdit: (Detail) -> Unit,
+    onDelete: (Detail) -> Unit,
     onCopyToClipboard: (Detail) -> Unit
 ) {
     var isObfuscated: Boolean by remember { mutableStateOf(detail.metadata.isObfuscated) }
@@ -435,7 +460,7 @@ private fun DetailListRow(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                onEditDetail(detail)
+                onEdit(detail)
             }
             .padding(
                 start = dimensionResource(R.dimen.margin_horizontal),
@@ -516,7 +541,7 @@ private fun DetailListRow(
                         },
                         onClick = {
                             isDropdownVisible = false
-                            onEditDetail(detail)
+                            onEdit(detail)
                         }
                     )
                     DropdownMenuItem(
@@ -531,7 +556,7 @@ private fun DetailListRow(
                         },
                         onClick = {
                             isDropdownVisible = false
-                            onDeleteDetail(detail)
+                            onDelete(detail)
                         }
                     )
                     HorizontalDivider(
