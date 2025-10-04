@@ -1,4 +1,4 @@
-package de.christian2003.passwordvault.application.usecases
+package de.christian2003.passwordvault.application.usecases.acount
 
 import de.christian2003.passwordvault.application.repository.AccountRepository
 import de.christian2003.passwordvault.domain.model.account.Account

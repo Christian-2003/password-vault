@@ -11,9 +11,9 @@ import de.christian2003.passwordvault.domain.model.detail.Detail
 import de.christian2003.passwordvault.domain.model.account.Account
 import de.christian2003.passwordvault.domain.model.tag.Tag
 import de.christian2003.passwordvault.application.repository.TagRepository
-import de.christian2003.passwordvault.application.usecases.CreateAccountUseCase
-import de.christian2003.passwordvault.application.usecases.GetAccountByIdUseCase
-import de.christian2003.passwordvault.application.usecases.UpdateAccountUseCase
+import de.christian2003.passwordvault.application.usecases.acount.CreateAccountUseCase
+import de.christian2003.passwordvault.application.usecases.acount.GetAccountByIdUseCase
+import de.christian2003.passwordvault.application.usecases.acount.UpdateAccountUseCase
 import de.christian2003.passwordvault.domain.security.ClipboardService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

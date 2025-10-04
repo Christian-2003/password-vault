@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import de.christian2003.passwordvault.application.usecases.DeleteAccountUseCase
-import de.christian2003.passwordvault.application.usecases.GetAllAccountDescriptorsUseCase
+import de.christian2003.passwordvault.application.usecases.acount.DeleteAccountUseCase
+import de.christian2003.passwordvault.application.usecases.acount.GetAllAccountDescriptorsUseCase
 import de.christian2003.passwordvault.domain.model.account.AccountDescriptor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
