@@ -207,6 +207,23 @@ class PasswordVaultRepository(
 
 
     /**
+     * Returns the tag with the specified ID. If no tag with the specified ID exists, null is
+     * returned.
+     *
+     * @param id    ID of the tag to return.
+     * @return      Tag with the specified ID or null.
+     */
+    override suspend fun getTagById(id: Uuid): Tag? {
+        val tagEntity: TagEntity? = tagDao.selectById(id)
+        return if (tagEntity != null) {
+            tagMapper.toDomain(tagEntity)
+        } else {
+            null
+        }
+    }
+
+
+    /**
      * Creates the new tag that is passed as argument.
      *
      * @param tag   Tag to create.

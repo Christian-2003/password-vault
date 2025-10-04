@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.TagEntity
 import kotlinx.coroutines.flow.Flow
+import kotlin.uuid.Uuid
 
 
 @Dao
@@ -14,6 +15,9 @@ interface TagDao {
 
     @Query("SELECT * FROM tags")
     fun selectAll(): Flow<List<TagEntity>>
+
+    @Query("SELECT * FROM tags WHERE id = :id")
+    suspend fun selectById(id: Uuid): TagEntity?
 
     @Insert
     suspend fun insert(tag: TagEntity)
