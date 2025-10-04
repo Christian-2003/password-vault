@@ -9,24 +9,22 @@
     <string name="main_accounts_delete">Delete account</string>
     <string name="main_deleteAccountText">Are you sure you want to delete \"%1$s\"? This cannot be undone.</string>
 
-    <string name="entries_title">Your accounts</string>
-    <string name="entries_emptyPlaceholder_title">No entries</string>
-    <string name="entries_emptyPlaceholder_subtitle">Available entries are shown here</string>
-
-    <string name="entry_nameLabel">Name</string>
-    <string name="entry_nameInfo">Use the name to identify an account. Use short, concise and unique names for accounts.</string>
-    <string name="entry_descriptionLabel">Description</string>
-    <string name="entry_descriptionInfo">Use the description to describe the account. Unlike a name, descriptions can be longer and more detailed.</string>
-    <string name="entry_namePlaceholder">Enter name</string>
-    <string name="entry_descriptionPlaceholder">Enter description</string>
-    <string name="entry_detailsTitle">Details</string>
-    <string name="entry_editDetail">Edit detail</string>
-    <string name="entry_deleteDetail">Delete detail</string>
-    <string name="entry_copyDetail">Copy to clipboard</string>
-    <string name="entry_deleteDetailText">Are you sure you want to delete \"%1$s\"? This cannot be undone.</string>
-    <string name="entry_emptyPlaceholder_title">No details</string>
-    <string name="entry_emptyPlaceholder_subtitle">Available details are shown here</string>
-    <string name="entry_tagsEmpty">No tags</string>
+    <string name="account_nameLabel">Name</string>
+    <string name="account_nameTitle">Edit name</string>
+    <string name="account_namePlaceholder">Enter name</string>
+    <string name="account_descriptionLabel">Description</string>
+    <string name="account_descriptionTitle">Edit description</string>
+    <string name="account_descriptionPlaceholder">Enter description</string>
+    <string name="account_details_title">Details</string>
+    <string name="account_details_edit">Edit detail</string>
+    <string name="account_details_delete">Delete detail</string>
+    <string name="account_details_copyToClipboard">Copy to clipboard</string>
+    <string name="account_details_showContent">Show content</string>
+    <string name="account_details_hideContent">Hide content</string>
+    <string name="account_details_confirmDeleteText">Are you sure you want to delete \"%1$s\"? This cannot be undone.</string>
+    <string name="account_details_emptyPlaceholder_title">No details</string>
+    <string name="account_details_emptyPlaceholder_subtitle">Available details are shown here</string>
+    <string name="account_tags_emptyPlaceholder_title">No tags</string>
 
     <string name="tag_title">Tags</string>
     <string name="tag_titleCreate">Create tag</string>
@@ -53,5 +51,6 @@
     <string name="button_cancel">Cancel</string>
     <string name="button_delete">Delete</string>
     <string name="button_add">Add</string>
+    <string name="button_ok">OK</string>
     <string name="button_createTag">Create tag</string>
 </resources>

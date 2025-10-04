@@ -241,7 +241,9 @@ private fun AccountDescriptorsListItem(
             Text(
                 text = accountDescriptor.name,
                 color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyLargeEmphasized
+                style = MaterialTheme.typography.bodyLargeEmphasized,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             if (accountDescriptor.description.isNotBlank()) {
                 Text(

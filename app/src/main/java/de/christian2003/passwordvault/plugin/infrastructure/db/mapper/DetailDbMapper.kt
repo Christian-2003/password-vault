@@ -47,7 +47,7 @@ class DetailDbMapper(
                 editedAt = entity.editedAt,
                 isObfuscated = entity.isObfuscated,
                 isVisible = entity.isVisible,
-            ),
+            )
         )
     }
 

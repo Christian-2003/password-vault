@@ -1,11 +1,13 @@
 package de.christian2003.passwordvault.application.usecases
 
 import de.christian2003.passwordvault.application.repository.AccountRepository
+import de.christian2003.passwordvault.application.repository.TagRepository
 import de.christian2003.passwordvault.domain.model.account.Account
 import de.christian2003.passwordvault.domain.model.account.AccountDescriptor
 import de.christian2003.passwordvault.domain.model.detail.Detail
 import de.christian2003.passwordvault.domain.model.tag.Tag
 import de.christian2003.passwordvault.domain.model.target.Target
+import kotlinx.coroutines.flow.first
 import kotlin.uuid.Uuid
 
 
@@ -16,6 +18,7 @@ import kotlin.uuid.Uuid
  */
 class UpdateAccountUseCase(
     private val accountRepository: AccountRepository,
+    private val tagRepository: TagRepository
 ) {
 
     /**
@@ -39,13 +42,20 @@ class UpdateAccountUseCase(
         val account: Account? = accountRepository.getAccountById(id)
 
         if (account != null) {
-            account.descriptor = AccountDescriptor(
+            account.descriptor = account.descriptor.copy(
                 name = name,
                 description = description
             )
             account.details = details
             account.tags = tags
             account.targets = targets
+
+            val allTags: List<Tag> = tagRepository.getAllTags().first()
+            tags.forEach { tag ->
+                if (!allTags.contains(tag)) {
+                    throw IllegalStateException("Tag '$tag' cannot be added to account because it does not exist.")
+                }
+            }
 
             accountRepository.updateAccount(account)
         }

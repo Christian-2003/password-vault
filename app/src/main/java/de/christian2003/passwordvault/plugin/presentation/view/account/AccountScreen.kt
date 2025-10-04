@@ -1,15 +1,17 @@
 package de.christian2003.passwordvault.plugin.presentation.view.account
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,26 +24,24 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.TopAppBarState
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -54,15 +54,14 @@ import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.domain.model.detail.Detail
 import de.christian2003.passwordvault.domain.model.tag.Tag
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDeleteDialog
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.EditValueDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.Headline
-import de.christian2003.passwordvault.plugin.presentation.ui.composables.TextInput
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.NavigationBarProtection
 import de.christian2003.passwordvault.plugin.presentation.view.detail.DetailSheet
 import de.christian2003.passwordvault.plugin.presentation.view.detail.DetailViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.tag.TagSheet
 import de.christian2003.passwordvault.plugin.presentation.view.tag.TagViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import kotlin.text.ifEmpty
 
 
@@ -71,12 +70,16 @@ fun AccountScreen(
     viewModel: AccountViewModel,
     onNavigateUp: () -> Unit
 ) {
+    val appBarState: TopAppBarState = rememberTopAppBarState()
+    val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(appBarState)
+    val details: List<Detail> = viewModel.details
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = viewModel.name.ifEmpty { stringResource(R.string.entry_namePlaceholder) },
+                        text = viewModel.name.ifEmpty { stringResource(R.string.account_namePlaceholder) },
                         color = if (!viewModel.name.isEmpty()) {
                             MaterialTheme.colorScheme.onSurface
                         } else {
@@ -85,6 +88,10 @@ fun AccountScreen(
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1,
                         modifier = Modifier
+                            //Text has horizontal padding of 8 dp, so that the touch target size is larger.
+                            //However, this increases the space between the back-icon and the text by 8 dp.
+                            //To prevent this unusual space that irritates the user, we offset the text by -8 dp.
+                            .offset(x = (-8).dp)
                             .clip(MaterialTheme.shapes.small)
                             .clickable {
                                 viewModel.isNameDialogVisible = true
@@ -104,70 +111,93 @@ fun AccountScreen(
                             contentDescription = ""
                         )
                     }
-                }
+                },
+                scrollBehavior = scrollBehavior
             )
-        }
+        },
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { innerPadding ->
-        Column(
+        LazyColumn(
             modifier = Modifier
-                .padding(innerPadding)
+                .padding(
+                    start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
+                    top = innerPadding.calculateTopPadding(),
+                    end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
+                )
                 .fillMaxSize()
         ) {
-            GeneralSection(
-                description = viewModel.description,
-                onEditDescription = {
-                    viewModel.isDescriptionDialogVisible = true
-                },
-                name = viewModel.name,
-                tags = viewModel.tags,
-                onEditTags = {
-                    viewModel.isTagDialogVisible = true
-                },
-                onSave = {
-                    viewModel.save()
-                    onNavigateUp()
-                },
-                modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.margin_horizontal))
-            )
-            Headline(
-                title = stringResource(R.string.entry_detailsTitle),
-                endIcon = painterResource(R.drawable.ic_add),
-                onClick = {
-                    viewModel.isDetailDialogVisible = true
-                }
-            )
-            if (viewModel.details.isEmpty()) {
-                EmptyPlaceholder(
-                    title = stringResource(R.string.entry_emptyPlaceholder_title),
-                    subtitle = stringResource(R.string.entry_emptyPlaceholder_subtitle),
-                    painter = painterResource(R.drawable.el_details)
+            item {
+                GeneralSection(
+                    description = viewModel.description,
+                    onEditDescription = {
+                        viewModel.isDescriptionDialogVisible = true
+                    },
+                    name = viewModel.name,
+                    tags = viewModel.tags,
+                    onEditTags = {
+                        viewModel.isTagDialogVisible = true
+                    },
+                    onSave = {
+                        viewModel.save()
+                        onNavigateUp()
+                    },
+                    modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.margin_horizontal))
                 )
             }
+            stickyHeader {
+                HorizontalDivider()
+                Headline(
+                    title = stringResource(R.string.account_details_title),
+                    endIcon = painterResource(R.drawable.ic_add),
+                    onClick = {
+                        viewModel.isDetailDialogVisible = true
+                    },
+                    modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+                )
+            }
+            if (viewModel.details.isEmpty()) {
+                item {
+                    EmptyPlaceholder(
+                        title = stringResource(R.string.account_details_emptyPlaceholder_title),
+                        subtitle = stringResource(R.string.account_details_emptyPlaceholder_subtitle),
+                        painter = painterResource(R.drawable.el_details)
+                    )
+                }
+            }
             else {
-                LazyColumn {
-                    items(viewModel.details) { detail ->
-                        DetailListRow(
-                            detail = detail,
-                            onEditDetail = {
-                                viewModel.detailToEdit = it
-                            },
-                            onDeleteDetail = {
-                                viewModel.detailToDelete = it
-                            },
-                            onCopyToClipboard = {
-                                viewModel.copyToClipboard(it)
-                            }
-                        )
-                    }
+                items(details) { detail ->
+                    DetailListRow(
+                        detail = detail,
+                        onEditDetail = {
+                            viewModel.detailToEdit = it
+                        },
+                        onDeleteDetail = {
+                            viewModel.detailToDelete = it
+                        },
+                        onCopyToClipboard = {
+                            viewModel.copyToClipboard(it)
+                        }
+                    )
+                }
+                item {
+                    Box(
+                        modifier = Modifier.height(innerPadding.calculateBottomPadding())
+                    )
                 }
             }
         }
+
+        NavigationBarProtection(
+            color = MaterialTheme.colorScheme.surfaceContainer.copy(0.5f),
+            windowInsets = WindowInsets(bottom = innerPadding.calculateBottomPadding())
+        )
+
         if (viewModel.isNameDialogVisible) {
-            EditDataDialog(
+            EditValueDialog(
                 value = viewModel.name,
-                label = stringResource(R.string.entry_nameLabel),
-                infoText = stringResource(R.string.entry_nameInfo),
-                prefixIcon = painterResource(R.drawable.ic_name),
+                canValueBeBlank = false,
+                label = stringResource(R.string.account_nameLabel),
+                title = stringResource(R.string.account_nameTitle),
                 onDismiss = {
                     viewModel.isNameDialogVisible = false
                 },
@@ -177,12 +207,13 @@ fun AccountScreen(
                 }
             )
         }
+
         if (viewModel.isDescriptionDialogVisible) {
-            EditDataDialog(
+            EditValueDialog(
                 value = viewModel.description,
-                label = stringResource(R.string.entry_descriptionLabel),
-                infoText = stringResource(R.string.entry_descriptionInfo),
-                prefixIcon = painterResource(R.drawable.ic_description),
+                canValueBeBlank = true,
+                label = stringResource(R.string.account_descriptionLabel),
+                title = stringResource(R.string.account_descriptionTitle),
                 onDismiss = {
                     viewModel.isDescriptionDialogVisible = false
                 },
@@ -192,9 +223,10 @@ fun AccountScreen(
                 }
             )
         }
+
         if (viewModel.detailToDelete != null) {
             ConfirmDeleteDialog(
-                text = stringResource(R.string.entry_deleteDetailText, viewModel.detailToDelete!!.name),
+                text = stringResource(R.string.account_details_confirmDeleteText, viewModel.detailToDelete!!.name),
                 onDismiss = {
                     viewModel.detailToDelete = null
                 },
@@ -208,6 +240,7 @@ fun AccountScreen(
             )
         }
     }
+
     if (viewModel.isTagDialogVisible) {
         val tagViewModel: TagViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
         tagViewModel.init(
@@ -224,6 +257,7 @@ fun AccountScreen(
             }
         )
     }
+
     if (viewModel.isDetailDialogVisible) {
         val detailViewModel: DetailViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
         detailViewModel.init(
@@ -239,6 +273,7 @@ fun AccountScreen(
             }
         )
     }
+
     if (viewModel.detailToEdit != null) {
         val detailViewModel: DetailViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
         detailViewModel.init(
@@ -267,127 +302,119 @@ private fun GeneralSection(
     onSave: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
+    Row(
         modifier = modifier
-            .fillMaxWidth()
-            .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outline,
-                shape = MaterialTheme.shapes.extraLarge
-            )
-            .clip(MaterialTheme.shapes.extraLarge)
     ) {
-        Row(
+        Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
-                .padding(
-                    start = dimensionResource(R.dimen.padding_horizontal),
-                    end = dimensionResource(R.dimen.padding_horizontal),
-                    bottom = dimensionResource(R.dimen.padding_vertical)
-                )
+                .padding(top = dimensionResource(R.dimen.padding_vertical))
+                .size(dimensionResource(R.dimen.image_xl))
+                .clip(MaterialTheme.shapes.large)
+                .background(MaterialTheme.colorScheme.surfaceContainer)
         ) {
-            Box(
-                contentAlignment = Alignment.Center,
+            Text(
+                text = if (!name.isEmpty()) { name.first().toString() } else { "?" },
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.titleLargeEmphasized,
+                fontWeight = FontWeight.Bold,
+                fontSize = 32.sp
+            )
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = description.ifEmpty { stringResource(R.string.account_descriptionPlaceholder) },
+                color = if (!description.isEmpty()) { MaterialTheme.colorScheme.onSurface } else { MaterialTheme.colorScheme.onSurface.copy(0.5f) },
+                style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier
-                    .padding(top = dimensionResource(R.dimen.padding_vertical))
-                    .size(dimensionResource(R.dimen.image_xl))
-                    .clip(MaterialTheme.shapes.large)
-                    .background(MaterialTheme.colorScheme.surfaceContainer)
-            ) {
-                Text(
-                    text = if (!name.isEmpty()) { name.first().toString() } else { "?" },
-                    color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.titleLargeEmphasized,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 32.sp
-                )
-            }
-            Column(
+                    .padding(
+                        start = dimensionResource(R.dimen.padding_horizontal) - 8.dp,
+                        top = dimensionResource(R.dimen.padding_vertical) - 4.dp
+                    )
+                    .clip(MaterialTheme.shapes.small)
+                    .clickable {
+                        onEditDescription()
+                    }
+                    .padding(
+                        horizontal = 8.dp,
+                        vertical = 4.dp
+                    )
+            )
+            Button(
+                onClick = onSave,
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .padding(start = dimensionResource(R.dimen.padding_horizontal))
             ) {
-                Text(
-                    text = description.ifEmpty { stringResource(R.string.entry_descriptionPlaceholder) },
-                    color = if (!description.isEmpty()) { MaterialTheme.colorScheme.onSurface } else { MaterialTheme.colorScheme.onSurface.copy(0.5f) },
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier
-                        .padding(
-                            start = dimensionResource(R.dimen.padding_horizontal) - 8.dp,
-                            top = dimensionResource(R.dimen.padding_vertical) - 4.dp
-                        )
-                        .clip(MaterialTheme.shapes.small)
-                        .clickable {
-                            onEditDescription()
-                        }
-                        .padding(
-                            horizontal = 8.dp,
-                            vertical = 4.dp
-                        )
-                )
-                Button(
-                    onClick = onSave,
-                    modifier = Modifier
-                        .padding(start = dimensionResource(R.dimen.padding_horizontal))
-                ) {
-                    Text(stringResource(R.string.button_save))
-                }
+                Text(stringResource(R.string.button_save))
             }
         }
-        if (tags.isEmpty()) {
-            //No tags:
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
+    }
+    if (tags.isEmpty()) {
+        //No tags:
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = dimensionResource(R.dimen.padding_horizontal)
+                )
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_tag),
+                contentDescription = "",
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                text = stringResource(R.string.account_tags_emptyPlaceholder_title),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
-                    .fillMaxWidth()
                     .padding(
                         horizontal = dimensionResource(R.dimen.padding_horizontal)
                     )
+                    .weight(1f)
+            )
+            IconButton(
+                onClick = onEditTags
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_tag),
+                    painter = painterResource(R.drawable.ic_edit),
                     contentDescription = "",
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
-                Text(
-                    text = stringResource(R.string.entry_tagsEmpty),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier
-                        .padding(
-                            horizontal = dimensionResource(R.dimen.padding_horizontal)
-                        )
-                        .weight(1f)
-                )
-                IconButton(
-                    onClick = onEditTags
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_edit),
-                        contentDescription = "",
-                        tint = MaterialTheme.colorScheme.onSurface
-                    )
-                }
             }
         }
-        else {
-            //List of tags:
-            LazyRow(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                items(tags) { tag ->
-                    SuggestionChip(
-                        onClick = {
-                            onEditTags()
-                        },
-                        label = {
-                            Text(tag.name)
-                        },
-                        modifier = Modifier
-                            .padding(
-                                start = if (tags.indexOf(tag) == 0) { dimensionResource(R.dimen.padding_horizontal) } else { 0.dp },
-                                end = dimensionResource(R.dimen.padding_horizontal)
-                            )
-                    )
-                }
+    }
+    else {
+        //List of tags:
+        LazyRow(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            items(tags) { tag ->
+                SuggestionChip(
+                    onClick = {
+                        onEditTags()
+                    },
+                    label = {
+                        Text(tag.name)
+                    },
+                    modifier = Modifier
+                        .padding(
+                            start = if (tags.indexOf(tag) == 0) {
+                                dimensionResource(R.dimen.margin_horizontal)
+                            } else {
+                                0.dp
+                            },
+                            end = if (tags.indexOf(tag) == tags.size - 1 ) {
+                                dimensionResource(R.dimen.margin_horizontal)
+                            } else {
+                                dimensionResource(R.dimen.padding_horizontal)
+                            }
+                        )
+                )
             }
         }
     }
@@ -403,6 +430,7 @@ private fun DetailListRow(
 ) {
     var isObfuscated: Boolean by remember { mutableStateOf(detail.metadata.isObfuscated) }
     var isDropdownVisible: Boolean by remember { mutableStateOf(false) }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -478,7 +506,7 @@ private fun DetailListRow(
                 ) {
                     DropdownMenuItem(
                         text = {
-                            Text(stringResource(R.string.entry_editDetail))
+                            Text(stringResource(R.string.account_details_edit))
                         },
                         leadingIcon = {
                             Icon(
@@ -493,7 +521,7 @@ private fun DetailListRow(
                     )
                     DropdownMenuItem(
                         text = {
-                            Text(stringResource(R.string.entry_deleteDetail))
+                            Text(stringResource(R.string.account_details_delete))
                         },
                         leadingIcon = {
                             Icon(
@@ -511,7 +539,7 @@ private fun DetailListRow(
                     )
                     DropdownMenuItem(
                         text = {
-                            Text(stringResource(R.string.entry_copyDetail))
+                            Text(stringResource(R.string.account_details_copyToClipboard))
                         },
                         leadingIcon = {
                             Icon(
@@ -524,85 +552,31 @@ private fun DetailListRow(
                             onCopyToClipboard(detail)
                         }
                     )
-                }
-            }
-        }
-    }
-}
-
-
-@Composable
-private fun EditDataDialog(
-    value: String,
-    label: String,
-    infoText: String,
-    prefixIcon: Painter,
-    onDismiss: () -> Unit,
-    onSave: (String) -> Unit
-) {
-    val sheetState: SheetState = rememberModalBottomSheetState()
-    val coroutineScope: CoroutineScope = rememberCoroutineScope()
-    val focusRequester: FocusRequester = remember { FocusRequester() }
-    var mutableValue: String by remember { mutableStateOf(value) }
-
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
-
-    ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        sheetState = sheetState,
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    start = dimensionResource(R.dimen.margin_horizontal),
-                    end = dimensionResource(R.dimen.margin_horizontal),
-                    bottom = dimensionResource(R.dimen.padding_vertical)
-                )
-        ) {
-            Text(
-                text = infoText,
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyMedium,
-            )
-            TextInput(
-                value = mutableValue,
-                onValueChange = {
-                    mutableValue = it
-                },
-                label = label,
-                prefixIcon = prefixIcon,
-                focusRequester = focusRequester,
-                modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_vertical))
-            )
-            FlowRow(
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier.align(Alignment.End)
-            ) {
-                TextButton(
-                    onClick = {
-                        coroutineScope.launch {
-                            sheetState.hide()
-                        }.invokeOnCompletion {
-                            onDismiss()
-                        }
+                    if (detail.metadata.isObfuscated) {
+                        DropdownMenuItem(
+                            text = {
+                                Text(if (isObfuscated) {
+                                    stringResource(R.string.account_details_showContent)
+                                } else {
+                                    stringResource(R.string.account_details_hideContent)
+                                })
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    painter = if (isObfuscated) {
+                                        painterResource(R.drawable.ic_visibility_on)
+                                    } else {
+                                        painterResource(R.drawable.ic_visibility_off)
+                                    },
+                                    contentDescription = ""
+                                )
+                            },
+                            onClick = {
+                                isDropdownVisible = false
+                                isObfuscated = !isObfuscated
+                            }
+                        )
                     }
-                ) {
-                    Text(stringResource(R.string.button_cancel))
-                }
-                TextButton(
-                    onClick = {
-                        coroutineScope.launch {
-                            sheetState.hide()
-                        }.invokeOnCompletion {
-                            onSave(mutableValue)
-                        }
-                    },
-                    modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
-                ) {
-                    Text(stringResource(R.string.button_save))
                 }
             }
         }

@@ -50,7 +50,7 @@ class CreateAccountUseCase(
         val allTags: List<Tag> = tagRepository.getAllTags().first()
         tags.forEach { tag ->
             if (!allTags.contains(tag)) {
-                throw IllegalStateException("Tag '$tag' cannot be added to entry because it does not exist.")
+                throw IllegalStateException("Tag '$tag' cannot be added to account because it does not exist.")
             }
         }
 

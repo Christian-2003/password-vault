@@ -12,14 +12,6 @@ import kotlin.uuid.Uuid
 interface AccountRepository {
 
     /**
-     * Returns a list containing all accounts.
-     *
-     * @return  Flow containing a list of all accounts.
-     */
-    @Deprecated("Use getAllAccountDescriptors instead")
-    fun getAllAccounts(): Flow<List<Account>>
-
-    /**
      * Returns a list which contains the account descriptors of all accounts.
      *
      * @return  List of all account descriptors.

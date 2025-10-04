@@ -20,8 +20,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import de.christian2003.passwordvault.application.usecases.CreateAccountUseCase
 import de.christian2003.passwordvault.application.usecases.DeleteAccountUseCase
+import de.christian2003.passwordvault.application.usecases.GetAccountByIdUseCase
 import de.christian2003.passwordvault.application.usecases.GetAllAccountDescriptorsUseCase
+import de.christian2003.passwordvault.application.usecases.UpdateAccountUseCase
 import de.christian2003.passwordvault.domain.security.ClipboardService
 import de.christian2003.passwordvault.plugin.PasswordVaultApplication
 import de.christian2003.passwordvault.plugin.infrastructure.db.PasswordVaultRepository
@@ -116,8 +119,9 @@ fun PasswordVault() {
                 }
                 val viewModel: AccountViewModel = viewModel()
                 viewModel.init(
-                    accountRepository = repository,
-                    detailRepository = repository,
+                    getAccountByIdUseCase = GetAccountByIdUseCase(repository),
+                    createAccountUseCase = CreateAccountUseCase(repository, repository),
+                    updateAccountUseCase = UpdateAccountUseCase(repository, repository),
                     tagRepository = repository,
                     clipboardService = clipboardService,
                     id = id

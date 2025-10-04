@@ -1,5 +1,6 @@
 package de.christian2003.passwordvault.plugin.presentation.view.account
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -9,23 +10,22 @@ import androidx.lifecycle.viewModelScope
 import de.christian2003.passwordvault.domain.model.detail.Detail
 import de.christian2003.passwordvault.domain.model.account.Account
 import de.christian2003.passwordvault.domain.model.tag.Tag
-import de.christian2003.passwordvault.application.repository.DetailRepository
-import de.christian2003.passwordvault.application.repository.AccountRepository
 import de.christian2003.passwordvault.application.repository.TagRepository
-import de.christian2003.passwordvault.domain.model.account.AccountDescriptor
+import de.christian2003.passwordvault.application.usecases.CreateAccountUseCase
+import de.christian2003.passwordvault.application.usecases.GetAccountByIdUseCase
+import de.christian2003.passwordvault.application.usecases.UpdateAccountUseCase
 import de.christian2003.passwordvault.domain.security.ClipboardService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlin.uuid.Uuid
 
 
 class AccountViewModel(): ViewModel() {
 
-    private lateinit var accountRepository: AccountRepository
+    private lateinit var createAccountUseCase: CreateAccountUseCase
 
-    private lateinit var detailRepository: DetailRepository
+    private lateinit var updateAccountUseCase: UpdateAccountUseCase
 
     private lateinit var clipboardService: ClipboardService
 
@@ -36,8 +36,6 @@ class AccountViewModel(): ViewModel() {
     lateinit var tagRepository: TagRepository
 
     lateinit var allTags: Flow<List<Tag>>
-
-    lateinit var accountId: Uuid
 
     var name: String by mutableStateOf("")
 
@@ -63,8 +61,9 @@ class AccountViewModel(): ViewModel() {
 
 
     fun init(
-        accountRepository: AccountRepository,
-        detailRepository: DetailRepository,
+        getAccountByIdUseCase: GetAccountByIdUseCase,
+        createAccountUseCase: CreateAccountUseCase,
+        updateAccountUseCase: UpdateAccountUseCase,
         tagRepository: TagRepository,
         clipboardService: ClipboardService,
         id: Uuid? = null
@@ -72,61 +71,62 @@ class AccountViewModel(): ViewModel() {
         if (isInitialized) {
             return
         }
-        this.accountRepository = accountRepository
-        this.detailRepository = detailRepository
+        this.createAccountUseCase = createAccountUseCase
+        this.updateAccountUseCase = updateAccountUseCase
         this.tagRepository = tagRepository
         this.clipboardService = clipboardService
-        this.accountId = id ?: Uuid.random()
-
         allTags = tagRepository.getAllTags()
         isInitialized = true
-        viewModelScope.launch(Dispatchers.IO) {
-            account = accountRepository.getAccountById(accountId)
-            if (account == null) {
-                name = ""
-                description = ""
-                tags.clear()
-            }
-            else {
-                name = account!!.descriptor.name
-                description = account!!.descriptor.description
-                tags.clear()
-                tags.addAll(account!!.tags)
-            }
-            details.clear()
-            val detailsForAccount: Flow<List<Detail>> = detailRepository.getAllDetailsForAccount(accountId)
-            detailsForAccount.first().forEach { detail ->
-                details.add(detail)
+
+        if (id != null) {
+            viewModelScope.launch(Dispatchers.IO) {
+                val account: Account? = getAccountByIdUseCase.getAccountById(id)
+                this@AccountViewModel.account = account
+                if (account == null) {
+                    name = ""
+                    description = ""
+                    details.clear()
+                    tags.clear()
+                }
+                else {
+                    name = account.descriptor.name
+                    description = account.descriptor.description
+                    tags.clear()
+                    tags.addAll(account.tags)
+                    details.clear()
+                    details.addAll(account.details)
+                }
             }
         }
     }
 
 
     fun save() = viewModelScope.launch(Dispatchers.IO) {
-        if (name.isNotEmpty() && description.isNotEmpty()) {
+        if (name.isNotBlank() && (description.isEmpty() || description.isNotBlank())) {
+            val account: Account? = this@AccountViewModel.account
             if (account == null) {
                 //Create new account:
-                account = Account(
-                    descriptor = AccountDescriptor(
-                        id = accountId,
-                        name = name,
-                        description = description
-                    ),
-                    tags = tags
+                Log.d("Account", "Create account")
+                createAccountUseCase.createAccount(
+                    name = name,
+                    description = description,
+                    details = details,
+                    tags = tags,
+                    targets = listOf()
                 )
-                accountRepository.createAccount(account!!)
             }
             else {
                 //Edit existing account:
-                account!!.descriptor = account!!.descriptor.copy(
+                Log.d("Account", "Edit account")
+                updateAccountUseCase.updateAccount(
+                    id = account.descriptor.id,
                     name = name,
-                    description = description
+                    description = description,
+                    details = details,
+                    tags = tags,
+                    targets = listOf()
                 )
-                account!!.tags = tags
-                accountRepository.updateAccount(account!!)
             }
-            //Save details:
-            detailRepository.saveAllDetailsForAccount(details, accountId)
         }
     }
 
