@@ -1,5 +1,6 @@
 package de.christian2003.passwordvault.plugin.infrastructure.db
 
+import android.util.Log
 import de.christian2003.passwordvault.domain.model.account.Account
 import de.christian2003.passwordvault.domain.model.tag.Tag
 import de.christian2003.passwordvault.application.repository.AccountRepository
@@ -197,8 +198,10 @@ class PasswordVaultRepository(
     override fun getAllTags(): Flow<List<Tag>> {
         if (tags == null) {
             tags = tagDao.selectAll().map { list ->
-                list.map { tag ->
-                    tagMapper.toDomain(tag)
+                list.map { tagEntity ->
+                    val tag = tagMapper.toDomain(tagEntity)
+                    Log.d("Repository", "Map '${tag.name}' in flow")
+                    return@map tag
                 }
             }
         }

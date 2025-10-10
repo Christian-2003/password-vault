@@ -1,0 +1,42 @@
+package de.christian2003.passwordvault.plugin.presentation.view.tag
+
+import de.christian2003.passwordvault.domain.model.tag.Tag
+
+
+/**
+ * Mapper maps the domain model 'Tag' to the DTO for the UI.
+ *
+ * For the reason on why DTOs are needed for the UI, see the documentation of "TagUiDto".
+ */
+class TagUiMapper {
+
+    /**
+     * Maps the DTO that is passed as argument to the domain model 'Tag'.
+     *
+     * @param dto   DTO to map to the domain model 'Tag'.
+     * @return      Domain model 'Tag'.
+     */
+    fun toDomain(dto: TagUiDto): Tag {
+        return Tag(
+            id = dto.id,
+            name = dto.name,
+            metadata = dto.metadata
+        )
+    }
+
+
+    /**
+     * Maps the domain model 'Tag' that is passed as argument to the DTO.
+     *
+     * @param domain    Domain model 'Tag' to map to the DTO.
+     * @return          DTO.
+     */
+    fun toDto(domain: Tag): TagUiDto {
+        return TagUiDto(
+            id = domain.id,
+            name = domain.name,
+            metadata = domain.metadata
+        )
+    }
+
+}

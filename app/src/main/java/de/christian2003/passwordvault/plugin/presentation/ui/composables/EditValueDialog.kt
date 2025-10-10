@@ -35,12 +35,14 @@ import kotlinx.coroutines.android.awaitFrame
 /**
  * Displays a dialog through which a single value can be edited.
  *
- * @param value             Value to edit.
- * @param canValueBeBlank   Whether the edited value can be blank.
- * @param label             Label for the text field.
- * @param title             Title for the dialog.
- * @param onDismiss         Callback invoked to dismiss the dialog without saving the edited value.
- * @param onSave            Callback invoked to dismiss the dialog and save the edited value.
+ * @param value                 Value to edit.
+ * @param canValueBeBlank       Whether the edited value can be blank.
+ * @param label                 Label for the text field.
+ * @param title                 Title for the dialog.
+ * @param onDismiss             Callback invoked to dismiss the dialog without saving the edited value.
+ * @param onSave                Callback invoked to dismiss the dialog and save the edited value.
+ * @param primaryButtonText     Text for the primary button (e.g. "OK").
+ * @param secondaryButtonText   Text for the secondary button (e.g. "Cancel").
  */
 @Composable
 fun EditValueDialog(
@@ -49,7 +51,9 @@ fun EditValueDialog(
     label: String,
     title: String,
     onDismiss: () -> Unit,
-    onSave: (String) -> Unit
+    onSave: (String) -> Unit,
+    primaryButtonText: String = stringResource(R.string.button_ok),
+    secondaryButtonText: String = stringResource(R.string.button_cancel)
 ) {
     val focusRequester: FocusRequester = remember { FocusRequester() }
     var mutableValue: String by rememberSaveable { mutableStateOf(value) }
@@ -103,7 +107,7 @@ fun EditValueDialog(
                             onDismiss()
                         }
                     ) {
-                        Text(stringResource(R.string.button_cancel))
+                        Text(secondaryButtonText)
                     }
                     TextButton(
                         enabled = canValueBeBlank || mutableValue.isNotBlank(),
@@ -112,7 +116,7 @@ fun EditValueDialog(
                         },
                         modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
                     ) {
-                        Text(stringResource(R.string.button_ok))
+                        Text(primaryButtonText)
                     }
                 }
             }

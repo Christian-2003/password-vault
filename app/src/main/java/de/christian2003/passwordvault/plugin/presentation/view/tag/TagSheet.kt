@@ -1,9 +1,7 @@
 package de.christian2003.passwordvault.plugin.presentation.view.tag
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,11 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -31,7 +25,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,20 +33,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import de.christian2003.passwordvault.domain.model.tag.Tag
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDeleteDialog
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.EditValueDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
-import de.christian2003.passwordvault.plugin.presentation.ui.composables.TextInput
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -71,9 +60,9 @@ fun TagSheet(
     onDismiss: () -> Unit,
     onSave: (List<Tag>) -> Unit
 ) {
+    val tags: List<TagUiDto> by viewModel.tags.collectAsState(emptyList())
     val sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
-    val tags: List<Tag> by viewModel.tags.collectAsState(emptyList())
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -114,7 +103,7 @@ fun TagSheet(
                             }
                         }
                     ) {
-                        Text(stringResource(R.string.button_save))
+                        Text(stringResource(R.string.button_ok))
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors().copy(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
@@ -139,18 +128,20 @@ fun TagSheet(
             else {
                 TagList(
                     tags = tags,
-                    selectedTags = viewModel.selectedTags,
                     onTagSelected = { tag ->
-                        viewModel.selectedTags.add(tag)
+                        viewModel.selectTag(tag)
                     },
                     onTagDeselected = { tag ->
-                        viewModel.selectedTags.remove(tag)
+                        viewModel.deselectTag(tag)
                     },
                     onEditTag = { tag ->
                         viewModel.tagToEdit = tag
                     },
                     onDeleteTag = { tag ->
                         viewModel.tagToDelete = tag
+                    },
+                    isTagSelected = { tag ->
+                        viewModel.isTagSelected(tag)
                     },
                     modifier = Modifier.weight(1f)
                 )
@@ -190,9 +181,8 @@ fun TagSheet(
             onDismiss = {
                 viewModel.tagToEdit = null
             },
-            onSave = { tag ->
-                viewModel.tagToEdit = null
-                viewModel.saveTag(tag)
+            onSave = { tagName ->
+                viewModel.saveTag(tagName)
             }
         )
     }
@@ -202,9 +192,9 @@ fun TagSheet(
             onDismiss = {
                 viewModel.isCreateTagDialogVisible = false
             },
-            onSave = { tag ->
+            onSave = { tagName ->
                 viewModel.isCreateTagDialogVisible = false
-                viewModel.createTag(tag)
+                viewModel.createTag(tagName)
             }
         )
     }
@@ -215,21 +205,21 @@ fun TagSheet(
  * Displays a list of all tags.
  *
  * @param tags              List of all tags.
- * @param selectedTags      List of all tags that are currently selected.
  * @param onTagSelected     Callback invoked once a tag is selected.
  * @param onTagDeselected   Callback invoked once a tag is deselected.
  * @param onEditTag         Callback invoked to edit a tag.
  * @param onDeleteTag       Callback invoked to delete a tag.
+ * @param isTagSelected     Callback invoked to determine whether the specified tag is selected.
  * @param modifier          Modifier.
  */
 @Composable
 private fun TagList(
-    tags: List<Tag>,
-    selectedTags: List<Tag>,
-    onTagSelected: (Tag) -> Unit,
-    onTagDeselected: (Tag) -> Unit,
-    onEditTag: (Tag) -> Unit,
-    onDeleteTag: (Tag) -> Unit,
+    tags: List<TagUiDto>,
+    onTagSelected: (TagUiDto) -> Unit,
+    onTagDeselected: (TagUiDto) -> Unit,
+    onEditTag: (TagUiDto) -> Unit,
+    onDeleteTag: (TagUiDto) -> Unit,
+    isTagSelected: (TagUiDto) -> Boolean,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -238,7 +228,7 @@ private fun TagList(
         items(tags) { tag ->
             TagListRow(
                 tag = tag,
-                selected = selectedTags.contains(tag),
+                selected = isTagSelected(tag),
                 onSelectedChange = { isSelected ->
                     if (isSelected) {
                         onTagSelected(tag)
@@ -266,11 +256,11 @@ private fun TagList(
  */
 @Composable
 private fun TagListRow(
-    tag: Tag,
+    tag: TagUiDto,
     selected: Boolean,
     onSelectedChange: (Boolean) -> Unit,
-    onEditTag: (Tag) -> Unit,
-    onDeleteTag: (Tag) -> Unit
+    onEditTag: (TagUiDto) -> Unit,
+    onDeleteTag: (TagUiDto) -> Unit
 ) {
     var isDropdownVisible: Boolean by remember { mutableStateOf(false) }
     Row(
@@ -360,107 +350,17 @@ private fun TagListRow(
  */
 @Composable
 private fun EditTagDialog(
-    tag: Tag?,
+    tag: TagUiDto?,
     onDismiss: () -> Unit,
-    onSave: (Tag) -> Unit
+    onSave: (String) -> Unit
 ) {
-    var name: String by remember { mutableStateOf(tag?.name ?: "") }
-    val nameError: String = stringResource(R.string.tag_nameError)
-    var isNameErrorVisible: Boolean by remember { mutableStateOf(false) }
-    val focusRequester: FocusRequester = remember { FocusRequester() }
-
-    val onSaveClick: () -> Unit = {
-        if (name.isNotBlank()) {
-            if (tag != null) {
-                tag.name = name
-                onSave(tag)
-            }
-            else {
-                val newTag = Tag(
-                    name = name
-                )
-                onSave(newTag)
-            }
-        }
-        else {
-            isNameErrorVisible = true
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
-
-    Dialog(
-        onDismissRequest = onDismiss
-    ) {
-        Card(
-            shape = RoundedCornerShape(24.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(24.dp)
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_edit),
-                    contentDescription = "",
-                    tint = MaterialTheme.colorScheme.secondary
-                )
-                Text(
-                    text = if (tag == null) { stringResource(R.string.tag_titleCreate) } else { stringResource(R.string.tag_titleEdit) },
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.titleLarge,
-                    textAlign = TextAlign.Center,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(vertical = 16.dp)
-                )
-                TextInput(
-                    value = name,
-                    onValueChange = {
-                        name = it
-                    },
-                    label = stringResource(R.string.tag_nameLabel),
-                    errorMessage = if (isNameErrorVisible) { nameError } else { null },
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Done
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            onSaveClick()
-                        }
-                    ),
-                    focusRequester = focusRequester,
-                    modifier = Modifier
-                        .padding(bottom = 24.dp)
-                )
-                FlowRow(
-                    horizontalArrangement = Arrangement.End,
-                    modifier = Modifier.align(Alignment.End)
-                ) {
-                    TextButton(
-                        onClick = {
-                            onDismiss()
-                        }
-                    ) {
-                        Text(stringResource(R.string.button_cancel))
-                    }
-                    TextButton(
-                        onClick = {
-                            onSaveClick()
-                        },
-                        enabled = name.isNotBlank(),
-                        modifier = Modifier.padding(start = 8.dp)
-                    ) {
-                        Text(stringResource(R.string.button_save))
-                    }
-                }
-            }
-        }
-    }
+    EditValueDialog(
+        value = tag?.name ?: "",
+        canValueBeBlank = false,
+        label = stringResource(R.string.tag_nameLabel),
+        title = if (tag == null) { stringResource(R.string.tag_titleCreate) } else { stringResource(R.string.tag_titleEdit) },
+        onDismiss = onDismiss,
+        onSave = onSave,
+        primaryButtonText = stringResource(R.string.button_save)
+    )
 }

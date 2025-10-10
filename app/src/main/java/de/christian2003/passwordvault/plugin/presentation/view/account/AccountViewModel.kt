@@ -17,6 +17,7 @@ import de.christian2003.passwordvault.application.usecases.acount.UpdateAccountU
 import de.christian2003.passwordvault.domain.security.ClipboardService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlin.uuid.Uuid
 

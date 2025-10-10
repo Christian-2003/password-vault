@@ -7,9 +7,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.christian2003.passwordvault.domain.model.tag.Tag
-import de.christian2003.passwordvault.application.repository.TagRepository
+import de.christian2003.passwordvault.application.usecases.tag.CreateTagUseCase
+import de.christian2003.passwordvault.application.usecases.tag.DeleteTagUseCase
+import de.christian2003.passwordvault.application.usecases.tag.GetAllTagsUseCase
+import de.christian2003.passwordvault.application.usecases.tag.UpdateTagUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 
@@ -19,9 +23,24 @@ import kotlinx.coroutines.launch
 class TagViewModel(): ViewModel() {
 
     /**
-     * Repository through which to access tags.
+     * Use case to create a new tag.
      */
-    private lateinit var tagRepository: TagRepository
+    private lateinit var createTagUseCase: CreateTagUseCase
+
+    /**
+     * Use case to update an existing tag.
+     */
+    private lateinit var updateTagUseCase: UpdateTagUseCase
+
+    /**
+     * Use case to delete a tag.
+     */
+    private lateinit var deleteTagUseCase: DeleteTagUseCase
+
+    /**
+     * Mapper used to map tags to the DTO used in the UI and vice versa.
+     */
+    private var tagMapper: TagUiMapper = TagUiMapper()
 
     /**
      * Whether the view model has been initialized.
@@ -31,7 +50,7 @@ class TagViewModel(): ViewModel() {
     /**
      * List of all tags that are available within the app.
      */
-    lateinit var tags: Flow<List<Tag>>
+    lateinit var tags: Flow<List<TagUiDto>>
 
     /**
      * List of all tags that are selected currently.
@@ -41,12 +60,12 @@ class TagViewModel(): ViewModel() {
     /**
      * Stores the tag to delete. If this is null, no tag is currently being deleted.
      */
-    var tagToDelete: Tag? by mutableStateOf(null)
+    var tagToDelete: TagUiDto? by mutableStateOf(null)
 
     /**
      * Stores the tag to edit. If this is null, no tag is currently being edited.
      */
-    var tagToEdit: Tag? by mutableStateOf(null)
+    var tagToEdit: TagUiDto? by mutableStateOf(null)
 
     /**
      * Indicates whether the dialog to create a new tag is currently visible.
@@ -57,19 +76,29 @@ class TagViewModel(): ViewModel() {
     /**
      * Initializes the view model.
      *
-     * @param tagRepository Repository through which to access tags.
      * @param selectedTags  List of tags that are currently selected.
      */
-    fun init(tagRepository: TagRepository, selectedTags: List<Tag>) {
+    fun init(
+        getAllTagsUseCase: GetAllTagsUseCase,
+        createTagUseCase: CreateTagUseCase,
+        updateTagUseCase: UpdateTagUseCase,
+        deleteTagUseCase: DeleteTagUseCase,
+        selectedTags: List<Tag>
+    ) {
         if (isInitialized) {
             return
         }
-        this.tagRepository = tagRepository
+        this.tags = getAllTagsUseCase.getAllTags().map { list ->
+            list.map { domain ->
+                val dto: TagUiDto = tagMapper.toDto(domain)
+                return@map dto
+            }
+        }
+        this.createTagUseCase = createTagUseCase
+        this.updateTagUseCase = updateTagUseCase
+        this.deleteTagUseCase = deleteTagUseCase
         this.selectedTags.addAll(selectedTags)
         isInitialized = true
-        viewModelScope.launch(Dispatchers.IO) {
-            tags = tagRepository.getAllTags()
-        }
     }
 
 
@@ -78,11 +107,11 @@ class TagViewModel(): ViewModel() {
      * the attribute "tagToDelete" will be set to null.
      */
     fun deleteTag() = viewModelScope.launch(Dispatchers.IO) {
-        val tag: Tag? = this@TagViewModel.tagToDelete
+        val tag: TagUiDto? = this@TagViewModel.tagToDelete
+        this@TagViewModel.tagToDelete = null
         if (tag != null) {
-            this@TagViewModel.tagToDelete = null
-            tagRepository.deleteTag(tag)
-            selectedTags.remove(tag)
+            deselectTag(tag)
+            deleteTagUseCase.deleteTag(tag.id)
         }
     }
 
@@ -90,16 +119,72 @@ class TagViewModel(): ViewModel() {
     /**
      * Saves the tag that is passed as argument.
      */
-    fun saveTag(tag: Tag) = viewModelScope.launch(Dispatchers.IO) {
-        tagRepository.updateTag(tag)
+    fun saveTag(tagName: String) = viewModelScope.launch(Dispatchers.IO) {
+        val tagToEdit: TagUiDto? = this@TagViewModel.tagToEdit
+        this@TagViewModel.tagToEdit = null
+        if (tagToEdit != null) {
+            updateTagUseCase.updateTag(
+                id = tagToEdit.id,
+                name = tagName
+            )
+        }
     }
 
 
     /**
      * Creates the new tag that is passed as argument.
      */
-    fun createTag(tag: Tag) = viewModelScope.launch(Dispatchers.IO) {
-        tagRepository.createTag(tag)
+    fun createTag(tagName: String) = viewModelScope.launch(Dispatchers.IO) {
+        createTagUseCase.createTag(
+            name = tagName
+        )
+    }
+
+
+    /**
+     * Selects the tag that is passed as argument.
+     *
+     * @param tag   Tag to select.
+     */
+    fun selectTag(tag: TagUiDto) {
+        selectedTags.forEach { selectedTag ->
+            if (selectedTag.id == tag.id) {
+                selectedTags.remove(selectedTag)
+                return@forEach
+            }
+        }
+        selectedTags.add(tagMapper.toDomain(tag))
+    }
+
+
+    /**
+     * Deselects the tag that is passed as argument.
+     *
+     * @param tag   Tag to deselect.
+     */
+    fun deselectTag(tag: TagUiDto) {
+        selectedTags.forEach { selectedTag ->
+            if (selectedTag.id == tag.id) {
+                selectedTags.remove(selectedTag)
+                return
+            }
+        }
+    }
+
+
+    /**
+     * Determines whether the specified tag is selected.
+     *
+     * @param tag   Tag for which to determine whether it is selected.
+     * @return      Whether the tag is selected or not.
+     */
+    fun isTagSelected(tag: TagUiDto): Boolean {
+        selectedTags.forEach { selectedTag ->
+            if (selectedTag.id == tag.id) {
+                return true
+            }
+        }
+        return false
     }
 
 }
