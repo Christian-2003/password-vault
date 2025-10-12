@@ -1,7 +1,7 @@
 package de.christian2003.passwordvault.plugin.presentation.view.account.target
 
 import android.graphics.drawable.Drawable
-import androidx.compose.foundation.text.input.rememberTextFieldState
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -64,11 +64,42 @@ class TargetViewModel: ViewModel() {
     }
 
 
-    fun dismissSelectPackageDialog(selectedPackages: List<String>? = null) {
+    fun dismissSelectPackageDialog(selectedPackages: Set<String>? = null) {
         isSelectPackageDialogVisible = false
         if (selectedPackages != null) {
-            //TODO: Save selected packages
+            val targetsToRemove: MutableList<Target> = mutableListOf()
+            targets.forEach { target ->
+                if (target.isAndroidApp()) {
+                    targetsToRemove.add(target)
+                }
+            }
+            targetsToRemove.onEach { target ->
+                targets.remove(target)
+            }
+
+            selectedPackages.forEach { selectedPackage ->
+                val target: Target? = targets.find { it.name == selectedPackage }
+                if (target != null) {
+                    targets.remove(target)
+                }
+                val newTarget = Target(
+                    name = selectedPackage,
+                    url = Uri.fromParts("android", "//0@$selectedPackage", "")
+                )
+                targets.add(newTarget)
+            }
         }
+    }
+
+
+    fun getAllSelectedPackages(): Set<String> {
+        val selectedPackages: MutableSet<String> = mutableSetOf()
+        targets.forEach { target ->
+            if (target.isAndroidApp()) {
+                selectedPackages.add(target.name)
+            }
+        }
+        return selectedPackages
     }
 
 

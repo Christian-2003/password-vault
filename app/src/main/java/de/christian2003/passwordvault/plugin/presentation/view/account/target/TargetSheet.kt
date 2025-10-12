@@ -1,6 +1,8 @@
 package de.christian2003.passwordvault.plugin.presentation.view.account.target
 
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.Icon
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,7 +31,13 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateSetOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -107,6 +115,12 @@ fun TargetSheet(
                 onRemoveTarget = { target ->
                     viewModel.targets.remove(target)
                 },
+                onQueryLocalizedPackageName = { packageName ->
+                    viewModel.getLocalizedPackageName(packageName)
+                },
+                onQueryPackageIcon = { packageName ->
+                    viewModel.getPackageIcon(packageName)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
@@ -135,6 +149,7 @@ fun TargetSheet(
         }
         SelectPackageDialog(
             packageNames = viewModel.allInstalledPackages,
+            selectedPackages = viewModel.getAllSelectedPackages(),
             getLocalizedPackageName = { packageName ->
                 viewModel.getLocalizedPackageName(packageName)
             },
@@ -156,6 +171,8 @@ fun TargetSheet(
 private fun TargetsList(
     targets: List<Target>,
     onRemoveTarget: (Target) -> Unit,
+    onQueryLocalizedPackageName: (String) -> String?,
+    onQueryPackageIcon: (String) -> Drawable?,
     modifier: Modifier = Modifier
 ) {
     if (targets.isEmpty()) {
@@ -172,10 +189,20 @@ private fun TargetsList(
             modifier = modifier
         ) {
             items(targets) { target ->
-                TargetsListRow(
-                    target = target,
-                    onRemove = onRemoveTarget
-                )
+                if (target.isAndroidApp()) {
+                    TargetsListRowPackage(
+                        target = target,
+                        onRemove = onRemoveTarget,
+                        onQueryLocalizedPackageName = onQueryLocalizedPackageName,
+                        onQueryPackageIcon = onQueryPackageIcon
+                    )
+                }
+                else {
+                    TargetsListRowWebsite(
+                        target = target,
+                        onRemove = onRemoveTarget
+                    )
+                }
             }
         }
     }
@@ -183,29 +210,70 @@ private fun TargetsList(
 
 
 @Composable
-private fun TargetsListRow(
+private fun TargetsListRowPackage(
+    target: Target,
+    onRemove: (Target) -> Unit,
+    onQueryLocalizedPackageName: (String) -> String?,
+    onQueryPackageIcon: (String) -> Drawable?
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                horizontal = dimensionResource(R.dimen.margin_horizontal),
+                vertical = dimensionResource(R.dimen.padding_vertical)
+            )
+    ) {
+        Image(
+            painter = rememberDrawablePainter(onQueryPackageIcon(target.name)),
+            contentDescription = "",
+            modifier = Modifier.size(dimensionResource(R.dimen.image_m))
+        )
+        Text(
+            text = onQueryLocalizedPackageName(target.name) ?: "",
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = dimensionResource(R.dimen.padding_horizontal))
+        )
+        IconButton(
+            onClick = {
+                onRemove(target)
+            }
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_delete),
+                contentDescription = ""
+            )
+        }
+    }
+}
+
+
+@Composable
+private fun TargetsListRowWebsite(
     target: Target,
     onRemove: (Target) -> Unit
 ) {
-    Column(
-        modifier = Modifier.clickable {
-            onRemove(target)
-        }
-    ) {
-        Text(target.name)
-        Text(target.url)
-    }
+    //Once websites are supported targets:
+    //Fill this composable with the code to display a website target
 }
 
 
 @Composable
 private fun SelectPackageDialog(
     packageNames: List<String>?,
+    selectedPackages: Set<String>,
     getLocalizedPackageName: (String) -> String?,
     getPackageIcon: (String) -> Drawable?,
     onDismiss: () -> Unit,
-    onSave: (List<String>) -> Unit
+    onSave: (Set<String>) -> Unit
 ) {
+    val mutableSelectedPackages: MutableSet<String> = remember { mutableStateSetOf() }
+    mutableSelectedPackages.addAll(selectedPackages)
+
     Dialog(
         onDismissRequest = onDismiss
     ) {
@@ -217,7 +285,8 @@ private fun SelectPackageDialog(
                     .fillMaxWidth()
                     .padding(
                         top = 24.dp,
-                        bottom = 24.dp)
+                        bottom = 24.dp
+                    )
             ) {
                 Text(
                     text = stringResource(R.string.target_packages_title),
@@ -242,12 +311,18 @@ private fun SelectPackageDialog(
                         modifier = Modifier.weight(1f)
                     ) {
                         items(packageNames) { packageName ->
+                            val isSelected: Boolean = mutableSelectedPackages.contains(packageName)
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable {
-
+                                        if (isSelected) {
+                                            mutableSelectedPackages.remove(packageName)
+                                        }
+                                        else {
+                                            mutableSelectedPackages.add(packageName)
+                                        }
                                     }
                                     .padding(
                                         horizontal = 24.dp,
@@ -265,8 +340,17 @@ private fun SelectPackageDialog(
                                     style = MaterialTheme.typography.bodyLarge,
                                     maxLines = 2,
                                     overflow = TextOverflow.Ellipsis,
-                                    modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
+                                    modifier = Modifier
+                                        .padding(start = dimensionResource(R.dimen.padding_horizontal))
+                                        .weight(1f)
                                 )
+                                AnimatedVisibility(isSelected) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_add),
+                                        contentDescription = "",
+                                        modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
+                                    )
+                                }
                             }
                         }
                     }
@@ -291,7 +375,7 @@ private fun SelectPackageDialog(
                     }
                     TextButton(
                         onClick = {
-                            onSave(emptyList()) //TODO: Save list
+                            onSave(mutableSelectedPackages)
                         },
                         modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
                     ) {

@@ -187,8 +187,8 @@ class AccountViewModel(): ViewModel() {
         isTargetDialogVisible = false
         viewModelStoreId++
         if (targets != null) {
-            //Save targets:
-
+            this.targets.clear()
+            this.targets.addAll(targets)
         }
     }
 
