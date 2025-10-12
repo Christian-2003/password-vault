@@ -33,6 +33,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.TopAppBarState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,16 +57,18 @@ import de.christian2003.passwordvault.application.usecases.tag.DeleteTagUseCase
 import de.christian2003.passwordvault.application.usecases.tag.GetAllTagsUseCase
 import de.christian2003.passwordvault.application.usecases.tag.UpdateTagUseCase
 import de.christian2003.passwordvault.domain.model.detail.Detail
-import de.christian2003.passwordvault.domain.model.tag.Tag
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDeleteDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EditValueDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.Headline
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.NavigationBarProtection
-import de.christian2003.passwordvault.plugin.presentation.view.detail.DetailSheet
-import de.christian2003.passwordvault.plugin.presentation.view.detail.DetailViewModel
-import de.christian2003.passwordvault.plugin.presentation.view.tag.TagSheet
-import de.christian2003.passwordvault.plugin.presentation.view.tag.TagViewModel
+import de.christian2003.passwordvault.plugin.presentation.view.account.detail.DetailSheet
+import de.christian2003.passwordvault.plugin.presentation.view.account.detail.DetailViewModel
+import de.christian2003.passwordvault.plugin.presentation.view.account.tag.TagSheet
+import de.christian2003.passwordvault.plugin.presentation.view.account.tag.TagViewModel
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toSet
 import kotlin.text.ifEmpty
 
 
@@ -77,6 +80,7 @@ fun AccountScreen(
     val appBarState: TopAppBarState = rememberTopAppBarState()
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(appBarState)
     val details: List<Detail> = viewModel.details
+    val selectedTags: List<TagUiDto> by viewModel.selectedTags.collectAsState(emptyList())
 
     Scaffold(
         topBar = {
@@ -137,7 +141,7 @@ fun AccountScreen(
                         viewModel.isDescriptionDialogVisible = true
                     },
                     name = viewModel.name,
-                    tags = viewModel.tags,
+                    tags = selectedTags,
                     onEditTags = {
                         viewModel.isTagDialogVisible = true
                     },
@@ -257,15 +261,15 @@ fun AccountScreen(
             createTagUseCase = CreateTagUseCase(viewModel.tagRepository),
             updateTagUseCase = UpdateTagUseCase(viewModel.tagRepository),
             deleteTagUseCase = DeleteTagUseCase(viewModel.tagRepository),
-            selectedTags = viewModel.tags
+            selectedTagIds = selectedTags.map { it.id }.toSet()
         )
         TagSheet(
             viewModel = tagViewModel,
             onDismiss = {
                 viewModel.dismissTagDialog()
             },
-            onSave = { selectedTags ->
-                viewModel.dismissTagDialog(selectedTags)
+            onSave = { selectedTagIds ->
+                viewModel.dismissTagDialog(selectedTagIds)
             }
         )
     }
@@ -321,7 +325,7 @@ fun AccountScreen(
 private fun GeneralSection(
     description: String,
     name: String,
-    tags: List<Tag>,
+    tags: List<TagUiDto>,
     onEditDescription: () -> Unit,
     onEditTags: () -> Unit,
     onSave: () -> Unit,

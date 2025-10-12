@@ -9,15 +9,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.christian2003.passwordvault.domain.model.detail.Detail
 import de.christian2003.passwordvault.domain.model.account.Account
-import de.christian2003.passwordvault.domain.model.tag.Tag
 import de.christian2003.passwordvault.application.repository.TagRepository
 import de.christian2003.passwordvault.application.usecases.acount.CreateAccountUseCase
 import de.christian2003.passwordvault.application.usecases.acount.GetAccountByIdUseCase
 import de.christian2003.passwordvault.application.usecases.acount.UpdateAccountUseCase
+import de.christian2003.passwordvault.domain.model.tag.Tag
 import de.christian2003.passwordvault.domain.security.ClipboardService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.uuid.Uuid
 
@@ -30,13 +36,15 @@ class AccountViewModel(): ViewModel() {
 
     private lateinit var clipboardService: ClipboardService
 
+    private val tagMapper: TagUiMapper = TagUiMapper()
+
     private var account: Account? = null
 
     private var isInitialized = false
 
     lateinit var tagRepository: TagRepository
 
-    lateinit var allTags: Flow<List<Tag>>
+    lateinit var allTags: Flow<List<TagUiDto>>
 
     var name: String by mutableStateOf("")
 
@@ -54,7 +62,9 @@ class AccountViewModel(): ViewModel() {
 
     var detailToDelete: Detail? by mutableStateOf(null)
 
-    val tags: MutableList<Tag> = mutableStateListOf()
+    val selectedTagIds: MutableStateFlow<Set<Uuid>> = MutableStateFlow(emptySet())
+
+    lateinit var selectedTags: StateFlow<List<TagUiDto>>
 
     val details: MutableList<Detail> = mutableStateListOf()
 
@@ -76,26 +86,33 @@ class AccountViewModel(): ViewModel() {
         this.updateAccountUseCase = updateAccountUseCase
         this.tagRepository = tagRepository
         this.clipboardService = clipboardService
-        allTags = tagRepository.getAllTags()
+        allTags = tagRepository.getAllTags().map { list ->
+            list.map { tag -> tagMapper.toDto(tag)}
+        }
+        selectedTags = combine(allTags, selectedTagIds) { all, ids ->
+            all.filter { it.id in ids }
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
         isInitialized = true
 
-        if (id != null) {
-            viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (id != null) {
                 val account: Account? = getAccountByIdUseCase.getAccountById(id)
                 this@AccountViewModel.account = account
                 if (account == null) {
                     name = ""
                     description = ""
                     details.clear()
-                    tags.clear()
+                    clearSelectedTags()
                 }
                 else {
                     name = account.descriptor.name
                     description = account.descriptor.description
-                    tags.clear()
-                    tags.addAll(account.tags)
                     details.clear()
                     details.addAll(account.details)
+                    clearSelectedTags()
+                    account.tags.forEach { tag ->
+                        toggleTagSelection(tag.id)
+                    }
                 }
             }
         }
@@ -105,9 +122,9 @@ class AccountViewModel(): ViewModel() {
     fun save() = viewModelScope.launch(Dispatchers.IO) {
         if (name.isNotBlank() && (description.isEmpty() || description.isNotBlank())) {
             val account: Account? = this@AccountViewModel.account
+            val tags: List<Tag> = selectedTags.value.map { tag -> tagMapper.toDomain(tag) }
             if (account == null) {
                 //Create new account:
-                Log.d("Account", "Create account")
                 createAccountUseCase.createAccount(
                     name = name,
                     description = description,
@@ -118,7 +135,6 @@ class AccountViewModel(): ViewModel() {
             }
             else {
                 //Edit existing account:
-                Log.d("Account", "Edit account")
                 updateAccountUseCase.updateAccount(
                     id = account.descriptor.id,
                     name = name,
@@ -146,13 +162,15 @@ class AccountViewModel(): ViewModel() {
     }
 
 
-    fun dismissTagDialog(selectedTags: List<Tag>? = null) {
+    fun dismissTagDialog(selectedTagIds: Set<Uuid>? = null) {
         isTagDialogVisible = false
         viewModelStoreId++
-        if (selectedTags != null) {
+        if (selectedTagIds != null) {
             //Save new selected tags:
-            tags.clear()
-            tags.addAll(selectedTags)
+            clearSelectedTags()
+            selectedTagIds.forEach { tagId ->
+                toggleTagSelection(tagId)
+            }
         }
     }
 
@@ -182,6 +200,22 @@ class AccountViewModel(): ViewModel() {
             isDetailDialogVisible = false
             detailToEdit = null
             viewModelStoreId++
+        }
+    }
+
+
+    private fun clearSelectedTags() {
+        selectedTagIds.value = emptySet()
+    }
+
+    private fun toggleTagSelection(tagId: Uuid) {
+        selectedTagIds.update { currentIds ->
+            if (tagId in currentIds) {
+                currentIds - tagId
+            }
+            else {
+                currentIds + tagId
+            }
         }
     }
 

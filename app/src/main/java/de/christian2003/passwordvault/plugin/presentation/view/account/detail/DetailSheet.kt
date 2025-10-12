@@ -1,4 +1,4 @@
-package de.christian2003.passwordvault.plugin.presentation.view.detail
+package de.christian2003.passwordvault.plugin.presentation.view.account.detail
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

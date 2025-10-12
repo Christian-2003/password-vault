@@ -1,8 +1,10 @@
-package de.christian2003.passwordvault.plugin.presentation.view.tag
+package de.christian2003.passwordvault.plugin.presentation.view.account.tag
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,10 +13,13 @@ import de.christian2003.passwordvault.application.usecases.tag.CreateTagUseCase
 import de.christian2003.passwordvault.application.usecases.tag.DeleteTagUseCase
 import de.christian2003.passwordvault.application.usecases.tag.GetAllTagsUseCase
 import de.christian2003.passwordvault.application.usecases.tag.UpdateTagUseCase
+import de.christian2003.passwordvault.plugin.presentation.view.account.TagUiDto
+import de.christian2003.passwordvault.plugin.presentation.view.account.TagUiMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlin.uuid.Uuid
 
 
 /**
@@ -53,9 +58,9 @@ class TagViewModel(): ViewModel() {
     lateinit var tags: Flow<List<TagUiDto>>
 
     /**
-     * List of all tags that are selected currently.
+     * Set of the IDs of all selected tags.
      */
-    var selectedTags: MutableList<Tag> = mutableStateListOf()
+    val selectedTagIds: MutableSet<Uuid> = mutableStateSetOf()
 
     /**
      * Stores the tag to delete. If this is null, no tag is currently being deleted.
@@ -76,14 +81,14 @@ class TagViewModel(): ViewModel() {
     /**
      * Initializes the view model.
      *
-     * @param selectedTags  List of tags that are currently selected.
+     * @param selectedTagIds    Set of tags that are currently selected.
      */
     fun init(
         getAllTagsUseCase: GetAllTagsUseCase,
         createTagUseCase: CreateTagUseCase,
         updateTagUseCase: UpdateTagUseCase,
         deleteTagUseCase: DeleteTagUseCase,
-        selectedTags: List<Tag>
+        selectedTagIds: Set<Uuid>
     ) {
         if (isInitialized) {
             return
@@ -97,7 +102,8 @@ class TagViewModel(): ViewModel() {
         this.createTagUseCase = createTagUseCase
         this.updateTagUseCase = updateTagUseCase
         this.deleteTagUseCase = deleteTagUseCase
-        this.selectedTags.addAll(selectedTags)
+        this.selectedTagIds.clear()
+        this.selectedTagIds.addAll(selectedTagIds)
         isInitialized = true
     }
 
@@ -110,7 +116,7 @@ class TagViewModel(): ViewModel() {
         val tag: TagUiDto? = this@TagViewModel.tagToDelete
         this@TagViewModel.tagToDelete = null
         if (tag != null) {
-            deselectTag(tag)
+            deselectTag(tag.id)
             deleteTagUseCase.deleteTag(tag.id)
         }
     }
@@ -142,49 +148,33 @@ class TagViewModel(): ViewModel() {
 
 
     /**
-     * Selects the tag that is passed as argument.
+     * Selects the tag whose ID is passed as argument.
      *
-     * @param tag   Tag to select.
+     * @param tagId ID of the tag to select.
      */
-    fun selectTag(tag: TagUiDto) {
-        selectedTags.forEach { selectedTag ->
-            if (selectedTag.id == tag.id) {
-                selectedTags.remove(selectedTag)
-                return@forEach
-            }
-        }
-        selectedTags.add(tagMapper.toDomain(tag))
+    fun selectTag(tagId: Uuid) {
+        selectedTagIds.add(tagId)
     }
 
 
     /**
-     * Deselects the tag that is passed as argument.
+     * Deselects the tag whose ID is passed as argument.
      *
-     * @param tag   Tag to deselect.
+     * @param tagId ID of the tag to deselect.
      */
-    fun deselectTag(tag: TagUiDto) {
-        selectedTags.forEach { selectedTag ->
-            if (selectedTag.id == tag.id) {
-                selectedTags.remove(selectedTag)
-                return
-            }
-        }
+    fun deselectTag(tagId: Uuid) {
+        selectedTagIds.remove(tagId)
     }
 
 
     /**
      * Determines whether the specified tag is selected.
      *
-     * @param tag   Tag for which to determine whether it is selected.
+     * @param tagId ID of the tag for which to determine whether it is selected.
      * @return      Whether the tag is selected or not.
      */
-    fun isTagSelected(tag: TagUiDto): Boolean {
-        selectedTags.forEach { selectedTag ->
-            if (selectedTag.id == tag.id) {
-                return true
-            }
-        }
-        return false
+    fun isTagSelected(tagId: Uuid): Boolean {
+        return tagId in selectedTagIds
     }
 
 }

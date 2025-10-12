@@ -1,11 +1,11 @@
-package de.christian2003.passwordvault.plugin.presentation.view.tag
+package de.christian2003.passwordvault.plugin.presentation.view.account
 
 import de.christian2003.passwordvault.domain.model.tag.TagMetadata
 import kotlin.uuid.Uuid
 
 
 /**
- * Models a DTO for tags that is used in the TagSheet.
+ * Models a DTO for tags that is used in the presentation layer.
  *
  * The DTO is required for the following reason:
  *      In the domain layer, the equals- and hashCode-methods only regard the tag ID, because this

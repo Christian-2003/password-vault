@@ -1,4 +1,4 @@
-package de.christian2003.passwordvault.plugin.presentation.view.tag
+package de.christian2003.passwordvault.plugin.presentation.view.account
 
 import de.christian2003.passwordvault.domain.model.tag.Tag
 

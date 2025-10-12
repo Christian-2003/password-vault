@@ -1,4 +1,4 @@
-package de.christian2003.passwordvault.plugin.presentation.view.detail
+package de.christian2003.passwordvault.plugin.presentation.view.account.detail
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf

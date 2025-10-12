@@ -1,4 +1,4 @@
-package de.christian2003.passwordvault.plugin.presentation.view.tag
+package de.christian2003.passwordvault.plugin.presentation.view.account.tag
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -38,13 +38,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import de.christian2003.passwordvault.domain.model.tag.Tag
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDeleteDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EditValueDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
+import de.christian2003.passwordvault.plugin.presentation.view.account.TagUiDto
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlin.uuid.Uuid
 
 
 /**
@@ -58,7 +59,7 @@ import kotlinx.coroutines.launch
 fun TagSheet(
     viewModel: TagViewModel,
     onDismiss: () -> Unit,
-    onSave: (List<Tag>) -> Unit
+    onSave: (Set<Uuid>) -> Unit
 ) {
     val tags: List<TagUiDto> by viewModel.tags.collectAsState(emptyList())
     val sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -99,7 +100,7 @@ fun TagSheet(
                             coroutineScope.launch {
                                 sheetState.hide()
                             }.invokeOnCompletion {
-                                onSave(viewModel.selectedTags)
+                                onSave(viewModel.selectedTagIds)
                             }
                         }
                     ) {
@@ -129,10 +130,10 @@ fun TagSheet(
                 TagList(
                     tags = tags,
                     onTagSelected = { tag ->
-                        viewModel.selectTag(tag)
+                        viewModel.selectTag(tag.id)
                     },
                     onTagDeselected = { tag ->
-                        viewModel.deselectTag(tag)
+                        viewModel.deselectTag(tag.id)
                     },
                     onEditTag = { tag ->
                         viewModel.tagToEdit = tag
@@ -141,7 +142,7 @@ fun TagSheet(
                         viewModel.tagToDelete = tag
                     },
                     isTagSelected = { tag ->
-                        viewModel.isTagSelected(tag)
+                        viewModel.isTagSelected(tag.id)
                     },
                     modifier = Modifier.weight(1f)
                 )
