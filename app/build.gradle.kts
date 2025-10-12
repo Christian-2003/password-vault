@@ -90,6 +90,7 @@ dependencies {
     implementation(libs.room.runtime)
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-cbor:1.9.0")
     implementation(platform(libs.androidx.compose.bom))
+    implementation("com.google.accompanist:accompanist-drawablepainter:0.37.3")
 
     testImplementation(libs.junit)
 

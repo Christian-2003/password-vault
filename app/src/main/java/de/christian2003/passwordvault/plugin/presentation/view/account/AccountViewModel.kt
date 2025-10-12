@@ -14,6 +14,7 @@ import de.christian2003.passwordvault.application.usecases.acount.CreateAccountU
 import de.christian2003.passwordvault.application.usecases.acount.GetAccountByIdUseCase
 import de.christian2003.passwordvault.application.usecases.acount.UpdateAccountUseCase
 import de.christian2003.passwordvault.domain.model.tag.Tag
+import de.christian2003.passwordvault.domain.model.target.Target
 import de.christian2003.passwordvault.domain.security.ClipboardService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -50,6 +51,12 @@ class AccountViewModel(): ViewModel() {
 
     var description: String by mutableStateOf("")
 
+    val details: MutableList<Detail> = mutableStateListOf()
+
+    val targets: MutableList<Target> = mutableStateListOf()
+
+    val selectedTagIds: MutableStateFlow<Set<Uuid>> = MutableStateFlow(emptySet())
+
     var isNameDialogVisible: Boolean by mutableStateOf(false)
 
     var isDescriptionDialogVisible: Boolean by mutableStateOf(false)
@@ -58,15 +65,13 @@ class AccountViewModel(): ViewModel() {
 
     var isDetailDialogVisible: Boolean by mutableStateOf(false)
 
+    var isTargetDialogVisible: Boolean by mutableStateOf(false)
+
     var detailToEdit: Detail? by mutableStateOf(null)
 
     var detailToDelete: Detail? by mutableStateOf(null)
 
-    val selectedTagIds: MutableStateFlow<Set<Uuid>> = MutableStateFlow(emptySet())
-
     lateinit var selectedTags: StateFlow<List<TagUiDto>>
-
-    val details: MutableList<Detail> = mutableStateListOf()
 
     var viewModelStoreId: Int = 0
 
@@ -102,6 +107,7 @@ class AccountViewModel(): ViewModel() {
                     name = ""
                     description = ""
                     details.clear()
+                    targets.clear()
                     clearSelectedTags()
                 }
                 else {
@@ -109,6 +115,8 @@ class AccountViewModel(): ViewModel() {
                     description = account.descriptor.description
                     details.clear()
                     details.addAll(account.details)
+                    targets.clear()
+                    targets.addAll(account.targets)
                     clearSelectedTags()
                     account.tags.forEach { tag ->
                         toggleTagSelection(tag.id)
@@ -171,6 +179,16 @@ class AccountViewModel(): ViewModel() {
             selectedTagIds.forEach { tagId ->
                 toggleTagSelection(tagId)
             }
+        }
+    }
+
+
+    fun dismissTargetDialog(targets: List<Target>? = null) {
+        isTargetDialogVisible = false
+        viewModelStoreId++
+        if (targets != null) {
+            //Save targets:
+
         }
     }
 

@@ -42,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -52,11 +53,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.christian2003.passwordvault.R
+import de.christian2003.passwordvault.application.repository.PackagesRepository
+import de.christian2003.passwordvault.application.usecases.packages.GetAllPackagesUseCase
+import de.christian2003.passwordvault.application.usecases.packages.GetLocalizedPackageNameUseCase
+import de.christian2003.passwordvault.application.usecases.packages.GetPackageIconUseCase
 import de.christian2003.passwordvault.application.usecases.tag.CreateTagUseCase
 import de.christian2003.passwordvault.application.usecases.tag.DeleteTagUseCase
 import de.christian2003.passwordvault.application.usecases.tag.GetAllTagsUseCase
 import de.christian2003.passwordvault.application.usecases.tag.UpdateTagUseCase
 import de.christian2003.passwordvault.domain.model.detail.Detail
+import de.christian2003.passwordvault.plugin.infrastructure.packages.LocalPackagesRepository
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDeleteDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EditValueDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
@@ -66,6 +72,8 @@ import de.christian2003.passwordvault.plugin.presentation.view.account.detail.De
 import de.christian2003.passwordvault.plugin.presentation.view.account.detail.DetailViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.account.tag.TagSheet
 import de.christian2003.passwordvault.plugin.presentation.view.account.tag.TagViewModel
+import de.christian2003.passwordvault.plugin.presentation.view.account.target.TargetSheet
+import de.christian2003.passwordvault.plugin.presentation.view.account.target.TargetViewModel
 import kotlin.text.ifEmpty
 
 
@@ -141,6 +149,9 @@ fun AccountScreen(
                     tags = selectedTags,
                     onEditTags = {
                         viewModel.isTagDialogVisible = true
+                    },
+                    onEditTargets = {
+                        viewModel.isTargetDialogVisible = true
                     },
                     onSave = {
                         viewModel.save()
@@ -271,6 +282,28 @@ fun AccountScreen(
         )
     }
 
+    //Dialog to edit the targets:
+    if (viewModel.isTargetDialogVisible) {
+        //TODO: Move repo instantiation to MainActivity
+        val packagesRepository: PackagesRepository = LocalPackagesRepository(LocalContext.current.packageManager)
+        val targetViewModel: TargetViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
+        targetViewModel.init(
+            getAllPackagesUseCase = GetAllPackagesUseCase(packagesRepository),
+            getLocalizedPackageNameUseCase = GetLocalizedPackageNameUseCase(packagesRepository),
+            getPackageIconUseCase = GetPackageIconUseCase(packagesRepository),
+            targets = viewModel.targets
+        )
+        TargetSheet(
+            viewModel = targetViewModel,
+            onDismiss = {
+                viewModel.dismissTargetDialog()
+            },
+            onSave = { targets ->
+                viewModel.dismissTargetDialog(targets)
+            }
+        )
+    }
+
     //Dialog to create a detail:
     if (viewModel.isDetailDialogVisible) {
         val detailViewModel: DetailViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
@@ -315,6 +348,7 @@ fun AccountScreen(
  * @param tags              List of tags of the account.
  * @param onEditDescription Callback invoked to edit the description.
  * @param onEditTags        Callback invoked to edit the tags.
+ * @param onEditTargets     Callback invoked to edit the targets.
  * @param onSave            Callback invoked to save the changes.
  * @param modifier          Modifier.
  */
@@ -325,6 +359,7 @@ private fun GeneralSection(
     tags: List<TagUiDto>,
     onEditDescription: () -> Unit,
     onEditTags: () -> Unit,
+    onEditTargets: () -> Unit,
     onSave: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -338,6 +373,9 @@ private fun GeneralSection(
                 .size(dimensionResource(R.dimen.image_xl))
                 .clip(MaterialTheme.shapes.large)
                 .background(MaterialTheme.colorScheme.surfaceContainer)
+                .clickable {
+                    onEditTargets()
+                }
         ) {
             Text(
                 text = if (!name.isEmpty()) { name.first().toString() } else { "?" },
