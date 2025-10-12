@@ -1,14 +1,11 @@
 package de.christian2003.passwordvault.plugin.presentation.view.account.tag
 
-import android.util.Log
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.christian2003.passwordvault.domain.model.tag.Tag
 import de.christian2003.passwordvault.application.usecases.tag.CreateTagUseCase
 import de.christian2003.passwordvault.application.usecases.tag.DeleteTagUseCase
 import de.christian2003.passwordvault.application.usecases.tag.GetAllTagsUseCase

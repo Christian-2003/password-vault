@@ -66,9 +66,6 @@ import de.christian2003.passwordvault.plugin.presentation.view.account.detail.De
 import de.christian2003.passwordvault.plugin.presentation.view.account.detail.DetailViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.account.tag.TagSheet
 import de.christian2003.passwordvault.plugin.presentation.view.account.tag.TagViewModel
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toSet
 import kotlin.text.ifEmpty
 
 
