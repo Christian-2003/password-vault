@@ -49,6 +49,7 @@ import androidx.compose.ui.window.Dialog
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.domain.model.target.Target
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.Checkbox
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -230,21 +231,29 @@ private fun TargetsListRowPackage(
             contentDescription = "",
             modifier = Modifier.size(dimensionResource(R.dimen.image_m))
         )
-        Text(
-            text = onQueryLocalizedPackageName(target.name) ?: "",
-            color = MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.bodyLarge,
+        Column(
             modifier = Modifier
                 .weight(1f)
                 .padding(horizontal = dimensionResource(R.dimen.padding_horizontal))
-        )
+        ) {
+            Text(
+                text = onQueryLocalizedPackageName(target.name) ?: "",
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyLarge
+            )
+            Text(
+                text = target.url.toString(),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
         IconButton(
             onClick = {
                 onRemove(target)
             }
         ) {
             Icon(
-                painter = painterResource(R.drawable.ic_delete),
+                painter = painterResource(R.drawable.ic_cancel),
                 contentDescription = ""
             )
         }
@@ -325,8 +334,10 @@ private fun SelectPackageDialog(
                                         }
                                     }
                                     .padding(
-                                        horizontal = 24.dp,
-                                        vertical = dimensionResource(R.dimen.padding_vertical)
+                                        start = 24.dp,
+                                        top = dimensionResource(R.dimen.padding_vertical),
+                                        end = 12.dp, //24 - 12 = 12
+                                        bottom = dimensionResource(R.dimen.padding_vertical)
                                     )
                             ) {
                                 Image(
@@ -344,13 +355,17 @@ private fun SelectPackageDialog(
                                         .padding(start = dimensionResource(R.dimen.padding_horizontal))
                                         .weight(1f)
                                 )
-                                AnimatedVisibility(isSelected) {
-                                    Icon(
-                                        painter = painterResource(R.drawable.ic_add),
-                                        contentDescription = "",
-                                        modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
-                                    )
-                                }
+                                androidx.compose.material3.Checkbox(
+                                    checked = isSelected,
+                                    onCheckedChange = {
+                                        if (isSelected) {
+                                            mutableSelectedPackages.remove(packageName)
+                                        }
+                                        else {
+                                            mutableSelectedPackages.add(packageName)
+                                        }
+                                    }
+                                )
                             }
                         }
                     }

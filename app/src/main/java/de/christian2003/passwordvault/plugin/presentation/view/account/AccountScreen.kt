@@ -54,6 +54,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.application.repository.PackagesRepository
+import de.christian2003.passwordvault.application.usecases.packages.CreateAndroidTargetService
 import de.christian2003.passwordvault.application.usecases.packages.GetAllPackagesUseCase
 import de.christian2003.passwordvault.application.usecases.packages.GetLocalizedPackageNameUseCase
 import de.christian2003.passwordvault.application.usecases.packages.GetPackageIconUseCase
@@ -62,6 +63,7 @@ import de.christian2003.passwordvault.application.usecases.tag.DeleteTagUseCase
 import de.christian2003.passwordvault.application.usecases.tag.GetAllTagsUseCase
 import de.christian2003.passwordvault.application.usecases.tag.UpdateTagUseCase
 import de.christian2003.passwordvault.domain.model.detail.Detail
+import de.christian2003.passwordvault.plugin.infrastructure.packages.AndroidPackageFingerprintService
 import de.christian2003.passwordvault.plugin.infrastructure.packages.LocalPackagesRepository
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDeleteDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EditValueDialog
@@ -291,6 +293,7 @@ fun AccountScreen(
             getAllPackagesUseCase = GetAllPackagesUseCase(packagesRepository),
             getLocalizedPackageNameUseCase = GetLocalizedPackageNameUseCase(packagesRepository),
             getPackageIconUseCase = GetPackageIconUseCase(packagesRepository),
+            createAndroidTargetService = CreateAndroidTargetService(AndroidPackageFingerprintService(LocalContext.current.packageManager)),
             targets = viewModel.targets
         )
         TargetSheet(

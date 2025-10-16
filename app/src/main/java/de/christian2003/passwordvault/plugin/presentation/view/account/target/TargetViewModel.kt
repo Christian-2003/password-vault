@@ -1,13 +1,13 @@
 package de.christian2003.passwordvault.plugin.presentation.view.account.target
 
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import de.christian2003.passwordvault.application.usecases.packages.CreateAndroidTargetService
 import de.christian2003.passwordvault.application.usecases.packages.GetAllPackagesUseCase
 import de.christian2003.passwordvault.application.usecases.packages.GetLocalizedPackageNameUseCase
 import de.christian2003.passwordvault.application.usecases.packages.GetPackageIconUseCase
@@ -24,6 +24,8 @@ class TargetViewModel: ViewModel() {
 
     private lateinit var getPackageIconUseCase: GetPackageIconUseCase
 
+    private lateinit var createAndroidTargetService: CreateAndroidTargetService
+
     private var isInitialized: Boolean = false
 
     val targets: MutableList<Target> = mutableStateListOf()
@@ -37,7 +39,8 @@ class TargetViewModel: ViewModel() {
         targets: List<Target>,
         getAllPackagesUseCase: GetAllPackagesUseCase,
         getLocalizedPackageNameUseCase: GetLocalizedPackageNameUseCase,
-        getPackageIconUseCase: GetPackageIconUseCase
+        getPackageIconUseCase: GetPackageIconUseCase,
+        createAndroidTargetService: CreateAndroidTargetService
     ) {
         if (isInitialized) {
             return
@@ -46,6 +49,7 @@ class TargetViewModel: ViewModel() {
         this.getAllPackagesUseCase = getAllPackagesUseCase
         this.getLocalizedPackageNameUseCase = getLocalizedPackageNameUseCase
         this.getPackageIconUseCase = getPackageIconUseCase
+        this.createAndroidTargetService = createAndroidTargetService
         this.targets.addAll(targets)
         isInitialized = true
     }
@@ -82,11 +86,10 @@ class TargetViewModel: ViewModel() {
                 if (target != null) {
                     targets.remove(target)
                 }
-                val newTarget = Target(
-                    name = selectedPackage,
-                    url = Uri.fromParts("android", "//0@$selectedPackage", "")
-                )
-                targets.add(newTarget)
+                val newTarget: Target? = createAndroidTargetService.createAndroidTarget(selectedPackage)
+                if (newTarget != null) {
+                    targets.add(newTarget)
+                }
             }
         }
     }
