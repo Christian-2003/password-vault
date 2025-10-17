@@ -36,7 +36,9 @@ import kotlinx.coroutines.android.awaitFrame
  * Displays a dialog through which a single value can be edited.
  *
  * @param value                 Value to edit.
- * @param canValueBeBlank       Whether the edited value can be blank.
+ * @param onValidateValue       When the value changes, this callback is invoked to validate the value.
+ *                              This callback returns null if the value is valid and an error message
+ *                              if the value is invalid.
  * @param label                 Label for the text field.
  * @param title                 Title for the dialog.
  * @param onDismiss             Callback invoked to dismiss the dialog without saving the edited value.
@@ -47,7 +49,7 @@ import kotlinx.coroutines.android.awaitFrame
 @Composable
 fun EditValueDialog(
     value: String,
-    canValueBeBlank: Boolean,
+    onValidateValue: (String) -> String?,
     label: String,
     title: String,
     onDismiss: () -> Unit,
@@ -57,6 +59,15 @@ fun EditValueDialog(
 ) {
     val focusRequester: FocusRequester = remember { FocusRequester() }
     var mutableValue: String by rememberSaveable { mutableStateOf(value) }
+    var isInitialValueValid: Boolean by rememberSaveable { mutableStateOf(onValidateValue(value) == null) }
+    var validationCallbackInvoked: Boolean by rememberSaveable { mutableStateOf(false) }
+    var errorMessage: String? by rememberSaveable { mutableStateOf(null) }
+
+    val invokeOnSave: () -> Unit = {
+        if ((validationCallbackInvoked && errorMessage == null) || (!validationCallbackInvoked && isInitialValueValid)) {
+            onSave(mutableValue)
+        }
+    }
 
     LaunchedEffect(Unit) {
         awaitFrame()
@@ -82,8 +93,10 @@ fun EditValueDialog(
                 )
                 TextInput(
                     value = mutableValue,
-                    onValueChange = {
-                        mutableValue = it
+                    onValueChange = { newValue ->
+                        mutableValue = newValue
+                        errorMessage = onValidateValue(newValue)
+                        validationCallbackInvoked = true
                     },
                     label = label,
                     focusRequester = focusRequester,
@@ -91,10 +104,11 @@ fun EditValueDialog(
                         top = 16.dp,
                         bottom = 24.dp
                     ),
+                    errorMessage = errorMessage,
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                     keyboardActions = KeyboardActions(
                         onDone = {
-                            onSave(mutableValue)
+                            invokeOnSave()
                         }
                     )
                 )
@@ -110,9 +124,9 @@ fun EditValueDialog(
                         Text(secondaryButtonText)
                     }
                     TextButton(
-                        enabled = canValueBeBlank || mutableValue.isNotBlank(),
+                        enabled = (validationCallbackInvoked && errorMessage == null) || (!validationCallbackInvoked && isInitialValueValid),
                         onClick = {
-                            onSave(mutableValue)
+                            invokeOnSave()
                         },
                         modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
                     ) {

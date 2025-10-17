@@ -4,7 +4,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.Signature
 import android.content.pm.SigningInfo
-import de.christian2003.passwordvault.application.usecases.packages.PackageFingerprintService
+import de.christian2003.passwordvault.domain.model.target.PackageFingerprintService
 import java.io.ByteArrayInputStream
 import java.security.MessageDigest
 import java.security.cert.Certificate

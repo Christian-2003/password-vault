@@ -41,6 +41,8 @@
     <string name="target_emptyPlaceholder_title">No targets</string>
     <string name="target_emptyPlaceholder_subtitle">Select targets and they will show up here</string>
     <string name="target_packages_title">Select apps</string>
+    <string name="target_website_title">Select website</string>
+    <string name="target_website_label">Website</string>
 
     <string name="detail_titleCreate">Create detail</string>
     <string name="detail_titleEdit">Edit detail</string>
@@ -59,4 +61,8 @@
     <string name="button_ok">OK</string>
     <string name="button_createTag">Create tag</string>
     <string name="button_selectTargetPackage">Select apps</string>
+    <string name="button_selectTargetWebsite">Select website</string>
+
+    <string name="error_blankInput">The input cannot be blank</string>
+    <string name="error_invalidUrl">The input is no valid URL</string>
 </resources>

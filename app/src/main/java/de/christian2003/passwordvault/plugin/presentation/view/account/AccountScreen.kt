@@ -54,7 +54,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.application.repository.PackagesRepository
-import de.christian2003.passwordvault.application.usecases.packages.CreateAndroidTargetService
 import de.christian2003.passwordvault.application.usecases.packages.GetAllPackagesUseCase
 import de.christian2003.passwordvault.application.usecases.packages.GetLocalizedPackageNameUseCase
 import de.christian2003.passwordvault.application.usecases.packages.GetPackageIconUseCase
@@ -213,9 +212,17 @@ fun AccountScreen(
 
         //Dialog to edit the account name:
         if (viewModel.isNameDialogVisible) {
+            val errorBlankInput: String = stringResource(R.string.error_blankInput)
             EditValueDialog(
                 value = viewModel.name,
-                canValueBeBlank = false,
+                onValidateValue = { value ->
+                    if (value.isBlank()) {
+                        errorBlankInput
+                    }
+                    else {
+                        null
+                    }
+                },
                 label = stringResource(R.string.account_nameLabel),
                 title = stringResource(R.string.account_nameTitle),
                 onDismiss = {
@@ -232,7 +239,7 @@ fun AccountScreen(
         if (viewModel.isDescriptionDialogVisible) {
             EditValueDialog(
                 value = viewModel.description,
-                canValueBeBlank = true,
+                onValidateValue = { value -> null},
                 label = stringResource(R.string.account_descriptionLabel),
                 title = stringResource(R.string.account_descriptionTitle),
                 onDismiss = {
@@ -293,7 +300,7 @@ fun AccountScreen(
             getAllPackagesUseCase = GetAllPackagesUseCase(packagesRepository),
             getLocalizedPackageNameUseCase = GetLocalizedPackageNameUseCase(packagesRepository),
             getPackageIconUseCase = GetPackageIconUseCase(packagesRepository),
-            createAndroidTargetService = CreateAndroidTargetService(AndroidPackageFingerprintService(LocalContext.current.packageManager)),
+            packageFingerprintService = AndroidPackageFingerprintService(LocalContext.current.packageManager),
             targets = viewModel.targets
         )
         TargetSheet(

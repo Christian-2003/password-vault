@@ -1,5 +1,4 @@
-package de.christian2003.passwordvault.application.usecases.packages
-
+package de.christian2003.passwordvault.domain.model.target
 
 /**
  * Service through which to get access to a package's fingerprint.

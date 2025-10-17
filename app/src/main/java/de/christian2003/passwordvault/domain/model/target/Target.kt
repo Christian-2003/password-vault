@@ -1,8 +1,11 @@
 package de.christian2003.passwordvault.domain.model.target
 
 import android.net.Uri
+import android.util.Base64
+import android.webkit.URLUtil
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toLowerCase
+import androidx.core.net.toUri
 import kotlin.uuid.Uuid
 
 
@@ -47,6 +50,69 @@ data class Target(
      */
     fun isAndroidApp(): Boolean {
         return url.scheme?.toLowerCase(Locale.current) == "android"
+    }
+
+
+    companion object {
+
+        /**
+         * Helper function creates a target for an Android app. If the target cannot be created (for
+         * example because the Android app is not installed), null is returned.
+         *
+         * @param packageName               Package name of the Android app for which to create the
+         *                                  target.
+         * @param packageFingerprintService Service through which to get the fingerprint of an
+         *                                  installed Android package.
+         * @return                          Android app target or null.
+         */
+        fun createAndroidTarget(
+            packageName: String,
+            packageFingerprintService: PackageFingerprintService
+        ): Target? {
+            val fingerprint: ByteArray? = packageFingerprintService.getPackageFingerprint(packageName)
+            if (fingerprint == null) {
+                return null
+            }
+            val fingerprintBase64: String = Base64.encodeToString(fingerprint, Base64.DEFAULT)
+
+            val url: Uri = Uri.Builder()
+                .scheme("android")
+                .encodedAuthority("$fingerprintBase64@$packageName")
+                .path("/")
+                .build()
+
+            return Target(
+                name = packageName,
+                url = url
+            )
+        }
+
+
+        /**
+         * Helper function creates a target for a website. If the target cannot be created (for
+         * example because the URL is invalid), null is returned.
+         *
+         * @param url   URL of the website for which to create the target.
+         * @return      Website target or null.
+         */
+        fun createWebsiteTarget(url: String): Target? {
+            if (!URLUtil.isValidUrl(url)) {
+                return null
+            }
+
+            val parsedUrl: Uri = url.toUri()
+            val name: String? = parsedUrl.host
+
+            if (name == null) {
+                return null
+            }
+
+            return Target(
+                name = name,
+                url = parsedUrl
+            )
+        }
+
     }
 
 }

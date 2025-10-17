@@ -355,9 +355,17 @@ private fun EditTagDialog(
     onDismiss: () -> Unit,
     onSave: (String) -> Unit
 ) {
+    val errorBlankInput = stringResource(R.string.error_blankInput)
     EditValueDialog(
         value = tag?.name ?: "",
-        canValueBeBlank = false,
+        onValidateValue = { value ->
+            if (value.isBlank()) {
+                errorBlankInput
+            }
+            else {
+                null
+            }
+        },
         label = stringResource(R.string.tag_nameLabel),
         title = if (tag == null) { stringResource(R.string.tag_titleCreate) } else { stringResource(R.string.tag_titleEdit) },
         onDismiss = onDismiss,
