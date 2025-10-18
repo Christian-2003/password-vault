@@ -65,8 +65,7 @@ import de.christian2003.passwordvault.plugin.presentation.ui.composables.Navigat
 fun MainScreen(
     viewModel: MainViewModel,
     onEditAccount: (Uuid) -> Unit,
-    onCreateNewAccount: () -> Unit,
-    onNavigateToTest: () -> Unit
+    onCreateNewAccount: () -> Unit
 ) {
     val accountDescriptors: List<AccountDescriptor> by viewModel.accountDescriptors.collectAsState(emptyList())
     val appBarState: TopAppBarState = rememberTopAppBarState()
@@ -76,12 +75,7 @@ fun MainScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(
-                        text = stringResource(R.string.app_name),
-                        modifier = Modifier.clickable {
-                            onNavigateToTest()
-                        }
-                    )
+                    Text(stringResource(R.string.app_name))
                 },
                 scrollBehavior = scrollBehavior
             )

@@ -16,6 +16,12 @@
     <string name="account_descriptionLabel">Description</string>
     <string name="account_descriptionTitle">Edit description</string>
     <string name="account_descriptionPlaceholder">Enter description</string>
+    <string name="account_contextActions_editName">Edit name</string>
+    <string name="account_contextActions_editDescription">Edit description</string>
+    <string name="account_contextActions_selectAutofillTargets">Autofill targets</string>
+    <string name="account_contextActions_selectTags">Tags</string>
+    <string name="account_contextActions_createDetail">Create detail</string>
+    <string name="account_contextActions_reorderDetails">Reorder details</string>
     <string name="account_details_title">Details</string>
     <string name="account_details_edit">Edit detail</string>
     <string name="account_details_delete">Delete detail</string>

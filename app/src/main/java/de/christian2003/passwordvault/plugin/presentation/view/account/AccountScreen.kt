@@ -120,6 +120,18 @@ fun AccountScreen(
                     onEditName = {
                         viewModel.isNameDialogVisible = true
                     },
+                    onEditDescription = {
+                        viewModel.isDescriptionDialogVisible = true
+                    },
+                    onSelectTargets = {
+                        viewModel.isTargetDialogVisible = true
+                    },
+                    onSelectTags = {
+                        viewModel.isTagDialogVisible = true
+                    },
+                    onCreateDetail = {
+                        viewModel.isDetailDialogVisible = true
+                    },
                     onReorderDetails = {
                         viewModel.isInReorderableState = true
                     }
@@ -376,8 +388,13 @@ private fun DefaultAppBar(
     scrollBehavior: TopAppBarScrollBehavior,
     onNavigateUp: () -> Unit,
     onEditName: () -> Unit,
+    onEditDescription: () -> Unit,
+    onSelectTargets: () -> Unit,
+    onSelectTags: () -> Unit,
+    onCreateDetail: () -> Unit,
     onReorderDetails: () -> Unit
 ) {
+    var isDropdownVisible: Boolean by remember { mutableStateOf(false) }
     TopAppBar(
         title = {
             Text(
@@ -416,12 +433,114 @@ private fun DefaultAppBar(
         },
         actions = {
             IconButton(
-                onClick = onReorderDetails
+                onClick = {
+                    isDropdownVisible = !isDropdownVisible
+                }
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_reorder),
+                    painter = painterResource(R.drawable.ic_more),
                     contentDescription = ""
                 )
+                DropdownMenu(
+                    expanded = isDropdownVisible,
+                    onDismissRequest = {
+                        isDropdownVisible = false
+                    }
+                ) {
+                    DropdownMenuItem(
+                        text = {
+                            Text(stringResource(R.string.account_contextActions_editName))
+                        },
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_edit_name),
+                                contentDescription = ""
+                            )
+                        },
+                        onClick = {
+                            isDropdownVisible = false
+                            onEditName()
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = {
+                            Text(stringResource(R.string.account_contextActions_editDescription))
+                        },
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_edit_description),
+                                contentDescription = ""
+                            )
+                        },
+                        onClick = {
+                            isDropdownVisible = false
+                            onEditDescription()
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = {
+                            Text(stringResource(R.string.account_contextActions_selectAutofillTargets))
+                        },
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_website),
+                                contentDescription = ""
+                            )
+                        },
+                        onClick = {
+                            isDropdownVisible = false
+                            onSelectTargets()
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = {
+                            Text(stringResource(R.string.account_contextActions_selectTags))
+                        },
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_tag),
+                                contentDescription = ""
+                            )
+                        },
+                        onClick = {
+                            isDropdownVisible = false
+                            onSelectTags()
+                        }
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+                    DropdownMenuItem(
+                        text = {
+                            Text(stringResource(R.string.account_contextActions_createDetail))
+                        },
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_add),
+                                contentDescription = ""
+                            )
+                        },
+                        onClick = {
+                            isDropdownVisible = false
+                            onCreateDetail()
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = {
+                            Text(stringResource(R.string.account_contextActions_reorderDetails))
+                        },
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_reorder),
+                                contentDescription = ""
+                            )
+                        },
+                        onClick = {
+                            isDropdownVisible = false
+                            onReorderDetails()
+                        }
+                    )
+                }
             }
         },
         scrollBehavior = scrollBehavior
@@ -542,7 +661,8 @@ private fun GeneralSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    horizontal = dimensionResource(R.dimen.margin_horizontal)
+                    start = dimensionResource(R.dimen.margin_horizontal),
+                    end = dimensionResource(R.dimen.margin_horizontal) - 12.dp
                 )
         ) {
             Icon(

@@ -34,7 +34,6 @@ import de.christian2003.passwordvault.plugin.presentation.view.account.AccountSc
 import de.christian2003.passwordvault.plugin.presentation.view.account.AccountViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.main.MainScreen
 import de.christian2003.passwordvault.plugin.presentation.view.main.MainViewModel
-import de.christian2003.passwordvault.plugin.presentation.view.test.TestScreen
 import java.util.UUID
 import kotlin.uuid.Uuid
 import kotlin.uuid.toKotlinUuid
@@ -103,9 +102,6 @@ fun PasswordVault() {
                     },
                     onCreateNewAccount = {
                         navController.navigate("account/")
-                    },
-                    onNavigateToTest = {
-                        navController.navigate("test")
                     }
                 )
             }
@@ -133,15 +129,6 @@ fun PasswordVault() {
                 )
                 AccountScreen(
                     viewModel = viewModel,
-                    onNavigateUp = {
-                        navController.navigateUp()
-                    }
-                )
-            }
-
-
-            composable("test") {
-                TestScreen(
                     onNavigateUp = {
                         navController.navigateUp()
                     }
