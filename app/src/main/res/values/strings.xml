@@ -10,6 +10,11 @@
     <string name="main_deleteAccountText">Are you sure you want to delete \"%1$s\"? This cannot be undone.</string>
 
     <string name="account_titleReorder">Reorder</string>
+    <plurals name="account_titleMultiselect">
+        <item quantity="zero">%1$d details</item>
+        <item quantity="one">%1$d detail</item>
+        <item quantity="other">%1$d details</item>
+    </plurals>
     <string name="account_nameLabel">Name</string>
     <string name="account_nameTitle">Edit name</string>
     <string name="account_namePlaceholder">Enter name</string>

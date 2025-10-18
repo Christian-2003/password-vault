@@ -57,7 +57,11 @@ class AccountViewModel(): ViewModel() {
 
     val selectedTagIds: MutableStateFlow<Set<Uuid>> = MutableStateFlow(emptySet())
 
+    val selectedDetailIds: MutableList<Uuid> = mutableStateListOf()
+
     var isInReorderableState: Boolean by mutableStateOf(false)
+
+    var isInMultiselectState: Boolean by mutableStateOf(false)
 
     var isNameDialogVisible: Boolean by mutableStateOf(false)
 
@@ -221,6 +225,30 @@ class AccountViewModel(): ViewModel() {
             detailToEdit = null
             viewModelStoreId++
         }
+    }
+
+
+    fun deleteSelectedDetails() {
+        selectedDetailIds.forEach { id ->
+            val detail: Detail? = details.find { it.id == id }
+            if (detail != null) {
+                details.remove(detail)
+            }
+        }
+        isInMultiselectState = false
+        selectedDetailIds.clear()
+    }
+
+    fun selectAllDetails() {
+        details.forEach { detail ->
+            if (!selectedDetailIds.contains(detail.id)) {
+                selectedDetailIds.add(detail.id)
+            }
+        }
+    }
+
+    fun isDetailSelected(id: Uuid): Boolean {
+        return id in selectedDetailIds
     }
 
 

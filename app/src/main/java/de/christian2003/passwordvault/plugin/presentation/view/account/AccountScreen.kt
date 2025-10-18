@@ -2,6 +2,7 @@ package de.christian2003.passwordvault.plugin.presentation.view.account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -26,6 +28,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
@@ -49,9 +52,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -78,7 +83,9 @@ import de.christian2003.passwordvault.plugin.presentation.view.account.tag.TagSh
 import de.christian2003.passwordvault.plugin.presentation.view.account.tag.TagViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.account.target.TargetSheet
 import de.christian2003.passwordvault.plugin.presentation.view.account.target.TargetViewModel
+import sh.calvin.reorderable.ReorderableCollectionItemScope
 import sh.calvin.reorderable.ReorderableItem
+import sh.calvin.reorderable.ReorderableListItemScope
 import sh.calvin.reorderable.rememberReorderableLazyListState
 import kotlin.text.ifEmpty
 
@@ -92,7 +99,7 @@ fun AccountScreen(
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(appBarState)
     val lazyListState: LazyListState = rememberLazyListState()
     val reorderableLazyListState = rememberReorderableLazyListState(lazyListState) { from, to ->
-        val offset = 2 //Number of items in LazyColumn that are above the details list
+        val offset = 1 //Number of items in LazyColumn that are above the details list
         viewModel.details.apply {
             this[to.index - offset] = this[from.index - offset].also {
                 this[from.index - offset] = this[to.index - offset]
@@ -106,9 +113,23 @@ fun AccountScreen(
         topBar = {
             if (viewModel.isInReorderableState) {
                 ReorderAppBar(
-                    scrollBehavior = scrollBehavior,
                     onFinishReordering = {
                         viewModel.isInReorderableState = false
+                    }
+                )
+            }
+            else if (viewModel.isInMultiselectState) {
+                MultiselectAppBar(
+                    selectedDetailsCount = viewModel.selectedDetailIds.size,
+                    onSelectAll = {
+                        viewModel.selectAllDetails()
+                    },
+                    onDeleteSelected = {
+                        viewModel.deleteSelectedDetails()
+                    },
+                    onFinishMultiselect = {
+                        viewModel.isInMultiselectState = false
+                        viewModel.selectedDetailIds.clear()
                     }
                 )
             }
@@ -170,8 +191,6 @@ fun AccountScreen(
                     },
                     modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.margin_horizontal))
                 )
-            }
-            stickyHeader {
                 HorizontalDivider()
                 Headline(
                     title = stringResource(R.string.account_details_title),
@@ -200,18 +219,15 @@ fun AccountScreen(
                         state = reorderableLazyListState,
                         key = detail.id
                     ) { isDragging ->
-                        val detailListRowModifier: Modifier = if (viewModel.isInReorderableState) {
-                            if (isDragging) {
-                                Modifier.draggableHandle().shadow(16.dp)
-                            } else {
-                                Modifier.draggableHandle()
-                            }
+                        val detailListRowModifier: Modifier = if (isDragging) {
+                            Modifier.draggableHandle().shadow(16.dp)
                         } else {
                             Modifier
                         }
                         DetailListRow(
                             detail = detail,
                             isInReorderableState = viewModel.isInReorderableState,
+                            isInMultiselectState = viewModel.isInMultiselectState,
                             onEdit = {
                                 viewModel.detailToEdit = it
                             },
@@ -223,6 +239,24 @@ fun AccountScreen(
                             },
                             onReorderDetails = {
                                 viewModel.isInReorderableState = true
+                            },
+                            onMultiselect = { detail ->
+                                viewModel.isInMultiselectState = true
+                                viewModel.selectedDetailIds.add(detail.id)
+                            },
+                            onToggleSelection = { detail, selected ->
+                                if (selected) {
+                                    viewModel.selectedDetailIds.add(detail.id)
+                                }
+                                else {
+                                    viewModel.selectedDetailIds.remove(detail.id)
+                                    if (viewModel.selectedDetailIds.isEmpty()) {
+                                        viewModel.isInMultiselectState = false
+                                    }
+                                }
+                            },
+                            isDetailSelected = { detail ->
+                                viewModel.isDetailSelected(detail.id)
                             },
                             modifier = detailListRowModifier
                         )
@@ -550,14 +584,13 @@ private fun DefaultAppBar(
 
 @Composable
 private fun ReorderAppBar(
-    scrollBehavior: TopAppBarScrollBehavior,
     onFinishReordering: () -> Unit
 ) {
     TopAppBar(
         title = {
             Text(
                 text = stringResource(R.string.account_titleReorder),
-                color = MaterialTheme.colorScheme.secondary,
+                color = MaterialTheme.colorScheme.primary,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1
             )
@@ -573,7 +606,59 @@ private fun ReorderAppBar(
                 )
             }
         },
-        scrollBehavior = scrollBehavior
+        colors = TopAppBarDefaults.topAppBarColors().copy(containerColor = MaterialTheme.colorScheme.surfaceContainer)
+    )
+}
+
+
+@Composable
+private fun MultiselectAppBar(
+    selectedDetailsCount: Int,
+    onSelectAll: () -> Unit,
+    onDeleteSelected: () -> Unit,
+    onFinishMultiselect: () -> Unit
+) {
+    TopAppBar(
+        title = {
+            Text(
+                text = pluralStringResource(R.plurals.account_titleMultiselect, selectedDetailsCount, selectedDetailsCount),
+                color = MaterialTheme.colorScheme.primary,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+        },
+        navigationIcon = {
+            IconButton(
+                onClick = onFinishMultiselect
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_cancel),
+                    contentDescription = "",
+                    tint = MaterialTheme.colorScheme.secondary
+                )
+            }
+        },
+        actions = {
+            IconButton(
+                onClick = onSelectAll
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_selectall),
+                    contentDescription = "",
+                    tint = MaterialTheme.colorScheme.secondary
+                )
+            }
+            IconButton(
+                onClick = onDeleteSelected
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_delete),
+                    contentDescription = "",
+                    tint = MaterialTheme.colorScheme.secondary
+                )
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors().copy(containerColor = MaterialTheme.colorScheme.surfaceContainer)
     )
 }
 
@@ -728,37 +813,68 @@ private fun GeneralSection(
  *
  * @param detail                Detail to display.
  * @param isInReorderableState  Whether the screen is currently in reorder state.
+ * @param isInMultiselectState  Whether the screen is currently in multiselect state.
  * @param onEdit                Callback invoked to edit the detail.
  * @param onDelete              Callback invoked to delete the detail.
  * @param onCopyToClipboard     Callback invoked to copy the detail content to the clipboard.
  * @param onReorderDetails      Callback invoked to begin reordering the details.
+ * @param onMultiselect         Callback invoked to begin selecting details.
+ * @param isDetailSelected      Callback invoked to determine whether a detail is selected.
  * @param modifier              Modifier.
  */
 @Composable
-private fun DetailListRow(
+private fun ReorderableCollectionItemScope.DetailListRow(
     detail: Detail,
     isInReorderableState: Boolean,
+    isInMultiselectState: Boolean,
     onEdit: (Detail) -> Unit,
     onDelete: (Detail) -> Unit,
     onCopyToClipboard: (Detail) -> Unit,
     onReorderDetails: () -> Unit,
+    onMultiselect: (Detail) -> Unit,
+    onToggleSelection: (Detail, Boolean) -> Unit,
+    isDetailSelected: (Detail) -> Boolean,
     modifier: Modifier = Modifier
 ) {
     var isObfuscated: Boolean by remember { mutableStateOf(detail.metadata.isObfuscated) }
     var isDropdownVisible: Boolean by remember { mutableStateOf(false) }
+    val isSelected: Boolean = if (isInMultiselectState) {
+        isDetailSelected(detail)
+    } else {
+        false
+    }
+    val quarterVerticalPadding: Dp = dimensionResource(R.dimen.padding_vertical) / 4
 
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(!isInReorderableState) {
-                onEdit(detail)
-            }
-            .background(MaterialTheme.colorScheme.surface)
+            .combinedClickable(
+                onClick = {
+                    if (isInMultiselectState) {
+                        onToggleSelection(detail, !isSelected)
+                    } else {
+                        onEdit(detail)
+                    }
+                },
+                onLongClick = if (!isInMultiselectState) {
+                    { onMultiselect(detail) }
+                } else {
+                    null
+                }
+            )
+            .padding(
+                vertical = quarterVerticalPadding
+            )
+            .background(if (isSelected) {
+                MaterialTheme.colorScheme.secondaryContainer
+            } else {
+                MaterialTheme.colorScheme.surface
+            })
             .padding(
                 start = dimensionResource(R.dimen.margin_horizontal),
-                top = dimensionResource(R.dimen.padding_vertical),
+                top = quarterVerticalPadding * 3,
                 end = dimensionResource(R.dimen.margin_horizontal) - 12.dp,
-                bottom = dimensionResource(R.dimen.padding_vertical)
+                bottom = quarterVerticalPadding * 3
             )
     ) {
         Box(
@@ -792,12 +908,24 @@ private fun DetailListRow(
             )
         }
         if (isInReorderableState) {
-            Icon(
-                painter = painterResource(R.drawable.ic_draghandle),
-                contentDescription = "",
+            IconButton(
+                onClick = { },
                 modifier = Modifier
+                    .draggableHandle()
                     .align(Alignment.CenterVertically)
-                    .padding(end = 12.dp)
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_draghandle),
+                    contentDescription = "",
+                )
+            }
+        }
+        else if (isInMultiselectState) {
+            RadioButton(
+                selected = isSelected,
+                onClick = {
+                    onToggleSelection(detail, !isSelected)
+                }
             )
         }
         else {
