@@ -9,6 +9,7 @@
     <string name="main_accounts_delete">Delete account</string>
     <string name="main_deleteAccountText">Are you sure you want to delete \"%1$s\"? This cannot be undone.</string>
 
+    <string name="account_titleReorder">Reorder</string>
     <string name="account_nameLabel">Name</string>
     <string name="account_nameTitle">Edit name</string>
     <string name="account_namePlaceholder">Enter name</string>
@@ -19,6 +20,7 @@
     <string name="account_details_edit">Edit detail</string>
     <string name="account_details_delete">Delete detail</string>
     <string name="account_details_copyToClipboard">Copy to clipboard</string>
+    <string name="account_details_reorder">Reorder details</string>
     <string name="account_details_showContent">Show content</string>
     <string name="account_details_hideContent">Hide content</string>
     <string name="account_details_confirmDeleteText">Are you sure you want to delete \"%1$s\"? This cannot be undone.</string>

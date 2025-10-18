@@ -57,6 +57,8 @@ class AccountViewModel(): ViewModel() {
 
     val selectedTagIds: MutableStateFlow<Set<Uuid>> = MutableStateFlow(emptySet())
 
+    var isInReorderableState: Boolean by mutableStateOf(false)
+
     var isNameDialogVisible: Boolean by mutableStateOf(false)
 
     var isDescriptionDialogVisible: Boolean by mutableStateOf(false)

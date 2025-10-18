@@ -15,8 +15,10 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -41,6 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -75,6 +78,8 @@ import de.christian2003.passwordvault.plugin.presentation.view.account.tag.TagSh
 import de.christian2003.passwordvault.plugin.presentation.view.account.tag.TagViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.account.target.TargetSheet
 import de.christian2003.passwordvault.plugin.presentation.view.account.target.TargetViewModel
+import sh.calvin.reorderable.ReorderableItem
+import sh.calvin.reorderable.rememberReorderableLazyListState
 import kotlin.text.ifEmpty
 
 
@@ -85,53 +90,46 @@ fun AccountScreen(
 ) {
     val appBarState: TopAppBarState = rememberTopAppBarState()
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(appBarState)
+    val lazyListState: LazyListState = rememberLazyListState()
+    val reorderableLazyListState = rememberReorderableLazyListState(lazyListState) { from, to ->
+        val offset = 2 //Number of items in LazyColumn that are above the details list
+        viewModel.details.apply {
+            this[to.index - offset] = this[from.index - offset].also {
+                this[from.index - offset] = this[to.index - offset]
+            }
+        }
+    }
     val details: List<Detail> = viewModel.details
     val selectedTags: List<TagUiDto> by viewModel.selectedTags.collectAsState(emptyList())
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = viewModel.name.ifEmpty { stringResource(R.string.account_namePlaceholder) },
-                        color = if (!viewModel.name.isEmpty()) {
-                            MaterialTheme.colorScheme.onSurface
-                        } else {
-                            MaterialTheme.colorScheme.onSurface.copy(0.5f)
-                        },
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1,
-                        modifier = Modifier
-                            //Text has horizontal padding of 8 dp, so that the touch target size is larger.
-                            //However, this increases the space between the back-icon and the text by 8 dp.
-                            //To prevent this unusual space that irritates the user, we offset the text by -8 dp.
-                            .offset(x = (-8).dp)
-                            .clip(MaterialTheme.shapes.small)
-                            .clickable {
-                                viewModel.isNameDialogVisible = true
-                            }
-                            .padding(
-                                horizontal = 8.dp,
-                                vertical = 4.dp
-                            )
-                    )
-                },
-                navigationIcon = {
-                    IconButton(
-                        onClick = onNavigateUp
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_back),
-                            contentDescription = ""
-                        )
+            if (viewModel.isInReorderableState) {
+                ReorderAppBar(
+                    scrollBehavior = scrollBehavior,
+                    onFinishReordering = {
+                        viewModel.isInReorderableState = false
                     }
-                },
-                scrollBehavior = scrollBehavior
-            )
+                )
+            }
+            else {
+                DefaultAppBar(
+                    name = viewModel.name,
+                    scrollBehavior = scrollBehavior,
+                    onNavigateUp = onNavigateUp,
+                    onEditName = {
+                        viewModel.isNameDialogVisible = true
+                    },
+                    onReorderDetails = {
+                        viewModel.isInReorderableState = true
+                    }
+                )
+            }
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { innerPadding ->
         LazyColumn(
+            state = lazyListState,
             modifier = Modifier
                 .padding(
                     start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
@@ -182,19 +180,41 @@ fun AccountScreen(
                 }
             }
             else {
-                items(details) { detail ->
-                    DetailListRow(
-                        detail = detail,
-                        onEdit = {
-                            viewModel.detailToEdit = it
-                        },
-                        onDelete = {
-                            viewModel.detailToDelete = it
-                        },
-                        onCopyToClipboard = {
-                            viewModel.copyToClipboard(it)
+                items(
+                    items = details,
+                    key = { it.id }
+                ) { detail ->
+                    ReorderableItem(
+                        state = reorderableLazyListState,
+                        key = detail.id
+                    ) { isDragging ->
+                        val detailListRowModifier: Modifier = if (viewModel.isInReorderableState) {
+                            if (isDragging) {
+                                Modifier.draggableHandle().shadow(16.dp)
+                            } else {
+                                Modifier.draggableHandle()
+                            }
+                        } else {
+                            Modifier
                         }
-                    )
+                        DetailListRow(
+                            detail = detail,
+                            isInReorderableState = viewModel.isInReorderableState,
+                            onEdit = {
+                                viewModel.detailToEdit = it
+                            },
+                            onDelete = {
+                                viewModel.detailToDelete = it
+                            },
+                            onCopyToClipboard = {
+                                viewModel.copyToClipboard(it)
+                            },
+                            onReorderDetails = {
+                                viewModel.isInReorderableState = true
+                            },
+                            modifier = detailListRowModifier
+                        )
+                    }
                 }
                 item {
                     Box(
@@ -350,6 +370,95 @@ fun AccountScreen(
 }
 
 
+@Composable
+private fun DefaultAppBar(
+    name: String,
+    scrollBehavior: TopAppBarScrollBehavior,
+    onNavigateUp: () -> Unit,
+    onEditName: () -> Unit,
+    onReorderDetails: () -> Unit
+) {
+    TopAppBar(
+        title = {
+            Text(
+                text = name.ifEmpty { stringResource(R.string.account_namePlaceholder) },
+                color = if (!name.isEmpty()) {
+                    MaterialTheme.colorScheme.onSurface
+                } else {
+                    MaterialTheme.colorScheme.onSurface.copy(0.5f)
+                },
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+                modifier = Modifier
+                    //Text has horizontal padding of 8 dp, so that the touch target size is larger.
+                    //However, this increases the space between the back-icon and the text by 8 dp.
+                    //To prevent this unusual space that irritates the user, we offset the text by -8 dp.
+                    .offset(x = (-8).dp)
+                    .clip(MaterialTheme.shapes.small)
+                    .clickable {
+                        onEditName()
+                    }
+                    .padding(
+                        horizontal = 8.dp,
+                        vertical = 4.dp
+                    )
+            )
+        },
+        navigationIcon = {
+            IconButton(
+                onClick = onNavigateUp
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_back),
+                    contentDescription = ""
+                )
+            }
+        },
+        actions = {
+            IconButton(
+                onClick = onReorderDetails
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_reorder),
+                    contentDescription = ""
+                )
+            }
+        },
+        scrollBehavior = scrollBehavior
+    )
+}
+
+
+@Composable
+private fun ReorderAppBar(
+    scrollBehavior: TopAppBarScrollBehavior,
+    onFinishReordering: () -> Unit
+) {
+    TopAppBar(
+        title = {
+            Text(
+                text = stringResource(R.string.account_titleReorder),
+                color = MaterialTheme.colorScheme.secondary,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+        },
+        navigationIcon = {
+            IconButton(
+                onClick = onFinishReordering
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_cancel),
+                    contentDescription = "",
+                    tint = MaterialTheme.colorScheme.secondary
+                )
+            }
+        },
+        scrollBehavior = scrollBehavior
+    )
+}
+
+
 /**
  * Displays the general section at the top of the page.
  *
@@ -390,7 +499,7 @@ private fun GeneralSection(
             Text(
                 text = if (!name.isEmpty()) { name.first().toString() } else { "?" },
                 color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.titleLargeEmphasized,
+                style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 fontSize = 32.sp
             )
@@ -497,27 +606,34 @@ private fun GeneralSection(
 /**
  * Displays a single account detail in a list row.
  *
- * @param detail            Detail to display.
- * @param onEdit            Callback invoked to edit the detail.
- * @param onDelete          Callback invoked to delete the detail.
- * @param onCopyToClipboard Callback invoked to copy the detail content to the clipboard.
+ * @param detail                Detail to display.
+ * @param isInReorderableState  Whether the screen is currently in reorder state.
+ * @param onEdit                Callback invoked to edit the detail.
+ * @param onDelete              Callback invoked to delete the detail.
+ * @param onCopyToClipboard     Callback invoked to copy the detail content to the clipboard.
+ * @param onReorderDetails      Callback invoked to begin reordering the details.
+ * @param modifier              Modifier.
  */
 @Composable
 private fun DetailListRow(
     detail: Detail,
+    isInReorderableState: Boolean,
     onEdit: (Detail) -> Unit,
     onDelete: (Detail) -> Unit,
-    onCopyToClipboard: (Detail) -> Unit
+    onCopyToClipboard: (Detail) -> Unit,
+    onReorderDetails: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     var isObfuscated: Boolean by remember { mutableStateOf(detail.metadata.isObfuscated) }
     var isDropdownVisible: Boolean by remember { mutableStateOf(false) }
 
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .clickable {
+            .clickable(!isInReorderableState) {
                 onEdit(detail)
             }
+            .background(MaterialTheme.colorScheme.surface)
             .padding(
                 start = dimensionResource(R.dimen.margin_horizontal),
                 top = dimensionResource(R.dimen.padding_vertical),
@@ -555,108 +671,134 @@ private fun DetailListRow(
                 style = MaterialTheme.typography.bodyLarge
             )
         }
-        Row(
-            modifier = Modifier.align(Alignment.CenterVertically)
-        ) {
-            if (detail.metadata.isObfuscated) {
+        if (isInReorderableState) {
+            Icon(
+                painter = painterResource(R.drawable.ic_draghandle),
+                contentDescription = "",
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(end = 12.dp)
+            )
+        }
+        else {
+            Row(
+                modifier = Modifier.align(Alignment.CenterVertically)
+            ) {
+                if (detail.metadata.isObfuscated) {
+                    IconButton(
+                        onClick = {
+                            isObfuscated = !isObfuscated
+                        }
+                    ) {
+                        Icon(
+                            painter = if (isObfuscated) { painterResource(R.drawable.ic_visibility_on) } else { painterResource(R.drawable.ic_visibility_off) },
+                            contentDescription = ""
+                        )
+                    }
+                }
                 IconButton(
                     onClick = {
-                        isObfuscated = !isObfuscated
+                        isDropdownVisible = !isDropdownVisible
                     }
                 ) {
                     Icon(
-                        painter = if (isObfuscated) { painterResource(R.drawable.ic_visibility_on) } else { painterResource(R.drawable.ic_visibility_off) },
+                        painter = painterResource(R.drawable.ic_more),
                         contentDescription = ""
                     )
-                }
-            }
-            IconButton(
-                onClick = {
-                    isDropdownVisible = !isDropdownVisible
-                }
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_more),
-                    contentDescription = ""
-                )
-                DropdownMenu(
-                    expanded = isDropdownVisible,
-                    onDismissRequest = {
-                        isDropdownVisible = false
-                    }
-                ) {
-                    DropdownMenuItem(
-                        text = {
-                            Text(stringResource(R.string.account_details_edit))
-                        },
-                        leadingIcon = {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_edit),
-                                contentDescription = ""
-                            )
-                        },
-                        onClick = {
+                    DropdownMenu(
+                        expanded = isDropdownVisible,
+                        onDismissRequest = {
                             isDropdownVisible = false
-                            onEdit(detail)
                         }
-                    )
-                    DropdownMenuItem(
-                        text = {
-                            Text(stringResource(R.string.account_details_delete))
-                        },
-                        leadingIcon = {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_delete),
-                                contentDescription = ""
-                            )
-                        },
-                        onClick = {
-                            isDropdownVisible = false
-                            onDelete(detail)
-                        }
-                    )
-                    HorizontalDivider(
-                        modifier = Modifier.padding(vertical = 8.dp)
-                    )
-                    DropdownMenuItem(
-                        text = {
-                            Text(stringResource(R.string.account_details_copyToClipboard))
-                        },
-                        leadingIcon = {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_copy),
-                                contentDescription = ""
-                            )
-                        },
-                        onClick = {
-                            isDropdownVisible = false
-                            onCopyToClipboard(detail)
-                        }
-                    )
-                    if (detail.metadata.isObfuscated) {
+                    ) {
                         DropdownMenuItem(
                             text = {
-                                Text(if (isObfuscated) {
-                                    stringResource(R.string.account_details_showContent)
-                                } else {
-                                    stringResource(R.string.account_details_hideContent)
-                                })
+                                Text(stringResource(R.string.account_details_edit))
                             },
                             leadingIcon = {
                                 Icon(
-                                    painter = if (isObfuscated) {
-                                        painterResource(R.drawable.ic_visibility_on)
-                                    } else {
-                                        painterResource(R.drawable.ic_visibility_off)
-                                    },
+                                    painter = painterResource(R.drawable.ic_edit),
                                     contentDescription = ""
                                 )
                             },
                             onClick = {
                                 isDropdownVisible = false
-                                isObfuscated = !isObfuscated
+                                onEdit(detail)
                             }
                         )
+                        DropdownMenuItem(
+                            text = {
+                                Text(stringResource(R.string.account_details_delete))
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_delete),
+                                    contentDescription = ""
+                                )
+                            },
+                            onClick = {
+                                isDropdownVisible = false
+                                onDelete(detail)
+                            }
+                        )
+                        HorizontalDivider(
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+                        DropdownMenuItem(
+                            text = {
+                                Text(stringResource(R.string.account_details_copyToClipboard))
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_copy),
+                                    contentDescription = ""
+                                )
+                            },
+                            onClick = {
+                                isDropdownVisible = false
+                                onCopyToClipboard(detail)
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = {
+                                Text(stringResource(R.string.account_details_reorder))
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_reorder),
+                                    contentDescription = ""
+                                )
+                            },
+                            onClick = {
+                                isDropdownVisible = false
+                                onReorderDetails()
+                            }
+                        )
+                        if (detail.metadata.isObfuscated) {
+                            DropdownMenuItem(
+                                text = {
+                                    Text(if (isObfuscated) {
+                                        stringResource(R.string.account_details_showContent)
+                                    } else {
+                                        stringResource(R.string.account_details_hideContent)
+                                    })
+                                },
+                                leadingIcon = {
+                                    Icon(
+                                        painter = if (isObfuscated) {
+                                            painterResource(R.drawable.ic_visibility_on)
+                                        } else {
+                                            painterResource(R.drawable.ic_visibility_off)
+                                        },
+                                        contentDescription = ""
+                                    )
+                                },
+                                onClick = {
+                                    isDropdownVisible = false
+                                    isObfuscated = !isObfuscated
+                                }
+                            )
+                        }
                     }
                 }
             }

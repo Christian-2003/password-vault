@@ -86,11 +86,12 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.room)
-    implementation(libs.room.runtime)
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-cbor:1.9.0")
+    implementation(libs.androidx.room)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.kotlinx.serialization.cbor)
     implementation(platform(libs.androidx.compose.bom))
-    implementation("com.google.accompanist:accompanist-drawablepainter:0.37.3")
+    implementation(libs.accompanist.drawablepainter)
+    implementation(libs.reorderable)
 
     testImplementation(libs.junit)
 
@@ -102,7 +103,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    annotationProcessor(libs.room.compiler)
+    annotationProcessor(libs.androidx.room.compiler)
 
-    ksp(libs.room.compiler)
+    ksp(libs.androidx.room.compiler)
 }
