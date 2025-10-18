@@ -40,11 +40,11 @@ class CreateAccountUseCase(
         val account = Account(
             descriptor = AccountDescriptor(
                 name = name,
-                description = description
+                description = description,
+                targets = targets
             ),
             details = details,
-            tags = tags,
-            targets = targets
+            tags = tags
         )
 
         val allTags: List<Tag> = tagRepository.getAllTags().first()

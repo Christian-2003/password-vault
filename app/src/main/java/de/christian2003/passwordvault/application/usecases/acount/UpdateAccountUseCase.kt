@@ -43,11 +43,11 @@ class UpdateAccountUseCase(
         if (account != null) {
             account.descriptor = account.descriptor.copy(
                 name = name,
-                description = description
+                description = description,
+                targets = targets
             )
             account.details = details
             account.tags = tags
-            account.targets = targets
 
             val allTags: List<Tag> = tagRepository.getAllTags().first()
             tags.forEach { tag ->

@@ -3,17 +3,22 @@ package de.christian2003.passwordvault.plugin.infrastructure.db.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.time.LocalDateTime
 import kotlin.uuid.Uuid
 
+
 @Entity(
     tableName = "details",
+    indices = [
+        Index(value = ["id", "account"])
+    ],
     foreignKeys = [
         ForeignKey(
             entity = AccountEntity::class,
             parentColumns = ["id"],
-            childColumns = ["entry"],
+            childColumns = ["account"],
             onDelete = ForeignKey.CASCADE
         )
     ]
@@ -24,8 +29,8 @@ data class DetailEntity(
     @ColumnInfo(name = "id")
     val id: Uuid,
 
-    @ColumnInfo(name = "entry")
-    val entry: Uuid,
+    @ColumnInfo(name = "account")
+    val account: Uuid,
 
     @ColumnInfo(name = "payload")
     val payload: ByteArray,
@@ -53,7 +58,7 @@ data class DetailEntity(
         if (isObfuscated != other.isObfuscated) return false
         if (isVisible != other.isVisible) return false
         if (id != other.id) return false
-        if (entry != other.entry) return false
+        if (account != other.account) return false
         if (!payload.contentEquals(other.payload)) return false
         if (createdAt != other.createdAt) return false
         if (editedAt != other.editedAt) return false
@@ -65,7 +70,7 @@ data class DetailEntity(
         var hash = isObfuscated.hashCode()
         hash = 31 * hash + isVisible.hashCode()
         hash = 31 * hash + id.hashCode()
-        hash = 31 * hash + entry.hashCode()
+        hash = 31 * hash + account.hashCode()
         hash = 31 * hash + payload.contentHashCode()
         hash = 31 * hash + createdAt.hashCode()
         hash = 31 * hash + editedAt.hashCode()

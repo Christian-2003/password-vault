@@ -16,14 +16,14 @@ import kotlin.uuid.Uuid
 @Dao
 interface AccountDao {
 
-    @Query("SELECT * FROM entries")
+    @Query("SELECT * FROM accounts")
     @Transaction
     fun selectAllAccounts(): Flow<List<AccountWithTags>>
 
-    @Query("SELECT * FROM entries")
+    @Query("SELECT * FROM accounts")
     fun selectAllAccountsWithoutTags(): Flow<List<AccountEntity>>
 
-    @Query("SELECT * FROM entries WHERE id = :id")
+    @Query("SELECT * FROM accounts WHERE id = :id")
     @Transaction
     fun selectAccountById(id: Uuid): AccountWithTags?
 
@@ -40,7 +40,7 @@ interface AccountDao {
     @Insert
     suspend fun insertAccountTagCrossRef(crossRef: AccountTagCrossRef)
 
-    @Query("DELETE FROM entries_tags_cross_ref WHERE entry = :accountId")
+    @Query("DELETE FROM accounts_tags_cross_ref WHERE account = :accountId")
     suspend fun deleteAllAccountTagCrossRefs(accountId: Uuid)
 
 

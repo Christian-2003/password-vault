@@ -1,5 +1,6 @@
 package de.christian2003.passwordvault.domain.model.account
 
+import de.christian2003.passwordvault.domain.model.target.Target
 import kotlin.uuid.Uuid
 
 
@@ -10,11 +11,13 @@ import kotlin.uuid.Uuid
  * @param name          Name of the account.
  * @param description   Optional description for the account.
  * @param id            UUID of the account.
+ * @param targets       Targets of the account.
  */
 data class AccountDescriptor(
     val name: String,
     val description: String = "",
-    val id: Uuid = Uuid.random()
+    val id: Uuid = Uuid.random(),
+    val targets: List<Target> = listOf(),
 ) {
 
     /**

@@ -34,6 +34,7 @@ class PasswordVaultApplication(): Application() {
                 accountDao = database.accountDao,
                 detailDao = database.detailDao,
                 tagDao = database.tagDao,
+                targetDao = database.targetDao,
                 cipherService = AesCipherService()
             )
         }

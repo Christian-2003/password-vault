@@ -138,7 +138,7 @@ class AccountViewModel(): ViewModel() {
                     description = description,
                     details = details,
                     tags = tags,
-                    targets = listOf()
+                    targets = targets
                 )
             }
             else {
@@ -149,7 +149,7 @@ class AccountViewModel(): ViewModel() {
                     description = description,
                     details = details,
                     tags = tags,
-                    targets = listOf()
+                    targets = targets
                 )
             }
         }

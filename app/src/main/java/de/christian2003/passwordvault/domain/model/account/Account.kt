@@ -13,14 +13,12 @@ import java.time.LocalDateTime
  *                      description and ID.
  * @param details       List of details associated with the account.
  * @param tags          List of tags associated with the account.
- * @param targets       List of targets for the account.
  * @param metadata      Metadata for the account.
  */
 class Account (
     descriptor: AccountDescriptor,
     details: List<Detail> = listOf(),
     tags: List<Tag> = listOf(),
-    targets: List<Target> = listOf(),
     metadata: AccountMetadata = AccountMetadata()
 ) {
 
@@ -66,13 +64,13 @@ class Account (
     /**
      * List of targets for the account.
      */
-    var targets: List<Target> = targets
+    var targets: List<Target>
         get() {
-            return field.toList()
+            return descriptor.targets.toList()
         }
         set(value) {
-            if (field != value) {
-                field = value.toList()
+            if (descriptor.targets != value) {
+                descriptor = descriptor.copy(targets = value)
                 metadata = metadata.copy(editedAt = LocalDateTime.now())
             }
         }
@@ -91,7 +89,6 @@ class Account (
         this.descriptor = descriptor
         this.details = details
         this.tags = tags
-        this.targets = targets
         this.metadata = metadata
     }
 

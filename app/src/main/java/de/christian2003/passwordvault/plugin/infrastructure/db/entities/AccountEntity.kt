@@ -2,12 +2,18 @@ package de.christian2003.passwordvault.plugin.infrastructure.db.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.time.LocalDateTime
 import kotlin.uuid.Uuid
 
 
-@Entity(tableName = "entries")
+@Entity(
+    tableName = "accounts",
+    indices = [
+        Index(value = ["id"])
+    ]
+)
 data class AccountEntity (
 
     @PrimaryKey

@@ -33,7 +33,7 @@ class DetailDbMapper(
      * @return          Domain model 'Detail'.
      */
     fun toDomain(entity: DetailEntity): Detail {
-        val decryptedPayload: ByteArray = cipherService.decrypt(entity.payload, entity.entry.toByteArray())
+        val decryptedPayload: ByteArray = cipherService.decrypt(entity.payload, entity.account.toByteArray())
         val payload: DetailPayload = cbor.decodeFromByteArray(DetailPayload.serializer(), decryptedPayload)
 
         return Detail(
@@ -72,7 +72,7 @@ class DetailDbMapper(
 
         return DetailEntity(
             id = domain.id,
-            entry = entry,
+            account = entry,
             payload = encryptedPayload,
             createdAt = domain.metadata.createdAt,
             editedAt = domain.metadata.editedAt,

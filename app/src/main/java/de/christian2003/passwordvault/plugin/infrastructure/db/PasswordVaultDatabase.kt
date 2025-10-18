@@ -6,14 +6,17 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import de.christian2003.passwordvault.plugin.infrastructure.db.converter.LocalDateTimeConverter
+import de.christian2003.passwordvault.plugin.infrastructure.db.converter.UriConverter
 import de.christian2003.passwordvault.plugin.infrastructure.db.converter.UuidConverter
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.DetailDao
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.AccountDao
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.TagDao
+import de.christian2003.passwordvault.plugin.infrastructure.db.dao.TargetDao
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.DetailEntity
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.AccountEntity
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.AccountTagCrossRef
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.TagEntity
+import de.christian2003.passwordvault.plugin.infrastructure.db.entities.TargetEntity
 
 
 @Database(
@@ -21,6 +24,7 @@ import de.christian2003.passwordvault.plugin.infrastructure.db.entities.TagEntit
         AccountEntity::class,
         DetailEntity::class,
         TagEntity::class,
+        TargetEntity::class,
         AccountTagCrossRef::class
     ],
     version = 1,
@@ -28,7 +32,8 @@ import de.christian2003.passwordvault.plugin.infrastructure.db.entities.TagEntit
 )
 @TypeConverters(
     UuidConverter::class,
-    LocalDateTimeConverter::class
+    LocalDateTimeConverter::class,
+    UriConverter::class
 )
 abstract class PasswordVaultDatabase(): RoomDatabase() {
 
@@ -46,6 +51,11 @@ abstract class PasswordVaultDatabase(): RoomDatabase() {
      * DAO through which to access the tags.
      */
     abstract val tagDao: TagDao
+
+    /**
+     * DAO through which to access the targets.
+     */
+    abstract val targetDao: TargetDao
 
 
     companion object {

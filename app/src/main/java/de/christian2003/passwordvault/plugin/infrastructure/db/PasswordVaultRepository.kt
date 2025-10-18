@@ -7,16 +7,20 @@ import de.christian2003.passwordvault.application.repository.AccountRepository
 import de.christian2003.passwordvault.application.repository.TagRepository
 import de.christian2003.passwordvault.domain.model.account.AccountDescriptor
 import de.christian2003.passwordvault.domain.model.detail.Detail
+import de.christian2003.passwordvault.domain.model.target.Target
 import de.christian2003.passwordvault.domain.security.CipherService
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.DetailDao
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.AccountDao
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.TagDao
+import de.christian2003.passwordvault.plugin.infrastructure.db.dao.TargetDao
 import de.christian2003.passwordvault.plugin.infrastructure.db.dto.AccountWithTags
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.DetailEntity
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.TagEntity
+import de.christian2003.passwordvault.plugin.infrastructure.db.entities.TargetEntity
 import de.christian2003.passwordvault.plugin.infrastructure.db.mapper.DetailDbMapper
 import de.christian2003.passwordvault.plugin.infrastructure.db.mapper.AccountDbMapper
 import de.christian2003.passwordvault.plugin.infrastructure.db.mapper.TagDbMapper
+import de.christian2003.passwordvault.plugin.infrastructure.db.mapper.TargetDbMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -26,33 +30,23 @@ import kotlin.uuid.Uuid
 
 /**
  * Repository for the app.
+ *
+ * @param accountDao        DAO through which to access the entries in the database.
+ * @param detailDao         DAO through which to access the details in the database.
+ * @param tagDao            DAO through which to access the tags in the database.
+ * @param targetDao         DAO through which to access the targets in the database.
+ * @param cipherService     Cipher service used for encryption and decryption.
  */
 class PasswordVaultRepository(
-
-    /**
-     * DAO through which to access the entries in the database.
-     */
     private val accountDao: AccountDao,
-
-    /**
-     * DAO through which to access the details in the database.
-     */
     private val detailDao: DetailDao,
-
-    /**
-     * DAO through which to access the tags in the database.
-     */
     private val tagDao: TagDao,
-
-    /**
-     * Cipher service used for encryption and decryption.
-     */
+    private val targetDao: TargetDao,
     private val cipherService: CipherService
-
 ): AccountRepository, TagRepository {
 
     /**
-     * Mapper maps the domain model 'Entry' to its entity.
+     * Mapper maps the domain model 'Account' to its entity.
      */
     private val accountMapper: AccountDbMapper = AccountDbMapper(
         cbor = Cbor { ignoreUnknownKeys = true },
@@ -71,6 +65,12 @@ class PasswordVaultRepository(
      * Mapper maps the domain model 'Tag' to it's entity.
      */
     private val tagMapper: TagDbMapper = TagDbMapper()
+
+    /**
+     * Mapper maps the domain model 'Target' to it's entity.
+     */
+    private val targetMapper: TargetDbMapper = TargetDbMapper()
+
 
     /**
      * Flow contains a list of all account descriptors. This can be null until
@@ -94,7 +94,10 @@ class PasswordVaultRepository(
         if (accountDescriptors == null) {
             accountDescriptors = accountDao.selectAllAccountsWithoutTags().map { list ->
                 list.map { account ->
-                    val descriptor: AccountDescriptor = accountMapper.toDescriptor(account)
+                    val targets: List<Target> = targetDao.selectAllForAccount(account.id).first().map { targetEntity ->
+                        targetMapper.toDomain(targetEntity)
+                    }
+                    val descriptor: AccountDescriptor = accountMapper.toDescriptor(account, targets)
                     return@map descriptor
                 }
             }
@@ -112,7 +115,11 @@ class PasswordVaultRepository(
     override suspend fun getAccountById(id: Uuid): Account? {
         val accountEntity: AccountWithTags? = accountDao.selectAccountById(id)
         if (accountEntity != null) {
-            val account: Account = accountMapper.toDomain(accountEntity.account)
+            val targets: List<Target> = targetDao.selectAllForAccount(id).first().map { targetEntity ->
+                targetMapper.toDomain(targetEntity)
+            }
+
+            val account: Account = accountMapper.toDomain(accountEntity.account, targets)
 
             val tags: List<Tag> = accountEntity.tags.map { tag ->
                 tagMapper.toDomain(tag)
@@ -142,6 +149,10 @@ class PasswordVaultRepository(
             tagMapper.toEntity(tag)
         }
 
+        val targetEntities: List<TargetEntity> = account.descriptor.targets.map { target ->
+            targetMapper.toEntity(target, account.descriptor.id)
+        }
+
         val detailEntities: List<DetailEntity> = account.details.map { detail ->
             detailMapper.toEntity(detail, account.descriptor.id)
         }
@@ -152,6 +163,7 @@ class PasswordVaultRepository(
         )
 
         accountDao.insertAccountWithTags(entryWithTags)
+        targetDao.saveAllTargetsForAccount(targetEntities, account.descriptor.id)
         detailDao.saveAllDetailsForAccount(detailEntities, account.descriptor.id)
     }
 
@@ -166,6 +178,10 @@ class PasswordVaultRepository(
             tagMapper.toEntity(tag)
         }
 
+        val targetEntities: List<TargetEntity> = account.descriptor.targets.map { target ->
+            targetMapper.toEntity(target, account.descriptor.id)
+        }
+
         val detailEntities: List<DetailEntity> = account.details.map { detail ->
             detailMapper.toEntity(detail, account.descriptor.id)
         }
@@ -176,6 +192,7 @@ class PasswordVaultRepository(
         )
 
         accountDao.updateAccountWithTags(accountWithTags)
+        targetDao.saveAllTargetsForAccount(targetEntities, account.descriptor.id)
         detailDao.saveAllDetailsForAccount(detailEntities, account.descriptor.id)
     }
 

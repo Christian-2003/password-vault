@@ -7,13 +7,13 @@ import kotlin.uuid.Uuid
 
 
 @Entity(
-    tableName = "entries_tags_cross_ref",
-    primaryKeys = ["entry", "tag"],
+    tableName = "accounts_tags_cross_ref",
+    primaryKeys = ["account", "tag"],
     foreignKeys = [
         ForeignKey(
             entity = AccountEntity::class,
             parentColumns = ["id"],
-            childColumns = ["entry"],
+            childColumns = ["account"],
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
@@ -26,8 +26,8 @@ import kotlin.uuid.Uuid
 )
 data class AccountTagCrossRef(
 
-    @ColumnInfo("entry")
-    val entry: Uuid,
+    @ColumnInfo("account")
+    val account: Uuid,
 
     @ColumnInfo("tag")
     val tag: Uuid

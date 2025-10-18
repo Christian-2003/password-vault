@@ -18,7 +18,7 @@ data class AccountWithTags(
         entityColumn = "id",
         associateBy = Junction(
             value = AccountTagCrossRef::class,
-            parentColumn = "entry",
+            parentColumn = "account",
             entityColumn = "tag"
         )
     )
