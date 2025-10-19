@@ -78,4 +78,8 @@
 
     <string name="error_blankInput">The input cannot be blank</string>
     <string name="error_invalidUrl">The input is no valid URL</string>
+
+    <string name="tooltip_selectAllDetails">Select all details</string>
+    <string name="tooltip_deleteSelectedDetails">Delete selected details</string>
+    <string name="tooltip_closeMultiselect">Close multiselect</string>
 </resources>

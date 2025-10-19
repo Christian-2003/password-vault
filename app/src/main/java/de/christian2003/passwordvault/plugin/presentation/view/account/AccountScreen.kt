@@ -16,26 +16,28 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipAnchorPosition
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.TopAppBarState
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -73,6 +75,10 @@ import de.christian2003.passwordvault.domain.model.detail.Detail
 import de.christian2003.passwordvault.plugin.infrastructure.packages.AndroidPackageFingerprintService
 import de.christian2003.passwordvault.plugin.infrastructure.packages.LocalPackagesRepository
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDeleteDialog
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.ContextAction
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.ContextActionBase
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.ContextActionDivider
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.ContextActions
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EditValueDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.Headline
@@ -85,7 +91,6 @@ import de.christian2003.passwordvault.plugin.presentation.view.account.target.Ta
 import de.christian2003.passwordvault.plugin.presentation.view.account.target.TargetViewModel
 import sh.calvin.reorderable.ReorderableCollectionItemScope
 import sh.calvin.reorderable.ReorderableItem
-import sh.calvin.reorderable.ReorderableListItemScope
 import sh.calvin.reorderable.rememberReorderableLazyListState
 import kotlin.text.ifEmpty
 
@@ -106,7 +111,6 @@ fun AccountScreen(
             }
         }
     }
-    val details: List<Detail> = viewModel.details
     val selectedTags: List<TagUiDto> by viewModel.selectedTags.collectAsState(emptyList())
 
     Scaffold(
@@ -212,7 +216,7 @@ fun AccountScreen(
             }
             else {
                 items(
-                    items = details,
+                    items = viewModel.details,
                     key = { it.id }
                 ) { detail ->
                     ReorderableItem(
@@ -428,7 +432,6 @@ private fun DefaultAppBar(
     onCreateDetail: () -> Unit,
     onReorderDetails: () -> Unit
 ) {
-    var isDropdownVisible: Boolean by remember { mutableStateOf(false) }
     TopAppBar(
         title = {
             Text(
@@ -466,116 +469,47 @@ private fun DefaultAppBar(
             }
         },
         actions = {
-            IconButton(
-                onClick = {
-                    isDropdownVisible = !isDropdownVisible
-                }
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_more),
-                    contentDescription = ""
-                )
-                DropdownMenu(
-                    expanded = isDropdownVisible,
-                    onDismissRequest = {
-                        isDropdownVisible = false
+            ContextActions(
+                actions = listOf(
+                    ContextAction(
+                        text = stringResource(R.string.account_contextActions_editName),
+                        icon = painterResource(R.drawable.ic_edit_name)
+                    ) {
+                        onEditName()
+                    },
+                    ContextAction(
+                        text = stringResource(R.string.account_contextActions_editDescription),
+                        icon = painterResource(R.drawable.ic_edit_description)
+                    ) {
+                        onEditDescription()
+                    },
+                    ContextAction(
+                        text = stringResource(R.string.account_contextActions_selectAutofillTargets),
+                        icon = painterResource(R.drawable.ic_website)
+                    ) {
+                        onSelectTargets()
+                    },
+                    ContextAction(
+                        text = stringResource(R.string.account_contextActions_selectTags),
+                        icon = painterResource(R.drawable.ic_tag)
+                    ) {
+                        onSelectTags()
+                    },
+                    ContextActionDivider(),
+                    ContextAction(
+                        text = stringResource(R.string.account_contextActions_createDetail),
+                        icon = painterResource(R.drawable.ic_add)
+                    ) {
+                        onCreateDetail()
+                    },
+                    ContextAction(
+                        text = stringResource(R.string.account_contextActions_reorderDetails),
+                        icon = painterResource(R.drawable.ic_reorder)
+                    ) {
+                        onReorderDetails()
                     }
-                ) {
-                    DropdownMenuItem(
-                        text = {
-                            Text(stringResource(R.string.account_contextActions_editName))
-                        },
-                        leadingIcon = {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_edit_name),
-                                contentDescription = ""
-                            )
-                        },
-                        onClick = {
-                            isDropdownVisible = false
-                            onEditName()
-                        }
-                    )
-                    DropdownMenuItem(
-                        text = {
-                            Text(stringResource(R.string.account_contextActions_editDescription))
-                        },
-                        leadingIcon = {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_edit_description),
-                                contentDescription = ""
-                            )
-                        },
-                        onClick = {
-                            isDropdownVisible = false
-                            onEditDescription()
-                        }
-                    )
-                    DropdownMenuItem(
-                        text = {
-                            Text(stringResource(R.string.account_contextActions_selectAutofillTargets))
-                        },
-                        leadingIcon = {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_website),
-                                contentDescription = ""
-                            )
-                        },
-                        onClick = {
-                            isDropdownVisible = false
-                            onSelectTargets()
-                        }
-                    )
-                    DropdownMenuItem(
-                        text = {
-                            Text(stringResource(R.string.account_contextActions_selectTags))
-                        },
-                        leadingIcon = {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_tag),
-                                contentDescription = ""
-                            )
-                        },
-                        onClick = {
-                            isDropdownVisible = false
-                            onSelectTags()
-                        }
-                    )
-                    HorizontalDivider(
-                        modifier = Modifier.padding(vertical = 8.dp)
-                    )
-                    DropdownMenuItem(
-                        text = {
-                            Text(stringResource(R.string.account_contextActions_createDetail))
-                        },
-                        leadingIcon = {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_add),
-                                contentDescription = ""
-                            )
-                        },
-                        onClick = {
-                            isDropdownVisible = false
-                            onCreateDetail()
-                        }
-                    )
-                    DropdownMenuItem(
-                        text = {
-                            Text(stringResource(R.string.account_contextActions_reorderDetails))
-                        },
-                        leadingIcon = {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_reorder),
-                                contentDescription = ""
-                            )
-                        },
-                        onClick = {
-                            isDropdownVisible = false
-                            onReorderDetails()
-                        }
-                    )
-                }
-            }
+                )
+            )
         },
         scrollBehavior = scrollBehavior
     )
@@ -628,34 +562,70 @@ private fun MultiselectAppBar(
             )
         },
         navigationIcon = {
-            IconButton(
-                onClick = onFinishMultiselect
+            TooltipBox(
+                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                    positioning = TooltipAnchorPosition.End
+                ),
+                tooltip = {
+                    RichTooltip {
+                        Text(stringResource(R.string.tooltip_closeMultiselect))
+                    }
+                },
+                state = rememberTooltipState()
             ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_cancel),
-                    contentDescription = "",
-                    tint = MaterialTheme.colorScheme.secondary
-                )
+                IconButton(
+                    onClick = onFinishMultiselect
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_cancel),
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.secondary
+                    )
+                }
             }
         },
         actions = {
-            IconButton(
-                onClick = onSelectAll
+            TooltipBox(
+                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                    positioning = TooltipAnchorPosition.Start
+                ),
+                tooltip = {
+                    RichTooltip {
+                        Text(stringResource(R.string.tooltip_selectAllDetails))
+                    }
+                },
+                state = rememberTooltipState()
             ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_selectall),
-                    contentDescription = "",
-                    tint = MaterialTheme.colorScheme.secondary
-                )
+                IconButton(
+                    onClick = onSelectAll
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_selectall),
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.secondary
+                    )
+                }
             }
-            IconButton(
-                onClick = onDeleteSelected
+            TooltipBox(
+                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                    positioning = TooltipAnchorPosition.Start
+                ),
+                tooltip = {
+                    RichTooltip {
+                        Text(stringResource(R.string.tooltip_deleteSelectedDetails))
+                    }
+                },
+                state = rememberTooltipState()
             ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_delete),
-                    contentDescription = "",
-                    tint = MaterialTheme.colorScheme.secondary
-                )
+                IconButton(
+                    onClick = onDeleteSelected
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_delete),
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.secondary
+                    )
+                }
             }
         },
         colors = TopAppBarDefaults.topAppBarColors().copy(containerColor = MaterialTheme.colorScheme.surfaceContainer)
@@ -808,6 +778,7 @@ private fun GeneralSection(
     }
 }
 
+
 /**
  * Displays a single account detail in a list row.
  *
@@ -837,7 +808,6 @@ private fun ReorderableCollectionItemScope.DetailListRow(
     modifier: Modifier = Modifier
 ) {
     var isObfuscated: Boolean by remember { mutableStateOf(detail.metadata.isObfuscated) }
-    var isDropdownVisible: Boolean by remember { mutableStateOf(false) }
     val isSelected: Boolean = if (isInMultiselectState) {
         isDetailSelected(detail)
     } else {
@@ -856,7 +826,7 @@ private fun ReorderableCollectionItemScope.DetailListRow(
                         onEdit(detail)
                     }
                 },
-                onLongClick = if (!isInMultiselectState) {
+                onLongClick = if (!isInMultiselectState && !isInReorderableState) {
                     { onMultiselect(detail) }
                 } else {
                     null
@@ -944,111 +914,43 @@ private fun ReorderableCollectionItemScope.DetailListRow(
                         )
                     }
                 }
-                IconButton(
-                    onClick = {
-                        isDropdownVisible = !isDropdownVisible
-                    }
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_more),
-                        contentDescription = ""
-                    )
-                    DropdownMenu(
-                        expanded = isDropdownVisible,
-                        onDismissRequest = {
-                            isDropdownVisible = false
-                        }
+
+                val contextActions: MutableList<ContextActionBase> = mutableListOf(
+                    ContextAction(
+                        text = stringResource(R.string.account_details_edit),
+                        icon = painterResource(R.drawable.ic_edit)
                     ) {
-                        DropdownMenuItem(
-                            text = {
-                                Text(stringResource(R.string.account_details_edit))
-                            },
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_edit),
-                                    contentDescription = ""
-                                )
-                            },
-                            onClick = {
-                                isDropdownVisible = false
-                                onEdit(detail)
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = {
-                                Text(stringResource(R.string.account_details_delete))
-                            },
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_delete),
-                                    contentDescription = ""
-                                )
-                            },
-                            onClick = {
-                                isDropdownVisible = false
-                                onDelete(detail)
-                            }
-                        )
-                        HorizontalDivider(
-                            modifier = Modifier.padding(vertical = 8.dp)
-                        )
-                        DropdownMenuItem(
-                            text = {
-                                Text(stringResource(R.string.account_details_copyToClipboard))
-                            },
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_copy),
-                                    contentDescription = ""
-                                )
-                            },
-                            onClick = {
-                                isDropdownVisible = false
-                                onCopyToClipboard(detail)
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = {
-                                Text(stringResource(R.string.account_details_reorder))
-                            },
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_reorder),
-                                    contentDescription = ""
-                                )
-                            },
-                            onClick = {
-                                isDropdownVisible = false
-                                onReorderDetails()
-                            }
-                        )
-                        if (detail.metadata.isObfuscated) {
-                            DropdownMenuItem(
-                                text = {
-                                    Text(if (isObfuscated) {
-                                        stringResource(R.string.account_details_showContent)
-                                    } else {
-                                        stringResource(R.string.account_details_hideContent)
-                                    })
-                                },
-                                leadingIcon = {
-                                    Icon(
-                                        painter = if (isObfuscated) {
-                                            painterResource(R.drawable.ic_visibility_on)
-                                        } else {
-                                            painterResource(R.drawable.ic_visibility_off)
-                                        },
-                                        contentDescription = ""
-                                    )
-                                },
-                                onClick = {
-                                    isDropdownVisible = false
-                                    isObfuscated = !isObfuscated
-                                }
-                            )
-                        }
+                        onEdit(detail)
+                    },
+                    ContextAction(
+                        text = stringResource(R.string.account_details_delete),
+                        icon = painterResource(R.drawable.ic_delete)
+                    ) {
+                        onDelete(detail)
+                    },
+                    ContextActionDivider(),
+                    ContextAction(
+                        text = stringResource(R.string.account_details_copyToClipboard),
+                        icon = painterResource(R.drawable.ic_copy)
+                    ) {
+                        onCopyToClipboard(detail)
+                    },
+                    ContextAction(
+                        text = stringResource(R.string.account_details_reorder),
+                        icon = painterResource(R.drawable.ic_reorder)
+                    ) {
+                        onReorderDetails()
                     }
+                )
+                if (detail.metadata.isObfuscated) {
+                    contextActions.add(ContextAction(
+                        text = if (isObfuscated) { stringResource(R.string.account_details_showContent) } else { stringResource(R.string.account_details_hideContent) },
+                        icon = if (isObfuscated) { painterResource(R.drawable.ic_visibility_on) } else { painterResource(R.drawable.ic_visibility_off) }
+                    ) {
+                        isObfuscated = !isObfuscated
+                    })
                 }
+                ContextActions(contextActions)
             }
         }
     }
