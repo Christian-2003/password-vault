@@ -1,5 +1,7 @@
 package de.christian2003.passwordvault.plugin.presentation.view.account
 
+import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -112,6 +114,18 @@ fun AccountScreen(
         }
     }
     val selectedTags: List<TagUiDto> by viewModel.selectedTags.collectAsState(emptyList())
+
+    BackHandler {
+        if (viewModel.isInMultiselectState) {
+            viewModel.isInMultiselectState = false
+        }
+        else if (viewModel.isInReorderableState) {
+            viewModel.isInReorderableState = false
+        }
+        else {
+            onNavigateUp()
+        }
+    }
 
     Scaffold(
         topBar = {

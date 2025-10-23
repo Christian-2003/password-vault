@@ -1,5 +1,6 @@
 package de.christian2003.passwordvault.plugin.presentation.view.account.tag
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -40,6 +42,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDeleteDialog
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDiscardDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EditValueDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
 import de.christian2003.passwordvault.plugin.presentation.view.account.TagUiDto
@@ -64,13 +67,38 @@ fun TagSheet(
     val tags: List<TagUiDto> by viewModel.tags.collectAsState(emptyList())
     val sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
+    val invokeOnDismiss: () -> Unit = {
+        if (viewModel.areChangesMade(tags)) {
+            viewModel.isDiscardDialogVisible = true
+            if (!sheetState.isVisible) {
+                coroutineScope.launch {
+                    sheetState.show()
+                }
+            }
+        }
+        else {
+            coroutineScope.launch {
+                sheetState.hide()
+            }.invokeOnCompletion {
+                onDismiss()
+            }
+        }
+    }
+
 
     ModalBottomSheet(
-        onDismissRequest = onDismiss,
+        onDismissRequest = invokeOnDismiss,
         sheetState = sheetState,
         dragHandle = null,
-        sheetGesturesEnabled = false
+        sheetGesturesEnabled = false,
+        properties = ModalBottomSheetProperties(
+            shouldDismissOnBackPress = false
+        )
     ) {
+        BackHandler {
+            invokeOnDismiss()
+        }
+
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -80,13 +108,7 @@ fun TagSheet(
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = {
-                            coroutineScope.launch {
-                                sheetState.hide()
-                            }.invokeOnCompletion {
-                                onDismiss()
-                            }
-                        }
+                        onClick = invokeOnDismiss
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.ic_cancel),
@@ -176,6 +198,7 @@ fun TagSheet(
             }
         )
     }
+
     if (viewModel.tagToEdit != null) {
         EditTagDialog(
             tag = viewModel.tagToEdit,
@@ -187,6 +210,7 @@ fun TagSheet(
             }
         )
     }
+
     if (viewModel.isCreateTagDialogVisible) {
         EditTagDialog(
             tag = null,
@@ -196,6 +220,23 @@ fun TagSheet(
             onSave = { tagName ->
                 viewModel.isCreateTagDialogVisible = false
                 viewModel.createTag(tagName)
+            }
+        )
+    }
+
+    if (viewModel.isDiscardDialogVisible) {
+        ConfirmDiscardDialog(
+            text = stringResource(R.string.tag_discardChanges),
+            onDismiss = {
+                viewModel.isDiscardDialogVisible = false
+            },
+            onConfirm = {
+                coroutineScope.launch {
+                    viewModel.isDiscardDialogVisible = false
+                    sheetState.hide()
+                }.invokeOnCompletion {
+                    onDismiss()
+                }
             }
         )
     }

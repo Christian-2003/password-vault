@@ -45,6 +45,11 @@ class TagViewModel(): ViewModel() {
     private var tagMapper: TagUiMapper = TagUiMapper()
 
     /**
+     * Stores the tag IDs that were selected when the init-function was called.
+     */
+    private lateinit var selectedTagIdsAtInit: Set<Uuid>
+
+    /**
      * Whether the view model has been initialized.
      */
     private var isInitialized: Boolean = false
@@ -68,6 +73,11 @@ class TagViewModel(): ViewModel() {
      * Stores the tag to edit. If this is null, no tag is currently being edited.
      */
     var tagToEdit: TagUiDto? by mutableStateOf(null)
+
+    /**
+     * Indicates whether the dialog to discard without saving is visible.
+     */
+    var isDiscardDialogVisible: Boolean by mutableStateOf(false)
 
     /**
      * Indicates whether the dialog to create a new tag is currently visible.
@@ -101,7 +111,31 @@ class TagViewModel(): ViewModel() {
         this.deleteTagUseCase = deleteTagUseCase
         this.selectedTagIds.clear()
         this.selectedTagIds.addAll(selectedTagIds)
+        this.selectedTagIdsAtInit = selectedTagIds
         isInitialized = true
+    }
+
+
+    /**
+     * Determines whether changes were made to the selected tags.
+     *
+     * @param allTags   List of all tags that are available to the sheet.
+     * @return          Whether changes were made.
+     */
+    fun areChangesMade(allTags: List<TagUiDto>): Boolean {
+        selectedTagIds.forEach { selectedTagId ->
+            if (!selectedTagIdsAtInit.contains(selectedTagId)) {
+                return true //Tag added
+            }
+        }
+        selectedTagIdsAtInit.forEach { tagId ->
+            if (!selectedTagIds.contains(tagId)) {
+                if (allTags.find { it.id == tagId } != null) {
+                    return true //Tag removed
+                }
+            }
+        }
+        return false
     }
 
 

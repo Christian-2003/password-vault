@@ -2,6 +2,7 @@
     <string name="app_name">Password Vault</string>
     <string name="placeholder_obfuscated">•••••</string> <!-- '•' is U+2022  -->
     <string name="confirm_delete">Confirm deletion</string>
+    <string name="confirm_discard">Discard changes?</string>
 
     <string name="main_emptyPlaceholder_title">No accounts</string>
     <string name="main_emptyPlaceholder_subtitle">Create an account and it will show up here</string>
@@ -49,6 +50,7 @@
     <string name="tag_deleteTagText">Are you sure you want to delete the tag \"%1$s\"? This cannot be undone.</string>
     <string name="tag_emptyPlaceholder_title">No tags</string>
     <string name="tag_emptyPlaceholder_subtitle">Create a tag and it will show up here</string>
+    <string name="tag_discardChanges">Are you sure you want to discard the changes you made?</string>
 
     <string name="target_title">Targets</string>
     <string name="target_emptyPlaceholder_title">No targets</string>
@@ -72,6 +74,7 @@
     <string name="button_delete">Delete</string>
     <string name="button_add">Add</string>
     <string name="button_ok">OK</string>
+    <string name="button_discard">Discard</string>
     <string name="button_createTag">Create tag</string>
     <string name="button_selectTargetPackage">Select apps</string>
     <string name="button_selectTargetWebsite">Select website</string>
