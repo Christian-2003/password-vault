@@ -58,6 +58,7 @@
     <string name="target_packages_title">Select apps</string>
     <string name="target_website_title">Select website</string>
     <string name="target_website_label">Website</string>
+    <string name="target_discardChanges">Are you sure you want to discard the changes you made?</string>
 
     <string name="detail_titleCreate">Create detail</string>
     <string name="detail_titleEdit">Edit detail</string>

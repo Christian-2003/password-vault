@@ -2,6 +2,7 @@ package de.christian2003.passwordvault.plugin.presentation.view.account.target
 
 import android.graphics.drawable.Drawable
 import android.webkit.URLUtil
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,6 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -45,9 +47,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.core.net.toUri
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.domain.model.target.Target
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDiscardDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EditValueDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
 import kotlinx.coroutines.CoroutineScope
@@ -69,13 +73,33 @@ fun TargetSheet(
 ) {
     val sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
+    val invokeOnDismiss: () -> Unit = {
+        if (viewModel.areChangesMade()) {
+            viewModel.isDiscardDialogVisible = true
+        }
+        else {
+            coroutineScope.launch {
+                sheetState.hide()
+            }.invokeOnCompletion {
+                onDismiss()
+            }
+        }
+    }
+
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
         dragHandle = null,
-        sheetGesturesEnabled = false
+        sheetGesturesEnabled = false,
+        properties = ModalBottomSheetProperties(
+            shouldDismissOnBackPress = false
+        )
     ) {
+        BackHandler {
+            invokeOnDismiss()
+        }
+
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -85,13 +109,7 @@ fun TargetSheet(
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = {
-                            coroutineScope.launch {
-                                sheetState.hide()
-                            }.invokeOnCompletion {
-                                onDismiss()
-                            }
-                        }
+                        onClick = invokeOnDismiss
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.ic_cancel),
@@ -176,7 +194,7 @@ fun TargetSheet(
                 if (value.isBlank()) {
                     errorBlankInput
                 }
-                else if (!URLUtil.isValidUrl(value)) {
+                else if (!(URLUtil.isValidUrl(value) && !value.toUri().host.isNullOrEmpty())) {
                     errorInvalidUrl
                 }
                 else {
@@ -190,6 +208,22 @@ fun TargetSheet(
             },
             onSave = { url ->
                 viewModel.dismissSelectWebsiteDialog(url)
+            }
+        )
+    }
+
+    if (viewModel.isDiscardDialogVisible) {
+        ConfirmDiscardDialog(
+            text = stringResource(R.string.target_discardChanges),
+            onDismiss = {
+                viewModel.isDiscardDialogVisible = false
+            },
+            onConfirm = {
+                coroutineScope.launch {
+                    sheetState.hide()
+                }.invokeOnCompletion {
+                    onDismiss()
+                }
             }
         )
     }

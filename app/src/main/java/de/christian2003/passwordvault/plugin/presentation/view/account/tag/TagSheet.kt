@@ -70,11 +70,6 @@ fun TagSheet(
     val invokeOnDismiss: () -> Unit = {
         if (viewModel.areChangesMade(tags)) {
             viewModel.isDiscardDialogVisible = true
-            if (!sheetState.isVisible) {
-                coroutineScope.launch {
-                    sheetState.show()
-                }
-            }
         }
         else {
             coroutineScope.launch {

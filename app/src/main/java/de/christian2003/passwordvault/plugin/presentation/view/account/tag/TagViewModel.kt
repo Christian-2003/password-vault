@@ -45,7 +45,7 @@ class TagViewModel(): ViewModel() {
     private var tagMapper: TagUiMapper = TagUiMapper()
 
     /**
-     * Stores the tag IDs that were selected when the init-function was called.
+     * Tag IDs that were selected when the init-function was called.
      */
     private lateinit var selectedTagIdsAtInit: Set<Uuid>
 

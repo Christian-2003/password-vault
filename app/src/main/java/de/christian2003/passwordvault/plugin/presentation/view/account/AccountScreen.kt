@@ -118,6 +118,7 @@ fun AccountScreen(
     BackHandler {
         if (viewModel.isInMultiselectState) {
             viewModel.isInMultiselectState = false
+            viewModel.selectedDetailIds.clear()
         }
         else if (viewModel.isInReorderableState) {
             viewModel.isInReorderableState = false

@@ -12,6 +12,7 @@ import de.christian2003.passwordvault.application.usecases.packages.GetLocalized
 import de.christian2003.passwordvault.application.usecases.packages.GetPackageIconUseCase
 import de.christian2003.passwordvault.domain.model.target.PackageFingerprintService
 import de.christian2003.passwordvault.domain.model.target.Target
+import de.christian2003.passwordvault.plugin.presentation.view.account.TagUiDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -42,6 +43,11 @@ class TargetViewModel: ViewModel() {
     private lateinit var packageFingerprintService: PackageFingerprintService
 
     /**
+     * Targets that were selected when the init-function was called.
+     */
+    private lateinit var targetsAtInit: List<Target>
+
+    /**
      * Indicates whether the view model has been initialized.
      */
     private var isInitialized: Boolean = false
@@ -57,7 +63,7 @@ class TargetViewModel: ViewModel() {
     var allInstalledPackages: List<String>? by mutableStateOf(null)
 
     /**
-     * Indicates whether the dialog to select installed Android packges is visible.
+     * Indicates whether the dialog to select installed Android packages is visible.
      */
     var isSelectPackageDialogVisible: Boolean by mutableStateOf(false)
 
@@ -65,6 +71,11 @@ class TargetViewModel: ViewModel() {
      * Indicates whether the dialog to select a website is visible.
      */
     var isSelectWebsiteDialogVisible: Boolean by mutableStateOf(false)
+
+    /**
+     * Indicates whether the dialog through which to confirm dismissing without saving is visible.
+     */
+    var isDiscardDialogVisible: Boolean by mutableStateOf(false)
 
 
     /**
@@ -96,7 +107,28 @@ class TargetViewModel: ViewModel() {
         this.getPackageIconUseCase = getPackageIconUseCase
         this.packageFingerprintService = packageFingerprintService
         this.targets.addAll(targets)
+        this.targetsAtInit = targets
         isInitialized = true
+    }
+
+
+    /**
+     * Determines whether changes were made to the selected targets.
+     *
+     * @return  Whether changes were made.
+     */
+    fun areChangesMade(): Boolean {
+        targets.forEach { target ->
+            if (targetsAtInit.find { it.url == target.url } == null) {
+                return true //Target added
+            }
+        }
+        targetsAtInit.forEach { target ->
+            if (targets.find { it.url == target.url } == null) {
+                return true //Target removed
+            }
+        }
+        return false
     }
 
 
