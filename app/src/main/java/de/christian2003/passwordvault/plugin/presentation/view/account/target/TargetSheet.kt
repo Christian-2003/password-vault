@@ -113,13 +113,18 @@ fun TargetSheet(
                     Text(stringResource(R.string.target_title))
                 },
                 navigationIcon = {
-                    IconButton(
-                        onClick = invokeOnDismiss
+                    Tooltip(
+                        tooltip = stringResource(R.string.tooltip_closeWithoutSaving),
+                        anchor = TooltipAnchorPosition.End
                     ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_cancel),
-                            contentDescription = ""
-                        )
+                        IconButton(
+                            onClick = invokeOnDismiss
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_cancel),
+                                contentDescription = ""
+                            )
+                        }
                     }
                 },
                 actions = {

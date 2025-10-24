@@ -30,12 +30,13 @@
     <string name="account_contextActions_reorderDetails">Reorder details</string>
     <string name="account_details_title">Details</string>
     <string name="account_details_edit">Edit detail</string>
-    <string name="account_details_delete">Delete detail</string>
+    <string name="account_details_delete">Remove detail</string>
     <string name="account_details_copyToClipboard">Copy to clipboard</string>
     <string name="account_details_reorder">Reorder details</string>
     <string name="account_details_showContent">Show content</string>
     <string name="account_details_hideContent">Hide content</string>
-    <string name="account_details_confirmDeleteText">Are you sure you want to delete \"%1$s\"? This cannot be undone.</string>
+    <string name="account_details_confirmDeleteTitle">Remove detail</string>
+    <string name="account_details_confirmDeleteText">Are you sure you want to remove the detail \"%1$s\"?</string>
     <string name="account_details_emptyPlaceholder_title">No details</string>
     <string name="account_details_emptyPlaceholder_subtitle">Available details are shown here</string>
     <string name="account_tags_emptyPlaceholder_title">No tags</string>
@@ -75,6 +76,8 @@
     <string name="detail_visibleTitle">Visible</string>
     <string name="detail_visibleText">Whether the detail should be visible</string>
     <string name="detail_iconsTitle">Choose an icon</string>
+    <string name="detail_discardChanges">Are you sure you want to discard the changes you made to the detail?</string>
+    <string name="detail_help">Each detail has two parts: A name (what it is) and a content (the actual information).</string>
 
     <string name="settings_title">Settings</string>
     <string name="settings_help">Help</string>
@@ -91,6 +94,7 @@
         <item>Tags</item>
         <item>Help</item>
         <item>Targets</item>
+        <item>Detail</item>
     </string-array>
 
     <string name="button_save">Save</string>
@@ -113,4 +117,5 @@
     <string name="tooltip_closeMultiselect">Close multiselect</string>
     <string name="tooltip_removeTargetAndroidApp">Remove app %1$s</string>
     <string name="tooltip_removeTargetWebsite">Remove website %1$s</string>
+    <string name="tooltip_closeWithoutSaving">Close without saving</string>
 </resources>

@@ -24,6 +24,7 @@ import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -47,6 +48,7 @@ import de.christian2003.passwordvault.plugin.presentation.ui.composables.Confirm
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EditValueDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.HelpCard
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.Tooltip
 import de.christian2003.passwordvault.plugin.presentation.view.account.TagUiDto
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -104,13 +106,18 @@ fun TagSheet(
                     Text(stringResource(R.string.tag_title))
                 },
                 navigationIcon = {
-                    IconButton(
-                        onClick = invokeOnDismiss
+                    Tooltip(
+                        tooltip = stringResource(R.string.tooltip_closeWithoutSaving),
+                        anchor = TooltipAnchorPosition.End
                     ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_cancel),
-                            contentDescription = ""
-                        )
+                        IconButton(
+                            onClick = invokeOnDismiss
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_cancel),
+                                contentDescription = ""
+                            )
+                        }
                     }
                 },
                 actions = {

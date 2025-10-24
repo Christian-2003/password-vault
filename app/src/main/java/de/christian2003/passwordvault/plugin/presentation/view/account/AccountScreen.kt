@@ -294,65 +294,67 @@ fun AccountScreen(
             windowInsets = WindowInsets(bottom = innerPadding.calculateBottomPadding())
         )
 
+    }
 
-        //Dialog to edit the account name:
-        if (viewModel.isNameDialogVisible) {
-            val errorBlankInput: String = stringResource(R.string.error_blankInput)
-            EditValueDialog(
-                value = viewModel.name,
-                onValidateValue = { value ->
-                    if (value.isBlank()) {
-                        errorBlankInput
-                    }
-                    else {
-                        null
-                    }
-                },
-                label = stringResource(R.string.account_nameLabel),
-                title = stringResource(R.string.account_nameTitle),
-                onDismiss = {
-                    viewModel.isNameDialogVisible = false
-                },
-                onSave = { name ->
-                    viewModel.name = name
-                    viewModel.isNameDialogVisible = false
+    //Dialog to edit the account name:
+    if (viewModel.isNameDialogVisible) {
+        val errorBlankInput: String = stringResource(R.string.error_blankInput)
+        EditValueDialog(
+            value = viewModel.name,
+            onValidateValue = { value ->
+                if (value.isBlank()) {
+                    errorBlankInput
                 }
-            )
-        }
-
-        //Dialog to edit the account description:
-        if (viewModel.isDescriptionDialogVisible) {
-            EditValueDialog(
-                value = viewModel.description,
-                onValidateValue = { value -> null},
-                label = stringResource(R.string.account_descriptionLabel),
-                title = stringResource(R.string.account_descriptionTitle),
-                onDismiss = {
-                    viewModel.isDescriptionDialogVisible = false
-                },
-                onSave = { description ->
-                    viewModel.description = description
-                    viewModel.isDescriptionDialogVisible = false
+                else {
+                    null
                 }
-            )
-        }
+            },
+            label = stringResource(R.string.account_nameLabel),
+            title = stringResource(R.string.account_nameTitle),
+            onDismiss = {
+                viewModel.isNameDialogVisible = false
+            },
+            onSave = { name ->
+                viewModel.name = name
+                viewModel.isNameDialogVisible = false
+            }
+        )
+    }
 
-        //Dialog to delete a detail:
-        if (viewModel.detailToDelete != null) {
-            ConfirmDeleteDialog(
-                text = stringResource(R.string.account_details_confirmDeleteText, viewModel.detailToDelete!!.name),
-                onDismiss = {
+    //Dialog to edit the account description:
+    if (viewModel.isDescriptionDialogVisible) {
+        EditValueDialog(
+            value = viewModel.description,
+            onValidateValue = { value -> null},
+            label = stringResource(R.string.account_descriptionLabel),
+            title = stringResource(R.string.account_descriptionTitle),
+            onDismiss = {
+                viewModel.isDescriptionDialogVisible = false
+            },
+            onSave = { description ->
+                viewModel.description = description
+                viewModel.isDescriptionDialogVisible = false
+            }
+        )
+    }
+
+    //Dialog to delete a detail:
+    if (viewModel.detailToDelete != null) {
+        ConfirmDeleteDialog(
+            title = stringResource(R.string.account_details_confirmDeleteTitle),
+            text = stringResource(R.string.account_details_confirmDeleteText, viewModel.detailToDelete!!.name),
+            confirmButtonText = stringResource(R.string.button_remove),
+            onDismiss = {
+                viewModel.detailToDelete = null
+            },
+            onConfirm = {
+                val detail: Detail? = viewModel.detailToDelete
+                if (detail != null) {
+                    viewModel.deleteDetail(detail)
                     viewModel.detailToDelete = null
-                },
-                onConfirm = {
-                    val detail: Detail? = viewModel.detailToDelete
-                    if (detail != null) {
-                        viewModel.deleteDetail(detail)
-                        viewModel.detailToDelete = null
-                    }
                 }
-            )
-        }
+            }
+        )
     }
 
     //Dialog to edit the tags:

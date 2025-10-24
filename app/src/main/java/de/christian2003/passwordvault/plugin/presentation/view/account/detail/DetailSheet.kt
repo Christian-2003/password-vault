@@ -1,5 +1,7 @@
 package de.christian2003.passwordvault.plugin.presentation.view.account.detail
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -18,9 +20,11 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -41,12 +45,22 @@ import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.domain.model.detail.Detail
 import de.christian2003.passwordvault.domain.model.detail.DetailIcon
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.Checkbox
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDiscardDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.Headline
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.HelpCard
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.TextInput
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.Tooltip
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
+/**
+ * Sheet displays a detail that can be edited (or created) by the user.
+ *
+ * @param viewModel View model for the sheet.
+ * @param onDismiss Callback invoked to dismiss the sheet without saving.
+ * @param onSave    Callback invoked to dismiss the sheet and save the detail passed.
+ */
 @Composable
 fun DetailSheet(
     viewModel: DetailViewModel,
@@ -58,6 +72,19 @@ fun DetailSheet(
     val nameFocusRequester: FocusRequester = remember { FocusRequester() }
     val contentFocusRequester: FocusRequester = remember { FocusRequester() }
 
+    val invokeOnDismiss: () -> Unit = {
+        if (viewModel.areChangesMade()) {
+            viewModel.isDiscardDialogVisible = true
+        }
+        else {
+            coroutineScope.launch {
+                sheetState.hide()
+            }.invokeOnCompletion {
+                onDismiss()
+            }
+        }
+    }
+
     if (viewModel.isCreatingNewDetail) {
         LaunchedEffect(Unit) {
             //Safe call required: When rotating the screen, the focus requester is not instantiated
@@ -68,11 +95,18 @@ fun DetailSheet(
     }
 
     ModalBottomSheet(
-        onDismissRequest = onDismiss,
+        onDismissRequest = invokeOnDismiss,
         sheetState = sheetState,
         dragHandle = null,
-        sheetGesturesEnabled = false
+        sheetGesturesEnabled = false,
+        properties = ModalBottomSheetProperties(
+            shouldDismissOnBackPress = false
+        )
     ) {
+        BackHandler {
+            invokeOnDismiss()
+        }
+
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -81,19 +115,18 @@ fun DetailSheet(
                     Text(if (viewModel.isCreatingNewDetail) { stringResource(R.string.detail_titleCreate) } else { stringResource(R.string.detail_titleEdit) })
                 },
                 navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            coroutineScope.launch {
-                                sheetState.hide()
-                            }.invokeOnCompletion {
-                                onDismiss()
-                            }
-                        }
+                    Tooltip(
+                        tooltip = stringResource(R.string.tooltip_closeWithoutSaving),
+                        anchor = TooltipAnchorPosition.End
                     ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_cancel),
-                            contentDescription = ""
-                        )
+                        IconButton(
+                            onClick = invokeOnDismiss
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_cancel),
+                                contentDescription = ""
+                            )
+                        }
                     }
                 },
                 actions = {
@@ -110,13 +143,26 @@ fun DetailSheet(
                             }
                         }
                     ) {
-                        Text(stringResource(R.string.button_save))
+                        Text(stringResource(R.string.button_ok))
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors().copy(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
             )
 
             HorizontalDivider()
+
+            AnimatedVisibility(viewModel.isHelpCardVisible) {
+                HelpCard(
+                    text = stringResource(R.string.detail_help),
+                    onDismiss = {
+                        viewModel.dismissHelpCard()
+                    },
+                    modifier = Modifier.padding(
+                        horizontal = dimensionResource(R.dimen.margin_horizontal),
+                        vertical = dimensionResource(R.dimen.padding_vertical)
+                    )
+                )
+            }
 
             Column(
                 modifier = Modifier
@@ -129,7 +175,7 @@ fun DetailSheet(
                         viewModel.name = it
                     },
                     label = stringResource(R.string.detail_nameLabel),
-                    prefixIcon = painterResource(R.drawable.ic_name),
+                    prefixIcon = painterResource(R.drawable.ic_text),
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Next
                     ),
@@ -193,6 +239,23 @@ fun DetailSheet(
                 )
             }
         }
+    }
+
+    if (viewModel.isDiscardDialogVisible) {
+        ConfirmDiscardDialog(
+            text = stringResource(R.string.detail_discardChanges),
+            onDismiss = {
+                viewModel.isDiscardDialogVisible = false
+            },
+            onConfirm = {
+                coroutineScope.launch {
+                    viewModel.isDiscardDialogVisible = false
+                    sheetState.hide()
+                }.invokeOnCompletion {
+                    onDismiss()
+                }
+            }
+        )
     }
 }
 
