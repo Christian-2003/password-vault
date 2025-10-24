@@ -3,6 +3,7 @@ accompanistDrawable = "0.37.3"
 agp = "8.6.1"                   #Newest version that supports Gradle version 8.7
 kotlin = "2.2.20"
 coreKtx = "1.16.0"              #Newest version that supports API 35
+coilCompose = "2.7.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
@@ -43,6 +44,8 @@ kotlinx-coroutines-android = {group = "org.jetbrains.kotlinx", name = "kotlinx-c
 #Other
 accompanist-drawablepainter = { group = "com.google.accompanist", name = "accompanist-drawablepainter", version.ref = "accompanistDrawable" }
 reorderable = { group = "sh.calvin.reorderable", name = "reorderable", version.ref = "reorderable" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+coil-svg = { module = "io.coil-kt:coil-svg", version.ref = "coilCompose" }
 
 #Test
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

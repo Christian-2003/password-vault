@@ -51,6 +51,7 @@
     <string name="tag_emptyPlaceholder_title">No tags</string>
     <string name="tag_emptyPlaceholder_subtitle">Create a tag and it will show up here</string>
     <string name="tag_discardChanges">Are you sure you want to discard the changes you made?</string>
+    <string name="tag_helpCreate">Create tags to group related accounts</string>
 
     <string name="target_title">Targets</string>
     <string name="target_emptyPlaceholder_title">No targets</string>
@@ -70,6 +71,22 @@
     <string name="detail_visibleText">Whether the detail should be visible</string>
     <string name="detail_iconsTitle">Choose an icon</string>
 
+    <string name="settings_title">Settings</string>
+    <string name="settings_help">Help</string>
+    <string name="settings_help_helpMessagesTitle">Help messages</string>
+    <string name="settings_help_helpMessagesInfo">Reactivate dismissed help messages</string>
+    <string name="settings_about_copyright">© %1$s Christian‑2003</string>
+
+    <string name="help_title">Help messages</string>
+    <string name="help_help">Reactivate help messages that were dismissed earlier.</string>
+    <string name="help_reactivate">Click to reactivate</string>
+    <string name="help_visibleLabel">Visible</string>
+    <string name="help_dismissedLabel">Dismissed</string>
+    <string-array name="help_shortNames">
+        <item>Tags</item>
+        <item>Help</item>
+    </string-array>
+
     <string name="button_save">Save</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_delete">Delete</string>
@@ -77,6 +94,7 @@
     <string name="button_ok">OK</string>
     <string name="button_discard">Discard</string>
     <string name="button_createTag">Create tag</string>
+    <string name="button_dismissHelp">Dismiss</string>
     <string name="button_selectTargetPackage">Select apps</string>
     <string name="button_selectTargetWebsite">Select website</string>
 

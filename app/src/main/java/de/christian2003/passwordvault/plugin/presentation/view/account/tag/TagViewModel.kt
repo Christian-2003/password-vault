@@ -1,10 +1,13 @@
 package de.christian2003.passwordvault.plugin.presentation.view.account.tag
 
+import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
 import de.christian2003.passwordvault.application.usecases.tag.CreateTagUseCase
 import de.christian2003.passwordvault.application.usecases.tag.DeleteTagUseCase
@@ -12,6 +15,7 @@ import de.christian2003.passwordvault.application.usecases.tag.GetAllTagsUseCase
 import de.christian2003.passwordvault.application.usecases.tag.UpdateTagUseCase
 import de.christian2003.passwordvault.plugin.presentation.view.account.TagUiDto
 import de.christian2003.passwordvault.plugin.presentation.view.account.TagUiMapper
+import de.christian2003.passwordvault.plugin.presentation.view.help.HelpCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -21,8 +25,10 @@ import kotlin.uuid.Uuid
 
 /**
  * View model for the sheet through which to select tags for an entry.
+ *
+ * @param application   Application.
  */
-class TagViewModel(): ViewModel() {
+class TagViewModel(application: Application): AndroidViewModel(application) {
 
     /**
      * Use case to create a new tag.
@@ -83,6 +89,12 @@ class TagViewModel(): ViewModel() {
      * Indicates whether the dialog to create a new tag is currently visible.
      */
     var isCreateTagDialogVisible: Boolean by mutableStateOf(false)
+
+    /**
+     * Indicates whether the help card is visible.
+     */
+    var isHelpCardVisible: Boolean by mutableStateOf(HelpCard.TAGS.getVisible(application))
+        private set
 
 
     /**
@@ -206,6 +218,15 @@ class TagViewModel(): ViewModel() {
      */
     fun isTagSelected(tagId: Uuid): Boolean {
         return tagId in selectedTagIds
+    }
+
+
+    /**
+     * Dismisses the help card.
+     */
+    fun dismissHelpCard() {
+        HelpCard.TAGS.setVisible(application, false)
+        isHelpCardVisible = false
     }
 
 }

@@ -60,12 +60,14 @@ import de.christian2003.passwordvault.plugin.presentation.ui.composables.Navigat
  * @param viewModel             View model.
  * @param onEditAccount         Callback invoked to edit an account. The account ID is passed as argument.
  * @param onCreateNewAccount    Callback invoked to create a new account.
+ * @param onNavigateToSettings  Callback invoked to navigate to the settings.
  */
 @Composable
 fun MainScreen(
     viewModel: MainViewModel,
     onEditAccount: (Uuid) -> Unit,
-    onCreateNewAccount: () -> Unit
+    onCreateNewAccount: () -> Unit,
+    onNavigateToSettings: () -> Unit
 ) {
     val accountDescriptors: List<AccountDescriptor> by viewModel.accountDescriptors.collectAsState(emptyList())
     val appBarState: TopAppBarState = rememberTopAppBarState()
@@ -77,7 +79,17 @@ fun MainScreen(
                 title = {
                     Text(stringResource(R.string.app_name))
                 },
-                scrollBehavior = scrollBehavior
+                scrollBehavior = scrollBehavior,
+                actions = {
+                    IconButton(
+                        onClick = onNavigateToSettings
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_settings),
+                            contentDescription = ""
+                        )
+                    }
+                }
             )
         },
         floatingActionButton = {

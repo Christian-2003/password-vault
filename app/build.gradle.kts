@@ -92,6 +92,8 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.accompanist.drawablepainter)
     implementation(libs.reorderable)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.svg)
 
     testImplementation(libs.junit)
 

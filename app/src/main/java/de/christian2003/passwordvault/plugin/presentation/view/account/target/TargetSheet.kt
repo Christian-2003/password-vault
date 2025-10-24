@@ -220,6 +220,7 @@ fun TargetSheet(
             },
             onConfirm = {
                 coroutineScope.launch {
+                    viewModel.isDiscardDialogVisible = false
                     sheetState.hide()
                 }.invokeOnCompletion {
                     onDismiss()

@@ -32,8 +32,12 @@ import de.christian2003.passwordvault.plugin.infrastructure.security.AndroidClip
 import de.christian2003.passwordvault.plugin.presentation.ui.theme.PasswordVaultTheme
 import de.christian2003.passwordvault.plugin.presentation.view.account.AccountScreen
 import de.christian2003.passwordvault.plugin.presentation.view.account.AccountViewModel
+import de.christian2003.passwordvault.plugin.presentation.view.help.HelpScreen
+import de.christian2003.passwordvault.plugin.presentation.view.help.HelpViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.main.MainScreen
 import de.christian2003.passwordvault.plugin.presentation.view.main.MainViewModel
+import de.christian2003.passwordvault.plugin.presentation.view.settings.SettingsScreen
+import de.christian2003.passwordvault.plugin.presentation.view.settings.SettingsViewModel
 import java.util.UUID
 import kotlin.uuid.Uuid
 import kotlin.uuid.toKotlinUuid
@@ -94,6 +98,7 @@ fun PasswordVault() {
                         accountRepository = repository
                     )
                 )
+
                 MainScreen(
                     viewModel = viewModel,
                     onEditAccount = { id ->
@@ -102,6 +107,9 @@ fun PasswordVault() {
                     },
                     onCreateNewAccount = {
                         navController.navigate("account/")
+                    },
+                    onNavigateToSettings = {
+                        navController.navigate("settings")
                     }
                 )
             }
@@ -127,7 +135,37 @@ fun PasswordVault() {
                     clipboardService = clipboardService,
                     id = id
                 )
+
                 AccountScreen(
+                    viewModel = viewModel,
+                    onNavigateUp = {
+                        navController.navigateUp()
+                    }
+                )
+            }
+
+
+            composable("settings") {
+                val viewModel: SettingsViewModel = viewModel()
+                viewModel.init()
+
+                SettingsScreen(
+                    viewModel = viewModel,
+                    onNavigateUp = {
+                        navController.navigateUp()
+                    },
+                    onNavigateToHelp = {
+                        navController.navigate("help")
+                    }
+                )
+            }
+
+
+            composable("help") {
+                val viewModel: HelpViewModel = viewModel()
+                viewModel.init()
+
+                HelpScreen(
                     viewModel = viewModel,
                     onNavigateUp = {
                         navController.navigateUp()

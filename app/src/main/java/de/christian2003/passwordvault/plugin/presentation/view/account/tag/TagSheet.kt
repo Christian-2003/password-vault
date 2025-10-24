@@ -1,9 +1,13 @@
 package de.christian2003.passwordvault.plugin.presentation.view.account.tag
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -45,6 +49,7 @@ import de.christian2003.passwordvault.plugin.presentation.ui.composables.Confirm
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDiscardDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EditValueDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.HelpCard
 import de.christian2003.passwordvault.plugin.presentation.view.account.TagUiDto
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -135,11 +140,24 @@ fun TagSheet(
                         .weight(1f)
                         .verticalScroll(rememberScrollState())
                 ) {
+                    AnimatedVisibility(viewModel.isHelpCardVisible) {
+                        HelpCard(
+                            text = stringResource(R.string.tag_helpCreate),
+                            onDismiss = {
+                                viewModel.dismissHelpCard()
+                            },
+                            modifier = Modifier.padding(
+                                horizontal = dimensionResource(R.dimen.margin_horizontal),
+                                vertical = dimensionResource(R.dimen.padding_vertical)
+                            )
+                        )
+                    }
+                    val modifier: Modifier = if (viewModel.isHelpCardVisible) { Modifier } else { Modifier.weight(1f) }
                     EmptyPlaceholder(
                         title = stringResource(R.string.tag_emptyPlaceholder_title),
                         subtitle = stringResource(R.string.tag_emptyPlaceholder_subtitle),
                         painter = painterResource(R.drawable.el_tags),
-                        modifier = Modifier.weight(1f)
+                        modifier = modifier
                     )
                 }
             }
