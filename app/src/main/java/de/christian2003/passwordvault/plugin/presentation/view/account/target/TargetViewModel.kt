@@ -1,18 +1,20 @@
 package de.christian2003.passwordvault.plugin.presentation.view.account.target
 
+import android.app.Application
 import android.graphics.drawable.Drawable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
 import de.christian2003.passwordvault.application.usecases.packages.GetAllPackagesUseCase
 import de.christian2003.passwordvault.application.usecases.packages.GetLocalizedPackageNameUseCase
 import de.christian2003.passwordvault.application.usecases.packages.GetPackageIconUseCase
 import de.christian2003.passwordvault.domain.model.target.PackageFingerprintService
 import de.christian2003.passwordvault.domain.model.target.Target
-import de.christian2003.passwordvault.plugin.presentation.view.account.TagUiDto
+import de.christian2003.passwordvault.plugin.presentation.view.help.HelpCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -20,7 +22,7 @@ import kotlinx.coroutines.launch
 /**
  * View model for the sheet through which to select autofill targets for an account.
  */
-class TargetViewModel: ViewModel() {
+class TargetViewModel(application: Application): AndroidViewModel(application) {
 
     /**
      * Use case to get a list of all installed Android packages.
@@ -76,6 +78,17 @@ class TargetViewModel: ViewModel() {
      * Indicates whether the dialog through which to confirm dismissing without saving is visible.
      */
     var isDiscardDialogVisible: Boolean by mutableStateOf(false)
+
+    /**
+     * Target that is currently being removed by the user.
+     */
+    var targetToRemove: Target? by mutableStateOf(null)
+
+    /**
+     * Indicates whether the help card is visible.
+     */
+    var isHelpCardVisible: Boolean by mutableStateOf(HelpCard.TARGETS.getVisible(application))
+        private set
 
 
     /**
@@ -236,6 +249,28 @@ class TargetViewModel: ViewModel() {
      */
     fun getPackageIcon(packageName: String): Drawable? {
         return getPackageIconUseCase.getPackageIcon(packageName)
+    }
+
+
+    /**
+     * Dismisses the dialog through which to confirm the removal of a target.
+     *
+     * @param targetToRemove    Target to remove or null to dismiss without removing.
+     */
+    fun dismissRemoveTargetDialog(targetToRemove: Target? = null) {
+        this.targetToRemove = null
+        if (targetToRemove != null) {
+            targets.remove(targetToRemove)
+        }
+    }
+
+
+    /**
+     * Dismisses the help card.
+     */
+    fun dismissHelpCard() {
+        HelpCard.TARGETS.setVisible(application, false)
+        isHelpCardVisible = false
     }
 
 }

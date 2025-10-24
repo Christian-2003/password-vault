@@ -12,7 +12,9 @@ enum class HelpCard(
 
     TAGS("help_tags"),
 
-    HELP("help_help");
+    HELP("help_help"),
+
+    TARGETS("help_targets");
 
     fun getVisible(context: Context): Boolean {
         return context.getSharedPreferences("settings", Context.MODE_PRIVATE).getBoolean(preferencesKey, true)

@@ -3,6 +3,7 @@ package de.christian2003.passwordvault.plugin.presentation.view.account.target
 import android.graphics.drawable.Drawable
 import android.webkit.URLUtil
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,6 +31,7 @@ import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -51,9 +53,12 @@ import androidx.core.net.toUri
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.domain.model.target.Target
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDeleteDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDiscardDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EditValueDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.HelpCard
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.Tooltip
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -136,14 +141,18 @@ fun TargetSheet(
 
             TargetsList(
                 targets = viewModel.targets,
+                isHelpCardVisible = viewModel.isHelpCardVisible,
                 onRemoveTarget = { target ->
-                    viewModel.targets.remove(target)
+                    viewModel.targetToRemove = target
                 },
                 onQueryLocalizedPackageName = { packageName ->
                     viewModel.getLocalizedPackageName(packageName)
                 },
                 onQueryPackageIcon = { packageName ->
                     viewModel.getPackageIcon(packageName)
+                },
+                onDismissHelpCard = {
+                    viewModel.dismissHelpCard()
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -228,6 +237,25 @@ fun TargetSheet(
             }
         )
     }
+
+    val targetToRemove: Target? = viewModel.targetToRemove
+    if (targetToRemove != null) {
+        ConfirmDeleteDialog(
+            title = stringResource(R.string.target_remove_title),
+            text = if (targetToRemove.isAndroidApp()) {
+                stringResource(R.string.target_remove_textPackage, viewModel.getLocalizedPackageName(targetToRemove.name) ?: targetToRemove.name)
+            } else {
+                stringResource(R.string.target_remove_textWebsite, targetToRemove.name)
+            },
+            confirmButtonText = stringResource(R.string.button_remove),
+            onDismiss = {
+                viewModel.dismissRemoveTargetDialog()
+            },
+            onConfirm = {
+                viewModel.dismissRemoveTargetDialog(targetToRemove)
+            }
+        )
+    }
 }
 
 
@@ -294,32 +322,64 @@ private fun BottomButtonRow(
  * Displays a list of all targets.
  *
  * @param targets                       List of targets to display.
+ * @param isHelpCardVisible             Whether the help card is visible.
  * @param onRemoveTarget                Callback invoked to remove a target.
  * @param onQueryLocalizedPackageName   Callback invoked to query the localized name for an
  *                                      installed package
  * @param onQueryPackageIcon            Callback invoked to query the icon for an installed package.
+ * @param onDismissHelpCard             Callback invoked to dismiss the help card.
  * @param modifier                      Modifier.
  */
 @Composable
 private fun TargetsList(
     targets: List<Target>,
+    isHelpCardVisible: Boolean,
     onRemoveTarget: (Target) -> Unit,
     onQueryLocalizedPackageName: (String) -> String?,
     onQueryPackageIcon: (String) -> Drawable?,
+    onDismissHelpCard: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     if (targets.isEmpty()) {
-        EmptyPlaceholder(
-            title = stringResource(R.string.target_emptyPlaceholder_title),
-            subtitle = stringResource(R.string.target_emptyPlaceholder_subtitle),
-            painter = painterResource(R.drawable.el_targets),
-            modifier = modifier.verticalScroll(rememberScrollState())
-        )
+        Column(
+            modifier = modifier
+                .verticalScroll(rememberScrollState())
+        ) {
+            AnimatedVisibility(isHelpCardVisible) {
+                HelpCard(
+                    text = stringResource(R.string.target_help),
+                    onDismiss = onDismissHelpCard,
+                    modifier = Modifier.padding(
+                        horizontal = dimensionResource(R.dimen.margin_horizontal),
+                        vertical = dimensionResource(R.dimen.padding_vertical)
+                    )
+                )
+            }
+            val modifier: Modifier = if (isHelpCardVisible) { Modifier } else { Modifier.weight(1f) }
+            EmptyPlaceholder(
+                title = stringResource(R.string.target_emptyPlaceholder_title),
+                subtitle = stringResource(R.string.target_emptyPlaceholder_subtitle),
+                painter = painterResource(R.drawable.el_targets),
+                modifier = modifier
+            )
+        }
     }
     else {
         LazyColumn(
             modifier = modifier
         ) {
+            item {
+                AnimatedVisibility(isHelpCardVisible) {
+                    HelpCard(
+                        text = stringResource(R.string.target_help),
+                        onDismiss = onDismissHelpCard,
+                        modifier = Modifier.padding(
+                            horizontal = dimensionResource(R.dimen.margin_horizontal),
+                            vertical = dimensionResource(R.dimen.padding_vertical)
+                        )
+                    )
+                }
+            }
             items(targets) { target ->
                 if (target.isAndroidApp()) {
                     TargetsListRowPackage(
@@ -357,6 +417,7 @@ private fun TargetsListRowPackage(
     onQueryLocalizedPackageName: (String) -> String?,
     onQueryPackageIcon: (String) -> Drawable?
 ) {
+    val localizedPackageName: String = onQueryLocalizedPackageName(target.name) ?: ""
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -374,22 +435,27 @@ private fun TargetsListRowPackage(
             modifier = Modifier.size(dimensionResource(R.dimen.image_m))
         )
         Text(
-            text = onQueryLocalizedPackageName(target.name) ?: "",
+            text = localizedPackageName,
             color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier
                 .weight(1f)
                 .padding(horizontal = dimensionResource(R.dimen.padding_horizontal))
         )
-        IconButton(
-            onClick = {
-                onRemove(target)
-            }
+        Tooltip(
+            tooltip = stringResource(R.string.tooltip_removeTargetAndroidApp, localizedPackageName),
+            anchor = TooltipAnchorPosition.Start
         ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_cancel),
-                contentDescription = ""
-            )
+            IconButton(
+                onClick = {
+                    onRemove(target)
+                }
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_cancel),
+                    contentDescription = ""
+                )
+            }
         }
     }
 }
@@ -446,15 +512,20 @@ private fun TargetsListRowWebsite(
                 style = MaterialTheme.typography.bodySmall
             )
         }
-        IconButton(
-            onClick = {
-                onRemove(target)
-            }
+        Tooltip(
+            tooltip = stringResource(R.string.tooltip_removeTargetWebsite, target.name),
+            anchor = TooltipAnchorPosition.Start
         ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_cancel),
-                contentDescription = ""
-            )
+            IconButton(
+                onClick = {
+                    onRemove(target)
+                }
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_cancel),
+                    contentDescription = ""
+                )
+            }
         }
     }
 }

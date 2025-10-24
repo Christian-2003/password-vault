@@ -51,8 +51,8 @@
     <string name="tag_emptyPlaceholder_title">No tags</string>
     <string name="tag_emptyPlaceholder_subtitle">Create a tag and it will show up here</string>
     <string name="tag_discardChanges">Are you sure you want to discard the changes you made?</string>
-    <string name="tag_helpCreate">Create tags to group related accounts</string>
-    <string name="tag_helpSelect">Select or create new tags to group accounts</string>
+    <string name="tag_helpCreate">Create tags to group related accounts.</string>
+    <string name="tag_helpSelect">Select or create new tags to group accounts.</string>
 
     <string name="target_title">Targets</string>
     <string name="target_emptyPlaceholder_title">No targets</string>
@@ -61,6 +61,10 @@
     <string name="target_website_title">Select website</string>
     <string name="target_website_label">Website</string>
     <string name="target_discardChanges">Are you sure you want to discard the changes you made?</string>
+    <string name="target_help">Select installed apps and websites as targets for the autofill service.</string>
+    <string name="target_remove_title">Remove target</string>
+    <string name="target_remove_textPackage">Are you sure you want to remove the Android app \"%1$s\" from the autofill targets?</string>
+    <string name="target_remove_textWebsite">Are you sure you want to remove the website \"%1$s\" from the autofill targets?</string>
 
     <string name="detail_titleCreate">Create detail</string>
     <string name="detail_titleEdit">Edit detail</string>
@@ -86,6 +90,7 @@
     <string-array name="help_shortNames">
         <item>Tags</item>
         <item>Help</item>
+        <item>Targets</item>
     </string-array>
 
     <string name="button_save">Save</string>
@@ -94,6 +99,7 @@
     <string name="button_add">Add</string>
     <string name="button_ok">OK</string>
     <string name="button_discard">Discard</string>
+    <string name="button_remove">Remove</string>
     <string name="button_createTag">Create tag</string>
     <string name="button_dismissHelp">Dismiss</string>
     <string name="button_selectTargetPackage">Select apps</string>
@@ -105,4 +111,6 @@
     <string name="tooltip_selectAllDetails">Select all details</string>
     <string name="tooltip_deleteSelectedDetails">Delete selected details</string>
     <string name="tooltip_closeMultiselect">Close multiselect</string>
+    <string name="tooltip_removeTargetAndroidApp">Remove app %1$s</string>
+    <string name="tooltip_removeTargetWebsite">Remove website %1$s</string>
 </resources>

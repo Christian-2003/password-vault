@@ -24,15 +24,21 @@ import de.christian2003.passwordvault.R
 /**
  * Displays a dialog asking the user for confirmation to delete an item.
  *
- * @param text      Information text to display to the user.
- * @param onDismiss Dismiss the dialog without deleting the item.
- * @param onConfirm Delete the item and dismiss the dialog.
+ * @param text              Information text to display to the user.
+ * @param onDismiss         Dismiss the dialog without deleting the item.
+ * @param onConfirm         Delete the item and dismiss the dialog.
+ * @param title             Title for the dialog.
+ * @param dismissButtonText Text for the dismiss button.
+ * @param confirmButtonText Text for the confirm button.
  */
 @Composable
 fun ConfirmDeleteDialog(
     text: String,
     onDismiss: () -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
+    title: String = stringResource(R.string.confirm_delete),
+    dismissButtonText: String = stringResource(R.string.button_cancel),
+    confirmButtonText: String = stringResource(R.string.button_delete)
 ) {
     Dialog(
         onDismissRequest = onDismiss
@@ -47,7 +53,7 @@ fun ConfirmDeleteDialog(
                     .padding(24.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.confirm_delete),
+                    text = title,
                     color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.headlineSmall
                 )
@@ -67,13 +73,13 @@ fun ConfirmDeleteDialog(
                     TextButton(
                         onClick = onDismiss
                     ) {
-                        Text(stringResource(R.string.button_cancel))
+                        Text(dismissButtonText)
                     }
                     TextButton(
                         onClick = onConfirm,
                         colors = ButtonDefaults.textButtonColors().copy(contentColor = MaterialTheme.colorScheme.error)
                     ) {
-                        Text(stringResource(R.string.button_delete))
+                        Text(confirmButtonText)
                     }
                 }
             }
