@@ -2,12 +2,9 @@ package de.christian2003.passwordvault.plugin.presentation.view.account.tag
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -164,6 +161,7 @@ fun TagSheet(
             else {
                 TagList(
                     tags = tags,
+                    isHelpCardVisible = viewModel.isHelpCardVisible,
                     onTagSelected = { tag ->
                         viewModel.selectTag(tag.id)
                     },
@@ -178,6 +176,9 @@ fun TagSheet(
                     },
                     isTagSelected = { tag ->
                         viewModel.isTagSelected(tag.id)
+                    },
+                    dismissHelpCard = {
+                        viewModel.dismissHelpCard()
                     },
                     modifier = Modifier.weight(1f)
                 )
@@ -260,26 +261,42 @@ fun TagSheet(
  * Displays a list of all tags.
  *
  * @param tags              List of all tags.
+ * @param isHelpCardVisible Whether the help card is visible.
  * @param onTagSelected     Callback invoked once a tag is selected.
  * @param onTagDeselected   Callback invoked once a tag is deselected.
  * @param onEditTag         Callback invoked to edit a tag.
  * @param onDeleteTag       Callback invoked to delete a tag.
  * @param isTagSelected     Callback invoked to determine whether the specified tag is selected.
+ * @param dismissHelpCard   Callback invoked to dismiss the help card.
  * @param modifier          Modifier.
  */
 @Composable
 private fun TagList(
     tags: List<TagUiDto>,
+    isHelpCardVisible: Boolean,
     onTagSelected: (TagUiDto) -> Unit,
     onTagDeselected: (TagUiDto) -> Unit,
     onEditTag: (TagUiDto) -> Unit,
     onDeleteTag: (TagUiDto) -> Unit,
     isTagSelected: (TagUiDto) -> Boolean,
+    dismissHelpCard: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
         modifier = modifier.fillMaxWidth()
     ) {
+        item {
+            AnimatedVisibility(isHelpCardVisible) {
+                HelpCard(
+                    text = stringResource(R.string.tag_helpSelect),
+                    onDismiss = dismissHelpCard,
+                    modifier = Modifier.padding(
+                        horizontal = dimensionResource(R.dimen.margin_horizontal),
+                        vertical = dimensionResource(R.dimen.padding_vertical)
+                    )
+                )
+            }
+        }
         items(tags) { tag ->
             TagListRow(
                 tag = tag,

@@ -52,6 +52,7 @@
     <string name="tag_emptyPlaceholder_subtitle">Create a tag and it will show up here</string>
     <string name="tag_discardChanges">Are you sure you want to discard the changes you made?</string>
     <string name="tag_helpCreate">Create tags to group related accounts</string>
+    <string name="tag_helpSelect">Select or create new tags to group accounts</string>
 
     <string name="target_title">Targets</string>
     <string name="target_emptyPlaceholder_title">No targets</string>
