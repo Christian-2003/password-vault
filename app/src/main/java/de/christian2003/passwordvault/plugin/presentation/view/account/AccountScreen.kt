@@ -84,6 +84,7 @@ import de.christian2003.passwordvault.plugin.presentation.ui.composables.EditVal
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.Headline
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.NavigationBarProtection
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.Tooltip
 import de.christian2003.passwordvault.plugin.presentation.view.account.detail.DetailSheet
 import de.christian2003.passwordvault.plugin.presentation.view.account.detail.DetailViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.account.tag.TagSheet
@@ -576,16 +577,9 @@ private fun MultiselectAppBar(
             )
         },
         navigationIcon = {
-            TooltipBox(
-                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                    positioning = TooltipAnchorPosition.End
-                ),
-                tooltip = {
-                    RichTooltip {
-                        Text(stringResource(R.string.tooltip_closeMultiselect))
-                    }
-                },
-                state = rememberTooltipState()
+            Tooltip(
+                tooltip = stringResource(R.string.tooltip_closeMultiselect),
+                anchor = TooltipAnchorPosition.End
             ) {
                 IconButton(
                     onClick = onFinishMultiselect
@@ -599,16 +593,9 @@ private fun MultiselectAppBar(
             }
         },
         actions = {
-            TooltipBox(
-                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                    positioning = TooltipAnchorPosition.Start
-                ),
-                tooltip = {
-                    RichTooltip {
-                        Text(stringResource(R.string.tooltip_selectAllDetails))
-                    }
-                },
-                state = rememberTooltipState()
+            Tooltip(
+                tooltip = stringResource(R.string.tooltip_selectAllDetails),
+                anchor = TooltipAnchorPosition.Start
             ) {
                 IconButton(
                     onClick = onSelectAll
@@ -620,16 +607,9 @@ private fun MultiselectAppBar(
                     )
                 }
             }
-            TooltipBox(
-                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                    positioning = TooltipAnchorPosition.Start
-                ),
-                tooltip = {
-                    RichTooltip {
-                        Text(stringResource(R.string.tooltip_deleteSelectedDetails))
-                    }
-                },
-                state = rememberTooltipState()
+            Tooltip(
+                tooltip = stringResource(R.string.tooltip_deleteSelectedDetails),
+                anchor = TooltipAnchorPosition.Start
             ) {
                 IconButton(
                     onClick = onDeleteSelected
