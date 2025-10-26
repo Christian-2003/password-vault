@@ -1,6 +1,9 @@
 package de.christian2003.passwordvault.plugin.presentation.view.account
 
+import android.graphics.Paint
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -27,18 +30,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TooltipAnchorPosition
-import androidx.compose.material3.TooltipBox
-import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.TopAppBarState
-import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -49,7 +49,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -97,6 +99,12 @@ import sh.calvin.reorderable.rememberReorderableLazyListState
 import kotlin.text.ifEmpty
 
 
+/**
+ * Screen displays an account to the user.
+ *
+ * @param viewModel     View model for the screen.
+ * @param onNavigateUp  Callback invoked to navigate up the navigation stack.
+ */
 @Composable
 fun AccountScreen(
     viewModel: AccountViewModel,
@@ -231,7 +239,7 @@ fun AccountScreen(
             }
             else {
                 items(
-                    items = viewModel.details,
+                    items = viewModel.visibleDetails.value,
                     key = { it.id }
                 ) { detail ->
                     ReorderableItem(
@@ -279,6 +287,95 @@ fun AccountScreen(
                             },
                             modifier = detailListRowModifier
                         )
+                    }
+                }
+                if (viewModel.invisibleDetails.value.isNotEmpty()) {
+                    item {
+                        val animatedArrowRotation by animateFloatAsState(
+                            targetValue = if (viewModel.areInvisibleDetailsVisible) { 180F } else { 0F },
+                            animationSpec = spring()
+                        )
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            TextButton(
+                                onClick = {
+                                    viewModel.areInvisibleDetailsVisible = !viewModel.areInvisibleDetailsVisible
+                                },
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_expand),
+                                        contentDescription = "",
+                                        modifier = Modifier.rotate(animatedArrowRotation)
+                                    )
+                                    Text(
+                                        text = if (viewModel.areInvisibleDetailsVisible) {
+                                            stringResource(R.string.button_showLess)
+                                        } else {
+                                            stringResource(R.string.button_showMore)
+                                        },
+                                        modifier = Modifier.padding(start = 8.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+                if (viewModel.areInvisibleDetailsVisible) {
+                    items(
+                        items = viewModel.invisibleDetails.value,
+                        key = { it.id }
+                    ) { detail ->
+                        ReorderableItem(
+                            state = reorderableLazyListState,
+                            key = detail.id
+                        ) { isDragging ->
+                            val detailListRowModifier: Modifier = if (isDragging) {
+                                Modifier.draggableHandle().shadow(16.dp)
+                            } else {
+                                Modifier
+                            }
+                            DetailListRow(
+                                detail = detail,
+                                isInReorderableState = viewModel.isInReorderableState,
+                                isInMultiselectState = viewModel.isInMultiselectState,
+                                onEdit = {
+                                    viewModel.detailToEdit = it
+                                },
+                                onDelete = {
+                                    viewModel.detailToDelete = it
+                                },
+                                onCopyToClipboard = {
+                                    viewModel.copyToClipboard(it)
+                                },
+                                onReorderDetails = {
+                                    viewModel.isInReorderableState = true
+                                },
+                                onMultiselect = { detail ->
+                                    viewModel.isInMultiselectState = true
+                                    viewModel.selectedDetailIds.add(detail.id)
+                                },
+                                onToggleSelection = { detail, selected ->
+                                    if (selected) {
+                                        viewModel.selectedDetailIds.add(detail.id)
+                                    }
+                                    else {
+                                        viewModel.selectedDetailIds.remove(detail.id)
+                                        if (viewModel.selectedDetailIds.isEmpty()) {
+                                            viewModel.isInMultiselectState = false
+                                        }
+                                    }
+                                },
+                                isDetailSelected = { detail ->
+                                    viewModel.isDetailSelected(detail.id)
+                                },
+                                modifier = detailListRowModifier
+                            )
+                        }
                     }
                 }
                 item {
@@ -448,6 +545,19 @@ fun AccountScreen(
 }
 
 
+/**
+ * Default app bar displayed in default state.
+ *
+ * @param name              Name of the account.
+ * @param scrollBehavior    Scroll behavior for the screen.
+ * @param onNavigateUp      Callback invoked to navigate up the navigation stack.
+ * @param onEditName        Callback invoked to edit the account name.
+ * @param onEditDescription Callback invoked to edit the account description.
+ * @param onSelectTargets   Callback invoked to edit the targets.
+ * @param onSelectTags      Callback invoked to edit the tags.
+ * @param onCreateDetail    Callback invoked to create a new detail.
+ * @param onReorderDetails  Callback invoked to reorder details.
+ */
 @Composable
 private fun DefaultAppBar(
     name: String,
@@ -544,6 +654,11 @@ private fun DefaultAppBar(
 }
 
 
+/**
+ * App bar for the reorder state.
+ *
+ * @param onFinishReordering    Callback invoked to finish reordering state.
+ */
 @Composable
 private fun ReorderAppBar(
     onFinishReordering: () -> Unit
@@ -573,6 +688,14 @@ private fun ReorderAppBar(
 }
 
 
+/**
+ * App bar for the multiselect state.
+ *
+ * @param selectedDetailsCount  Number of details currently selected.
+ * @param onSelectAll           Callback invoked to select all details.
+ * @param onDeleteSelected      Callback invoked to delete all selected details.
+ * @param onFinishMultiselect   Callback invoked to finish multiselect state.
+ */
 @Composable
 private fun MultiselectAppBar(
     selectedDetailsCount: Int,

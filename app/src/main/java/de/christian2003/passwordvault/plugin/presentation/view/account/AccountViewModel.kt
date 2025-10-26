@@ -1,5 +1,7 @@
 package de.christian2003.passwordvault.plugin.presentation.view.account
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -52,6 +54,26 @@ class AccountViewModel(): ViewModel() {
 
     val details: MutableList<Detail> = mutableStateListOf()
 
+    val visibleDetails: State<List<Detail>> = derivedStateOf {
+        val visibleDetails: MutableList<Detail> = mutableListOf()
+        details.forEach { detail ->
+            if (detail.metadata.isVisible) {
+                visibleDetails.add(detail)
+            }
+        }
+        return@derivedStateOf visibleDetails
+    }
+
+    val invisibleDetails: State<List<Detail>> = derivedStateOf {
+        val invisibleDetails: MutableList<Detail> = mutableListOf()
+        details.forEach { detail ->
+            if (!detail.metadata.isVisible) {
+                invisibleDetails.add(detail)
+            }
+        }
+        return@derivedStateOf invisibleDetails
+    }
+
     val targets: MutableList<Target> = mutableStateListOf()
 
     val selectedTagIds: MutableStateFlow<Set<Uuid>> = MutableStateFlow(emptySet())
@@ -73,6 +95,8 @@ class AccountViewModel(): ViewModel() {
     var isTargetDialogVisible: Boolean by mutableStateOf(false)
 
     var isDeleteDetailMultiselectDialogVisible: Boolean by mutableStateOf(false)
+
+    var areInvisibleDetailsVisible: Boolean by mutableStateOf(false)
 
     var detailToEdit: Detail? by mutableStateOf(null)
 

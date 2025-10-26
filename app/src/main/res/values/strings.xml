@@ -116,6 +116,8 @@
     <string name="button_dismissHelp">Dismiss</string>
     <string name="button_selectTargetPackage">Select apps</string>
     <string name="button_selectTargetWebsite">Select website</string>
+    <string name="button_showMore">Show more</string>
+    <string name="button_showLess">Show less</string>
 
     <string name="error_blankInput">The input cannot be blank</string>
     <string name="error_invalidUrl">The input is no valid URL</string>
