@@ -37,6 +37,14 @@
     <string name="account_details_hideContent">Hide content</string>
     <string name="account_details_confirmDeleteTitle">Remove detail</string>
     <string name="account_details_confirmDeleteText">Are you sure you want to remove the detail \"%1$s\"?</string>
+    <plurals name="account_details_confirmDeleteTitleMultiselect">
+        <item quantity="one">Remove detail</item>
+        <item quantity="other">Remove details</item>
+    </plurals>
+    <plurals name="account_details_confirmDeleteTextMultiselect">
+        <item quantity="one">Are you sure you want to remove %1$d selected detail</item>
+        <item quantity="other">Are you sure you want to remove %1$d selected details</item>
+    </plurals>
     <string name="account_details_emptyPlaceholder_title">No details</string>
     <string name="account_details_emptyPlaceholder_subtitle">Available details are shown here</string>
     <string name="account_tags_emptyPlaceholder_title">No tags</string>
@@ -113,7 +121,7 @@
     <string name="error_invalidUrl">The input is no valid URL</string>
 
     <string name="tooltip_selectAllDetails">Select all details</string>
-    <string name="tooltip_deleteSelectedDetails">Delete selected details</string>
+    <string name="tooltip_deleteSelectedDetails">Remove selected details</string>
     <string name="tooltip_closeMultiselect">Close multiselect</string>
     <string name="tooltip_removeTargetAndroidApp">Remove app %1$s</string>
     <string name="tooltip_removeTargetWebsite">Remove website %1$s</string>

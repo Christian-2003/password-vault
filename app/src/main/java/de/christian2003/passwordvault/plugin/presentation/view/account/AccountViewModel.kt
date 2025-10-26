@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import okhttp3.Dispatcher
 import kotlin.uuid.Uuid
 
 
@@ -71,6 +72,8 @@ class AccountViewModel(): ViewModel() {
     var isDetailDialogVisible: Boolean by mutableStateOf(false)
 
     var isTargetDialogVisible: Boolean by mutableStateOf(false)
+
+    var isDeleteDetailMultiselectDialogVisible: Boolean by mutableStateOf(false)
 
     var detailToEdit: Detail? by mutableStateOf(null)
 
@@ -169,7 +172,7 @@ class AccountViewModel(): ViewModel() {
     fun copyToClipboard(detail: Detail) = viewModelScope.launch(Dispatchers.IO) {
         clipboardService.copyToClipboard(
             label = detail.name,
-            data =detail.content,
+            data = detail.content,
             isSensitive = detail.metadata.isObfuscated
         )
     }
@@ -227,16 +230,25 @@ class AccountViewModel(): ViewModel() {
     }
 
 
-    fun deleteSelectedDetails() {
-        selectedDetailIds.forEach { id ->
+    fun dismissDeleteDetailDialog(detailToDelete: Detail? = null) = viewModelScope.launch(Dispatchers.Default) {
+        this@AccountViewModel.detailToDelete = null
+        if (detailToDelete != null) {
+            details.remove(detailToDelete)
+        }
+    }
+
+    fun dismissDeleteDetailsMultiselectDialog(selectedDetailIds: List<Uuid>? = null) = viewModelScope.launch(Dispatchers.Default) {
+        isInMultiselectState = false
+        isDeleteDetailMultiselectDialogVisible = false
+        selectedDetailIds?.forEach { id ->
             val detail: Detail? = details.find { it.id == id }
             if (detail != null) {
                 details.remove(detail)
             }
         }
-        isInMultiselectState = false
-        selectedDetailIds.clear()
+        this@AccountViewModel.selectedDetailIds.clear()
     }
+
 
     fun selectAllDetails() {
         details.forEach { detail ->

@@ -144,7 +144,7 @@ fun AccountScreen(
                         viewModel.selectAllDetails()
                     },
                     onDeleteSelected = {
-                        viewModel.deleteSelectedDetails()
+                        viewModel.isDeleteDetailMultiselectDialogVisible = true
                     },
                     onFinishMultiselect = {
                         viewModel.isInMultiselectState = false
@@ -345,14 +345,25 @@ fun AccountScreen(
             text = stringResource(R.string.account_details_confirmDeleteText, viewModel.detailToDelete!!.name),
             confirmButtonText = stringResource(R.string.button_remove),
             onDismiss = {
-                viewModel.detailToDelete = null
+                viewModel.dismissDeleteDetailDialog()
             },
             onConfirm = {
-                val detail: Detail? = viewModel.detailToDelete
-                if (detail != null) {
-                    viewModel.deleteDetail(detail)
-                    viewModel.detailToDelete = null
-                }
+                viewModel.dismissDeleteDetailDialog(viewModel.detailToDelete)
+            }
+        )
+    }
+
+    //Dialog to delete multiple selected details:
+    if (viewModel.isDeleteDetailMultiselectDialogVisible) {
+        ConfirmDeleteDialog(
+            title = pluralStringResource(R.plurals.account_details_confirmDeleteTitleMultiselect, viewModel.selectedDetailIds.size),
+            text = pluralStringResource(R.plurals.account_details_confirmDeleteTextMultiselect, viewModel.selectedDetailIds.size, viewModel.selectedDetailIds.size),
+            confirmButtonText = stringResource(R.string.button_remove),
+            onDismiss = {
+                viewModel.dismissDeleteDetailsMultiselectDialog()
+            },
+            onConfirm = {
+                viewModel.dismissDeleteDetailsMultiselectDialog(viewModel.selectedDetailIds)
             }
         )
     }
