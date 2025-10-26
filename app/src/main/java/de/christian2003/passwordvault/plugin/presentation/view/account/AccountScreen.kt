@@ -865,7 +865,7 @@ private fun ReorderableCollectionItemScope.DetailListRow(
                 painter = painterResource(if (detail.icon != null) { detail.icon!!.drawableResourceId } else { detail.type.defaultIcon.drawableResourceId }),
                 contentDescription = "",
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(dimensionResource(R.dimen.image_xs))
+                modifier = Modifier.size(dimensionResource(R.dimen.image_s))
             )
         }
         Column(

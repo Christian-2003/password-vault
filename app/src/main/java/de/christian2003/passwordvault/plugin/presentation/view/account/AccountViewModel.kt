@@ -25,7 +25,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
 import kotlin.uuid.Uuid
 
 
@@ -161,11 +160,6 @@ class AccountViewModel(): ViewModel() {
                 )
             }
         }
-    }
-
-
-    fun deleteDetail(detail: Detail) = viewModelScope.launch(Dispatchers.IO) {
-        details.remove(detail)
     }
 
 

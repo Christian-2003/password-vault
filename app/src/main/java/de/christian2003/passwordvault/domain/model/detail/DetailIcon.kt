@@ -21,6 +21,7 @@ enum class DetailIcon(
     EMAIL(R.drawable.detail_email),
     PASSWORD(R.drawable.detail_password),
     URL(R.drawable.detail_url),
-    PIN(R.drawable.detail_pin);
+    PIN(R.drawable.detail_pin),
+    USERNAME(R.drawable.detail_username);
 
 }
