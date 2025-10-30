@@ -68,7 +68,6 @@ class Detail(
      * Metadata for the detail.
      */
     var metadata: DetailMetadata = metadata
-        private set
 
 
     /**

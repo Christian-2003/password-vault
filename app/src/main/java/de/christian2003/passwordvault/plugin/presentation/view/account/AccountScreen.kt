@@ -1,6 +1,5 @@
 package de.christian2003.passwordvault.plugin.presentation.view.account
 
-import android.graphics.Paint
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -51,7 +50,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -114,12 +112,8 @@ fun AccountScreen(
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(appBarState)
     val lazyListState: LazyListState = rememberLazyListState()
     val reorderableLazyListState = rememberReorderableLazyListState(lazyListState) { from, to ->
-        val offset = 1 //Number of items in LazyColumn that are above the details list
-        viewModel.details.apply {
-            this[to.index - offset] = this[from.index - offset].also {
-                this[from.index - offset] = this[to.index - offset]
-            }
-        }
+        val offset = 1 //Number of items in LazyColumn that are above the visible details list
+        viewModel.reorderDetails(from.index - offset, to.index - offset)
     }
     val selectedTags: List<TagUiDto> by viewModel.selectedTags.collectAsState(emptyList())
 

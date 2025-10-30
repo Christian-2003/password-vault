@@ -281,6 +281,39 @@ class AccountViewModel(): ViewModel() {
     }
 
 
+    fun reorderDetails(fromIndex: Int, toIndex: Int) {
+        var fromDetail: Detail? = null
+        var toDetail: Detail? = null
+        val isVisible: Boolean = toIndex < visibleDetails.value.size
+        if (fromIndex >= visibleDetails.value.size) {
+            val index: Int = fromIndex - visibleDetails.value.size - 1 // Subtract 1 for the "Show more" / "Show less" button
+            fromDetail = invisibleDetails.value[index]
+        }
+        else {
+            fromDetail = visibleDetails.value[fromIndex]
+        }
+        if (toIndex >= visibleDetails.value.size) {
+            val index: Int = toIndex - visibleDetails.value.size - 1 // Subtract 1 for the "Show more" / "Show less" button
+            toDetail = invisibleDetails.value[index]
+        }
+        else {
+            toDetail = visibleDetails.value[toIndex]
+        }
+
+        val fromIndexDetail: Int = details.indexOf(fromDetail)
+        val toIndexDetail: Int = details.indexOf(toDetail)
+
+        details.apply {
+            this[toIndexDetail] = this[fromIndexDetail].also {
+                this[fromIndexDetail] = this[toIndexDetail]
+            }
+        }
+        if (fromDetail.metadata.isVisible != isVisible) {
+            fromDetail.metadata = fromDetail.metadata.copy(isVisible = isVisible)
+        }
+    }
+
+
     private fun clearSelectedTags() {
         selectedTagIds.value = emptySet()
     }
