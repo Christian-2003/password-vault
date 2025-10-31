@@ -1,5 +1,6 @@
 package de.christian2003.passwordvault.plugin.presentation.view.account
 
+import android.graphics.drawable.Drawable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -11,9 +12,10 @@ import androidx.lifecycle.viewModelScope
 import de.christian2003.passwordvault.domain.model.detail.Detail
 import de.christian2003.passwordvault.domain.model.account.Account
 import de.christian2003.passwordvault.application.repository.TagRepository
-import de.christian2003.passwordvault.application.usecases.acount.CreateAccountUseCase
-import de.christian2003.passwordvault.application.usecases.acount.GetAccountByIdUseCase
-import de.christian2003.passwordvault.application.usecases.acount.UpdateAccountUseCase
+import de.christian2003.passwordvault.application.usecases.account.CreateAccountUseCase
+import de.christian2003.passwordvault.application.usecases.account.GetAccountByIdUseCase
+import de.christian2003.passwordvault.application.usecases.account.GetAccountIconUseCase
+import de.christian2003.passwordvault.application.usecases.account.UpdateAccountUseCase
 import de.christian2003.passwordvault.domain.model.tag.Tag
 import de.christian2003.passwordvault.domain.model.target.Target
 import de.christian2003.passwordvault.domain.security.ClipboardService
@@ -35,6 +37,8 @@ class AccountViewModel(): ViewModel() {
     private lateinit var createAccountUseCase: CreateAccountUseCase
 
     private lateinit var updateAccountUseCase: UpdateAccountUseCase
+
+    private lateinit var getAccountIconUseCase: GetAccountIconUseCase
 
     private lateinit var clipboardService: ClipboardService
 
@@ -76,6 +80,10 @@ class AccountViewModel(): ViewModel() {
 
     val targets: MutableList<Target> = mutableStateListOf()
 
+    val icon: State<Drawable?> = derivedStateOf {
+        getAccountIconUseCase.getAccountIcon(targets)
+    }
+
     val selectedTagIds: MutableStateFlow<Set<Uuid>> = MutableStateFlow(emptySet())
 
     val selectedDetailIds: MutableList<Uuid> = mutableStateListOf()
@@ -111,6 +119,7 @@ class AccountViewModel(): ViewModel() {
         getAccountByIdUseCase: GetAccountByIdUseCase,
         createAccountUseCase: CreateAccountUseCase,
         updateAccountUseCase: UpdateAccountUseCase,
+        getAccountIconUseCase: GetAccountIconUseCase,
         tagRepository: TagRepository,
         clipboardService: ClipboardService,
         id: Uuid? = null
@@ -120,6 +129,7 @@ class AccountViewModel(): ViewModel() {
         }
         this.createAccountUseCase = createAccountUseCase
         this.updateAccountUseCase = updateAccountUseCase
+        this.getAccountIconUseCase = getAccountIconUseCase
         this.tagRepository = tagRepository
         this.clipboardService = clipboardService
         allTags = tagRepository.getAllTags().map { list ->
@@ -312,7 +322,6 @@ class AccountViewModel(): ViewModel() {
             fromDetail.metadata = fromDetail.metadata.copy(isVisible = isVisible)
         }
     }
-
 
     private fun clearSelectedTags() {
         selectedTagIds.value = emptySet()

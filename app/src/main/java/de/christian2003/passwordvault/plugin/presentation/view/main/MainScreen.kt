@@ -1,5 +1,7 @@
 package de.christian2003.passwordvault.plugin.presentation.view.main
 
+import android.graphics.drawable.Drawable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -46,6 +48,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import de.christian2003.passwordvault.domain.model.account.AccountDescriptor
 import kotlin.uuid.Uuid
 import de.christian2003.passwordvault.R
@@ -123,6 +126,9 @@ fun MainScreen(
                 onDeleteAccount = { accountDescriptor ->
                     viewModel.accountToDelete = accountDescriptor
                 },
+                onQueryIcon = { account ->
+                    viewModel.queryIconForAccount(account)
+                },
                 windowInsets = WindowInsets(bottom = innerPadding.calculateBottomPadding())
             )
         }
@@ -155,6 +161,7 @@ fun MainScreen(
  * @param accountDescriptors    List of descriptors to display.
  * @param onEditAccount         Callback invoked to edit an account.
  * @param onDeleteAccount       Callback invoked to delete an account.
+ * @param onQueryIcon       Callback invoked to query the account icon.
  * @param windowInsets          Window insets with the bottom padding.
  */
 @Composable
@@ -162,6 +169,7 @@ private fun AccountDescriptorsList(
     accountDescriptors: List<AccountDescriptor>,
     onEditAccount: (AccountDescriptor) -> Unit,
     onDeleteAccount: (AccountDescriptor) -> Unit,
+    onQueryIcon: (AccountDescriptor) -> Drawable?,
     windowInsets: WindowInsets
 ) {
     if (accountDescriptors.isEmpty()) {
@@ -182,7 +190,8 @@ private fun AccountDescriptorsList(
                 AccountDescriptorsListItem(
                     accountDescriptor = accountDescriptor,
                     onEdit = onEditAccount,
-                    onDelete = onDeleteAccount
+                    onDelete = onDeleteAccount,
+                    onQueryIcon = onQueryIcon
                 )
             }
             //Last item has the same height as the bottom navigation bar. This makes it possible to
@@ -204,12 +213,14 @@ private fun AccountDescriptorsList(
  * @param accountDescriptor Descriptor for which to display the list item.
  * @param onEdit            Callback invoked to edit the account.
  * @param onDelete          Callback invoked to delete the account.
+ * @param onQueryIcon       Callback invoked to query the account icon.
  */
 @Composable
 private fun AccountDescriptorsListItem(
     accountDescriptor: AccountDescriptor,
     onEdit: (AccountDescriptor) -> Unit,
-    onDelete: (AccountDescriptor) -> Unit
+    onDelete: (AccountDescriptor) -> Unit,
+    onQueryIcon: (AccountDescriptor) -> Drawable?
 ) {
     var isDropdownVisible: Boolean by remember { mutableStateOf(false) }
 
@@ -228,19 +239,29 @@ private fun AccountDescriptorsListItem(
             )
     ) {
         //Icon:
-        val firstChar: Char? = accountDescriptor.name.firstOrNull { !it.isWhitespace() }
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .size(dimensionResource(R.dimen.image_m))
-                .clip(MaterialTheme.shapes.medium)
-                .background(MaterialTheme.colorScheme.surfaceContainer)
-        ) {
-            Text(
-                text = firstChar?.toString() ?: "",
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
+        val icon: Drawable? = onQueryIcon(accountDescriptor)
+        if (icon == null) {
+            val firstChar: Char? = accountDescriptor.name.firstOrNull { !it.isWhitespace() }
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .size(dimensionResource(R.dimen.image_m))
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(MaterialTheme.colorScheme.surfaceContainer)
+            ) {
+                Text(
+                    text = firstChar?.toString() ?: "",
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+        else {
+            Image(
+                painter = rememberDrawablePainter(icon),
+                contentDescription = "",
+                modifier = Modifier.size(dimensionResource(R.dimen.image_m))
             )
         }
 

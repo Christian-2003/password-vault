@@ -20,14 +20,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import de.christian2003.passwordvault.application.usecases.acount.CreateAccountUseCase
-import de.christian2003.passwordvault.application.usecases.acount.DeleteAccountUseCase
-import de.christian2003.passwordvault.application.usecases.acount.GetAccountByIdUseCase
-import de.christian2003.passwordvault.application.usecases.acount.GetAllAccountDescriptorsUseCase
-import de.christian2003.passwordvault.application.usecases.acount.UpdateAccountUseCase
+import de.christian2003.passwordvault.application.usecases.account.CreateAccountUseCase
+import de.christian2003.passwordvault.application.usecases.account.DeleteAccountUseCase
+import de.christian2003.passwordvault.application.usecases.account.GetAccountByIdUseCase
+import de.christian2003.passwordvault.application.usecases.account.GetAccountIconUseCase
+import de.christian2003.passwordvault.application.usecases.account.GetAllAccountDescriptorsUseCase
+import de.christian2003.passwordvault.application.usecases.account.UpdateAccountUseCase
 import de.christian2003.passwordvault.domain.security.ClipboardService
 import de.christian2003.passwordvault.plugin.PasswordVaultApplication
 import de.christian2003.passwordvault.plugin.infrastructure.db.PasswordVaultRepository
+import de.christian2003.passwordvault.plugin.infrastructure.packages.LocalPackagesRepository
 import de.christian2003.passwordvault.plugin.infrastructure.security.AndroidClipboardService
 import de.christian2003.passwordvault.plugin.presentation.ui.theme.PasswordVaultTheme
 import de.christian2003.passwordvault.plugin.presentation.view.account.AccountScreen
@@ -79,7 +81,9 @@ class MainActivity : ComponentActivity() {
 fun PasswordVault() {
     val navController: NavHostController = rememberNavController()
     val context: Context = LocalContext.current
-    val repository: PasswordVaultRepository = (context.applicationContext as PasswordVaultApplication).getRepository()
+    val application: PasswordVaultApplication = (context.applicationContext as PasswordVaultApplication)
+    val repository: PasswordVaultRepository = application.getRepository()
+    val packagesRepository: LocalPackagesRepository = application.getPackagesRepository()
     val clipboardService: ClipboardService = AndroidClipboardService(LocalClipboard.current.nativeClipboard)
 
     PasswordVaultTheme {
@@ -91,12 +95,9 @@ fun PasswordVault() {
             composable("main") {
                 val viewModel: MainViewModel = viewModel()
                 viewModel.init(
-                    getAllAccountDescriptorsUseCase = GetAllAccountDescriptorsUseCase(
-                        accountRepository = repository
-                    ),
-                    deleteAccountUseCase = DeleteAccountUseCase(
-                        accountRepository = repository
-                    )
+                    getAllAccountDescriptorsUseCase = GetAllAccountDescriptorsUseCase(repository),
+                    deleteAccountUseCase = DeleteAccountUseCase(repository),
+                    getAccountIconUseCase = GetAccountIconUseCase(packagesRepository)
                 )
 
                 MainScreen(
@@ -131,6 +132,7 @@ fun PasswordVault() {
                     getAccountByIdUseCase = GetAccountByIdUseCase(repository),
                     createAccountUseCase = CreateAccountUseCase(repository, repository),
                     updateAccountUseCase = UpdateAccountUseCase(repository, repository),
+                    getAccountIconUseCase = GetAccountIconUseCase(packagesRepository),
                     tagRepository = repository,
                     clipboardService = clipboardService,
                     id = id

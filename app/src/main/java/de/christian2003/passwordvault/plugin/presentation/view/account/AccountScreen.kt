@@ -1,8 +1,10 @@
 package de.christian2003.passwordvault.plugin.presentation.view.account
 
+import android.graphics.drawable.Drawable
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -63,6 +65,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.application.repository.PackagesRepository
 import de.christian2003.passwordvault.application.usecases.packages.GetAllPackagesUseCase
@@ -200,6 +203,7 @@ fun AccountScreen(
                     },
                     name = viewModel.name,
                     tags = selectedTags,
+                    icon = viewModel.icon.value,
                     onEditTags = {
                         viewModel.isTagDialogVisible = true
                     },
@@ -241,7 +245,9 @@ fun AccountScreen(
                         key = detail.id
                     ) { isDragging ->
                         val detailListRowModifier: Modifier = if (isDragging) {
-                            Modifier.draggableHandle().shadow(16.dp)
+                            Modifier
+                                .draggableHandle()
+                                .shadow(16.dp)
                         } else {
                             Modifier
                         }
@@ -329,7 +335,9 @@ fun AccountScreen(
                             key = detail.id
                         ) { isDragging ->
                             val detailListRowModifier: Modifier = if (isDragging) {
-                                Modifier.draggableHandle().shadow(16.dp)
+                                Modifier
+                                    .draggableHandle()
+                                    .shadow(16.dp)
                             } else {
                                 Modifier
                             }
@@ -774,6 +782,7 @@ private fun GeneralSection(
     description: String,
     name: String,
     tags: List<TagUiDto>,
+    icon: Drawable?,
     onEditDescription: () -> Unit,
     onEditTags: () -> Unit,
     onEditTargets: () -> Unit,
@@ -783,28 +792,42 @@ private fun GeneralSection(
     Row(
         modifier = modifier
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .padding(top = dimensionResource(R.dimen.padding_vertical))
-                .size(dimensionResource(R.dimen.image_xl))
-                .clip(MaterialTheme.shapes.large)
-                .background(MaterialTheme.colorScheme.surfaceContainer)
-                .clickable {
-                    onEditTargets()
-                }
-        ) {
-            Text(
-                text = if (!name.isEmpty()) { name.first().toString() } else { "?" },
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                fontSize = 32.sp
+        if (icon == null) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .padding(top = dimensionResource(R.dimen.padding_vertical))
+                    .size(dimensionResource(R.dimen.image_xl))
+                    .clip(MaterialTheme.shapes.large)
+                    .background(MaterialTheme.colorScheme.surfaceContainer)
+                    .clickable {
+                        onEditTargets()
+                    }
+            ) {
+                Text(
+                    text = if (!name.isEmpty()) { name.first().toString() } else { "?" },
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 32.sp
+                )
+            }
+        }
+        else {
+            Image(
+                painter = rememberDrawablePainter(icon),
+                contentDescription = "",
+                modifier = Modifier
+                    .padding(top = dimensionResource(R.dimen.padding_vertical))
+                    .size(dimensionResource(R.dimen.image_xl))
+                    .clip(MaterialTheme.shapes.medium)
+                    .clickable {
+                        onEditTargets()
+                    }
             )
         }
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text(
                 text = description.ifEmpty { stringResource(R.string.account_descriptionPlaceholder) },
@@ -959,11 +982,13 @@ private fun ReorderableCollectionItemScope.DetailListRow(
             .padding(
                 vertical = quarterVerticalPadding
             )
-            .background(if (isSelected) {
-                MaterialTheme.colorScheme.secondaryContainer
-            } else {
-                MaterialTheme.colorScheme.surface
-            })
+            .background(
+                if (isSelected) {
+                    MaterialTheme.colorScheme.secondaryContainer
+                } else {
+                    MaterialTheme.colorScheme.surface
+                }
+            )
             .padding(
                 start = dimensionResource(R.dimen.margin_horizontal),
                 top = quarterVerticalPadding * 3,
