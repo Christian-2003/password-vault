@@ -151,24 +151,24 @@ fun DetailSheet(
 
             HorizontalDivider()
 
-            AnimatedVisibility(viewModel.isHelpCardVisible) {
-                HelpCard(
-                    text = stringResource(R.string.detail_help),
-                    onDismiss = {
-                        viewModel.dismissHelpCard()
-                    },
-                    modifier = Modifier.padding(
-                        horizontal = dimensionResource(R.dimen.margin_horizontal),
-                        vertical = dimensionResource(R.dimen.padding_vertical)
-                    )
-                )
-            }
-
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
             ) {
+                AnimatedVisibility(viewModel.isHelpCardVisible) {
+                    HelpCard(
+                        text = stringResource(R.string.detail_help),
+                        onDismiss = {
+                            viewModel.dismissHelpCard()
+                        },
+                        modifier = Modifier.padding(
+                            horizontal = dimensionResource(R.dimen.margin_horizontal),
+                            vertical = dimensionResource(R.dimen.padding_vertical)
+                        )
+                    )
+                }
+
                 TextInput(
                     value = viewModel.name,
                     onValueChange = {
