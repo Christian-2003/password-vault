@@ -1,5 +1,6 @@
 package de.christian2003.passwordvault.plugin.presentation.view.account
 
+import android.app.Application
 import android.graphics.drawable.Drawable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
@@ -7,18 +8,29 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
 import de.christian2003.passwordvault.domain.model.detail.Detail
 import de.christian2003.passwordvault.domain.model.account.Account
-import de.christian2003.passwordvault.application.repository.TagRepository
 import de.christian2003.passwordvault.application.usecases.account.CreateAccountUseCase
 import de.christian2003.passwordvault.application.usecases.account.GetAccountByIdUseCase
 import de.christian2003.passwordvault.application.usecases.account.GetAccountIconUseCase
 import de.christian2003.passwordvault.application.usecases.account.UpdateAccountUseCase
+import de.christian2003.passwordvault.application.usecases.packages.GetAllPackagesUseCase
+import de.christian2003.passwordvault.application.usecases.packages.GetLocalizedPackageNameUseCase
+import de.christian2003.passwordvault.application.usecases.packages.GetPackageIconUseCase
+import de.christian2003.passwordvault.application.usecases.tag.CreateTagUseCase
+import de.christian2003.passwordvault.application.usecases.tag.DeleteTagUseCase
+import de.christian2003.passwordvault.application.usecases.tag.GetAllTagsUseCase
+import de.christian2003.passwordvault.application.usecases.tag.UpdateTagUseCase
 import de.christian2003.passwordvault.domain.model.tag.Tag
+import de.christian2003.passwordvault.domain.model.target.PackageFingerprintService
 import de.christian2003.passwordvault.domain.model.target.Target
 import de.christian2003.passwordvault.domain.security.ClipboardService
+import de.christian2003.passwordvault.plugin.presentation.view.account.tag.TagViewModel
+import de.christian2003.passwordvault.plugin.presentation.view.account.target.TargetViewModel
+import de.christian2003.passwordvault.plugin.presentation.view.help.HelpCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,16 +41,34 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.collections.map
+import kotlin.collections.toSet
 import kotlin.uuid.Uuid
 
 
-class AccountViewModel(): ViewModel() {
+class AccountViewModel(application: Application): AndroidViewModel(application) {
 
     private lateinit var createAccountUseCase: CreateAccountUseCase
 
     private lateinit var updateAccountUseCase: UpdateAccountUseCase
 
     private lateinit var getAccountIconUseCase: GetAccountIconUseCase
+
+    private lateinit var getAllTagsUseCase: GetAllTagsUseCase
+
+    private lateinit var createTagUseCase: CreateTagUseCase
+
+    private lateinit var updateTagUseCase: UpdateTagUseCase
+
+    private lateinit var deleteTagUseCase: DeleteTagUseCase
+
+    private lateinit var getAllPackagesUseCase: GetAllPackagesUseCase
+
+    private lateinit var getLocalizedPackageNameUseCase: GetLocalizedPackageNameUseCase
+
+    private lateinit var getPackageIconUseCase: GetPackageIconUseCase
+
+    private lateinit var packageFingerprintService: PackageFingerprintService
 
     private lateinit var clipboardService: ClipboardService
 
@@ -47,8 +77,6 @@ class AccountViewModel(): ViewModel() {
     private var account: Account? = null
 
     private var isInitialized = false
-
-    lateinit var tagRepository: TagRepository
 
     lateinit var allTags: Flow<List<TagUiDto>>
 
@@ -89,8 +117,10 @@ class AccountViewModel(): ViewModel() {
     val selectedDetailIds: MutableList<Uuid> = mutableStateListOf()
 
     var isInReorderableState: Boolean by mutableStateOf(false)
+        private set
 
     var isInMultiselectState: Boolean by mutableStateOf(false)
+        private set
 
     var isNameDialogVisible: Boolean by mutableStateOf(false)
 
@@ -112,6 +142,12 @@ class AccountViewModel(): ViewModel() {
 
     lateinit var selectedTags: StateFlow<List<TagUiDto>>
 
+    var helpState: AccountScreenHelpState? by mutableStateOf(if (HelpCard.ACCOUNT.getVisible(application)) {
+        AccountScreenHelpState.NAME
+    } else {
+        null
+    })
+
     var viewModelStoreId: Int = 0
 
 
@@ -120,7 +156,14 @@ class AccountViewModel(): ViewModel() {
         createAccountUseCase: CreateAccountUseCase,
         updateAccountUseCase: UpdateAccountUseCase,
         getAccountIconUseCase: GetAccountIconUseCase,
-        tagRepository: TagRepository,
+        getAllTagsUseCase: GetAllTagsUseCase,
+        createTagUseCase: CreateTagUseCase,
+        updateTagUseCase: UpdateTagUseCase,
+        deleteTagUseCase: DeleteTagUseCase,
+        getAllPackagesUseCase: GetAllPackagesUseCase,
+        getLocalizedPackageNameUseCase: GetLocalizedPackageNameUseCase,
+        getPackageIconUseCase: GetPackageIconUseCase,
+        packageFingerprintService: PackageFingerprintService,
         clipboardService: ClipboardService,
         id: Uuid? = null
     ) {
@@ -130,9 +173,16 @@ class AccountViewModel(): ViewModel() {
         this.createAccountUseCase = createAccountUseCase
         this.updateAccountUseCase = updateAccountUseCase
         this.getAccountIconUseCase = getAccountIconUseCase
-        this.tagRepository = tagRepository
+        this.getAllTagsUseCase = getAllTagsUseCase
+        this.createTagUseCase = createTagUseCase
+        this.updateTagUseCase = updateTagUseCase
+        this.deleteTagUseCase = deleteTagUseCase
+        this.getAllPackagesUseCase = getAllPackagesUseCase
+        this.getLocalizedPackageNameUseCase = getLocalizedPackageNameUseCase
+        this.getPackageIconUseCase = getPackageIconUseCase
+        this.packageFingerprintService = packageFingerprintService
         this.clipboardService = clipboardService
-        allTags = tagRepository.getAllTags().map { list ->
+        allTags = getAllTagsUseCase.getAllTags().map { list ->
             list.map { tag -> tagMapper.toDto(tag)}
         }
         selectedTags = combine(allTags, selectedTagIds) { all, ids ->
@@ -152,6 +202,7 @@ class AccountViewModel(): ViewModel() {
                     clearSelectedTags()
                 }
                 else {
+                    helpState = null
                     name = account.descriptor.name
                     description = account.descriptor.description
                     details.clear()
@@ -206,6 +257,45 @@ class AccountViewModel(): ViewModel() {
     }
 
 
+    fun startReorderableState() {
+        isInReorderableState = true
+        determineNextHelpState()
+    }
+    fun dismissReorderableState() {
+        isInReorderableState = false
+        determineNextHelpState()
+    }
+
+    fun startMultiselectState(selectedDetailId: Uuid) {
+        selectedDetailIds.add(selectedDetailId)
+        isInMultiselectState = true
+        determineNextHelpState()
+    }
+    fun dismissMultiselectState() {
+        isInMultiselectState = false
+        selectedDetailIds.clear()
+        determineNextHelpState()
+    }
+
+
+    fun dismissNameDialog(name: String? = null) {
+        isNameDialogVisible = false
+        if (name != null) {
+            this.name = name
+            determineNextHelpState()
+        }
+    }
+
+
+    fun dismissDescriptionDialog(description: String? = null) {
+        isDescriptionDialogVisible = false
+        if (description != null) {
+            this.description = description
+            determineNextHelpState()
+        }
+    }
+
+
     fun dismissTagDialog(selectedTagIds: Set<Uuid>? = null) {
         isTagDialogVisible = false
         viewModelStoreId++
@@ -225,6 +315,7 @@ class AccountViewModel(): ViewModel() {
         if (targets != null) {
             this.targets.clear()
             this.targets.addAll(targets)
+            determineNextHelpState()
         }
     }
 
@@ -248,6 +339,7 @@ class AccountViewModel(): ViewModel() {
                     details.add(index, detail)
                 }
             }
+            determineNextHelpState()
         }
         else {
             //Dismiss dialog without saving:
@@ -292,8 +384,8 @@ class AccountViewModel(): ViewModel() {
 
 
     fun reorderDetails(fromIndex: Int, toIndex: Int) {
-        var fromDetail: Detail? = null
-        var toDetail: Detail? = null
+        var fromDetail: Detail?
+        var toDetail: Detail?
         val isVisible: Boolean = toIndex < visibleDetails.value.size
         if (fromIndex >= visibleDetails.value.size) {
             val index: Int = fromIndex - visibleDetails.value.size - 1 // Subtract 1 for the "Show more" / "Show less" button
@@ -323,6 +415,34 @@ class AccountViewModel(): ViewModel() {
         }
     }
 
+    fun initTagViewModel(viewModel: TagViewModel, selectedTags: List<TagUiDto>) {
+        viewModel.init(
+            getAllTagsUseCase = getAllTagsUseCase,
+            createTagUseCase = createTagUseCase,
+            updateTagUseCase = updateTagUseCase,
+            deleteTagUseCase = deleteTagUseCase,
+            selectedTagIds = selectedTags.map { it.id }.toSet()
+        )
+    }
+
+
+    fun initTargetViewModel(viewModel: TargetViewModel) {
+        viewModel.init(
+            getAllPackagesUseCase = getAllPackagesUseCase,
+            getLocalizedPackageNameUseCase = getLocalizedPackageNameUseCase,
+            getPackageIconUseCase = getPackageIconUseCase,
+            packageFingerprintService = packageFingerprintService,
+            targets = targets
+        )
+    }
+
+
+    fun dismissHelpCard() {
+        HelpCard.ACCOUNT.setVisible(application, false)
+        helpState = null
+    }
+
+
     private fun clearSelectedTags() {
         selectedTagIds.value = emptySet()
     }
@@ -334,6 +454,32 @@ class AccountViewModel(): ViewModel() {
             }
             else {
                 currentIds + tagId
+            }
+        }
+    }
+
+    private fun determineNextHelpState() {
+        if (helpState != null) {
+            helpState = if (isInMultiselectState) {
+                AccountScreenHelpState.CLOSE_MULTISELECT
+            }
+            else if (isInReorderableState) {
+                AccountScreenHelpState.CLOSE_REORDER
+            }
+            else if (name.isBlank()) {
+                AccountScreenHelpState.NAME
+            }
+            else if (description.isBlank()) {
+                AccountScreenHelpState.DESCRIPTION
+            }
+            else if (details.isEmpty()) {
+                AccountScreenHelpState.DETAILS
+            }
+            else if (targets.isEmpty()) {
+                AccountScreenHelpState.TARGETS
+            }
+            else {
+                AccountScreenHelpState.SAVE
             }
         }
     }

@@ -22,9 +22,13 @@ import androidx.compose.ui.unit.dp
 
 /**
  * Displays an eyecatcher to the user using a pulsating effect.
+ *
+ * @param modifier  Modifier.
  */
 @Composable
-fun Eyecatcher() {
+fun Eyecatcher(
+    modifier: Modifier = Modifier
+) {
     val infiniteTransition: InfiniteTransition = rememberInfiniteTransition(label = "")
     val scale by infiniteTransition.animateFloat(
         initialValue = 0.8f,
@@ -40,7 +44,7 @@ fun Eyecatcher() {
     )
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .size(12.dp)
             .scale(scale)
             .background(

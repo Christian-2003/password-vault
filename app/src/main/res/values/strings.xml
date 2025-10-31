@@ -48,6 +48,15 @@
     <string name="account_details_emptyPlaceholder_title">No details</string>
     <string name="account_details_emptyPlaceholder_subtitle">Available details are shown here</string>
     <string name="account_tags_emptyPlaceholder_title">No tags</string>
+    <string-array name="account_helpMessages">
+        <item>Let\'s configure your account. First, enter a name for the account.</item>
+        <item>Next, enter a description which describes the account in greater detail.</item>
+        <item>Let\'s add the actual account information, like a password or email address.</item>
+        <item>Select an app or website you want to autofill the information.</item>
+        <item>Now, save your account by clicking the "Save" button.</item>
+        <item>To continue, close the reorder mode.</item>
+        <item>To continue, close the reorder mode.</item>
+    </string-array>
 
     <string name="tag_title">Tags</string>
     <string name="tag_titleCreate">Create tag</string>
@@ -103,6 +112,7 @@
         <item>Help</item>
         <item>Targets</item>
         <item>Detail</item>
+        <item>Account</item>
     </string-array>
 
     <string name="button_save">Save</string>

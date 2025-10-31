@@ -2,6 +2,7 @@ package de.christian2003.passwordvault.plugin.presentation.view.account
 
 import android.graphics.drawable.Drawable
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
@@ -52,12 +53,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -67,17 +69,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import de.christian2003.passwordvault.R
-import de.christian2003.passwordvault.application.repository.PackagesRepository
-import de.christian2003.passwordvault.application.usecases.packages.GetAllPackagesUseCase
-import de.christian2003.passwordvault.application.usecases.packages.GetLocalizedPackageNameUseCase
-import de.christian2003.passwordvault.application.usecases.packages.GetPackageIconUseCase
-import de.christian2003.passwordvault.application.usecases.tag.CreateTagUseCase
-import de.christian2003.passwordvault.application.usecases.tag.DeleteTagUseCase
-import de.christian2003.passwordvault.application.usecases.tag.GetAllTagsUseCase
-import de.christian2003.passwordvault.application.usecases.tag.UpdateTagUseCase
 import de.christian2003.passwordvault.domain.model.detail.Detail
-import de.christian2003.passwordvault.plugin.infrastructure.packages.AndroidPackageFingerprintService
-import de.christian2003.passwordvault.plugin.infrastructure.packages.LocalPackagesRepository
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDeleteDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ContextAction
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ContextActionBase
@@ -85,7 +77,9 @@ import de.christian2003.passwordvault.plugin.presentation.ui.composables.Context
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ContextActions
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EditValueDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.Eyecatcher
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.Headline
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.HelpCard
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.NavigationBarProtection
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.Tooltip
 import de.christian2003.passwordvault.plugin.presentation.view.account.detail.DetailSheet
@@ -122,11 +116,10 @@ fun AccountScreen(
 
     BackHandler {
         if (viewModel.isInMultiselectState) {
-            viewModel.isInMultiselectState = false
-            viewModel.selectedDetailIds.clear()
+            viewModel.dismissMultiselectState()
         }
         else if (viewModel.isInReorderableState) {
-            viewModel.isInReorderableState = false
+            viewModel.dismissReorderableState()
         }
         else {
             onNavigateUp()
@@ -137,14 +130,16 @@ fun AccountScreen(
         topBar = {
             if (viewModel.isInReorderableState) {
                 ReorderAppBar(
+                    helpState = viewModel.helpState,
                     onFinishReordering = {
-                        viewModel.isInReorderableState = false
+                        viewModel.dismissReorderableState()
                     }
                 )
             }
             else if (viewModel.isInMultiselectState) {
                 MultiselectAppBar(
                     selectedDetailsCount = viewModel.selectedDetailIds.size,
+                    helpState = viewModel.helpState,
                     onSelectAll = {
                         viewModel.selectAllDetails()
                     },
@@ -152,14 +147,14 @@ fun AccountScreen(
                         viewModel.isDeleteDetailMultiselectDialogVisible = true
                     },
                     onFinishMultiselect = {
-                        viewModel.isInMultiselectState = false
-                        viewModel.selectedDetailIds.clear()
+                        viewModel.dismissMultiselectState()
                     }
                 )
             }
             else {
                 DefaultAppBar(
                     name = viewModel.name,
+                    helpState = viewModel.helpState,
                     scrollBehavior = scrollBehavior,
                     onNavigateUp = onNavigateUp,
                     onEditName = {
@@ -178,7 +173,7 @@ fun AccountScreen(
                         viewModel.isDetailDialogVisible = true
                     },
                     onReorderDetails = {
-                        viewModel.isInReorderableState = true
+                        viewModel.startReorderableState()
                     }
                 )
             }
@@ -204,6 +199,9 @@ fun AccountScreen(
                     name = viewModel.name,
                     tags = selectedTags,
                     icon = viewModel.icon.value,
+                    helpState = viewModel.helpState,
+                    isInMultiselectState = viewModel.isInMultiselectState,
+                    isInReorderableState = viewModel.isInReorderableState,
                     onEditTags = {
                         viewModel.isTagDialogVisible = true
                     },
@@ -214,12 +212,16 @@ fun AccountScreen(
                         viewModel.save()
                         onNavigateUp()
                     },
+                    onDismissHelpCard = {
+                        viewModel.dismissHelpCard()
+                    },
                     modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.margin_horizontal))
                 )
                 HorizontalDivider()
                 Headline(
                     title = stringResource(R.string.account_details_title),
                     endIcon = painterResource(R.drawable.ic_add),
+                    isEyecatcherVisible = viewModel.helpState == AccountScreenHelpState.DETAILS,
                     onClick = {
                         viewModel.isDetailDialogVisible = true
                     },
@@ -265,11 +267,10 @@ fun AccountScreen(
                                 viewModel.copyToClipboard(it)
                             },
                             onReorderDetails = {
-                                viewModel.isInReorderableState = true
+                                viewModel.startReorderableState()
                             },
                             onMultiselect = { detail ->
-                                viewModel.isInMultiselectState = true
-                                viewModel.selectedDetailIds.add(detail.id)
+                                viewModel.startMultiselectState(detail.id)
                             },
                             onToggleSelection = { detail, selected ->
                                 if (selected) {
@@ -278,7 +279,7 @@ fun AccountScreen(
                                 else {
                                     viewModel.selectedDetailIds.remove(detail.id)
                                     if (viewModel.selectedDetailIds.isEmpty()) {
-                                        viewModel.isInMultiselectState = false
+                                        viewModel.dismissMultiselectState()
                                     }
                                 }
                             },
@@ -355,11 +356,10 @@ fun AccountScreen(
                                     viewModel.copyToClipboard(it)
                                 },
                                 onReorderDetails = {
-                                    viewModel.isInReorderableState = true
+                                    viewModel.startReorderableState()
                                 },
                                 onMultiselect = { detail ->
-                                    viewModel.isInMultiselectState = true
-                                    viewModel.selectedDetailIds.add(detail.id)
+                                    viewModel.startMultiselectState(detail.id)
                                 },
                                 onToggleSelection = { detail, selected ->
                                     if (selected) {
@@ -368,7 +368,7 @@ fun AccountScreen(
                                     else {
                                         viewModel.selectedDetailIds.remove(detail.id)
                                         if (viewModel.selectedDetailIds.isEmpty()) {
-                                            viewModel.isInMultiselectState = false
+                                            viewModel.dismissMultiselectState()
                                         }
                                     }
                                 },
@@ -411,11 +411,10 @@ fun AccountScreen(
             label = stringResource(R.string.account_nameLabel),
             title = stringResource(R.string.account_nameTitle),
             onDismiss = {
-                viewModel.isNameDialogVisible = false
+                viewModel.dismissNameDialog()
             },
             onSave = { name ->
-                viewModel.name = name
-                viewModel.isNameDialogVisible = false
+                viewModel.dismissNameDialog(name)
             }
         )
     }
@@ -428,11 +427,10 @@ fun AccountScreen(
             label = stringResource(R.string.account_descriptionLabel),
             title = stringResource(R.string.account_descriptionTitle),
             onDismiss = {
-                viewModel.isDescriptionDialogVisible = false
+                viewModel.dismissDescriptionDialog()
             },
             onSave = { description ->
-                viewModel.description = description
-                viewModel.isDescriptionDialogVisible = false
+                viewModel.dismissDescriptionDialog(description)
             }
         )
     }
@@ -470,13 +468,7 @@ fun AccountScreen(
     //Dialog to edit the tags:
     if (viewModel.isTagDialogVisible) {
         val tagViewModel: TagViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
-        tagViewModel.init(
-            getAllTagsUseCase = GetAllTagsUseCase(viewModel.tagRepository),
-            createTagUseCase = CreateTagUseCase(viewModel.tagRepository),
-            updateTagUseCase = UpdateTagUseCase(viewModel.tagRepository),
-            deleteTagUseCase = DeleteTagUseCase(viewModel.tagRepository),
-            selectedTagIds = selectedTags.map { it.id }.toSet()
-        )
+        viewModel.initTagViewModel(tagViewModel, selectedTags)
         TagSheet(
             viewModel = tagViewModel,
             onDismiss = {
@@ -490,16 +482,8 @@ fun AccountScreen(
 
     //Dialog to edit the targets:
     if (viewModel.isTargetDialogVisible) {
-        //TODO: Move repo instantiation to MainActivity
-        val packagesRepository: PackagesRepository = LocalPackagesRepository(LocalContext.current.packageManager)
         val targetViewModel: TargetViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
-        targetViewModel.init(
-            getAllPackagesUseCase = GetAllPackagesUseCase(packagesRepository),
-            getLocalizedPackageNameUseCase = GetLocalizedPackageNameUseCase(packagesRepository),
-            getPackageIconUseCase = GetPackageIconUseCase(packagesRepository),
-            packageFingerprintService = AndroidPackageFingerprintService(LocalContext.current.packageManager),
-            targets = viewModel.targets
-        )
+        viewModel.initTargetViewModel(targetViewModel)
         TargetSheet(
             viewModel = targetViewModel,
             onDismiss = {
@@ -551,6 +535,7 @@ fun AccountScreen(
  * Default app bar displayed in default state.
  *
  * @param name              Name of the account.
+ * @param helpState         Help state.
  * @param scrollBehavior    Scroll behavior for the screen.
  * @param onNavigateUp      Callback invoked to navigate up the navigation stack.
  * @param onEditName        Callback invoked to edit the account name.
@@ -563,6 +548,7 @@ fun AccountScreen(
 @Composable
 private fun DefaultAppBar(
     name: String,
+    helpState: AccountScreenHelpState?,
     scrollBehavior: TopAppBarScrollBehavior,
     onNavigateUp: () -> Unit,
     onEditName: () -> Unit,
@@ -574,15 +560,8 @@ private fun DefaultAppBar(
 ) {
     TopAppBar(
         title = {
-            Text(
-                text = name.ifEmpty { stringResource(R.string.account_namePlaceholder) },
-                color = if (!name.isEmpty()) {
-                    MaterialTheme.colorScheme.onSurface
-                } else {
-                    MaterialTheme.colorScheme.onSurface.copy(0.5f)
-                },
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1,
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     //Text has horizontal padding of 8 dp, so that the touch target size is larger.
                     //However, this increases the space between the back-icon and the text by 8 dp.
@@ -596,7 +575,21 @@ private fun DefaultAppBar(
                         horizontal = 8.dp,
                         vertical = 4.dp
                     )
-            )
+            ) {
+                Text(
+                    text = name.ifEmpty { stringResource(R.string.account_namePlaceholder) },
+                    color = if (!name.isEmpty()) {
+                        MaterialTheme.colorScheme.onSurface
+                    } else {
+                        MaterialTheme.colorScheme.onSurface.copy(0.5f)
+                    },
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
+                )
+                if (helpState == AccountScreenHelpState.NAME) {
+                    Eyecatcher()
+                }
+            }
         },
         navigationIcon = {
             IconButton(
@@ -659,10 +652,12 @@ private fun DefaultAppBar(
 /**
  * App bar for the reorder state.
  *
+ * @param helpState             Help state.
  * @param onFinishReordering    Callback invoked to finish reordering state.
  */
 @Composable
 private fun ReorderAppBar(
+    helpState: AccountScreenHelpState?,
     onFinishReordering: () -> Unit
 ) {
     TopAppBar(
@@ -675,15 +670,28 @@ private fun ReorderAppBar(
             )
         },
         navigationIcon = {
-            IconButton(
-                onClick = onFinishReordering
+            Box(
+                contentAlignment = Alignment.TopEnd
             ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_cancel),
-                    contentDescription = "",
-                    tint = MaterialTheme.colorScheme.secondary
-                )
+                IconButton(
+                    onClick = onFinishReordering
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_cancel),
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.secondary
+                    )
+                }
+                if (helpState != null) {
+                    Eyecatcher(
+                        modifier = Modifier.padding(
+                            top = 8.dp,
+                            end = 8.dp
+                        )
+                    )
+                }
             }
+
         },
         colors = TopAppBarDefaults.topAppBarColors().copy(containerColor = MaterialTheme.colorScheme.surfaceContainer)
     )
@@ -694,6 +702,7 @@ private fun ReorderAppBar(
  * App bar for the multiselect state.
  *
  * @param selectedDetailsCount  Number of details currently selected.
+ * @param helpState             Help state.
  * @param onSelectAll           Callback invoked to select all details.
  * @param onDeleteSelected      Callback invoked to delete all selected details.
  * @param onFinishMultiselect   Callback invoked to finish multiselect state.
@@ -701,6 +710,7 @@ private fun ReorderAppBar(
 @Composable
 private fun MultiselectAppBar(
     selectedDetailsCount: Int,
+    helpState: AccountScreenHelpState?,
     onSelectAll: () -> Unit,
     onDeleteSelected: () -> Unit,
     onFinishMultiselect: () -> Unit
@@ -715,17 +725,29 @@ private fun MultiselectAppBar(
             )
         },
         navigationIcon = {
-            Tooltip(
-                tooltip = stringResource(R.string.tooltip_closeMultiselect),
-                anchor = TooltipAnchorPosition.End
+            Box(
+                contentAlignment = Alignment.TopEnd
             ) {
-                IconButton(
-                    onClick = onFinishMultiselect
+                Tooltip(
+                    tooltip = stringResource(R.string.tooltip_closeMultiselect),
+                    anchor = TooltipAnchorPosition.End
                 ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_cancel),
-                        contentDescription = "",
-                        tint = MaterialTheme.colorScheme.secondary
+                    IconButton(
+                        onClick = onFinishMultiselect
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_cancel),
+                            contentDescription = "",
+                            tint = MaterialTheme.colorScheme.secondary
+                        )
+                    }
+                }
+                if (helpState != null) {
+                    Eyecatcher(
+                        modifier = Modifier.padding(
+                            top = 8.dp,
+                            end = 8.dp
+                        )
                     )
                 }
             }
@@ -768,14 +790,19 @@ private fun MultiselectAppBar(
 /**
  * Displays the general section at the top of the page.
  *
- * @param description       Description of the account.
- * @param name              Name of the account.
- * @param tags              List of tags of the account.
- * @param onEditDescription Callback invoked to edit the description.
- * @param onEditTags        Callback invoked to edit the tags.
- * @param onEditTargets     Callback invoked to edit the targets.
- * @param onSave            Callback invoked to save the changes.
- * @param modifier          Modifier.
+ * @param description           Description of the account.
+ * @param name                  Name of the account.
+ * @param tags                  List of tags of the account.
+ * @param icon                  Icon for the account.
+ * @param helpState             Help state indicating the help message to display.
+ * @param isInMultiselectState  Whether the screen is in multiselect state.
+ * @param isInReorderableState  Whether the screen is in reorderable state.
+ * @param onEditDescription     Callback invoked to edit the description.
+ * @param onEditTags            Callback invoked to edit the tags.
+ * @param onEditTargets         Callback invoked to edit the targets.
+ * @param onSave                Callback invoked to save the changes.
+ * @param onDismissHelpCard     Callback invoked to dismiss the help card.
+ * @param modifier              Modifier.
  */
 @Composable
 private fun GeneralSection(
@@ -783,56 +810,80 @@ private fun GeneralSection(
     name: String,
     tags: List<TagUiDto>,
     icon: Drawable?,
+    helpState: AccountScreenHelpState?,
+    isInMultiselectState: Boolean,
+    isInReorderableState: Boolean,
     onEditDescription: () -> Unit,
     onEditTags: () -> Unit,
     onEditTargets: () -> Unit,
     onSave: () -> Unit,
+    onDismissHelpCard: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    if (helpState != null) {
+        HelpCard(
+            text = if (isInMultiselectState) {
+                stringArrayResource(R.array.account_helpMessages)[AccountScreenHelpState.CLOSE_MULTISELECT.ordinal]
+            } else if (isInReorderableState) {
+                stringArrayResource(R.array.account_helpMessages)[AccountScreenHelpState.CLOSE_REORDER.ordinal]
+            } else {
+                stringArrayResource(R.array.account_helpMessages)[helpState.ordinal]
+            },
+            onDismiss = onDismissHelpCard,
+            modifier = Modifier.padding(
+                horizontal = dimensionResource(R.dimen.margin_horizontal),
+                vertical = dimensionResource(R.dimen.padding_vertical)
+            )
+        )
+    }
     Row(
         modifier = modifier
     ) {
-        if (icon == null) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .padding(top = dimensionResource(R.dimen.padding_vertical))
-                    .size(dimensionResource(R.dimen.image_xl))
-                    .clip(MaterialTheme.shapes.large)
-                    .background(MaterialTheme.colorScheme.surfaceContainer)
-                    .clickable {
-                        onEditTargets()
-                    }
-            ) {
-                Text(
-                    text = if (!name.isEmpty()) { name.first().toString() } else { "?" },
-                    color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 32.sp
+        Box(
+            contentAlignment = Alignment.TopEnd,
+            modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
+        ) {
+            if (icon == null) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .size(dimensionResource(R.dimen.image_xl))
+                        .clip(MaterialTheme.shapes.large)
+                        .background(MaterialTheme.colorScheme.surfaceContainer)
+                        .clickable {
+                            onEditTargets()
+                        }
+                ) {
+                    Text(
+                        text = if (!name.isEmpty()) { name.first().toString() } else { "?" },
+                        color = MaterialTheme.colorScheme.primary,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 32.sp
+                    )
+                }
+            }
+            else {
+                Image(
+                    painter = rememberDrawablePainter(icon),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .size(dimensionResource(R.dimen.image_xl))
+                        .clip(MaterialTheme.shapes.medium)
+                        .clickable {
+                            onEditTargets()
+                        }
                 )
             }
-        }
-        else {
-            Image(
-                painter = rememberDrawablePainter(icon),
-                contentDescription = "",
-                modifier = Modifier
-                    .padding(top = dimensionResource(R.dimen.padding_vertical))
-                    .size(dimensionResource(R.dimen.image_xl))
-                    .clip(MaterialTheme.shapes.medium)
-                    .clickable {
-                        onEditTargets()
-                    }
-            )
+            if (helpState == AccountScreenHelpState.TARGETS) {
+                Eyecatcher()
+            }
         }
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(
-                text = description.ifEmpty { stringResource(R.string.account_descriptionPlaceholder) },
-                color = if (!description.isEmpty()) { MaterialTheme.colorScheme.onSurface } else { MaterialTheme.colorScheme.onSurface.copy(0.5f) },
-                style = MaterialTheme.typography.bodyLarge,
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .padding(
                         start = dimensionResource(R.dimen.padding_horizontal) - 8.dp,
@@ -846,13 +897,28 @@ private fun GeneralSection(
                         horizontal = 8.dp,
                         vertical = 4.dp
                     )
-            )
-            Button(
-                onClick = onSave,
-                modifier = Modifier
-                    .padding(start = dimensionResource(R.dimen.padding_horizontal))
             ) {
-                Text(stringResource(R.string.button_save))
+                Text(
+                    text = description.ifEmpty { stringResource(R.string.account_descriptionPlaceholder) },
+                    color = if (!description.isEmpty()) { MaterialTheme.colorScheme.onSurface } else { MaterialTheme.colorScheme.onSurface.copy(0.5f) },
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                if (helpState == AccountScreenHelpState.DESCRIPTION) {
+                    Eyecatcher()
+                }
+            }
+            Box(
+                contentAlignment = Alignment.TopEnd,
+                modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
+            ) {
+                Button(
+                    onClick = onSave,
+                ) {
+                    Text(stringResource(R.string.button_save))
+                }
+                if (helpState == AccountScreenHelpState.SAVE) {
+                    Eyecatcher()
+                }
             }
         }
     }

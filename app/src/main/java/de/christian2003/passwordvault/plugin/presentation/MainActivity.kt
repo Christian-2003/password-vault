@@ -26,9 +26,17 @@ import de.christian2003.passwordvault.application.usecases.account.GetAccountByI
 import de.christian2003.passwordvault.application.usecases.account.GetAccountIconUseCase
 import de.christian2003.passwordvault.application.usecases.account.GetAllAccountDescriptorsUseCase
 import de.christian2003.passwordvault.application.usecases.account.UpdateAccountUseCase
+import de.christian2003.passwordvault.application.usecases.packages.GetAllPackagesUseCase
+import de.christian2003.passwordvault.application.usecases.packages.GetLocalizedPackageNameUseCase
+import de.christian2003.passwordvault.application.usecases.packages.GetPackageIconUseCase
+import de.christian2003.passwordvault.application.usecases.tag.CreateTagUseCase
+import de.christian2003.passwordvault.application.usecases.tag.DeleteTagUseCase
+import de.christian2003.passwordvault.application.usecases.tag.GetAllTagsUseCase
+import de.christian2003.passwordvault.application.usecases.tag.UpdateTagUseCase
 import de.christian2003.passwordvault.domain.security.ClipboardService
 import de.christian2003.passwordvault.plugin.PasswordVaultApplication
 import de.christian2003.passwordvault.plugin.infrastructure.db.PasswordVaultRepository
+import de.christian2003.passwordvault.plugin.infrastructure.packages.AndroidPackageFingerprintService
 import de.christian2003.passwordvault.plugin.infrastructure.packages.LocalPackagesRepository
 import de.christian2003.passwordvault.plugin.infrastructure.security.AndroidClipboardService
 import de.christian2003.passwordvault.plugin.presentation.ui.theme.PasswordVaultTheme
@@ -133,7 +141,14 @@ fun PasswordVault() {
                     createAccountUseCase = CreateAccountUseCase(repository, repository),
                     updateAccountUseCase = UpdateAccountUseCase(repository, repository),
                     getAccountIconUseCase = GetAccountIconUseCase(packagesRepository),
-                    tagRepository = repository,
+                    getAllTagsUseCase = GetAllTagsUseCase(repository),
+                    createTagUseCase = CreateTagUseCase(repository),
+                    updateTagUseCase = UpdateTagUseCase(repository),
+                    deleteTagUseCase = DeleteTagUseCase(repository),
+                    getAllPackagesUseCase = GetAllPackagesUseCase(packagesRepository),
+                    getLocalizedPackageNameUseCase = GetLocalizedPackageNameUseCase(packagesRepository),
+                    getPackageIconUseCase = GetPackageIconUseCase(packagesRepository),
+                    packageFingerprintService = AndroidPackageFingerprintService(context.packageManager),
                     clipboardService = clipboardService,
                     id = id
                 )
