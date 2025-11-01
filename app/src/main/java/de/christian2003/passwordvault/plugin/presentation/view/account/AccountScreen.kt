@@ -115,7 +115,7 @@ fun AccountScreen(
 
     val invokeOnNavigateUp: () -> Unit = {
         if(viewModel.areChangesMade(selectedTags)) {
-            viewModel.isDiscardDialogVisible = true
+            viewModel.visibleDialog = AccountScreenDialog.Discard
         }
         else {
             onNavigateUp()
@@ -123,62 +123,54 @@ fun AccountScreen(
     }
 
     BackHandler {
-        if (viewModel.isInMultiselectState) {
-            viewModel.dismissMultiselectState()
-        }
-        else if (viewModel.isInReorderableState) {
-            viewModel.dismissReorderableState()
-        }
-        else {
-            invokeOnNavigateUp()
+        when (viewModel.screenState) {
+            ScreenState.Multiselect -> viewModel.dismissMultiselectState()
+            ScreenState.Reorder -> viewModel.dismissReorderableState()
+            else -> invokeOnNavigateUp()
         }
     }
 
     Scaffold(
         topBar = {
-            if (viewModel.isInReorderableState) {
-                ReorderAppBar(
+            when (viewModel.screenState) {
+                ScreenState.Reorder -> ReorderAppBar(
                     helpState = viewModel.helpState,
                     onFinishReordering = {
                         viewModel.dismissReorderableState()
                     }
                 )
-            }
-            else if (viewModel.isInMultiselectState) {
-                MultiselectAppBar(
+                ScreenState.Multiselect -> MultiselectAppBar(
                     selectedDetailsCount = viewModel.selectedDetailIds.size,
                     helpState = viewModel.helpState,
                     onSelectAll = {
                         viewModel.selectAllDetails()
                     },
                     onDeleteSelected = {
-                        viewModel.isDeleteDetailMultiselectDialogVisible = true
+                        viewModel.visibleDialog = AccountScreenDialog.DeleteDetailMultiselect
                     },
                     onFinishMultiselect = {
                         viewModel.dismissMultiselectState()
                     }
                 )
-            }
-            else {
-                DefaultAppBar(
+                else -> DefaultAppBar(
                     name = viewModel.name,
                     helpState = viewModel.helpState,
                     scrollBehavior = scrollBehavior,
                     onNavigateUp = invokeOnNavigateUp,
                     onEditName = {
-                        viewModel.isNameDialogVisible = true
+                        viewModel.visibleDialog = AccountScreenDialog.Name
                     },
                     onEditDescription = {
-                        viewModel.isDescriptionDialogVisible = true
+                        viewModel.visibleDialog = AccountScreenDialog.Description
                     },
                     onSelectTargets = {
-                        viewModel.isTargetDialogVisible = true
+                        viewModel.visibleDialog = AccountScreenDialog.Target
                     },
                     onSelectTags = {
-                        viewModel.isTagDialogVisible = true
+                        viewModel.visibleDialog = AccountScreenDialog.Tag
                     },
                     onCreateDetail = {
-                        viewModel.isDetailDialogVisible = true
+                        viewModel.visibleDialog = AccountScreenDialog.Detail
                     },
                     onReorderDetails = {
                         viewModel.startReorderableState()
@@ -202,20 +194,19 @@ fun AccountScreen(
                 GeneralSection(
                     description = viewModel.description,
                     onEditDescription = {
-                        viewModel.isDescriptionDialogVisible = true
+                        viewModel.visibleDialog = AccountScreenDialog.Description
                     },
                     name = viewModel.name,
                     tags = selectedTags,
                     icon = viewModel.icon.value,
+                    screenState = viewModel.screenState,
                     helpState = viewModel.helpState,
-                    isInMultiselectState = viewModel.isInMultiselectState,
-                    isInReorderableState = viewModel.isInReorderableState,
                     isDataValid = viewModel.isDataValid.value,
                     onEditTags = {
-                        viewModel.isTagDialogVisible = true
+                        viewModel.visibleDialog = AccountScreenDialog.Tag
                     },
                     onEditTargets = {
-                        viewModel.isTargetDialogVisible = true
+                        viewModel.visibleDialog = AccountScreenDialog.Target
                     },
                     onSave = {
                         viewModel.save()
@@ -230,9 +221,9 @@ fun AccountScreen(
                 Headline(
                     title = stringResource(R.string.account_details_title),
                     endIcon = painterResource(R.drawable.ic_add),
-                    isEyecatcherVisible = viewModel.helpState == AccountScreenHelpState.DETAILS,
+                    isEyecatcherVisible = viewModel.helpState == AccountScreenHelpState.Details,
                     onClick = {
-                        viewModel.isDetailDialogVisible = true
+                        viewModel.visibleDialog = AccountScreenDialog.Detail
                     },
                     modifier = Modifier.background(MaterialTheme.colorScheme.surface)
                 )
@@ -264,8 +255,7 @@ fun AccountScreen(
                         }
                         DetailListRow(
                             detail = detail,
-                            isInReorderableState = viewModel.isInReorderableState,
-                            isInMultiselectState = viewModel.isInMultiselectState,
+                            screenState = viewModel.screenState,
                             onEdit = {
                                 viewModel.detailToEdit = it
                             },
@@ -353,8 +343,7 @@ fun AccountScreen(
                             }
                             DetailListRow(
                                 detail = detail,
-                                isInReorderableState = viewModel.isInReorderableState,
-                                isInMultiselectState = viewModel.isInMultiselectState,
+                                screenState = viewModel.screenState,
                                 onEdit = {
                                     viewModel.detailToEdit = it
                                 },
@@ -404,152 +393,144 @@ fun AccountScreen(
 
     }
 
-    //Dialog to edit the account name:
-    if (viewModel.isNameDialogVisible) {
-        val errorBlankInput: String = stringResource(R.string.error_blankInput)
-        EditValueDialog(
-            value = viewModel.name,
-            onValidateValue = { value ->
-                if (value.isBlank()) {
-                    errorBlankInput
+
+    //Dialogs:
+    when (viewModel.visibleDialog) {
+        AccountScreenDialog.Name -> {
+            val errorBlankInput: String = stringResource(R.string.error_blankInput)
+            EditValueDialog(
+                value = viewModel.name,
+                onValidateValue = { value ->
+                    if (value.isBlank()) {
+                        errorBlankInput
+                    }
+                    else {
+                        null
+                    }
+                },
+                label = stringResource(R.string.account_nameLabel),
+                title = stringResource(R.string.account_nameTitle),
+                onDismiss = {
+                    viewModel.dismissNameDialog()
+                },
+                onSave = { name ->
+                    viewModel.dismissNameDialog(name)
                 }
-                else {
-                    null
+            )
+        }
+        AccountScreenDialog.Description -> {
+            EditValueDialog(
+                value = viewModel.description,
+                onValidateValue = { value -> null},
+                label = stringResource(R.string.account_descriptionLabel),
+                title = stringResource(R.string.account_descriptionTitle),
+                onDismiss = {
+                    viewModel.dismissDescriptionDialog()
+                },
+                onSave = { description ->
+                    viewModel.dismissDescriptionDialog(description)
                 }
-            },
-            label = stringResource(R.string.account_nameLabel),
-            title = stringResource(R.string.account_nameTitle),
-            onDismiss = {
-                viewModel.dismissNameDialog()
-            },
-            onSave = { name ->
-                viewModel.dismissNameDialog(name)
+            )
+        }
+        AccountScreenDialog.DeleteDetailMultiselect -> {
+            ConfirmDeleteDialog(
+                title = pluralStringResource(R.plurals.account_details_confirmDeleteTitleMultiselect, viewModel.selectedDetailIds.size),
+                text = pluralStringResource(R.plurals.account_details_confirmDeleteTextMultiselect, viewModel.selectedDetailIds.size, viewModel.selectedDetailIds.size),
+                confirmButtonText = stringResource(R.string.button_remove),
+                onDismiss = {
+                    viewModel.dismissDeleteDetailsMultiselectDialog()
+                },
+                onConfirm = {
+                    viewModel.dismissDeleteDetailsMultiselectDialog(viewModel.selectedDetailIds)
+                }
+            )
+        }
+        AccountScreenDialog.Tag -> {
+            val tagViewModel: TagViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
+            viewModel.initTagViewModel(tagViewModel, selectedTags)
+            TagSheet(
+                viewModel = tagViewModel,
+                onDismiss = {
+                    viewModel.dismissTagDialog()
+                },
+                onSave = { selectedTagIds ->
+                    viewModel.dismissTagDialog(selectedTagIds)
+                }
+            )
+        }
+        AccountScreenDialog.Target -> {
+            val targetViewModel: TargetViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
+            viewModel.initTargetViewModel(targetViewModel)
+            TargetSheet(
+                viewModel = targetViewModel,
+                onDismiss = {
+                    viewModel.dismissTargetDialog()
+                },
+                onSave = { targets ->
+                    viewModel.dismissTargetDialog(targets)
+                }
+            )
+        }
+        AccountScreenDialog.Detail -> {
+            val detailViewModel: DetailViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
+            detailViewModel.init(
+                detail = null
+            )
+            DetailSheet(
+                viewModel = detailViewModel,
+                onDismiss = {
+                    viewModel.dismissDetailDialog()
+                },
+                onSave = { detail ->
+                    viewModel.dismissDetailDialog(detail)
+                }
+            )
+        }
+        AccountScreenDialog.Discard -> {
+            ConfirmDiscardDialog(
+                text = stringResource(R.string.account_discardChanges),
+                onDismiss = {
+                    viewModel.visibleDialog = AccountScreenDialog.None
+                },
+                onConfirm = {
+                    viewModel.visibleDialog = AccountScreenDialog.None
+                    onNavigateUp()
+                }
+            )
+        }
+        else -> {
+            //Dialog to delete a detail:
+            if (viewModel.detailToDelete != null) {
+                ConfirmDeleteDialog(
+                    title = stringResource(R.string.account_details_confirmDeleteTitle),
+                    text = stringResource(R.string.account_details_confirmDeleteText, viewModel.detailToDelete!!.name),
+                    confirmButtonText = stringResource(R.string.button_remove),
+                    onDismiss = {
+                        viewModel.dismissDeleteDetailDialog()
+                    },
+                    onConfirm = {
+                        viewModel.dismissDeleteDetailDialog(viewModel.detailToDelete)
+                    }
+                )
             }
-        )
-    }
 
-    //Dialog to edit the account description:
-    if (viewModel.isDescriptionDialogVisible) {
-        EditValueDialog(
-            value = viewModel.description,
-            onValidateValue = { value -> null},
-            label = stringResource(R.string.account_descriptionLabel),
-            title = stringResource(R.string.account_descriptionTitle),
-            onDismiss = {
-                viewModel.dismissDescriptionDialog()
-            },
-            onSave = { description ->
-                viewModel.dismissDescriptionDialog(description)
+            //Dialog to edit a detail:
+            if (viewModel.detailToEdit != null) {
+                val detailViewModel: DetailViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
+                detailViewModel.init(
+                    detail = viewModel.detailToEdit
+                )
+                DetailSheet(
+                    viewModel = detailViewModel,
+                    onDismiss = {
+                        viewModel.dismissDetailDialog()
+                    },
+                    onSave = { detail ->
+                        viewModel.dismissDetailDialog(detail)
+                    }
+                )
             }
-        )
-    }
-
-    //Dialog to delete a detail:
-    if (viewModel.detailToDelete != null) {
-        ConfirmDeleteDialog(
-            title = stringResource(R.string.account_details_confirmDeleteTitle),
-            text = stringResource(R.string.account_details_confirmDeleteText, viewModel.detailToDelete!!.name),
-            confirmButtonText = stringResource(R.string.button_remove),
-            onDismiss = {
-                viewModel.dismissDeleteDetailDialog()
-            },
-            onConfirm = {
-                viewModel.dismissDeleteDetailDialog(viewModel.detailToDelete)
-            }
-        )
-    }
-
-    //Dialog to delete multiple selected details:
-    if (viewModel.isDeleteDetailMultiselectDialogVisible) {
-        ConfirmDeleteDialog(
-            title = pluralStringResource(R.plurals.account_details_confirmDeleteTitleMultiselect, viewModel.selectedDetailIds.size),
-            text = pluralStringResource(R.plurals.account_details_confirmDeleteTextMultiselect, viewModel.selectedDetailIds.size, viewModel.selectedDetailIds.size),
-            confirmButtonText = stringResource(R.string.button_remove),
-            onDismiss = {
-                viewModel.dismissDeleteDetailsMultiselectDialog()
-            },
-            onConfirm = {
-                viewModel.dismissDeleteDetailsMultiselectDialog(viewModel.selectedDetailIds)
-            }
-        )
-    }
-
-    //Dialog to edit the tags:
-    if (viewModel.isTagDialogVisible) {
-        val tagViewModel: TagViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
-        viewModel.initTagViewModel(tagViewModel, selectedTags)
-        TagSheet(
-            viewModel = tagViewModel,
-            onDismiss = {
-                viewModel.dismissTagDialog()
-            },
-            onSave = { selectedTagIds ->
-                viewModel.dismissTagDialog(selectedTagIds)
-            }
-        )
-    }
-
-    //Dialog to edit the targets:
-    if (viewModel.isTargetDialogVisible) {
-        val targetViewModel: TargetViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
-        viewModel.initTargetViewModel(targetViewModel)
-        TargetSheet(
-            viewModel = targetViewModel,
-            onDismiss = {
-                viewModel.dismissTargetDialog()
-            },
-            onSave = { targets ->
-                viewModel.dismissTargetDialog(targets)
-            }
-        )
-    }
-
-    //Dialog to create a detail:
-    if (viewModel.isDetailDialogVisible) {
-        val detailViewModel: DetailViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
-        detailViewModel.init(
-            detail = null
-        )
-        DetailSheet(
-            viewModel = detailViewModel,
-            onDismiss = {
-                viewModel.dismissDetailDialog()
-            },
-            onSave = { detail ->
-                viewModel.dismissDetailDialog(detail)
-            }
-        )
-    }
-
-    //Dialog to edit a detail:
-    if (viewModel.detailToEdit != null) {
-        val detailViewModel: DetailViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
-        detailViewModel.init(
-            detail = viewModel.detailToEdit
-        )
-        DetailSheet(
-            viewModel = detailViewModel,
-            onDismiss = {
-                viewModel.dismissDetailDialog()
-            },
-            onSave = { detail ->
-                viewModel.dismissDetailDialog(detail)
-            }
-        )
-    }
-
-    //Dialog to dismiss without saving:
-    if (viewModel.isDiscardDialogVisible) {
-        ConfirmDiscardDialog(
-            text = stringResource(R.string.account_discardChanges),
-            onDismiss = {
-                viewModel.isDiscardDialogVisible = false
-            },
-            onConfirm = {
-                viewModel.isDiscardDialogVisible = false
-                onNavigateUp()
-            }
-        )
+        }
     }
 }
 
@@ -609,7 +590,7 @@ private fun DefaultAppBar(
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1
                 )
-                if (helpState == AccountScreenHelpState.NAME) {
+                if (helpState == AccountScreenHelpState.Name) {
                     Eyecatcher()
                 }
             }
@@ -817,9 +798,8 @@ private fun MultiselectAppBar(
  * @param name                  Name of the account.
  * @param tags                  List of tags of the account.
  * @param icon                  Icon for the account.
+ * @param screenState           Screen state.
  * @param helpState             Help state indicating the help message to display.
- * @param isInMultiselectState  Whether the screen is in multiselect state.
- * @param isInReorderableState  Whether the screen is in reorderable state.
  * @param isDataValid           Whether the data entered by the user is valid.
  * @param onEditDescription     Callback invoked to edit the description.
  * @param onEditTags            Callback invoked to edit the tags.
@@ -834,9 +814,8 @@ private fun GeneralSection(
     name: String,
     tags: List<TagUiDto>,
     icon: Drawable?,
+    screenState: ScreenState,
     helpState: AccountScreenHelpState?,
-    isInMultiselectState: Boolean,
-    isInReorderableState: Boolean,
     isDataValid: Boolean,
     onEditDescription: () -> Unit,
     onEditTags: () -> Unit,
@@ -847,12 +826,10 @@ private fun GeneralSection(
 ) {
     if (helpState != null) {
         HelpCard(
-            text = if (isInMultiselectState) {
-                stringArrayResource(R.array.account_helpMessages)[AccountScreenHelpState.CLOSE_MULTISELECT.ordinal]
-            } else if (isInReorderableState) {
-                stringArrayResource(R.array.account_helpMessages)[AccountScreenHelpState.CLOSE_REORDER.ordinal]
-            } else {
-                stringArrayResource(R.array.account_helpMessages)[helpState.ordinal]
+            text = when (screenState) {
+                ScreenState.Multiselect -> stringArrayResource(R.array.account_helpMessages)[AccountScreenHelpState.CloseMultiselect.ordinal]
+                ScreenState.Reorder -> stringArrayResource(R.array.account_helpMessages)[AccountScreenHelpState.CloseReorder.ordinal]
+                else -> stringArrayResource(R.array.account_helpMessages)[helpState.ordinal]
             },
             onDismiss = onDismissHelpCard,
             modifier = Modifier.padding(
@@ -900,7 +877,7 @@ private fun GeneralSection(
                         }
                 )
             }
-            if (helpState == AccountScreenHelpState.TARGETS) {
+            if (helpState == AccountScreenHelpState.Targets) {
                 Eyecatcher()
             }
         }
@@ -928,7 +905,7 @@ private fun GeneralSection(
                     color = if (!description.isEmpty()) { MaterialTheme.colorScheme.onSurface } else { MaterialTheme.colorScheme.onSurface.copy(0.5f) },
                     style = MaterialTheme.typography.bodyLarge
                 )
-                if (helpState == AccountScreenHelpState.DESCRIPTION) {
+                if (helpState == AccountScreenHelpState.Description) {
                     Eyecatcher()
                 }
             }
@@ -942,7 +919,7 @@ private fun GeneralSection(
                 ) {
                     Text(stringResource(R.string.button_save))
                 }
-                if (helpState == AccountScreenHelpState.SAVE) {
+                if (helpState == AccountScreenHelpState.Save) {
                     Eyecatcher()
                 }
             }
@@ -1022,8 +999,7 @@ private fun GeneralSection(
  * Displays a single account detail in a list row.
  *
  * @param detail                Detail to display.
- * @param isInReorderableState  Whether the screen is currently in reorder state.
- * @param isInMultiselectState  Whether the screen is currently in multiselect state.
+ * @param screenState           Screen state.
  * @param onEdit                Callback invoked to edit the detail.
  * @param onDelete              Callback invoked to delete the detail.
  * @param onCopyToClipboard     Callback invoked to copy the detail content to the clipboard.
@@ -1035,8 +1011,7 @@ private fun GeneralSection(
 @Composable
 private fun ReorderableCollectionItemScope.DetailListRow(
     detail: Detail,
-    isInReorderableState: Boolean,
-    isInMultiselectState: Boolean,
+    screenState: ScreenState,
     onEdit: (Detail) -> Unit,
     onDelete: (Detail) -> Unit,
     onCopyToClipboard: (Detail) -> Unit,
@@ -1047,7 +1022,7 @@ private fun ReorderableCollectionItemScope.DetailListRow(
     modifier: Modifier = Modifier
 ) {
     var isObfuscated: Boolean by remember { mutableStateOf(detail.metadata.isObfuscated) }
-    val isSelected: Boolean = if (isInMultiselectState) {
+    val isSelected: Boolean = if (screenState == ScreenState.Multiselect) {
         isDetailSelected(detail)
     } else {
         false
@@ -1059,13 +1034,13 @@ private fun ReorderableCollectionItemScope.DetailListRow(
             .fillMaxWidth()
             .combinedClickable(
                 onClick = {
-                    if (isInMultiselectState) {
+                    if (screenState == ScreenState.Multiselect) {
                         onToggleSelection(detail, !isSelected)
                     } else {
                         onEdit(detail)
                     }
                 },
-                onLongClick = if (!isInMultiselectState && !isInReorderableState) {
+                onLongClick = if (screenState == ScreenState.Default) {
                     { onMultiselect(detail) }
                 } else {
                     null
@@ -1118,8 +1093,8 @@ private fun ReorderableCollectionItemScope.DetailListRow(
                 style = MaterialTheme.typography.bodyLarge
             )
         }
-        if (isInReorderableState) {
-            IconButton(
+        when (screenState) {
+            ScreenState.Reorder -> IconButton(
                 onClick = { },
                 modifier = Modifier
                     .draggableHandle()
@@ -1130,17 +1105,13 @@ private fun ReorderableCollectionItemScope.DetailListRow(
                     contentDescription = "",
                 )
             }
-        }
-        else if (isInMultiselectState) {
-            RadioButton(
+            ScreenState.Multiselect -> RadioButton(
                 selected = isSelected,
                 onClick = {
                     onToggleSelection(detail, !isSelected)
                 }
             )
-        }
-        else {
-            Row(
+            else -> Row(
                 modifier = Modifier.align(Alignment.CenterVertically)
             ) {
                 if (detail.metadata.isObfuscated) {

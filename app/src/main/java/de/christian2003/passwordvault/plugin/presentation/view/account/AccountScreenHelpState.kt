@@ -6,11 +6,11 @@ package de.christian2003.passwordvault.plugin.presentation.view.account
  * screen through which to edit / create accounts.
  */
 enum class AccountScreenHelpState {
-    NAME,
-    DESCRIPTION,
-    DETAILS,
-    TARGETS,
-    SAVE,
-    CLOSE_MULTISELECT,
-    CLOSE_REORDER
+    Name,
+    Description,
+    Details,
+    Targets,
+    Save,
+    CloseMultiselect,
+    CloseReorder
 }
