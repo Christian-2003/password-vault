@@ -3,6 +3,7 @@ package de.christian2003.passwordvault.plugin.presentation.view.password
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -34,6 +35,7 @@ import de.christian2003.passwordvault.plugin.presentation.ui.composables.TextInp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 /**
@@ -64,20 +66,21 @@ fun PasswordScreen(
     val repeatNewPasswordFocusRequester: FocusRequester = remember { FocusRequester() }
 
     val invokeSave: () -> Unit = {
-        coroutineScope.launch(Dispatchers.Main) {
+        coroutineScope.launch(Dispatchers.Default) {
             viewModel.save()
-        }.invokeOnCompletion {
-            if (viewModel.isOldPasswordValid && viewModel.isRepeatNewPasswordValid && viewModel.isDataValid.value) {
-                if (viewModel.isSetup) {
-                    onNavigateToNextSetupStep()
+            withContext(Dispatchers.Main) {
+                if (viewModel.isOldPasswordValid && viewModel.isRepeatNewPasswordValid && viewModel.isDataValid.value) {
+                    if (viewModel.isSetup) {
+                        onNavigateToNextSetupStep()
+                    }
+                    else {
+                        onNavigateUp()
+                    }
                 }
                 else {
-                    onNavigateUp()
-                }
-            }
-            else {
-                coroutineScope.launch {
-                    snackbarHostState.showSnackbar(errorSaving)
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(errorSaving)
+                    }
                 }
             }
         }

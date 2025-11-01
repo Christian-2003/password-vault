@@ -53,6 +53,8 @@ import de.christian2003.passwordvault.plugin.presentation.view.account.AccountSc
 import de.christian2003.passwordvault.plugin.presentation.view.account.AccountViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.help.HelpScreen
 import de.christian2003.passwordvault.plugin.presentation.view.help.HelpViewModel
+import de.christian2003.passwordvault.plugin.presentation.view.login.LoginScreen
+import de.christian2003.passwordvault.plugin.presentation.view.login.LoginViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.main.MainScreen
 import de.christian2003.passwordvault.plugin.presentation.view.main.MainViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.password.PasswordScreen
@@ -112,7 +114,7 @@ fun PasswordVault() {
         NavHost(
             navController = navController,
             startDestination = if (isAuthSetupFinished) {
-                "main"
+                "login"
             } else {
                 "password/true"
             },
@@ -249,6 +251,24 @@ fun PasswordVault() {
                         else {
                             //Shown through settings to edit master password:
                             navController.navigateUp()
+                        }
+                    }
+                )
+            }
+
+            composable("login") {
+                val viewModel: LoginViewModel = viewModel()
+                viewModel.init(
+                    verifyPasswordUseCase = VerifyPasswordUseCase(authRepository)
+                )
+
+                LoginScreen(
+                    viewModel = viewModel,
+                    onFinish = {
+                        navController.navigate("main") {
+                            popUpTo("login") {
+                                inclusive = true
+                            }
                         }
                     }
                 )

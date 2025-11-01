@@ -1,0 +1,139 @@
+package de.christian2003.passwordvault.plugin.presentation.view.login
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import coil.compose.rememberAsyncImagePainter
+import de.christian2003.passwordvault.R
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.TextInput
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+
+/**
+ * Screen allows the user to login to the app.
+ *
+ * @param viewModel View model.
+ * @param onFinish  Callback invoked to finish login and continue to the main screen.
+ */
+@Composable
+fun LoginScreen(
+    viewModel: LoginViewModel,
+    onFinish: () -> Unit
+) {
+    val coroutineScope: CoroutineScope = rememberCoroutineScope()
+    val errorPassword: String = stringResource(R.string.login_errorPassword)
+    val focusRequester: FocusRequester = remember { FocusRequester() }
+
+    val invokeOnFinish: () -> Unit = {
+        coroutineScope.launch(Dispatchers.Default) {
+            viewModel.verifyPassword()
+            if (viewModel.isPasswordValid) {
+                withContext(Dispatchers.Main) {
+                    onFinish()
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        //Safe calls required: When rotating the screen, the focus requester is not instantiated
+        //for a very short period of time, during which this Launched effect is called. Without
+        //this safe call, the app would crash throwing an IllegalStateException.
+        focusRequester?.requestFocus()
+    }
+
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(stringResource(R.string.app_name))
+                }
+            )
+        },
+        modifier = Modifier.imePadding()
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(
+                    horizontal = dimensionResource(R.dimen.margin_horizontal)
+                )
+        ) {
+            //Content:
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Image(
+                    painter = rememberAsyncImagePainter(R.mipmap.ic_launcher),
+                    contentDescription = "",
+                    modifier = Modifier.size(dimensionResource(R.dimen.image_l))
+                )
+                Text(
+                    text = stringResource(R.string.login_hint),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_vertical))
+                )
+                TextInput(
+                    value = viewModel.password,
+                    onValueChange = {
+                        viewModel.password = it
+                    },
+                    label = stringResource(R.string.login_passwordLabel),
+                    isPassword = true,
+                    errorMessage = if (viewModel.isPasswordValid) { null } else { errorPassword },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            invokeOnFinish()
+                        }
+                    ),
+                    focusRequester = focusRequester
+                )
+            }
+
+            //Buttons:
+            Column {
+                Button(
+                    onClick = invokeOnFinish,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(stringResource(R.string.button_login))
+                }
+            }
+        }
+    }
+}

@@ -134,6 +134,10 @@
     <string name="password_helpSetup">In order to use Password Vault, you need to setup a master password to prevent unauthorized access.</string>
     <string name="password_helpEdit">Edit the master password you use for authentication.</string>
 
+    <string name="login_passwordLabel">Master password</string>
+    <string name="login_hint">Confirm your identity</string>
+    <string name="login_errorPassword">Password is invalid</string>
+
     <string name="button_save">Save</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_delete">Delete</string>
@@ -142,6 +146,7 @@
     <string name="button_discard">Discard</string>
     <string name="button_remove">Remove</string>
     <string name="button_continue">Continue</string>
+    <string name="button_login">Login</string>
     <string name="button_createTag">Create tag</string>
     <string name="button_dismissHelp">Dismiss</string>
     <string name="button_selectTargetPackage">Select apps</string>
