@@ -48,7 +48,7 @@ fun Eyecatcher(
             .size(12.dp)
             .scale(scale)
             .background(
-                color = MaterialTheme.colorScheme.tertiaryContainer,
+                color = MaterialTheme.colorScheme.tertiary,
                 shape = CircleShape
             )
     )
