@@ -4,7 +4,7 @@ import de.christian2003.passwordvault.domain.model.account.Account
 import de.christian2003.passwordvault.domain.model.account.AccountDescriptor
 import de.christian2003.passwordvault.domain.model.account.AccountMetadata
 import de.christian2003.passwordvault.domain.model.target.Target
-import de.christian2003.passwordvault.domain.security.CipherService
+import de.christian2003.passwordvault.application.security.CipherService
 import de.christian2003.passwordvault.plugin.infrastructure.db.dto.AccountPayload
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.AccountEntity
 import kotlinx.serialization.cbor.Cbor

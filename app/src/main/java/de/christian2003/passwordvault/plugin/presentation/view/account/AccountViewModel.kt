@@ -27,7 +27,7 @@ import de.christian2003.passwordvault.application.usecases.tag.UpdateTagUseCase
 import de.christian2003.passwordvault.domain.model.tag.Tag
 import de.christian2003.passwordvault.domain.model.target.PackageFingerprintService
 import de.christian2003.passwordvault.domain.model.target.Target
-import de.christian2003.passwordvault.domain.security.ClipboardService
+import de.christian2003.passwordvault.application.security.ClipboardService
 import de.christian2003.passwordvault.plugin.presentation.view.account.tag.TagViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.account.target.TargetViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.help.HelpCard

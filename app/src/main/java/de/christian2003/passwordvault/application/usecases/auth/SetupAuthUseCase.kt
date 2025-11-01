@@ -1,0 +1,30 @@
+package de.christian2003.passwordvault.application.usecases.auth
+
+import de.christian2003.passwordvault.application.repository.AuthRepository
+
+
+/**
+ * Use case for the first time setup of the app authentication.
+ *
+ * @param repository    Repository to access auth information.
+ */
+class SetupAuthUseCase(
+    private val repository: AuthRepository
+) {
+
+    /**
+     * Creates the authentication for the app for the first time. This only works if no password is
+     * set currently.
+     *
+     * @param password  Password for app authentication.
+     * @return          Whether the setup was successful.
+     */
+    fun setup(password: String): Boolean {
+        if (repository.hasPassword()) {
+            return false
+        }
+        repository.setPassword(password)
+        return true
+    }
+
+}

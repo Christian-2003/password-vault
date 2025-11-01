@@ -98,6 +98,9 @@
     <string name="detail_help">Each detail has two parts: A name (what it is) and a content (the actual information).</string>
 
     <string name="settings_title">Settings</string>
+    <string name="settings_security">Security</string>
+    <string name="settings_security_masterPasswordTitle">Master password</string>
+    <string name="settings_security_masterPasswordInfo">Change your master password</string>
     <string name="settings_help">Help</string>
     <string name="settings_help_helpMessagesTitle">Help messages</string>
     <string name="settings_help_helpMessagesInfo">Reactivate dismissed help messages</string>
@@ -114,7 +117,22 @@
         <item>Targets</item>
         <item>Detail</item>
         <item>Account</item>
+        <item>Master password</item>
     </string-array>
+
+    <string name="password_titleSetup">Setup login</string>
+    <string name="password_titleEdit">Change password</string>
+    <string name="password_oldPasswordLabel">Old password</string>
+    <string name="password_newPasswordLabel">New password</string>
+    <string name="password_repeatNewPasswordLabel">Repeat new password</string>
+    <string name="password_passwordLabel">Password</string>
+    <string name="password_repeatPasswordLabel">Repeat password</string>
+    <string name="password_errorSaving">Cannot save password</string>
+    <string name="password_errorOldPassword">Old password is invalid</string>
+    <string name="password_errorRepeatNewPassword">New passwords do not match</string>
+    <string name="password_errorRepeatPassword">Passwords do not match</string>
+    <string name="password_helpSetup">In order to use Password Vault, you need to setup a master password to prevent unauthorized access.</string>
+    <string name="password_helpEdit">Edit the master password you use for authentication.</string>
 
     <string name="button_save">Save</string>
     <string name="button_cancel">Cancel</string>
@@ -123,6 +141,7 @@
     <string name="button_ok">OK</string>
     <string name="button_discard">Discard</string>
     <string name="button_remove">Remove</string>
+    <string name="button_continue">Continue</string>
     <string name="button_createTag">Create tag</string>
     <string name="button_dismissHelp">Dismiss</string>
     <string name="button_selectTargetPackage">Select apps</string>

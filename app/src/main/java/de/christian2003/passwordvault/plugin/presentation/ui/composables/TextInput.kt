@@ -8,6 +8,8 @@ import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -26,6 +28,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import de.christian2003.passwordvault.R
@@ -49,6 +52,7 @@ import androidx.compose.ui.unit.dp
  *                              icon.
  * @param errorMessage          Error message to display.
  * @param enabled               Whether the text input is enabled or not.
+ * @param isPassword            Whether the text input is used to display a password.
  * @param visualTransformation  Visual transformation for the text displayed.
  * @param focusRequester        Focus requester.
  */
@@ -65,6 +69,7 @@ fun TextInput(
     trailingIcon: Painter? = null,
     errorMessage: String? = null,
     enabled: Boolean = true,
+    isPassword: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     focusRequester: FocusRequester = FocusRequester()
 ) {
@@ -84,6 +89,7 @@ fun TextInput(
         trailingIcon = trailingIcon,
         errorMessage = errorMessage,
         enabled = enabled,
+        isPassword = isPassword,
         visualTransformation = visualTransformation,
         focusRequester = focusRequester
     )
@@ -106,6 +112,7 @@ fun TextInput(
  *                              icon.
  * @param errorMessage          Error message to display.
  * @param enabled               Whether the text input is enabled or not.
+ * @param isPassword            Whether the text input is used to display a password.
  * @param visualTransformation  Visual transformation for the text displayed.
  * @param focusRequester        Focus requester.
  */
@@ -122,11 +129,13 @@ fun TextInput(
     trailingIcon: Painter? = null,
     errorMessage: String? = null,
     enabled: Boolean = true,
+    isPassword: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     focusRequester: FocusRequester = FocusRequester()
 ) {
     val scope = rememberCoroutineScope()
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
+    var isPasswordVisible: Boolean by remember { mutableStateOf(false) }
 
     //Text displayed as suffix:
     val suffixView: (@Composable () -> Unit)? = if (suffixLabel != null) {
@@ -145,7 +154,30 @@ fun TextInput(
     }
 
     //Trailing icon displayed if an error occurs:
-    val trailingIconView: (@Composable () -> Unit)? = if (errorMessage != null) {
+    val trailingIconView: (@Composable () -> Unit)? = if (isPassword) {
+        @Composable {
+            IconButton(
+                onClick = {
+                    isPasswordVisible = !isPasswordVisible
+                }
+            ) {
+                Icon(
+                    painter = if (isPasswordVisible) {
+                        painterResource(R.drawable.ic_visibility_off)
+                    } else {
+                        painterResource(R.drawable.ic_visibility_on)
+                    },
+                    contentDescription = "",
+                    tint = if (errorMessage != null) {
+                        MaterialTheme.colorScheme.error
+                    } else {
+                        IconButtonDefaults.iconButtonColors().contentColor
+                    }
+                )
+            }
+        }
+    }
+    else if (errorMessage != null) {
         @Composable {
             Icon(
                 painter = painterResource(R.drawable.ic_error),
@@ -210,7 +242,11 @@ fun TextInput(
             isError = errorMessage != null,
             trailingIcon = trailingIconView,
             supportingText = supportingTextView,
-            visualTransformation = visualTransformation,
+            visualTransformation = if (isPassword && !isPasswordVisible) {
+                PasswordVisualTransformation()
+            } else {
+                visualTransformation
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .onFocusEvent {

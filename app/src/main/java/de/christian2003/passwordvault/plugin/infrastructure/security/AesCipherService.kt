@@ -2,7 +2,7 @@ package de.christian2003.passwordvault.plugin.infrastructure.security
 
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import de.christian2003.passwordvault.domain.security.CipherService
+import de.christian2003.passwordvault.application.security.CipherService
 import java.security.KeyStore
 import java.security.SecureRandom
 import javax.crypto.Cipher

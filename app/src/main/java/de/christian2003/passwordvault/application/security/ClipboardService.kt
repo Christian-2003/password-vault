@@ -1,4 +1,4 @@
-package de.christian2003.passwordvault.domain.security
+package de.christian2003.passwordvault.application.security
 
 
 /**

@@ -7,7 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.PersistableBundle
 import android.util.Log
-import de.christian2003.passwordvault.domain.security.ClipboardService
+import de.christian2003.passwordvault.application.security.ClipboardService
 
 
 class AndroidClipboardService(

@@ -10,6 +10,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
@@ -20,6 +24,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import de.christian2003.passwordvault.application.repository.AuthRepository
 import de.christian2003.passwordvault.application.usecases.account.CreateAccountUseCase
 import de.christian2003.passwordvault.application.usecases.account.DeleteAccountUseCase
 import de.christian2003.passwordvault.application.usecases.account.GetAccountByIdUseCase
@@ -33,12 +38,16 @@ import de.christian2003.passwordvault.application.usecases.tag.CreateTagUseCase
 import de.christian2003.passwordvault.application.usecases.tag.DeleteTagUseCase
 import de.christian2003.passwordvault.application.usecases.tag.GetAllTagsUseCase
 import de.christian2003.passwordvault.application.usecases.tag.UpdateTagUseCase
-import de.christian2003.passwordvault.domain.security.ClipboardService
+import de.christian2003.passwordvault.application.security.ClipboardService
+import de.christian2003.passwordvault.application.usecases.auth.SetupAuthUseCase
+import de.christian2003.passwordvault.application.usecases.auth.UpdatePasswordUseCase
+import de.christian2003.passwordvault.application.usecases.auth.VerifyPasswordUseCase
 import de.christian2003.passwordvault.plugin.PasswordVaultApplication
 import de.christian2003.passwordvault.plugin.infrastructure.db.PasswordVaultRepository
 import de.christian2003.passwordvault.plugin.infrastructure.packages.AndroidPackageFingerprintService
 import de.christian2003.passwordvault.plugin.infrastructure.packages.LocalPackagesRepository
 import de.christian2003.passwordvault.plugin.infrastructure.security.AndroidClipboardService
+import de.christian2003.passwordvault.plugin.infrastructure.security.auth.SharedPreferencesAuthRepository
 import de.christian2003.passwordvault.plugin.presentation.ui.theme.PasswordVaultTheme
 import de.christian2003.passwordvault.plugin.presentation.view.account.AccountScreen
 import de.christian2003.passwordvault.plugin.presentation.view.account.AccountViewModel
@@ -46,6 +55,8 @@ import de.christian2003.passwordvault.plugin.presentation.view.help.HelpScreen
 import de.christian2003.passwordvault.plugin.presentation.view.help.HelpViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.main.MainScreen
 import de.christian2003.passwordvault.plugin.presentation.view.main.MainViewModel
+import de.christian2003.passwordvault.plugin.presentation.view.password.PasswordScreen
+import de.christian2003.passwordvault.plugin.presentation.view.password.PasswordViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.settings.SettingsScreen
 import de.christian2003.passwordvault.plugin.presentation.view.settings.SettingsViewModel
 import java.util.UUID
@@ -92,12 +103,19 @@ fun PasswordVault() {
     val application: PasswordVaultApplication = (context.applicationContext as PasswordVaultApplication)
     val repository: PasswordVaultRepository = application.getRepository()
     val packagesRepository: LocalPackagesRepository = application.getPackagesRepository()
+    val authRepository: AuthRepository = SharedPreferencesAuthRepository(context)
     val clipboardService: ClipboardService = AndroidClipboardService(LocalClipboard.current.nativeClipboard)
+
+    var isAuthSetupFinished: Boolean by rememberSaveable { mutableStateOf(authRepository.hasPassword()) }
 
     PasswordVaultTheme {
         NavHost(
             navController = navController,
-            startDestination = "main",
+            startDestination = if (isAuthSetupFinished) {
+                "main"
+            } else {
+                "password/true"
+            },
             modifier = Modifier.background(MaterialTheme.colorScheme.surface)
         ) {
             composable("main") {
@@ -173,6 +191,9 @@ fun PasswordVault() {
                     },
                     onNavigateToHelp = {
                         navController.navigate("help")
+                    },
+                    onNavigateToPassword = {
+                        navController.navigate("password/false")
                     }
                 )
             }
@@ -186,6 +207,49 @@ fun PasswordVault() {
                     viewModel = viewModel,
                     onNavigateUp = {
                         navController.navigateUp()
+                    }
+                )
+            }
+
+
+            composable(
+                route = "password/{isSetup}",
+                arguments = listOf(
+                    navArgument("isSetup") { type = NavType.BoolType}
+                )
+            ) { backStackEntry ->
+                val isSetup: Boolean = if (backStackEntry.arguments?.containsKey("isSetup") ?: false) {
+                    backStackEntry.arguments?.getBoolean("isSetup") ?: false
+                } else {
+                    false
+                }
+                val viewModel: PasswordViewModel = viewModel()
+                viewModel.init(
+                    setupAuthUseCase = SetupAuthUseCase(authRepository),
+                    updatePasswordUseCase = UpdatePasswordUseCase(authRepository),
+                    verifyPasswordUseCase = VerifyPasswordUseCase(authRepository),
+                    isSetup = isSetup
+                )
+
+                PasswordScreen(
+                    viewModel = viewModel,
+                    onNavigateUp = {
+                        navController.navigateUp()
+                    },
+                    onNavigateToNextSetupStep = {
+                        if (!isAuthSetupFinished) {
+                            //Shown at first launch to setup auth:
+                            isAuthSetupFinished = true
+                            navController.navigate("main") {
+                                popUpTo("password/true") {
+                                    inclusive = true
+                                }
+                            }
+                        }
+                        else {
+                            //Shown through settings to edit master password:
+                            navController.navigateUp()
+                        }
                     }
                 )
             }
