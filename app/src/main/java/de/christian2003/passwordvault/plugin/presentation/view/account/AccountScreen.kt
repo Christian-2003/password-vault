@@ -69,6 +69,7 @@ import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.domain.model.detail.Detail
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDeleteDialog
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDiscardDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ContextAction
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ContextActionBase
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ContextActionDivider
@@ -112,6 +113,15 @@ fun AccountScreen(
     }
     val selectedTags: List<TagUiDto> by viewModel.selectedTags.collectAsState(emptyList())
 
+    val invokeOnNavigateUp: () -> Unit = {
+        if(viewModel.areChangesMade(selectedTags)) {
+            viewModel.isDiscardDialogVisible = true
+        }
+        else {
+            onNavigateUp()
+        }
+    }
+
     BackHandler {
         if (viewModel.isInMultiselectState) {
             viewModel.dismissMultiselectState()
@@ -120,7 +130,7 @@ fun AccountScreen(
             viewModel.dismissReorderableState()
         }
         else {
-            onNavigateUp()
+            invokeOnNavigateUp()
         }
     }
 
@@ -154,7 +164,7 @@ fun AccountScreen(
                     name = viewModel.name,
                     helpState = viewModel.helpState,
                     scrollBehavior = scrollBehavior,
-                    onNavigateUp = onNavigateUp,
+                    onNavigateUp = invokeOnNavigateUp,
                     onEditName = {
                         viewModel.isNameDialogVisible = true
                     },
@@ -200,6 +210,7 @@ fun AccountScreen(
                     helpState = viewModel.helpState,
                     isInMultiselectState = viewModel.isInMultiselectState,
                     isInReorderableState = viewModel.isInReorderableState,
+                    isDataValid = viewModel.isDataValid.value,
                     onEditTags = {
                         viewModel.isTagDialogVisible = true
                     },
@@ -526,6 +537,20 @@ fun AccountScreen(
             }
         )
     }
+
+    //Dialog to dismiss without saving:
+    if (viewModel.isDiscardDialogVisible) {
+        ConfirmDiscardDialog(
+            text = stringResource(R.string.account_discardChanges),
+            onDismiss = {
+                viewModel.isDiscardDialogVisible = false
+            },
+            onConfirm = {
+                viewModel.isDiscardDialogVisible = false
+                onNavigateUp()
+            }
+        )
+    }
 }
 
 
@@ -795,6 +820,7 @@ private fun MultiselectAppBar(
  * @param helpState             Help state indicating the help message to display.
  * @param isInMultiselectState  Whether the screen is in multiselect state.
  * @param isInReorderableState  Whether the screen is in reorderable state.
+ * @param isDataValid           Whether the data entered by the user is valid.
  * @param onEditDescription     Callback invoked to edit the description.
  * @param onEditTags            Callback invoked to edit the tags.
  * @param onEditTargets         Callback invoked to edit the targets.
@@ -811,6 +837,7 @@ private fun GeneralSection(
     helpState: AccountScreenHelpState?,
     isInMultiselectState: Boolean,
     isInReorderableState: Boolean,
+    isDataValid: Boolean,
     onEditDescription: () -> Unit,
     onEditTags: () -> Unit,
     onEditTargets: () -> Unit,
@@ -911,6 +938,7 @@ private fun GeneralSection(
             ) {
                 Button(
                     onClick = onSave,
+                    enabled = isDataValid
                 ) {
                     Text(stringResource(R.string.button_save))
                 }

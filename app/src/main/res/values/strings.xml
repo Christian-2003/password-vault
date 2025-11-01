@@ -54,9 +54,10 @@
         <item>Let\'s add the actual account information, like a password or email address.</item>
         <item>Select an app or website you want to autofill the information.</item>
         <item>Now, save your account by clicking the "Save" button.</item>
-        <item>To continue, close the reorder mode.</item>
+        <item>To continue, close the multiselect mode.</item>
         <item>To continue, close the reorder mode.</item>
     </string-array>
+    <string name="account_discardChanges">Are you sure you want to discard the changes you made to the account?</string>
 
     <string name="tag_title">Tags</string>
     <string name="tag_titleCreate">Create tag</string>

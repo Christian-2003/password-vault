@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -133,6 +134,12 @@ class AccountViewModel(application: Application): AndroidViewModel(application) 
     var isTargetDialogVisible: Boolean by mutableStateOf(false)
 
     var isDeleteDetailMultiselectDialogVisible: Boolean by mutableStateOf(false)
+
+    var isDiscardDialogVisible: Boolean by mutableStateOf(false)
+
+    val isDataValid: State<Boolean> = derivedStateOf {
+        name.isNotBlank()
+    }
 
     var areInvisibleDetailsVisible: Boolean by mutableStateOf(false)
 
@@ -440,6 +447,51 @@ class AccountViewModel(application: Application): AndroidViewModel(application) 
     fun dismissHelpCard() {
         HelpCard.ACCOUNT.setVisible(application, false)
         helpState = null
+    }
+
+
+    fun areChangesMade(selectedTags: List<TagUiDto>): Boolean {
+        val account: Account? = this.account
+        if (account == null) {
+            //Account created:
+            return name != ""
+                    || description != ""
+                    || selectedTags.isNotEmpty()
+                    || details.isNotEmpty()
+                    || targets.isNotEmpty()
+        }
+        else {
+            //Account edited:
+            return account.descriptor.name != name
+                    || account.descriptor.description != description
+                    || account.tags != selectedTags.map { tag -> tagMapper.toDomain(tag) }
+                    || !areDetailListsIdentical(account.details, details)
+                    || account.targets != targets
+        }
+    }
+
+
+    private fun areDetailListsIdentical(lhs: List<Detail>, rhs: List<Detail>): Boolean {
+        if (lhs.size == rhs.size) {
+            lhs.forEachIndexed { index, detail ->
+                val other: Detail = rhs[index]
+                if (detail.name != other.name
+                    || detail.content != other.content
+                    || detail.icon != other.icon
+                    || detail.type != other.type
+                    || detail.metadata.isVisible != other.metadata.isVisible
+                    || detail.metadata.isObfuscated != other.metadata.isObfuscated) {
+                    //Details are not identical:
+                    return false
+                }
+            }
+            //No changes made:
+            return true
+        }
+        else {
+            //Details added / removed:
+            return false
+        }
     }
 
 
