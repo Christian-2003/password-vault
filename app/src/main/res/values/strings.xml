@@ -102,9 +102,11 @@
     <string name="settings_title">Settings</string>
     <string name="settings_security">Security</string>
     <string name="settings_security_masterPasswordTitle">Master password</string>
-    <string name="settings_security_masterPasswordInfo">Change your master password</string>
+    <string name="settings_security_masterPasswordInfo">Edit your master password</string>
     <string name="settings_security_biometricsTitle">Biometrics</string>
     <string name="settings_security_biometricsInfo">Use biometrics for authentication</string>
+    <string name="settings_security_questionsTitle">Security questions</string>
+    <string name="settings_security_questionsInfo">Security questions for password recovery</string>
     <string name="settings_help">Help</string>
     <string name="settings_help_helpMessagesTitle">Help messages</string>
     <string name="settings_help_helpMessagesInfo">Reactivate dismissed help messages</string>
@@ -129,10 +131,11 @@
         <item>Detail</item>
         <item>Account</item>
         <item>Master password</item>
+        <item>Security questions</item>
     </string-array>
 
     <string name="password_titleSetup">Setup login</string>
-    <string name="password_titleEdit">Change password</string>
+    <string name="password_titleEdit">Edit password</string>
     <string name="password_oldPasswordLabel">Old password</string>
     <string name="password_newPasswordLabel">New password</string>
     <string name="password_repeatNewPasswordLabel">Repeat new password</string>
@@ -144,6 +147,28 @@
     <string name="password_errorRepeatPassword">Passwords do not match</string>
     <string name="password_helpSetup">In order to use Password Vault, you need to setup a master password to prevent unauthorized access.</string>
     <string name="password_helpEdit">Edit the master password you use for authentication.</string>
+
+    <string name="securityQuestion_titleSetup">Setup recovery</string>
+    <string name="securityQuestion_titleEdit">Edit Recovery</string>
+    <string name="securityQuestion_emptyPlaceholder_title">No security questions</string>
+    <string name="securityQuestion_emptyPlaceholder_subtitle">Add security questions and they will show up here</string>
+    <string name="securityQuestion_helpSetup">Answer some security questions that we can use to verify your identity in case you forget your password.</string>
+    <string name="securityQuestion_helpEdit">Edit the security questions that you have setup</string>
+    <string-array name="securityQuestion_questions">
+        <item>What was the name of your first childhood friend?</item>
+        <item>What was the name of your first school teacher?</item>
+        <item>What is your grandmothers maiden name?</item>
+        <item>In what city did you meet your spouse / significant other?</item>
+        <item>What is the middle name of your youngest child?</item>
+        <item>What was the name of your first stuffed animal?</item>
+        <item>In what city did your mother and father meet?</item>
+        <item>What was the first exam you failed?</item>
+        <item>Where was the destination of your first school field trip?</item>
+        <item>What was your driving instructor\'s first name?</item>
+        <item>What is the first name of your oldest cousin?</item>
+        <item>What was your favorite elementary school teacher\'s name?</item>
+        <item>What was the name of your first pet?</item>
+    </string-array>
 
     <string name="login_passwordLabel">Master password</string>
     <string name="login_hint">Confirm your identity</string>

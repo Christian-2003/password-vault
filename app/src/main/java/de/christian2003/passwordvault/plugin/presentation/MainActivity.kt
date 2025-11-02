@@ -43,8 +43,11 @@ import de.christian2003.passwordvault.application.security.ClipboardService
 import de.christian2003.passwordvault.application.usecases.auth.AreBiometricsAvailableUseCase
 import de.christian2003.passwordvault.application.usecases.auth.AreBiometricsConfiguredUseCase
 import de.christian2003.passwordvault.application.usecases.auth.BiometricAuthUseCase
+import de.christian2003.passwordvault.application.usecases.auth.ChangeSecurityQuestionUseCase
+import de.christian2003.passwordvault.application.usecases.auth.GetSecurityQuestionsUseCase
 import de.christian2003.passwordvault.application.usecases.auth.SetupAuthUseCase
 import de.christian2003.passwordvault.application.usecases.auth.SetupBiometricsUseCase
+import de.christian2003.passwordvault.application.usecases.auth.SetupSecurityQuestionsUseCase
 import de.christian2003.passwordvault.application.usecases.auth.UpdatePasswordUseCase
 import de.christian2003.passwordvault.application.usecases.auth.VerifyPasswordUseCase
 import de.christian2003.passwordvault.plugin.PasswordVaultApplication
@@ -67,6 +70,8 @@ import de.christian2003.passwordvault.plugin.presentation.view.main.MainScreen
 import de.christian2003.passwordvault.plugin.presentation.view.main.MainViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.password.PasswordScreen
 import de.christian2003.passwordvault.plugin.presentation.view.password.PasswordViewModel
+import de.christian2003.passwordvault.plugin.presentation.view.securityquestions.SecurityQuestionsScreen
+import de.christian2003.passwordvault.plugin.presentation.view.securityquestions.SecurityQuestionsViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.settings.SettingsScreen
 import de.christian2003.passwordvault.plugin.presentation.view.settings.SettingsViewModel
 import java.util.UUID
@@ -213,6 +218,9 @@ fun PasswordVault() {
                     },
                     onNavigateToDevSettings = {
                         navController.navigate("devSettings")
+                    },
+                    onNavigateToSecurityQuestions = {
+                        navController.navigate("questions/false")
                     }
                 )
             }
@@ -269,11 +277,42 @@ fun PasswordVault() {
                         navController.navigateUp()
                     },
                     onNavigateToNextSetupStep = {
+                        navController.navigate("questions/true")
+                    }
+                )
+            }
+
+
+            composable(
+                route = "questions/{isSetup}",
+                arguments = listOf(
+                    navArgument("isSetup") { type = NavType.BoolType}
+                )
+            ) { backStackEntry ->
+                val isSetup: Boolean = if (backStackEntry.arguments?.containsKey("isSetup") ?: false) {
+                    backStackEntry.arguments?.getBoolean("isSetup") ?: false
+                } else {
+                    false
+                }
+                val viewModel: SecurityQuestionsViewModel = viewModel()
+                viewModel.init(
+                    setupSecurityQuestionsUseCase = SetupSecurityQuestionsUseCase(authRepository),
+                    getSecurityQuestionsUseCase = GetSecurityQuestionsUseCase(authRepository),
+                    changeSecurityQuestionUseCase = ChangeSecurityQuestionUseCase(authRepository),
+                    isSetup = isSetup
+                )
+
+                SecurityQuestionsScreen(
+                    viewModel = viewModel,
+                    onNavigateUp = {
+                        navController.navigateUp()
+                    },
+                    onNavigateToNextSetupStep = {
                         if (!isAuthSetupFinished) {
                             //Shown at first launch to setup auth:
                             isAuthSetupFinished = true
                             navController.navigate("main") {
-                                popUpTo("password/true") {
+                                popUpTo("questions/true") {
                                     inclusive = true
                                 }
                             }
@@ -285,6 +324,7 @@ fun PasswordVault() {
                     }
                 )
             }
+
 
             composable("login") {
                 val viewModel: LoginViewModel = viewModel()

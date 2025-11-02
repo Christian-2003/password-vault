@@ -38,7 +38,8 @@ fun SettingsScreen(
     onNavigateUp: () -> Unit,
     onNavigateToHelp: () -> Unit,
     onNavigateToPassword: () -> Unit,
-    onNavigateToDevSettings: () -> Unit
+    onNavigateToDevSettings: () -> Unit,
+    onNavigateToSecurityQuestions: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -92,6 +93,13 @@ fun SettingsScreen(
                         }
                     )
                 }
+                SettingsItemButton(
+                    title = stringResource(R.string.settings_security_questionsTitle),
+                    info = stringResource(R.string.settings_security_questionsInfo),
+                    prefixIcon = painterResource(R.drawable.ic_question),
+                    endIcon = painterResource(R.drawable.ic_next),
+                    onClick = onNavigateToSecurityQuestions
+                )
             }
 
             //Help:

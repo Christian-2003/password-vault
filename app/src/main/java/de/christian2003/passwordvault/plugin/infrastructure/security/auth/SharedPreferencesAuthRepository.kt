@@ -9,6 +9,7 @@ import java.util.Base64
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 import androidx.core.content.edit
+import de.christian2003.passwordvault.domain.security.auth.SecurityQuestion
 
 
 /**
@@ -116,14 +117,136 @@ class SharedPreferencesAuthRepository(
 
 
     /**
-     * Hashes the specified password with the specified salt.
+     * Returns whether security questions are configured for the app.
      *
-     * @param password  Plain text password to hash.
-     * @param salt      Salt to use for hashing.
+     * @return  Whether security questions are configured.
      */
-    private fun hash(password: String, salt: ByteArray): String {
-        val passwordAsCharArray: CharArray = password.toCharArray()
-        val keySpec = PBEKeySpec(passwordAsCharArray, salt, 65536, 256)
+    override fun hasSecurityQuestions(): Boolean {
+        val questions: List<SecurityQuestion> = getConfiguredQuestions()
+        return questions.isNotEmpty()
+    }
+
+
+    /**
+     * Adds the specified combination of security question and answer to the configured questions.
+     *
+     * @param question  Security question.
+     * @param answer    Answer to the security question.
+     */
+    override fun addSecurityQuestion(question: SecurityQuestion, answer: String) {
+        if (answer.isBlank()) {
+            return
+        }
+        val salt: ByteArray = generateSalt()
+        val hashedAnswer: String = hash(answer, salt)
+        val saltAsString: String = byteArrayToString(salt)
+
+        val questions: List<SecurityQuestion> = getConfiguredQuestions()
+        var questionListAsString: String? = null
+        if (!questions.contains(question)) {
+            val questionListStringBuilder = StringBuilder()
+            questions.forEach { existingQuestion ->
+                questionListStringBuilder.append(existingQuestion.ordinal)
+                questionListStringBuilder.append(',')
+            }
+            questionListStringBuilder.append(question.ordinal)
+            questionListAsString = questionListStringBuilder.toString()
+        }
+
+        sharedPreferences.edit {
+            putString("question_${question.ordinal}_hash", hashedAnswer)
+            putString("question_${question.ordinal}_salt", saltAsString)
+            if (questionListAsString != null) {
+                putString("question_list", questionListAsString)
+            }
+        }
+    }
+
+
+    /**
+     * Removes the specified security question from the configured questions.
+     *
+     * @param question  Question to remove.
+     */
+    override fun removeSecurityQuestion(question: SecurityQuestion) {
+        val questions: List<SecurityQuestion> = getConfiguredQuestions()
+        if (questions.contains(question)) {
+            val questionListStringBuilder = StringBuilder()
+            questions.forEach { existingQuestion ->
+                if (existingQuestion != question) {
+                    questionListStringBuilder.append(existingQuestion.ordinal)
+                    questionListStringBuilder.append(',')
+                }
+            }
+            val questionListAsString = questionListStringBuilder.removeSuffix(",").toString()
+
+            sharedPreferences.edit {
+                putString("question_list", questionListAsString)
+                remove("question_${question.ordinal}_hash")
+                remove("question_${question.ordinal}_salt")
+            }
+        }
+    }
+
+
+    /**
+     * Returns a list of the configured security questions.
+     *
+     * @return  List of configured security questions.
+     */
+    override fun getConfiguredQuestions(): List<SecurityQuestion> {
+        val questionsList: String? = sharedPreferences.getString("question_list", null)
+        val questionOrdinalsAsString: List<String> = questionsList?.split(",") ?: listOf()
+        val questionOrdinals: List<Int?> = questionOrdinalsAsString.map { it.toIntOrNull() }
+
+        val questions: MutableList<SecurityQuestion> = mutableListOf()
+        questionOrdinals.forEach { ordinal ->
+            if (ordinal != null && ordinal >= 0 && ordinal < SecurityQuestion.entries.size) {
+                questions.add(SecurityQuestion.entries[ordinal])
+            }
+        }
+
+        return questions
+    }
+
+
+    /**
+     * Validates the specified security questions. If the number of correct questions is equal to
+     * (or exceeds) the passed threshold, the validation succeeds. Otherwise, it fails.
+     *
+     * @param questions Answered security questions.
+     * @param threshold Number of questions that need to be answered correctly to succeed.
+     * @return          Whether the answers to the security questions are valid.
+     */
+    override fun validateSecurityQuestions(questions: Map<SecurityQuestion, String>, threshold: Int): Boolean {
+        var validAnswers = 0
+        questions.forEach { question, answer ->
+            if (answer.isNotBlank()) {
+                val hash: String? = sharedPreferences.getString("question_${question.ordinal}_hash", null)
+                val salt: String? = sharedPreferences.getString("question_${question.ordinal}_salt", null)
+
+                if (hash != null && salt != null) {
+                    val hashedAnswer: String = hash(answer, stringToByteArray(salt))
+                    if (hash == hashedAnswer) {
+                        validAnswers++
+                    }
+                }
+            }
+        }
+
+        return validAnswers >= threshold
+    }
+
+
+    /**
+     * Hashes the specified plain text with the specified salt.
+     *
+     * @param plain Plain text to hash.
+     * @param salt  Salt to use for hashing.
+     */
+    private fun hash(plain: String, salt: ByteArray): String {
+        val plainAsCharArray: CharArray = plain.toCharArray()
+        val keySpec = PBEKeySpec(plainAsCharArray, salt, 65536, 256)
         val factory: SecretKeyFactory = SecretKeyFactory.getInstance("PBKDF2withHmacSHA512")
         val hash: ByteArray = factory.generateSecret(keySpec).encoded
         return byteArrayToString(hash)
