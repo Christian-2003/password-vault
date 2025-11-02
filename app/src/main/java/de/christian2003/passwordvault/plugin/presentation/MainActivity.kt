@@ -3,7 +3,6 @@ package de.christian2003.passwordvault.plugin.presentation
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -58,6 +57,8 @@ import de.christian2003.passwordvault.plugin.infrastructure.security.auth.Shared
 import de.christian2003.passwordvault.plugin.presentation.ui.theme.PasswordVaultTheme
 import de.christian2003.passwordvault.plugin.presentation.view.account.AccountScreen
 import de.christian2003.passwordvault.plugin.presentation.view.account.AccountViewModel
+import de.christian2003.passwordvault.plugin.presentation.view.devsettings.DevSettingsScreen
+import de.christian2003.passwordvault.plugin.presentation.view.devsettings.DevSettingsViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.help.HelpScreen
 import de.christian2003.passwordvault.plugin.presentation.view.help.HelpViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.login.LoginScreen
@@ -209,6 +210,22 @@ fun PasswordVault() {
                     },
                     onNavigateToPassword = {
                         navController.navigate("password/false")
+                    },
+                    onNavigateToDevSettings = {
+                        navController.navigate("devSettings")
+                    }
+                )
+            }
+
+
+            composable("devSettings") {
+                val viewModel: DevSettingsViewModel = viewModel()
+                viewModel.init()
+
+                DevSettingsScreen(
+                    viewModel = viewModel,
+                    onNavigateUp = {
+                        navController.navigateUp()
                     }
                 )
             }

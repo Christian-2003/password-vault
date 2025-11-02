@@ -76,7 +76,7 @@ fun LoginScreen(
     }
 
     LaunchedEffect(Unit) {
-        if (viewModel.areBiometricsConfigured) {
+        if (viewModel.areBiometricsConfigured && !viewModel.skipBiometricsPrompt) {
             invokeBiometricAuth()
         }
         else {

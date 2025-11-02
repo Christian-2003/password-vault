@@ -1,8 +1,11 @@
 package de.christian2003.passwordvault.plugin.presentation.view.login
 
+import android.app.Application
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import de.christian2003.passwordvault.application.usecases.auth.AreBiometricsConfiguredUseCase
 import de.christian2003.passwordvault.application.usecases.auth.BiometricAuthUseCase
@@ -12,7 +15,7 @@ import de.christian2003.passwordvault.application.usecases.auth.VerifyPasswordUs
 /**
  * View model for the screen through which the user confirms their identity before accessing app data.
  */
-class LoginViewModel: ViewModel() {
+class LoginViewModel(application: Application): AndroidViewModel(application) {
 
     private lateinit var verifyPasswordUseCase: VerifyPasswordUseCase
     private lateinit var biometricAuthUseCase: BiometricAuthUseCase
@@ -21,6 +24,11 @@ class LoginViewModel: ViewModel() {
      * Indicates whether the view model is initialized.
      */
     private var isInitialized: Boolean = false
+
+    /**
+     * Whether to skip the biometrics prompt when the screen is displayed.
+     */
+    var skipBiometricsPrompt: Boolean = application.getSharedPreferences("settings", Context.MODE_PRIVATE).getBoolean("skip_biometrics", false)
 
     /**
      * Indicates whether biometrics are configured and supported.

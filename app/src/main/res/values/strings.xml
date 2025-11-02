@@ -109,6 +109,13 @@
     <string name="settings_help_helpMessagesTitle">Help messages</string>
     <string name="settings_help_helpMessagesInfo">Reactivate dismissed help messages</string>
     <string name="settings_about_copyright">© %1$s Christian‑2003</string>
+    <string name="settings_developmentTitle">Developer settings</string>
+    <string name="settings_developmentInfo">Settings for developers</string>
+    <string name="settings_dev_title">Developer settings</string>
+    <string name="settings_dev_deleteMasterPasswordTitle">Delete master password</string>
+    <string name="settings_dev_deleteMasterPasswordInfo">Delete the master password</string>
+    <string name="settings_dev_skipBiometricsTitle">Skip biometrics</string>
+    <string name="settings_dev_skipBiometricsInfo">Do not show biometrics dialog when opening app</string>
 
     <string name="help_title">Help messages</string>
     <string name="help_help">Reactivate help messages that were dismissed earlier.</string>

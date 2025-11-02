@@ -30,7 +30,6 @@ import coil.compose.rememberAsyncImagePainter
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.Headline
 import java.time.LocalDate
-import androidx.core.content.edit
 
 
 @Composable
@@ -38,10 +37,9 @@ fun SettingsScreen(
     viewModel: SettingsViewModel,
     onNavigateUp: () -> Unit,
     onNavigateToHelp: () -> Unit,
-    onNavigateToPassword: () -> Unit
+    onNavigateToPassword: () -> Unit,
+    onNavigateToDevSettings: () -> Unit
 ) {
-    val context: Context = LocalContext.current
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -83,18 +81,6 @@ fun SettingsScreen(
                     endIcon = painterResource(R.drawable.ic_next),
                     onClick = onNavigateToPassword
                 )
-                SettingsItemButton(
-                    title = "DEBUG: Delete Master password",
-                    info = "Delete the master password",
-                    prefixIcon = painterResource(R.drawable.ic_password),
-                    onClick = {
-                        val prefs = context.getSharedPreferences("security", Context.MODE_PRIVATE)
-                        prefs.edit {
-                            remove("password_salt")
-                            remove("password_hash")
-                        }
-                    }
-                )
                 if (viewModel.areBiometricsAvailable) {
                     SettingsItemSwitch(
                         title = stringResource(R.string.settings_security_biometricsTitle),
@@ -121,6 +107,18 @@ fun SettingsScreen(
                     prefixIcon = painterResource(R.drawable.ic_help_outlined),
                     endIcon = painterResource(R.drawable.ic_next),
                     onClick = onNavigateToHelp
+                )
+            }
+
+            //Other:
+            item {
+                HorizontalDivider()
+                SettingsItemButton(
+                    title = stringResource(R.string.settings_developmentTitle),
+                    info = stringResource(R.string.settings_developmentInfo),
+                    prefixIcon = painterResource(R.drawable.ic_dev),
+                    endIcon = painterResource(R.drawable.ic_next),
+                    onClick = onNavigateToDevSettings
                 )
             }
         }
