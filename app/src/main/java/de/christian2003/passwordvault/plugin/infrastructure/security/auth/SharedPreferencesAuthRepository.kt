@@ -44,6 +44,9 @@ class SharedPreferencesAuthRepository(
      * @return              Whether the password was changed successfully.
      */
     override fun setPassword(newPassword: String) {
+        if (newPassword.isBlank()) {
+            return
+        }
         val salt: ByteArray = generateSalt()
         val hashedPassword: String = hash(newPassword, salt)
         val saltAsString: String = byteArrayToString(salt)
@@ -60,6 +63,9 @@ class SharedPreferencesAuthRepository(
      * @return          Whether the password is valid.
      */
     override fun isPasswordValid(password: String): Boolean {
+        if (password.isBlank()) {
+            return false
+        }
         val storedHash: String? = sharedPreferences.getString("password_hash", null)
         val storedSalt: String? = sharedPreferences.getString("password_salt", null)
         if (storedHash != null && storedSalt != null) {

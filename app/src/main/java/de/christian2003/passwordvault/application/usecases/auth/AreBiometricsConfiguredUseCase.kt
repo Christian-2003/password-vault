@@ -18,7 +18,7 @@ class AreBiometricsConfiguredUseCase(
      * @return  Whether to use biometrics for authentication.
      */
     fun areBiometricsConfigured(): Boolean {
-        return repository.hasBiometrics()
+        return repository.hasBiometrics() && repository.doesDeviceSupportBiometrics()
     }
 
 }

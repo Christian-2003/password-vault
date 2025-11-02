@@ -26,6 +26,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import de.christian2003.passwordvault.application.repository.AuthRepository
+import de.christian2003.passwordvault.application.security.BiometricAuthService
 import de.christian2003.passwordvault.application.usecases.account.CreateAccountUseCase
 import de.christian2003.passwordvault.application.usecases.account.DeleteAccountUseCase
 import de.christian2003.passwordvault.application.usecases.account.GetAccountByIdUseCase
@@ -42,6 +43,7 @@ import de.christian2003.passwordvault.application.usecases.tag.UpdateTagUseCase
 import de.christian2003.passwordvault.application.security.ClipboardService
 import de.christian2003.passwordvault.application.usecases.auth.AreBiometricsAvailableUseCase
 import de.christian2003.passwordvault.application.usecases.auth.AreBiometricsConfiguredUseCase
+import de.christian2003.passwordvault.application.usecases.auth.BiometricAuthUseCase
 import de.christian2003.passwordvault.application.usecases.auth.SetupAuthUseCase
 import de.christian2003.passwordvault.application.usecases.auth.SetupBiometricsUseCase
 import de.christian2003.passwordvault.application.usecases.auth.UpdatePasswordUseCase
@@ -112,6 +114,7 @@ fun PasswordVault() {
     val repository: PasswordVaultRepository = application.getRepository()
     val packagesRepository: LocalPackagesRepository = application.getPackagesRepository()
     val authRepository: AuthRepository = SharedPreferencesAuthRepository(context)
+    val biometricAuthService: BiometricAuthService = AndroidBiometricAuthService(context)
     val clipboardService: ClipboardService = AndroidClipboardService(LocalClipboard.current.nativeClipboard)
 
     var isAuthSetupFinished: Boolean by rememberSaveable { mutableStateOf(authRepository.hasPassword()) }
@@ -193,7 +196,7 @@ fun PasswordVault() {
                 viewModel.init(
                     areBiometricsAvailableUseCase = AreBiometricsAvailableUseCase(authRepository),
                     areBiometricsConfiguredUseCase = AreBiometricsConfiguredUseCase(authRepository),
-                    setupBiometricsUseCase = SetupBiometricsUseCase(authRepository, AndroidBiometricAuthService(context))
+                    setupBiometricsUseCase = SetupBiometricsUseCase(authRepository, biometricAuthService)
                 )
 
                 SettingsScreen(
@@ -269,7 +272,9 @@ fun PasswordVault() {
             composable("login") {
                 val viewModel: LoginViewModel = viewModel()
                 viewModel.init(
-                    verifyPasswordUseCase = VerifyPasswordUseCase(authRepository)
+                    verifyPasswordUseCase = VerifyPasswordUseCase(authRepository),
+                    areBiometricsConfiguredUseCase = AreBiometricsConfiguredUseCase(authRepository),
+                    biometricAuthUseCase = BiometricAuthUseCase(authRepository, biometricAuthService)
                 )
 
                 LoginScreen(

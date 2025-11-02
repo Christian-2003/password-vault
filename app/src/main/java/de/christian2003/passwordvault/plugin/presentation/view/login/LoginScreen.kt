@@ -2,6 +2,7 @@ package de.christian2003.passwordvault.plugin.presentation.view.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -13,7 +14,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,8 +27,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.TextInput
@@ -61,11 +66,25 @@ fun LoginScreen(
         }
     }
 
+    val invokeBiometricAuth: () -> Unit = {
+        coroutineScope.launch {
+            val result = viewModel.biometricAuthentication()
+            if (result) {
+                onFinish()
+            }
+        }
+    }
+
     LaunchedEffect(Unit) {
-        //Safe calls required: When rotating the screen, the focus requester is not instantiated
-        //for a very short period of time, during which this Launched effect is called. Without
-        //this safe call, the app would crash throwing an IllegalStateException.
-        focusRequester?.requestFocus()
+        if (viewModel.areBiometricsConfigured) {
+            invokeBiometricAuth()
+        }
+        else {
+            //Safe calls required: When rotating the screen, the focus requester is not instantiated
+            //for a very short period of time, during which this Launched effect is called. Without
+            //this safe call, the app would crash throwing an IllegalStateException.
+            focusRequester?.requestFocus()
+        }
     }
 
     Scaffold(
@@ -127,9 +146,28 @@ fun LoginScreen(
 
             //Buttons:
             Column {
+                if (viewModel.areBiometricsConfigured) {
+                    OutlinedButton(
+                        onClick = invokeBiometricAuth,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_biometrics),
+                                contentDescription = "",
+                                modifier = Modifier.padding(end = 8.dp)
+                            )
+                            Text(stringResource(R.string.button_useBiometrics))
+                        }
+                    }
+                }
                 Button(
                     onClick = invokeOnFinish,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = dimensionResource(R.dimen.padding_vertical))
                 ) {
                     Text(stringResource(R.string.button_login))
                 }
