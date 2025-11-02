@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "de.christian2003.passwordvault.compose" //TODO: Remove '.compose' suffix once migration finishes!
-        minSdk = 35
+        minSdk = 34
         targetSdk = 35
         versionCode = 38
         versionName = "3.8.0-pre1"
