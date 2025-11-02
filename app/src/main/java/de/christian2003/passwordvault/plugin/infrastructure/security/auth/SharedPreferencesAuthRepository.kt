@@ -2,6 +2,7 @@ package de.christian2003.passwordvault.plugin.infrastructure.security.auth
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.biometric.BiometricManager
 import de.christian2003.passwordvault.application.repository.AuthRepository
 import java.security.SecureRandom
 import java.util.Base64
@@ -16,7 +17,7 @@ import androidx.core.content.edit
  * @param context   Android context.
  */
 class SharedPreferencesAuthRepository(
-    context: Context
+    private val context: Context
 ): AuthRepository {
 
     /**
@@ -67,6 +68,44 @@ class SharedPreferencesAuthRepository(
             return storedHash == computedHash
         }
         return false
+    }
+
+
+    /**
+     * Returns whether the device supports biometric authentication.
+     *
+     * @return  Whether the device supports biometric authentication.
+     */
+    override fun doesDeviceSupportBiometrics(): Boolean {
+        val biometricManager: BiometricManager = BiometricManager.from(context)
+        val canAuthenticate: Int = biometricManager.canAuthenticate(
+            BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL
+        )
+
+        return canAuthenticate == BiometricManager.BIOMETRIC_SUCCESS
+    }
+
+
+    /**
+     * Returns whether the app should use biometrics for authentication.
+     *
+     * @return  Whether to use biometrics for authentication.
+     */
+    override fun hasBiometrics(): Boolean {
+        val biometrics: Boolean = sharedPreferences.getBoolean("use_biometrics", false)
+        return biometrics
+    }
+
+
+    /**
+     * Changes whether the app should use biometrics for authentication.
+     *
+     * @param biometrics    Whether to use biometrics for authentication.
+     */
+    override fun setBiometrics(biometrics: Boolean) {
+        sharedPreferences.edit {
+            putBoolean("use_biometrics", biometrics)
+        }
     }
 
 

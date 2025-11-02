@@ -30,4 +30,28 @@ interface AuthRepository {
      */
     fun isPasswordValid(password: String): Boolean
 
+
+    /**
+     * Returns whether the device supports biometric authentication.
+     *
+     * @return  Whether the device supports biometric authentication.
+     */
+    fun doesDeviceSupportBiometrics(): Boolean
+
+
+    /**
+     * Returns whether the app should use biometrics for authentication.
+     *
+     * @return  Whether to use biometrics for authentication.
+     */
+    fun hasBiometrics(): Boolean
+
+
+    /**
+     * Changes whether the app should use biometrics for authentication.
+     *
+     * @param biometrics    Whether to use biometrics for authentication.
+     */
+    fun setBiometrics(biometrics: Boolean)
+
 }

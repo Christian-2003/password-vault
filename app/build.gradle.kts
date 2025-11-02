@@ -61,7 +61,8 @@ kotlin {
             "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
             "-opt-in=kotlin.uuid.ExperimentalUuidApi",
             "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
-            "-opt-in=androidx.compose.material3.ExperimentalMaterial3ExpressiveApi"
+            "-opt-in=androidx.compose.material3.ExperimentalMaterial3ExpressiveApi",
+            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
         )
     }
 }
@@ -94,6 +95,7 @@ dependencies {
     implementation(libs.reorderable)
     implementation(libs.coil.compose)
     implementation(libs.coil.svg)
+    implementation(libs.androidx.biometric)
 
     testImplementation(libs.junit)
 

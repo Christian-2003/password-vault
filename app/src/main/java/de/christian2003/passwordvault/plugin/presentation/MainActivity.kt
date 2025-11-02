@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -39,7 +40,10 @@ import de.christian2003.passwordvault.application.usecases.tag.DeleteTagUseCase
 import de.christian2003.passwordvault.application.usecases.tag.GetAllTagsUseCase
 import de.christian2003.passwordvault.application.usecases.tag.UpdateTagUseCase
 import de.christian2003.passwordvault.application.security.ClipboardService
+import de.christian2003.passwordvault.application.usecases.auth.AreBiometricsAvailableUseCase
+import de.christian2003.passwordvault.application.usecases.auth.AreBiometricsConfiguredUseCase
 import de.christian2003.passwordvault.application.usecases.auth.SetupAuthUseCase
+import de.christian2003.passwordvault.application.usecases.auth.SetupBiometricsUseCase
 import de.christian2003.passwordvault.application.usecases.auth.UpdatePasswordUseCase
 import de.christian2003.passwordvault.application.usecases.auth.VerifyPasswordUseCase
 import de.christian2003.passwordvault.plugin.PasswordVaultApplication
@@ -47,6 +51,7 @@ import de.christian2003.passwordvault.plugin.infrastructure.db.PasswordVaultRepo
 import de.christian2003.passwordvault.plugin.infrastructure.packages.AndroidPackageFingerprintService
 import de.christian2003.passwordvault.plugin.infrastructure.packages.LocalPackagesRepository
 import de.christian2003.passwordvault.plugin.infrastructure.security.AndroidClipboardService
+import de.christian2003.passwordvault.plugin.infrastructure.security.auth.AndroidBiometricAuthService
 import de.christian2003.passwordvault.plugin.infrastructure.security.auth.SharedPreferencesAuthRepository
 import de.christian2003.passwordvault.plugin.presentation.ui.theme.PasswordVaultTheme
 import de.christian2003.passwordvault.plugin.presentation.view.account.AccountScreen
@@ -66,7 +71,8 @@ import kotlin.uuid.Uuid
 import kotlin.uuid.toKotlinUuid
 
 
-class MainActivity : ComponentActivity() {
+//Require FragmentActivity instead of ComponentActivity in order to host a biometric prompt
+class MainActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -184,7 +190,11 @@ fun PasswordVault() {
 
             composable("settings") {
                 val viewModel: SettingsViewModel = viewModel()
-                viewModel.init()
+                viewModel.init(
+                    areBiometricsAvailableUseCase = AreBiometricsAvailableUseCase(authRepository),
+                    areBiometricsConfiguredUseCase = AreBiometricsConfiguredUseCase(authRepository),
+                    setupBiometricsUseCase = SetupBiometricsUseCase(authRepository, AndroidBiometricAuthService(context))
+                )
 
                 SettingsScreen(
                     viewModel = viewModel,

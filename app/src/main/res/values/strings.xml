@@ -3,6 +3,8 @@
     <string name="placeholder_obfuscated">•••••</string> <!-- '•' is U+2022  -->
     <string name="confirm_delete">Confirm deletion</string>
     <string name="confirm_discard">Discard changes?</string>
+    <string name="biometricPrompt_title">Biometric authentication</string>
+    <string name="biometricPrompt_subtitle">To continue, you need to verify your identity.</string>
 
     <string name="main_emptyPlaceholder_title">No accounts</string>
     <string name="main_emptyPlaceholder_subtitle">Create an account and it will show up here</string>
@@ -101,6 +103,8 @@
     <string name="settings_security">Security</string>
     <string name="settings_security_masterPasswordTitle">Master password</string>
     <string name="settings_security_masterPasswordInfo">Change your master password</string>
+    <string name="settings_security_biometricsTitle">Biometrics</string>
+    <string name="settings_security_biometricsInfo">Use biometrics for authentication</string>
     <string name="settings_help">Help</string>
     <string name="settings_help_helpMessagesTitle">Help messages</string>
     <string name="settings_help_helpMessagesInfo">Reactivate dismissed help messages</string>
@@ -153,6 +157,7 @@
     <string name="button_selectTargetWebsite">Select website</string>
     <string name="button_showMore">Show more</string>
     <string name="button_showLess">Show less</string>
+    <string name="button_useBiometrics">Use biometrics</string>
 
     <string name="error_blankInput">The input cannot be blank</string>
     <string name="error_invalidUrl">The input is no valid URL</string>

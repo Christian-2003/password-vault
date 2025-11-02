@@ -14,6 +14,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -94,7 +95,17 @@ fun SettingsScreen(
                         }
                     }
                 )
-
+                if (viewModel.areBiometricsAvailable) {
+                    SettingsItemSwitch(
+                        title = stringResource(R.string.settings_security_biometricsTitle),
+                        info = stringResource(R.string.settings_security_biometricsInfo),
+                        prefixIcon = painterResource(R.drawable.ic_biometrics),
+                        checked = viewModel.areBiometricsConfigured,
+                        onCheckedChange = { enabled ->
+                            viewModel.setBiometrics(enabled)
+                        }
+                    )
+                }
             }
 
             //Help:
@@ -120,9 +131,11 @@ fun SettingsScreen(
 /**
  * Composable displays an item button.
  *
- * @param title     Title for the setting.
- * @param info      Info for the setting.
- * @param onClick   Callback to invoke when the item button is clicked.
+ * @param title         Title for the setting.
+ * @param info          Info for the setting.
+ * @param onClick       Callback to invoke when the item button is clicked.
+ * @param endIcon       Optional end icon.
+ * @param prefixIcon    Optional prefix icon.
  */
 @Composable
 fun SettingsItemButton(
@@ -183,6 +196,69 @@ fun SettingsItemButton(
                 style = MaterialTheme.typography.bodyMedium
             )
         }
+    }
+}
+
+
+/**
+ * Composable displays an item switch.
+ *
+ * @param title             Title for the setting.
+ * @param info              Info for the setting.
+ * @param checked           Whether the switch is checked.
+ * @param onCheckedChange   Callback invoked once the switch is (un)checked.
+ * @param prefixIcon        Optional prefix icon.
+ */
+@Composable
+fun SettingsItemSwitch(
+    title: String,
+    info: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    prefixIcon: Painter? = null
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                onCheckedChange(!checked)
+            }
+            .padding(
+                vertical = dimensionResource(R.dimen.padding_vertical),
+                horizontal = dimensionResource(R.dimen.margin_horizontal)
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        if (prefixIcon != null) {
+            Icon(
+                painter = prefixIcon,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                contentDescription = "",
+                modifier = Modifier
+                    .padding(end = dimensionResource(R.dimen.padding_horizontal))
+                    .size(dimensionResource(R.dimen.image_xs))
+            )
+        }
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                text = title,
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = info,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+        Switch(
+            checked = checked,
+            onCheckedChange = onCheckedChange,
+            modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
+        )
     }
 }
 
