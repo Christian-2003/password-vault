@@ -1,24 +1,57 @@
 package de.christian2003.passwordvault.plugin.presentation.view.securityquestions
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import de.christian2003.passwordvault.R
+import de.christian2003.passwordvault.domain.security.auth.SecurityQuestion
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDeleteDialog
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.ContextAction
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.ContextActions
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.DropdownInput
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.HelpCard
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.TextInput
 
 
 @Composable
@@ -50,16 +83,29 @@ fun SecurityQuestionsScreen(
                             )
                         }
                     }
+                },
+                actions = {
+                    IconButton(
+                        onClick = {
+                            viewModel.isCreateDialogVisible = true
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_add),
+                            contentDescription = ""
+                        )
+                    }
                 }
             )
         }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ) {
-            item {
+        if (viewModel.securityQuestions.isEmpty()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .verticalScroll(rememberScrollState())
+            ) {
                 AnimatedVisibility(viewModel.isHelpCardVisible) {
                     HelpCard(
                         text = if (viewModel.isSetup) {
@@ -70,22 +116,141 @@ fun SecurityQuestionsScreen(
                         onDismiss = {
                             viewModel.dismissHelpCard()
                         },
-                        modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.margin_horizontal))
+                        modifier = Modifier.padding(
+                            start = dimensionResource(R.dimen.margin_horizontal),
+                            end = dimensionResource(R.dimen.margin_horizontal),
+                        )
                     )
                 }
+                val modifier: Modifier = if (viewModel.isHelpCardVisible) { Modifier } else { Modifier.weight(1f) }
+                EmptyPlaceholder(
+                    title = stringResource(R.string.securityQuestion_emptyPlaceholder_title),
+                    subtitle = stringResource(R.string.securityQuestion_emptyPlaceholder_subtitle),
+                    painter = painterResource(R.drawable.el_questions),
+                    onButtonClick = {
+                        viewModel.isCreateDialogVisible = true
+                    },
+                    buttonContent = {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_add),
+                                contentDescription = "",
+                                modifier = Modifier.padding(end = 8.dp)
+                            )
+                            Text(stringResource(R.string.button_addSecurityQuestion))
+                        }
+                    },
+                    modifier = modifier.padding(vertical = dimensionResource(R.dimen.padding_vertical))
+                )
             }
-            if (viewModel.securityQuestions.isEmpty()) {
-                item {
-                    EmptyPlaceholder(
-                        title = stringResource(R.string.securityQuestion_emptyPlaceholder_title),
-                        subtitle = stringResource(R.string.securityQuestion_emptyPlaceholder_subtitle),
-                        painter = painterResource(R.drawable.el_questions)
-                    )
-                }
-            }
-            items(viewModel.securityQuestions) {
+        }
+        else {
+            SecurityQuestionList(
+                questions = viewModel.securityQuestions,
+                isHelpCardVisible = viewModel.isHelpCardVisible,
+                isSetup = viewModel.isSetup,
+                onDismissHelpCard = {
+                    viewModel.dismissHelpCard()
+                },
+                onEditQuestion = { question ->
+                    viewModel.questionToEdit = question
+                },
+                onDeleteQuestion = { question ->
+                    viewModel.questionToDelete = question
+                },
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+            )
+        }
+    }
 
+    //Dialog to create a new question:
+    if (viewModel.isCreateDialogVisible) {
+        SecurityQuestionDialog(
+            securityQuestion = null,
+            selectedSecurityQuestions = viewModel.securityQuestions.map { it.question },
+            onDismiss = {
+                viewModel.dismissCreateDialog()
+            },
+            onSave = { question, answer ->
+                viewModel.dismissCreateDialog(question, answer)
             }
+        )
+    }
+
+    //Dialog to edit an existing question
+    val questionToEdit: SecurityQuestionUiDto? = viewModel.questionToEdit
+    if (questionToEdit != null) {
+        SecurityQuestionDialog(
+            securityQuestion = questionToEdit.question,
+            answer = questionToEdit.answer,
+            selectedSecurityQuestions = viewModel.securityQuestions.map { it.question } - questionToEdit.question,
+            onDismiss = {
+                viewModel.dismissEditQuestionDialog()
+            },
+            onSave = { question, answer ->
+                viewModel.dismissEditQuestionDialog(question, answer)
+            }
+        )
+    }
+
+    //Dialog to delete a question:
+    if (viewModel.questionToDelete != null) {
+        ConfirmDeleteDialog(
+            text = stringResource(R.string.securityQuestion_confirmDeleteMessage),
+            onDismiss = {
+                viewModel.dismissDeleteQuestionDialog()
+            },
+            onConfirm = {
+                viewModel.dismissDeleteQuestionDialog(viewModel.questionToDelete?.question)
+            }
+        )
+    }
+}
+
+
+@Composable
+private fun SecurityQuestionList(
+    questions: List<SecurityQuestionUiDto>,
+    isHelpCardVisible: Boolean,
+    isSetup: Boolean,
+    onDismissHelpCard: () -> Unit,
+    onEditQuestion: (SecurityQuestionUiDto) -> Unit,
+    onDeleteQuestion: (SecurityQuestionUiDto) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    LazyColumn(
+        modifier = modifier
+    ) {
+        item {
+            AnimatedVisibility(isHelpCardVisible) {
+                HelpCard(
+                    text = if (isSetup) {
+                        stringResource(R.string.securityQuestion_helpSetup)
+                    } else {
+                        stringResource(R.string.securityQuestion_helpEdit)
+                    },
+                    onDismiss = onDismissHelpCard,
+                    modifier = Modifier.padding(
+                        start = dimensionResource(R.dimen.margin_horizontal),
+                        end = dimensionResource(R.dimen.margin_horizontal),
+                        bottom = dimensionResource(R.dimen.padding_vertical)
+                    )
+                )
+            }
+            InfoCard(
+                securityQuestionsCount = questions.size
+            )
+        }
+        items(questions) { question ->
+            SecurityQuestionItem(
+                question = question,
+                onEdit = onEditQuestion,
+                onDelete = onDeleteQuestion
+            )
         }
     }
 }
@@ -93,8 +258,217 @@ fun SecurityQuestionsScreen(
 
 @Composable
 private fun SecurityQuestionItem(
-    isSetup: Boolean,
-
+    question: SecurityQuestionUiDto,
+    onEdit: (SecurityQuestionUiDto) -> Unit,
+    onDelete: (SecurityQuestionUiDto) -> Unit
 ) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                onEdit(question)
+            }
+            .padding(
+                horizontal = dimensionResource(R.dimen.margin_horizontal),
+                vertical = dimensionResource(R.dimen.padding_vertical)
+            )
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = dimensionResource(R.dimen.padding_horizontal))
+        ) {
+            Text(
+                text = stringArrayResource(R.array.securityQuestion_questions)[question.question.ordinal],
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyLarge
+            )
+            if (question.hasAnswer && question.answer != null) {
+                Text(
+                    text = question.answer,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        }
+        val contextActions: List<ContextAction> = listOf(
+            ContextAction(
+                text = stringResource(R.string.securityQuestion_edit),
+                icon = painterResource(R.drawable.ic_edit)
+            ) {
+                onEdit(question)
+            },
+            ContextAction(
+                text = stringResource(R.string.securityQuestion_delete),
+                icon = painterResource(R.drawable.ic_delete)
+            ) {
+                onDelete(question)
+            }
+        )
+        ContextActions(contextActions)
+    }
+}
 
+
+@Composable
+private fun InfoCard(
+    securityQuestionsCount: Int,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        shape = MaterialTheme.shapes.extraLarge,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+        modifier = modifier
+            .padding(
+                start = dimensionResource(R.dimen.margin_horizontal),
+                end = dimensionResource(R.dimen.margin_horizontal),
+                bottom = dimensionResource(R.dimen.padding_vertical),
+            )
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = dimensionResource(R.dimen.margin_horizontal),
+                    vertical = dimensionResource(R.dimen.padding_vertical)
+                )
+        ) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .size(dimensionResource(R.dimen.image_m))
+                    .clip(CircleShape)
+                    .background(
+                        color = if (securityQuestionsCount >= 5) {
+                            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
+                        } else {
+                            MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f)
+                        }
+                    )
+            ) {
+                Icon(
+                    painter = if (securityQuestionsCount >= 5) {
+                        painterResource(R.drawable.ic_shield_check)
+                    } else {
+                        painterResource(R.drawable.ic_shield_warning)
+                    },
+                    contentDescription = "",
+                    tint = if (securityQuestionsCount >= 5) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.error
+                    },
+                    modifier = Modifier.size(dimensionResource(R.dimen.image_s))
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = dimensionResource(R.dimen.padding_horizontal))
+            ) {
+                Text(
+                    text = if (securityQuestionsCount >= 5) {
+                        stringResource(R.string.securityQuestion_activeTitle)
+                    } else {
+                        stringResource(R.string.securityQuestion_inactiveTitle)
+                    },
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.headlineSmall
+                )
+                Text(
+                    text = if (securityQuestionsCount >= 5) {
+                        stringResource(R.string.securityQuestion_activeSubtitle, securityQuestionsCount)
+                    } else {
+                        pluralStringResource(R.plurals.securityQuestion_inactiveSubtitle, 5 - securityQuestionsCount, 5 - securityQuestionsCount)
+                    },
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+private fun SecurityQuestionDialog(
+    securityQuestion: SecurityQuestion?,
+    selectedSecurityQuestions: List<SecurityQuestion>,
+    onDismiss: () -> Unit,
+    onSave: (SecurityQuestion, String) -> Unit,
+    answer: String? = null
+) {
+    val availableSecurityQuestions: List<SecurityQuestion> = remember { SecurityQuestion.entries - selectedSecurityQuestions }
+    var mutableAnswer: String by remember { mutableStateOf(answer ?: "") }
+    var selectedQuestionIndex: Int by remember { mutableIntStateOf(if (securityQuestion != null) { availableSecurityQuestions.indexOf(securityQuestion) } else { 0 }) }
+
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(
+            dismissOnClickOutside = false
+        )
+    ) {
+        Card(
+            shape = MaterialTheme.shapes.extraLarge
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+                    .padding(24.dp)
+            ) {
+                Text(
+                    text = if (securityQuestion == null) {
+                        stringResource(R.string.securityQuestion_edit_titleAdd)
+                    } else {
+                        stringResource(R.string.securityQuestion_edit_titleEdit)
+                    },
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+
+                DropdownInput(
+                    items = availableSecurityQuestions.map { stringArrayResource(R.array.securityQuestion_questions)[it.ordinal] },
+                    selectedItemIndex = selectedQuestionIndex,
+                    onSelectedItemIndexChange = {
+                        selectedQuestionIndex = it
+                    },
+                    label = stringResource(R.string.securityQuestion_edit_labelQuestion),
+                    prefixIcon = painterResource(R.drawable.ic_question),
+                    modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_vertical))
+                )
+
+                TextInput(
+                    value = mutableAnswer,
+                    onValueChange = {
+                        mutableAnswer = it
+                    },
+                    label = stringResource(R.string.securityQuestion_edit_labelAnswer),
+                    prefixIcon = painterResource(R.drawable.ic_text)
+                )
+
+                FlowRow(
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier.align(Alignment.End).padding(top = 24.dp)
+                ) {
+                    TextButton(
+                        onClick = onDismiss
+                    ) {
+                        Text(stringResource(R.string.button_cancel))
+                    }
+                    TextButton(
+                        onClick = {
+                            onSave(availableSecurityQuestions[selectedQuestionIndex], mutableAnswer)
+                        },
+                        enabled = mutableAnswer.isNotBlank()
+                    ) {
+                        Text(stringResource(R.string.button_save))
+                    }
+                }
+            }
+        }
+    }
 }

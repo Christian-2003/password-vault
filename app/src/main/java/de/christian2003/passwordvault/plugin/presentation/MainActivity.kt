@@ -43,8 +43,9 @@ import de.christian2003.passwordvault.application.security.ClipboardService
 import de.christian2003.passwordvault.application.usecases.auth.AreBiometricsAvailableUseCase
 import de.christian2003.passwordvault.application.usecases.auth.AreBiometricsConfiguredUseCase
 import de.christian2003.passwordvault.application.usecases.auth.BiometricAuthUseCase
-import de.christian2003.passwordvault.application.usecases.auth.ChangeSecurityQuestionUseCase
+import de.christian2003.passwordvault.application.usecases.auth.AddSecurityQuestionUseCase
 import de.christian2003.passwordvault.application.usecases.auth.GetSecurityQuestionsUseCase
+import de.christian2003.passwordvault.application.usecases.auth.RemoveSecurityQuestionUseCase
 import de.christian2003.passwordvault.application.usecases.auth.SetupAuthUseCase
 import de.christian2003.passwordvault.application.usecases.auth.SetupBiometricsUseCase
 import de.christian2003.passwordvault.application.usecases.auth.SetupSecurityQuestionsUseCase
@@ -298,7 +299,8 @@ fun PasswordVault() {
                 viewModel.init(
                     setupSecurityQuestionsUseCase = SetupSecurityQuestionsUseCase(authRepository),
                     getSecurityQuestionsUseCase = GetSecurityQuestionsUseCase(authRepository),
-                    changeSecurityQuestionUseCase = ChangeSecurityQuestionUseCase(authRepository),
+                    addSecurityQuestionUseCase = AddSecurityQuestionUseCase(authRepository),
+                    removeSecurityQuestionUseCase = RemoveSecurityQuestionUseCase(authRepository),
                     isSetup = isSetup
                 )
 

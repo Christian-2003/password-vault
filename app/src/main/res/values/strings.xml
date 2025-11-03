@@ -152,8 +152,22 @@
     <string name="securityQuestion_titleEdit">Edit Recovery</string>
     <string name="securityQuestion_emptyPlaceholder_title">No security questions</string>
     <string name="securityQuestion_emptyPlaceholder_subtitle">Add security questions and they will show up here</string>
+    <string name="securityQuestion_edit_titleAdd">Add security question</string>
+    <string name="securityQuestion_edit_titleEdit">Edit security question</string>
+    <string name="securityQuestion_edit_labelQuestion">Security question</string>
+    <string name="securityQuestion_edit_labelAnswer">Answer</string>
     <string name="securityQuestion_helpSetup">Answer some security questions that we can use to verify your identity in case you forget your password.</string>
     <string name="securityQuestion_helpEdit">Edit the security questions that you have setup</string>
+    <string name="securityQuestion_inactiveTitle">Recovery inactive</string>
+    <plurals name="securityQuestion_inactiveSubtitle">
+        <item quantity="one">Add %1$d security question</item>
+        <item quantity="other">Add %1$d security questions</item>
+    </plurals>
+    <string name="securityQuestion_activeTitle">Recovery active</string>
+    <string name="securityQuestion_activeSubtitle">%1$d security questions</string>
+    <string name="securityQuestion_edit">Edit question</string>
+    <string name="securityQuestion_delete">Delete question</string>
+    <string name="securityQuestion_confirmDeleteMessage">Are you sure you want to delete the security question? This cannot be undone.</string>
     <string-array name="securityQuestion_questions">
         <item>What was the name of your first childhood friend?</item>
         <item>What was the name of your first school teacher?</item>
@@ -190,6 +204,7 @@
     <string name="button_showMore">Show more</string>
     <string name="button_showLess">Show less</string>
     <string name="button_useBiometrics">Use biometrics</string>
+    <string name="button_addSecurityQuestion">Add security question</string>
 
     <string name="error_blankInput">The input cannot be blank</string>
     <string name="error_invalidUrl">The input is no valid URL</string>
