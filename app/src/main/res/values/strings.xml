@@ -168,6 +168,8 @@
     <string name="securityQuestion_edit">Edit question</string>
     <string name="securityQuestion_delete">Delete question</string>
     <string name="securityQuestion_confirmDeleteMessage">Are you sure you want to delete the security question? This cannot be undone.</string>
+    <string name="securityQuestion_noAnswerDialog_title">Where is the answer to this question?</string>
+    <string name="securityQuestion_noAnswerDialog_text">For security purposes, we cannot display your answer to the security question. But do not worry, the app remembers the answer until you delete the question.</string>
     <string-array name="securityQuestion_questions">
         <item>What was the name of your first childhood friend?</item>
         <item>What was the name of your first school teacher?</item>

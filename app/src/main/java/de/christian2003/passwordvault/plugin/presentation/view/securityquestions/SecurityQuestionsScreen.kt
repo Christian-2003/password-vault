@@ -16,6 +16,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -40,6 +42,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -47,6 +50,8 @@ import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.domain.security.auth.SecurityQuestion
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ConfirmDeleteDialog
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ContextAction
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.ContextActionBase
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.ContextActionDivider
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.ContextActions
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.DropdownInput
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.EmptyPlaceholder
@@ -54,6 +59,13 @@ import de.christian2003.passwordvault.plugin.presentation.ui.composables.HelpCar
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.TextInput
 
 
+/**
+ * Screen displays a list of the security questions that are configured by the user.
+ *
+ * @param viewModel                 View model.
+ * @param onNavigateUp              Callback invoked to navigate up the navigation stack.
+ * @param onNavigateToNextSetupStep Callback invoked to navigate to the next setup step.
+ */
 @Composable
 fun SecurityQuestionsScreen(
     viewModel: SecurityQuestionsViewModel,
@@ -160,6 +172,9 @@ fun SecurityQuestionsScreen(
                 onDeleteQuestion = { question ->
                     viewModel.questionToDelete = question
                 },
+                onShowHelp = {
+                    viewModel.isHelpDialogVisible = true
+                },
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
@@ -186,8 +201,8 @@ fun SecurityQuestionsScreen(
     if (questionToEdit != null) {
         SecurityQuestionDialog(
             securityQuestion = questionToEdit.question,
-            answer = questionToEdit.answer,
             selectedSecurityQuestions = viewModel.securityQuestions.map { it.question } - questionToEdit.question,
+            answer = questionToEdit.answer,
             onDismiss = {
                 viewModel.dismissEditQuestionDialog()
             },
@@ -209,9 +224,32 @@ fun SecurityQuestionsScreen(
             }
         )
     }
+
+    //Help dialog:
+    if (viewModel.isHelpDialogVisible) {
+        InfoDialog(
+            title = stringResource(R.string.securityQuestion_noAnswerDialog_title),
+            text = stringResource(R.string.securityQuestion_noAnswerDialog_text),
+            onDismiss = {
+                viewModel.isHelpDialogVisible = false
+            }
+        )
+    }
 }
 
 
+/**
+ * Displays a list of security questions.
+ *
+ * @param questions         List of questions to display.
+ * @param isHelpCardVisible Whether the help card is visible.
+ * @param isSetup           Whether the screen is shown through the app setup.
+ * @param onDismissHelpCard Callback invoked to dismiss the help card.
+ * @param onEditQuestion    Callback invoked to edit a security question.
+ * @param onDeleteQuestion  Callback invoked to delete a security question.
+ * @param onShowHelp        Callback invoked to show the help dialog.
+ * @param modifier          Modifier.
+ */
 @Composable
 private fun SecurityQuestionList(
     questions: List<SecurityQuestionUiDto>,
@@ -220,6 +258,7 @@ private fun SecurityQuestionList(
     onDismissHelpCard: () -> Unit,
     onEditQuestion: (SecurityQuestionUiDto) -> Unit,
     onDeleteQuestion: (SecurityQuestionUiDto) -> Unit,
+    onShowHelp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -249,18 +288,28 @@ private fun SecurityQuestionList(
             SecurityQuestionItem(
                 question = question,
                 onEdit = onEditQuestion,
-                onDelete = onDeleteQuestion
+                onDelete = onDeleteQuestion,
+                onShowHelp = onShowHelp
             )
         }
     }
 }
 
 
+/**
+ * Displays a security question within the list of security questions.
+ *
+ * @param question      Security question to display.
+ * @param onDelete      Callback invoked to edit the question.
+ * @param onDelete      Callback invoked to delete the question.
+ * @param onShowHelp    Callback invoked to show the help dialog.
+ */
 @Composable
 private fun SecurityQuestionItem(
     question: SecurityQuestionUiDto,
     onEdit: (SecurityQuestionUiDto) -> Unit,
-    onDelete: (SecurityQuestionUiDto) -> Unit
+    onDelete: (SecurityQuestionUiDto) -> Unit,
+    onShowHelp: () -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -270,8 +319,10 @@ private fun SecurityQuestionItem(
                 onEdit(question)
             }
             .padding(
-                horizontal = dimensionResource(R.dimen.margin_horizontal),
-                vertical = dimensionResource(R.dimen.padding_vertical)
+                start = dimensionResource(R.dimen.margin_horizontal),
+                top = dimensionResource(R.dimen.padding_vertical),
+                end = dimensionResource(R.dimen.margin_horizontal) - 12.dp,
+                bottom = dimensionResource(R.dimen.padding_vertical)
             )
     ) {
         Column(
@@ -292,7 +343,7 @@ private fun SecurityQuestionItem(
                 )
             }
         }
-        val contextActions: List<ContextAction> = listOf(
+        val contextActions: MutableList<ContextActionBase> = mutableListOf(
             ContextAction(
                 text = stringResource(R.string.securityQuestion_edit),
                 icon = painterResource(R.drawable.ic_edit)
@@ -306,11 +357,28 @@ private fun SecurityQuestionItem(
                 onDelete(question)
             }
         )
+        if (!question.hasAnswer || question.answer == null) {
+            contextActions.add(ContextActionDivider())
+            contextActions.add(
+                ContextAction(
+                    text = stringResource(R.string.securityQuestion_noAnswerDialog_title),
+                    icon = painterResource(R.drawable.ic_info_outlined)
+                ) {
+                    onShowHelp()
+                }
+            )
+        }
         ContextActions(contextActions)
     }
 }
 
 
+/**
+ * Information card which shows to the user, whether the recovery is active.
+ *
+ * @param securityQuestionsCount    Number of security questions configured.
+ * @param modifier                  Modifier.
+ */
 @Composable
 private fun InfoCard(
     securityQuestionsCount: Int,
@@ -342,9 +410,9 @@ private fun InfoCard(
                     .clip(CircleShape)
                     .background(
                         color = if (securityQuestionsCount >= 5) {
-                            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
+                            MaterialTheme.colorScheme.primaryContainer
                         } else {
-                            MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f)
+                            MaterialTheme.colorScheme.errorContainer
                         }
                     )
             ) {
@@ -356,9 +424,9 @@ private fun InfoCard(
                     },
                     contentDescription = "",
                     tint = if (securityQuestionsCount >= 5) {
-                        MaterialTheme.colorScheme.primary
+                        MaterialTheme.colorScheme.onPrimaryContainer
                     } else {
-                        MaterialTheme.colorScheme.error
+                        MaterialTheme.colorScheme.onErrorContainer
                     },
                     modifier = Modifier.size(dimensionResource(R.dimen.image_s))
                 )
@@ -392,17 +460,31 @@ private fun InfoCard(
 }
 
 
+/**
+ * Dialog through which to add or edit a security question.
+ *
+ * @param securityQuestion          Security question to edit. Pass null to create a new one.
+ * @param selectedSecurityQuestions List of security questions that are already selected.
+ * @param onDismiss                 Callback invoked to dismiss the dialog.
+ * @param onSave                    Callback invoked to save the security question and answer specified.
+ */
 @Composable
 private fun SecurityQuestionDialog(
     securityQuestion: SecurityQuestion?,
     selectedSecurityQuestions: List<SecurityQuestion>,
+    answer: String? = null,
     onDismiss: () -> Unit,
-    onSave: (SecurityQuestion, String) -> Unit,
-    answer: String? = null
+    onSave: (SecurityQuestion, String) -> Unit
 ) {
     val availableSecurityQuestions: List<SecurityQuestion> = remember { SecurityQuestion.entries - selectedSecurityQuestions }
     var mutableAnswer: String by remember { mutableStateOf(answer ?: "") }
     var selectedQuestionIndex: Int by remember { mutableIntStateOf(if (securityQuestion != null) { availableSecurityQuestions.indexOf(securityQuestion) } else { 0 }) }
+
+    val invokeOnSave: () -> Unit = {
+        if (mutableAnswer.isNotBlank()) {
+            onSave(availableSecurityQuestions[selectedQuestionIndex], mutableAnswer)
+        }
+    }
 
     Dialog(
         onDismissRequest = onDismiss,
@@ -447,7 +529,13 @@ private fun SecurityQuestionDialog(
                         mutableAnswer = it
                     },
                     label = stringResource(R.string.securityQuestion_edit_labelAnswer),
-                    prefixIcon = painterResource(R.drawable.ic_text)
+                    prefixIcon = painterResource(R.drawable.ic_text),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            invokeOnSave()
+                        }
+                    )
                 )
 
                 FlowRow(
@@ -461,12 +549,65 @@ private fun SecurityQuestionDialog(
                     }
                     TextButton(
                         onClick = {
-                            onSave(availableSecurityQuestions[selectedQuestionIndex], mutableAnswer)
+                            invokeOnSave()
                         },
                         enabled = mutableAnswer.isNotBlank()
                     ) {
                         Text(stringResource(R.string.button_save))
                     }
+                }
+            }
+        }
+    }
+}
+
+
+/**
+ * Displays an informational dialog.
+ *
+ * @param title     Title for the dialog.
+ * @param text      Text for the dialog.
+ * @param onDismiss Callback invoked to dismiss the dialog.
+ */
+@Composable
+private fun InfoDialog(
+    title: String,
+    text: String,
+    onDismiss: () -> Unit
+) {
+    Dialog(
+        onDismissRequest = onDismiss,
+    ) {
+        Card(
+            shape = MaterialTheme.shapes.extraLarge
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+                    .padding(24.dp)
+            ) {
+                Text(
+                    text = title,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.headlineSmall
+                )
+
+                Text(
+                    text = text,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(
+                        top = 16.dp,
+                        bottom = 24.dp
+                    )
+                )
+
+                TextButton(
+                    onClick = onDismiss,
+                    modifier = Modifier.align(Alignment.End)
+                ) {
+                    Text(stringResource(R.string.button_ok))
                 }
             }
         }

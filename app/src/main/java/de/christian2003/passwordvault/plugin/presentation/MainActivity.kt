@@ -48,7 +48,6 @@ import de.christian2003.passwordvault.application.usecases.auth.GetSecurityQuest
 import de.christian2003.passwordvault.application.usecases.auth.RemoveSecurityQuestionUseCase
 import de.christian2003.passwordvault.application.usecases.auth.SetupAuthUseCase
 import de.christian2003.passwordvault.application.usecases.auth.SetupBiometricsUseCase
-import de.christian2003.passwordvault.application.usecases.auth.SetupSecurityQuestionsUseCase
 import de.christian2003.passwordvault.application.usecases.auth.UpdatePasswordUseCase
 import de.christian2003.passwordvault.application.usecases.auth.VerifyPasswordUseCase
 import de.christian2003.passwordvault.plugin.PasswordVaultApplication
@@ -297,7 +296,6 @@ fun PasswordVault() {
                 }
                 val viewModel: SecurityQuestionsViewModel = viewModel()
                 viewModel.init(
-                    setupSecurityQuestionsUseCase = SetupSecurityQuestionsUseCase(authRepository),
                     getSecurityQuestionsUseCase = GetSecurityQuestionsUseCase(authRepository),
                     addSecurityQuestionUseCase = AddSecurityQuestionUseCase(authRepository),
                     removeSecurityQuestionUseCase = RemoveSecurityQuestionUseCase(authRepository),
