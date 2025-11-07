@@ -44,12 +44,14 @@ import de.christian2003.passwordvault.application.usecases.auth.AreBiometricsAva
 import de.christian2003.passwordvault.application.usecases.auth.AreBiometricsConfiguredUseCase
 import de.christian2003.passwordvault.application.usecases.auth.BiometricAuthUseCase
 import de.christian2003.passwordvault.application.usecases.auth.AddSecurityQuestionUseCase
+import de.christian2003.passwordvault.application.usecases.auth.AreSecurityQuestionsConfiguredUseCase
 import de.christian2003.passwordvault.application.usecases.auth.GetSecurityQuestionsUseCase
 import de.christian2003.passwordvault.application.usecases.auth.RemoveSecurityQuestionUseCase
 import de.christian2003.passwordvault.application.usecases.auth.SetupAuthUseCase
 import de.christian2003.passwordvault.application.usecases.auth.SetupBiometricsUseCase
 import de.christian2003.passwordvault.application.usecases.auth.UpdatePasswordUseCase
 import de.christian2003.passwordvault.application.usecases.auth.VerifyPasswordUseCase
+import de.christian2003.passwordvault.application.usecases.auth.VerifySecurityQuestionsUseCase
 import de.christian2003.passwordvault.plugin.PasswordVaultApplication
 import de.christian2003.passwordvault.plugin.infrastructure.db.PasswordVaultRepository
 import de.christian2003.passwordvault.plugin.infrastructure.packages.AndroidPackageFingerprintService
@@ -70,6 +72,8 @@ import de.christian2003.passwordvault.plugin.presentation.view.main.MainScreen
 import de.christian2003.passwordvault.plugin.presentation.view.main.MainViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.password.PasswordScreen
 import de.christian2003.passwordvault.plugin.presentation.view.password.PasswordViewModel
+import de.christian2003.passwordvault.plugin.presentation.view.recovery.RecoveryScreen
+import de.christian2003.passwordvault.plugin.presentation.view.recovery.RecoveryViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.securityquestions.SecurityQuestionsScreen
 import de.christian2003.passwordvault.plugin.presentation.view.securityquestions.SecurityQuestionsViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.settings.SettingsScreen
@@ -331,6 +335,7 @@ fun PasswordVault() {
                 viewModel.init(
                     verifyPasswordUseCase = VerifyPasswordUseCase(authRepository),
                     areBiometricsConfiguredUseCase = AreBiometricsConfiguredUseCase(authRepository),
+                    areSecurityQuestionsConfiguredUseCase = AreSecurityQuestionsConfiguredUseCase(authRepository),
                     biometricAuthUseCase = BiometricAuthUseCase(authRepository, biometricAuthService)
                 )
 
@@ -339,6 +344,32 @@ fun PasswordVault() {
                     onFinish = {
                         navController.navigate("main") {
                             popUpTo("login") {
+                                inclusive = true
+                            }
+                        }
+                    },
+                    onNavigateToRecovery = {
+                        navController.navigate("recovery")
+                    }
+                )
+            }
+
+
+            composable("recovery") {
+                val viewModel: RecoveryViewModel = viewModel()
+                viewModel.init(
+                    getSecurityQuestionsUseCase = GetSecurityQuestionsUseCase(authRepository),
+                    verifySecurityQuestionsUseCase = VerifySecurityQuestionsUseCase(authRepository)
+                )
+
+                RecoveryScreen(
+                    viewModel = viewModel,
+                    onNavigateUp = {
+                        navController.navigateUp()
+                    },
+                    onFinish = {
+                        navController.navigate("main") {
+                            popUpTo("recovery") {
                                 inclusive = true
                             }
                         }

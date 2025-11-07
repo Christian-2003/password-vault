@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -43,13 +44,15 @@ import kotlinx.coroutines.withContext
 /**
  * Screen allows the user to login to the app.
  *
- * @param viewModel View model.
- * @param onFinish  Callback invoked to finish login and continue to the main screen.
+ * @param viewModel             View model.
+ * @param onFinish              Callback invoked to finish login and continue to the main screen.
+ * @param onNavigateToRecovery  Callback invoked to navigate to the password recovery.
  */
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel,
-    onFinish: () -> Unit
+    onFinish: () -> Unit,
+    onNavigateToRecovery: () -> Unit
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val errorPassword: String = stringResource(R.string.login_errorPassword)
@@ -142,6 +145,13 @@ fun LoginScreen(
                     ),
                     focusRequester = focusRequester
                 )
+                if (viewModel.isRecoveryConfigured) {
+                    TextButton(
+                        onClick = onNavigateToRecovery
+                    ) {
+                        Text(stringResource(R.string.button_forgotPassword))
+                    }
+                }
             }
 
             //Buttons:

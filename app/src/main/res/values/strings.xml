@@ -132,6 +132,7 @@
         <item>Account</item>
         <item>Master password</item>
         <item>Security questions</item>
+        <item>Master password recovery</item>
     </string-array>
 
     <string name="password_titleSetup">Setup login</string>
@@ -190,6 +191,11 @@
     <string name="login_hint">Confirm your identity</string>
     <string name="login_errorPassword">Password is invalid</string>
 
+    <string name="recovery_title">Password recovery</string>
+    <string name="recovery_help">Answer the security questions below in order to recover your password.</string>
+    <string name="recovery_answerLabel">Answer</string>
+    <string name="recovery_questionTitle">Question %1$d</string>
+
     <string name="button_save">Save</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_delete">Delete</string>
@@ -199,6 +205,7 @@
     <string name="button_remove">Remove</string>
     <string name="button_continue">Continue</string>
     <string name="button_login">Login</string>
+    <string name="button_skip">Skip</string>
     <string name="button_createTag">Create tag</string>
     <string name="button_dismissHelp">Dismiss</string>
     <string name="button_selectTargetPackage">Select apps</string>
@@ -207,6 +214,7 @@
     <string name="button_showLess">Show less</string>
     <string name="button_useBiometrics">Use biometrics</string>
     <string name="button_addSecurityQuestion">Add security question</string>
+    <string name="button_forgotPassword">Forgot password?</string>
 
     <string name="error_blankInput">The input cannot be blank</string>
     <string name="error_invalidUrl">The input is no valid URL</string>

@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,8 +21,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -37,6 +42,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
@@ -95,70 +101,15 @@ fun SecurityQuestionsScreen(
                             )
                         }
                     }
-                },
-                actions = {
-                    IconButton(
-                        onClick = {
-                            viewModel.isCreateDialogVisible = true
-                        }
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_add),
-                            contentDescription = ""
-                        )
-                    }
                 }
             )
         }
     ) { innerPadding ->
-        if (viewModel.securityQuestions.isEmpty()) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                AnimatedVisibility(viewModel.isHelpCardVisible) {
-                    HelpCard(
-                        text = if (viewModel.isSetup) {
-                            stringResource(R.string.securityQuestion_helpSetup)
-                        } else {
-                            stringResource(R.string.securityQuestion_helpEdit)
-                        },
-                        onDismiss = {
-                            viewModel.dismissHelpCard()
-                        },
-                        modifier = Modifier.padding(
-                            start = dimensionResource(R.dimen.margin_horizontal),
-                            end = dimensionResource(R.dimen.margin_horizontal),
-                        )
-                    )
-                }
-                val modifier: Modifier = if (viewModel.isHelpCardVisible) { Modifier } else { Modifier.weight(1f) }
-                EmptyPlaceholder(
-                    title = stringResource(R.string.securityQuestion_emptyPlaceholder_title),
-                    subtitle = stringResource(R.string.securityQuestion_emptyPlaceholder_subtitle),
-                    painter = painterResource(R.drawable.el_questions),
-                    onButtonClick = {
-                        viewModel.isCreateDialogVisible = true
-                    },
-                    buttonContent = {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_add),
-                                contentDescription = "",
-                                modifier = Modifier.padding(end = 8.dp)
-                            )
-                            Text(stringResource(R.string.button_addSecurityQuestion))
-                        }
-                    },
-                    modifier = modifier.padding(vertical = dimensionResource(R.dimen.padding_vertical))
-                )
-            }
-        }
-        else {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
             SecurityQuestionList(
                 questions = viewModel.securityQuestions,
                 isHelpCardVisible = viewModel.isHelpCardVisible,
@@ -175,10 +126,22 @@ fun SecurityQuestionsScreen(
                 onShowHelp = {
                     viewModel.isHelpDialogVisible = true
                 },
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
+                onAddQuestion = {
+                    viewModel.isCreateDialogVisible = true
+                },
+                modifier = Modifier.weight(1f)
             )
+            if (viewModel.isSetup) {
+                ButtonRow(
+                    isContinueEnabled = viewModel.securityQuestions.size >= 5,
+                    onContinue = {
+                        onNavigateToNextSetupStep()
+                    },
+                    onSkip = {
+                        onNavigateToNextSetupStep()
+                    }
+                )
+            }
         }
     }
 
@@ -248,6 +211,7 @@ fun SecurityQuestionsScreen(
  * @param onEditQuestion    Callback invoked to edit a security question.
  * @param onDeleteQuestion  Callback invoked to delete a security question.
  * @param onShowHelp        Callback invoked to show the help dialog.
+ * @param onAddQuestion     Callback invoked to add a new question.
  * @param modifier          Modifier.
  */
 @Composable
@@ -259,6 +223,7 @@ private fun SecurityQuestionList(
     onEditQuestion: (SecurityQuestionUiDto) -> Unit,
     onDeleteQuestion: (SecurityQuestionUiDto) -> Unit,
     onShowHelp: () -> Unit,
+    onAddQuestion: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -281,8 +246,17 @@ private fun SecurityQuestionList(
                 )
             }
             InfoCard(
-                securityQuestionsCount = questions.size
+                securityQuestionsCount = questions.size,
+                onAddQuestion = onAddQuestion
             )
+            if (questions.isEmpty()) {
+                EmptyPlaceholder(
+                    title = stringResource(R.string.securityQuestion_emptyPlaceholder_title),
+                    subtitle = stringResource(R.string.securityQuestion_emptyPlaceholder_subtitle),
+                    painter = painterResource(R.drawable.el_questions),
+                    modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_vertical))
+                )
+            }
         }
         items(questions) { question ->
             SecurityQuestionItem(
@@ -335,7 +309,7 @@ private fun SecurityQuestionItem(
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.bodyLarge
             )
-            if (question.hasAnswer && question.answer != null) {
+            if (question.answer != null) {
                 Text(
                     text = question.answer,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -357,7 +331,7 @@ private fun SecurityQuestionItem(
                 onDelete(question)
             }
         )
-        if (!question.hasAnswer || question.answer == null) {
+        if (question.answer == null) {
             contextActions.add(ContextActionDivider())
             contextActions.add(
                 ContextAction(
@@ -373,15 +347,53 @@ private fun SecurityQuestionItem(
 }
 
 
+@Composable
+private fun ButtonRow(
+    isContinueEnabled: Boolean,
+    onContinue: () -> Unit,
+    onSkip: () -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        HorizontalDivider()
+        FlowRow(
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = dimensionResource(R.dimen.margin_horizontal),
+                    vertical = dimensionResource(R.dimen.padding_vertical)
+                )
+        ) {
+            TextButton(
+                onClick = onSkip
+            ) {
+                Text(stringResource(R.string.button_skip))
+            }
+            Button(
+                onClick = onContinue,
+                enabled = isContinueEnabled,
+                modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
+            ) {
+                Text(stringResource(R.string.button_continue))
+            }
+        }
+    }
+}
+
+
 /**
  * Information card which shows to the user, whether the recovery is active.
  *
  * @param securityQuestionsCount    Number of security questions configured.
+ * @param onAddQuestion             Callback invoked to add a new security question.
  * @param modifier                  Modifier.
  */
 @Composable
 private fun InfoCard(
     securityQuestionsCount: Int,
+    onAddQuestion: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -394,8 +406,7 @@ private fun InfoCard(
                 bottom = dimensionResource(R.dimen.padding_vertical),
             )
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
@@ -403,57 +414,73 @@ private fun InfoCard(
                     vertical = dimensionResource(R.dimen.padding_vertical)
                 )
         ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .size(dimensionResource(R.dimen.image_m))
-                    .clip(CircleShape)
-                    .background(
-                        color = if (securityQuestionsCount >= 5) {
-                            MaterialTheme.colorScheme.primaryContainer
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .size(dimensionResource(R.dimen.image_m))
+                        .clip(CircleShape)
+                        .background(
+                            color = if (securityQuestionsCount >= 5) {
+                                MaterialTheme.colorScheme.primaryContainer
+                            } else {
+                                MaterialTheme.colorScheme.errorContainer
+                            }
+                        )
+                ) {
+                    Icon(
+                        painter = if (securityQuestionsCount >= 5) {
+                            painterResource(R.drawable.ic_shield_check)
                         } else {
-                            MaterialTheme.colorScheme.errorContainer
-                        }
+                            painterResource(R.drawable.ic_shield_warning)
+                        },
+                        contentDescription = "",
+                        tint = if (securityQuestionsCount >= 5) {
+                            MaterialTheme.colorScheme.onPrimaryContainer
+                        } else {
+                            MaterialTheme.colorScheme.onErrorContainer
+                        },
+                        modifier = Modifier.size(dimensionResource(R.dimen.image_s))
                     )
-            ) {
-                Icon(
-                    painter = if (securityQuestionsCount >= 5) {
-                        painterResource(R.drawable.ic_shield_check)
-                    } else {
-                        painterResource(R.drawable.ic_shield_warning)
-                    },
-                    contentDescription = "",
-                    tint = if (securityQuestionsCount >= 5) {
-                        MaterialTheme.colorScheme.onPrimaryContainer
-                    } else {
-                        MaterialTheme.colorScheme.onErrorContainer
-                    },
-                    modifier = Modifier.size(dimensionResource(R.dimen.image_s))
-                )
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = dimensionResource(R.dimen.padding_horizontal))
+                ) {
+                    Text(
+                        text = if (securityQuestionsCount >= 5) {
+                            stringResource(R.string.securityQuestion_activeTitle)
+                        } else {
+                            stringResource(R.string.securityQuestion_inactiveTitle)
+                        },
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                    Text(
+                        text = if (securityQuestionsCount >= 5) {
+                            stringResource(R.string.securityQuestion_activeSubtitle, securityQuestionsCount)
+                        } else {
+                            pluralStringResource(R.plurals.securityQuestion_inactiveSubtitle, 5 - securityQuestionsCount, 5 - securityQuestionsCount)
+                        },
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
             }
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = dimensionResource(R.dimen.padding_horizontal))
-            ) {
-                Text(
-                    text = if (securityQuestionsCount >= 5) {
-                        stringResource(R.string.securityQuestion_activeTitle)
-                    } else {
-                        stringResource(R.string.securityQuestion_inactiveTitle)
-                    },
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.headlineSmall
-                )
-                Text(
-                    text = if (securityQuestionsCount >= 5) {
-                        stringResource(R.string.securityQuestion_activeSubtitle, securityQuestionsCount)
-                    } else {
-                        pluralStringResource(R.plurals.securityQuestion_inactiveSubtitle, 5 - securityQuestionsCount, 5 - securityQuestionsCount)
-                    },
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    style = MaterialTheme.typography.bodyLarge
-                )
+            AnimatedVisibility(securityQuestionsCount < 5) {
+                TextButton(
+                    onClick = onAddQuestion,
+                    enabled = securityQuestionsCount < 5,
+                    modifier = Modifier.padding(
+                        start = dimensionResource(R.dimen.image_m) + dimensionResource(R.dimen.padding_horizontal) - ButtonDefaults.TextButtonContentPadding.calculateStartPadding(LocalLayoutDirection.current)
+                    )
+                ) {
+                    Text(stringResource(R.string.button_addSecurityQuestion))
+                }
             }
         }
     }

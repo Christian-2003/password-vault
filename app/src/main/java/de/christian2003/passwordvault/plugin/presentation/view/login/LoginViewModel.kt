@@ -8,6 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import de.christian2003.passwordvault.application.usecases.auth.AreBiometricsConfiguredUseCase
+import de.christian2003.passwordvault.application.usecases.auth.AreSecurityQuestionsConfiguredUseCase
 import de.christian2003.passwordvault.application.usecases.auth.BiometricAuthUseCase
 import de.christian2003.passwordvault.application.usecases.auth.VerifyPasswordUseCase
 
@@ -31,6 +32,11 @@ class LoginViewModel(application: Application): AndroidViewModel(application) {
     var skipBiometricsPrompt: Boolean = application.getSharedPreferences("settings", Context.MODE_PRIVATE).getBoolean("skip_biometrics", false)
 
     /**
+     * Indicates whether the recovery is configured.
+     */
+    var isRecoveryConfigured: Boolean = false
+
+    /**
      * Indicates whether biometrics are configured and supported.
      */
     var areBiometricsConfigured: Boolean = false
@@ -49,13 +55,15 @@ class LoginViewModel(application: Application): AndroidViewModel(application) {
     /**
      * Initializes the view model.
      *
-     * @param verifyPasswordUseCase             Use case to verify a password.
-     * @param areBiometricsConfiguredUseCase    Use case to determine whether biometrics are configured.
-     * @param biometricAuthUseCase              Use case to facilitate biometric authentication.
+     * @param verifyPasswordUseCase                 Use case to verify a password.
+     * @param areBiometricsConfiguredUseCase        Use case to determine whether biometrics are configured.
+     * @param areSecurityQuestionsConfiguredUseCase Use case to determine whether security questions are configured.
+     * @param biometricAuthUseCase                  Use case to facilitate biometric authentication.
      */
     fun init(
         verifyPasswordUseCase: VerifyPasswordUseCase,
         areBiometricsConfiguredUseCase: AreBiometricsConfiguredUseCase,
+        areSecurityQuestionsConfiguredUseCase: AreSecurityQuestionsConfiguredUseCase,
         biometricAuthUseCase: BiometricAuthUseCase
     ) {
         if (isInitialized) {
@@ -65,6 +73,7 @@ class LoginViewModel(application: Application): AndroidViewModel(application) {
         this.verifyPasswordUseCase = verifyPasswordUseCase
         this.biometricAuthUseCase = biometricAuthUseCase
         areBiometricsConfigured = areBiometricsConfiguredUseCase.areBiometricsConfigured()
+        isRecoveryConfigured = areSecurityQuestionsConfiguredUseCase.areSecurityQuestionsConfigured()
         isInitialized = true
     }
 

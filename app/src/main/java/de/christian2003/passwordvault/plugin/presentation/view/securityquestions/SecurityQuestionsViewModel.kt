@@ -96,8 +96,7 @@ class SecurityQuestionsViewModel(application: Application): AndroidViewModel(app
                 getSecurityQuestionsUseCase.getSecurityQuestions().forEach { question ->
                     securityQuestions.add(SecurityQuestionUiDto(
                         question = question,
-                        answer = null,
-                        hasAnswer = false
+                        answer = null
                     ))
                 }
             }
@@ -118,8 +117,7 @@ class SecurityQuestionsViewModel(application: Application): AndroidViewModel(app
             if (existingQuestion == null) {
                 securityQuestions.add(SecurityQuestionUiDto(
                     question = question,
-                    answer = answer,
-                    hasAnswer = true
+                    answer = answer
                 ))
                 addSecurityQuestionUseCase.addQuestion(question, answer)
             }
@@ -140,8 +138,7 @@ class SecurityQuestionsViewModel(application: Application): AndroidViewModel(app
             val index: Int = securityQuestions.indexOf(existingQuestion)
             securityQuestions[index] = existingQuestion.copy(
                 question = question,
-                answer = answer,
-                hasAnswer = true
+                answer = answer
             )
             addSecurityQuestionUseCase.addQuestion(question, answer)
         }

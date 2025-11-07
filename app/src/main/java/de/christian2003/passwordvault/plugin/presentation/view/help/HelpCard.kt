@@ -16,7 +16,8 @@ enum class HelpCard(
     DETAIL("help_detail"),
     ACCOUNT("help_account"),
     PASSWORD("help_password"),
-    SECURITY_QUESTION("help_securityQuestion");
+    SECURITY_QUESTION("help_securityQuestion"),
+    MASTER_PASSWORD_RECOVERY("help_masterPasswordRecovery");
 
     fun getVisible(context: Context): Boolean {
         return context.getSharedPreferences("settings", Context.MODE_PRIVATE).getBoolean(preferencesKey, true)
