@@ -7,14 +7,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.passwordvault.application.usecases.auth.GetSecurityQuestionsUseCase
 import de.christian2003.passwordvault.application.usecases.auth.VerifySecurityQuestionsUseCase
 import de.christian2003.passwordvault.plugin.presentation.view.help.HelpCard
 import de.christian2003.passwordvault.plugin.presentation.view.securityquestions.SecurityQuestionUiDto
+import javax.inject.Inject
 
-class RecoveryViewModel(application: Application): AndroidViewModel(application) {
 
-    private lateinit var verifySecurityQuestionsUseCase: VerifySecurityQuestionsUseCase
+@HiltViewModel
+class RecoveryViewModel @Inject constructor(
+    application: Application,
+    private val verifySecurityQuestionsUseCase: VerifySecurityQuestionsUseCase
+): AndroidViewModel(application) {
 
     private var isInitialized: Boolean = false
 
@@ -33,7 +38,7 @@ class RecoveryViewModel(application: Application): AndroidViewModel(application)
             return
         }
 
-        this.verifySecurityQuestionsUseCase = verifySecurityQuestionsUseCase
+        //this.verifySecurityQuestionsUseCase = verifySecurityQuestionsUseCase
         securityQuestions.addAll(getSecurityQuestionsUseCase.getSecurityQuestions().map {
             SecurityQuestionUiDto(it, "")
         })

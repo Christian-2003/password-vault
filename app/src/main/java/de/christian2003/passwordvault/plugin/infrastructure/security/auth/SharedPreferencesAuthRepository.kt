@@ -9,7 +9,9 @@ import java.util.Base64
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 import androidx.core.content.edit
+import dagger.hilt.android.qualifiers.ApplicationContext
 import de.christian2003.passwordvault.domain.security.auth.SecurityQuestion
+import javax.inject.Inject
 
 
 /**
@@ -17,8 +19,8 @@ import de.christian2003.passwordvault.domain.security.auth.SecurityQuestion
  *
  * @param context   Android context.
  */
-class SharedPreferencesAuthRepository(
-    private val context: Context
+class SharedPreferencesAuthRepository @Inject constructor(
+    @ApplicationContext private val context: Context
 ): AuthRepository {
 
     /**

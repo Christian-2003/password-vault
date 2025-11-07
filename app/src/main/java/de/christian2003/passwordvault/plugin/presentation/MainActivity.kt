@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.FragmentActivity
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -24,6 +25,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import dagger.hilt.android.AndroidEntryPoint
 import de.christian2003.passwordvault.application.repository.AuthRepository
 import de.christian2003.passwordvault.application.security.BiometricAuthService
 import de.christian2003.passwordvault.application.usecases.account.CreateAccountUseCase
@@ -84,6 +86,7 @@ import kotlin.uuid.toKotlinUuid
 
 
 //Require FragmentActivity instead of ComponentActivity in order to host a biometric prompt
+@AndroidEntryPoint
 class MainActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -356,7 +359,7 @@ fun PasswordVault() {
 
 
             composable("recovery") {
-                val viewModel: RecoveryViewModel = viewModel()
+                val viewModel: RecoveryViewModel = hiltViewModel()
                 viewModel.init(
                     getSecurityQuestionsUseCase = GetSecurityQuestionsUseCase(authRepository),
                     verifySecurityQuestionsUseCase = VerifySecurityQuestionsUseCase(authRepository)

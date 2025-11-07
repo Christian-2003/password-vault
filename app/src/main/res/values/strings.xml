@@ -14,7 +14,6 @@
 
     <string name="account_titleReorder">Reorder</string>
     <plurals name="account_titleMultiselect">
-        <item quantity="zero">%1$d details</item>
         <item quantity="one">%1$d detail</item>
         <item quantity="other">%1$d details</item>
     </plurals>
