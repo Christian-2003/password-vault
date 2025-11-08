@@ -4,17 +4,19 @@ import android.app.Application
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 
 /**
  * View model for the screen through which all help messages are displayed.
+ *
+ * @param application   Application.
  */
-class HelpViewModel(application: Application): AndroidViewModel(application) {
-
-    /**
-     * Indicates whether the view model is initialized.
-     */
-    private var isInitialized: Boolean = false
+@HiltViewModel
+class HelpViewModel @Inject constructor(
+    application: Application
+): AndroidViewModel(application) {
 
     /**
      * Maps the help cards to a boolean which indicates whether the card is visible or not.
@@ -25,14 +27,10 @@ class HelpViewModel(application: Application): AndroidViewModel(application) {
     /**
      * Initializes the view model.
      */
-    fun init() {
-        if (isInitialized) {
-            return
-        }
+    init {
         HelpCard.entries.forEach { helpCard ->
             helpCards[helpCard] = helpCard.getVisible(application)
         }
-        isInitialized = true
     }
 
 

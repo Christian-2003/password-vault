@@ -1,7 +1,10 @@
 package de.christian2003.passwordvault.application.usecases.auth
 
+import dagger.hilt.android.scopes.ActivityScoped
+import dagger.hilt.android.scopes.ViewModelScoped
 import de.christian2003.passwordvault.application.repository.AuthRepository
 import de.christian2003.passwordvault.application.security.BiometricAuthService
+import javax.inject.Inject
 
 
 /**
@@ -10,7 +13,8 @@ import de.christian2003.passwordvault.application.security.BiometricAuthService
  * @param repository            Repository to access auth data.
  * @param biometricAuthService  Service facilitating biometric authentication.
  */
-class BiometricAuthUseCase(
+@ActivityScoped
+class BiometricAuthUseCase @Inject constructor(
     private val repository: AuthRepository,
     private val biometricAuthService: BiometricAuthService
 ) {

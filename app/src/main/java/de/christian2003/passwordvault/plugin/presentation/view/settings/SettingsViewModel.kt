@@ -5,19 +5,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.passwordvault.application.usecases.auth.AreBiometricsAvailableUseCase
 import de.christian2003.passwordvault.application.usecases.auth.AreBiometricsConfiguredUseCase
-import de.christian2003.passwordvault.application.usecases.auth.SetupBiometricsUseCase
+import de.christian2003.passwordvault.application.usecases.auth.ToggleBiometricsUseCase
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 /**
  * View model for the settings screen.
  */
-class SettingsViewModel: ViewModel() {
-
-    private lateinit var areBiometricsConfiguredUseCase: AreBiometricsConfiguredUseCase
-    private lateinit var setupBiometricsUseCase: SetupBiometricsUseCase
+@HiltViewModel
+class SettingsViewModel @Inject constructor(
+    areBiometricsAvailableUseCase: AreBiometricsAvailableUseCase,
+    private val areBiometricsConfiguredUseCase: AreBiometricsConfiguredUseCase
+): ViewModel() {
 
     /**
      * Indicates whether the view model is initialized.
@@ -27,61 +30,20 @@ class SettingsViewModel: ViewModel() {
     /**
      * Indicates whether biometrics are supported on the device.
      */
-    var areBiometricsAvailable: Boolean = false
-        private set
+    val areBiometricsAvailable: Boolean = areBiometricsAvailableUseCase.areBiometricsAvailable()
 
     /**
      * Indicates whether biometrics are configured for the app.
      */
-    var areBiometricsConfigured: Boolean by mutableStateOf(false)
+    var areBiometricsConfigured: Boolean by mutableStateOf(areBiometricsConfiguredUseCase.areBiometricsConfigured())
         private set
 
 
     /**
-     * Initializes the view model.
-     *
-     * @param areBiometricsAvailableUseCase     Use case to determine whether biometrics are supported
-     *                                          on the device.
-     * @param areBiometricsConfiguredUseCase    Use case to determine whether biometrics are configured
-     *                                          for the app.
-     * @param setupBiometricsUseCase            Use case to enable / disable biometrics.
+     * Refreshes the property "areBiometricsConfigured".
      */
-    fun init(
-        areBiometricsAvailableUseCase: AreBiometricsAvailableUseCase,
-        areBiometricsConfiguredUseCase: AreBiometricsConfiguredUseCase,
-        setupBiometricsUseCase: SetupBiometricsUseCase
-    ) {
-        if (isInitialized) {
-            return
-        }
-
-        this.areBiometricsConfiguredUseCase = areBiometricsConfiguredUseCase
-        this.setupBiometricsUseCase = setupBiometricsUseCase
-        areBiometricsAvailable = areBiometricsAvailableUseCase.areBiometricsAvailable()
+    fun refreshAreBiometricsConfigured() {
         areBiometricsConfigured = areBiometricsConfiguredUseCase.areBiometricsConfigured()
-        isInitialized = true
-    }
-
-
-    /**
-     * Enables or disables the biometrics.
-     *
-     * @param enabled   Whether to enable (= true) or disable (= false) the biometrics.
-     */
-    fun setBiometrics(enabled: Boolean) = viewModelScope.launch {
-        val result: Boolean = if (enabled && !areBiometricsConfigured) {
-            //Enable biometrics:
-            setupBiometricsUseCase.enableBiometrics()
-        } else if (!enabled && areBiometricsConfigured) {
-            //Disable biometrics:
-            setupBiometricsUseCase.disableBiometrics()
-        } else {
-            false
-        }
-
-        if (result) {
-            areBiometricsConfigured = areBiometricsConfiguredUseCase.areBiometricsConfigured()
-        }
     }
 
 }

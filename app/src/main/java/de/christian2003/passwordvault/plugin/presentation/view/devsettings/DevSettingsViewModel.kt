@@ -9,12 +9,19 @@ import androidx.compose.runtime.setValue
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 
 /**
  * View model for the developer settings.
+ *
+ * @param application   Application.
  */
-class DevSettingsViewModel(application: Application): AndroidViewModel(application) {
+@HiltViewModel
+class DevSettingsViewModel @Inject constructor(
+    application: Application
+): AndroidViewModel(application) {
 
     /**
      * Shared preferences for regular settings.
@@ -27,14 +34,6 @@ class DevSettingsViewModel(application: Application): AndroidViewModel(applicati
      */
     var isSkipBiometrics: Boolean by mutableStateOf(preferences.getBoolean("skip_biometrics", false))
         private set
-
-
-    /**
-     * Initializes the view model.
-     */
-    fun init() {
-
-    }
 
 
     /**

@@ -1,6 +1,7 @@
 package de.christian2003.passwordvault.application.usecases.auth
 
 import de.christian2003.passwordvault.application.repository.AuthRepository
+import javax.inject.Inject
 
 
 /**
@@ -8,7 +9,7 @@ import de.christian2003.passwordvault.application.repository.AuthRepository
  *
  * @param repository    Repository to access auth information.
  */
-class AreBiometricsConfiguredUseCase(
+class AreBiometricsConfiguredUseCase @Inject constructor(
     private val repository: AuthRepository
 ) {
 

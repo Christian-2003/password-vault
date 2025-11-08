@@ -18,6 +18,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
@@ -29,18 +30,24 @@ import androidx.compose.ui.text.font.FontWeight
 import coil.compose.rememberAsyncImagePainter
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.Headline
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel,
+    onToggleBiometrics: suspend () -> Boolean,
     onNavigateUp: () -> Unit,
     onNavigateToHelp: () -> Unit,
     onNavigateToPassword: () -> Unit,
     onNavigateToDevSettings: () -> Unit,
     onNavigateToSecurityQuestions: () -> Unit
 ) {
+    val coroutineScope: CoroutineScope = rememberCoroutineScope()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -89,7 +96,12 @@ fun SettingsScreen(
                         prefixIcon = painterResource(R.drawable.ic_biometrics),
                         checked = viewModel.areBiometricsConfigured,
                         onCheckedChange = { enabled ->
-                            viewModel.setBiometrics(enabled)
+                            coroutineScope.launch {
+                                val result: Boolean = onToggleBiometrics()
+                                if (result) {
+                                    viewModel.refreshAreBiometricsConfigured()
+                                }
+                            }
                         }
                     )
                 }

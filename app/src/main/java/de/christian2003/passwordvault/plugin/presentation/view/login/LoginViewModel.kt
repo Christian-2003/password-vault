@@ -7,24 +7,32 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.passwordvault.application.usecases.auth.AreBiometricsConfiguredUseCase
 import de.christian2003.passwordvault.application.usecases.auth.AreSecurityQuestionsConfiguredUseCase
 import de.christian2003.passwordvault.application.usecases.auth.BiometricAuthUseCase
 import de.christian2003.passwordvault.application.usecases.auth.VerifyPasswordUseCase
+import javax.inject.Inject
 
 
 /**
  * View model for the screen through which the user confirms their identity before accessing app data.
+ *
+ * @param application                           Application.
+ * @param areBiometricsConfiguredUseCase        Use case to determine whether biometric auth is
+ *                                              configured.
+ * @param areSecurityQuestionsConfiguredUseCase Use case to determine whether the security questions
+ *                                              are configured and can be used to recover the master
+ *                                              password.
+ * @param verifyPasswordUseCase                 Use case to verify the master password.
  */
-class LoginViewModel(application: Application): AndroidViewModel(application) {
-
-    private lateinit var verifyPasswordUseCase: VerifyPasswordUseCase
-    private lateinit var biometricAuthUseCase: BiometricAuthUseCase
-
-    /**
-     * Indicates whether the view model is initialized.
-     */
-    private var isInitialized: Boolean = false
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    application: Application,
+    areBiometricsConfiguredUseCase: AreBiometricsConfiguredUseCase,
+    areSecurityQuestionsConfiguredUseCase: AreSecurityQuestionsConfiguredUseCase,
+    private val verifyPasswordUseCase: VerifyPasswordUseCase,
+): AndroidViewModel(application) {
 
     /**
      * Whether to skip the biometrics prompt when the screen is displayed.
@@ -34,12 +42,12 @@ class LoginViewModel(application: Application): AndroidViewModel(application) {
     /**
      * Indicates whether the recovery is configured.
      */
-    var isRecoveryConfigured: Boolean = false
+    var isRecoveryConfigured: Boolean = areSecurityQuestionsConfiguredUseCase.areSecurityQuestionsConfigured()
 
     /**
      * Indicates whether biometrics are configured and supported.
      */
-    var areBiometricsConfigured: Boolean = false
+    var areBiometricsConfigured: Boolean = areBiometricsConfiguredUseCase.areBiometricsConfigured()
 
     /**
      * Password entered by the user.
@@ -53,50 +61,10 @@ class LoginViewModel(application: Application): AndroidViewModel(application) {
 
 
     /**
-     * Initializes the view model.
-     *
-     * @param verifyPasswordUseCase                 Use case to verify a password.
-     * @param areBiometricsConfiguredUseCase        Use case to determine whether biometrics are configured.
-     * @param areSecurityQuestionsConfiguredUseCase Use case to determine whether security questions are configured.
-     * @param biometricAuthUseCase                  Use case to facilitate biometric authentication.
-     */
-    fun init(
-        verifyPasswordUseCase: VerifyPasswordUseCase,
-        areBiometricsConfiguredUseCase: AreBiometricsConfiguredUseCase,
-        areSecurityQuestionsConfiguredUseCase: AreSecurityQuestionsConfiguredUseCase,
-        biometricAuthUseCase: BiometricAuthUseCase
-    ) {
-        if (isInitialized) {
-            return
-        }
-
-        this.verifyPasswordUseCase = verifyPasswordUseCase
-        this.biometricAuthUseCase = biometricAuthUseCase
-        areBiometricsConfigured = areBiometricsConfiguredUseCase.areBiometricsConfigured()
-        isRecoveryConfigured = areSecurityQuestionsConfiguredUseCase.areSecurityQuestionsConfigured()
-        isInitialized = true
-    }
-
-
-    /**
      * Verifies the password entered by the user.
      */
     fun verifyPassword() {
         isPasswordValid = verifyPasswordUseCase.isPasswordValid(password)
-    }
-
-
-    /**
-     * Performs biometric authentication.
-     *
-     * @return  Whether authentication was successful.
-     */
-    suspend fun biometricAuthentication(): Boolean {
-        return if (areBiometricsConfigured) {
-            biometricAuthUseCase.authenticate()
-        } else {
-            false
-        }
     }
 
 }

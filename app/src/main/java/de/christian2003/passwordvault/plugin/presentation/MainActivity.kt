@@ -45,15 +45,7 @@ import de.christian2003.passwordvault.application.security.ClipboardService
 import de.christian2003.passwordvault.application.usecases.auth.AreBiometricsAvailableUseCase
 import de.christian2003.passwordvault.application.usecases.auth.AreBiometricsConfiguredUseCase
 import de.christian2003.passwordvault.application.usecases.auth.BiometricAuthUseCase
-import de.christian2003.passwordvault.application.usecases.auth.AddSecurityQuestionUseCase
-import de.christian2003.passwordvault.application.usecases.auth.AreSecurityQuestionsConfiguredUseCase
-import de.christian2003.passwordvault.application.usecases.auth.GetSecurityQuestionsUseCase
-import de.christian2003.passwordvault.application.usecases.auth.RemoveSecurityQuestionUseCase
-import de.christian2003.passwordvault.application.usecases.auth.SetupAuthUseCase
-import de.christian2003.passwordvault.application.usecases.auth.SetupBiometricsUseCase
-import de.christian2003.passwordvault.application.usecases.auth.UpdatePasswordUseCase
-import de.christian2003.passwordvault.application.usecases.auth.VerifyPasswordUseCase
-import de.christian2003.passwordvault.application.usecases.auth.VerifySecurityQuestionsUseCase
+import de.christian2003.passwordvault.application.usecases.auth.ToggleBiometricsUseCase
 import de.christian2003.passwordvault.plugin.PasswordVaultApplication
 import de.christian2003.passwordvault.plugin.infrastructure.db.PasswordVaultRepository
 import de.christian2003.passwordvault.plugin.infrastructure.packages.AndroidPackageFingerprintService
@@ -81,6 +73,7 @@ import de.christian2003.passwordvault.plugin.presentation.view.securityquestions
 import de.christian2003.passwordvault.plugin.presentation.view.settings.SettingsScreen
 import de.christian2003.passwordvault.plugin.presentation.view.settings.SettingsViewModel
 import java.util.UUID
+import javax.inject.Inject
 import kotlin.uuid.Uuid
 import kotlin.uuid.toKotlinUuid
 
@@ -89,6 +82,26 @@ import kotlin.uuid.toKotlinUuid
 @AndroidEntryPoint
 class MainActivity : FragmentActivity() {
 
+    /**
+     * Use case to perform biometric authentication. This use case is activity-scoped, so that
+     * it can use an activity context. Therefore, the use case cannot be injected into view models
+     * and must be injected into the activity itself.
+     */
+    @Inject lateinit var biometricAuthUseCase: BiometricAuthUseCase
+
+    /**
+     * Use case to enable / disable the biometric authentication. This use case is activity-scoped,
+     * so that it can use an activity context. Therefore, the use case cannot be injected into view
+     * models and must be injected into the activity itself.
+     */
+    @Inject lateinit var toggleBiometricsUseCase: ToggleBiometricsUseCase
+
+
+    /**
+     * Creates the activity.
+     *
+     * @param savedInstanceState    Previously saved state of the instance.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -106,11 +119,23 @@ class MainActivity : FragmentActivity() {
             }
         )
         setContent {
-            PasswordVault()
+            PasswordVault(
+                onBiometricAuth = {
+                    biometricAuthUseCase.authenticate()
+                },
+                onToggleBiometrics = {
+                    toggleBiometricsUseCase.toggleBiometrics()
+                }
+            )
         }
     }
 
 
+    /**
+     * Determines whether the system is in night or day mode.
+     *
+     * @return  Whether the system is night or day mode.
+     */
     private fun isNightMode(): Boolean {
         val currentMode: Int = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         return currentMode == Configuration.UI_MODE_NIGHT_YES
@@ -119,8 +144,17 @@ class MainActivity : FragmentActivity() {
 }
 
 
+/**
+ * First layer composable which encompasses the entire application.
+ *
+ * @param onBiometricAuth       Callback invoked to perform biometric auth.
+ * @param onToggleBiometrics    Callback invoke to enable / disable biometric auth.
+ */
 @Composable
-fun PasswordVault() {
+fun PasswordVault(
+    onBiometricAuth: suspend () -> Boolean,
+    onToggleBiometrics: suspend () -> Boolean
+) {
     val navController: NavHostController = rememberNavController()
     val context: Context = LocalContext.current
     val application: PasswordVaultApplication = (context.applicationContext as PasswordVaultApplication)
@@ -205,15 +239,10 @@ fun PasswordVault() {
 
 
             composable("settings") {
-                val viewModel: SettingsViewModel = viewModel()
-                viewModel.init(
-                    areBiometricsAvailableUseCase = AreBiometricsAvailableUseCase(authRepository),
-                    areBiometricsConfiguredUseCase = AreBiometricsConfiguredUseCase(authRepository),
-                    setupBiometricsUseCase = SetupBiometricsUseCase(authRepository, biometricAuthService)
-                )
-
+                val viewModel: SettingsViewModel = hiltViewModel()
                 SettingsScreen(
                     viewModel = viewModel,
+                    onToggleBiometrics = onToggleBiometrics,
                     onNavigateUp = {
                         navController.navigateUp()
                     },
@@ -234,9 +263,7 @@ fun PasswordVault() {
 
 
             composable("devSettings") {
-                val viewModel: DevSettingsViewModel = viewModel()
-                viewModel.init()
-
+                val viewModel: DevSettingsViewModel = hiltViewModel()
                 DevSettingsScreen(
                     viewModel = viewModel,
                     onNavigateUp = {
@@ -247,9 +274,7 @@ fun PasswordVault() {
 
 
             composable("help") {
-                val viewModel: HelpViewModel = viewModel()
-                viewModel.init()
-
+                val viewModel: HelpViewModel = hiltViewModel()
                 HelpScreen(
                     viewModel = viewModel,
                     onNavigateUp = {
@@ -264,20 +289,8 @@ fun PasswordVault() {
                 arguments = listOf(
                     navArgument("isSetup") { type = NavType.BoolType}
                 )
-            ) { backStackEntry ->
-                val isSetup: Boolean = if (backStackEntry.arguments?.containsKey("isSetup") ?: false) {
-                    backStackEntry.arguments?.getBoolean("isSetup") ?: false
-                } else {
-                    false
-                }
-                val viewModel: PasswordViewModel = viewModel()
-                viewModel.init(
-                    setupAuthUseCase = SetupAuthUseCase(authRepository),
-                    updatePasswordUseCase = UpdatePasswordUseCase(authRepository),
-                    verifyPasswordUseCase = VerifyPasswordUseCase(authRepository),
-                    isSetup = isSetup
-                )
-
+            ) {
+                val viewModel: PasswordViewModel = hiltViewModel()
                 PasswordScreen(
                     viewModel = viewModel,
                     onNavigateUp = {
@@ -295,20 +308,8 @@ fun PasswordVault() {
                 arguments = listOf(
                     navArgument("isSetup") { type = NavType.BoolType}
                 )
-            ) { backStackEntry ->
-                val isSetup: Boolean = if (backStackEntry.arguments?.containsKey("isSetup") ?: false) {
-                    backStackEntry.arguments?.getBoolean("isSetup") ?: false
-                } else {
-                    false
-                }
-                val viewModel: SecurityQuestionsViewModel = viewModel()
-                viewModel.init(
-                    getSecurityQuestionsUseCase = GetSecurityQuestionsUseCase(authRepository),
-                    addSecurityQuestionUseCase = AddSecurityQuestionUseCase(authRepository),
-                    removeSecurityQuestionUseCase = RemoveSecurityQuestionUseCase(authRepository),
-                    isSetup = isSetup
-                )
-
+            ) {
+                val viewModel: SecurityQuestionsViewModel = hiltViewModel()
                 SecurityQuestionsScreen(
                     viewModel = viewModel,
                     onNavigateUp = {
@@ -334,16 +335,10 @@ fun PasswordVault() {
 
 
             composable("login") {
-                val viewModel: LoginViewModel = viewModel()
-                viewModel.init(
-                    verifyPasswordUseCase = VerifyPasswordUseCase(authRepository),
-                    areBiometricsConfiguredUseCase = AreBiometricsConfiguredUseCase(authRepository),
-                    areSecurityQuestionsConfiguredUseCase = AreSecurityQuestionsConfiguredUseCase(authRepository),
-                    biometricAuthUseCase = BiometricAuthUseCase(authRepository, biometricAuthService)
-                )
-
+                val viewModel: LoginViewModel = hiltViewModel()
                 LoginScreen(
                     viewModel = viewModel,
+                    onBiometricAuth = onBiometricAuth,
                     onFinish = {
                         navController.navigate("main") {
                             popUpTo("login") {
@@ -360,11 +355,6 @@ fun PasswordVault() {
 
             composable("recovery") {
                 val viewModel: RecoveryViewModel = hiltViewModel()
-                viewModel.init(
-                    getSecurityQuestionsUseCase = GetSecurityQuestionsUseCase(authRepository),
-                    verifySecurityQuestionsUseCase = VerifySecurityQuestionsUseCase(authRepository)
-                )
-
                 RecoveryScreen(
                     viewModel = viewModel,
                     onNavigateUp = {

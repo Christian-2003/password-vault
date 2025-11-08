@@ -7,32 +7,39 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.application
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.passwordvault.application.usecases.auth.SetupAuthUseCase
 import de.christian2003.passwordvault.application.usecases.auth.UpdatePasswordUseCase
 import de.christian2003.passwordvault.application.usecases.auth.VerifyPasswordUseCase
 import de.christian2003.passwordvault.plugin.presentation.view.help.HelpCard
+import javax.inject.Inject
 
 
 /**
  * View model for the screen through which the user can setup and change the master password.
+ *
+ * @param application           Application.
+ * @param savedStateHandle      Saved state handle.
+ * @param setupAuthUseCase      Use case to setup authentication.
+ * @param updatePasswordUseCase Use case to update an existing password.
+ * @param verifyPasswordUseCase Use case to verify whether a password entered is the master password.
  */
-class PasswordViewModel(application: Application): AndroidViewModel(application) {
-
-    private lateinit var setupAuthUseCase: SetupAuthUseCase
-    private lateinit var updatePasswordUseCase: UpdatePasswordUseCase
-    private lateinit var verifyPasswordUseCase: VerifyPasswordUseCase
-
-    /**
-     * Indicates whether the view model is initialized.
-     */
-    private var isInitialized: Boolean = false
+@HiltViewModel
+class PasswordViewModel @Inject constructor(
+    application: Application,
+    savedStateHandle: SavedStateHandle,
+    private val setupAuthUseCase: SetupAuthUseCase,
+    private val updatePasswordUseCase: UpdatePasswordUseCase,
+    private val verifyPasswordUseCase: VerifyPasswordUseCase
+): AndroidViewModel(application) {
 
     /**
      * Indicates whether the screen is displayed for the initial setup (i.e. when the user configures
      * the master password for the first time).
      */
-    var isSetup: Boolean by mutableStateOf(false)
+    val isSetup: Boolean = savedStateHandle["isSetup"] ?: false
 
     /**
      * Old password entered by the user.
@@ -73,32 +80,6 @@ class PasswordViewModel(application: Application): AndroidViewModel(application)
      */
     var isHelpCardVisible: Boolean by mutableStateOf(HelpCard.PASSWORD.getVisible(application))
         private set
-
-
-    /**
-     * Initializes the view model.
-     *
-     * @param setupAuthUseCase      Use case to setup authentication.
-     * @param updatePasswordUseCase Use case to update an existing master password.
-     * @param verifyPasswordUseCase Use case to verify the validity of a password.
-     * @param isSetup               Whether the screen is created for initial setup.
-     */
-    fun init(
-        setupAuthUseCase: SetupAuthUseCase,
-        updatePasswordUseCase: UpdatePasswordUseCase,
-        verifyPasswordUseCase: VerifyPasswordUseCase,
-        isSetup: Boolean
-    ) {
-        if (isInitialized) {
-            return
-        }
-
-        this.setupAuthUseCase = setupAuthUseCase
-        this.updatePasswordUseCase = updatePasswordUseCase
-        this.verifyPasswordUseCase = verifyPasswordUseCase
-        this.isSetup = isSetup
-        isInitialized = true
-    }
 
 
     /**

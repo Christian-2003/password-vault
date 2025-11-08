@@ -4,21 +4,27 @@ import android.content.Context
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.scopes.ActivityScoped
+import dagger.hilt.android.scopes.ViewModelScoped
 import de.christian2003.passwordvault.application.security.BiometricAuthService
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.util.concurrent.Executor
 import kotlin.coroutines.resume
 import de.christian2003.passwordvault.R
+import javax.inject.Inject
 
 
 /**
  * Service implementation for biometric authentication that uses the androidx-implementation of
  * biometrics.
  *
- * @param context   Context.
+ * @param context   Activity context. This activity needs to be a FragmentActivity!
  */
-class AndroidBiometricAuthService(
-    private val context: Context
+@ActivityScoped
+class AndroidBiometricAuthService @Inject constructor(
+    @ActivityContext private val context: Context
 ): BiometricAuthService {
 
     /**

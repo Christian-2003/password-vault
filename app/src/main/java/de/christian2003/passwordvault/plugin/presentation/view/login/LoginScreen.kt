@@ -45,12 +45,14 @@ import kotlinx.coroutines.withContext
  * Screen allows the user to login to the app.
  *
  * @param viewModel             View model.
+ * @param onBiometricAuth       Callback invoked to perform biometric authentication.
  * @param onFinish              Callback invoked to finish login and continue to the main screen.
  * @param onNavigateToRecovery  Callback invoked to navigate to the password recovery.
  */
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel,
+    onBiometricAuth: suspend () -> Boolean,
     onFinish: () -> Unit,
     onNavigateToRecovery: () -> Unit
 ) {
@@ -71,7 +73,7 @@ fun LoginScreen(
 
     val invokeBiometricAuth: () -> Unit = {
         coroutineScope.launch {
-            val result = viewModel.biometricAuthentication()
+            val result = onBiometricAuth()
             if (result) {
                 onFinish()
             }

@@ -6,8 +6,10 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.passwordvault.application.usecases.auth.AddSecurityQuestionUseCase
 import de.christian2003.passwordvault.application.usecases.auth.GetSecurityQuestionsUseCase
 import de.christian2003.passwordvault.application.usecases.auth.RemoveSecurityQuestionUseCase
@@ -15,26 +17,31 @@ import de.christian2003.passwordvault.domain.security.auth.SecurityQuestion
 import de.christian2003.passwordvault.plugin.presentation.view.help.HelpCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 /**
  * View model for the screen through which to configure security questions.
+ *
+ * @param application                   Application.
+ * @param savedStateHandle              Saved state handle.
+ * @param getSecurityQuestionsUseCase   Use case to get a list of configured security questions.
+ * @param addSecurityQuestionUseCase    Use case to add a new security question.
+ * @param removeSecurityQuestionUseCase Use case to remove an existing security question.
  */
-class SecurityQuestionsViewModel(application: Application): AndroidViewModel(application) {
-
-    private lateinit var addSecurityQuestionUseCase: AddSecurityQuestionUseCase
-    private lateinit var removeSecurityQuestionUseCase: RemoveSecurityQuestionUseCase
-
-    /**
-     * Indicates whether the view model is initialized.
-     */
-    private var isInitialized: Boolean = false
+@HiltViewModel
+class SecurityQuestionsViewModel @Inject constructor(
+    application: Application,
+    savedStateHandle: SavedStateHandle,
+    getSecurityQuestionsUseCase: GetSecurityQuestionsUseCase,
+    private val addSecurityQuestionUseCase: AddSecurityQuestionUseCase,
+    private val removeSecurityQuestionUseCase: RemoveSecurityQuestionUseCase
+): AndroidViewModel(application) {
 
     /**
      * Indicates whether the screen is shown through the setup flow.
      */
-    var isSetup: Boolean = false
-        private set
+    val isSetup: Boolean = savedStateHandle["isSetup"] ?: false
 
     /**
      * Indicates whether the help card is visible.
@@ -71,34 +78,14 @@ class SecurityQuestionsViewModel(application: Application): AndroidViewModel(app
 
     /**
      * Initializes the view model.
-     *
-     * @param getSecurityQuestionsUseCase   Use case to get a list of configured security questions.
-     * @param addSecurityQuestionUseCase    Use case to add (or replace) a security question.
-     * @param removeSecurityQuestionUseCase Use case to remove a security question.
-     * @param isSetup                       Whether the screen is created for the setup flow.
      */
-    fun init(
-        getSecurityQuestionsUseCase: GetSecurityQuestionsUseCase,
-        addSecurityQuestionUseCase: AddSecurityQuestionUseCase,
-        removeSecurityQuestionUseCase: RemoveSecurityQuestionUseCase,
-        isSetup: Boolean
-    ) {
-        if (isInitialized) {
-            return
-        }
-
-        this.addSecurityQuestionUseCase = addSecurityQuestionUseCase
-        this.removeSecurityQuestionUseCase = removeSecurityQuestionUseCase
-        this.isSetup = isSetup
-        isInitialized = true
-        if (!isSetup) {
-            viewModelScope.launch(Dispatchers.IO) {
-                getSecurityQuestionsUseCase.getSecurityQuestions().forEach { question ->
-                    securityQuestions.add(SecurityQuestionUiDto(
-                        question = question,
-                        answer = null
-                    ))
-                }
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            getSecurityQuestionsUseCase.getSecurityQuestions().forEach { question ->
+                securityQuestions.add(SecurityQuestionUiDto(
+                    question = question,
+                    answer = null
+                ))
             }
         }
     }

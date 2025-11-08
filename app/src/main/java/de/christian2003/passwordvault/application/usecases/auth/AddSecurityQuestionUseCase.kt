@@ -2,6 +2,7 @@ package de.christian2003.passwordvault.application.usecases.auth
 
 import de.christian2003.passwordvault.application.repository.AuthRepository
 import de.christian2003.passwordvault.domain.security.auth.SecurityQuestion
+import javax.inject.Inject
 
 
 /**
@@ -9,7 +10,7 @@ import de.christian2003.passwordvault.domain.security.auth.SecurityQuestion
  *
  * @param repository    Repository to access auth information.
  */
-class AddSecurityQuestionUseCase(
+class AddSecurityQuestionUseCase @Inject constructor(
     private val repository: AuthRepository
 ) {
 

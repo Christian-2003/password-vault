@@ -18,31 +18,19 @@ import javax.inject.Inject
 @HiltViewModel
 class RecoveryViewModel @Inject constructor(
     application: Application,
+    getSecurityQuestionsUseCase: GetSecurityQuestionsUseCase,
     private val verifySecurityQuestionsUseCase: VerifySecurityQuestionsUseCase
 ): AndroidViewModel(application) {
 
-    private var isInitialized: Boolean = false
-
-    var securityQuestions: MutableList<SecurityQuestionUiDto> = mutableStateListOf()
-        private set
+    val securityQuestions: MutableList<SecurityQuestionUiDto> = mutableStateListOf()
 
     var isHelpCardVisible: Boolean by mutableStateOf(HelpCard.MASTER_PASSWORD_RECOVERY.getVisible(application))
         private set
 
-
-    fun init(
-        getSecurityQuestionsUseCase: GetSecurityQuestionsUseCase,
-        verifySecurityQuestionsUseCase: VerifySecurityQuestionsUseCase
-    ) {
-        if (isInitialized) {
-            return
-        }
-
-        //this.verifySecurityQuestionsUseCase = verifySecurityQuestionsUseCase
+    init {
         securityQuestions.addAll(getSecurityQuestionsUseCase.getSecurityQuestions().map {
             SecurityQuestionUiDto(it, "")
         })
-        isInitialized = true
     }
 
 
