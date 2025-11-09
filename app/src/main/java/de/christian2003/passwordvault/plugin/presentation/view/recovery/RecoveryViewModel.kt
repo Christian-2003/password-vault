@@ -1,7 +1,6 @@
 package de.christian2003.passwordvault.plugin.presentation.view.recovery
 
 import android.app.Application
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf

@@ -1,19 +1,13 @@
 package de.christian2003.passwordvault.plugin.presentation.view.recovery
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,8 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
@@ -44,6 +36,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
+/**
+ * Screen through which the user can confirm their identity before being forwarded to the screen at
+ * which they can reset their master password.
+ *
+ * @param viewModel                     View model.
+ * @param sharedViewModel               View model that is shared with the PasswordScreen.
+ * @param onNavigateUp                  Callback invoked to navigate up the navigation stack.
+ * @param onNavigateToChangePassword    Callback invoked to navigate to the screen at which to change
+ *                                      the master password after successful identification.
+ */
 @Composable
 fun RecoveryScreen(
     viewModel: RecoveryViewModel,

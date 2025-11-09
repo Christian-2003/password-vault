@@ -2,7 +2,6 @@ package de.christian2003.passwordvault.plugin.infrastructure.security.auth
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.biometric.BiometricManager
 import de.christian2003.passwordvault.application.repository.AuthRepository
 import java.security.SecureRandom
