@@ -8,17 +8,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.passwordvault.domain.model.detail.Detail
 import de.christian2003.passwordvault.domain.model.detail.DetailIcon
 import de.christian2003.passwordvault.domain.model.detail.DetailMetadata
 import de.christian2003.passwordvault.domain.model.detail.DetailType
 import de.christian2003.passwordvault.plugin.presentation.view.help.HelpCard
+import javax.inject.Inject
 
 
 /**
  * View model for the sheet through which to edit (or create) a detail.
  */
-class DetailViewModel(application: Application): AndroidViewModel(application) {
+@HiltViewModel
+class DetailViewModel @Inject constructor(
+    application: Application
+): AndroidViewModel(application) {
 
     /**
      * Indicates whether the view model has been initialized.

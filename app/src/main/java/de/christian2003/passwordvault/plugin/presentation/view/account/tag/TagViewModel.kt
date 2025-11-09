@@ -8,6 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.passwordvault.application.usecases.tag.CreateTagUseCase
 import de.christian2003.passwordvault.application.usecases.tag.DeleteTagUseCase
 import de.christian2003.passwordvault.application.usecases.tag.GetAllTagsUseCase
@@ -19,50 +20,47 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.uuid.Uuid
 
 
 /**
  * View model for the sheet through which to select tags for an entry.
  *
- * @param application   Application.
+ * @param application       Application.
+ * @param getAllTagsUseCase Use case to get a list of all available tags.
+ * @param createTagUseCase  Use case to create a new tag.
+ * @param updateTagUseCase  Use case to update an existing tag.
+ * @param deleteTagUseCase  Use case to delete an existing tag.
  */
-class TagViewModel(application: Application): AndroidViewModel(application) {
-
-    /**
-     * Use case to create a new tag.
-     */
-    private lateinit var createTagUseCase: CreateTagUseCase
-
-    /**
-     * Use case to update an existing tag.
-     */
-    private lateinit var updateTagUseCase: UpdateTagUseCase
-
-    /**
-     * Use case to delete a tag.
-     */
-    private lateinit var deleteTagUseCase: DeleteTagUseCase
+@HiltViewModel
+class TagViewModel @Inject constructor(
+    application: Application,
+    getAllTagsUseCase: GetAllTagsUseCase,
+    private val createTagUseCase: CreateTagUseCase,
+    private val updateTagUseCase: UpdateTagUseCase,
+    private val deleteTagUseCase: DeleteTagUseCase,
+): AndroidViewModel(application) {
 
     /**
      * Mapper used to map tags to the DTO used in the UI and vice versa.
      */
-    private var tagMapper: TagUiMapper = TagUiMapper()
+    private val tagMapper: TagUiMapper = TagUiMapper()
 
     /**
      * Tag IDs that were selected when the init-function was called.
      */
-    private lateinit var selectedTagIdsAtInit: Set<Uuid>
-
-    /**
-     * Whether the view model has been initialized.
-     */
-    private var isInitialized: Boolean = false
+    private var selectedTagIdsAtInit: Set<Uuid>? = null
 
     /**
      * List of all tags that are available within the app.
      */
-    lateinit var tags: Flow<List<TagUiDto>>
+    val tags: Flow<List<TagUiDto>> = getAllTagsUseCase.getAllTags().map { list ->
+        list.map { domain ->
+            val dto: TagUiDto = tagMapper.toDto(domain)
+            return@map dto
+        }
+    }
 
     /**
      * Set of the IDs of all selected tags.
@@ -101,29 +99,12 @@ class TagViewModel(application: Application): AndroidViewModel(application) {
      *
      * @param selectedTagIds    Set of tags that are currently selected.
      */
-    fun init(
-        getAllTagsUseCase: GetAllTagsUseCase,
-        createTagUseCase: CreateTagUseCase,
-        updateTagUseCase: UpdateTagUseCase,
-        deleteTagUseCase: DeleteTagUseCase,
-        selectedTagIds: Set<Uuid>
-    ) {
-        if (isInitialized) {
-            return
+    fun init(selectedTagIds: Set<Uuid>) {
+        if (selectedTagIdsAtInit == null) {
+            this.selectedTagIds.clear()
+            this.selectedTagIds.addAll(selectedTagIds)
+            this.selectedTagIdsAtInit = selectedTagIds
         }
-        this.tags = getAllTagsUseCase.getAllTags().map { list ->
-            list.map { domain ->
-                val dto: TagUiDto = tagMapper.toDto(domain)
-                return@map dto
-            }
-        }
-        this.createTagUseCase = createTagUseCase
-        this.updateTagUseCase = updateTagUseCase
-        this.deleteTagUseCase = deleteTagUseCase
-        this.selectedTagIds.clear()
-        this.selectedTagIds.addAll(selectedTagIds)
-        this.selectedTagIdsAtInit = selectedTagIds
-        isInitialized = true
     }
 
 
@@ -135,11 +116,11 @@ class TagViewModel(application: Application): AndroidViewModel(application) {
      */
     fun areChangesMade(allTags: List<TagUiDto>): Boolean {
         selectedTagIds.forEach { selectedTagId ->
-            if (!selectedTagIdsAtInit.contains(selectedTagId)) {
+            if (!selectedTagIdsAtInit!!.contains(selectedTagId)) {
                 return true //Tag added
             }
         }
-        selectedTagIdsAtInit.forEach { tagId ->
+        selectedTagIdsAtInit!!.forEach { tagId ->
             if (!selectedTagIds.contains(tagId)) {
                 if (allTags.find { it.id == tagId } != null) {
                     return true //Tag removed

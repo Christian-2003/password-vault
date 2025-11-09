@@ -7,6 +7,7 @@ import de.christian2003.passwordvault.domain.model.detail.Detail
 import de.christian2003.passwordvault.domain.model.tag.Tag
 import de.christian2003.passwordvault.domain.model.target.Target
 import kotlinx.coroutines.flow.first
+import javax.inject.Inject
 import kotlin.uuid.Uuid
 
 
@@ -15,7 +16,7 @@ import kotlin.uuid.Uuid
  *
  * @param accountRepository Repository to access the accounts.
  */
-class UpdateAccountUseCase(
+class UpdateAccountUseCase @Inject constructor(
     private val accountRepository: AccountRepository,
     private val tagRepository: TagRepository
 ) {

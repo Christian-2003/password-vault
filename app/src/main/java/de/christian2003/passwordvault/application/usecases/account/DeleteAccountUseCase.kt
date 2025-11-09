@@ -2,6 +2,7 @@ package de.christian2003.passwordvault.application.usecases.account
 
 import de.christian2003.passwordvault.application.repository.AccountRepository
 import de.christian2003.passwordvault.domain.model.account.Account
+import javax.inject.Inject
 import kotlin.uuid.Uuid
 
 
@@ -10,7 +11,7 @@ import kotlin.uuid.Uuid
  *
  * @param accountRepository Repository through which to access accounts.
  */
-class DeleteAccountUseCase(
+class DeleteAccountUseCase @Inject constructor(
     private val accountRepository: AccountRepository
 ) {
 

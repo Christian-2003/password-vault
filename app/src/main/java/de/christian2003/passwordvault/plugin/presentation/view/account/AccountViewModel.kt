@@ -9,23 +9,18 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.passwordvault.domain.model.detail.Detail
 import de.christian2003.passwordvault.domain.model.account.Account
 import de.christian2003.passwordvault.application.usecases.account.CreateAccountUseCase
 import de.christian2003.passwordvault.application.usecases.account.GetAccountByIdUseCase
 import de.christian2003.passwordvault.application.usecases.account.GetAccountIconUseCase
 import de.christian2003.passwordvault.application.usecases.account.UpdateAccountUseCase
-import de.christian2003.passwordvault.application.usecases.packages.GetAllPackagesUseCase
-import de.christian2003.passwordvault.application.usecases.packages.GetLocalizedPackageNameUseCase
-import de.christian2003.passwordvault.application.usecases.packages.GetPackageIconUseCase
-import de.christian2003.passwordvault.application.usecases.tag.CreateTagUseCase
-import de.christian2003.passwordvault.application.usecases.tag.DeleteTagUseCase
 import de.christian2003.passwordvault.application.usecases.tag.GetAllTagsUseCase
-import de.christian2003.passwordvault.application.usecases.tag.UpdateTagUseCase
 import de.christian2003.passwordvault.domain.model.tag.Tag
-import de.christian2003.passwordvault.domain.model.target.PackageFingerprintService
 import de.christian2003.passwordvault.domain.model.target.Target
 import de.christian2003.passwordvault.application.security.ClipboardService
 import de.christian2003.passwordvault.plugin.presentation.view.account.tag.TagViewModel
@@ -41,28 +36,37 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.UUID
+import javax.inject.Inject
 import kotlin.collections.map
 import kotlin.collections.toSet
 import kotlin.uuid.Uuid
+import kotlin.uuid.toKotlinUuid
 
 
 /**
  * View model for the screen through which to create, edit or view an account.
+ *
+ * @param application           Application.
+ * @param savedStateHandle      Saved state handle.
+ * @param getAccountByIdUseCase Use case to get an account by it's ID.
+ * @param getAllTagsUseCase     Use case to get a list of all tags.
+ * @param createAccountUseCase  Use case to create a new account.
+ * @param updateAccountUseCase  Use case to update an existing account.
+ * @param getAccountIconUseCase Use case to get the icon for an account.
+ * @param clipboardService      Service to copy content to the clipboard.
  */
-class AccountViewModel(application: Application): AndroidViewModel(application) {
-
-    private lateinit var createAccountUseCase: CreateAccountUseCase
-    private lateinit var updateAccountUseCase: UpdateAccountUseCase
-    private lateinit var getAccountIconUseCase: GetAccountIconUseCase
-    private lateinit var getAllTagsUseCase: GetAllTagsUseCase
-    private lateinit var createTagUseCase: CreateTagUseCase
-    private lateinit var updateTagUseCase: UpdateTagUseCase
-    private lateinit var deleteTagUseCase: DeleteTagUseCase
-    private lateinit var getAllPackagesUseCase: GetAllPackagesUseCase
-    private lateinit var getLocalizedPackageNameUseCase: GetLocalizedPackageNameUseCase
-    private lateinit var getPackageIconUseCase: GetPackageIconUseCase
-    private lateinit var packageFingerprintService: PackageFingerprintService
-    private lateinit var clipboardService: ClipboardService
+@HiltViewModel
+class AccountViewModel @Inject constructor(
+    application: Application,
+    savedStateHandle: SavedStateHandle,
+    getAccountByIdUseCase: GetAccountByIdUseCase,
+    getAllTagsUseCase: GetAllTagsUseCase,
+    private val createAccountUseCase: CreateAccountUseCase,
+    private val updateAccountUseCase: UpdateAccountUseCase,
+    private val getAccountIconUseCase: GetAccountIconUseCase,
+    private val clipboardService: ClipboardService
+): AndroidViewModel(application) {
 
     /**
      * Mapper to map tags from their domain model to the UI DTO.
@@ -80,14 +84,11 @@ class AccountViewModel(application: Application): AndroidViewModel(application) 
     private val selectedTagIds: MutableStateFlow<Set<Uuid>> = MutableStateFlow(emptySet())
 
     /**
-     * Indicates whether the view model is initialized or not.
-     */
-    private var isInitialized = false
-
-    /**
      * Flow contains all tags that are available.
      */
-    lateinit var allTags: Flow<List<TagUiDto>>
+    val allTags: Flow<List<TagUiDto>> = getAllTagsUseCase.getAllTags().map { list ->
+        list.map { tag -> tagMapper.toDto(tag)}
+    }
 
     /**
      * Name of the account.
@@ -185,7 +186,9 @@ class AccountViewModel(application: Application): AndroidViewModel(application) 
      * Tags that are currently selected. The list inside the flow is generated automatically based
      * on "selectedTagIds".
      */
-    lateinit var selectedTags: StateFlow<List<TagUiDto>>
+    val selectedTags: StateFlow<List<TagUiDto>> = combine(allTags, selectedTagIds) { all, ids ->
+        all.filter { it.id in ids }
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     /**
      * Help state the screen is currently in. This indicates the help message that is currently
@@ -207,64 +210,13 @@ class AccountViewModel(application: Application): AndroidViewModel(application) 
 
     /**
      * Initializes the view model.
-     *
-     * @param getAccountByIdUseCase             Use case to get an account by ID.
-     * @param createAccountUseCase              Use case to create a new account.
-     * @param updateAccountUseCase              Use case to update an existing account.
-     * @param getAccountIconUseCase             Use case to get the icon for an account.
-     * @param getAllTagsUseCase                 Use case to get a list of all tags.
-     * @param createTagUseCase                  Use case to create a new tag.
-     * @param updateTagUseCase                  Use case to update an existing tag.
-     * @param deleteTagUseCase                  Use case to delete a tag.
-     * @param getAllPackagesUseCase             Use case to get a list of all installed Android packages.
-     * @param getLocalizedPackageNameUseCase    Use case to get the localized name for an installed
-     *                                          Android package.
-     * @param getPackageIconUseCase             Use case to get the icon drawable for an installed
-     *                                          Android package.
-     * @param packageFingerprintService         Service through which to generate the fingerprint
-     *                                          of an installed Android package.
-     * @param clipboardService                  Service through which to copy content to the clipboard.
-     * @param id                                ID of the account to edit. Pass null to create a new
-     *                                          account.
      */
-    fun init(
-        getAccountByIdUseCase: GetAccountByIdUseCase,
-        createAccountUseCase: CreateAccountUseCase,
-        updateAccountUseCase: UpdateAccountUseCase,
-        getAccountIconUseCase: GetAccountIconUseCase,
-        getAllTagsUseCase: GetAllTagsUseCase,
-        createTagUseCase: CreateTagUseCase,
-        updateTagUseCase: UpdateTagUseCase,
-        deleteTagUseCase: DeleteTagUseCase,
-        getAllPackagesUseCase: GetAllPackagesUseCase,
-        getLocalizedPackageNameUseCase: GetLocalizedPackageNameUseCase,
-        getPackageIconUseCase: GetPackageIconUseCase,
-        packageFingerprintService: PackageFingerprintService,
-        clipboardService: ClipboardService,
-        id: Uuid? = null
-    ) {
-        if (isInitialized) {
-            return
+    init {
+        val id: Uuid? = try {
+            UUID.fromString(savedStateHandle["accountId"]).toKotlinUuid()
+        } catch (_: Exception) {
+            null
         }
-        this.createAccountUseCase = createAccountUseCase
-        this.updateAccountUseCase = updateAccountUseCase
-        this.getAccountIconUseCase = getAccountIconUseCase
-        this.getAllTagsUseCase = getAllTagsUseCase
-        this.createTagUseCase = createTagUseCase
-        this.updateTagUseCase = updateTagUseCase
-        this.deleteTagUseCase = deleteTagUseCase
-        this.getAllPackagesUseCase = getAllPackagesUseCase
-        this.getLocalizedPackageNameUseCase = getLocalizedPackageNameUseCase
-        this.getPackageIconUseCase = getPackageIconUseCase
-        this.packageFingerprintService = packageFingerprintService
-        this.clipboardService = clipboardService
-        allTags = getAllTagsUseCase.getAllTags().map { list ->
-            list.map { tag -> tagMapper.toDto(tag)}
-        }
-        selectedTags = combine(allTags, selectedTagIds) { all, ids ->
-            all.filter { it.id in ids }
-        }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
-        isInitialized = true
 
         viewModelScope.launch(Dispatchers.IO) {
             if (id != null) {
@@ -577,13 +529,8 @@ class AccountViewModel(application: Application): AndroidViewModel(application) 
      * @param selectedTags  List of selected tags to use for initialization.
      */
     fun initTagViewModel(viewModel: TagViewModel, selectedTags: List<TagUiDto>) {
-        viewModel.init(
-            getAllTagsUseCase = getAllTagsUseCase,
-            createTagUseCase = createTagUseCase,
-            updateTagUseCase = updateTagUseCase,
-            deleteTagUseCase = deleteTagUseCase,
-            selectedTagIds = selectedTags.map { it.id }.toSet()
-        )
+        val selectedTagIds: Set<Uuid> = selectedTags.map { it.id }.toSet()
+        viewModel.init(selectedTagIds)
     }
 
 
@@ -593,13 +540,7 @@ class AccountViewModel(application: Application): AndroidViewModel(application) 
      * @param viewModel View model to initialize.
      */
     fun initTargetViewModel(viewModel: TargetViewModel) {
-        viewModel.init(
-            getAllPackagesUseCase = getAllPackagesUseCase,
-            getLocalizedPackageNameUseCase = getLocalizedPackageNameUseCase,
-            getPackageIconUseCase = getPackageIconUseCase,
-            packageFingerprintService = packageFingerprintService,
-            targets = targets
-        )
+        viewModel.init(targets)
     }
 
 

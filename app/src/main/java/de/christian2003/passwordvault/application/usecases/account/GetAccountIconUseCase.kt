@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable
 import de.christian2003.passwordvault.application.repository.PackagesRepository
 import de.christian2003.passwordvault.domain.model.account.AccountDescriptor
 import de.christian2003.passwordvault.domain.model.target.Target
+import javax.inject.Inject
 
 
 /**
@@ -11,7 +12,7 @@ import de.christian2003.passwordvault.domain.model.target.Target
  *
  * @param repository    Repository through which to access the packages.
  */
-class GetAccountIconUseCase(
+class GetAccountIconUseCase @Inject constructor(
     private val repository: PackagesRepository
 ) {
 

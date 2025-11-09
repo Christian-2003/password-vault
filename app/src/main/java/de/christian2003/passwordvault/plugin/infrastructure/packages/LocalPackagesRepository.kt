@@ -4,6 +4,7 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import de.christian2003.passwordvault.application.repository.PackagesRepository
+import javax.inject.Inject
 
 
 /**
@@ -11,7 +12,7 @@ import de.christian2003.passwordvault.application.repository.PackagesRepository
  *
  * @param packageManager    Android package manager.
  */
-class LocalPackagesRepository(
+class LocalPackagesRepository @Inject constructor(
     private val packageManager: PackageManager
 ): PackagesRepository {
 

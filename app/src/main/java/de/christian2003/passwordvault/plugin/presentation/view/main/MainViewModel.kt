@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.passwordvault.application.usecases.account.DeleteAccountUseCase
 import de.christian2003.passwordvault.application.usecases.account.GetAccountIconUseCase
 import de.christian2003.passwordvault.application.usecases.account.GetAllAccountDescriptorsUseCase
@@ -14,35 +15,20 @@ import de.christian2003.passwordvault.domain.model.account.AccountDescriptor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
-class MainViewModel(application: Application): AndroidViewModel(application) {
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    application: Application,
+    getAllAccountDescriptorsUseCase: GetAllAccountDescriptorsUseCase,
+    private val deleteAccountUseCase: DeleteAccountUseCase,
+    private val getAccountIconUseCase: GetAccountIconUseCase
+): AndroidViewModel(application) {
 
-    private lateinit var deleteAccountUseCase: DeleteAccountUseCase
-
-    private lateinit var getAccountIconUseCase: GetAccountIconUseCase
-
-    private var isInitialized: Boolean = false
-
-    lateinit var accountDescriptors: Flow<List<AccountDescriptor>>
+    val accountDescriptors: Flow<List<AccountDescriptor>> = getAllAccountDescriptorsUseCase.getAllAccountDescriptors()
 
     var accountToDelete: AccountDescriptor? by mutableStateOf(null)
-
-
-    fun init(
-        getAllAccountDescriptorsUseCase: GetAllAccountDescriptorsUseCase,
-        deleteAccountUseCase: DeleteAccountUseCase,
-        getAccountIconUseCase: GetAccountIconUseCase
-    ) {
-        if (isInitialized) {
-            return
-        }
-
-        this.deleteAccountUseCase = deleteAccountUseCase
-        this.getAccountIconUseCase = getAccountIconUseCase
-        this.accountDescriptors = getAllAccountDescriptorsUseCase.getAllAccountDescriptors()
-        isInitialized = true
-    }
 
 
     fun deleteAccount() = viewModelScope.launch(Dispatchers.IO) {

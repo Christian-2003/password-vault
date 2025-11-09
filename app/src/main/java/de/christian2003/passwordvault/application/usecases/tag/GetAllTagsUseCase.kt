@@ -3,6 +3,7 @@ package de.christian2003.passwordvault.application.usecases.tag
 import de.christian2003.passwordvault.application.repository.TagRepository
 import de.christian2003.passwordvault.domain.model.tag.Tag
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 
 /**
@@ -10,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
  *
  * @param tagRepository Repository to access the tags.
  */
-class GetAllTagsUseCase(
+class GetAllTagsUseCase @Inject constructor(
     private val tagRepository: TagRepository
 ) {
 

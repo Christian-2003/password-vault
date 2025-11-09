@@ -64,7 +64,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.domain.model.detail.Detail
@@ -446,7 +446,7 @@ fun AccountScreen(
             )
         }
         AccountScreenDialog.Tag -> {
-            val tagViewModel: TagViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
+            val tagViewModel: TagViewModel = hiltViewModel(key = "vm_${viewModel.viewModelStoreId}")
             viewModel.initTagViewModel(tagViewModel, selectedTags)
             TagSheet(
                 viewModel = tagViewModel,
@@ -459,7 +459,7 @@ fun AccountScreen(
             )
         }
         AccountScreenDialog.Target -> {
-            val targetViewModel: TargetViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
+            val targetViewModel: TargetViewModel = hiltViewModel(key = "vm_${viewModel.viewModelStoreId}")
             viewModel.initTargetViewModel(targetViewModel)
             TargetSheet(
                 viewModel = targetViewModel,
@@ -472,10 +472,8 @@ fun AccountScreen(
             )
         }
         AccountScreenDialog.Detail -> {
-            val detailViewModel: DetailViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
-            detailViewModel.init(
-                detail = null
-            )
+            val detailViewModel: DetailViewModel = hiltViewModel(key = "vm_${viewModel.viewModelStoreId}")
+            detailViewModel.init(null)
             DetailSheet(
                 viewModel = detailViewModel,
                 onDismiss = {
@@ -516,10 +514,8 @@ fun AccountScreen(
 
             //Dialog to edit a detail:
             if (viewModel.detailToEdit != null) {
-                val detailViewModel: DetailViewModel = viewModel(key = "vm_${viewModel.viewModelStoreId}")
-                detailViewModel.init(
-                    detail = viewModel.detailToEdit
-                )
+                val detailViewModel: DetailViewModel = hiltViewModel(key = "vm_${viewModel.viewModelStoreId}")
+                detailViewModel.init(viewModel.detailToEdit)
                 DetailSheet(
                     viewModel = detailViewModel,
                     onDismiss = {

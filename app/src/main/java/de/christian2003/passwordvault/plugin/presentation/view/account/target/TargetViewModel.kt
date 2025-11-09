@@ -9,6 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.passwordvault.application.usecases.packages.GetAllPackagesUseCase
 import de.christian2003.passwordvault.application.usecases.packages.GetLocalizedPackageNameUseCase
 import de.christian2003.passwordvault.application.usecases.packages.GetPackageIconUseCase
@@ -17,42 +18,30 @@ import de.christian2003.passwordvault.domain.model.target.Target
 import de.christian2003.passwordvault.plugin.presentation.view.help.HelpCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 /**
  * View model for the sheet through which to select autofill targets for an account.
+ *
+ * @param application                       Application.
+ * @param getPackageIconUseCase             Use case to get a list of all installed packages.
+ * @param getLocalizedPackageNameUseCase    Use case to get the localized name for a package.
+ * @param packageFingerprintService         Service to generate the fingerprint for a package.
  */
-class TargetViewModel(application: Application): AndroidViewModel(application) {
-
-    /**
-     * Use case to get a list of all installed Android packages.
-     */
-    private lateinit var getAllPackagesUseCase: GetAllPackagesUseCase
-
-    /**
-     * Use case to get the localized name for an installed Android package.
-     */
-    private lateinit var getLocalizedPackageNameUseCase: GetLocalizedPackageNameUseCase
-
-    /**
-     * Use case to get the icon for an installed Android package.
-     */
-    private lateinit var getPackageIconUseCase: GetPackageIconUseCase
-
-    /**
-     * Service to get the fingerprint for an installed Android package.
-     */
-    private lateinit var packageFingerprintService: PackageFingerprintService
+@HiltViewModel
+class TargetViewModel @Inject constructor(
+    application: Application,
+    private val getAllPackagesUseCase: GetAllPackagesUseCase,
+    private val getLocalizedPackageNameUseCase: GetLocalizedPackageNameUseCase,
+    private val getPackageIconUseCase: GetPackageIconUseCase,
+    private val packageFingerprintService: PackageFingerprintService
+): AndroidViewModel(application) {
 
     /**
      * Targets that were selected when the init-function was called.
      */
-    private lateinit var targetsAtInit: List<Target>
-
-    /**
-     * Indicates whether the view model has been initialized.
-     */
-    private var isInitialized: Boolean = false
+    private var targetsAtInit: List<Target>? = null
 
     /**
      * List of all targets that are selected.
@@ -94,34 +83,13 @@ class TargetViewModel(application: Application): AndroidViewModel(application) {
     /**
      * Initializes the view model.
      *
-     * @param targets                           Targets that are currently selected.
-     * @param getAllPackagesUseCase             Use case to get a list of all installed Android
-     *                                          packages.
-     * @param getLocalizedPackageNameUseCase    Use case to get the localized name for an installed
-     *                                          Android package.
-     * @param getPackageIconUseCase             Use case to get the icon for an installed Android
-     *                                          package.
-     * @param packageFingerprintService         Service to get the fingerprint for an installed
-     *                                          Android package.
+     * @param targets   Targets that are currently selected.
      */
-    fun init(
-        targets: List<Target>,
-        getAllPackagesUseCase: GetAllPackagesUseCase,
-        getLocalizedPackageNameUseCase: GetLocalizedPackageNameUseCase,
-        getPackageIconUseCase: GetPackageIconUseCase,
-        packageFingerprintService: PackageFingerprintService
-    ) {
-        if (isInitialized) {
-            return
+    fun init(targets: List<Target>) {
+        if (targetsAtInit == null) {
+            this.targetsAtInit = targets
+            this.targets.addAll(targets)
         }
-
-        this.getAllPackagesUseCase = getAllPackagesUseCase
-        this.getLocalizedPackageNameUseCase = getLocalizedPackageNameUseCase
-        this.getPackageIconUseCase = getPackageIconUseCase
-        this.packageFingerprintService = packageFingerprintService
-        this.targets.addAll(targets)
-        this.targetsAtInit = targets
-        isInitialized = true
     }
 
 
@@ -132,11 +100,11 @@ class TargetViewModel(application: Application): AndroidViewModel(application) {
      */
     fun areChangesMade(): Boolean {
         targets.forEach { target ->
-            if (targetsAtInit.find { it.url == target.url } == null) {
+            if (targetsAtInit!!.find { it.url == target.url } == null) {
                 return true //Target added
             }
         }
-        targetsAtInit.forEach { target ->
+        targetsAtInit!!.forEach { target ->
             if (targets.find { it.url == target.url } == null) {
                 return true //Target removed
             }

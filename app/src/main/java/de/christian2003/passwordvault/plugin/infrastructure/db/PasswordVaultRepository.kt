@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.cbor.Cbor
+import javax.inject.Inject
 import kotlin.uuid.Uuid
 
 
@@ -36,7 +37,7 @@ import kotlin.uuid.Uuid
  * @param targetDao         DAO through which to access the targets in the database.
  * @param cipherService     Cipher service used for encryption and decryption.
  */
-class PasswordVaultRepository(
+class PasswordVaultRepository @Inject constructor(
     private val accountDao: AccountDao,
     private val detailDao: DetailDao,
     private val tagDao: TagDao,

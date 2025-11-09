@@ -1,6 +1,5 @@
 package de.christian2003.passwordvault.plugin.presentation
 
-import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.SystemBarStyle
@@ -14,11 +13,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalClipboard
-import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -27,32 +23,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import de.christian2003.passwordvault.application.repository.AuthRepository
-import de.christian2003.passwordvault.application.security.BiometricAuthService
-import de.christian2003.passwordvault.application.usecases.account.CreateAccountUseCase
-import de.christian2003.passwordvault.application.usecases.account.DeleteAccountUseCase
-import de.christian2003.passwordvault.application.usecases.account.GetAccountByIdUseCase
-import de.christian2003.passwordvault.application.usecases.account.GetAccountIconUseCase
-import de.christian2003.passwordvault.application.usecases.account.GetAllAccountDescriptorsUseCase
-import de.christian2003.passwordvault.application.usecases.account.UpdateAccountUseCase
-import de.christian2003.passwordvault.application.usecases.packages.GetAllPackagesUseCase
-import de.christian2003.passwordvault.application.usecases.packages.GetLocalizedPackageNameUseCase
-import de.christian2003.passwordvault.application.usecases.packages.GetPackageIconUseCase
-import de.christian2003.passwordvault.application.usecases.tag.CreateTagUseCase
-import de.christian2003.passwordvault.application.usecases.tag.DeleteTagUseCase
-import de.christian2003.passwordvault.application.usecases.tag.GetAllTagsUseCase
-import de.christian2003.passwordvault.application.usecases.tag.UpdateTagUseCase
-import de.christian2003.passwordvault.application.security.ClipboardService
-import de.christian2003.passwordvault.application.usecases.auth.AreBiometricsAvailableUseCase
-import de.christian2003.passwordvault.application.usecases.auth.AreBiometricsConfiguredUseCase
 import de.christian2003.passwordvault.application.usecases.auth.BiometricAuthUseCase
 import de.christian2003.passwordvault.application.usecases.auth.ToggleBiometricsUseCase
-import de.christian2003.passwordvault.plugin.PasswordVaultApplication
-import de.christian2003.passwordvault.plugin.infrastructure.db.PasswordVaultRepository
-import de.christian2003.passwordvault.plugin.infrastructure.packages.AndroidPackageFingerprintService
-import de.christian2003.passwordvault.plugin.infrastructure.packages.LocalPackagesRepository
-import de.christian2003.passwordvault.plugin.infrastructure.security.AndroidClipboardService
-import de.christian2003.passwordvault.plugin.infrastructure.security.auth.AndroidBiometricAuthService
-import de.christian2003.passwordvault.plugin.infrastructure.security.auth.SharedPreferencesAuthRepository
 import de.christian2003.passwordvault.plugin.presentation.ui.theme.PasswordVaultTheme
 import de.christian2003.passwordvault.plugin.presentation.view.account.AccountScreen
 import de.christian2003.passwordvault.plugin.presentation.view.account.AccountViewModel
@@ -72,10 +44,7 @@ import de.christian2003.passwordvault.plugin.presentation.view.securityquestions
 import de.christian2003.passwordvault.plugin.presentation.view.securityquestions.SecurityQuestionsViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.settings.SettingsScreen
 import de.christian2003.passwordvault.plugin.presentation.view.settings.SettingsViewModel
-import java.util.UUID
 import javax.inject.Inject
-import kotlin.uuid.Uuid
-import kotlin.uuid.toKotlinUuid
 
 
 //Require FragmentActivity instead of ComponentActivity in order to host a biometric prompt
@@ -95,6 +64,8 @@ class MainActivity : FragmentActivity() {
      * models and must be injected into the activity itself.
      */
     @Inject lateinit var toggleBiometricsUseCase: ToggleBiometricsUseCase
+
+    @Inject lateinit var authRepository: AuthRepository
 
 
     /**
@@ -120,6 +91,7 @@ class MainActivity : FragmentActivity() {
         )
         setContent {
             PasswordVault(
+                hasMasterPassword = authRepository.hasPassword(),
                 onBiometricAuth = {
                     biometricAuthUseCase.authenticate()
                 },
@@ -147,24 +119,18 @@ class MainActivity : FragmentActivity() {
 /**
  * First layer composable which encompasses the entire application.
  *
+ * @param hasMasterPassword     Whether the app has a master password.
  * @param onBiometricAuth       Callback invoked to perform biometric auth.
  * @param onToggleBiometrics    Callback invoke to enable / disable biometric auth.
  */
 @Composable
 fun PasswordVault(
+    hasMasterPassword: Boolean,
     onBiometricAuth: suspend () -> Boolean,
     onToggleBiometrics: suspend () -> Boolean
 ) {
     val navController: NavHostController = rememberNavController()
-    val context: Context = LocalContext.current
-    val application: PasswordVaultApplication = (context.applicationContext as PasswordVaultApplication)
-    val repository: PasswordVaultRepository = application.getRepository()
-    val packagesRepository: LocalPackagesRepository = application.getPackagesRepository()
-    val authRepository: AuthRepository = SharedPreferencesAuthRepository(context)
-    val biometricAuthService: BiometricAuthService = AndroidBiometricAuthService(context)
-    val clipboardService: ClipboardService = AndroidClipboardService(LocalClipboard.current.nativeClipboard)
-
-    var isAuthSetupFinished: Boolean by rememberSaveable { mutableStateOf(authRepository.hasPassword()) }
+    var isAuthSetupFinished: Boolean by rememberSaveable { mutableStateOf(hasMasterPassword) }
 
     PasswordVaultTheme {
         NavHost(
@@ -177,13 +143,7 @@ fun PasswordVault(
             modifier = Modifier.background(MaterialTheme.colorScheme.surface)
         ) {
             composable("main") {
-                val viewModel: MainViewModel = viewModel()
-                viewModel.init(
-                    getAllAccountDescriptorsUseCase = GetAllAccountDescriptorsUseCase(repository),
-                    deleteAccountUseCase = DeleteAccountUseCase(repository),
-                    getAccountIconUseCase = GetAccountIconUseCase(packagesRepository)
-                )
-
+                val viewModel: MainViewModel = hiltViewModel()
                 MainScreen(
                     viewModel = viewModel,
                     onEditAccount = { id ->
@@ -205,30 +165,8 @@ fun PasswordVault(
                 arguments = listOf(
                     navArgument("accountId") { type = NavType.StringType}
                 )
-            ) { backStackEntry ->
-                val id: Uuid? = try {
-                    UUID.fromString(backStackEntry.arguments!!.getString("accountId")).toKotlinUuid() //Wtf is this shit?
-                } catch (_: Exception) {
-                    null
-                }
-                val viewModel: AccountViewModel = viewModel()
-                viewModel.init(
-                    getAccountByIdUseCase = GetAccountByIdUseCase(repository),
-                    createAccountUseCase = CreateAccountUseCase(repository, repository),
-                    updateAccountUseCase = UpdateAccountUseCase(repository, repository),
-                    getAccountIconUseCase = GetAccountIconUseCase(packagesRepository),
-                    getAllTagsUseCase = GetAllTagsUseCase(repository),
-                    createTagUseCase = CreateTagUseCase(repository),
-                    updateTagUseCase = UpdateTagUseCase(repository),
-                    deleteTagUseCase = DeleteTagUseCase(repository),
-                    getAllPackagesUseCase = GetAllPackagesUseCase(packagesRepository),
-                    getLocalizedPackageNameUseCase = GetLocalizedPackageNameUseCase(packagesRepository),
-                    getPackageIconUseCase = GetPackageIconUseCase(packagesRepository),
-                    packageFingerprintService = AndroidPackageFingerprintService(context.packageManager),
-                    clipboardService = clipboardService,
-                    id = id
-                )
-
+            ) {
+                val viewModel: AccountViewModel = hiltViewModel()
                 AccountScreen(
                     viewModel = viewModel,
                     onNavigateUp = {

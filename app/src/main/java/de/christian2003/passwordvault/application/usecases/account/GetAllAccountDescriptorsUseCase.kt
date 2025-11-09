@@ -3,6 +3,7 @@ package de.christian2003.passwordvault.application.usecases.account
 import de.christian2003.passwordvault.application.repository.AccountRepository
 import de.christian2003.passwordvault.domain.model.account.AccountDescriptor
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 
 /**
@@ -10,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
  *
  * @param accountRepository Repository to access accounts.
  */
-class GetAllAccountDescriptorsUseCase(
+class GetAllAccountDescriptorsUseCase @Inject constructor(
     private val accountRepository: AccountRepository
 ) {
 
