@@ -34,6 +34,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import de.christian2003.passwordvault.R
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.LoadingIndicatorButton
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.TextInput
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -175,14 +176,14 @@ fun LoginScreen(
                         }
                     }
                 }
-                Button(
+                LoadingIndicatorButton(
+                    label = stringResource(R.string.button_login),
+                    isLoading = viewModel.isConfirmingPassword,
                     onClick = invokeOnFinish,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = dimensionResource(R.dimen.padding_vertical))
-                ) {
-                    Text(stringResource(R.string.button_login))
-                }
+                )
             }
         }
     }

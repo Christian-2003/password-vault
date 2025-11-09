@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -21,6 +22,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.navigation
 import dagger.hilt.android.AndroidEntryPoint
 import de.christian2003.passwordvault.application.repository.AuthRepository
 import de.christian2003.passwordvault.application.usecases.auth.BiometricAuthUseCase
@@ -37,9 +39,11 @@ import de.christian2003.passwordvault.plugin.presentation.view.login.LoginViewMo
 import de.christian2003.passwordvault.plugin.presentation.view.main.MainScreen
 import de.christian2003.passwordvault.plugin.presentation.view.main.MainViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.password.PasswordScreen
+import de.christian2003.passwordvault.plugin.presentation.view.password.PasswordScreenFlow
 import de.christian2003.passwordvault.plugin.presentation.view.password.PasswordViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.recovery.RecoveryScreen
 import de.christian2003.passwordvault.plugin.presentation.view.recovery.RecoveryViewModel
+import de.christian2003.passwordvault.plugin.presentation.view.recovery.SharedRecoveryViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.securityquestions.SecurityQuestionsScreen
 import de.christian2003.passwordvault.plugin.presentation.view.securityquestions.SecurityQuestionsViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.settings.SettingsScreen
@@ -138,7 +142,7 @@ fun PasswordVault(
             startDestination = if (isAuthSetupFinished) {
                 "login"
             } else {
-                "password/true"
+                "setup_flow"
             },
             modifier = Modifier.background(MaterialTheme.colorScheme.surface)
         ) {
@@ -188,13 +192,13 @@ fun PasswordVault(
                         navController.navigate("help")
                     },
                     onNavigateToPassword = {
-                        navController.navigate("password/false")
+                        navController.navigate("password")
                     },
                     onNavigateToDevSettings = {
                         navController.navigate("devSettings")
                     },
                     onNavigateToSecurityQuestions = {
-                        navController.navigate("questions/false")
+                        navController.navigate("questions")
                     }
                 )
             }
@@ -222,51 +226,32 @@ fun PasswordVault(
             }
 
 
-            composable(
-                route = "password/{isSetup}",
-                arguments = listOf(
-                    navArgument("isSetup") { type = NavType.BoolType}
-                )
-            ) {
+            composable("password") { backStackEntry ->
                 val viewModel: PasswordViewModel = hiltViewModel()
+                viewModel.flow = PasswordScreenFlow.None
                 PasswordScreen(
                     viewModel = viewModel,
+                    sharedViewModel = null,
                     onNavigateUp = {
                         navController.navigateUp()
                     },
-                    onNavigateToNextSetupStep = {
-                        navController.navigate("questions/true")
+                    onFinish = {
+                        navController.navigateUp()
                     }
                 )
             }
 
 
-            composable(
-                route = "questions/{isSetup}",
-                arguments = listOf(
-                    navArgument("isSetup") { type = NavType.BoolType}
-                )
-            ) {
+            composable("questions") {
                 val viewModel: SecurityQuestionsViewModel = hiltViewModel()
+                viewModel.isSetup = false
                 SecurityQuestionsScreen(
                     viewModel = viewModel,
                     onNavigateUp = {
                         navController.navigateUp()
                     },
                     onNavigateToNextSetupStep = {
-                        if (!isAuthSetupFinished) {
-                            //Shown at first launch to setup auth:
-                            isAuthSetupFinished = true
-                            navController.navigate("main") {
-                                popUpTo("questions/true") {
-                                    inclusive = true
-                                }
-                            }
-                        }
-                        else {
-                            //Shown through settings to edit master password:
-                            navController.navigateUp()
-                        }
+                        navController.navigateUp()
                     }
                 )
             }
@@ -291,21 +276,84 @@ fun PasswordVault(
             }
 
 
-            composable("recovery") {
-                val viewModel: RecoveryViewModel = hiltViewModel()
-                RecoveryScreen(
-                    viewModel = viewModel,
-                    onNavigateUp = {
-                        navController.navigateUp()
-                    },
-                    onFinish = {
-                        navController.navigate("main") {
-                            popUpTo("recovery") {
-                                inclusive = true
-                            }
+            /**
+             * Flow for the initial app setup.
+             */
+            navigation(
+                route = "setup_flow",
+                startDestination = "password"
+            ) {
+                composable("password") { backStackEntry ->
+                    val viewModel: PasswordViewModel = hiltViewModel()
+                    viewModel.flow = PasswordScreenFlow.Setup
+                    PasswordScreen(
+                        viewModel = viewModel,
+                        sharedViewModel = null,
+                        onNavigateUp = {
+                            navController.popBackStack("setup_flow", true)
+                        },
+                        onFinish = {
+                            navController.navigate("questions")
                         }
-                    }
-                )
+                    )
+                }
+
+                composable("questions") { backStackEntry ->
+                    val viewModel: SecurityQuestionsViewModel = hiltViewModel()
+                    viewModel.isSetup = true
+                    SecurityQuestionsScreen(
+                        viewModel = viewModel,
+                        onNavigateUp = {
+                            navController.navigateUp()
+                        },
+                        onNavigateToNextSetupStep = {
+                            isAuthSetupFinished = true
+                            navController.popBackStack("setup_flow", true)
+                        }
+                    )
+                }
+            }
+
+
+            /**
+             * Flow for the recovery of the master password.
+             */
+            navigation(
+                route = "recovery_flow",
+                startDestination = "recovery"
+            ) {
+                composable("recovery") { backStackEntry ->
+                    val viewModel: RecoveryViewModel = hiltViewModel()
+                    val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("recovery_flow") }
+                    val sharedViewModel: SharedRecoveryViewModel = hiltViewModel(parentEntry)
+                    RecoveryScreen(
+                        viewModel = viewModel,
+                        sharedViewModel = sharedViewModel,
+                        onNavigateUp = {
+                            navController.popBackStack("recovery_flow", true)
+                        },
+                        onNavigateToChangePassword = {
+                            navController.navigate("password")
+                        }
+                    )
+                }
+
+                composable("password") { backStackEntry ->
+                    val viewModel: PasswordViewModel = hiltViewModel()
+                    viewModel.flow = PasswordScreenFlow.Recovery
+                    val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("recovery_flow") }
+                    val sharedViewModel: SharedRecoveryViewModel = hiltViewModel(parentEntry)
+                    PasswordScreen(
+                        viewModel = viewModel,
+                        sharedViewModel = sharedViewModel,
+                        onNavigateUp = {
+                            navController.navigateUp()
+                        },
+                        onFinish = {
+                            navController.popBackStack("recovery_flow", true)
+                        }
+                    )
+                }
             }
         }
     }

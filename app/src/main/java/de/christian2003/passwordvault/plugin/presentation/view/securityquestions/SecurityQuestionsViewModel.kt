@@ -41,7 +41,7 @@ class SecurityQuestionsViewModel @Inject constructor(
     /**
      * Indicates whether the screen is shown through the setup flow.
      */
-    val isSetup: Boolean = savedStateHandle["isSetup"] ?: false
+    var isSetup: Boolean = false
 
     /**
      * Indicates whether the help card is visible.

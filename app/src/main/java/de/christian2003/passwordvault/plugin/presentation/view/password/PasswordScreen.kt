@@ -3,7 +3,6 @@ package de.christian2003.passwordvault.plugin.presentation.view.password
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -31,7 +30,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.HelpCard
+import de.christian2003.passwordvault.plugin.presentation.ui.composables.LoadingIndicatorButton
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.TextInput
+import de.christian2003.passwordvault.plugin.presentation.view.recovery.SharedRecoveryViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,21 +43,24 @@ import kotlinx.coroutines.withContext
  * Screen allows the user to configure the master password when they open the app for the first time.
  * Additionally, the user can change the existing master password through this screen.
  *
- * @param viewModel                 View model.
- * @param onNavigateUp              Callback invoked to navigate up the navigation stack.
- * @param onNavigateToNextSetupStep Callback invoked to navigate to the next setup step.
+ * @param viewModel         View model.
+ * @param sharedViewModel   Shared view model to transfer security questions to this screen.
+ * @param onNavigateUp      Callback invoked to navigate up the navigation stack.
+ * @param onFinish          Callback invoked to navigate away from this screen after the password
+ *                          is set successfully.
  */
 @Composable
 fun PasswordScreen(
     viewModel: PasswordViewModel,
+    sharedViewModel: SharedRecoveryViewModel?,
     onNavigateUp: () -> Unit,
-    onNavigateToNextSetupStep: () -> Unit
+    onFinish: () -> Unit
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
     val errorSaving: String = stringResource(R.string.password_errorSaving)
     val errorOldPassword: String = stringResource(R.string.password_errorOldPassword)
-    val errorRepeatNewPassword: String = if (viewModel.isSetup) {
+    val errorRepeatNewPassword: String = if (viewModel.flow == PasswordScreenFlow.Setup) {
         stringResource(R.string.password_errorRepeatPassword)
     } else {
         stringResource(R.string.password_errorRepeatNewPassword)
@@ -67,15 +71,20 @@ fun PasswordScreen(
 
     val invokeSave: () -> Unit = {
         coroutineScope.launch(Dispatchers.Default) {
-            viewModel.save()
+            if (viewModel.flow == PasswordScreenFlow.Recovery) {
+                if (sharedViewModel != null) {
+                    viewModel.save(sharedViewModel.securityQuestions)
+                }
+                else {
+                    return@launch
+                }
+            }
+            else {
+                viewModel.save()
+            }
             withContext(Dispatchers.Main) {
                 if (viewModel.isOldPasswordValid && viewModel.isRepeatNewPasswordValid && viewModel.isDataValid.value) {
-                    if (viewModel.isSetup) {
-                        onNavigateToNextSetupStep()
-                    }
-                    else {
-                        onNavigateUp()
-                    }
+                    onFinish()
                 }
                 else {
                     coroutineScope.launch {
@@ -84,18 +93,17 @@ fun PasswordScreen(
                 }
             }
         }
-
     }
 
     LaunchedEffect(Unit) {
         //Safe calls required: When rotating the screen, the focus requester is not instantiated
         //for a very short period of time, during which this Launched effect is called. Without
         //this safe call, the app would crash throwing an IllegalStateException.
-        if (viewModel.isSetup) {
-            newPasswordFocusRequester?.requestFocus()
+        if (viewModel.flow == PasswordScreenFlow.None) {
+            oldPasswordFocusRequester?.requestFocus()
         }
         else {
-            oldPasswordFocusRequester?.requestFocus()
+            newPasswordFocusRequester?.requestFocus()
         }
     }
 
@@ -106,16 +114,14 @@ fun PasswordScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        text = if (viewModel.isSetup) {
-                            stringResource(R.string.password_titleSetup)
-                        } else {
-                            stringResource(R.string.password_titleEdit)
-                        }
-                    )
+                    Text(text = when(viewModel.flow) {
+                        PasswordScreenFlow.Setup -> stringResource(R.string.password_titleSetup)
+                        PasswordScreenFlow.Recovery -> stringResource(R.string.password_titleRecovery)
+                        PasswordScreenFlow.None -> stringResource(R.string.password_titleEdit)
+                    })
                 },
                 navigationIcon = {
-                    if (!viewModel.isSetup) {
+                    if (viewModel.flow != PasswordScreenFlow.Setup) {
                         IconButton(
                             onClick = onNavigateUp
                         ) {
@@ -140,10 +146,10 @@ fun PasswordScreen(
         ) {
             AnimatedVisibility(viewModel.isHelpCardVisible) {
                 HelpCard(
-                    text = if (viewModel.isSetup) {
-                        stringResource(R.string.password_helpSetup)
-                    } else {
-                        stringResource(R.string.password_helpEdit)
+                    text = when(viewModel.flow) {
+                        PasswordScreenFlow.Setup -> stringResource(R.string.password_helpSetup)
+                        PasswordScreenFlow.Recovery -> stringResource(R.string.password_helpRecovery)
+                        PasswordScreenFlow.None -> stringResource(R.string.password_helpEdit)
                     },
                     onDismiss = {
                         viewModel.dismissHelpCard()
@@ -151,7 +157,7 @@ fun PasswordScreen(
                     modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_vertical))
                 )
             }
-            if (!viewModel.isSetup) {
+            if (viewModel.flow == PasswordScreenFlow.None) {
                 TextInput(
                     value = viewModel.oldPassword,
                     onValueChange = {
@@ -177,7 +183,7 @@ fun PasswordScreen(
                 onValueChange = {
                     viewModel.newPassword = it
                 },
-                label = if (viewModel.isSetup) {
+                label = if (viewModel.flow == PasswordScreenFlow.Setup) {
                     stringResource(R.string.password_passwordLabel)
                 } else {
                     stringResource(R.string.password_newPasswordLabel)
@@ -199,7 +205,7 @@ fun PasswordScreen(
                 onValueChange = {
                     viewModel.repeatNewPassword = it
                 },
-                label = if (viewModel.isSetup) {
+                label = if (viewModel.flow == PasswordScreenFlow.Setup) {
                     stringResource(R.string.password_repeatPasswordLabel)
                 } else {
                     stringResource(R.string.password_repeatNewPasswordLabel)
@@ -217,20 +223,16 @@ fun PasswordScreen(
                 isPassword = true,
                 modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_vertical))
             )
-            Button(
+            LoadingIndicatorButton(
+                label = if (viewModel.flow == PasswordScreenFlow.Setup) {
+                    stringResource(R.string.button_continue)
+                } else {
+                    stringResource(R.string.button_save)
+                },
+                isLoading = viewModel.isSettingPassword,
                 enabled = viewModel.isDataValid.value,
-                onClick = {
-                    invokeSave()
-                }
-            ) {
-                Text(
-                    text = if (viewModel.isSetup) {
-                        stringResource(R.string.button_continue)
-                    } else {
-                        stringResource(R.string.button_save)
-                    }
-                )
-            }
+                onClick = invokeSave
+            )
         }
     }
 }

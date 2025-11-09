@@ -60,7 +60,6 @@ abstract class SingletonModule {
         impl: PasswordVaultRepository
     ): TagRepository
 
-
 }
 
 

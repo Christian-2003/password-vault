@@ -59,12 +59,21 @@ class LoginViewModel @Inject constructor(
      */
     var isPasswordValid: Boolean by mutableStateOf(true)
 
+    /**
+     * Indicates whether the password is currently being confirmed.
+     */
+    var isConfirmingPassword: Boolean by mutableStateOf(false)
+
 
     /**
      * Verifies the password entered by the user.
      */
     fun verifyPassword() {
-        isPasswordValid = verifyPasswordUseCase.isPasswordValid(password)
+        if (!isConfirmingPassword) {
+            isConfirmingPassword = true
+            isPasswordValid = verifyPasswordUseCase.isPasswordValid(password)
+            isConfirmingPassword = false
+        }
     }
 
 }

@@ -136,6 +136,7 @@
 
     <string name="password_titleSetup">Setup login</string>
     <string name="password_titleEdit">Edit password</string>
+    <string name="password_titleRecovery">Recover password</string>
     <string name="password_oldPasswordLabel">Old password</string>
     <string name="password_newPasswordLabel">New password</string>
     <string name="password_repeatNewPasswordLabel">Repeat new password</string>
@@ -147,6 +148,7 @@
     <string name="password_errorRepeatPassword">Passwords do not match</string>
     <string name="password_helpSetup">In order to use Password Vault, you need to setup a master password to prevent unauthorized access.</string>
     <string name="password_helpEdit">Edit the master password you use for authentication.</string>
+    <string name="password_helpRecovery">Enter a new master password that you want to use for authentication.</string>
 
     <string name="securityQuestion_titleSetup">Setup recovery</string>
     <string name="securityQuestion_titleEdit">Edit Recovery</string>
@@ -192,8 +194,10 @@
 
     <string name="recovery_title">Password recovery</string>
     <string name="recovery_help">Answer the security questions below in order to recover your password.</string>
-    <string name="recovery_answerLabel">Answer</string>
+    <string name="recovery_answerLabel">Answer %1$d</string>
     <string name="recovery_questionTitle">Question %1$d</string>
+    <string name="recovery_verifyButton">Recover master password</string>
+    <string name="recovery_answersInvalid">Answers are invalid</string>
 
     <string name="button_save">Save</string>
     <string name="button_cancel">Cancel</string>
