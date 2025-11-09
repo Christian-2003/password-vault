@@ -2,6 +2,8 @@ package de.christian2003.passwordvault.plugin.infrastructure.security.auth
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyProperties
 import androidx.biometric.BiometricManager
 import de.christian2003.passwordvault.application.repository.AuthRepository
 import java.security.SecureRandom
@@ -11,6 +13,10 @@ import javax.crypto.spec.PBEKeySpec
 import androidx.core.content.edit
 import dagger.hilt.android.qualifiers.ApplicationContext
 import de.christian2003.passwordvault.domain.security.auth.SecurityQuestion
+import java.security.KeyStore
+import javax.crypto.KeyGenerator
+import javax.crypto.Mac
+import javax.crypto.SecretKey
 import javax.inject.Inject
 
 
@@ -248,7 +254,9 @@ class SharedPreferencesAuthRepository @Inject constructor(
      */
     private fun hash(plain: String, salt: ByteArray): String {
         val plainAsCharArray: CharArray = plain.toCharArray()
-        val keySpec = PBEKeySpec(plainAsCharArray, salt, 65536, 256)
+        val pepper: ByteArray = getOrGeneratePepper()
+        val saltAndPepper: ByteArray = salt + pepper
+        val keySpec = PBEKeySpec(plainAsCharArray, saltAndPepper, 600_000, 256)
         val factory: SecretKeyFactory = SecretKeyFactory.getInstance("PBKDF2withHmacSHA512")
         val hash: ByteArray = factory.generateSecret(keySpec).encoded
         return byteArrayToString(hash)
@@ -265,6 +273,36 @@ class SharedPreferencesAuthRepository @Inject constructor(
         val salt = ByteArray(32)
         random.nextBytes(salt)
         return salt
+    }
+
+
+    /**
+     * Gets or generates a pepper that can be used for all hashing procedures.
+     *
+     * @return  Pepper.
+     */
+    private fun getOrGeneratePepper(): ByteArray {
+        val keyStore: KeyStore = KeyStore.getInstance("AndroidKeyStore").apply {
+            load(null)
+        }
+        val alias = "AuthPepper"
+
+        if (!keyStore.containsAlias(alias)) {
+            val keyGen: KeyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_HMAC_SHA512, "AndroidKeyStore")
+            val spec: KeyGenParameterSpec = KeyGenParameterSpec.Builder(alias, KeyProperties.PURPOSE_SIGN or KeyProperties.PURPOSE_VERIFY)
+                .setKeySize(256)
+                .setDigests(KeyProperties.DIGEST_SHA512)
+                .setUserAuthenticationRequired(false)
+                .build()
+            keyGen.init(spec)
+            keyGen.generateKey()
+        }
+
+        val pepperKey = keyStore.getKey(alias, null) as SecretKey
+        val hmac: Mac = Mac.getInstance("HmacSHA512")
+        hmac.init(pepperKey)
+        val pepperBytes: ByteArray = hmac.doFinal("passwordvault".toByteArray())
+        return pepperBytes
     }
 
 
