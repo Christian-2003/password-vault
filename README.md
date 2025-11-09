@@ -5,6 +5,9 @@
 ![GitHub](https://img.shields.io/github/issues/Christian-2003/password-vault?color=purple)
 ![GitHub](https://img.shields.io/github/repo-size/Christian-2003/password-vault?color=blue)
 
+The following diagram shows the preliminary navigation:
+![Navigation](docs/img/development/navigation_diagram.drawio.svg)
+
 The following diagram describes the new module architecture for the app:
 ![Modules](docs/img/development/modules.drawio.svg)
 
