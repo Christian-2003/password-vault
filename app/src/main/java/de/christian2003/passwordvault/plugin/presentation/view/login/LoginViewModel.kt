@@ -66,7 +66,7 @@ class LoginViewModel @Inject constructor(
     /**
      * Verifies the password entered by the user.
      */
-    fun verifyPassword() {
+    suspend fun verifyPassword() {
         if (!isConfirmingPassword) {
             isConfirmingPassword = true
             isPasswordValid = verifyPasswordUseCase.isPasswordValid(password)

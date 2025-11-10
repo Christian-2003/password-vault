@@ -7,12 +7,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.passwordvault.application.usecases.auth.GetSecurityQuestionsUseCase
 import de.christian2003.passwordvault.application.usecases.auth.VerifySecurityQuestionsUseCase
 import de.christian2003.passwordvault.domain.security.auth.SecurityQuestion
 import de.christian2003.passwordvault.plugin.presentation.view.help.HelpCard
 import de.christian2003.passwordvault.plugin.presentation.view.securityquestions.SecurityQuestionUiDto
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -59,9 +62,11 @@ class RecoveryViewModel @Inject constructor(
      * Initializes the view model.
      */
     init {
-        securityQuestions.addAll(getSecurityQuestionsUseCase.getSecurityQuestions().map {
-            SecurityQuestionUiDto(it, "")
-        })
+        viewModelScope.launch(Dispatchers.IO) {
+            securityQuestions.addAll(getSecurityQuestionsUseCase.getSecurityQuestions().map {
+                SecurityQuestionUiDto(it, "")
+            })
+        }
     }
 
 
@@ -70,7 +75,7 @@ class RecoveryViewModel @Inject constructor(
      *
      * @return  Whether the security questions are valid.
      */
-    fun verifySecurityQuestions(): Boolean {
+    suspend fun verifySecurityQuestions(): Boolean {
         isValidatingAnswers = true
         val answers: MutableMap<SecurityQuestion, String> = mutableMapOf()
         securityQuestions.forEach { question ->

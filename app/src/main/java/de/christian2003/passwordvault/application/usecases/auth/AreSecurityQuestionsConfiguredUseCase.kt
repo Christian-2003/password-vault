@@ -19,7 +19,7 @@ class AreSecurityQuestionsConfiguredUseCase @Inject constructor(
      * @return  Whether security questions are configured and can be used for recovery.
      */
     fun areSecurityQuestionsConfigured(): Boolean {
-        return repository.hasSecurityQuestions() && repository.getConfiguredQuestions().size >= 5
+        return repository.hasSecurityQuestions() && repository.getSecurityQuestionsCount() >= 5
     }
 
 }

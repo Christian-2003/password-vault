@@ -13,6 +13,10 @@ import javax.crypto.spec.PBEKeySpec
 import androidx.core.content.edit
 import dagger.hilt.android.qualifiers.ApplicationContext
 import de.christian2003.passwordvault.domain.security.auth.SecurityQuestion
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import java.security.KeyStore
 import javax.crypto.KeyGenerator
 import javax.crypto.Mac
@@ -52,7 +56,7 @@ class SharedPreferencesAuthRepository @Inject constructor(
      * @param newPassword   New password.
      * @return              Whether the password was changed successfully.
      */
-    override fun setPassword(newPassword: String) {
+    override suspend fun setPassword(newPassword: String) {
         if (newPassword.isBlank()) {
             return
         }
@@ -71,7 +75,7 @@ class SharedPreferencesAuthRepository @Inject constructor(
      * @param password  Password to test.
      * @return          Whether the password is valid.
      */
-    override fun isPasswordValid(password: String): Boolean {
+    override suspend fun isPasswordValid(password: String): Boolean {
         if (password.isBlank()) {
             return false
         }
@@ -130,8 +134,8 @@ class SharedPreferencesAuthRepository @Inject constructor(
      * @return  Whether security questions are configured.
      */
     override fun hasSecurityQuestions(): Boolean {
-        val questions: List<SecurityQuestion> = getConfiguredQuestions()
-        return questions.isNotEmpty()
+        val questionList: String? = sharedPreferences.getString("question_list", null)
+        return questionList != null && questionList.isNotBlank()
     }
 
 
@@ -141,7 +145,7 @@ class SharedPreferencesAuthRepository @Inject constructor(
      * @param question  Security question.
      * @param answer    Answer to the security question.
      */
-    override fun addSecurityQuestion(question: SecurityQuestion, answer: String) {
+    override suspend fun addSecurityQuestion(question: SecurityQuestion, answer: String) {
         if (answer.isBlank()) {
             return
         }
@@ -177,12 +181,15 @@ class SharedPreferencesAuthRepository @Inject constructor(
      * @param question  Question to remove.
      */
     override fun removeSecurityQuestion(question: SecurityQuestion) {
-        val questions: List<SecurityQuestion> = getConfiguredQuestions()
-        if (questions.contains(question)) {
+        val questionsList: String? = sharedPreferences.getString("question_list", null)
+        val questionOrdinalsAsString: List<String> = questionsList?.split(",") ?: listOf()
+        val questionOrdinals: List<Int?> = questionOrdinalsAsString.map { it.toIntOrNull() }
+
+        if (questionOrdinals.contains(question.ordinal)) {
             val questionListStringBuilder = StringBuilder()
-            questions.forEach { existingQuestion ->
-                if (existingQuestion != question) {
-                    questionListStringBuilder.append(existingQuestion.ordinal)
+            questionOrdinals.forEach { existingQuestionOrdinal ->
+                if (existingQuestionOrdinal != question.ordinal) {
+                    questionListStringBuilder.append(existingQuestionOrdinal)
                     questionListStringBuilder.append(',')
                 }
             }
@@ -202,7 +209,7 @@ class SharedPreferencesAuthRepository @Inject constructor(
      *
      * @return  List of configured security questions.
      */
-    override fun getConfiguredQuestions(): List<SecurityQuestion> {
+    override suspend fun getConfiguredQuestions(): List<SecurityQuestion> {
         val questionsList: String? = sharedPreferences.getString("question_list", null)
         val questionOrdinalsAsString: List<String> = questionsList?.split(",") ?: listOf()
         val questionOrdinals: List<Int?> = questionOrdinalsAsString.map { it.toIntOrNull() }
@@ -219,6 +226,19 @@ class SharedPreferencesAuthRepository @Inject constructor(
 
 
     /**
+     * Returns the number of security questions that are configured.
+     *
+     * @return  Number of security questions that are configured.
+     */
+    override fun getSecurityQuestionsCount(): Int {
+        val questionsList: String? = sharedPreferences.getString("question_list", null)
+        val questionOrdinalsAsString: List<String> = questionsList?.split(",") ?: listOf()
+        val questionOrdinals: List<Int?> = questionOrdinalsAsString.map { it.toIntOrNull() }
+        return questionOrdinals.size
+    }
+
+
+    /**
      * Validates the specified security questions. If the number of correct questions is equal to
      * (or exceeds) the passed threshold, the validation succeeds. Otherwise, it fails.
      *
@@ -226,23 +246,24 @@ class SharedPreferencesAuthRepository @Inject constructor(
      * @param threshold Number of questions that need to be answered correctly to succeed.
      * @return          Whether the answers to the security questions are valid.
      */
-    override fun validateSecurityQuestions(questions: Map<SecurityQuestion, String>, threshold: Int): Boolean {
-        var validAnswers = 0
-        questions.forEach { question, answer ->
-            if (answer.isNotBlank()) {
-                val hash: String? = sharedPreferences.getString("question_${question.ordinal}_hash", null)
-                val salt: String? = sharedPreferences.getString("question_${question.ordinal}_salt", null)
+    override suspend fun validateSecurityQuestions(questions: Map<SecurityQuestion, String>, threshold: Int): Boolean = coroutineScope {
+        val deferredResults = questions.map { (question, answer) ->
+            async(Dispatchers.Default) {
+                if (answer.isNotBlank()) {
+                    val hash: String? = sharedPreferences.getString("question_${question.ordinal}_hash", null)
+                    val salt: String? = sharedPreferences.getString("question_${question.ordinal}_salt", null)
 
-                if (hash != null && salt != null) {
-                    val hashedAnswer: String = hash(answer, stringToByteArray(salt))
-                    if (hash == hashedAnswer) {
-                        validAnswers++
+                    if (hash != null && salt != null) {
+                        val hashedAnswer: String = hash(answer, stringToByteArray(salt))
+                        return@async hash == hashedAnswer
                     }
                 }
+                return@async false
             }
         }
 
-        return validAnswers >= threshold
+        val validAnswers: Int = deferredResults.count { it.await() }
+        return@coroutineScope validAnswers >= threshold
     }
 
 
@@ -252,14 +273,14 @@ class SharedPreferencesAuthRepository @Inject constructor(
      * @param plain Plain text to hash.
      * @param salt  Salt to use for hashing.
      */
-    private fun hash(plain: String, salt: ByteArray): String {
+    private suspend fun hash(plain: String, salt: ByteArray): String = coroutineScope {
         val plainAsCharArray: CharArray = plain.toCharArray()
         val pepper: ByteArray = getOrGeneratePepper()
         val saltAndPepper: ByteArray = salt + pepper
         val keySpec = PBEKeySpec(plainAsCharArray, saltAndPepper, 600_000, 256)
         val factory: SecretKeyFactory = SecretKeyFactory.getInstance("PBKDF2withHmacSHA512")
         val hash: ByteArray = factory.generateSecret(keySpec).encoded
-        return byteArrayToString(hash)
+        return@coroutineScope byteArrayToString(hash)
     }
 
 

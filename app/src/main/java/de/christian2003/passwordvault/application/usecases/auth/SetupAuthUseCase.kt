@@ -20,7 +20,7 @@ class SetupAuthUseCase @Inject constructor(
      * @param password  Password for app authentication.
      * @return          Whether the setup was successful.
      */
-    fun setup(password: String): Boolean {
+    suspend fun setup(password: String): Boolean {
         if (repository.hasPassword()) {
             return false
         }

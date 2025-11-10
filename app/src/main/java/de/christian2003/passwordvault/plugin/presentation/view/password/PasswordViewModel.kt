@@ -10,12 +10,15 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.application
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.passwordvault.application.usecases.auth.SetupAuthUseCase
 import de.christian2003.passwordvault.application.usecases.auth.UpdatePasswordUseCase
 import de.christian2003.passwordvault.application.usecases.auth.VerifyPasswordUseCase
 import de.christian2003.passwordvault.domain.security.auth.SecurityQuestion
 import de.christian2003.passwordvault.plugin.presentation.view.help.HelpCard
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -88,7 +91,6 @@ class PasswordViewModel @Inject constructor(
     var isHelpCardVisible: Boolean by mutableStateOf(HelpCard.PASSWORD.getVisible(application))
         private set
 
-
     /**
      * Saves the password entered by the user. If the data is not valid, "isOldPasswordValid",
      * "isRepeatNewPasswordValid" and "isDataValid" are updated accordingly.
@@ -97,7 +99,7 @@ class PasswordViewModel @Inject constructor(
      *                          the password should be recovered. In any other case (e.g. during the
      *                          initial setup), pass null.
      */
-    fun save(securityQuestions: Map<SecurityQuestion, String>? = null) {
+    suspend fun save(securityQuestions: Map<SecurityQuestion, String>? = null) {
         if (!isSettingPassword) {
             isSettingPassword = true
             val areNewPasswordsValid: Boolean = newPassword == repeatNewPassword && newPassword.isNotBlank()
@@ -127,6 +129,7 @@ class PasswordViewModel @Inject constructor(
             isSettingPassword = false
         }
     }
+
 
 
     /**

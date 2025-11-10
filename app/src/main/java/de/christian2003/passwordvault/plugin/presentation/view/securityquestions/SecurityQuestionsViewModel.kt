@@ -15,7 +15,9 @@ import de.christian2003.passwordvault.application.usecases.auth.GetSecurityQuest
 import de.christian2003.passwordvault.application.usecases.auth.RemoveSecurityQuestionUseCase
 import de.christian2003.passwordvault.domain.security.auth.SecurityQuestion
 import de.christian2003.passwordvault.plugin.presentation.view.help.HelpCard
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -97,16 +99,20 @@ class SecurityQuestionsViewModel @Inject constructor(
      * @param question  Question to create.
      * @param answer    Answer for the question.
      */
-    fun dismissCreateDialog(question: SecurityQuestion? = null, answer: String? = null) = viewModelScope.launch(Dispatchers.IO) {
+    fun dismissCreateDialog(question: SecurityQuestion? = null, answer: String? = null) {
         isCreateDialogVisible = false
         if (question != null && answer != null && answer.isNotBlank()) {
-            val existingQuestion: SecurityQuestionUiDto? = securityQuestions.find { it.question == question }
-            if (existingQuestion == null) {
-                securityQuestions.add(SecurityQuestionUiDto(
-                    question = question,
-                    answer = answer
-                ))
-                addSecurityQuestionUseCase.addQuestion(question, answer)
+            //We cannot use ViewModelScope since the view model can be disposed before the question is
+            //saved, which would dispose the coroutine.
+            CoroutineScope(Dispatchers.Default).launch {
+                val existingQuestion: SecurityQuestionUiDto? = securityQuestions.find { it.question == question }
+                if (existingQuestion == null) {
+                    securityQuestions.add(SecurityQuestionUiDto(
+                        question = question,
+                        answer = answer
+                    ))
+                    addSecurityQuestionUseCase.addQuestion(question, answer)
+                }
             }
         }
     }
@@ -118,16 +124,20 @@ class SecurityQuestionsViewModel @Inject constructor(
      * @param question  Question to edit.
      * @param answer    Answer to edit.
      */
-    fun dismissEditQuestionDialog(question: SecurityQuestion? = null, answer: String? = null) = viewModelScope.launch(Dispatchers.IO) {
+    fun dismissEditQuestionDialog(question: SecurityQuestion? = null, answer: String? = null) {
         val existingQuestion: SecurityQuestionUiDto? = questionToEdit
         questionToEdit = null
         if (existingQuestion != null && question != null && answer != null) {
-            val index: Int = securityQuestions.indexOf(existingQuestion)
-            securityQuestions[index] = existingQuestion.copy(
-                question = question,
-                answer = answer
-            )
-            addSecurityQuestionUseCase.addQuestion(question, answer)
+            //We cannot use ViewModelScope since the view model can be disposed before the question is
+            //saved, which would dispose the coroutine.
+            CoroutineScope(Dispatchers.Default).launch {
+                val index: Int = securityQuestions.indexOf(existingQuestion)
+                securityQuestions[index] = existingQuestion.copy(
+                    question = question,
+                    answer = answer
+                )
+                addSecurityQuestionUseCase.addQuestion(question, answer)
+            }
         }
     }
 

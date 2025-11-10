@@ -20,7 +20,7 @@ class AddSecurityQuestionUseCase @Inject constructor(
      * @param question      New question to add.
      * @param newAnswer     New answer to add.
      */
-    fun addQuestion(question: SecurityQuestion, newAnswer: String) {
+    suspend fun addQuestion(question: SecurityQuestion, newAnswer: String) {
         if (repository.getConfiguredQuestions().contains(question)) {
             repository.removeSecurityQuestion(question)
         }

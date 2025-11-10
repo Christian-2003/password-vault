@@ -19,7 +19,7 @@ class GetSecurityQuestionsUseCase @Inject constructor(
      *
      * @return  List of configured security questions.
      */
-    fun getSecurityQuestions(): List<SecurityQuestion> {
+    suspend fun getSecurityQuestions(): List<SecurityQuestion> {
         return repository.getConfiguredQuestions()
     }
 
