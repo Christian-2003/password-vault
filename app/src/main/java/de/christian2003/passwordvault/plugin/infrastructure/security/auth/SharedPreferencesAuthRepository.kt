@@ -321,7 +321,7 @@ class SharedPreferencesAuthRepository @Inject constructor(
         val pepperKey = keyStore.getKey(alias, null) as SecretKey
         val hmac: Mac = Mac.getInstance("HmacSHA512")
         hmac.init(pepperKey)
-        val pepperBytes: ByteArray = hmac.doFinal("passwordvault".toByteArray())
+        val pepperBytes: ByteArray = hmac.doFinal("passwordvault".toByteArray()) //TODO: No hardcoded string!!!!!!
         return pepperBytes
     }
 
