@@ -274,12 +274,11 @@ class SharedPreferencesAuthRepository @Inject constructor(
      */
     private suspend fun hash(plain: String, salt: ByteArray): String = coroutineScope {
         val plainAsCharArray: CharArray = plain.toCharArray()
-        val pepper: ByteArray = getOrGeneratePepper()
-        val saltAndPepper: ByteArray = salt + pepper
-        val keySpec = PBEKeySpec(plainAsCharArray, saltAndPepper, 600_000, 256)
+        val keySpec = PBEKeySpec(plainAsCharArray, salt, 600_000, 256)
         val factory: SecretKeyFactory = SecretKeyFactory.getInstance("PBKDF2withHmacSHA512")
         val hash: ByteArray = factory.generateSecret(keySpec).encoded
-        return@coroutineScope byteArrayToString(hash)
+        val final: ByteArray = hmacWithPepper(hash)
+        return@coroutineScope byteArrayToString(final)
     }
 
 
@@ -297,11 +296,12 @@ class SharedPreferencesAuthRepository @Inject constructor(
 
 
     /**
-     * Gets or generates a pepper that can be used for all hashing procedures.
+     * Performs an HMAC operation on some plain text using a hardware-backed secret key.
      *
-     * @return  Pepper.
+     * @param plain Plain text.
+     * @return      Cipher text.
      */
-    private fun getOrGeneratePepper(): ByteArray {
+    private fun hmacWithPepper(plain: ByteArray): ByteArray {
         val keyStore: KeyStore = KeyStore.getInstance("AndroidKeyStore").apply {
             load(null)
         }
@@ -321,8 +321,9 @@ class SharedPreferencesAuthRepository @Inject constructor(
         val pepperKey = keyStore.getKey(alias, null) as SecretKey
         val hmac: Mac = Mac.getInstance("HmacSHA512")
         hmac.init(pepperKey)
-        val pepperBytes: ByteArray = hmac.doFinal("passwordvault".toByteArray()) //TODO: No hardcoded string!!!!!!
-        return pepperBytes
+
+        val final: ByteArray = hmac.doFinal(plain)
+        return final
     }
 
 
