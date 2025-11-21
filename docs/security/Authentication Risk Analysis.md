@@ -92,6 +92,9 @@ Data flows as follows:
 * **Password Authentication:** Entry -> Hashing -> Compare with password hash in `SharedPreferences`
 * **Recovery Authentication:** Entry -> Hashing -> Compare with password hash in `SharedPreferences`
 
+Generally speaking, data flows either as String or array (e.g. `ByteArray` or `CharArray`). The following diagram demonstrates where data flows:
+![Data flow](../img/security/auth_data_flow.drawio.svg)
+
 <br/>
 
 ## 3 Attack Vectors and Risk Analysis
