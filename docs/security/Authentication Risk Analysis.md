@@ -106,6 +106,11 @@ The app uses the following cryptographic algorithms for authentication purposes:
 * Secure Hash Algorithm 2 (SHA-512)
 * Hash-Based Message Authentication Code (Hmac)
 
+The following diagram illustrates how these algorithms are used for authentication:
+![Hashing](../img/security/auth_hashing.drawio.svg)
+
+The diagram shows that the user input is hashed using PBKDF2 alongside a randomly generated salt. The resulting intermediate hash is then hashed using Hmac SHA-512 with a secret key from the `KeyStore`. The resulting final hash is then stored in the SharedPreferences as password or security question answer.
+
 <br/>
 
 ## 3 Attack Vectors and Risk Analysis
