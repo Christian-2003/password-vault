@@ -84,16 +84,16 @@ This section describes a list of possible attacks to the authentication implemen
 ###### Overview
 This table summarizes attack vectors and their mitigations. 
 
-Attack Vector | Preconditions | Likelihood | Impact
---- | --- | --- | ---
-[Offline brute-force / dictionary attack](#offline-brute-force--dictionary-attack) | Access to the device storage | :red_square: Very likely | :red_square: Very High
-[Physical device compromise](#physical-device-compromise) | Access to the (unlocked) physical device | Unlikely | Low, unless device is acquired by professionals (e.g. law enforcement)
-[Backups and synchronization leaks](#backups-and-synchronization-leaks) | App files are backed-up | Unlikely | Very High
-[Malicious app or malware with priviliges](#malicious-app-or-malware-with-priviliges) | Malware, third-party IME or Accessibility Services capture inputs (like passwords) before they are processed | Likely | Very High
-[In-memory exposure and logging](#in-memory-exposure-and-logging) | Sensitve data is stored in temporary memory or is included in logs | Very likely | High
-[Side-channel / timing / comparator Attacks](#side-channel--timing--comparator-attacks) | Attacker can observe timing differences when verifying passwords | Likely | Low
-[Threats to security questions](#threats-to-security-questions) | Users uses low-entropy answers | Very Likely | Very High
-[UI and OS features](#ui-and-os-features) | UI or OS leaks sensitive app content, such as through autofill or screenshots | Very Likely | Medium
+Attack Vector | Preconditions | Likelihood | Impact | Mitigation Status
+--- | --- | --- | --- | ---
+[Offline brute-force / dictionary attack](#offline-brute-force--dictionary-attack) | Access to the device storage | :red_circle: Very likely | :red_circle: very High | :green_circle: Implemented
+[Physical device compromise](#physical-device-compromise) | Access to the (unlocked) physical device | :green_circle: Unlikely | :green_circle: Low, unless device is acquired by professionals (e.g. law enforcement) | :green_circle: Implemented
+[Backups and synchronization leaks](#backups-and-synchronization-leaks) | App files are backed-up | :green_circle: Unlikely | :red_circle: Very high | :red_circle: Not implemented
+[Malicious app or malware with priviliges](#malicious-app-or-malware-with-priviliges) | Malware, third-party IME or Accessibility Services capture inputs (like passwords) before they are processed | :orange_circle: Likely | :red_circle: Very High | :red_circle: Not implemented
+[In-memory exposure and logging](#in-memory-exposure-and-logging) | Sensitve data is stored in temporary memory or is included in logs | :red_circle: Very likely | :orange_circle: High | :green_circle: Implemented
+[Side-channel / timing / comparator Attacks](#side-channel--timing--comparator-attacks) | Attacker can observe timing differences when verifying passwords | :orange_circle: Likely | :green_circle: Low | :green_circle: Implemented
+[Threats to security questions](#threats-to-security-questions) | Users uses low-entropy answers | :red_circle: Very Likely | :red_circle: Very High | :red_circle: Not implemented
+[UI and OS features](#ui-and-os-features) | UI or OS leaks sensitive app content, such as through autofill or screenshots | :red_circle: Very Likely | :yellow_circle: Medium | :red_circle: Not implemented
 
 Each attack vector is described in greater detail in further sections.
 
