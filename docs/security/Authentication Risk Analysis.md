@@ -13,6 +13,7 @@ This document analyzes possible risks and attack vectors to the authentication m
     * [Architecture](#21-architecture)
     * [UI Flow](#22-ui-flow)
     * [Data Storage](#23-data-storage)
+    * [Cryptographic Algorithms](#24-cryptographic-algorithms)
 3. [Attack Vectors and Risk Analysis](#3-attack-vectors-and-risk-analysis)
     * [Overview](#31-overview)
     * [Offline Brute-Force / Dictionary Attack](#32-offline-brute-force--dictionary-attack)
@@ -94,6 +95,16 @@ Data flows as follows:
 
 Generally speaking, data flows either as String or array (e.g. `ByteArray` or `CharArray`). The following diagram demonstrates where data flows:
 ![Data flow](../img/security/auth_data_flow.drawio.svg)
+
+The diagram shows, that the user can enter sensitive data (e.g. passwords or security answers) into the user interface through the Android IME. The data is stored in the view model until validation is started.  
+Once validation starts, business logic is invoked that orchestrates calls to Android libraries. These calls are required for secure handling of data, like loading hash and salt from `SharedPreferences` as well as cryptographic operations.  
+Within the app, sensitive data flows as `ByteArray` or `CharArray`. After use, these arrays are filled with '0' or '\u0000' to hide the sensitive data until garbage collection. This minimizes the chances of data being visible on the heap or in memory dumps. Excluded from this are system operations, like the communication between the app and the IME keyboard. Jetpack Compose always handles text-data as `String`. Therefore, until the data is retrieved from the UI composables, it is stored in string-format. However, using arrays outside composable-scope greatly reduces the number of `String`-instances and thus chances of leaking sensitive data in heap or dumps.
+
+### 2.4 Cryptographic Algorithms
+The app uses the following cryptographic algorithms for authentication purposes:
+* Password-Based Key Derivation Function 2 (PBKDF2)
+* Secure Hash Algorithm 2 (SHA-512)
+* Hash-Based Message Authentication Code (Hmac)
 
 <br/>
 
