@@ -86,7 +86,7 @@ This table summarizes attack vectors and their mitigations.
 
 Attack Vector | Preconditions | Likelihood | Impact
 --- | --- | --- | ---
-[Offline brute-force / dictionary attack](#offline-brute-force--dictionary-attack) | Access to the device storage | Very likely | Very High
+[Offline brute-force / dictionary attack](#offline-brute-force--dictionary-attack) | Access to the device storage | :red_square: Very likely | :red_square: Very High
 [Physical device compromise](#physical-device-compromise) | Access to the (unlocked) physical device | Unlikely | Low, unless device is acquired by professionals (e.g. law enforcement)
 [Backups and synchronization leaks](#backups-and-synchronization-leaks) | App files are backed-up | Unlikely | Very High
 [Malicious app or malware with priviliges](#malicious-app-or-malware-with-priviliges) | Malware, third-party IME or Accessibility Services capture inputs (like passwords) before they are processed | Likely | Very High
