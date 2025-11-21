@@ -64,6 +64,7 @@ fun LoginScreen(
         coroutineScope.launch(Dispatchers.Default) {
             viewModel.verifyPassword()
             if (viewModel.isPasswordValid) {
+                viewModel.clearData()
                 withContext(Dispatchers.Main) {
                     onFinish()
                 }
@@ -75,6 +76,7 @@ fun LoginScreen(
         coroutineScope.launch {
             val result = onBiometricAuth()
             if (result) {
+                viewModel.clearData()
                 onFinish()
             }
         }
@@ -130,9 +132,9 @@ fun LoginScreen(
                     modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_vertical))
                 )
                 TextInput(
-                    value = viewModel.password,
+                    value = viewModel.password.concatToString(),
                     onValueChange = {
-                        viewModel.password = it
+                        viewModel.password = it.toCharArray()
                     },
                     label = stringResource(R.string.login_passwordLabel),
                     isPassword = true,

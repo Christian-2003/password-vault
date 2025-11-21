@@ -19,7 +19,7 @@ class VerifyPasswordUseCase @Inject constructor(
      * @param password  Password to verify.
      * @return          Whether the specified password is valid.
      */
-    suspend fun isPasswordValid(password: String): Boolean {
+    suspend fun isPasswordValid(password: CharArray): Boolean {
         return repository.isPasswordValid(password)
     }
 

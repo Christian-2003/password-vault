@@ -50,7 +50,7 @@ class LoginViewModel @Inject constructor(
     /**
      * Password entered by the user.
      */
-    var password: String by mutableStateOf("")
+    var password: CharArray by mutableStateOf(CharArray(0))
 
     /**
      * Indicates whether the password entered by the user is valid.
@@ -72,6 +72,15 @@ class LoginViewModel @Inject constructor(
             isPasswordValid = verifyPasswordUseCase.isPasswordValid(password)
             isConfirmingPassword = false
         }
+    }
+
+
+    /**
+     * Clears the data stored. This must be called before the screen is dismissed so that sensitive
+     * data does not remain in the heap.
+     */
+    fun clearData() {
+        password.fill('\u0000')
     }
 
 }

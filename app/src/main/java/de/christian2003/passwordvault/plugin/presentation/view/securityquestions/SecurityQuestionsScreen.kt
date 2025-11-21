@@ -1,5 +1,6 @@
 package de.christian2003.passwordvault.plugin.presentation.view.securityquestions
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -77,6 +78,20 @@ fun SecurityQuestionsScreen(
     onNavigateUp: () -> Unit,
     onNavigateToNextSetupStep: () -> Unit
 ) {
+    val invokeOnNavigateUp: () -> Unit = {
+        viewModel.clearData()
+        onNavigateUp()
+    }
+
+    val invokeOnNavigateToNextSetupStep: () -> Unit = {
+        viewModel.clearData()
+        onNavigateToNextSetupStep()
+    }
+
+    BackHandler {
+        invokeOnNavigateUp()
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -92,7 +107,7 @@ fun SecurityQuestionsScreen(
                 navigationIcon = {
                     if (!viewModel.isSetup) {
                         IconButton(
-                            onClick = onNavigateUp
+                            onClick = invokeOnNavigateUp
                         ) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_back),
@@ -134,10 +149,10 @@ fun SecurityQuestionsScreen(
                 ButtonRow(
                     isContinueEnabled = viewModel.securityQuestions.size >= 5,
                     onContinue = {
-                        onNavigateToNextSetupStep()
+                        invokeOnNavigateToNextSetupStep()
                     },
                     onSkip = {
-                        onNavigateToNextSetupStep()
+                        invokeOnNavigateToNextSetupStep()
                     }
                 )
             }
@@ -310,7 +325,7 @@ private fun SecurityQuestionItem(
             )
             if (question.answer != null) {
                 Text(
-                    text = question.answer,
+                    text = question.answer.concatToString(),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodyMedium
                 )
@@ -498,16 +513,16 @@ private fun InfoCard(
 private fun SecurityQuestionDialog(
     securityQuestion: SecurityQuestion?,
     selectedSecurityQuestions: List<SecurityQuestion>,
-    answer: String? = null,
+    answer: CharArray? = null,
     onDismiss: () -> Unit,
-    onSave: (SecurityQuestion, String) -> Unit
+    onSave: (SecurityQuestion, CharArray) -> Unit
 ) {
     val availableSecurityQuestions: List<SecurityQuestion> = remember { SecurityQuestion.entries - selectedSecurityQuestions }
-    var mutableAnswer: String by remember { mutableStateOf(answer ?: "") }
+    var mutableAnswer: CharArray by remember { mutableStateOf(answer ?: CharArray(0)) }
     var selectedQuestionIndex: Int by remember { mutableIntStateOf(if (securityQuestion != null) { availableSecurityQuestions.indexOf(securityQuestion) } else { 0 }) }
 
     val invokeOnSave: () -> Unit = {
-        if (mutableAnswer.isNotBlank()) {
+        if (mutableAnswer.isNotEmpty()) {
             onSave(availableSecurityQuestions[selectedQuestionIndex], mutableAnswer)
         }
     }
@@ -550,9 +565,9 @@ private fun SecurityQuestionDialog(
                 )
 
                 TextInput(
-                    value = mutableAnswer,
+                    value = mutableAnswer.concatToString(),
                     onValueChange = {
-                        mutableAnswer = it
+                        mutableAnswer = it.toCharArray()
                     },
                     label = stringResource(R.string.securityQuestion_edit_labelAnswer),
                     prefixIcon = painterResource(R.drawable.ic_text),
@@ -577,7 +592,7 @@ private fun SecurityQuestionDialog(
                         onClick = {
                             invokeOnSave()
                         },
-                        enabled = mutableAnswer.isNotBlank()
+                        enabled = mutableAnswer.isNotEmpty()
                     ) {
                         Text(stringResource(R.string.button_save))
                     }

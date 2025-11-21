@@ -1,5 +1,6 @@
 package de.christian2003.passwordvault.plugin.presentation.view.password
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -83,6 +84,8 @@ fun PasswordScreen(
             }
             withContext(Dispatchers.Main) {
                 if (viewModel.isOldPasswordValid && viewModel.isRepeatNewPasswordValid && viewModel.isDataValid.value) {
+                    viewModel.clearData()
+                    sharedViewModel?.clearData()
                     onFinish()
                 }
                 else {
@@ -92,6 +95,12 @@ fun PasswordScreen(
                 }
             }
         }
+    }
+
+    val invokedOnNavigateUp: () -> Unit = {
+        viewModel.clearData()
+        sharedViewModel?.clearData()
+        onNavigateUp()
     }
 
     LaunchedEffect(Unit) {
@@ -104,6 +113,10 @@ fun PasswordScreen(
         else {
             newPasswordFocusRequester?.requestFocus()
         }
+    }
+
+    BackHandler {
+        invokedOnNavigateUp()
     }
 
     Scaffold(
@@ -122,7 +135,7 @@ fun PasswordScreen(
                 navigationIcon = {
                     if (viewModel.flow != PasswordScreenFlow.Setup) {
                         IconButton(
-                            onClick = onNavigateUp
+                            onClick = invokedOnNavigateUp
                         ) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_back),
@@ -158,9 +171,9 @@ fun PasswordScreen(
             }
             if (viewModel.flow == PasswordScreenFlow.None) {
                 TextInput(
-                    value = viewModel.oldPassword,
+                    value = viewModel.oldPassword.concatToString(),
                     onValueChange = {
-                        viewModel.oldPassword = it
+                        viewModel.oldPassword = it.toCharArray()
                     },
                     label = stringResource(R.string.password_oldPasswordLabel),
                     keyboardOptions = KeyboardOptions(
@@ -178,9 +191,9 @@ fun PasswordScreen(
                 )
             }
             TextInput(
-                value = viewModel.newPassword,
+                value = viewModel.newPassword.concatToString(),
                 onValueChange = {
-                    viewModel.newPassword = it
+                    viewModel.newPassword = it.toCharArray()
                 },
                 label = if (viewModel.flow == PasswordScreenFlow.Setup) {
                     stringResource(R.string.password_passwordLabel)
@@ -200,9 +213,9 @@ fun PasswordScreen(
                 modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_vertical))
             )
             TextInput(
-                value = viewModel.repeatNewPassword,
+                value = viewModel.repeatNewPassword.concatToString(),
                 onValueChange = {
-                    viewModel.repeatNewPassword = it
+                    viewModel.repeatNewPassword = it.toCharArray()
                 },
                 label = if (viewModel.flow == PasswordScreenFlow.Setup) {
                     stringResource(R.string.password_repeatPasswordLabel)

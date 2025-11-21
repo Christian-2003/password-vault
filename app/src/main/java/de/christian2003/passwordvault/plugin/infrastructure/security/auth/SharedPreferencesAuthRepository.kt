@@ -7,7 +7,6 @@ import android.security.keystore.KeyProperties
 import androidx.biometric.BiometricManager
 import de.christian2003.passwordvault.application.repository.AuthRepository
 import java.security.SecureRandom
-import java.util.Base64
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 import androidx.core.content.edit
@@ -17,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import java.security.KeyStore
+import java.util.Base64
 import javax.crypto.KeyGenerator
 import javax.crypto.Mac
 import javax.crypto.SecretKey
@@ -29,7 +29,7 @@ import javax.inject.Inject
  * @param context   Android context.
  */
 class SharedPreferencesAuthRepository @Inject constructor(
-    @ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context
 ): AuthRepository {
 
     /**
@@ -55,17 +55,19 @@ class SharedPreferencesAuthRepository @Inject constructor(
      * @param newPassword   New password.
      * @return              Whether the password was changed successfully.
      */
-    override suspend fun setPassword(newPassword: String) {
-        if (newPassword.isBlank()) {
+    override suspend fun setPassword(newPassword: CharArray) {
+        if (newPassword.isEmpty()) {
             return
         }
         val salt: ByteArray = generateSalt()
-        val hashedPassword: String = hash(newPassword, salt)
-        val saltAsString: String = byteArrayToString(salt)
+        val hashedPassword: CharArray = hash(newPassword, salt)
         sharedPreferences.edit {
-            putString("password_hash", hashedPassword)
-            putString("password_salt", saltAsString)
+            putString("password_hash", byteArrayToBase64(charArrayToByteArray(hashedPassword)))
+            putString("password_salt", byteArrayToBase64(salt))
         }
+
+        salt.fill(0)
+        hashedPassword.fill('\u0000')
     }
 
     /**
@@ -74,18 +76,27 @@ class SharedPreferencesAuthRepository @Inject constructor(
      * @param password  Password to test.
      * @return          Whether the password is valid.
      */
-    override suspend fun isPasswordValid(password: String): Boolean {
-        if (password.isBlank()) {
+    override suspend fun isPasswordValid(password: CharArray): Boolean {
+        if (password.isEmpty()) {
             return false
         }
         val storedHash: String? = sharedPreferences.getString("password_hash", null)
         val storedSalt: String? = sharedPreferences.getString("password_salt", null)
-        if (storedHash != null && storedSalt != null) {
-            val saltAsByteArray: ByteArray = stringToByteArray(storedSalt)
-            val computedHash: String = hash(password, saltAsByteArray)
-            return storedHash == computedHash
+
+        val passwordValid: Boolean = if (storedHash != null && storedSalt != null) {
+            val saltAsByteArray: ByteArray = base64ToByteArray(storedSalt)
+            val computedHash: CharArray = hash(password, saltAsByteArray)
+            val valid: Boolean = contentEqualsHash(computedHash, storedHash)
+
+            saltAsByteArray.fill(0)
+            computedHash.fill('\u0000')
+
+            valid
+        } else {
+            false
         }
-        return false
+
+        return passwordValid
     }
 
 
@@ -144,13 +155,12 @@ class SharedPreferencesAuthRepository @Inject constructor(
      * @param question  Security question.
      * @param answer    Answer to the security question.
      */
-    override suspend fun addSecurityQuestion(question: SecurityQuestion, answer: String) {
-        if (answer.isBlank()) {
+    override suspend fun addSecurityQuestion(question: SecurityQuestion, answer: CharArray) {
+        if (answer.isEmpty()) {
             return
         }
         val salt: ByteArray = generateSalt()
-        val hashedAnswer: String = hash(answer, salt)
-        val saltAsString: String = byteArrayToString(salt)
+        val hashedAnswer: CharArray = hash(answer, salt)
 
         val questions: List<SecurityQuestion> = getConfiguredQuestions()
         var questionListAsString: String? = null
@@ -165,12 +175,15 @@ class SharedPreferencesAuthRepository @Inject constructor(
         }
 
         sharedPreferences.edit {
-            putString("question_${question.ordinal}_hash", hashedAnswer)
-            putString("question_${question.ordinal}_salt", saltAsString)
+            putString("question_${question.ordinal}_hash", byteArrayToBase64(charArrayToByteArray(hashedAnswer)))
+            putString("question_${question.ordinal}_salt", byteArrayToBase64(salt))
             if (questionListAsString != null) {
                 putString("question_list", questionListAsString)
             }
         }
+
+        salt.fill(0)
+        hashedAnswer.fill('\u0000')
     }
 
 
@@ -192,7 +205,7 @@ class SharedPreferencesAuthRepository @Inject constructor(
                     questionListStringBuilder.append(',')
                 }
             }
-            val questionListAsString = questionListStringBuilder.removeSuffix(",").toString()
+            val questionListAsString: String = questionListStringBuilder.removeSuffix(",").toString()
 
             sharedPreferences.edit {
                 putString("question_list", questionListAsString)
@@ -245,16 +258,19 @@ class SharedPreferencesAuthRepository @Inject constructor(
      * @param threshold Number of questions that need to be answered correctly to succeed.
      * @return          Whether the answers to the security questions are valid.
      */
-    override suspend fun validateSecurityQuestions(questions: Map<SecurityQuestion, String>, threshold: Int): Boolean = coroutineScope {
+    override suspend fun validateSecurityQuestions(questions: Map<SecurityQuestion, CharArray>, threshold: Int): Boolean = coroutineScope {
         val deferredResults = questions.map { (question, answer) ->
             async(Dispatchers.Default) {
-                if (answer.isNotBlank()) {
+                if (answer.isNotEmpty()) {
                     val hash: String? = sharedPreferences.getString("question_${question.ordinal}_hash", null)
                     val salt: String? = sharedPreferences.getString("question_${question.ordinal}_salt", null)
 
                     if (hash != null && salt != null) {
-                        val hashedAnswer: String = hash(answer, stringToByteArray(salt))
-                        return@async hash == hashedAnswer
+                        val hashedAnswer: CharArray = hash(answer, base64ToByteArray(salt))
+                        val valid: Boolean = contentEqualsHash(hashedAnswer, hash)
+
+                        hashedAnswer.fill('\u0000')
+                        return@async valid
                     }
                 }
                 return@async false
@@ -262,23 +278,26 @@ class SharedPreferencesAuthRepository @Inject constructor(
         }
 
         val validAnswers: Int = deferredResults.count { it.await() }
+
         return@coroutineScope validAnswers >= threshold
     }
 
 
     /**
-     * Hashes the specified plain text with the specified salt.
+     * Hashes the specified plain text with the specified salt. The specified plain text is wiped
+     * afterwards.
      *
      * @param plain Plain text to hash.
      * @param salt  Salt to use for hashing.
+     * @return      Hashed result.
      */
-    private suspend fun hash(plain: String, salt: ByteArray): String = coroutineScope {
-        val plainAsCharArray: CharArray = plain.toCharArray()
-        val keySpec = PBEKeySpec(plainAsCharArray, salt, 600_000, 256)
+    private suspend fun hash(plain: CharArray, salt: ByteArray): CharArray = coroutineScope {
+        val keySpec = PBEKeySpec(plain, salt, 600_000, 256)
         val factory: SecretKeyFactory = SecretKeyFactory.getInstance("PBKDF2withHmacSHA512")
         val hash: ByteArray = factory.generateSecret(keySpec).encoded
         val final: ByteArray = hmacWithPepper(hash)
-        return@coroutineScope byteArrayToString(final)
+        hash.fill(0)
+        return@coroutineScope byteArrayToCharArray(final)
     }
 
 
@@ -328,24 +347,76 @@ class SharedPreferencesAuthRepository @Inject constructor(
 
 
     /**
-     * Converts the specified string to a byte array.
+     * Converts the specified char array to a byte array.
      *
-     * @param s String to convert to a byte array.
+     * @param chars Char array to convert to a byte array.
+     * @return      Converted byte array.
+     */
+    private fun charArrayToByteArray(chars: CharArray): ByteArray {
+        val bytes = ByteArray(chars.size) { i ->
+            chars[i].code.toByte()
+        }
+        return bytes
+    }
+
+
+    /**
+     * Converts the specified byte array to a char array.
+     *
+     * @param bytes Byte array to convert to a char array.
+     * @return      Converted char array.
+     */
+    private fun byteArrayToCharArray(bytes: ByteArray): CharArray {
+        val chars = CharArray(bytes.size) { i ->
+            (bytes[i].toInt() and 0xFF).toChar()
+        }
+        return chars
+    }
+
+
+    /**
+     * Converts the specified byte array to a base64-encoded string.
+     *
+     * @param bytes Byte array to convert to a base64-encoded string.
+     * @return      Base64-encoded string.
+     */
+    private fun byteArrayToBase64(bytes: ByteArray): String {
+        return Base64.getEncoder().encodeToString(bytes)
+    }
+
+
+    /**
+     * Converts the specified base64-encoded string to a byte array.
+     *
+     * @param s Base64-encoded string to convert to a byte array.
      * @return  Converted byte array.
      */
-    private fun stringToByteArray(s: String): ByteArray {
+    private fun base64ToByteArray(s: String): ByteArray {
         return Base64.getDecoder().decode(s)
     }
 
 
     /**
-     * Converts the specified byte array to a string.
+     * Test whether the specified computed hash content equals the stored hash. This method always
+     * runs with complexity O(n), so that comparison takes the same time regardless of whether the
+     * hashes are identical or not. This minimizes possibilities to guess partial correctness of
+     * the hashes (i.e. the password or security answer).
      *
-     * @param array Byte array to convert to a string.
-     * @return      Converted string.
+     * @param computedHash      Computed hash that was generated from the user input.
+     * @param storedHashBase64  Base64-encoded stored hash that was retrieved from SharedPreferences.
+     * @return                  Whether both hash are identical.
      */
-    private fun byteArrayToString(array: ByteArray): String {
-        return Base64.getEncoder().encodeToString(array)
+    private fun contentEqualsHash(computedHash: CharArray, storedHashBase64: String): Boolean {
+        val storedHash: CharArray = byteArrayToCharArray(base64ToByteArray(storedHashBase64))
+
+        var equals = true
+        for (i in 0 .. computedHash.size - 1) {
+            if (i >= storedHash.size || computedHash[i] != storedHash[i]) {
+                equals = false
+            }
+        }
+
+        return equals
     }
 
 }

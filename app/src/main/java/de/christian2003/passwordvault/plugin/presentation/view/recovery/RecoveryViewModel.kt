@@ -64,7 +64,7 @@ class RecoveryViewModel @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             securityQuestions.addAll(getSecurityQuestionsUseCase.getSecurityQuestions().map {
-                SecurityQuestionUiDto(it, "")
+                SecurityQuestionUiDto(it, CharArray(0))
             })
         }
     }
@@ -77,9 +77,9 @@ class RecoveryViewModel @Inject constructor(
      */
     suspend fun verifySecurityQuestions(): Boolean {
         isValidatingAnswers = true
-        val answers: MutableMap<SecurityQuestion, String> = mutableMapOf()
+        val answers: MutableMap<SecurityQuestion, CharArray> = mutableMapOf()
         securityQuestions.forEach { question ->
-            answers[question.question] = question.answer ?: ""
+            answers[question.question] = (question.answer ?: CharArray(0))
         }
         val result: Boolean = verifySecurityQuestionsUseCase.areSecurityQuestionsValid(answers)
         answersValid = result
@@ -93,10 +93,10 @@ class RecoveryViewModel @Inject constructor(
      *
      * @return  Map which maps the answers to the security questions.
      */
-    fun securityQuestionsToMap(): Map<SecurityQuestion, String> {
-        val map: MutableMap<SecurityQuestion, String> = mutableMapOf()
+    fun securityQuestionsToMap(): Map<SecurityQuestion, CharArray> {
+        val map: MutableMap<SecurityQuestion, CharArray> = mutableMapOf()
         securityQuestions.forEach { question ->
-            map[question.question] = question.answer ?: ""
+            map[question.question] = question.answer ?: CharArray(0)
         }
         return map
     }

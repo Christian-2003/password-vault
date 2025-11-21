@@ -99,9 +99,9 @@ class SecurityQuestionsViewModel @Inject constructor(
      * @param question  Question to create.
      * @param answer    Answer for the question.
      */
-    fun dismissCreateDialog(question: SecurityQuestion? = null, answer: String? = null) {
+    fun dismissCreateDialog(question: SecurityQuestion? = null, answer: CharArray? = null) {
         isCreateDialogVisible = false
-        if (question != null && answer != null && answer.isNotBlank()) {
+        if (question != null && answer != null && answer.isNotEmpty()) {
             //We cannot use ViewModelScope since the view model can be disposed before the question is
             //saved, which would dispose the coroutine.
             CoroutineScope(Dispatchers.Default).launch {
@@ -124,7 +124,7 @@ class SecurityQuestionsViewModel @Inject constructor(
      * @param question  Question to edit.
      * @param answer    Answer to edit.
      */
-    fun dismissEditQuestionDialog(question: SecurityQuestion? = null, answer: String? = null) {
+    fun dismissEditQuestionDialog(question: SecurityQuestion? = null, answer: CharArray? = null) {
         val existingQuestion: SecurityQuestionUiDto? = questionToEdit
         questionToEdit = null
         if (existingQuestion != null && question != null && answer != null) {
@@ -153,6 +153,17 @@ class SecurityQuestionsViewModel @Inject constructor(
             val existingQuestion: SecurityQuestionUiDto? = securityQuestions.find { it.question == question }
             securityQuestions.remove(existingQuestion)
             removeSecurityQuestionUseCase.removeQuestion(question)
+        }
+    }
+
+
+    /**
+     * Clears the data stored. This must be called before the screen is dismissed so that sensitive
+     * data does not remain in the heap.
+     */
+    fun clearData() {
+        securityQuestions.forEach { question ->
+            question.answer?.fill('\u0000')
         }
     }
 

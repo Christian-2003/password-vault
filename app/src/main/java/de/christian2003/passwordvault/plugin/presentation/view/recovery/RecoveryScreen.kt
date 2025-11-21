@@ -1,5 +1,6 @@
 package de.christian2003.passwordvault.plugin.presentation.view.recovery
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -55,6 +56,15 @@ fun RecoveryScreen(
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
 
+    val invokeOnNavigateUp: () -> Unit = {
+        sharedViewModel.clearData()
+        onNavigateUp()
+    }
+
+    BackHandler {
+        invokeOnNavigateUp()
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -63,7 +73,7 @@ fun RecoveryScreen(
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = onNavigateUp
+                        onClick = invokeOnNavigateUp
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.ic_back),
@@ -166,7 +176,7 @@ fun RecoveryScreen(
 private fun QuestionItem(
     index: Int,
     question: SecurityQuestionUiDto,
-    onAnswerChange: (Int, String) -> Unit
+    onAnswerChange: (Int, CharArray) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -181,9 +191,9 @@ private fun QuestionItem(
             modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.margin_horizontal))
         )
         TextInput(
-            value = question.answer ?: "",
+            value = (question.answer ?: CharArray(0)).concatToString(),
             onValueChange = { answer ->
-                onAnswerChange(index, answer)
+                onAnswerChange(index, answer.toCharArray())
             },
             label = stringResource(R.string.recovery_answerLabel, index + 1),
             modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.margin_horizontal))

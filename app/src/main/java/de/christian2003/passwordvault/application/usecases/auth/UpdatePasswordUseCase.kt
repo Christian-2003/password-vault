@@ -23,7 +23,7 @@ class UpdatePasswordUseCase @Inject constructor(
      * @param oldPassword   Old password to verify the user's identity.
      * @return              Whether the password was updated successfully.
      */
-    suspend fun updatePassword(newPassword: String, oldPassword: String): Boolean {
+    suspend fun updatePassword(newPassword: CharArray, oldPassword: CharArray): Boolean {
         if (repository.hasPassword() && repository.isPasswordValid(oldPassword)) {
             repository.setPassword(newPassword)
             return true
@@ -41,7 +41,7 @@ class UpdatePasswordUseCase @Inject constructor(
      * @param securityQuestions Security questions to verify the user's identity.
      * @return                  Whether the password was updated successfully.
      */
-    suspend fun updatePassword(newPassword: String, securityQuestions: Map<SecurityQuestion, String>): Boolean {
+    suspend fun updatePassword(newPassword: CharArray, securityQuestions: Map<SecurityQuestion, CharArray>): Boolean {
         if (repository.hasPassword()
             && securityQuestions.size >= 4
             && repository.hasSecurityQuestions()

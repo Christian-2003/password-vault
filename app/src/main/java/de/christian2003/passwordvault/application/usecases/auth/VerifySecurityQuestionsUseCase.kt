@@ -19,7 +19,7 @@ class VerifySecurityQuestionsUseCase @Inject constructor(
      *
      * @param questions Questions and answers to verify.
      */
-    suspend fun areSecurityQuestionsValid(questions: Map<SecurityQuestion, String>): Boolean {
+    suspend fun areSecurityQuestionsValid(questions: Map<SecurityQuestion, CharArray>): Boolean {
         if (questions.size >= 4) {
             return repository.validateSecurityQuestions(questions, 4)
         }

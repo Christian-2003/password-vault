@@ -1,6 +1,5 @@
 package de.christian2003.passwordvault.application.repository
 
-import androidx.biometric.AuthenticationRequest
 import de.christian2003.passwordvault.domain.security.auth.SecurityQuestion
 
 
@@ -22,7 +21,7 @@ interface AuthRepository {
      *
      * @param newPassword   New password.
      */
-    suspend fun setPassword(newPassword: String)
+    suspend fun setPassword(newPassword: CharArray)
 
 
     /**
@@ -31,7 +30,7 @@ interface AuthRepository {
      * @param password  Password to test.
      * @return          Whether the password is valid.
      */
-    suspend fun isPasswordValid(password: String): Boolean
+    suspend fun isPasswordValid(password: CharArray): Boolean
 
 
     /**
@@ -72,7 +71,7 @@ interface AuthRepository {
      * @param question  Security question.
      * @param answer    Answer to the security question.
      */
-    suspend fun addSecurityQuestion(question: SecurityQuestion, answer: String)
+    suspend fun addSecurityQuestion(question: SecurityQuestion, answer: CharArray)
 
 
     /**
@@ -107,6 +106,6 @@ interface AuthRepository {
      * @param threshold Number of questions that need to be answered correctly to succeed.
      * @return          Whether the answers to the security questions are valid.
      */
-    suspend fun validateSecurityQuestions(questions: Map<SecurityQuestion, String>, threshold: Int): Boolean
+    suspend fun validateSecurityQuestions(questions: Map<SecurityQuestion, CharArray>, threshold: Int): Boolean
 
 }

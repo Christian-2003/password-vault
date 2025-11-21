@@ -16,6 +16,17 @@ class SharedRecoveryViewModel @Inject constructor(): ViewModel() {
     /**
      * Map of the security questions and their answers that are provided by the user for identification.
      */
-    var securityQuestions: Map<SecurityQuestion, String>? = null
+    var securityQuestions: Map<SecurityQuestion, CharArray>? = null
+
+
+    /**
+     * Clears the data stored. This must be called before the screen is dismissed so that sensitive
+     * data does not remain in the heap.
+     */
+    fun clearData() {
+        securityQuestions?.forEach { (_, answer) ->
+            answer.fill('\u0000')
+        }
+    }
 
 }
