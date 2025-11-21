@@ -3,17 +3,33 @@
 # Authenticaction Risk Analysis
 This document analyzes possible risks and attack vectors to the authentication mechanisms of the Password Vault application for Android.
 
-###### Table of Contents
-1. [Scope](#scope)
-2. [System Overview](#system-overview)
-3. [Attack Vectors and Risk Analysis](#attack-vectors-and-risk-analysis)
+### Table of Contents
+1. [Scope](#1-scope)
+    * [What is In-Scope](#11-what-is-in-scope)
+    * [What is Out-Scope](#12-what-is-out-scope)
+    * [Infrastructure Assumptions](#13-infrastructure-assumptions)
+    * [Threat Model Assumptions](#14-threat-model-assumptions)
+2. [System Overview](#2-system-overview)
+    * [Architecture](#21-architecture)
+    * [UI Flow](#22-ui-flow)
+    * [Data Storage](#23-data-storage)
+3. [Attack Vectors and Risk Analysis](#3-attack-vectors-and-risk-analysis)
+    * [Overview](#31-overview)
+    * [Offline Brute-Force / Dictionary Attack](#32-offline-brute-force--dictionary-attack)
+    * [Physical Device Compromise](#33-physical-device-compromise)
+    * [Backups and Synchronization Leaks](#34-backups-and-synchronization-leaks)
+    * [Malicious App or Malware with Priviliges](#35-malicious-app-or-malware-with-priviliges)
+    * [In-memory Exposure and Logging](#36-in-memory-exposure-and-logging)
+    * [Side-Channel / Timing / Comparator Attacks](#37-side-channel--timing--comparator-attacks)
+    * [Threats to Security Questions](#38-threats-to-security-questions)
+    * [UI and OS Features](#39-ui-and-os-features)
 
 <br/>
 
-## Scope
+## 1 Scope
 This analysis applies to the Password Vault application for Android, and considers the authentication mechanisms that are implemented beginning with version 3.8.0 and later.
 
-###### What is In-Scope
+### 1.1 What is In-Scope
 The following aspects are considered "in scope" and are regarded by this analysis:
 * Local-only auhentication
 * `SharedPreferences` storage
@@ -21,20 +37,20 @@ The following aspects are considered "in scope" and are regarded by this analysi
 * Optional biometric authentication
 * Optional security questions
 
-###### What is Out-Scope
+### 1.2 What is Out-Scope
 The following aspects are considered "out of scope" and are therefore not regarded any further:
 * Server-side attacks
 * Network transit risks
 * User-related issues such as social engineering
 * Rooted Android devices
 
-###### Infrastructure Assumptions
+### 1.3 Infrastructure Assumptions
 The following assumptions are made, in order for this analysis to apply:
 * Password Vault version 3.8.0 or higher is used
 * Android OS version 14 (API 34) or higher is installed
 * No remote backend server is present
 
-###### Threat Model Assumptions
+### 1.4 Threat Model Assumptions
 The following assumptions apply to possible threats that the app needs to face:
 * Attackers have full access to the device storage
 * Attackers have access to an unlocked Android device without OS-level data protection
@@ -42,10 +58,10 @@ The following assumptions apply to possible threats that the app needs to face:
 
 <br/>
 
-## System Overview
+## 2 System Overview
 This section provides a brief overview of the system that is implemented to handle user authentication.
 
-###### Architecture
+### 2.1 Architecture
 The following diagram briefly illustrates the overall architecture for the authentication system:
 ![Architecture](../img/security/auth_architecture_overview.drawio.svg) 
 
@@ -53,7 +69,7 @@ The diagram shows the interaction between the user and the interface.
 The interface itself works with application layer use cases that encapsulate all business logic, such as password validation and security question verification.  
 The use cases access the specific data on the disk through a repository, which itself accesses external Android dependencies, such as `SharedPreferences` or `KeyStore`.
 
-###### UI Flow
+### 2.2 UI Flow
 The UI flow is illustrated through the following diagram:
 ![Architecture](../img/security/ui_flow.drawio.svg) 
 
@@ -62,7 +78,7 @@ The flow shows that the app prompts the user for authentication before they can 
 * **Biometric Authentication:** If configured, the user authenticates through biometrics, such as fingerprints or facial recognition.
 * **Recovery:** If configured, the user can recover their master password through security questions.
 
-###### Data Storage
+### 2.3 Data Storage
 Throughout the app lifecycle, data related to authentication is stored in multiple spaces. These include the following:
 * Android `SharedPreferences`
 * Android `KeyStore`
@@ -78,26 +94,26 @@ Data flows as follows:
 
 <br/>
 
-## Attack Vectors and Risk Analysis
+## 3 Attack Vectors and Risk Analysis
 This section describes a list of possible attacks to the authentication implementation for the app.
 
-###### Overview
+### 3.1 Overview
 This table summarizes attack vectors and their mitigations. 
 
 Attack Vector | Preconditions | Likelihood | Impact | Mitigation Status
 --- | --- | --- | --- | ---
-[Offline brute-force / dictionary attack](#offline-brute-force--dictionary-attack) | Access to the device storage | :red_circle: Very likely | :red_circle: very High | :green_circle: Implemented
-[Physical device compromise](#physical-device-compromise) | Access to the (unlocked) physical device | :green_circle: Unlikely | :green_circle: Low, unless device is acquired by professionals (e.g. law enforcement) | :green_circle: Implemented
-[Backups and synchronization leaks](#backups-and-synchronization-leaks) | App files are backed-up | :green_circle: Unlikely | :red_circle: Very high | :red_circle: Not implemented
-[Malicious app or malware with priviliges](#malicious-app-or-malware-with-priviliges) | Malware, third-party IME or Accessibility Services capture inputs (like passwords) before they are processed | :orange_circle: Likely | :red_circle: Very High | :red_circle: Not implemented
-[In-memory exposure and logging](#in-memory-exposure-and-logging) | Sensitve data is stored in temporary memory or is included in logs | :red_circle: Very likely | :orange_circle: High | :green_circle: Implemented
-[Side-channel / timing / comparator Attacks](#side-channel--timing--comparator-attacks) | Attacker can observe timing differences when verifying passwords | :orange_circle: Likely | :green_circle: Low | :green_circle: Implemented
-[Threats to security questions](#threats-to-security-questions) | Users uses low-entropy answers | :red_circle: Very Likely | :red_circle: Very High | :red_circle: Not implemented
-[UI and OS features](#ui-and-os-features) | UI or OS leaks sensitive app content, such as through autofill or screenshots | :red_circle: Very Likely | :yellow_circle: Medium | :red_circle: Not implemented
+[Offline brute-force / dictionary attack](#32-offline-brute-force--dictionary-attack) | Access to the device storage | :red_circle: High | :red_circle: High | :green_circle: Implemented
+[Physical device compromise](#33-physical-device-compromise) | Access to the (unlocked) physical device | :green_circle: Low | :green_circle: Low<br/>Unless device is acquired by professionals (e.g. law enforcement) | :green_circle: Implemented
+[Backups and synchronization leaks](#34-backups-and-synchronization-leaks) | App files are backed-up | :green_circle: Low | :red_circle: High | :red_circle: Not implemented
+[Malicious app or malware with priviliges](#35-malicious-app-or-malware-with-priviliges) | Malware, third-party IME or Accessibility Services capture inputs (like passwords) before they are processed | :yellow_circle: Medium | :red_circle: High | :red_circle: Not implemented
+[In-memory exposure and logging](#35-in-memory-exposure-and-logging) | Sensitve data is stored in temporary memory or is included in logs | :red_circle: High | :yellow_circle: Medium | :green_circle: Implemented
+[Side-channel / timing / comparator Attacks](#37-side-channel--timing--comparator-attacks) | Attacker can observe timing differences when verifying passwords | :yellow_circle: Medium | :green_circle: Low | :green_circle: Implemented
+[Threats to security questions](#38-threats-to-security-questions) | Users uses low-entropy answers | :red_circle: High | :red_circle: High | :red_circle: Not implemented
+[UI and OS features](#39-ui-and-os-features) | UI or OS leaks sensitive app content, such as through autofill or screenshots | :red_circle: High | :yellow_circle: Medium | :red_circle: Not implemented
 
 Each attack vector is described in greater detail in further sections.
 
-###### Offline Brute-Force / Dictionary Attack
+### 3.2 Offline Brute-Force / Dictionary Attack
 **How:**  
 An attacker obtains the stored `password_hash` and `password_salt` (or salts and hashes for the answers to security questions). They run password guesses on their own machine, deriving candidate keys with PBKDF2 and comparing hashes.
 
@@ -109,7 +125,7 @@ If security questions are low entropy (e.g. names, birthdays or common answers),
 Increase the iterations to 600,000. This is above the [OWASP recommendation](https://en.wikipedia.org/wiki/PBKDF2#Purpose_and_operation) of 210,000 iterations for PBKDF2 with SHA-512. This significantly increases the time required to hash a password by almost 10 times.  
 Introduce a common pepper that is added to the process. This pepper is stored within the Android `KeyStore` and cannot be extracted from the Android device. Therefore, any attacks must happen on the device itself and cannot rely on powerful hardware that is unavailable on Android.
 
-###### Physical Device Compromise
+### 3.3 Physical Device Compromise
 **How:**  
 An attacker gets phyiscal access and either (a) boots into recovery; (b) obtains a full filesystem image via forensic tool; (c) uses `adb` to pull `SharedPreferences` if debug features or backups are enabled; (d) extracts internal storage on a rooted device.
 
@@ -120,7 +136,7 @@ An attacker gets phyiscal access and either (a) boots into recovery; (b) obtains
 Threats to a physical device acquisition cannot be mitigated entirely. Even the introduction of hardware-backed keys, such as through `KeyStore`, cannot prevent the derivation of the user password, since forensic capabilities of an attacker (e.g. law enforement) can access TPM implementations on a physical device. However, hardware-backed keys significantly increase the cost of retrieving such information and prevent any data breach through unprofessionals, such as script-kiddies.  
 Protection against rooted devices is out of scope for this analysis.
 
-###### Backups and Synchronization Leaks
+### 3.4 Backups and Synchronization Leaks
 **How:**  
 This attack occurs when `SharedPreferences` or other internal app files are included in device backups (e.g. Android Auto Backup, Google Cloud Backup or `adb` backups). If backups are stored on a PC, cloud service or synched to another device, an attacker who compromises those locations can extract the stored password hash, salts and hashed security answers. Even without compromising the device directly, the attacker can obtain the authentication data indirectly via these backup channels.
 
@@ -130,7 +146,7 @@ By default, many Android apps unintentionally allow backups through `android:all
 **Mitigation:**  
 Disable app backups by setting `android:allowBackup=false` in the manifest and explicitly excluding `SharedPreferences` from all backup mechanisms. Educate users about third-party backup risks. Consider encrypting sensitive data with a hardware-backed key from a KeyStore, so even if the backed-up files are extracted, the data cannot be used without the device.
 
-###### Malicious App or Malware with Priviliges
+### 3.5 Malicious App or Malware with Priviliges
 **How:**  
 A malicious app installed on the device can exploit powerful Android permissions - most notably Accessibility Services or a custom IME - to intercept user input. Such malware can monitor screen content, read typed passwords or security answers in real time, or even capture on-screen UI elements. More advanced malware can escalate priviliges if the device is rooted or compromised.
 
@@ -140,7 +156,7 @@ Accessibility services are routinely abused because many users grant them to app
 **Mitigation:**  
 Detect and warn users about Accessibility Services when the authentication screen is shown. Provide in-app warnings when a non-system IME is being used. Avoid requesting dangerous permissions and encourage good hygiene around installing third-party apps. Use biometric authenticatio (through `KeyStore`) where possible to reduce raw password entry frequently. If feasible, apply `FLAG_SECURE` and obfuscate sensitive fields to reduce UI scraping.
 
-###### In-memory Exposure and Logging
+### 3.6 In-memory Exposure and Logging
 **How:**  
 Secrets such as the password security answers may be stored temporarily in memory as immutable `String` objects during authentication. These objects can persist in memory for an undefined period and may appear in heap dumps or memory snapshot, especially of debugging tools, crash reports or analytics frameworks are present. In addition, poorly configured logging statements, stack traces or crash handlers might accidentally log sensitive values.
 
@@ -150,7 +166,7 @@ Java / Kotlin `String` objects cannot be wiped because they are immutable. Witho
 **Mitigation:**  
 Use `CharArray` or `ByteArray` for handling passwords and reset them after use. Limit the lifetime of sensitive in-memory objects. Disable verbose logging in production builds and ensure no logs contain user secrets. Avoid third-party libraries that capture memory dumps. Use secure input widgets that minimize temporary object creation. Statically analyze code paths to ensure no crash reports leak sensitive data.
 
-###### Side-Channel / Timing / Comparator Attacks
+### 3.7 Side-Channel / Timing / Comparator Attacks
 **How:**  
 When comparing password hashes or KDF outputs, a naive equality check can leak information through timing differences - e.g. returning early when the first mismatched byte is found. An attacker running code on the same device (e.g. via injected malware, shared resources or precise measurement of system calls) may be able to determine partial correctness of guesses. Over time, they can reduce the search space for [brute-force](#offline-brute-force--dictionary-attack) attempts.
 
@@ -160,7 +176,7 @@ Android devices are shared computational environments: Malicious software can ob
 **Mitigation:**  
 Aways use constant-time comparison methods for secrets, such as `MessageDigest.isEqual()`. Ensure that all password verification operations take approximately the same time regardless of correctness. Add artificial delay or rate-limiting on authentication attempts to further reduce side-channel effectiveness. Avoid revealing whether rejection happened due to wrong number of correct security question answers.
 
-###### Threats to Security Questions
+### 3.8 Threats to Security Questions
 **How:**  
 Security questions are usually low-entropy, guessable or discoverable throughh social engineering. An attacker who gains access to stored hashed answers can perform [offline brute-force](#offline-brute-force--dictionary-attack) attacks against the answers, which typically have much smaller key spaces than passwords. Even without technical access, an attacker who knows the user (family name, pet name, birthplace) can answer several questions correctly and recover the master password.
 
@@ -170,7 +186,7 @@ Users overwhelmingly pick predictable answers. Even with salts, peppers and PBKD
 **Mitigation:**  
 Discourage or prohibit weak questions. Enforce struct complexity requirements for answers (minimum length, random characters or passphrase-style answers). Consider replacing security questions with stronger recovery mechanisms (local recovery codes, biometric authentication tied to `KeyStore` or multi-step recovery requiring device authentication). If security questions remain, apply a hardware-backed pepper in addition to salts.
 
-###### UI and OS Features
+### 3.9 UI and OS Features
 **How:**  
 Common UI and OS behaviours can leak sensitive information. Screenshots or "Recent Apps" thumbnails can capture the authentication screen. Autofill services might store or suggest passwords. Clipboard contents can be read by other apps of the user copies the password. Notifications or accessibility overlays may reveal partial content. If `FLAG_SECURE` is not used, any app with screenshot permission can capture UI content.
 
