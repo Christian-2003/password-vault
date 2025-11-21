@@ -17,7 +17,6 @@ import de.christian2003.passwordvault.domain.security.auth.SecurityQuestion
 import de.christian2003.passwordvault.plugin.presentation.view.help.HelpCard
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
