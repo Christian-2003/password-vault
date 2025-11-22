@@ -44,7 +44,8 @@ fun SettingsScreen(
     onNavigateToHelp: () -> Unit,
     onNavigateToPassword: () -> Unit,
     onNavigateToDevSettings: () -> Unit,
-    onNavigateToSecurityQuestions: () -> Unit
+    onNavigateToSecurityQuestions: () -> Unit,
+    onUseGlobalThemeChange: (Boolean) -> Unit
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
 
@@ -73,6 +74,25 @@ fun SettingsScreen(
             //General section:
             item {
                 GeneralSection()
+            }
+
+            //Customization:
+            item {
+                HorizontalDivider()
+                Headline(
+                    title = stringResource(R.string.settings_customization),
+                    indentToPrefixIcon = true
+                )
+                SettingsItemSwitch(
+                    title = stringResource(R.string.settings_customization_globalThemeTitle),
+                    info = stringResource(R.string.settings_customization_globalThemeInfo),
+                    prefixIcon = painterResource(R.drawable.ic_theme),
+                    checked = viewModel.useGlobalTheme,
+                    onCheckedChange = { enabled ->
+                        viewModel.updateUseGlobalTheme(enabled)
+                        onUseGlobalThemeChange(enabled)
+                    }
+                )
             }
 
             //Security:

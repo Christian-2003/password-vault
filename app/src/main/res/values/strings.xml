@@ -99,6 +99,9 @@
     <string name="detail_help">Each detail has two parts: A name (what it is) and a content (the actual information).</string>
 
     <string name="settings_title">Settings</string>
+    <string name="settings_customization">Customization</string>
+    <string name="settings_customization_globalThemeTitle">Global theme</string>
+    <string name="settings_customization_globalThemeInfo">Use the global theme colors</string>
     <string name="settings_security">Security</string>
     <string name="settings_security_masterPasswordTitle">Master password</string>
     <string name="settings_security_masterPasswordInfo">Edit your master password</string>

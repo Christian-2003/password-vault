@@ -12,18 +12,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -153,8 +149,11 @@ fun PasswordVault(
 
     val navController: NavHostController = rememberNavController()
     var isAuthSetupFinished: Boolean by rememberSaveable { mutableStateOf(hasMasterPassword) }
+    var useGlobalTheme: Boolean by rememberSaveable { mutableStateOf(preferences.getBoolean("global_theme", false)) }
 
-    PasswordVaultTheme {
+    PasswordVaultTheme(
+        dynamicColor = useGlobalTheme
+    ) {
         NavHost(
             navController = navController,
             startDestination = if (isAuthSetupFinished) {
@@ -220,6 +219,9 @@ fun PasswordVault(
                     },
                     onNavigateToSecurityQuestions = {
                         navController.navigate("questions")
+                    },
+                    onUseGlobalThemeChange = {
+                        useGlobalTheme = it
                     }
                 )
             }
