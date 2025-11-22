@@ -20,13 +20,17 @@ import de.christian2003.passwordvault.plugin.presentation.view.settings.Settings
 /**
  * Settings for developers.
  *
- * @param viewModel     View model.
- * @param onNavigateUp  Callback invoked to navigate up the navigation stack.
+ * @param viewModel                     View model.
+ * @param onNavigateUp                  Callback invoked to navigate up the navigation stack.
+ * @param onEnableScreenshotsChanged    Callback invoked to inform the host activity that the flag
+ *                                      indicating whether screenshots on sensitive screens are
+ *                                      enabled has changed.
  */
 @Composable
 fun DevSettingsScreen(
     viewModel: DevSettingsViewModel,
-    onNavigateUp: () -> Unit
+    onNavigateUp: () -> Unit,
+    onEnableScreenshotsChanged: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -68,6 +72,16 @@ fun DevSettingsScreen(
                     checked = viewModel.isSkipBiometrics,
                     onCheckedChange = {
                         viewModel.setIsSkipBiometrics(it)
+                    }
+                )
+                SettingsItemSwitch(
+                    title = stringResource(R.string.settings_dev_enableScreenshotsTitle),
+                    info = stringResource(R.string.settings_dev_enableScreenshotsInfo),
+                    prefixIcon = painterResource(R.drawable.ic_dev),
+                    checked = viewModel.isEnableScreenshots,
+                    onCheckedChange = {
+                        viewModel.setIsEnableScreenshots(it)
+                        onEnableScreenshotsChanged()
                     }
                 )
             }

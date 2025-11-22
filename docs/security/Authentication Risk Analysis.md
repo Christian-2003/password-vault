@@ -231,7 +231,7 @@ M05 | Educate users about risks of third-party backups | [A03](#34-backups-and-s
 M06 | Detect third-party Accessibility Services and warn user | [A04](#35-malicious-app-or-malware-with-priviliges-a04) | :red_circle: Not implemented
 M07 | Detect third-party IME keyboards and warn user | [A04](#35-malicious-app-or-malware-with-priviliges-a04) | :red_circle: Not implemented
 M08 | Implement biometric authentication to reduce raw password entry | [A04](#35-malicious-app-or-malware-with-priviliges-a04) | :green_circle: Implemented
-M09 | Apply `FLAG_SECURE` to `MainActivity` | [A04](#35-malicious-app-or-malware-with-priviliges-a04), [A08](#39-ui-and-os-features-a08) | :yellow_circle: Planned
+M09 | Apply `FLAG_SECURE` to `MainActivity` | [A04](#35-malicious-app-or-malware-with-priviliges-a04), [A08](#39-ui-and-os-features-a08) | :green_circle: Implemented
 M10 | Obfuscate sensitive input fiels | [A04](#35-malicious-app-or-malware-with-priviliges-a04) | :green_circle: Implemented
 M11 | Use `CharArray` and `ByteArray` instead of strings when handling sensitive data | [A05](#36-in-memory-exposure-and-logging-a05) | :green_circle: Implemented
 M12 | Disable verbose logging in production builds | [A05](#36-in-memory-exposure-and-logging-a05) | :green_circle: Implemented

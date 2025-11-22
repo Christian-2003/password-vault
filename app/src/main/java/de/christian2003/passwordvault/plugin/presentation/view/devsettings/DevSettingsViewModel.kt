@@ -35,6 +35,12 @@ class DevSettingsViewModel @Inject constructor(
     var isSkipBiometrics: Boolean by mutableStateOf(preferences.getBoolean("skip_biometrics", false))
         private set
 
+    /**
+     * Whether to enable screenshots for sensitive screens.
+     */
+    var isEnableScreenshots: Boolean by mutableStateOf(preferences.getBoolean("enable_screenshots", false))
+        private set
+
 
     /**
      * Deletes the master password.
@@ -51,12 +57,27 @@ class DevSettingsViewModel @Inject constructor(
 
     /**
      * Sets whether to skip the biometrics dialog when the app opens.
+     *
+     * @param isSkipBiometrics  Whether to skip biometrics.
      */
     fun setIsSkipBiometrics(isSkipBiometrics: Boolean) {
         preferences.edit {
             putBoolean("skip_biometrics", isSkipBiometrics)
         }
         this.isSkipBiometrics = isSkipBiometrics
+    }
+
+
+    /**
+     * Sets whether to enable screenshots on sensitive screens.
+     *
+     * @param isEnableScreenshots   Whether to enable screenshots.
+     */
+    fun setIsEnableScreenshots(isEnableScreenshots: Boolean) {
+        preferences.edit {
+            putBoolean("enable_screenshots", isEnableScreenshots)
+        }
+        this.isEnableScreenshots = isEnableScreenshots
     }
 
 }

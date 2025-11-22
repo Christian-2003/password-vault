@@ -1,21 +1,29 @@
 package de.christian2003.passwordvault.plugin.presentation
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.SystemBarStyle
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -133,6 +141,16 @@ fun PasswordVault(
     onBiometricAuth: suspend () -> Boolean,
     onToggleBiometrics: suspend () -> Boolean
 ) {
+    val activity: FragmentActivity = LocalActivity.current as FragmentActivity
+    val preferences: SharedPreferences = activity.getSharedPreferences("settings", Context.MODE_PRIVATE)
+    var enableScreenshots: Boolean by rememberSaveable { mutableStateOf(preferences.getBoolean("enable_screenshots", false)) }
+    val applyFlags: (Boolean) -> Unit = { isSensitive ->
+        activity.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        if (isSensitive && !enableScreenshots) {
+            activity.window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+        }
+    }
+
     val navController: NavHostController = rememberNavController()
     var isAuthSetupFinished: Boolean by rememberSaveable { mutableStateOf(hasMasterPassword) }
 
@@ -147,6 +165,7 @@ fun PasswordVault(
             modifier = Modifier.background(MaterialTheme.colorScheme.surface)
         ) {
             composable("main") {
+                applyFlags(false)
                 val viewModel: MainViewModel = hiltViewModel()
                 MainScreen(
                     viewModel = viewModel,
@@ -170,6 +189,7 @@ fun PasswordVault(
                     navArgument("accountId") { type = NavType.StringType}
                 )
             ) {
+                applyFlags(true)
                 val viewModel: AccountViewModel = hiltViewModel()
                 AccountScreen(
                     viewModel = viewModel,
@@ -181,6 +201,7 @@ fun PasswordVault(
 
 
             composable("settings") {
+                applyFlags(false)
                 val viewModel: SettingsViewModel = hiltViewModel()
                 SettingsScreen(
                     viewModel = viewModel,
@@ -205,17 +226,22 @@ fun PasswordVault(
 
 
             composable("devSettings") {
+                applyFlags(false)
                 val viewModel: DevSettingsViewModel = hiltViewModel()
                 DevSettingsScreen(
                     viewModel = viewModel,
                     onNavigateUp = {
                         navController.navigateUp()
+                    },
+                    onEnableScreenshotsChanged = {
+                        enableScreenshots = preferences.getBoolean("enable_screenshots", false)
                     }
                 )
             }
 
 
             composable("help") {
+                applyFlags(false)
                 val viewModel: HelpViewModel = hiltViewModel()
                 HelpScreen(
                     viewModel = viewModel,
@@ -227,6 +253,7 @@ fun PasswordVault(
 
 
             composable("password") { backStackEntry ->
+                applyFlags(true)
                 val viewModel: PasswordViewModel = hiltViewModel()
                 viewModel.flow = PasswordScreenFlow.None
                 PasswordScreen(
@@ -243,6 +270,7 @@ fun PasswordVault(
 
 
             composable("questions") {
+                applyFlags(true)
                 val viewModel: SecurityQuestionsViewModel = hiltViewModel()
                 viewModel.isSetup = false
                 SecurityQuestionsScreen(
@@ -258,6 +286,7 @@ fun PasswordVault(
 
 
             composable("login") {
+                applyFlags(true)
                 val viewModel: LoginViewModel = hiltViewModel()
                 LoginScreen(
                     viewModel = viewModel,
@@ -284,6 +313,7 @@ fun PasswordVault(
                 startDestination = "password"
             ) {
                 composable("password") { backStackEntry ->
+                    applyFlags(true)
                     val viewModel: PasswordViewModel = hiltViewModel()
                     viewModel.flow = PasswordScreenFlow.Setup
                     PasswordScreen(
@@ -299,6 +329,7 @@ fun PasswordVault(
                 }
 
                 composable("questions") { backStackEntry ->
+                    applyFlags(true)
                     val viewModel: SecurityQuestionsViewModel = hiltViewModel()
                     viewModel.isSetup = true
                     SecurityQuestionsScreen(
@@ -323,6 +354,7 @@ fun PasswordVault(
                 startDestination = "recovery"
             ) {
                 composable("recovery") { backStackEntry ->
+                    applyFlags(true)
                     val viewModel: RecoveryViewModel = hiltViewModel()
                     val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("recovery_flow") }
                     val sharedViewModel: SharedRecoveryViewModel = hiltViewModel(parentEntry)
@@ -339,6 +371,7 @@ fun PasswordVault(
                 }
 
                 composable("password") { backStackEntry ->
+                    applyFlags(true)
                     val viewModel: PasswordViewModel = hiltViewModel()
                     viewModel.flow = PasswordScreenFlow.Recovery
                     val parentEntry = remember(backStackEntry) { navController.getBackStackEntry("recovery_flow") }

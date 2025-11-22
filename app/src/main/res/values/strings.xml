@@ -117,6 +117,8 @@
     <string name="settings_dev_deleteMasterPasswordInfo">Delete the master password</string>
     <string name="settings_dev_skipBiometricsTitle">Skip biometrics</string>
     <string name="settings_dev_skipBiometricsInfo">Do not show biometrics dialog when opening app</string>
+    <string name="settings_dev_enableScreenshotsTitle">Enable screenshots</string>
+    <string name="settings_dev_enableScreenshotsInfo">Enable screenshots on sensitive screens.</string>
 
     <string name="help_title">Help messages</string>
     <string name="help_help">Reactivate help messages that were dismissed earlier.</string>
