@@ -1,6 +1,7 @@
 package de.christian2003.passwordvault.plugin.presentation.view.settings
 
 import android.content.Context
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import coil.compose.rememberAsyncImagePainter
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.plugin.presentation.ui.composables.Headline
+import de.christian2003.passwordvault.plugin.presentation.ui.theme.ThemeContrast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,7 +47,8 @@ fun SettingsScreen(
     onNavigateToPassword: () -> Unit,
     onNavigateToDevSettings: () -> Unit,
     onNavigateToSecurityQuestions: () -> Unit,
-    onUseGlobalThemeChange: (Boolean) -> Unit
+    onUseGlobalThemeChange: (Boolean) -> Unit,
+    onThemeContrastChange: (ThemeContrast) -> Unit
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
 
@@ -93,6 +96,16 @@ fun SettingsScreen(
                         onUseGlobalThemeChange(enabled)
                     }
                 )
+                AnimatedVisibility(!viewModel.useGlobalTheme) {
+                    SettingsItemButton(
+                        title = stringResource(R.string.settings_customization_contrastTitle),
+                        info = stringResource(R.string.settings_customization_contrastInfo),
+                        prefixIcon = painterResource(R.drawable.ic_contrast),
+                        onClick = {
+                            viewModel.dialog = SettingsScreenDialog.Contrast
+                        }
+                    )
+                }
             }
 
             //Security:
@@ -162,6 +175,23 @@ fun SettingsScreen(
                 )
             }
         }
+    }
+
+    when (viewModel.dialog) {
+        SettingsScreenDialog.Contrast -> {
+            ContrastDialog(
+                contrast = viewModel.themeContrast,
+                onDismiss = {
+                    viewModel.dialog = SettingsScreenDialog.None
+                },
+                onSave = { contrast ->
+                    viewModel.dialog = SettingsScreenDialog.None
+                    viewModel.updateThemeContrast(contrast)
+                    onThemeContrastChange(contrast)
+                }
+            )
+        }
+        else -> { /* Do not show any dialog */ }
     }
 }
 

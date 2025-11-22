@@ -11,6 +11,7 @@ import androidx.lifecycle.AndroidViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.passwordvault.application.usecases.auth.AreBiometricsAvailableUseCase
 import de.christian2003.passwordvault.application.usecases.auth.AreBiometricsConfiguredUseCase
+import de.christian2003.passwordvault.plugin.presentation.ui.theme.ThemeContrast
 import javax.inject.Inject
 
 
@@ -33,6 +34,7 @@ class SettingsViewModel @Inject constructor(
      */
     private val preferences: SharedPreferences = application.getSharedPreferences("settings", Context.MODE_PRIVATE)
 
+    var dialog: SettingsScreenDialog by mutableStateOf(SettingsScreenDialog.None)
 
     /**
      * Indicates whether biometrics are supported on the device.
@@ -52,6 +54,13 @@ class SettingsViewModel @Inject constructor(
         private set
 
     /**
+     * Contrast for the theme colors.
+     */
+    var themeContrast: ThemeContrast by mutableStateOf(ThemeContrast.entries[preferences.getInt("theme_contrast", 0)])
+        private set
+
+
+    /**
      * Refreshes the property "areBiometricsConfigured".
      */
     fun refreshAreBiometricsConfigured() {
@@ -69,6 +78,19 @@ class SettingsViewModel @Inject constructor(
             putBoolean("global_theme", useGlobalTheme)
         }
         this.useGlobalTheme = useGlobalTheme
+    }
+
+
+    /**
+     * Updates the theme contrast.
+     *
+     * @param themeContrast Theme contrast.
+     */
+    fun updateThemeContrast(themeContrast: ThemeContrast) {
+        preferences.edit {
+            putInt("theme_contrast", themeContrast.ordinal)
+        }
+        this.themeContrast = themeContrast
     }
 
 }

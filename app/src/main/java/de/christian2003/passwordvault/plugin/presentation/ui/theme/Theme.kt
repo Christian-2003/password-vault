@@ -260,10 +260,18 @@ val unspecified_scheme = ColorFamily(
 )
 
 
+enum class ThemeContrast {
+    Normal,
+    Medium,
+    High
+}
+
+
 @Composable
 fun PasswordVaultTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = false,
+    contrast: ThemeContrast = ThemeContrast.Normal,
     content: @Composable() () -> Unit
 ) {
     val colorScheme = when {
@@ -271,9 +279,18 @@ fun PasswordVaultTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-        darkTheme -> darkScheme
-        else -> lightScheme
+        darkTheme -> when(contrast) {
+            ThemeContrast.Normal -> darkScheme
+            ThemeContrast.Medium -> mediumContrastDarkColorScheme
+            ThemeContrast.High -> highContrastDarkColorScheme
+        }
+        else -> when(contrast) {
+            ThemeContrast.Normal -> lightScheme
+            ThemeContrast.Medium -> mediumContrastLightColorScheme
+            ThemeContrast.High -> highContrastLightColorScheme
+        }
     }
+
 
     MaterialTheme(
         colorScheme = colorScheme,

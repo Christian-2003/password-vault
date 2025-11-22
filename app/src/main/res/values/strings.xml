@@ -102,6 +102,15 @@
     <string name="settings_customization">Customization</string>
     <string name="settings_customization_globalThemeTitle">Global theme</string>
     <string name="settings_customization_globalThemeInfo">Use the global theme colors</string>
+    <string name="settings_customization_contrastTitle">Contrast</string>
+    <string name="settings_customization_contrastInfo">Change theme color contrast</string>
+    <string name="settings_customization_contrast_dialogTitle">Select contrast</string>
+    <string name="settings_customization_contrast_dialogItemNormal">Normal</string>
+    <string name="settings_customization_contrast_dialogItemMedium">Medium</string>
+    <string name="settings_customization_contrast_dialogItemHigh">High</string>
+    <string name="settings_customization_contrast_dialogPreview_title">Preview</string>
+    <string name="settings_customization_contrast_dialogPreview_itemTitle">Title</string>
+    <string name="settings_customization_contrast_dialogPreview_itemText">Text</string>
     <string name="settings_security">Security</string>
     <string name="settings_security_masterPasswordTitle">Master password</string>
     <string name="settings_security_masterPasswordInfo">Edit your master password</string>

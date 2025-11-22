@@ -32,6 +32,7 @@ import de.christian2003.passwordvault.application.repository.AuthRepository
 import de.christian2003.passwordvault.application.usecases.auth.BiometricAuthUseCase
 import de.christian2003.passwordvault.application.usecases.auth.ToggleBiometricsUseCase
 import de.christian2003.passwordvault.plugin.presentation.ui.theme.PasswordVaultTheme
+import de.christian2003.passwordvault.plugin.presentation.ui.theme.ThemeContrast
 import de.christian2003.passwordvault.plugin.presentation.view.account.AccountScreen
 import de.christian2003.passwordvault.plugin.presentation.view.account.AccountViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.devsettings.DevSettingsScreen
@@ -150,9 +151,11 @@ fun PasswordVault(
     val navController: NavHostController = rememberNavController()
     var isAuthSetupFinished: Boolean by rememberSaveable { mutableStateOf(hasMasterPassword) }
     var useGlobalTheme: Boolean by rememberSaveable { mutableStateOf(preferences.getBoolean("global_theme", false)) }
+    var themeContrast: ThemeContrast by rememberSaveable { mutableStateOf(ThemeContrast.entries[preferences.getInt("theme_contrast", 0)]) }
 
     PasswordVaultTheme(
-        dynamicColor = useGlobalTheme
+        dynamicColor = useGlobalTheme,
+        contrast = themeContrast
     ) {
         NavHost(
             navController = navController,
@@ -222,6 +225,9 @@ fun PasswordVault(
                     },
                     onUseGlobalThemeChange = {
                         useGlobalTheme = it
+                    },
+                    onThemeContrastChange = {
+                        themeContrast = it
                     }
                 )
             }
