@@ -225,8 +225,8 @@ Mitigation | Description | Affected Attack Vectors | Implementation State
 --- | --- | --- | ---
 M01 | Increase PBKDF iterations to 600,000 | [A01](#32-offline-brute-force--dictionary-attack-a01) | :green_circle: Implemented
 M02 | Add hardware-backed pepper | [A01](#32-offline-brute-force--dictionary-attack-a01), [A02](#33-physical-device-compromise-a02), [A03](#34-backups-and-synchronization-leaks-a03), [A07](#38-threats-to-security-questions-a07) | :green_circle: Implemented
-M03 | Disable app backups | [A03](#34-backups-and-synchronization-leaks-a03) | :yellow_circle: Planned
-M04 | Exclude `SharedPreferences` from backups | [A03](#34-backups-and-synchronization-leaks-a03) | :yellow_circle: Planned
+M03 | Disable app backups | [A03](#34-backups-and-synchronization-leaks-a03) | :green_circle: Implemented
+M04 | Exclude `SharedPreferences` from backups | [A03](#34-backups-and-synchronization-leaks-a03) | :green_circle: Implemented
 M05 | Educate users about risks of third-party backups | [A03](#34-backups-and-synchronization-leaks-a03) | :red_circle: Not implemented
 M06 | Detect third-party Accessibility Services and warn user | [A04](#35-malicious-app-or-malware-with-priviliges-a04) | :red_circle: Not implemented
 M07 | Detect third-party IME keyboards and warn user | [A04](#35-malicious-app-or-malware-with-priviliges-a04) | :red_circle: Not implemented
