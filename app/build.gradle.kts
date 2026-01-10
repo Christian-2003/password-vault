@@ -100,6 +100,8 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
 
+    implementation(project(":core:security"))
+
     testImplementation(libs.junit)
 
     androidTestImplementation(libs.androidx.junit)

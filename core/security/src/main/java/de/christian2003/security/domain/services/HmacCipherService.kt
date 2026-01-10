@@ -1,10 +1,9 @@
-package de.christian2003.passwordvault.application.security
-
+package de.christian2003.security.domain.services
 
 /**
  * Interface provides a service used for encryption and decryption using HMAC.
  */
-interface CipherService {
+interface HmacCipherService {
 
     /**
      * Encrypts the content passed using the specified seed for an HMAC.
@@ -16,6 +15,7 @@ interface CipherService {
      * @throws Exception    Cannot decrypt content.
      */
     fun encrypt(content: ByteArray, hmacSeed: ByteArray): ByteArray
+
 
     /**
      * Decrypts the passed cypher text using the specified seed for an HMAC.

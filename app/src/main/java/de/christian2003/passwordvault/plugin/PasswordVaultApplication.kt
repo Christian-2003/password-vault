@@ -2,7 +2,7 @@ package de.christian2003.passwordvault.plugin
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
-import de.christian2003.passwordvault.plugin.infrastructure.security.AesCipherService
+import de.christian2003.passwordvault.plugin.infrastructure.security.AesHmacCipherService
 import de.christian2003.passwordvault.plugin.infrastructure.db.PasswordVaultDatabase
 import de.christian2003.passwordvault.plugin.infrastructure.db.PasswordVaultRepository
 import de.christian2003.passwordvault.plugin.infrastructure.packages.LocalPackagesRepository
@@ -43,7 +43,7 @@ class PasswordVaultApplication(): Application() {
                 detailDao = database.detailDao,
                 tagDao = database.tagDao,
                 targetDao = database.targetDao,
-                cipherService = AesCipherService()
+                cipherService = AesHmacCipherService()
             )
         }
         return repository!!

@@ -7,7 +7,6 @@ import de.christian2003.passwordvault.application.repository.TagRepository
 import de.christian2003.passwordvault.domain.model.account.AccountDescriptor
 import de.christian2003.passwordvault.domain.model.detail.Detail
 import de.christian2003.passwordvault.domain.model.target.Target
-import de.christian2003.passwordvault.application.security.CipherService
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.DetailDao
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.AccountDao
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.TagDao
@@ -20,6 +19,7 @@ import de.christian2003.passwordvault.plugin.infrastructure.db.mapper.DetailDbMa
 import de.christian2003.passwordvault.plugin.infrastructure.db.mapper.AccountDbMapper
 import de.christian2003.passwordvault.plugin.infrastructure.db.mapper.TagDbMapper
 import de.christian2003.passwordvault.plugin.infrastructure.db.mapper.TargetDbMapper
+import de.christian2003.security.domain.services.HmacCipherService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -42,7 +42,7 @@ class PasswordVaultRepository @Inject constructor(
     private val detailDao: DetailDao,
     private val tagDao: TagDao,
     private val targetDao: TargetDao,
-    private val cipherService: CipherService
+    private val cipherService: HmacCipherService
 ): AccountRepository, TagRepository {
 
     /**

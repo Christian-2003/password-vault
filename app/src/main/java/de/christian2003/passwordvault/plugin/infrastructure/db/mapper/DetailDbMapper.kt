@@ -2,9 +2,9 @@ package de.christian2003.passwordvault.plugin.infrastructure.db.mapper
 
 import de.christian2003.passwordvault.domain.model.detail.Detail
 import de.christian2003.passwordvault.domain.model.detail.DetailMetadata
-import de.christian2003.passwordvault.application.security.CipherService
 import de.christian2003.passwordvault.plugin.infrastructure.db.dto.DetailPayload
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.DetailEntity
+import de.christian2003.security.domain.services.HmacCipherService
 import kotlinx.serialization.cbor.Cbor
 import kotlin.uuid.Uuid
 
@@ -17,7 +17,7 @@ class DetailDbMapper(
     /**
      * Cipher service to use for encryption and decryption.
      */
-    private val cipherService: CipherService,
+    private val cipherService: HmacCipherService,
 
     /**
      * Cbor to use for serialization.

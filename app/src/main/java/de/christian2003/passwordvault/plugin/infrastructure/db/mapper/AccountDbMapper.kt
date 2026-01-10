@@ -4,9 +4,9 @@ import de.christian2003.passwordvault.domain.model.account.Account
 import de.christian2003.passwordvault.domain.model.account.AccountDescriptor
 import de.christian2003.passwordvault.domain.model.account.AccountMetadata
 import de.christian2003.passwordvault.domain.model.target.Target
-import de.christian2003.passwordvault.application.security.CipherService
 import de.christian2003.passwordvault.plugin.infrastructure.db.dto.AccountPayload
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.AccountEntity
+import de.christian2003.security.domain.services.HmacCipherService
 import kotlinx.serialization.cbor.Cbor
 
 
@@ -17,7 +17,7 @@ import kotlinx.serialization.cbor.Cbor
  * @param cbor          Cbor to use for serialization.
  */
 class AccountDbMapper(
-    private val cipherService: CipherService,
+    private val cipherService: HmacCipherService,
     private val cbor: Cbor
 ) {
 

@@ -15,7 +15,7 @@ import de.christian2003.passwordvault.application.repository.AuthRepository
 import de.christian2003.passwordvault.application.repository.PackagesRepository
 import de.christian2003.passwordvault.application.repository.TagRepository
 import de.christian2003.passwordvault.application.security.BiometricAuthService
-import de.christian2003.passwordvault.application.security.CipherService
+import de.christian2003.security.domain.services.HmacCipherService
 import de.christian2003.passwordvault.application.security.ClipboardService
 import de.christian2003.passwordvault.domain.model.target.PackageFingerprintService
 import de.christian2003.passwordvault.plugin.infrastructure.db.PasswordVaultDatabase
@@ -26,7 +26,7 @@ import de.christian2003.passwordvault.plugin.infrastructure.db.dao.TagDao
 import de.christian2003.passwordvault.plugin.infrastructure.db.dao.TargetDao
 import de.christian2003.passwordvault.plugin.infrastructure.packages.AndroidPackageFingerprintService
 import de.christian2003.passwordvault.plugin.infrastructure.packages.LocalPackagesRepository
-import de.christian2003.passwordvault.plugin.infrastructure.security.AesCipherService
+import de.christian2003.passwordvault.plugin.infrastructure.security.AesHmacCipherService
 import de.christian2003.passwordvault.plugin.infrastructure.security.AndroidClipboardService
 import de.christian2003.passwordvault.plugin.infrastructure.security.auth.AndroidBiometricAuthService
 import de.christian2003.passwordvault.plugin.infrastructure.security.auth.SharedPreferencesAuthRepository
@@ -116,7 +116,7 @@ class AndroidSystemModule {
     ): ClipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
     @Provides
-    fun provideCipherService(): CipherService = AesCipherService()
+    fun provideCipherService(): HmacCipherService = AesHmacCipherService()
 
     @Provides
     fun provideClipboardService(clipboardManager: ClipboardManager): ClipboardService = AndroidClipboardService(clipboardManager)

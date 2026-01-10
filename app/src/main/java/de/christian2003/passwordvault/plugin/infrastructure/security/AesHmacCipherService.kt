@@ -2,21 +2,18 @@ package de.christian2003.passwordvault.plugin.infrastructure.security
 
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import de.christian2003.passwordvault.application.security.CipherService
+import de.christian2003.passwordvault.application.security.MasterKeyService
+import de.christian2003.security.domain.services.HmacCipherService
 import java.security.KeyStore
-import java.security.SecureRandom
-import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.Mac
 import javax.crypto.SecretKey
-import javax.crypto.spec.GCMParameterSpec
-import javax.crypto.spec.SecretKeySpec
 
 
 /**
  * Implements the cipher service for the AES algorithm.
  */
-class AesCipherService: CipherService {
+class AesHmacCipherService: HmacCipherService {
 
     /**
      * Alias with which to store the HMAC master key in the key store.
@@ -34,18 +31,13 @@ class AesCipherService: CipherService {
      * @throws Exception    Cannot encrypt content.
      */
     override fun encrypt(content: ByteArray, hmacSeed: ByteArray): ByteArray {
-        val cipher: Cipher = Cipher.getInstance("AES/GCM/NoPadding")
-        val hmac: ByteArray = deriveHmac(hmacSeed)
-        val iv = ByteArray(12)
-        SecureRandom().nextBytes(iv)
+        val masterKeyService: MasterKeyService = AesMasterKeyService(deriveHmac(hmacSeed))
+        val aesHelper = AesHelper(masterKeyService)
 
-        val secretKeySpec = SecretKeySpec(hmac, "AES")
-        val gcmSpec = GCMParameterSpec(128, iv)
+        val ciphertext: ByteArray = aesHelper.encrypt(content)
+        masterKeyService.clearMasterKey()
 
-        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, gcmSpec)
-        val ciphertext: ByteArray = cipher.doFinal(content)
-
-        return iv + ciphertext
+        return ciphertext
     }
 
 
@@ -59,16 +51,11 @@ class AesCipherService: CipherService {
      * @throws Exception    Cannot decrypt content.
      */
     override fun decrypt(content: ByteArray, hmacSeed: ByteArray): ByteArray {
-        val cipher: Cipher = Cipher.getInstance("AES/GCM/NoPadding")
-        val hmac: ByteArray = deriveHmac(hmacSeed)
-        val iv: ByteArray = content.take(12).toByteArray()
-        val ciphertext: ByteArray = content.drop(12).toByteArray()
+        val masterKeyService: MasterKeyService = AesMasterKeyService(deriveHmac(hmacSeed))
+        val aesHelper = AesHelper(masterKeyService)
 
-        val secretKeySpec = SecretKeySpec(hmac, "AES")
-        val gcmSpec = GCMParameterSpec(128, iv)
-
-        cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, gcmSpec)
-        val plaintext: ByteArray = cipher.doFinal(ciphertext)
+        val plaintext: ByteArray = aesHelper.decrypt(content)
+        masterKeyService.clearMasterKey()
 
         return plaintext
     }
