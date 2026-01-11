@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Screen through which to configure the master password -->
+    <string name="password_titleFirstTimeSetup">Setup login</string>
+    <string name="password_titleChangePassword">Edit master password</string>
+    <string name="password_titleRecoverPassword">New master password</string>
+    <string name="password_helpFirstTimeSetup">The master password is used to verify your identity whenever you access your data.</string>
+    <string name="password_helpChangePassword">You can change the master password that you use to verify your identity when you access your data.</string>
+    <string name="password_helpRecoverPassword">You need to set a new master password with which you verify your identity in the future.</string>
+    <string name="password_labelCurrentPassword">Current password</string>
+    <string name="password_labelNewPassword">New password</string>
+    <string name="password_labelConfirmNewPassword">Confirm new password</string>
+    <string name="password_labelPassword">Password</string>
+    <string name="password_labelConfirmPassword">Confirm password</string>
+
+    <string name="login_title">Password Vault</string>
+</resources>

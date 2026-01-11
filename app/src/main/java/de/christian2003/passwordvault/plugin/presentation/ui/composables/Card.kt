@@ -37,6 +37,7 @@ fun Card(
     icon: Painter = painterResource(R.drawable.ic_info),
     content: (@Composable () -> Unit)? = null
 ) {
+
     Column(
         modifier = modifier
             .clip(MaterialTheme.shapes.extraLarge)
