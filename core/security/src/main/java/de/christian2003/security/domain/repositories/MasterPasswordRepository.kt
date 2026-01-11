@@ -4,7 +4,7 @@ package de.christian2003.security.domain.repositories
 /**
  * Repository for the setup of the authentication can set the master password.
  */
-interface SetupMasterPasswordRepository {
+interface MasterPasswordRepository {
 
     /**
      * Sets the encrypted KEK from the master password.

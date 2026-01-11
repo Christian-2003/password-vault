@@ -5,7 +5,7 @@ package de.christian2003.security.domain.repositories
  * Repository for the authentication setup can manage the decrypted KEK that is required across
  * multiple setup steps.
  */
-interface SetupKekRepository {
+interface DecryptedKekRepository {
 
     /**
      * Returns the decrypted KEK or null, if no KEK is available.

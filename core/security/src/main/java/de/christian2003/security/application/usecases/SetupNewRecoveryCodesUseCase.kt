@@ -6,8 +6,8 @@ import de.christian2003.security.application.services.SaltGeneratorService
 import de.christian2003.security.domain.entities.RecoveryCodes
 import de.christian2003.security.domain.exceptions.AuthSetupException
 import de.christian2003.security.domain.repositories.HardwareBackedKeyRepository
-import de.christian2003.security.domain.repositories.SetupKekRepository
-import de.christian2003.security.domain.repositories.SetupRecoveryRepository
+import de.christian2003.security.domain.repositories.DecryptedKekRepository
+import de.christian2003.security.domain.repositories.RecoveryCodesRepository
 import de.christian2003.security.domain.services.CipherService
 import de.christian2003.security.domain.services.KdfService
 import java.security.SecureRandom
@@ -29,8 +29,8 @@ import javax.crypto.SecretKey
  * @param recoveryCodeEncoderService    Service to encode recovery codes.
  */
 class SetupNewRecoveryCodesUseCase(
-    private val recoveryCodesRepository: SetupRecoveryRepository,
-    private val kekRepository: SetupKekRepository,
+    private val recoveryCodesRepository: RecoveryCodesRepository,
+    private val kekRepository: DecryptedKekRepository,
     private val hardwareBackedKeyRepository: HardwareBackedKeyRepository,
     private val kdfService: KdfService,
     private val cipherService: CipherService,

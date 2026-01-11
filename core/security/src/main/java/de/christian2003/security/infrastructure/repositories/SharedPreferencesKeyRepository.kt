@@ -3,11 +3,11 @@ package de.christian2003.security.infrastructure.repositories
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import de.christian2003.security.domain.repositories.SetupCommitRepository
-import de.christian2003.security.domain.repositories.SetupKekRepository
-import de.christian2003.security.domain.repositories.SetupMasterKeyRepository
-import de.christian2003.security.domain.repositories.SetupMasterPasswordRepository
-import de.christian2003.security.domain.repositories.SetupRecoveryRepository
+import de.christian2003.security.domain.repositories.CommitRepository
+import de.christian2003.security.domain.repositories.DecryptedKekRepository
+import de.christian2003.security.domain.repositories.MasterKeyRepository
+import de.christian2003.security.domain.repositories.MasterPasswordRepository
+import de.christian2003.security.domain.repositories.RecoveryCodesRepository
 import de.christian2003.security.infrastructure.repositories.dto.SharedPreferencesSetupRepositoryKekEntryDto
 import java.util.Base64
 
@@ -21,7 +21,7 @@ import java.util.Base64
  */
 class SharedPreferencesKeyRepository(
     context: Context
-): SetupMasterPasswordRepository, SetupRecoveryRepository, SetupKekRepository, SetupMasterKeyRepository, SetupCommitRepository {
+): MasterPasswordRepository, RecoveryCodesRepository, DecryptedKekRepository, MasterKeyRepository, CommitRepository {
 
     /**
      * Shared preferences used for storing the data.

@@ -3,17 +3,17 @@ package de.christian2003.security.application.services
 import de.christian2003.security.domain.exceptions.UnlockFailedException
 import de.christian2003.security.domain.exceptions.UnlockSourceInvalidException
 import de.christian2003.security.domain.repositories.HardwareBackedKeyRepository
-import de.christian2003.security.domain.repositories.SetupMasterKeyRepository
-import de.christian2003.security.domain.repositories.SetupMasterPasswordRepository
+import de.christian2003.security.domain.repositories.MasterKeyRepository
+import de.christian2003.security.domain.repositories.MasterPasswordRepository
 import de.christian2003.security.domain.services.CipherService
 import de.christian2003.security.domain.services.KdfService
 import java.security.InvalidKeyException
 import javax.crypto.SecretKey
 
 class UnlockMasterKeyFromPasswordService(
-    private val masterPasswordRepository: SetupMasterPasswordRepository,
+    private val masterPasswordRepository: MasterPasswordRepository,
     private val hardwareBackedKeyRepository: HardwareBackedKeyRepository,
-    private val masterKeyRepository: SetupMasterKeyRepository,
+    private val masterKeyRepository: MasterKeyRepository,
     private val cipherService: CipherService,
     private val kdfService: KdfService
 ) {

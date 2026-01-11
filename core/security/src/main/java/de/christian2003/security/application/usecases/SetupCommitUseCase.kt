@@ -1,16 +1,16 @@
 package de.christian2003.security.application.usecases
 
 import de.christian2003.security.domain.exceptions.AuthSetupException
-import de.christian2003.security.domain.repositories.SetupCommitRepository
-import de.christian2003.security.domain.repositories.SetupKekRepository
-import de.christian2003.security.domain.repositories.SetupMasterKeyRepository
+import de.christian2003.security.domain.repositories.CommitRepository
+import de.christian2003.security.domain.repositories.DecryptedKekRepository
+import de.christian2003.security.domain.repositories.MasterKeyRepository
 import de.christian2003.security.domain.services.CipherService
 import de.christian2003.security.domain.services.KeyGeneratorService
 
 class SetupCommitUseCase(
-    private val kekRepository: SetupKekRepository,
-    private val masterKeyRepository: SetupMasterKeyRepository,
-    private val commitRepository: SetupCommitRepository,
+    private val kekRepository: DecryptedKekRepository,
+    private val masterKeyRepository: MasterKeyRepository,
+    private val commitRepository: CommitRepository,
     private val cipherService: CipherService,
     private val keyGeneratorService: KeyGeneratorService
 ) {

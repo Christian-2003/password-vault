@@ -4,8 +4,8 @@ import android.security.keystore.KeyProperties
 import de.christian2003.security.application.services.SaltGeneratorService
 import de.christian2003.security.domain.exceptions.AuthSetupException
 import de.christian2003.security.domain.repositories.HardwareBackedKeyRepository
-import de.christian2003.security.domain.repositories.SetupKekRepository
-import de.christian2003.security.domain.repositories.SetupMasterPasswordRepository
+import de.christian2003.security.domain.repositories.DecryptedKekRepository
+import de.christian2003.security.domain.repositories.MasterPasswordRepository
 import de.christian2003.security.domain.services.CipherService
 import de.christian2003.security.domain.services.KdfService
 import de.christian2003.security.domain.services.KeyGeneratorService
@@ -26,8 +26,8 @@ import javax.inject.Inject
  * @param saltGeneratorService          Service to generate random salt.
  */
 class SetupNewMasterPasswordUseCase @Inject constructor(
-    private val masterPasswordRepository: SetupMasterPasswordRepository,
-    private val kekRepository: SetupKekRepository,
+    private val masterPasswordRepository: MasterPasswordRepository,
+    private val kekRepository: DecryptedKekRepository,
     private val hardwareBackedKeyRepository: HardwareBackedKeyRepository,
     private val kdfService: KdfService,
     private val cipherService: CipherService,
