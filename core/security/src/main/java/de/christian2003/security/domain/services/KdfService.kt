@@ -10,17 +10,19 @@ interface KdfService {
      * Derives another key based on the specified input.
      *
      * @param input Input from which to derive a key.
+     * @param salt  Salt.
      * @return      Derived key.
      */
-    fun derive(input: ByteArray): ByteArray
+    fun derive(input: ByteArray, salt: ByteArray): ByteArray
 
 
     /**
      * Derives another key based on the specified input.
      *
      * @param input Input from which to derive a key.
+     * @param salt  Salt.
      * @return      Derived key.
      */
-    fun derive(input: CharArray): ByteArray
+    fun derive(input: CharArray, salt: ByteArray): ByteArray
 
 }

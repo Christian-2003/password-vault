@@ -3,128 +3,250 @@ package de.christian2003.security.infrastructure.repositories
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import de.christian2003.security.domain.entities.KekEntry
-import de.christian2003.security.domain.repositories.KekRepository
-import de.christian2003.security.domain.repositories.MasterKeyRepository
+import de.christian2003.security.domain.repositories.SetupCommitRepository
+import de.christian2003.security.domain.repositories.SetupKekRepository
+import de.christian2003.security.domain.repositories.SetupMasterKeyRepository
+import de.christian2003.security.domain.repositories.SetupMasterPasswordRepository
+import de.christian2003.security.domain.repositories.SetupRecoveryRepository
+import de.christian2003.security.infrastructure.repositories.dto.SharedPreferencesSetupRepositoryKekEntryDto
 import java.util.Base64
-import javax.inject.Inject
 
 
 /**
- * Repository implementation to access keys from SharedPreferences.
+ * Repository implementation for the authentication setup. This repository adheres to transactional
+ * principles, whereas changes are not committed to memory unless a commit is specifically called.
+ * The repository uses SharedPreferences for storage.
  *
- * @param context   Android context used to access SharedPreferences.
+ * @param context   Android context.
  */
-class SharedPreferencesKeyRepository @Inject constructor(
+class SharedPreferencesKeyRepository(
     context: Context
-): MasterKeyRepository, KekRepository {
+): SetupMasterPasswordRepository, SetupRecoveryRepository, SetupKekRepository, SetupMasterKeyRepository, SetupCommitRepository {
 
     /**
-     * Preferences used to access keys.
+     * Shared preferences used for storing the data.
      */
     private val preferences: SharedPreferences = context.getSharedPreferences("security", Context.MODE_PRIVATE)
 
+    /**
+     * KEK for the master password that was set. This is not stored in permanent memory until data
+     * is committed.
+     */
+    private var masterPasswordKek: SharedPreferencesSetupRepositoryKekEntryDto? = null
 
     /**
-     * Returns the encrypted master key or null if no master key is setup.
+     * KEKs for the recovery codes are mapped to their indices that were set. This is not stored in
+     * permanent memory until data is committed.
+     */
+    private val recoveryKeks: MutableMap<Int, SharedPreferencesSetupRepositoryKekEntryDto> = mutableMapOf()
+
+    /**
+     * Encrypted master key.
+     */
+    private var encryptedMasterKey: ByteArray? = null
+
+    /**
+     * Decrypted KEK that is required across multiple setup steps.
+     */
+    private var decryptedKek: ByteArray? = null
+
+
+
+    /**
+     * Sets the encrypted KEK from the master password.
      *
-     * @return  Encrypted master key or null.
+     * @param encryptedKekBytes Bytes of the encrypted KEK.
+     * @param salt              Salt used to derive the key used to encrypt the KEK.
+     */
+    override fun setEncryptedMasterPasswordKek(
+        encryptedKekBytes: ByteArray,
+        salt: ByteArray
+    ) {
+        masterPasswordKek = SharedPreferencesSetupRepositoryKekEntryDto(
+            encryptedKekBytes = encryptedKekBytes,
+            salt = salt
+        )
+    }
+
+
+    /**
+     * Returns the current encrypted KEK for the master password. If no KEK exists, null is returned.
+     *
+     * @return  Bytes of the encrypted KEK or null.
+     */
+    override fun getEncryptedMasterPasswordKek(): ByteArray? {
+        val masterPasswordKek: SharedPreferencesSetupRepositoryKekEntryDto? = this.masterPasswordKek
+        if (masterPasswordKek != null) {
+            return masterPasswordKek.encryptedKekBytes
+        }
+        else {
+            val kekAsString: String? = preferences.getString("master_password_kek", null)
+            if (kekAsString != null) {
+                val kekAsBytes: ByteArray = stringToBytes(kekAsString)
+                return kekAsBytes
+            }
+        }
+        return null
+    }
+
+
+    /**
+     * Returns the current salt for the master password. If no salt exists, null is returned.
+     *
+     * @return  Salt of the master password or null.
+     */
+    override fun getMasterPasswordSalt(): ByteArray? {
+        val masterPasswordKek: SharedPreferencesSetupRepositoryKekEntryDto? = this.masterPasswordKek
+        if (masterPasswordKek != null) {
+            return masterPasswordKek.salt
+        }
+        else {
+            val saltAsString: String? = preferences.getString("master_password_salt", null)
+            if (saltAsString != null) {
+                val saltAsBytes: ByteArray = stringToBytes(saltAsString)
+                return saltAsBytes
+            }
+        }
+        return null
+    }
+
+
+    /**
+     * Tests whether the encrypted KEK for the master password exists.
+     *
+     * @return  Whether the encrypted KEK for the master password exists.
+     */
+    override fun hasEncryptedMasterPasswordKek(): Boolean {
+        return masterPasswordKek != null || preferences.contains("master_password_kek")
+    }
+
+
+    /**
+     * Tests whether the salt for the master password exists.
+     *
+     * @return  Whether the salt for the master password exists.
+     */
+    override fun hasMasterPasswordSalt(): Boolean {
+        return masterPasswordKek != null || preferences.contains("master_password_salt")
+    }
+
+
+    /**
+     * Sets the encrypted KEK for a recovery code.
+     *
+     * @param index             Index of the encrypted KEK.
+     * @param encryptedKekBytes Bytes of the encrypted KEK.
+     * @param salt              Salt used to encrypt the recovery code.
+     */
+    override fun setEncryptedRecoveryKek(
+        index: Int,
+        encryptedKekBytes: ByteArray,
+        salt: ByteArray
+    ) {
+        recoveryKeks.put(
+            key = index,
+            value = SharedPreferencesSetupRepositoryKekEntryDto(
+                encryptedKekBytes = encryptedKekBytes,
+                salt = salt
+            )
+        )
+    }
+
+
+    /**
+     * Returns the decrypted KEK or null, if no KEK is available.
+     *
+     * @return  Bytes of the decrypted KEK or null.
+     */
+    override fun getDecryptedKek(): ByteArray? {
+        return decryptedKek
+    }
+
+
+    /**
+     * Sets the decrypted KEK.
+     *
+     * @param decryptedKekBytes New bytes of the decrypted KEK.
+     */
+    override fun setDecryptedKek(decryptedKekBytes: ByteArray) {
+        decryptedKek = decryptedKekBytes
+    }
+
+
+    /**
+     * Tests whether a decrypted KEK is available.
+     *
+     * @return  Whether a decrypted KEK is available.
+     */
+    override fun hasDecryptedKek(): Boolean {
+        return decryptedKek != null
+    }
+
+
+    /**
+     * Returns the encrypted master key or null if no master key is available.
+     *
+     * @return  Bytes of the encrypted master key or null.
      */
     override fun getEncryptedMasterKey(): ByteArray? {
-        val masterKeyAsString: String? = preferences.getString("master_key", null)
-        if (masterKeyAsString != null) {
-            val masterKeyAsByteArray: ByteArray = base64ToByteArray(masterKeyAsString)
-            return masterKeyAsByteArray
+        if (encryptedMasterKey != null) {
+            return encryptedMasterKey
         }
-        return null
-    }
-
-
-    /**
-     * Sets the encrypted master key for the first time. This method will only set the encrypted
-     * master key if no master key is already set, in which case true is returned. If a master
-     * key is already available, this does nothing and returns false.
-     *
-     * @param encryptedMasterKey    New encrypted master key.
-     * @return                      Whether the master key was setup or not.
-     */
-    override fun setupEncryptedMasterKey(encryptedMasterKey: ByteArray): Boolean {
-        if (!preferences.contains("master_key")) {
-            val masterKeyAsString: String = byteArrayToBase64(encryptedMasterKey)
-            preferences.edit {
-                putString("master_key", masterKeyAsString)
+        else {
+            val masterKeyAsString: String? = preferences.getString("master_key", null)
+            if (masterKeyAsString != null) {
+                val masterKeyAsBytes: ByteArray = stringToBytes(masterKeyAsString)
+                return masterKeyAsBytes
             }
-            return true
+            return null
         }
-        return false
     }
 
 
     /**
-     * Tests whether the repository contains an encrypted master key.
+     * Sets the encrypted master key.
      *
-     * @return  Whether an encrypted master key is available.
+     * @param encryptedMasterKey    Bytes of the encrypted master key.
+     */
+    override fun setEncryptedMasterKey(encryptedMasterKey: ByteArray) {
+        this.encryptedMasterKey = encryptedMasterKey
+    }
+
+
+    /**
+     * Tests whether an encrypted master key exists.
+     *
+     * @return  Whether an encrypted master key exists.
      */
     override fun hasEncryptedMasterKey(): Boolean {
-        val masterKeyAsString: String? = preferences.getString("master_key", null)
-        return masterKeyAsString != null
+        return encryptedMasterKey != null || preferences.contains("master_key")
     }
 
 
     /**
-     * Gets the encrypted key encryption key (KEK) or returns null if no KEK is available.
-     *
-     * @param entry KEK entry to return.
-     * @return      Encrypted KEK or null.
+     * Commits all changes that were done during the setup of the authentication.
      */
-    override fun getEncryptedKek(entry: KekEntry): ByteArray? {
-        val key: String = when(entry) {
-            KekEntry.MasterPassword -> "master_password_kek"
-            KekEntry.RecoveryCodes -> "recovery_codes_kek"
-        }
-
-        val kekAsString: String? = preferences.getString(key, null)
-        if (kekAsString != null) {
-            val kekAsByteArray: ByteArray = base64ToByteArray(kekAsString)
-            return kekAsByteArray
-        }
-        return null
-    }
-
-
-    /**
-     * Changes the encrypted key encryption key (KEK).
-     *
-     * @param entry         KEK entry to set.
-     * @param encryptedKek  New encrypted KEK.
-     */
-    override fun setEncryptedKek(entry: KekEntry, encryptedKek: ByteArray) {
-        val key: String = when(entry) {
-            KekEntry.MasterPassword -> "master_password_kek"
-            KekEntry.RecoveryCodes -> "recovery_codes_kek"
-        }
-
-        val kekAsString: String = byteArrayToBase64(encryptedKek)
+    override fun commitAllChanges() {
         preferences.edit {
-            putString(key, kekAsString)
+            //Commit master password KEK:
+            val masterPasswordKek: SharedPreferencesSetupRepositoryKekEntryDto? = this@SharedPreferencesKeyRepository.masterPasswordKek
+            if (masterPasswordKek != null) {
+                putString("master_password_kek", bytesToString(masterPasswordKek.encryptedKekBytes))
+                putString("master_password_salt", bytesToString(masterPasswordKek.salt))
+            }
+
+            //Commit changes to recovery:
+            recoveryKeks.forEach { index, recoveryCodeKek ->
+                putString("recovery_${index}_kek", bytesToString(recoveryCodeKek.encryptedKekBytes))
+                putString("recovery_${index}_salt", bytesToString(recoveryCodeKek.salt))
+            }
+
+            //Commit encrypted master key:
+            val encryptedMasterKey: ByteArray? = this@SharedPreferencesKeyRepository.encryptedMasterKey
+            if (encryptedMasterKey != null) {
+                putString("master_key", bytesToString(encryptedMasterKey))
+            }
         }
-    }
-
-
-    /**
-     * Returns whether the encrypted key encryption key (KEK) is available.
-     *
-     * @param entry KEK entry to test.
-     * @return      Whether the KEK is available.
-     */
-    override fun hasEncryptedKek(entry: KekEntry): Boolean {
-        val key: String = when(entry) {
-            KekEntry.MasterPassword -> "master_password_kek"
-            KekEntry.RecoveryCodes -> "recovery_codes_kek"
-        }
-
-        val kekAsString: String? = preferences.getString(key, null)
-        return kekAsString != null
     }
 
 
@@ -134,7 +256,7 @@ class SharedPreferencesKeyRepository @Inject constructor(
      * @param bytes Byte array to convert to a Base64-encoded string.
      * @return      Base64-encoded string.
      */
-    private fun byteArrayToBase64(bytes: ByteArray): String {
+    private fun bytesToString(bytes: ByteArray): String {
         return Base64.getEncoder().encodeToString(bytes)
     }
 
@@ -145,7 +267,7 @@ class SharedPreferencesKeyRepository @Inject constructor(
      * @param s Base64-encoded string to convert to a byte array.
      * @return  Converted byte array.
      */
-    private fun base64ToByteArray(s: String): ByteArray {
+    private fun stringToBytes(s: String): ByteArray {
         return Base64.getDecoder().decode(s)
     }
 
