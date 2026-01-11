@@ -12,4 +12,11 @@ interface CommitRepository {
      */
     fun commitAllChanges()
 
+    /**
+     * Tests whether changes are staged that can be committed.
+     *
+     * @return  Whether changes are staged and waiting for commit.
+     */
+    fun areChangesStaged(): Boolean
+
 }

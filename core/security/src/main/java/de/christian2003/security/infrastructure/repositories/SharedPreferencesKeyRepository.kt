@@ -234,19 +234,32 @@ class SharedPreferencesKeyRepository(
                 putString("master_password_kek", bytesToString(masterPasswordKek.encryptedKekBytes))
                 putString("master_password_salt", bytesToString(masterPasswordKek.salt))
             }
+            this@SharedPreferencesKeyRepository.masterPasswordKek = null
 
             //Commit changes to recovery:
             recoveryKeks.forEach { index, recoveryCodeKek ->
                 putString("recovery_${index}_kek", bytesToString(recoveryCodeKek.encryptedKekBytes))
                 putString("recovery_${index}_salt", bytesToString(recoveryCodeKek.salt))
             }
+            recoveryKeks.clear()
 
             //Commit encrypted master key:
             val encryptedMasterKey: ByteArray? = this@SharedPreferencesKeyRepository.encryptedMasterKey
             if (encryptedMasterKey != null) {
                 putString("master_key", bytesToString(encryptedMasterKey))
+                encryptedMasterKey.fill(0)
             }
+            this@SharedPreferencesKeyRepository.encryptedMasterKey = null
         }
+    }
+
+    /**
+     * Tests whether changes are staged that can be committed.
+     *
+     * @return  Whether changes are staged and waiting for commit.
+     */
+    override fun areChangesStaged(): Boolean {
+        return masterPasswordKek != null || recoveryKeks.isNotEmpty() || encryptedMasterKey != null
     }
 
 
