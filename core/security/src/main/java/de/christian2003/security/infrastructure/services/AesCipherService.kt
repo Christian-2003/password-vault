@@ -1,7 +1,7 @@
 package de.christian2003.security.infrastructure.services
 
-import de.christian2003.security.domain.exceptions.InvalidKeyException
 import de.christian2003.security.domain.services.CipherService
+import java.security.InvalidKeyException
 import java.security.SecureRandom
 import javax.crypto.AEADBadTagException
 import javax.crypto.Cipher

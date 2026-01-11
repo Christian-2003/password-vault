@@ -1,7 +1,7 @@
 package de.christian2003.security.domain.services
 
 import javax.crypto.SecretKey
-import de.christian2003.security.domain.exceptions.InvalidKeyException
+import java.security.InvalidKeyException
 
 
 /**

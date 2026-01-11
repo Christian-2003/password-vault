@@ -6,6 +6,6 @@ package de.christian2003.security.domain.exceptions
  *
  * @param message   Optional message.
  */
-class MasterKeyUnlockFailedException(
-    message: String = ""
+class UnlockFailedException(
+    message: String? = null
 ): Exception(message)
