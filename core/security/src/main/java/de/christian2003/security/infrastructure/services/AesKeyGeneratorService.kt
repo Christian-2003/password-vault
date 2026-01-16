@@ -16,7 +16,7 @@ class AesKeyGeneratorService: KeyGeneratorService {
      *
      * @return  Bytes of the generated key.
      */
-    override fun generate(): ByteArray {
+    override suspend fun generate(): ByteArray {
         val random = SecureRandom()
 
         val keyGenerator: KeyGenerator = KeyGenerator.getInstance("AES")

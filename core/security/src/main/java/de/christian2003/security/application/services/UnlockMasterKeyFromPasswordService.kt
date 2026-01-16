@@ -9,8 +9,10 @@ import de.christian2003.security.domain.services.CipherService
 import de.christian2003.security.domain.services.KdfService
 import java.security.InvalidKeyException
 import javax.crypto.SecretKey
+import javax.inject.Inject
 
-class UnlockMasterKeyFromPasswordService(
+
+class UnlockMasterKeyFromPasswordService @Inject constructor(
     private val masterPasswordRepository: MasterPasswordRepository,
     private val hardwareBackedKeyRepository: HardwareBackedKeyRepository,
     private val masterKeyRepository: MasterKeyRepository,
@@ -18,7 +20,7 @@ class UnlockMasterKeyFromPasswordService(
     private val kdfService: KdfService
 ) {
 
-    fun unlockMasterKey(masterPassword: CharArray): ByteArray {
+    suspend fun unlockMasterKey(masterPassword: CharArray): ByteArray {
         if (masterPassword.isEmpty()) {
             throw UnlockSourceInvalidException("Master password cannot be empty to unlock master key")
         }
@@ -75,7 +77,7 @@ class UnlockMasterKeyFromPasswordService(
     }
 
 
-    private fun unwrapKey(wrappedKeyBytes: ByteArray): ByteArray {
+    private suspend fun unwrapKey(wrappedKeyBytes: ByteArray): ByteArray {
         val hardwareBackedKey: SecretKey? = hardwareBackedKeyRepository.getKey("master_password_key")
         if (hardwareBackedKey == null) {
             throw UnlockFailedException("Cannot unwrap key because hardware-backed key is unavailable")

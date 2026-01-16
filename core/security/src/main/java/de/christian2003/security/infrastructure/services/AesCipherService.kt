@@ -23,7 +23,7 @@ class AesCipherService: CipherService {
      * @param plain Byte array to encrypt.
      * @param key   Key to use for encryption.
      */
-    override fun encrypt(plain: ByteArray, key: SecretKey): ByteArray {
+    override suspend fun encrypt(plain: ByteArray, key: SecretKey): ByteArray {
         val aesCipher: Cipher = Cipher.getInstance("AES/GCM/NoPadding")
 
         val iv = ByteArray(12)
@@ -51,7 +51,7 @@ class AesCipherService: CipherService {
      * @throws InvalidKeyException  If the cipher is in AEAD mode (such as AES-GCM) and the
      *                              authentication tag does not match, this exception is thrown.
      */
-    override fun decrypt(cipher: ByteArray, key: SecretKey): ByteArray {
+    override suspend fun decrypt(cipher: ByteArray, key: SecretKey): ByteArray {
         val aesCipher: Cipher = Cipher.getInstance("AES/GCM/NoPadding")
         val iv: ByteArray = cipher.take(12).toByteArray()
         val cipherWithoutIv: ByteArray = cipher.drop(12).toByteArray()
@@ -79,7 +79,7 @@ class AesCipherService: CipherService {
      * @param plain     Byte array to encrypt.
      * @param keyBytes  Bytes of the key to use for encryption.
      */
-    override fun encrypt(plain: ByteArray, keyBytes: ByteArray): ByteArray {
+    override suspend fun encrypt(plain: ByteArray, keyBytes: ByteArray): ByteArray {
         val aesCipher: Cipher = Cipher.getInstance("AES/GCM/NoPadding")
 
         val iv = ByteArray(12)
@@ -108,7 +108,7 @@ class AesCipherService: CipherService {
      * @throws InvalidKeyException  If the cipher is in AEAD mode (such as AES-GCM) and the
      *                              authentication tag does not match, this exception is thrown.
      */
-    override fun decrypt(cipher: ByteArray, keyBytes: ByteArray): ByteArray {
+    override suspend fun decrypt(cipher: ByteArray, keyBytes: ByteArray): ByteArray {
         val aesCipher: Cipher = Cipher.getInstance("AES/GCM/NoPadding")
         val iv: ByteArray = cipher.take(12).toByteArray()
         val cipherWithoutIv: ByteArray = cipher.drop(12).toByteArray()

@@ -16,7 +16,7 @@ interface CipherService {
      * @param plain Byte array to encrypt.
      * @param key   Key to use for encryption.
      */
-    fun encrypt(plain: ByteArray, key: SecretKey): ByteArray
+    suspend fun encrypt(plain: ByteArray, key: SecretKey): ByteArray
 
 
     /**
@@ -28,7 +28,7 @@ interface CipherService {
      * @throws InvalidKeyException  If the cipher is in AEAD mode (such as AES-GCM) and the
      *                              authentication tag does not match, this exception is thrown.
      */
-    fun decrypt(cipher: ByteArray, key: SecretKey): ByteArray
+    suspend fun decrypt(cipher: ByteArray, key: SecretKey): ByteArray
 
 
     /**
@@ -38,7 +38,7 @@ interface CipherService {
      * @param plain     Byte array to encrypt.
      * @param keyBytes  Bytes of the key to use for encryption.
      */
-    fun encrypt(plain: ByteArray, keyBytes: ByteArray): ByteArray
+    suspend fun encrypt(plain: ByteArray, keyBytes: ByteArray): ByteArray
 
 
     /**
@@ -50,6 +50,6 @@ interface CipherService {
      * @throws InvalidKeyException  If the cipher is in AEAD mode (such as AES-GCM) and the
      *                              authentication tag does not match, this exception is thrown.
      */
-    fun decrypt(cipher: ByteArray, keyBytes: ByteArray): ByteArray
+    suspend fun decrypt(cipher: ByteArray, keyBytes: ByteArray): ByteArray
 
 }

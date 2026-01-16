@@ -13,7 +13,7 @@ interface KdfService {
      * @param salt  Salt.
      * @return      Derived key.
      */
-    fun derive(input: ByteArray, salt: ByteArray): ByteArray
+    suspend fun derive(input: ByteArray, salt: ByteArray): ByteArray
 
 
     /**
@@ -23,6 +23,6 @@ interface KdfService {
      * @param salt  Salt.
      * @return      Derived key.
      */
-    fun derive(input: CharArray, salt: ByteArray): ByteArray
+    suspend fun derive(input: CharArray, salt: ByteArray): ByteArray
 
 }

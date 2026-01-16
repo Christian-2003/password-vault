@@ -12,6 +12,7 @@ import de.christian2003.security.domain.services.CipherService
 import de.christian2003.security.domain.services.KdfService
 import java.security.SecureRandom
 import javax.crypto.SecretKey
+import javax.inject.Inject
 
 
 /**
@@ -28,7 +29,7 @@ import javax.crypto.SecretKey
  * @param saltGeneratorService          Service to generate random salt.
  * @param recoveryCodeEncoderService    Service to encode recovery codes.
  */
-class SetupNewRecoveryCodesUseCase(
+class SetupNewRecoveryCodesUseCase @Inject constructor(
     private val recoveryCodesRepository: RecoveryCodesRepository,
     private val kekRepository: DecryptedKekRepository,
     private val hardwareBackedKeyRepository: HardwareBackedKeyRepository,
@@ -49,7 +50,7 @@ class SetupNewRecoveryCodesUseCase(
      *
      * @return  Recovery keys that were generated.
      */
-    fun setupRecoveryCodes(): RecoveryCodes {
+    suspend fun setupRecoveryCodes(): RecoveryCodes {
         val recoveryCodesAsBytes: List<ByteArray> = generateRecoveryCodes()
 
         //Transform codes to char arrays:
@@ -71,7 +72,7 @@ class SetupNewRecoveryCodesUseCase(
      *
      * @return  Recovery codes.
      */
-    private fun generateRecoveryCodes(): List<ByteArray> {
+    private suspend fun generateRecoveryCodes(): List<ByteArray> {
         val random = SecureRandom()
         val recoveryCodes: MutableList<ByteArray> = mutableListOf()
 
@@ -117,7 +118,7 @@ class SetupNewRecoveryCodesUseCase(
      * @param unwrappedKeyBytes Bytes of the source key to wrap.
      * @return                  Bytes of the wrapped source key.
      */
-    private fun wrapSourceKey(unwrappedKeyBytes: ByteArray): ByteArray {
+    private suspend fun wrapSourceKey(unwrappedKeyBytes: ByteArray): ByteArray {
         val hardwareBackedKeyAlias = "recovery_codes_key"
 
         var hardwareBackedKey: SecretKey? = hardwareBackedKeyRepository.getKey(hardwareBackedKeyAlias)

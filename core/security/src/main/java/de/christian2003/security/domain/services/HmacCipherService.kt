@@ -14,7 +14,7 @@ interface HmacCipherService {
      * @return              Cipher text.
      * @throws Exception    Cannot decrypt content.
      */
-    fun encrypt(content: ByteArray, hmacSeed: ByteArray): ByteArray
+    suspend fun encrypt(content: ByteArray, hmacSeed: ByteArray): ByteArray
 
 
     /**
@@ -26,6 +26,6 @@ interface HmacCipherService {
      * @return              Plain text.
      * @throws Exception    Cannot decrypt content.
      */
-    fun decrypt(content: ByteArray, hmacSeed: ByteArray): ByteArray
+    suspend fun decrypt(content: ByteArray, hmacSeed: ByteArray): ByteArray
 
 }

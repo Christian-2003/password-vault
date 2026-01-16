@@ -30,7 +30,7 @@ class AesHmacCipherService: HmacCipherService {
      * @return              Cipher text.
      * @throws Exception    Cannot encrypt content.
      */
-    override fun encrypt(content: ByteArray, hmacSeed: ByteArray): ByteArray {
+    override suspend fun encrypt(content: ByteArray, hmacSeed: ByteArray): ByteArray {
         val masterKeyService: MasterKeyService = AesMasterKeyService(deriveHmac(hmacSeed))
         val aesHelper = AesHelper(masterKeyService)
 
@@ -50,7 +50,7 @@ class AesHmacCipherService: HmacCipherService {
      * @return              Plain text.
      * @throws Exception    Cannot decrypt content.
      */
-    override fun decrypt(content: ByteArray, hmacSeed: ByteArray): ByteArray {
+    override suspend fun decrypt(content: ByteArray, hmacSeed: ByteArray): ByteArray {
         val masterKeyService: MasterKeyService = AesMasterKeyService(deriveHmac(hmacSeed))
         val aesHelper = AesHelper(masterKeyService)
 

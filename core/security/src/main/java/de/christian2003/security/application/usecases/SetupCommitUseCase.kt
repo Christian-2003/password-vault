@@ -6,8 +6,9 @@ import de.christian2003.security.domain.repositories.DecryptedKekRepository
 import de.christian2003.security.domain.repositories.MasterKeyRepository
 import de.christian2003.security.domain.services.CipherService
 import de.christian2003.security.domain.services.KeyGeneratorService
+import javax.inject.Inject
 
-class SetupCommitUseCase(
+class SetupCommitUseCase @Inject constructor(
     private val kekRepository: DecryptedKekRepository,
     private val masterKeyRepository: MasterKeyRepository,
     private val commitRepository: CommitRepository,
@@ -15,7 +16,7 @@ class SetupCommitUseCase(
     private val keyGeneratorService: KeyGeneratorService
 ) {
 
-    fun commit() {
+    suspend fun commit() {
         val decryptedKek: ByteArray? = kekRepository.getDecryptedKek()
         if (decryptedKek == null) {
             throw AuthSetupException("Cannot commit changes because there is no decrypted KEK available")

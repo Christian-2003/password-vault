@@ -11,6 +11,6 @@ interface KeyGeneratorService {
      *
      * @return  Bytes of the generated key.
      */
-    fun generate(): ByteArray
+    suspend fun generate(): ByteArray
 
 }

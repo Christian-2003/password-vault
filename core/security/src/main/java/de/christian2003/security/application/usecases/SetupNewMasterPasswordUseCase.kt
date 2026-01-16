@@ -41,7 +41,7 @@ class SetupNewMasterPasswordUseCase @Inject constructor(
      *
      * @param masterPassword    Master password to set.
      */
-    fun setupMasterPassword(masterPassword: CharArray) {
+    suspend fun setupMasterPassword(masterPassword: CharArray) {
         if (masterPassword.isEmpty()) {
             throw AuthSetupException("Master password cannot be empty")
         }
@@ -74,7 +74,7 @@ class SetupNewMasterPasswordUseCase @Inject constructor(
      * @param unwrappedKeyBytes Bytes of the source key to wrap.
      * @return                  Bytes of the wrapped source key.
      */
-    private fun wrapSourceKey(unwrappedKeyBytes: ByteArray): ByteArray {
+    private suspend fun wrapSourceKey(unwrappedKeyBytes: ByteArray): ByteArray {
         val hardwareBackedKeyAlias = "master_password_key"
 
         var hardwareBackedKey: SecretKey? = hardwareBackedKeyRepository.getKey(hardwareBackedKeyAlias)
@@ -100,7 +100,7 @@ class SetupNewMasterPasswordUseCase @Inject constructor(
      *
      * @return  Bytes of the decrypted KEK.
      */
-    private fun getDecryptedKek(): ByteArray {
+    private suspend fun getDecryptedKek(): ByteArray {
         var decryptedKek: ByteArray? = kekRepository.getDecryptedKek()
         if (decryptedKek == null) {
             decryptedKek = keyGeneratorService.generate()
