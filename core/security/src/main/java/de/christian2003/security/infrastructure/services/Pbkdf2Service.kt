@@ -17,7 +17,7 @@ class Pbkdf2Service: KdfService {
      * @param salt  Salt.
      * @return      Derived key.
      */
-    override fun derive(input: ByteArray, salt: ByteArray): ByteArray {
+    override suspend fun derive(input: ByteArray, salt: ByteArray): ByteArray {
         val inputAsCharArray: CharArray = byteArrayToCharArray(input)
         val result: ByteArray = derive(inputAsCharArray, salt)
         return result
@@ -30,7 +30,7 @@ class Pbkdf2Service: KdfService {
      * @param salt  Salt
      * @return      Derived key.
      */
-    override fun derive(input: CharArray, salt: ByteArray): ByteArray {
+    override suspend fun derive(input: CharArray, salt: ByteArray): ByteArray {
         val result: ByteArray = deriveKeyWithSalt(input, salt)
         return result
     }
