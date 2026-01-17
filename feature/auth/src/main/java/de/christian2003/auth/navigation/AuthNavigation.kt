@@ -6,7 +6,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import de.christian2003.auth.ui.password.PasswordScreen
+import de.christian2003.auth.ui.recoverycodes.RecoveryCodesScreen
 import de.christian2003.auth.viewmodels.PasswordViewModel
+import de.christian2003.auth.viewmodels.RecoveryCodesViewModel
 import kotlinx.serialization.Serializable
 
 
@@ -36,10 +38,26 @@ fun NavGraphBuilder.setupFlowDestination(
                 navController.navigate(RecoveryCodes)
             }
         )
+
+        recoveryCodesDestination(
+            onNavigateUp = {
+                navController.navigateUp()
+            },
+            onContinue = {
+                navController.navigate(Biometrics)
+            }
+        )
+
     }
 }
 
 
+/**
+ * Navigation destination for the screen to set a new paster password.
+ * 
+ * @param onNavigateUp  Callback invoked to navigate up the navigation stack.
+ * @param onContinue    Callback invoked to navigate to the next setup step.
+ */
 fun NavGraphBuilder.masterPasswordDestination(
     onNavigateUp: () -> Unit,
     onContinue: () -> Unit
@@ -54,3 +72,20 @@ fun NavGraphBuilder.masterPasswordDestination(
         )
     }
 }
+
+
+fun NavGraphBuilder.recoveryCodesDestination(
+    onNavigateUp: () -> Unit,
+    onContinue: () -> Unit
+) {
+    composable<RecoveryCodes> {
+        val viewModel: RecoveryCodesViewModel = hiltViewModel()
+
+        RecoveryCodesScreen(
+            viewModel = viewModel,
+            onNavigateUp = onNavigateUp,
+            onContinue = onContinue
+        )
+    }
+}
+

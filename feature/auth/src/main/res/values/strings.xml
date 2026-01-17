@@ -17,5 +17,24 @@
     <string name="password_error_newPasswordsDoNotMatch">New passwords do not match</string>
     <string name="password_error_inputEmpty">This field cannot be empty</string>
 
+    <string name="recoveryCodes_title">Recovery codes</string>
+    <string name="recoveryCodes_loadingInfo">Generating recovery codes</string>
+    <string name="recoveryCodes_codesHeader">Your recovery codes</string>
+    <string name="recoveryCodes_error">We cannot generate any recovery codes at the moment. Please try again later.</string>
+    <string name="recoveryCodes_help">Recovery codes are used to verify your identity if you forget your master password. Store these codes in a safe location where only you have access.</string>
+    <string name="recoveryCodes_buttonContinue">Continue</string>
+    <string name="recoveryCodes_buttonDownload">Download</string>
+    <string name="recoveryCodes_downloadDialog_title">Warning</string>
+    <string name="recoveryCodes_downloadDialog_text">Recovery codes are downloaded in an unsecured file. Everybody who has access to your device can see these codes. Make sure to move them to another device immediately and clear any traces of the codes on this device.</string>
+    <string name="recoveryCodes_downloadDialog_buttonCancel">Cancel download</string>
+    <string name="recoveryCodes_downloadDialog_buttonConfirm">Continue to download</string>
+    <string name="recoveryCodes_downloadFilename">recovery_codes.txt</string>
+    <string name="recoveryCodes_downloadSnackbar_success">Recovery codes saved</string>
+    <string name="recoveryCodes_downloadSnackbar_error">Cannot save recovery codes</string>
+    <string name="recoveryCodes_confirmContinueDialog_title">Confirm continue</string>
+    <string name="recoveryCodes_confirmContinueDialog_text">Are you sure you have written down the recovery codes and want to continue to the next step?</string>
+    <string name="recoveryCodes_confirmContinueDialog_buttonGoBack">Go back</string>
+    <string name="recoveryCodes_confirmContinueDialog_buttonContinue">Continue</string>
+
     <string name="login_title">Password Vault</string>
 </resources>

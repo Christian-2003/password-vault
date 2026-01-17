@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,7 +21,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -54,12 +60,14 @@ fun PasswordScreen(
     val currentPasswordFocusRequester: FocusRequester = remember { FocusRequester() }
     val newPasswordFocusRequester: FocusRequester = remember { FocusRequester() }
     val confirmNewPasswordFocusRequester: FocusRequester = remember { FocusRequester() }
+    val focusManager: FocusManager = LocalFocusManager.current
 
     val invokeOnContinue: () -> Unit = {
         coroutineScope.launch(Dispatchers.Default) {
             viewModel.setNewMasterPassword()
             if (viewModel.isMasterPasswordSetSuccessfully) {
                 withContext(Dispatchers.Main) {
+                    focusManager.clearFocus()
                     onContinue()
                 }
             }
@@ -93,7 +101,9 @@ fun PasswordScreen(
         modifier = Modifier.imePadding()
     ) { innerPadding ->
         Column(
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
         ) {
             AnimatedVisibility(viewModel.isHelpCardVisible) {
                 HelpCard(

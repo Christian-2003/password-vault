@@ -2,6 +2,7 @@ package de.christian2003.security.infrastructure.repositories
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.core.content.edit
 import dagger.hilt.android.qualifiers.ApplicationContext
 import de.christian2003.security.domain.repositories.CommitRepository
@@ -12,6 +13,7 @@ import de.christian2003.security.domain.repositories.RecoveryCodesRepository
 import de.christian2003.security.infrastructure.repositories.dto.SharedPreferencesSetupRepositoryKekEntryDto
 import java.util.Base64
 import javax.inject.Inject
+import javax.inject.Singleton
 
 
 /**
@@ -21,6 +23,7 @@ import javax.inject.Inject
  *
  * @param context   Android context.
  */
+@Singleton
 class SharedPreferencesKeyRepository @Inject constructor(
     @ApplicationContext context: Context
 ): MasterPasswordRepository, RecoveryCodesRepository, DecryptedKekRepository, MasterKeyRepository, CommitRepository {
@@ -51,6 +54,11 @@ class SharedPreferencesKeyRepository @Inject constructor(
      * Decrypted KEK that is required across multiple setup steps.
      */
     private var decryptedKek: ByteArray? = null
+
+
+    init {
+        Log.d("KeyRepo", "Create new KeyRepo")
+    }
 
 
 

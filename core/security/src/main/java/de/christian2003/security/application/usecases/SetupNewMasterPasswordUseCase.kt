@@ -1,6 +1,5 @@
 package de.christian2003.security.application.usecases
 
-import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import de.christian2003.security.application.services.SaltGeneratorService
 import de.christian2003.security.domain.exceptions.AuthSetupException

@@ -6,12 +6,14 @@ import java.security.KeyStore
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.inject.Inject
+import javax.inject.Singleton
 
 
 /**
  * Implementation of the repository to access hardware-backed keys, which uses the Android KeyStore
  * system to handle hardware-backed keys.
  */
+@Singleton
 class KeyStoreHardwareBackedKeyRepository @Inject constructor(): HardwareBackedKeyRepository {
 
     /**

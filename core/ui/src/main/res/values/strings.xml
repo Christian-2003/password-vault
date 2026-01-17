@@ -2,4 +2,7 @@
 
 <resources>
     <string name="help_dismissHelpCard">Dismiss</string>
+
+    <string name="button_dismiss">Dismiss</string>
+    <string name="button_confirm">Confirm</string>
 </resources>

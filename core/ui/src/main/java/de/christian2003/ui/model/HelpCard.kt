@@ -8,10 +8,12 @@ enum class HelpCard(
     private val key: String
 ) {
 
-    HelpSetupMasterPassword("help_setupMasterPassword");
+    HelpSetupMasterPassword("help_setupMasterPassword"),
+
+    HelpRecoveryCodes("help_recoveryCodes");
 
     fun getVisible(context: Context): Boolean {
-        return context.getSharedPreferences("settings", Context.MODE_PRIVATE).getBoolean(key, false)
+        return context.getSharedPreferences("settings", Context.MODE_PRIVATE).getBoolean(key, true)
     }
 
     fun setVisible(context: Context, isVisible: Boolean) {

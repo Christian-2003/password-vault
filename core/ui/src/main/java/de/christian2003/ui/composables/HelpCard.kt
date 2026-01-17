@@ -63,11 +63,7 @@ fun HelpCard(
             modifier = Modifier.fillMaxWidth()
         ) {
             TextButton(
-                onClick = onDismiss,
-                colors = ButtonDefaults.textButtonColors().copy(
-                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                    contentColor = MaterialTheme.colorScheme.tertiary
-                )
+                onClick = onDismiss
             ) {
                 Text(stringResource(R.string.help_dismissHelpCard))
             }
