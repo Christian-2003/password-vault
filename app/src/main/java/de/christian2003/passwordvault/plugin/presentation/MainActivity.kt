@@ -28,6 +28,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import dagger.hilt.android.AndroidEntryPoint
+import de.christian2003.auth.navigation.Login
+import de.christian2003.auth.navigation.SetupFlow
+import de.christian2003.auth.navigation.setupFlowDestination
 import de.christian2003.passwordvault.application.repository.AuthRepository
 import de.christian2003.passwordvault.application.usecases.auth.BiometricAuthUseCase
 import de.christian2003.passwordvault.application.usecases.auth.ToggleBiometricsUseCase
@@ -53,10 +56,12 @@ import de.christian2003.passwordvault.plugin.presentation.view.securityquestions
 import de.christian2003.passwordvault.plugin.presentation.view.securityquestions.SecurityQuestionsViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.settings.SettingsScreen
 import de.christian2003.passwordvault.plugin.presentation.view.settings.SettingsViewModel
+import de.christian2003.security.application.usecases.CanMasterKeyBeUnlockedUseCase
 import javax.inject.Inject
 
 
 //Require FragmentActivity instead of ComponentActivity in order to host a biometric prompt
+//Activity is created by Android, Hilt cannot inject into constructor
 @AndroidEntryPoint
 class MainActivity : FragmentActivity() {
 
@@ -74,7 +79,7 @@ class MainActivity : FragmentActivity() {
      */
     @Inject lateinit var toggleBiometricsUseCase: ToggleBiometricsUseCase
 
-    @Inject lateinit var authRepository: AuthRepository
+    @Inject lateinit var canMasterKeyBeUnlockedUseCase: CanMasterKeyBeUnlockedUseCase
 
 
     /**
@@ -100,7 +105,7 @@ class MainActivity : FragmentActivity() {
         )
         setContent {
             PasswordVault(
-                hasMasterPassword = authRepository.hasPassword(),
+                canUnlockMasterKey = canMasterKeyBeUnlockedUseCase.canBeUnlocked(),
                 onBiometricAuth = {
                     biometricAuthUseCase.authenticate()
                 },
@@ -128,13 +133,13 @@ class MainActivity : FragmentActivity() {
 /**
  * First layer composable which encompasses the entire application.
  *
- * @param hasMasterPassword     Whether the app has a master password.
+ * @param canUnlockMasterKey    Whether the app can unlock the master key.
  * @param onBiometricAuth       Callback invoked to perform biometric auth.
  * @param onToggleBiometrics    Callback invoke to enable / disable biometric auth.
  */
 @Composable
 fun PasswordVault(
-    hasMasterPassword: Boolean,
+    canUnlockMasterKey: Boolean,
     onBiometricAuth: suspend () -> Boolean,
     onToggleBiometrics: suspend () -> Boolean
 ) {
@@ -149,7 +154,7 @@ fun PasswordVault(
     }
 
     val navController: NavHostController = rememberNavController()
-    var isAuthSetupFinished: Boolean by rememberSaveable { mutableStateOf(hasMasterPassword) }
+    var isAuthSetupFinished: Boolean by rememberSaveable { mutableStateOf(canUnlockMasterKey) }
     var useGlobalTheme: Boolean by rememberSaveable { mutableStateOf(preferences.getBoolean("global_theme", false)) }
     var themeContrast: ThemeContrast by rememberSaveable { mutableStateOf(ThemeContrast.entries[preferences.getInt("theme_contrast", 0)]) }
 
@@ -160,12 +165,18 @@ fun PasswordVault(
         NavHost(
             navController = navController,
             startDestination = if (isAuthSetupFinished) {
-                "login"
+                Login
             } else {
-                "setup_flow"
+                SetupFlow
             },
             modifier = Modifier.background(MaterialTheme.colorScheme.surface)
         ) {
+            //Flow for the first-time master password setup:
+            setupFlowDestination(
+                navController = navController
+            )
+
+
             composable("main") {
                 applyFlags(false)
                 val viewModel: MainViewModel = hiltViewModel()
@@ -293,7 +304,7 @@ fun PasswordVault(
             }
 
 
-            composable("login") {
+            composable<Login> {
                 applyFlags(true)
                 val viewModel: LoginViewModel = hiltViewModel()
                 LoginScreen(
@@ -301,7 +312,7 @@ fun PasswordVault(
                     onBiometricAuth = onBiometricAuth,
                     onFinish = {
                         navController.navigate("main") {
-                            popUpTo("login") {
+                            popUpTo<Login> {
                                 inclusive = true
                             }
                         }

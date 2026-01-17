@@ -12,6 +12,10 @@
     <string name="password_labelConfirmNewPassword">Confirm new password</string>
     <string name="password_labelPassword">Password</string>
     <string name="password_labelConfirmPassword">Confirm password</string>
+    <string name="password_buttonContinue">Continue</string>
+    <string name="password_error_passwordsDoNotMatch">Passwords do not match</string>
+    <string name="password_error_newPasswordsDoNotMatch">New passwords do not match</string>
+    <string name="password_error_inputEmpty">This field cannot be empty</string>
 
     <string name="login_title">Password Vault</string>
 </resources>
