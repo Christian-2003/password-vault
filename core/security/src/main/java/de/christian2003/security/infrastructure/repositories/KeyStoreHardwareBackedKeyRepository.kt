@@ -17,7 +17,7 @@ class KeyStoreHardwareBackedKeyRepository @Inject constructor(): HardwareBackedK
     /**
      * Android key store to use for accessing hardware-backed keys.
      */
-    private lateinit var keyStore: KeyStore
+    private var keyStore: KeyStore? = null
 
 
     /**
@@ -29,8 +29,8 @@ class KeyStoreHardwareBackedKeyRepository @Inject constructor(): HardwareBackedK
      */
     override fun getKey(alias: String): SecretKey? {
         ensureKeyStoreLoaded()
-        if (keyStore.containsAlias(alias)) {
-            val entry: KeyStore.SecretKeyEntry = keyStore.getEntry(alias, null) as KeyStore.SecretKeyEntry
+        if (keyStore!!.containsAlias(alias)) {
+            val entry: KeyStore.SecretKeyEntry = keyStore!!.getEntry(alias, null) as KeyStore.SecretKeyEntry
             return entry.secretKey
         }
         return null
@@ -40,22 +40,19 @@ class KeyStoreHardwareBackedKeyRepository @Inject constructor(): HardwareBackedK
      * Generates a new hardware-backed key with the specified alias and returns it. The key will be
      * retrievable using getKey(String) for subsequent uses.
      *
-     * @param alias     Alias for the new key.
-     * @param algorithm Algorithm of the key to generate
-     *                  (e.g. 'KeyProperties.KEY_ALGORITHM_HMAC_SHA512').
-     * @param purposes  Purposes for which the new key is generated
-     *                  (e.g. 'KeyProperties.PURPOSE_SIGN or KeyProperties.PURPOSE_VERIFY').
-     * @return          New secret key with the specified alias.
+     * @param alias                 Alias for the new key.
+     * @param algorithm             Algorithm for the generated key (e.g. "AES).
+     * @param keyGenParameterSpec   Spec for the key generation.
+     * @return                      New secret key with the specified alias.
      */
     override fun generateNewKey(
         alias: String,
         algorithm: String,
-        purposes: Int
+        keyGenParameterSpec: KeyGenParameterSpec
     ): SecretKey {
         ensureKeyStoreLoaded()
         val keyGenerator: KeyGenerator = KeyGenerator.getInstance(algorithm, "AndroidKeyStore")
-        val keySpec: KeyGenParameterSpec = KeyGenParameterSpec.Builder(alias, purposes).build()
-        keyGenerator.init(keySpec)
+        keyGenerator.init(keyGenParameterSpec)
         val secretKey: SecretKey = keyGenerator.generateKey()
         return secretKey
     }
@@ -68,7 +65,7 @@ class KeyStoreHardwareBackedKeyRepository @Inject constructor(): HardwareBackedK
      */
     override fun containsKey(alias: String): Boolean {
         ensureKeyStoreLoaded()
-        return keyStore.containsAlias(alias)
+        return keyStore!!.containsAlias(alias)
     }
 
     /**
@@ -81,9 +78,9 @@ class KeyStoreHardwareBackedKeyRepository @Inject constructor(): HardwareBackedK
      */
     override fun deleteKey(alias: String): Boolean {
         ensureKeyStoreLoaded()
-        if (keyStore.containsAlias(alias)) {
+        if (keyStore!!.containsAlias(alias)) {
             try {
-                keyStore.deleteEntry(alias)
+                keyStore!!.deleteEntry(alias)
                 return true
             }
             catch (_: Exception) { }

@@ -10,6 +10,7 @@ import de.christian2003.security.domain.repositories.DecryptedKekRepository
 import de.christian2003.security.domain.repositories.RecoveryCodesRepository
 import de.christian2003.security.domain.services.CipherService
 import de.christian2003.security.domain.services.KdfService
+import de.christian2003.security.domain.services.KeyGeneratorService
 import java.security.SecureRandom
 import javax.crypto.SecretKey
 import javax.inject.Inject
@@ -28,6 +29,7 @@ import javax.inject.Inject
  * @param cipherService                 Service for cryptographic operations.
  * @param saltGeneratorService          Service to generate random salt.
  * @param recoveryCodeEncoderService    Service to encode recovery codes.
+ * @param keyGeneratorService           Service to generate cryptographic keys.
  */
 class SetupNewRecoveryCodesUseCase @Inject constructor(
     private val recoveryCodesRepository: RecoveryCodesRepository,
@@ -36,7 +38,8 @@ class SetupNewRecoveryCodesUseCase @Inject constructor(
     private val kdfService: KdfService,
     private val cipherService: CipherService,
     private val saltGeneratorService: SaltGeneratorService,
-    private val recoveryCodeEncoderService: RecoveryCodeEncoderService
+    private val recoveryCodeEncoderService: RecoveryCodeEncoderService,
+    private val keyGeneratorService: KeyGeneratorService
 ) {
 
     /**
@@ -126,12 +129,15 @@ class SetupNewRecoveryCodesUseCase @Inject constructor(
             hardwareBackedKey = hardwareBackedKeyRepository.generateNewKey(
                 alias = hardwareBackedKeyAlias,
                 algorithm = KeyProperties.KEY_ALGORITHM_AES,
-                purposes = KeyProperties.PURPOSE_SIGN or KeyProperties.PURPOSE_VERIFY
+                keyGenParameterSpec = keyGeneratorService.getKeyGenParameterSpec(hardwareBackedKeyAlias)
             )
         }
 
         try {
-            return cipherService.encrypt(unwrappedKeyBytes, hardwareBackedKey)
+            val keyBytes: ByteArray = cipherService.encrypt(unwrappedKeyBytes, hardwareBackedKey)
+            val trimmedKeyBytes: ByteArray = keyBytes.take(32).toByteArray()
+            keyBytes.fill(0)
+            return trimmedKeyBytes
         }
         catch (e: Exception) {
             throw AuthSetupException("Source key cannot be wrapped for master password: ${e.message ?: "Unknown error"}")

@@ -27,13 +27,10 @@ class AesCipherService @Inject constructor(): CipherService {
     override suspend fun encrypt(plain: ByteArray, key: SecretKey): ByteArray {
         val aesCipher: Cipher = Cipher.getInstance("AES/GCM/NoPadding")
 
-        val iv = ByteArray(12)
-        SecureRandom().nextBytes(iv)
-
-        val gcmSpec = GCMParameterSpec(128, iv)
-
-        aesCipher.init(Cipher.ENCRYPT_MODE, key, gcmSpec)
+        aesCipher.init(Cipher.ENCRYPT_MODE, key, SecureRandom())
         val cipher: ByteArray = aesCipher.doFinal(plain)
+
+        val iv: ByteArray = aesCipher.iv
 
         val final: ByteArray = iv + cipher
         iv.fill(0) //Wipe internal array

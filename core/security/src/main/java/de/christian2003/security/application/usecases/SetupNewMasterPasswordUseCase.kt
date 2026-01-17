@@ -1,5 +1,6 @@
 package de.christian2003.security.application.usecases
 
+import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import de.christian2003.security.application.services.SaltGeneratorService
 import de.christian2003.security.domain.exceptions.AuthSetupException
@@ -82,12 +83,15 @@ class SetupNewMasterPasswordUseCase @Inject constructor(
             hardwareBackedKey = hardwareBackedKeyRepository.generateNewKey(
                 alias = hardwareBackedKeyAlias,
                 algorithm = KeyProperties.KEY_ALGORITHM_AES,
-                purposes = KeyProperties.PURPOSE_SIGN or KeyProperties.PURPOSE_VERIFY
+                keyGenParameterSpec = keyGeneratorService.getKeyGenParameterSpec(hardwareBackedKeyAlias)
             )
         }
 
         try {
-            return cipherService.encrypt(unwrappedKeyBytes, hardwareBackedKey)
+            val keyBytes: ByteArray = cipherService.encrypt(unwrappedKeyBytes, hardwareBackedKey)
+            val trimmedKeyBytes: ByteArray = keyBytes.take(32).toByteArray()
+            keyBytes.fill(0)
+            return trimmedKeyBytes
         }
         catch (e: Exception) {
             throw AuthSetupException("Source key cannot be wrapped for master password: ${e.message ?: "Unknown error"}")

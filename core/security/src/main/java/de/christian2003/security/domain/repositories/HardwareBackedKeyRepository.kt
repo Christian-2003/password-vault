@@ -1,5 +1,6 @@
 package de.christian2003.security.domain.repositories
 
+import android.security.keystore.KeyGenParameterSpec
 import javax.crypto.SecretKey
 
 
@@ -22,17 +23,15 @@ interface HardwareBackedKeyRepository {
      * Generates a new hardware-backed key with the specified alias and returns it. The key will be
      * retrievable using getKey(String) for subsequent uses.
      *
-     * @param alias     Alias for the new key.
-     * @param algorithm Algorithm of the key to generate
-     *                  (e.g. 'KeyProperties.KEY_ALGORITHM_HMAC_SHA512').
-     * @param purposes  Purposes for which the new key is generated
-     *                  (e.g. 'KeyProperties.PURPOSE_SIGN or KeyProperties.PURPOSE_VERIFY').
-     * @return          New secret key with the specified alias.
+     * @param alias                 Alias for the new key.
+     * @param algorithm             Algorithm for the generated key (e.g. "AES").
+     * @param keyGenParameterSpec   Specs for the key generation.
+     * @return                      New secret key with the specified alias.
      */
     fun generateNewKey(
         alias: String,
         algorithm: String,
-        purposes: Int
+        keyGenParameterSpec: KeyGenParameterSpec
     ): SecretKey
 
 
