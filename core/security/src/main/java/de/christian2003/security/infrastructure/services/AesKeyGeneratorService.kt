@@ -4,12 +4,13 @@ import de.christian2003.security.domain.services.KeyGeneratorService
 import java.security.SecureRandom
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
+import javax.inject.Inject
 
 
 /**
  * Generator can generate cryptographic key for AES.
  */
-class AesKeyGeneratorService: KeyGeneratorService {
+class AesKeyGeneratorService @Inject constructor(): KeyGeneratorService {
 
     /**
      * Generates a cryptographic key.

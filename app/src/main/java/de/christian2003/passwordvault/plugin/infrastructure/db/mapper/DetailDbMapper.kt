@@ -32,7 +32,7 @@ class DetailDbMapper(
      * @param entity    Database entity to map to the domain model 'Detail'.
      * @return          Domain model 'Detail'.
      */
-    fun toDomain(entity: DetailEntity): Detail {
+    suspend fun toDomain(entity: DetailEntity): Detail {
         val decryptedPayload: ByteArray = cipherService.decrypt(entity.payload, entity.account.toByteArray())
         val payload: DetailPayload = cbor.decodeFromByteArray(DetailPayload.serializer(), decryptedPayload)
 
@@ -59,7 +59,7 @@ class DetailDbMapper(
      * @param entry     ID of the entry to which the detail is assigned.
      * @return          Database entity.
      */
-    fun toEntity(domain: Detail, entry: Uuid): DetailEntity {
+    suspend fun toEntity(domain: Detail, entry: Uuid): DetailEntity {
         val payload = DetailPayload(
             name = domain.name,
             content = domain.content,

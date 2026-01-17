@@ -3,12 +3,13 @@ package de.christian2003.security.infrastructure.services
 import de.christian2003.security.domain.services.KdfService
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
+import javax.inject.Inject
 
 
 /**
  * Implementation of the KDF service using Password-Based Key Derivation Function 2.
  */
-class Pbkdf2Service: KdfService {
+class Pbkdf2Service @Inject constructor(): KdfService {
 
     /**
      * Derives another key based on the specified input.

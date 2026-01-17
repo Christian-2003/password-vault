@@ -3,6 +3,7 @@ package de.christian2003.security.infrastructure.repositories
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import dagger.hilt.android.qualifiers.ApplicationContext
 import de.christian2003.security.domain.repositories.CommitRepository
 import de.christian2003.security.domain.repositories.DecryptedKekRepository
 import de.christian2003.security.domain.repositories.MasterKeyRepository
@@ -10,6 +11,7 @@ import de.christian2003.security.domain.repositories.MasterPasswordRepository
 import de.christian2003.security.domain.repositories.RecoveryCodesRepository
 import de.christian2003.security.infrastructure.repositories.dto.SharedPreferencesSetupRepositoryKekEntryDto
 import java.util.Base64
+import javax.inject.Inject
 
 
 /**
@@ -19,8 +21,8 @@ import java.util.Base64
  *
  * @param context   Android context.
  */
-class SharedPreferencesKeyRepository(
-    context: Context
+class SharedPreferencesKeyRepository @Inject constructor(
+    @ApplicationContext context: Context
 ): MasterPasswordRepository, RecoveryCodesRepository, DecryptedKekRepository, MasterKeyRepository, CommitRepository {
 
     /**

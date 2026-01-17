@@ -5,18 +5,19 @@ import de.christian2003.security.domain.repositories.HardwareBackedKeyRepository
 import java.security.KeyStore
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
+import javax.inject.Inject
 
 
 /**
  * Implementation of the repository to access hardware-backed keys, which uses the Android KeyStore
  * system to handle hardware-backed keys.
  */
-class KeyStoreHardwareBackedKeyRepository: HardwareBackedKeyRepository {
+class KeyStoreHardwareBackedKeyRepository @Inject constructor(): HardwareBackedKeyRepository {
 
     /**
      * Android key store to use for accessing hardware-backed keys.
      */
-    lateinit var keyStore: KeyStore
+    private lateinit var keyStore: KeyStore
 
 
     /**

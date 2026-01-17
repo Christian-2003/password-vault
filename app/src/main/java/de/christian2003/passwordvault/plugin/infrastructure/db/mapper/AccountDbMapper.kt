@@ -28,7 +28,7 @@ class AccountDbMapper(
      * @param targets   Targets for the account.
      * @return          Domain model 'Account'.
      */
-    fun toDomain(entity: AccountEntity, targets: List<Target>): Account {
+    suspend fun toDomain(entity: AccountEntity, targets: List<Target>): Account {
         val decryptedPayload: ByteArray = cipherService.decrypt(entity.payload, entity.id.toByteArray())
         val payload: AccountPayload = cbor.decodeFromByteArray(AccountPayload.serializer(), decryptedPayload)
 
@@ -55,7 +55,7 @@ class AccountDbMapper(
      * @param targets   Targets for the descriptor.
      * @return          Domain model 'AccountDescriptor'.
      */
-    fun toDescriptor(entity: AccountEntity, targets: List<Target>): AccountDescriptor {
+    suspend fun toDescriptor(entity: AccountEntity, targets: List<Target>): AccountDescriptor {
         val decryptedPayload: ByteArray = cipherService.decrypt(entity.payload, entity.id.toByteArray())
         val payload: AccountPayload = cbor.decodeFromByteArray(AccountPayload.serializer(), decryptedPayload)
 
@@ -74,7 +74,7 @@ class AccountDbMapper(
      * @param domain    Domain model 'Account' ti map to the database entity.
      * @return          Database entity.
      */
-    fun toEntity(domain: Account): AccountEntity {
+    suspend fun toEntity(domain: Account): AccountEntity {
         val payload = AccountPayload(
             name = domain.descriptor.name,
             description = domain.descriptor.description
