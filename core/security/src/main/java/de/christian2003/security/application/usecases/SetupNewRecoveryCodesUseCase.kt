@@ -3,6 +3,7 @@ package de.christian2003.security.application.usecases
 import android.security.keystore.KeyProperties
 import de.christian2003.security.application.services.RecoveryCodeEncoderService
 import de.christian2003.security.application.services.SaltGeneratorService
+import de.christian2003.security.application.usecases.dto.RecoveryCodeGeneratorResultDto
 import de.christian2003.security.domain.entities.RecoveryCodes
 import de.christian2003.security.domain.exceptions.AuthSetupException
 import de.christian2003.security.domain.repositories.HardwareBackedKeyRepository
@@ -11,6 +12,11 @@ import de.christian2003.security.domain.repositories.RecoveryCodesRepository
 import de.christian2003.security.domain.services.CipherService
 import de.christian2003.security.domain.services.KdfService
 import de.christian2003.security.domain.services.KeyGeneratorService
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import java.security.SecureRandom
 import javax.crypto.SecretKey
 import javax.inject.Inject
@@ -75,7 +81,7 @@ class SetupNewRecoveryCodesUseCase @Inject constructor(
      *
      * @return  Recovery codes.
      */
-    private suspend fun generateRecoveryCodes(): List<ByteArray> {
+    private suspend fun generateRecoveryCodes(): List<ByteArray> = coroutineScope {
         val random = SecureRandom()
         val recoveryCodes: MutableList<ByteArray> = mutableListOf()
 
@@ -84,34 +90,81 @@ class SetupNewRecoveryCodesUseCase @Inject constructor(
             throw AuthSetupException("Cannot generate recovery codes because there is no KEK available")
         }
 
-        for (index: Int in 0 until numberOfRecoveryCodes) {
-            //Recovery codes are encoded with Crockford's Base32: XXXX-XXXX-XXXX-XXXX-XXXX-XXXX
-            //6 Segments * 4 Characters * 5 Bits per character = 120 Bits
-            val recoveryCodeBytes = ByteArray((6 * 4 * 5) / 8) //Divide by 8 to get bytes
-            random.nextBytes(recoveryCodeBytes)
-
-            //Generate salt:
-            val salt: ByteArray = saltGeneratorService.generateSalt() //Always generate new salt for new code
-
-            //Derive key for encryption:
-            val unwrappedKeyBytes: ByteArray = kdfService.derive(recoveryCodeBytes, salt)
-
-            //Wrap key:
-            val wrappedKeyBytes: ByteArray = wrapSourceKey(unwrappedKeyBytes)
-
-            val encryptedKek: ByteArray = try {
-                cipherService.encrypt(decryptedKek, wrappedKeyBytes)
-            } catch (e: Exception) {
-                throw AuthSetupException("Cannot encrypt KEK for recovery code $index: ${e.message ?: "Unknown error"}")
+        //Asynchronously generate all recovery codes:
+        val deferredResults: List<Deferred<RecoveryCodeGeneratorResultDto>> = (0 until numberOfRecoveryCodes).map { index ->
+            async(Dispatchers.Default) {
+                val recoveryCode: RecoveryCodeGeneratorResultDto =
+                    generateSingleRecoveryCode(
+                    index = index,
+                    decryptedKek = decryptedKek,
+                    random = random
+                )
+                return@async recoveryCode
             }
-
-            //Save encrypted KEK to repository:
-            recoveryCodesRepository.setEncryptedRecoveryKek(index, encryptedKek, salt)
-
-            recoveryCodes.add(recoveryCodeBytes)
         }
 
-        return recoveryCodes
+        //Wait for recovery codes to finish generating:
+        val recoveryCodeDtos: List<RecoveryCodeGeneratorResultDto> = deferredResults.awaitAll()
+
+        //Save generated codes:
+        recoveryCodeDtos.forEach { recoveryCode ->
+            recoveryCodesRepository.setEncryptedRecoveryKek(
+                index = recoveryCode.index,
+                encryptedKekBytes = recoveryCode.encryptedKek,
+                salt = recoveryCode.salt
+            )
+
+            recoveryCodes.add(recoveryCode.recoveryCodeBytes)
+        }
+
+        return@coroutineScope recoveryCodes
+    }
+
+
+    /**
+     * Generates a single recovery code.
+     *
+     * @param index         Index of the recovery code.
+     * @param decryptedKek  Bytes of the decrypted kek.
+     * @param random        Secure random.
+     * @return              Generated recovery code.
+     */
+    private suspend fun generateSingleRecoveryCode(
+        index: Int,
+        decryptedKek: ByteArray,
+        random: SecureRandom
+    ): RecoveryCodeGeneratorResultDto = coroutineScope {
+        //Recovery codes are encoded with Crockford's Base32: XXXX-XXXX-XXXX-XXXX-XXXX-XXXX
+        //6 Segments * 4 Characters * 5 Bits per character = 120 Bits
+        val recoveryCodeBytes = ByteArray((6 * 4 * 5) / 8) //Divide by 8 to get bytes
+        random.nextBytes(recoveryCodeBytes)
+
+        //Generate salt:
+        val salt: ByteArray = saltGeneratorService.generateSalt() //Always generate new salt for new code
+
+        //Derive key for encryption:
+        val unwrappedKeyBytes: ByteArray = kdfService.derive(recoveryCodeBytes, salt)
+
+        //Wrap key:
+        val wrappedKeyBytes: ByteArray = wrapSourceKey(unwrappedKeyBytes)
+
+        val encryptedKek: ByteArray = try {
+            cipherService.encrypt(decryptedKek, wrappedKeyBytes)
+        } catch (e: Exception) {
+            throw AuthSetupException("Cannot encrypt KEK for recovery code $index: ${e.message ?: "Unknown error"}")
+        }
+
+        val result = RecoveryCodeGeneratorResultDto(
+            index = index,
+            recoveryCodeBytes = recoveryCodeBytes,
+            salt = salt,
+            encryptedKek = encryptedKek
+        )
+
+        unwrappedKeyBytes.fill(0)
+        wrappedKeyBytes.fill(0)
+
+        return@coroutineScope result
     }
 
 
