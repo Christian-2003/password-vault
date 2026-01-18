@@ -36,5 +36,10 @@
     <string name="recoveryCodes_confirmContinueDialog_buttonGoBack">Go back</string>
     <string name="recoveryCodes_confirmContinueDialog_buttonContinue">Continue</string>
 
+    <string name="biometrics_title">Setup biometrics</string>
+    <string name="biometrics_help">Biometric authentication facilitates a quicker login without your master password.</string>
+    <string name="biometrics_buttonSkip">Skip</string>
+    <string name="biometrics_buttonEnable">Enable</string>
+
     <string name="login_title">Password Vault</string>
 </resources>

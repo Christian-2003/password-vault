@@ -10,7 +10,9 @@ enum class HelpCard(
 
     HelpSetupMasterPassword("help_setupMasterPassword"),
 
-    HelpRecoveryCodes("help_recoveryCodes");
+    HelpRecoveryCodes("help_recoveryCodes"),
+
+    HelpBiometrics("help_biometrics");
 
     fun getVisible(context: Context): Boolean {
         return context.getSharedPreferences("settings", Context.MODE_PRIVATE).getBoolean(key, true)
