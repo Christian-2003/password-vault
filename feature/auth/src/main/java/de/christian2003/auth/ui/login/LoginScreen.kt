@@ -45,7 +45,8 @@ import kotlinx.coroutines.withContext
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel,
-    onContinue: () -> Unit
+    onContinue: () -> Unit,
+    onBiometricUnlock: suspend () -> Boolean
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val errorPassword: String = stringResource(R.string.login_errorPassword)
@@ -62,9 +63,18 @@ fun LoginScreen(
         }
     }
 
+    val invokeOnBiometricUnlock: () -> Unit = {
+        coroutineScope.launch {
+            val result: Boolean = onBiometricUnlock()
+            if (result) {
+                onContinue()
+            }
+        }
+    }
+
     LaunchedEffect(Unit) {
         if (viewModel.areBiometricsConfigured && !viewModel.skipBiometricsPrompt) {
-            //TODO: Start biometric auth
+            invokeOnBiometricUnlock()
         }
         else {
             //Safe calls required: When rotating the screen, the focus requester is not instantiated
@@ -138,9 +148,7 @@ fun LoginScreen(
             Column {
                 if (viewModel.areBiometricsConfigured) {
                     OutlinedButton(
-                        onClick = {
-                            //TODO: Invoke biometric auth
-                        },
+                        onClick = invokeOnBiometricUnlock,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Row(

@@ -146,14 +146,16 @@ fun NavGraphBuilder.biometricsDestination(
 
 
 fun NavGraphBuilder.loginDestination(
-    onContinue: () -> Unit
+    onContinue: () -> Unit,
+    onBiometricUnlock: suspend () -> Boolean
 ) {
     composable<Login> {
         val viewModel: LoginViewModel = hiltViewModel()
 
         LoginScreen(
             viewModel = viewModel,
-            onContinue = onContinue
+            onContinue = onContinue,
+            onBiometricUnlock = onBiometricUnlock
         )
     }
 }

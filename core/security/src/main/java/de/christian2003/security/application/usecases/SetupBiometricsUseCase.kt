@@ -3,6 +3,7 @@ package de.christian2003.security.application.usecases
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import dagger.hilt.android.scopes.ActivityScoped
+import de.christian2003.security.domain.entities.SecurityAliases
 import de.christian2003.security.domain.exceptions.AuthSetupException
 import de.christian2003.security.domain.repositories.BiometricsRepository
 import de.christian2003.security.domain.repositories.DecryptedKekRepository
@@ -77,8 +78,8 @@ class SetupBiometricsUseCase @Inject constructor(
      *
      * @return  Generated secret key that is only released after biometric authentication.
      */
-    fun generateHardwareBackedKey(): SecretKey {
-        val alias = "biometrics_key"
+    private fun generateHardwareBackedKey(): SecretKey {
+        val alias = SecurityAliases.BiometricsHardwareBackedKey.getAlias()
         if (hardwareBackedKeyRepository.containsKey(alias)) {
             hardwareBackedKeyRepository.deleteKey(alias)
         }

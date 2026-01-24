@@ -23,6 +23,7 @@ enum class SecurityAliases(
     RecoveryCodeSalt("recovery_%1\$d_salt"),
 
     //Biometrics:
+    BiometricsHardwareBackedKey("hardware_backed_key_biometrics"),
     BiometricsKek("biometrics_kek");
 
 

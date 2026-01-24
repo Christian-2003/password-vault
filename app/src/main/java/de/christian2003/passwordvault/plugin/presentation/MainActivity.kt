@@ -58,6 +58,7 @@ import de.christian2003.passwordvault.plugin.presentation.view.settings.Settings
 import de.christian2003.passwordvault.plugin.presentation.view.settings.SettingsViewModel
 import de.christian2003.security.application.usecases.CanMasterKeyBeUnlockedUseCase
 import de.christian2003.security.application.usecases.SetupBiometricsUseCase
+import de.christian2003.security.application.usecases.UnlockWithBiometricsUseCase
 import javax.inject.Inject
 
 
@@ -66,23 +67,16 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : FragmentActivity() {
 
-    /**
-     * Use case to perform biometric authentication. This use case is activity-scoped, so that
-     * it can use an activity context. Therefore, the use case cannot be injected into view models
-     * and must be injected into the activity itself.
-     */
     @Deprecated("Use :core:security use case instead")
     @Inject lateinit var biometricAuthUseCaseDeprecated: BiometricAuthUseCase
-
-    /**
-     * Use case to enable / disable the biometric authentication. This use case is activity-scoped,
-     * so that it can use an activity context. Therefore, the use case cannot be injected into view
-     * models and must be injected into the activity itself.
-     */
+    @Deprecated("Use :core:security use case instead")
     @Inject lateinit var toggleBiometricsUseCase: ToggleBiometricsUseCase
+
 
     @Inject lateinit var canMasterKeyBeUnlockedUseCase: CanMasterKeyBeUnlockedUseCase
     @Inject lateinit var setupBiometricsUseCase: SetupBiometricsUseCase
+
+    @Inject lateinit var unlockWithBiometricsUseCase: UnlockWithBiometricsUseCase
 
 
     /**
@@ -113,6 +107,13 @@ class MainActivity : FragmentActivity() {
                     try {
                         setupBiometricsUseCase.setupBiometrics()
                         true
+                    } catch (_: Exception) {
+                        false
+                    }
+                },
+                onBiometricUnlock = {
+                    try {
+                        unlockWithBiometricsUseCase.unlock()
                     } catch (_: Exception) {
                         false
                     }
@@ -152,6 +153,7 @@ class MainActivity : FragmentActivity() {
 fun PasswordVault(
     canUnlockMasterKey: Boolean,
     onSetupBiometricAuth: suspend () -> Boolean,
+    onBiometricUnlock: suspend () -> Boolean,
     onBiometricAuth: suspend () -> Boolean,
     onToggleBiometrics: suspend () -> Boolean
 ) {
@@ -200,7 +202,8 @@ fun PasswordVault(
                             inclusive = true
                         }
                     }
-                }
+                },
+                onBiometricUnlock = onBiometricUnlock
             )
 
 
