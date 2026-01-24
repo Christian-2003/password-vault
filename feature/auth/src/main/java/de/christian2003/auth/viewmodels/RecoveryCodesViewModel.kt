@@ -7,11 +7,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.auth.models.recoverycodes.RecoveryCodesFormatter
 import de.christian2003.auth.models.recoverycodes.RecoveryCodesScreenDialog
+import de.christian2003.auth.models.recoverycodes.RecoveryCodesScreenState
+import de.christian2003.security.application.usecases.SetupCommitUseCase
 import de.christian2003.security.application.usecases.SetupNewRecoveryCodesUseCase
 import de.christian2003.security.domain.entities.RecoveryCodes
 import de.christian2003.ui.model.HelpCard
@@ -25,13 +29,22 @@ import javax.inject.Inject
  * View model for the screen through which new recovery codes are displayed.
  *
  * @param application                   Application.
+ * @param savedStateHandle              Saved state handle.
  * @param setupNewRecoveryCodesUseCase  Use case to generate new recovery codes.
+ * @param setupCommitUseCase            Use case to commit changes, if this is the last screen of the flow.
  */
 @HiltViewModel
 class RecoveryCodesViewModel @Inject constructor(
     application: Application,
-    private val setupNewRecoveryCodesUseCase: SetupNewRecoveryCodesUseCase
+    savedStateHandle: SavedStateHandle,
+    private val setupNewRecoveryCodesUseCase: SetupNewRecoveryCodesUseCase,
+    private val setupCommitUseCase: SetupCommitUseCase
 ): AndroidViewModel(application) {
+
+    /**
+     * State with which the screen is shown.
+     */
+    val state: RecoveryCodesScreenState = savedStateHandle.toRoute<de.christian2003.auth.navigation.RecoveryCodes>().state
 
     /**
      * Formatted recovery codes. This is empty while new codes are generating.
@@ -111,6 +124,14 @@ class RecoveryCodesViewModel @Inject constructor(
         }
         catch (_: Exception) { }
         return@coroutineScope false
+    }
+
+
+    suspend fun finishSetupIfRequired(): Boolean {
+        if (state == RecoveryCodesScreenState.RecoverPassword) {
+            setupCommitUseCase.commit()
+        }
+        return true
     }
 
 

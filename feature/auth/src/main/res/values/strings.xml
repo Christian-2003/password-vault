@@ -21,11 +21,13 @@
 
 
     <!-- Screen through which recovery codes are displayed -->
-    <string name="recoveryCodes_title">Recovery codes</string>
+    <string name="recoveryCodes_titleFirstTimeSetup">Recovery codes</string>
+    <string name="recoveryCodes_titleRecoverPassword">New recovery codes</string>
     <string name="recoveryCodes_loadingInfo">Generating recovery codes</string>
     <string name="recoveryCodes_codesHeader">Your recovery codes</string>
     <string name="recoveryCodes_error">We cannot generate any recovery codes at the moment. Please try again later.</string>
-    <string name="recoveryCodes_help">Recovery codes are used to verify your identity if you forget your master password. Store these codes in a safe location where only you have access.</string>
+    <string name="recoveryCodes_helpFirstTimeSetup">Recovery codes are used to verify your identity if you forget your master password. Store these codes in a safe location where only you have access.</string>
+    <string name="recoveryCodes_helpRecoverPassword">Your old recovery codes have been invalidated. Store these new codes in a safe location where only you have access.</string>
     <string name="recoveryCodes_buttonContinue">Continue</string>
     <string name="recoveryCodes_buttonDownload">Download</string>
     <string name="recoveryCodes_downloadDialog_title">Warning</string>
@@ -56,5 +58,34 @@
     <string name="login_buttonLogin">Login</string>
     <string name="login_buttonBiometrics">Use biometrics</string>
     <string name="login_buttonRecovery">Forgot password</string>
+
+
+    <!-- Screen through which to enter the master password -->
+    <string name="recovery_title">Recovery</string>
+    <string name="recovery_help">During the app setup, you received five recovery codes. You need to enter one of these codes in order to continue.</string>
+    <string name="recovery_recoveryCodeLabel">Recovery code</string>
+    <string name="recovery_error_codeInvalid">Recovery code is invalid</string>
+    <string name="recovery_error_codeEmpty">This field cannot be empty</string>
+
+
+    <!-- Screen for authentication settings -->
+    <string name="authSettings_title">Authentication</string>
+    <string name="authSettings_masterPassword_title">Master password</string>
+    <string name="authSettings_masterPassword_placeholder">•••••</string> <!-- '•' is U+2022  -->
+    <string name="authSettings_masterPassword_activeLabelTooltip">You have set a master password</string>
+    <string name="authSettings_masterPassword_placeholderTooltip">We cannot show your master password</string>
+    <string name="authSettings_masterPassword_editButton">Change password</string>
+    <string name="authSettings_recoveryCodes_title">Recovery codes</string>
+    <string name="authSettings_recoveryCodes_placeholder">XXXX-XXXX-XXXX-XXXX-XXXX-XXXX</string>
+    <string name="authSettings_recoveryCodes_activeLabelTooltip">You have set 5 recovery codes</string>
+    <string name="authSettings_recoveryCodes_placeholderTooltip">We cannot show your recovery codes</string>
+    <string name="authSettings_recoveryCodes_generateButton">Generate new codes</string>
+    <string name="authSettings_biometrics_title">Biometrics</string>
+    <string name="authSettings_biometrics_activeLabelTooltip">Biometric authentication is active</string>
+    <string name="authSettings_biometrics_inactiveLabelTooltip">Biometric authentication is disabled</string>
+    <string name="authSettings_biometrics_enableButton">Enable biometrics</string>
+    <string name="authSettings_biometrics_disableButton">Disable biometrics</string>
+    <string name="authSettings_activeLabel">Active</string>
+    <string name="authSettings_inactiveLabel">Inactive</string>
 
 </resources>

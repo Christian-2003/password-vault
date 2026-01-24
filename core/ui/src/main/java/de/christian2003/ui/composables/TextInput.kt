@@ -10,6 +10,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -28,6 +29,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
@@ -55,6 +57,7 @@ import androidx.compose.ui.unit.dp
  * @param isPassword            Whether the text input is used to display a password.
  * @param visualTransformation  Visual transformation for the text displayed.
  * @param focusRequester        Focus requester.
+ * @param textStyle             Text style.
  */
 @Composable
 fun TextInput(
@@ -71,7 +74,8 @@ fun TextInput(
     enabled: Boolean = true,
     isPassword: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    focusRequester: FocusRequester = FocusRequester()
+    focusRequester: FocusRequester = FocusRequester(),
+    textStyle: TextStyle = LocalTextStyle.current
 ) {
     var selection by remember { mutableStateOf(TextRange(value.length)) }
     TextInput(
@@ -91,7 +95,8 @@ fun TextInput(
         enabled = enabled,
         isPassword = isPassword,
         visualTransformation = visualTransformation,
-        focusRequester = focusRequester
+        focusRequester = focusRequester,
+        textStyle = textStyle
     )
 }
 
@@ -115,6 +120,7 @@ fun TextInput(
  * @param isPassword            Whether the text input is used to display a password.
  * @param visualTransformation  Visual transformation for the text displayed.
  * @param focusRequester        Focus requester.
+ * @param textStyle             Text style.
  */
 @Composable
 fun TextInput(
@@ -131,7 +137,8 @@ fun TextInput(
     enabled: Boolean = true,
     isPassword: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    focusRequester: FocusRequester = FocusRequester()
+    focusRequester: FocusRequester = FocusRequester(),
+    textStyle: TextStyle = LocalTextStyle.current
 ) {
     val scope = rememberCoroutineScope()
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
@@ -247,6 +254,7 @@ fun TextInput(
             } else {
                 visualTransformation
             },
+            textStyle = textStyle,
             modifier = Modifier
                 .fillMaxWidth()
                 .onFocusEvent {

@@ -46,6 +46,7 @@ import kotlinx.coroutines.withContext
 fun LoginScreen(
     viewModel: LoginViewModel,
     onContinue: () -> Unit,
+    onNavigateToRecovery: () -> Unit,
     onBiometricUnlock: suspend () -> Boolean
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
@@ -136,9 +137,7 @@ fun LoginScreen(
                     focusRequester = focusRequester
                 )
                 TextButton(
-                    onClick = {
-                        //TODO: Navigate to recovery
-                    }
+                    onClick = onNavigateToRecovery
                 ) {
                     Text(stringResource(R.string.login_buttonRecovery))
                 }
@@ -155,7 +154,7 @@ fun LoginScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
-                                painter = painterResource(R.drawable.ic_biometrics),
+                                painter = painterResource(de.christian2003.ui.R.drawable.ic_biometrics),
                                 contentDescription = "",
                                 modifier = Modifier.padding(end = 8.dp)
                             )

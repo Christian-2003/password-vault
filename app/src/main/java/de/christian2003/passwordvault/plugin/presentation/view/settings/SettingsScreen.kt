@@ -41,12 +41,10 @@ import java.time.LocalDate
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel,
-    onToggleBiometrics: suspend () -> Boolean,
     onNavigateUp: () -> Unit,
     onNavigateToHelp: () -> Unit,
-    onNavigateToPassword: () -> Unit,
+    onNavigateToAuthSettings: () -> Unit,
     onNavigateToDevSettings: () -> Unit,
-    onNavigateToSecurityQuestions: () -> Unit,
     onUseGlobalThemeChange: (Boolean) -> Unit,
     onThemeContrastChange: (ThemeContrast) -> Unit
 ) {
@@ -116,34 +114,11 @@ fun SettingsScreen(
                     indentToPrefixIcon = true
                 )
                 SettingsItemButton(
-                    title = stringResource(R.string.settings_security_masterPasswordTitle),
-                    info = stringResource(R.string.settings_security_masterPasswordInfo),
-                    prefixIcon = painterResource(R.drawable.ic_password),
+                    title = stringResource(R.string.settings_security_authTitle),
+                    info = stringResource(R.string.settings_security_authInfo),
+                    prefixIcon = painterResource(de.christian2003.ui.R.drawable.ic_auth),
                     endIcon = painterResource(R.drawable.ic_next),
-                    onClick = onNavigateToPassword
-                )
-                if (viewModel.areBiometricsAvailable) {
-                    SettingsItemSwitch(
-                        title = stringResource(R.string.settings_security_biometricsTitle),
-                        info = stringResource(R.string.settings_security_biometricsInfo),
-                        prefixIcon = painterResource(R.drawable.ic_biometrics),
-                        checked = viewModel.areBiometricsConfigured,
-                        onCheckedChange = { enabled ->
-                            coroutineScope.launch {
-                                val result: Boolean = onToggleBiometrics()
-                                if (result) {
-                                    viewModel.refreshAreBiometricsConfigured()
-                                }
-                            }
-                        }
-                    )
-                }
-                SettingsItemButton(
-                    title = stringResource(R.string.settings_security_questionsTitle),
-                    info = stringResource(R.string.settings_security_questionsInfo),
-                    prefixIcon = painterResource(R.drawable.ic_question),
-                    endIcon = painterResource(R.drawable.ic_next),
-                    onClick = onNavigateToSecurityQuestions
+                    onClick = onNavigateToAuthSettings
                 )
             }
 

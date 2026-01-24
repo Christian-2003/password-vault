@@ -112,12 +112,8 @@
     <string name="settings_customization_contrast_dialogPreview_itemTitle">Title</string>
     <string name="settings_customization_contrast_dialogPreview_itemText">Text</string>
     <string name="settings_security">Security</string>
-    <string name="settings_security_masterPasswordTitle">Master password</string>
-    <string name="settings_security_masterPasswordInfo">Edit your master password</string>
-    <string name="settings_security_biometricsTitle">Biometrics</string>
-    <string name="settings_security_biometricsInfo">Use biometrics for authentication</string>
-    <string name="settings_security_questionsTitle">Security questions</string>
-    <string name="settings_security_questionsInfo">Security questions for password recovery</string>
+    <string name="settings_security_authTitle">Authentication</string>
+    <string name="settings_security_authInfo">Change authentication settings</string>
     <string name="settings_help">Help</string>
     <string name="settings_help_helpMessagesTitle">Help messages</string>
     <string name="settings_help_helpMessagesInfo">Reactivate dismissed help messages</string>
@@ -205,13 +201,6 @@
     <string name="login_passwordLabel">Master password</string>
     <string name="login_hint">Confirm your identity</string>
     <string name="login_errorPassword">Password is invalid</string>
-
-    <string name="recovery_title">Password recovery</string>
-    <string name="recovery_help">Answer the security questions below in order to recover your password.</string>
-    <string name="recovery_answerLabel">Answer %1$d</string>
-    <string name="recovery_questionTitle">Question %1$d</string>
-    <string name="recovery_verifyButton">Recover master password</string>
-    <string name="recovery_answersInvalid">Answers are invalid</string>
 
     <string name="button_save">Save</string>
     <string name="button_cancel">Cancel</string>

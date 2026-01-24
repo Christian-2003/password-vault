@@ -166,6 +166,52 @@ class SharedPreferencesKeyRepository @Inject constructor(
 
 
     /**
+     * Returns the encrypted recovery KEK for the specified index. If no KEK is available, null is
+     * returned.
+     *
+     * @param index Index of the encrypted KEK to return.
+     * @return      Encrypted KEK or null.
+     */
+    override fun getEncryptedRecoveryKek(index: Int): ByteArray? {
+        if (recoveryKeks.contains(index)) {
+            return recoveryKeks[index]?.encryptedKekBytes
+        }
+        else {
+            val alias: String = SecurityAliases.RecoveryCodeKek.getAlias(index)
+            val kekAsString: String? = preferences.getString(alias, null)
+            if (kekAsString != null) {
+                val kekAsBytes: ByteArray = stringToBytes(kekAsString)
+                return kekAsBytes
+            }
+        }
+        return null
+    }
+
+
+    /**
+     * Returns the salt for the recovery code with the specified index. If no salt is available,
+     * null is returned.
+     *
+     * @param index Index of the salt to return.
+     * @return      Salt of the specified index or null.
+     */
+    override fun getRecoverySalt(index: Int): ByteArray? {
+        if (recoveryKeks.contains(index)) {
+            return recoveryKeks[index]?.salt
+        }
+        else {
+            val alias: String = SecurityAliases.RecoveryCodeSalt.getAlias(index)
+            val saltAsString: String? = preferences.getString(alias, null)
+            if (saltAsString != null) {
+                val saltAsBytes: ByteArray = stringToBytes(saltAsString)
+                return saltAsBytes
+            }
+        }
+        return null
+    }
+
+
+    /**
      * Returns the decrypted KEK or null, if no KEK is available.
      *
      * @return  Bytes of the decrypted KEK or null.

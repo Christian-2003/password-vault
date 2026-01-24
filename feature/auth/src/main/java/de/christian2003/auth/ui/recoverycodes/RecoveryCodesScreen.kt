@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import de.christian2003.auth.viewmodels.RecoveryCodesViewModel
 import de.christian2003.auth.R
 import de.christian2003.auth.models.recoverycodes.RecoveryCodesScreenDialog
+import de.christian2003.auth.models.recoverycodes.RecoveryCodesScreenState
 import de.christian2003.ui.composables.DialogWithHeroSection
 import de.christian2003.ui.composables.HelpCard
 import de.christian2003.ui.composables.SimpleDialog
@@ -91,12 +92,20 @@ fun RecoveryCodesScreen(
     }
 
     val invokeOnContinue: () -> Unit = {
-        onContinue()
+        coroutineScope.launch(Dispatchers.IO) {
+            val result: Boolean = viewModel.finishSetupIfRequired()
+            if (result) {
+                withContext(Dispatchers.Main) {
+                    onContinue()
+                }
+            }
+        }
     }
 
     Scaffold(
         topBar = {
             TopBar(
+                state = viewModel.state,
                 onNavigateUp = onNavigateUp
             )
         },
@@ -137,6 +146,7 @@ fun RecoveryCodesScreen(
                 else -> {
                     //Display codes:
                     RecoveryCodesContent(
+                        state = viewModel.state,
                         recoveryCodes = viewModel.recoveryCodes,
                         isHelpCardVisible = viewModel.isHelpCardVisible,
                         onDismissHelpCard = {
@@ -263,6 +273,7 @@ private fun LoadingContent() {
 /**
  * Content displayed once recovery codes are generated.
  *
+ * @param state                     State with which the screen is displayed.
  * @param recoveryCodes             List of recovery codes to display.
  * @param isHelpCardVisible         Whether the help card is visible.
  * @param onDismissHelpCard         Callback invoked to dismiss the help card.
@@ -270,6 +281,7 @@ private fun LoadingContent() {
  */
 @Composable
 private fun RecoveryCodesContent(
+    state: RecoveryCodesScreenState,
     recoveryCodes: List<String>,
     isHelpCardVisible: Boolean,
     onDismissHelpCard: () -> Unit,
@@ -283,7 +295,10 @@ private fun RecoveryCodesContent(
     ) {
         AnimatedVisibility(isHelpCardVisible) {
             HelpCard(
-                text = stringResource(R.string.recoveryCodes_help),
+                text = when (state) {
+                    RecoveryCodesScreenState.FirstTimeSetup -> stringResource(R.string.recoveryCodes_helpFirstTimeSetup)
+                    RecoveryCodesScreenState.RecoverPassword -> stringResource(R.string.recoveryCodes_helpRecoverPassword)
+                },
                 onDismiss = onDismissHelpCard,
                 modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
             )
@@ -369,15 +384,22 @@ private fun RecoveryCodesItem(
 /**
  * Top bar for the screen.
  *
+ * @param state         State with which the screen is opened.
  * @param onNavigateUp  Callback invoked to navigate up the navigation stack.
  */
 @Composable
 private fun TopBar(
+    state: RecoveryCodesScreenState,
     onNavigateUp: () -> Unit
 ) {
     TopAppBar(
         title = {
-            Text(stringResource(R.string.recoveryCodes_title))
+            Text(
+                text = when (state) {
+                    RecoveryCodesScreenState.FirstTimeSetup -> stringResource(R.string.recoveryCodes_titleFirstTimeSetup)
+                    RecoveryCodesScreenState.RecoverPassword -> stringResource(R.string.recoveryCodes_titleRecoverPassword)
+                }
+            )
         },
         navigationIcon = {
             IconButton(

@@ -26,4 +26,23 @@ class RecoveryCodesFormatter {
         return builder.toString()
     }
 
+
+    /**
+     * Converts the specified Base32-formatted recovery code into a char array which contains only
+     * data and no formatting characters.
+     *
+     * @param code  Base32-formatted recovery code to convert to a char array.
+     * @return      Converted char array.
+     */
+    fun convertBack(code: String): CharArray {
+        val codeWithoutDashes: String = code.replace("-", "").uppercase()
+        val result = CharArray(codeWithoutDashes.length)
+
+        for (i: Int in result.indices) {
+            result[i] = codeWithoutDashes[i]
+        }
+
+        return result
+    }
+
 }
