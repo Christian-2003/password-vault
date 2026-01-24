@@ -13,7 +13,7 @@ import de.christian2003.security.application.services.SaltGeneratorService
  */
 @Module
 @InstallIn(SingletonComponent::class)
-class SecurityInfrastructureModule {
+class SecurityInfrastructureSingletonModule {
 
     @Provides
     fun provideRecoveryCodeEncoderService(): RecoveryCodeEncoderService {

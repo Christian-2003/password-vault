@@ -1,7 +1,9 @@
 package de.christian2003.security.application.usecases
 
+import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import de.christian2003.security.application.services.SaltGeneratorService
+import de.christian2003.security.domain.entities.SecurityAliases
 import de.christian2003.security.domain.exceptions.AuthSetupException
 import de.christian2003.security.domain.repositories.HardwareBackedKeyRepository
 import de.christian2003.security.domain.repositories.DecryptedKekRepository
@@ -42,75 +44,114 @@ class SetupNewMasterPasswordUseCase @Inject constructor(
      * @param masterPassword    Master password to set.
      */
     suspend fun setupMasterPassword(masterPassword: CharArray) {
+        //Internal buffers:
+        var salt: ByteArray? = null
+        var sourceKeyBytes: ByteArray? = null
+        var decryptedKekBytes: ByteArray? = null
+        var encryptedKekBytes: ByteArray? = null
+
+        try {
+            //Generate data:
+            salt = saltGeneratorService.generateSalt()
+            sourceKeyBytes = deriveSourceKey(masterPassword, salt)
+            decryptedKekBytes = getOrCreateDecryptedKek()
+            encryptedKekBytes = encryptKek(decryptedKekBytes, sourceKeyBytes)
+
+            //Store data in repositories:
+            masterPasswordRepository.setEncryptedMasterPasswordKek(encryptedKekBytes, salt)
+            kekRepository.setDecryptedKek(decryptedKekBytes)
+        }
+        catch (e: Exception) {
+            sourceKeyBytes?.fill(0)
+            decryptedKekBytes?.fill(0)
+            encryptedKekBytes?.fill(0)
+            throw e
+        }
+    }
+
+
+    /**
+     * Derives the source key from the specified master password and salt.
+     *
+     * @param masterPassword        Master password from which to derive the source key.
+     * @param salt                  Salt to use to derive the source key.
+     * @throws AuthSetupException   Cannot derive source key.
+     */
+    private suspend fun deriveSourceKey(masterPassword: CharArray, salt: ByteArray): ByteArray {
         if (masterPassword.isEmpty()) {
             throw AuthSetupException("Master password cannot be empty")
         }
 
-        val sourceKeySalt: ByteArray = saltGeneratorService.generateSalt() //Always generate new salt for password setup!
-
-        val unwrappedSourceKeyBytes: ByteArray = try {
-            kdfService.derive(masterPassword, sourceKeySalt)
-        } catch (e: Exception) {
-            throw AuthSetupException("Key cannot be derived from master password: ${e.message ?: "Unknown error"}")
-        }
-
-        val wrappedSourceKeyBytes: ByteArray = wrapSourceKey(unwrappedSourceKeyBytes)
-
-        val decryptedKekBytes: ByteArray = getDecryptedKek()
-
-        val encryptedKekBytes: ByteArray = try {
-            cipherService.encrypt(decryptedKekBytes, wrappedSourceKeyBytes)
-        } catch (e: Exception) {
-            throw AuthSetupException("KEK cannot be encrypted using master password: ${e.message ?: "Unknown error"}")
-        }
-
-        masterPasswordRepository.setEncryptedMasterPasswordKek(encryptedKekBytes, sourceKeySalt)
-    }
-
-
-    /**
-     * Wraps the source key.
-     *
-     * @param unwrappedKeyBytes Bytes of the source key to wrap.
-     * @return                  Bytes of the wrapped source key.
-     */
-    private suspend fun wrapSourceKey(unwrappedKeyBytes: ByteArray): ByteArray {
-        val hardwareBackedKeyAlias = "master_password_key"
-
-        var hardwareBackedKey: SecretKey? = hardwareBackedKeyRepository.getKey(hardwareBackedKeyAlias)
-        if (hardwareBackedKey == null) {
-            hardwareBackedKey = hardwareBackedKeyRepository.generateNewKey(
-                alias = hardwareBackedKeyAlias,
-                algorithm = KeyProperties.KEY_ALGORITHM_AES,
-                keyGenParameterSpec = keyGeneratorService.getKeyGenParameterSpec(hardwareBackedKeyAlias)
-            )
-        }
-
         try {
-            val keyBytes: ByteArray = cipherService.encrypt(unwrappedKeyBytes, hardwareBackedKey)
-            val trimmedKeyBytes: ByteArray = keyBytes.take(32).toByteArray()
-            keyBytes.fill(0)
-            return trimmedKeyBytes
-        }
-        catch (e: Exception) {
-            throw AuthSetupException("Source key cannot be wrapped for master password: ${e.message ?: "Unknown error"}")
+            val sourceKeyBytes: ByteArray = kdfService.derive(masterPassword, salt)
+            return sourceKeyBytes
+        } catch (e: Exception) {
+            throw AuthSetupException("Cannot derive source key (${e.message ?: "Unknown error"})")
         }
     }
 
 
     /**
-     * Returns the decrypted KEK.
+     * Gets the decrypted KEK. If no decrypted KEK is available, a new KEK is generated.
      *
      * @return  Bytes of the decrypted KEK.
      */
-    private suspend fun getDecryptedKek(): ByteArray {
-        var decryptedKek: ByteArray? = kekRepository.getDecryptedKek()
-        if (decryptedKek == null) {
-            decryptedKek = keyGeneratorService.generate()
-            kekRepository.setDecryptedKek(decryptedKek)
+    private suspend fun getOrCreateDecryptedKek(): ByteArray {
+        if (kekRepository.hasDecryptedKek()) {
+            //Return existing KEK:
+            val decryptedKekBytes: ByteArray? = kekRepository.getDecryptedKek()
+            if (decryptedKekBytes != null) {
+                return decryptedKekBytes
+            }
         }
 
-        return decryptedKek
+        //Generate new KEK:
+        val decryptedKekBytes: ByteArray = keyGeneratorService.generate()
+        return decryptedKekBytes
+    }
+
+
+    /**
+     * Encrypts the KEK using the specified source key as well as a hardware-backed key.
+     *
+     * @param decryptedKekBytes     Bytes of the KEK to encrypt.
+     * @param sourceKeyBytes        Bytes of the source key used for encrypting the KEK.
+     * @throws AuthSetupException   Cannot encrypt the KEK.
+     */
+    private suspend fun encryptKek(decryptedKekBytes: ByteArray, sourceKeyBytes: ByteArray): ByteArray {
+        //Encrypt KEK using source key:
+        val encryptedKekBytes: ByteArray = try {
+            cipherService.encrypt(decryptedKekBytes, sourceKeyBytes)
+        } catch (e: Exception) {
+            throw AuthSetupException("Cannot encrypt KEK using source key (${e.message ?: "Unknown error"})")
+        }
+
+        //Get hardware-backed key:
+        val hardwareBackedKeyAlias: String = SecurityAliases.HardwareBackedKey.getAlias()
+        val hardwareBackedKey: SecretKey = if (hardwareBackedKeyRepository.containsKey(hardwareBackedKeyAlias)) {
+            //Return existing key:
+            hardwareBackedKeyRepository.getKey(hardwareBackedKeyAlias)!!
+        } else {
+            //Generate new key:
+            val param: KeyGenParameterSpec = keyGeneratorService.getKeyGenParameterSpec(hardwareBackedKeyAlias)
+            hardwareBackedKeyRepository.generateNewKey(
+                alias = hardwareBackedKeyAlias,
+                algorithm = KeyProperties.KEY_ALGORITHM_AES,
+                keyGenParameterSpec = param
+            )
+        }
+
+        //Encrypt KEK using hardware-backed key:
+        try {
+            val encryptedKekWithHwBytes: ByteArray = cipherService.encrypt(encryptedKekBytes, hardwareBackedKey)
+            return encryptedKekWithHwBytes
+        }
+        catch (e: Exception) {
+            throw AuthSetupException("Cannot encrypt KEK using hardware-backed key (${e.message ?: "Unknown error"})")
+        }
+        finally {
+            encryptedKekBytes.fill(0)
+        }
     }
 
 }

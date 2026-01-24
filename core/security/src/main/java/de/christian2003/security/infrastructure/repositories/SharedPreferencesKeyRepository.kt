@@ -2,9 +2,11 @@ package de.christian2003.security.infrastructure.repositories
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
+import androidx.biometric.BiometricManager
 import androidx.core.content.edit
 import dagger.hilt.android.qualifiers.ApplicationContext
+import de.christian2003.security.domain.entities.SecurityAliases
+import de.christian2003.security.domain.repositories.BiometricsRepository
 import de.christian2003.security.domain.repositories.CommitRepository
 import de.christian2003.security.domain.repositories.DecryptedKekRepository
 import de.christian2003.security.domain.repositories.MasterKeyRepository
@@ -25,8 +27,8 @@ import javax.inject.Singleton
  */
 @Singleton
 class SharedPreferencesKeyRepository @Inject constructor(
-    @ApplicationContext context: Context
-): MasterPasswordRepository, RecoveryCodesRepository, DecryptedKekRepository, MasterKeyRepository, CommitRepository {
+    @ApplicationContext private val context: Context
+): MasterPasswordRepository, RecoveryCodesRepository, DecryptedKekRepository, MasterKeyRepository, BiometricsRepository, CommitRepository {
 
     /**
      * Shared preferences used for storing the data.
@@ -46,6 +48,12 @@ class SharedPreferencesKeyRepository @Inject constructor(
     private val recoveryKeks: MutableMap<Int, SharedPreferencesSetupRepositoryKekEntryDto> = mutableMapOf()
 
     /**
+     * KEK for the biometrics that was set. This is not stored in permanent memory until data is
+     * committed.
+     */
+    private var biometricsKek: ByteArray? = null
+
+    /**
      * Encrypted master key.
      */
     private var encryptedMasterKey: ByteArray? = null
@@ -54,12 +62,6 @@ class SharedPreferencesKeyRepository @Inject constructor(
      * Decrypted KEK that is required across multiple setup steps.
      */
     private var decryptedKek: ByteArray? = null
-
-
-    init {
-        Log.d("KeyRepo", "Create new KeyRepo")
-    }
-
 
 
     /**
@@ -90,7 +92,7 @@ class SharedPreferencesKeyRepository @Inject constructor(
             return masterPasswordKek.encryptedKekBytes
         }
         else {
-            val kekAsString: String? = preferences.getString("master_password_kek", null)
+            val kekAsString: String? = preferences.getString(SecurityAliases.MasterPasswordKek.getAlias(), null)
             if (kekAsString != null) {
                 val kekAsBytes: ByteArray = stringToBytes(kekAsString)
                 return kekAsBytes
@@ -111,7 +113,7 @@ class SharedPreferencesKeyRepository @Inject constructor(
             return masterPasswordKek.salt
         }
         else {
-            val saltAsString: String? = preferences.getString("master_password_salt", null)
+            val saltAsString: String? = preferences.getString(SecurityAliases.MasterPasswordSalt.getAlias(), null)
             if (saltAsString != null) {
                 val saltAsBytes: ByteArray = stringToBytes(saltAsString)
                 return saltAsBytes
@@ -127,7 +129,7 @@ class SharedPreferencesKeyRepository @Inject constructor(
      * @return  Whether the encrypted KEK for the master password exists.
      */
     override fun hasEncryptedMasterPasswordKek(): Boolean {
-        return masterPasswordKek != null || preferences.contains("master_password_kek")
+        return masterPasswordKek != null || preferences.contains(SecurityAliases.MasterPasswordKek.getAlias())
     }
 
 
@@ -137,7 +139,7 @@ class SharedPreferencesKeyRepository @Inject constructor(
      * @return  Whether the salt for the master password exists.
      */
     override fun hasMasterPasswordSalt(): Boolean {
-        return masterPasswordKek != null || preferences.contains("master_password_salt")
+        return masterPasswordKek != null || preferences.contains(SecurityAliases.MasterPasswordSalt.getAlias())
     }
 
 
@@ -203,7 +205,7 @@ class SharedPreferencesKeyRepository @Inject constructor(
             return encryptedMasterKey
         }
         else {
-            val masterKeyAsString: String? = preferences.getString("master_key", null)
+            val masterKeyAsString: String? = preferences.getString(SecurityAliases.MasterKey.getAlias(), null)
             if (masterKeyAsString != null) {
                 val masterKeyAsBytes: ByteArray = stringToBytes(masterKeyAsString)
                 return masterKeyAsBytes
@@ -229,7 +231,62 @@ class SharedPreferencesKeyRepository @Inject constructor(
      * @return  Whether an encrypted master key exists.
      */
     override fun hasEncryptedMasterKey(): Boolean {
-        return encryptedMasterKey != null || preferences.contains("master_key")
+        return encryptedMasterKey != null || preferences.contains(SecurityAliases.MasterKey.getAlias())
+    }
+
+
+    /**
+     * Sets the encrypted KEK from the biometrics.
+     *
+     * @param encryptedKekBytes Bytes of the encrypted KEK.
+     */
+    override fun setEncryptedBiometricsKek(encryptedKekBytes: ByteArray) {
+        biometricsKek = encryptedKekBytes
+    }
+
+
+    /**
+     * Returns the current encrypted KEK for the biometrics. If no KEK exists, null is returned.
+     *
+     * @return  Bytes of the encrypted KEK or null.
+     */
+    override fun getEncryptedBiometricsKek(): ByteArray? {
+        if (biometricsKek != null) {
+            return biometricsKek
+        }
+        else {
+            val biometricsKekAsString: String? = preferences.getString(SecurityAliases.BiometricsKek.getAlias(), null)
+            if (biometricsKekAsString != null) {
+                val biometricsKekAsBytes: ByteArray = stringToBytes(biometricsKekAsString)
+                return biometricsKekAsBytes
+            }
+            return null
+        }
+    }
+
+
+    /**
+     * Tests whether the encrypted KEK for the biometrics exists.
+     *
+     * @return  Whether the encrypted KEK for the biometrics exists.
+     */
+    override fun hasEncryptedBiometricsKek(): Boolean {
+        return biometricsKek != null || preferences.contains(SecurityAliases.BiometricsKek.getAlias())
+    }
+
+
+    /**
+     * Returns whether biometrics are available on the device.
+     *
+     * @return  Whether biometrics are available.
+     */
+    override fun areBiometricsAvailable(): Boolean {
+        val biometricManager: BiometricManager = BiometricManager.from(context)
+        val canAuthenticate: Int = biometricManager.canAuthenticate(
+            BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL
+        )
+
+        return canAuthenticate == BiometricManager.BIOMETRIC_SUCCESS
     }
 
 
@@ -241,27 +298,35 @@ class SharedPreferencesKeyRepository @Inject constructor(
             //Commit master password KEK:
             val masterPasswordKek: SharedPreferencesSetupRepositoryKekEntryDto? = this@SharedPreferencesKeyRepository.masterPasswordKek
             if (masterPasswordKek != null) {
-                putString("master_password_kek", bytesToString(masterPasswordKek.encryptedKekBytes))
-                putString("master_password_salt", bytesToString(masterPasswordKek.salt))
+                putString(SecurityAliases.MasterPasswordKek.getAlias(), bytesToString(masterPasswordKek.encryptedKekBytes))
+                putString(SecurityAliases.MasterPasswordSalt.getAlias(), bytesToString(masterPasswordKek.salt))
             }
             this@SharedPreferencesKeyRepository.masterPasswordKek = null
 
             //Commit changes to recovery:
             recoveryKeks.forEach { index, recoveryCodeKek ->
-                putString("recovery_${index}_kek", bytesToString(recoveryCodeKek.encryptedKekBytes))
-                putString("recovery_${index}_salt", bytesToString(recoveryCodeKek.salt))
+                putString(SecurityAliases.RecoveryCodeKek.getAlias(index), bytesToString(recoveryCodeKek.encryptedKekBytes))
+                putString(SecurityAliases.RecoveryCodeSalt.getAlias(index), bytesToString(recoveryCodeKek.salt))
             }
             recoveryKeks.clear()
+
+            //Commit changes to biometrics:
+            val biometricsKek: ByteArray? = this@SharedPreferencesKeyRepository.biometricsKek
+            if (biometricsKek != null) {
+                putString(SecurityAliases.BiometricsKek.getAlias(), bytesToString(biometricsKek))
+            }
+            this@SharedPreferencesKeyRepository.biometricsKek = null
 
             //Commit encrypted master key:
             val encryptedMasterKey: ByteArray? = this@SharedPreferencesKeyRepository.encryptedMasterKey
             if (encryptedMasterKey != null) {
-                putString("master_key", bytesToString(encryptedMasterKey))
+                putString(SecurityAliases.MasterKey.getAlias(), bytesToString(encryptedMasterKey))
                 encryptedMasterKey.fill(0)
             }
             this@SharedPreferencesKeyRepository.encryptedMasterKey = null
         }
     }
+
 
     /**
      * Tests whether changes are staged that can be committed.
@@ -269,7 +334,7 @@ class SharedPreferencesKeyRepository @Inject constructor(
      * @return  Whether changes are staged and waiting for commit.
      */
     override fun areChangesStaged(): Boolean {
-        return masterPasswordKek != null || recoveryKeks.isNotEmpty() || encryptedMasterKey != null
+        return masterPasswordKek != null || recoveryKeks.isNotEmpty() || biometricsKek != null || encryptedMasterKey != null
     }
 
 

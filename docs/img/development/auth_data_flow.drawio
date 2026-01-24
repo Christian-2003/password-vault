@@ -333,10 +333,20 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="AQssju8fficmBJCpN02b-117" edge="1" parent="1" source="AQssju8fficmBJCpN02b-84" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" target="AQssju8fficmBJCpN02b-93">
-          <mxGeometry relative="1" as="geometry" />
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="340" y="510" />
+              <mxPoint x="340" y="530" />
+            </Array>
+          </mxGeometry>
         </mxCell>
         <mxCell id="AQssju8fficmBJCpN02b-118" edge="1" parent="1" source="AQssju8fficmBJCpN02b-89" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" target="AQssju8fficmBJCpN02b-93">
-          <mxGeometry relative="1" as="geometry" />
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="340" y="590" />
+              <mxPoint x="340" y="550" />
+            </Array>
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>

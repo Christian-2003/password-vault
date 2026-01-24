@@ -17,6 +17,7 @@ data class RecoveryCodeGeneratorResultDto(
     val encryptedKek: ByteArray
 ) {
 
+    //Auto-generated
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -32,6 +33,7 @@ data class RecoveryCodeGeneratorResultDto(
     }
 
 
+    //Auto-generated
     override fun hashCode(): Int {
         var result = index
         result = 31 * result + recoveryCodeBytes.contentHashCode()

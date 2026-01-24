@@ -12,6 +12,7 @@ data class SharedPreferencesSetupRepositoryKekEntryDto(
     val salt: ByteArray
 ) {
 
+    //Auto-generated
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -25,6 +26,7 @@ data class SharedPreferencesSetupRepositoryKekEntryDto(
     }
 
 
+    //Auto-generated
     override fun hashCode(): Int {
         var result = encryptedKekBytes.contentHashCode()
         result = 31 * result + salt.contentHashCode()

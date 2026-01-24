@@ -46,4 +46,25 @@ class AesKeyGeneratorService @Inject constructor(): KeyGeneratorService {
         return keyGenParameterSpec
     }
 
+
+    /**
+     * Returns the spec for the key generation within a key store. The generated key will require
+     * prior authentication (e.g. through biometrics) before release.
+     *
+     * @param alias     Alias for the key store.
+     * @param timeout   Timeout until key is locked after authentication.
+     * @return          Spec for the key generation.
+     */
+    override fun getKeyGenParameterSpecForSecureKey(alias: String, timeout: Int): KeyGenParameterSpec {
+        val keyGenParameterSpec = KeyGenParameterSpec.Builder(alias, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
+            .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+            .setUserAuthenticationRequired(true)
+            .setInvalidatedByBiometricEnrollment(false)
+            .setUserAuthenticationParameters(timeout, KeyProperties.AUTH_BIOMETRIC_STRONG)
+            .build()
+
+        return keyGenParameterSpec
+    }
+
 }

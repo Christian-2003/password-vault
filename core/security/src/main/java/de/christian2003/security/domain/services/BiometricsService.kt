@@ -1,0 +1,16 @@
+package de.christian2003.security.domain.services
+
+
+/**
+ * Service for device biometrics.
+ */
+interface BiometricsService {
+
+    /**
+     * Shows a biometric prompt to the user with which to authenticate.
+     *
+     * @return  Whether biometric authentication was successful.
+     */
+    suspend fun authenticate(): Boolean
+
+}

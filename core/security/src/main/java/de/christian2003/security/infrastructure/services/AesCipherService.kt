@@ -60,7 +60,7 @@ class AesCipherService @Inject constructor(): CipherService {
         val plain: ByteArray = try {
             aesCipher.doFinal(cipherWithoutIv)
         } catch (e: AEADBadTagException) {
-            throw InvalidKeyException(e.message ?: "")
+            throw InvalidKeyException(e.message ?: "Tags do not match")
         }
 
         iv.fill(0) //Wipe internal array
@@ -78,12 +78,13 @@ class AesCipherService @Inject constructor(): CipherService {
      * @param keyBytes  Bytes of the key to use for encryption.
      */
     override suspend fun encrypt(plain: ByteArray, keyBytes: ByteArray): ByteArray {
+        val trimmedKeyBytes: ByteArray = keyBytes.take(32).toByteArray()
         val aesCipher: Cipher = Cipher.getInstance("AES/GCM/NoPadding")
 
         val iv = ByteArray(12)
         SecureRandom().nextBytes(iv)
 
-        val secretKeySpec = SecretKeySpec(keyBytes, "AES")
+        val secretKeySpec = SecretKeySpec(trimmedKeyBytes, "AES")
         val gcmSpec = GCMParameterSpec(128, iv)
 
         aesCipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, gcmSpec)
@@ -107,18 +108,19 @@ class AesCipherService @Inject constructor(): CipherService {
      *                              authentication tag does not match, this exception is thrown.
      */
     override suspend fun decrypt(cipher: ByteArray, keyBytes: ByteArray): ByteArray {
+        val trimmedKeyBytes: ByteArray = keyBytes.take(32).toByteArray()
         val aesCipher: Cipher = Cipher.getInstance("AES/GCM/NoPadding")
         val iv: ByteArray = cipher.take(12).toByteArray()
         val cipherWithoutIv: ByteArray = cipher.drop(12).toByteArray()
 
-        val secretKeySpec = SecretKeySpec(keyBytes, "AES")
+        val secretKeySpec = SecretKeySpec(trimmedKeyBytes, "AES")
         val gcmSpec = GCMParameterSpec(128, iv)
 
         aesCipher.init(Cipher.DECRYPT_MODE, secretKeySpec, gcmSpec)
         val plain: ByteArray = try {
             aesCipher.doFinal(cipherWithoutIv)
         } catch (e: AEADBadTagException) {
-            throw InvalidKeyException(e.message ?: "")
+            throw InvalidKeyException(e.message ?: "Tags do not match")
         }
 
         iv.fill(0) //Wipe internal array

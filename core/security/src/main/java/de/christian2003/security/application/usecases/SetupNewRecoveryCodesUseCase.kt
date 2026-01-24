@@ -1,17 +1,16 @@
 package de.christian2003.security.application.usecases
 
-import android.security.keystore.KeyProperties
 import de.christian2003.security.application.services.RecoveryCodeEncoderService
 import de.christian2003.security.application.services.SaltGeneratorService
 import de.christian2003.security.application.usecases.dto.RecoveryCodeGeneratorResultDto
 import de.christian2003.security.domain.entities.RecoveryCodes
+import de.christian2003.security.domain.entities.SecurityAliases
 import de.christian2003.security.domain.exceptions.AuthSetupException
 import de.christian2003.security.domain.repositories.HardwareBackedKeyRepository
 import de.christian2003.security.domain.repositories.DecryptedKekRepository
 import de.christian2003.security.domain.repositories.RecoveryCodesRepository
 import de.christian2003.security.domain.services.CipherService
 import de.christian2003.security.domain.services.KdfService
-import de.christian2003.security.domain.services.KeyGeneratorService
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -35,7 +34,6 @@ import javax.inject.Inject
  * @param cipherService                 Service for cryptographic operations.
  * @param saltGeneratorService          Service to generate random salt.
  * @param recoveryCodeEncoderService    Service to encode recovery codes.
- * @param keyGeneratorService           Service to generate cryptographic keys.
  */
 class SetupNewRecoveryCodesUseCase @Inject constructor(
     private val recoveryCodesRepository: RecoveryCodesRepository,
@@ -44,8 +42,7 @@ class SetupNewRecoveryCodesUseCase @Inject constructor(
     private val kdfService: KdfService,
     private val cipherService: CipherService,
     private val saltGeneratorService: SaltGeneratorService,
-    private val recoveryCodeEncoderService: RecoveryCodeEncoderService,
-    private val keyGeneratorService: KeyGeneratorService
+    private val recoveryCodeEncoderService: RecoveryCodeEncoderService
 ) {
 
     /**
@@ -93,10 +90,9 @@ class SetupNewRecoveryCodesUseCase @Inject constructor(
         //Asynchronously generate all recovery codes:
         val deferredResults: List<Deferred<RecoveryCodeGeneratorResultDto>> = (0 until numberOfRecoveryCodes).map { index ->
             async(Dispatchers.Default) {
-                val recoveryCode: RecoveryCodeGeneratorResultDto =
-                    generateSingleRecoveryCode(
+                val recoveryCode: RecoveryCodeGeneratorResultDto = generateSingleRecoveryCode(
                     index = index,
-                    decryptedKek = decryptedKek,
+                    decryptedKekBytes = decryptedKek,
                     random = random
                 )
                 return@async recoveryCode
@@ -124,14 +120,15 @@ class SetupNewRecoveryCodesUseCase @Inject constructor(
     /**
      * Generates a single recovery code.
      *
-     * @param index         Index of the recovery code.
-     * @param decryptedKek  Bytes of the decrypted kek.
-     * @param random        Secure random.
-     * @return              Generated recovery code.
+     * @param index                 Index of the recovery code.
+     * @param decryptedKekBytes     Bytes of the decrypted kek.
+     * @param random                Secure random.
+     * @return                      Generated recovery code.
+     * @throws AuthSetupException   Cannot generate recovery code.
      */
     private suspend fun generateSingleRecoveryCode(
         index: Int,
-        decryptedKek: ByteArray,
+        decryptedKekBytes: ByteArray,
         random: SecureRandom
     ): RecoveryCodeGeneratorResultDto = coroutineScope {
         //Recovery codes are encoded with Crockford's Base32: XXXX-XXXX-XXXX-XXXX-XXXX-XXXX
@@ -139,61 +136,87 @@ class SetupNewRecoveryCodesUseCase @Inject constructor(
         val recoveryCodeBytes = ByteArray((6 * 4 * 5) / 8) //Divide by 8 to get bytes
         random.nextBytes(recoveryCodeBytes)
 
-        //Generate salt:
-        val salt: ByteArray = saltGeneratorService.generateSalt() //Always generate new salt for new code
+        //Internal buffers:
+        var salt: ByteArray? = null
+        var sourceKeyBytes: ByteArray? = null
+        var encryptedKekBytes: ByteArray? = null
 
-        //Derive key for encryption:
-        val unwrappedKeyBytes: ByteArray = kdfService.derive(recoveryCodeBytes, salt)
+        try {
+            //Generate data:
+            salt = saltGeneratorService.generateSalt()
+            sourceKeyBytes = deriveSourceKey(recoveryCodeBytes, salt)
+            encryptedKekBytes = encryptKek(decryptedKekBytes, sourceKeyBytes)
 
-        //Wrap key:
-        val wrappedKeyBytes: ByteArray = wrapSourceKey(unwrappedKeyBytes)
-
-        val encryptedKek: ByteArray = try {
-            cipherService.encrypt(decryptedKek, wrappedKeyBytes)
-        } catch (e: Exception) {
-            throw AuthSetupException("Cannot encrypt KEK for recovery code $index: ${e.message ?: "Unknown error"}")
+            //Return result:
+            val result = RecoveryCodeGeneratorResultDto(
+                index = index,
+                recoveryCodeBytes = recoveryCodeBytes,
+                salt = salt,
+                encryptedKek = encryptedKekBytes
+            )
+            return@coroutineScope result
         }
-
-        val result = RecoveryCodeGeneratorResultDto(
-            index = index,
-            recoveryCodeBytes = recoveryCodeBytes,
-            salt = salt,
-            encryptedKek = encryptedKek
-        )
-
-        unwrappedKeyBytes.fill(0)
-        wrappedKeyBytes.fill(0)
-
-        return@coroutineScope result
+        catch (e: Exception) {
+            sourceKeyBytes?.fill(0)
+            encryptedKekBytes?.fill(0)
+            throw e
+        }
     }
 
 
     /**
-     * Wraps the source key.
+     * Derives the source key from the specified recovery code and salt.
      *
-     * @param unwrappedKeyBytes Bytes of the source key to wrap.
-     * @return                  Bytes of the wrapped source key.
+     * @param recoveryCode          Recovery code from which to derive the source key.
+     * @param salt                  Salt to use to derive the source key.
+     * @throws AuthSetupException   Cannot derive source key.
      */
-    private suspend fun wrapSourceKey(unwrappedKeyBytes: ByteArray): ByteArray {
-        val hardwareBackedKeyAlias = "recovery_codes_key"
-
-        var hardwareBackedKey: SecretKey? = hardwareBackedKeyRepository.getKey(hardwareBackedKeyAlias)
-        if (hardwareBackedKey == null) {
-            hardwareBackedKey = hardwareBackedKeyRepository.generateNewKey(
-                alias = hardwareBackedKeyAlias,
-                algorithm = KeyProperties.KEY_ALGORITHM_AES,
-                keyGenParameterSpec = keyGeneratorService.getKeyGenParameterSpec(hardwareBackedKeyAlias)
-            )
+    private suspend fun deriveSourceKey(recoveryCode: ByteArray, salt: ByteArray): ByteArray {
+        if (recoveryCode.isEmpty()) {
+            throw AuthSetupException("Recovery code cannot be empty")
         }
 
         try {
-            val keyBytes: ByteArray = cipherService.encrypt(unwrappedKeyBytes, hardwareBackedKey)
-            val trimmedKeyBytes: ByteArray = keyBytes.take(32).toByteArray()
-            keyBytes.fill(0)
-            return trimmedKeyBytes
+            val sourceKeyBytes: ByteArray = kdfService.derive(recoveryCode, salt)
+            return sourceKeyBytes
+        } catch (e: Exception) {
+            throw AuthSetupException("Cannot derive source key (${e.message ?: "Unknown error"})")
+        }
+    }
+
+
+    /**
+     * Encrypts the KEK using the specified source key as well as a hardware-backed key.
+     *
+     * @param decryptedKekBytes     Bytes of the KEK to encrypt.
+     * @param sourceKeyBytes        Bytes of the source key used for encrypting the KEK.
+     * @throws AuthSetupException   Cannot encrypt the KEK.
+     */
+    private suspend fun encryptKek(decryptedKekBytes: ByteArray, sourceKeyBytes: ByteArray): ByteArray {
+        //Encrypt KEK using source key:
+        val encryptedKekBytes: ByteArray = try {
+            cipherService.encrypt(decryptedKekBytes, sourceKeyBytes)
+        } catch (e: Exception) {
+            throw AuthSetupException("Cannot encrypt KEK using source key (${e.message ?: "Unknown error"})")
+        }
+
+        //Get hardware-backed key:
+        val hardwareBackedKeyAlias: String = SecurityAliases.HardwareBackedKey.getAlias()
+        val hardwareBackedKey: SecretKey? = hardwareBackedKeyRepository.getKey(hardwareBackedKeyAlias)
+        if (hardwareBackedKey == null) {
+            throw AuthSetupException("Cannot encrypt KEK, because hardware-backed key is unavailable")
+        }
+
+        //Encrypt KEK using hardware-backed key:
+        try {
+            val encryptedKekWithHwBytes: ByteArray = cipherService.encrypt(encryptedKekBytes, hardwareBackedKey)
+            return encryptedKekWithHwBytes
         }
         catch (e: Exception) {
-            throw AuthSetupException("Source key cannot be wrapped for master password: ${e.message ?: "Unknown error"}")
+            throw AuthSetupException("Cannot encrypt KEK using hardware-backed key (${e.message ?: "Unknown error"})")
+        }
+        finally {
+            encryptedKekBytes.fill(0)
         }
     }
 

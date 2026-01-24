@@ -1,5 +1,7 @@
 package de.christian2003.security.application.usecases
 
+import android.util.Log
+import de.christian2003.security.domain.repositories.BiometricsRepository
 import de.christian2003.security.domain.repositories.CommitRepository
 import de.christian2003.security.domain.repositories.MasterKeyRepository
 import de.christian2003.security.domain.repositories.MasterPasswordRepository
@@ -27,6 +29,7 @@ class CanMasterKeyBeUnlockedUseCase @Inject constructor(
      * @return  Whether the master key can be unlocked.
      */
     fun canBeUnlocked(): Boolean {
+        Log.d("MasterKeyUnlock", "HasEncryptedMasterKey=${masterKeyRepository.hasEncryptedMasterKey()}, HasEncryptedMasterPasswordKek=${masterKeyRepository.hasEncryptedMasterKey()}, HasMasterPasswordSalt=${masterPasswordRepository.hasMasterPasswordSalt()}, AreChangesStaged=${commitRepository.areChangesStaged()}")
         return masterKeyRepository.hasEncryptedMasterKey()
                 && masterPasswordRepository.hasEncryptedMasterPasswordKek()
                 && masterPasswordRepository.hasMasterPasswordSalt()

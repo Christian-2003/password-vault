@@ -24,4 +24,15 @@ interface KeyGeneratorService {
      */
     fun getKeyGenParameterSpec(alias: String): KeyGenParameterSpec
 
+
+    /**
+     * Returns the spec for the key generation within a key store. The generated key will require
+     * prior authentication (e.g. through biometrics) before release.
+     *
+     * @param alias     Alias for the key store.
+     * @param timeout   Timeout until key is locked after authentication.
+     * @return          Spec for the key generation.
+     */
+    fun getKeyGenParameterSpecForSecureKey(alias: String, timeout: Int): KeyGenParameterSpec
+
 }
