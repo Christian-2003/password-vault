@@ -56,9 +56,11 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
+    implementation(libs.hilt.android)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.svg)
 
     implementation(project(":core:security"))
     implementation(project(":core:common"))

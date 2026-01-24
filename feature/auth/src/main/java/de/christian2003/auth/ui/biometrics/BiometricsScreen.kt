@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -28,14 +29,19 @@ import androidx.compose.ui.unit.dp
 import de.christian2003.auth.viewmodels.BiometricsViewModel
 import de.christian2003.auth.R
 import de.christian2003.ui.composables.HelpCard
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun BiometricsScreen(
     viewModel: BiometricsViewModel,
     onNavigateUp: () -> Unit,
-    onContinue: () -> Unit
+    onContinue: () -> Unit,
+    onSetupBiometricAuth: suspend () -> Boolean
 ) {
+    val coroutineScope: CoroutineScope = rememberCoroutineScope()
+
     Scaffold(
         topBar = {
             TopBar(
@@ -45,10 +51,20 @@ fun BiometricsScreen(
         bottomBar = {
             BottomBar(
                 onEnable = {
-                    //TODO: Enable biometrics
-                    onContinue()
+                    coroutineScope.launch {
+                        val result: Boolean = onSetupBiometricAuth()
+                        if (result) {
+                            viewModel.finishSetup()
+                            onContinue()
+                        }
+                    }
                 },
-                onSkip = onContinue
+                onSkip = {
+                    coroutineScope.launch {
+                        viewModel.finishSetup()
+                        onContinue()
+                    }
+                }
             )
         }
     ) { innerPadding ->

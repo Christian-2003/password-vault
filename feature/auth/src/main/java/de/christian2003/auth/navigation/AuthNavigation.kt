@@ -6,9 +6,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import de.christian2003.auth.ui.biometrics.BiometricsScreen
+import de.christian2003.auth.ui.login.LoginScreen
 import de.christian2003.auth.ui.password.PasswordScreen
 import de.christian2003.auth.ui.recoverycodes.RecoveryCodesScreen
 import de.christian2003.auth.viewmodels.BiometricsViewModel
+import de.christian2003.auth.viewmodels.LoginViewModel
 import de.christian2003.auth.viewmodels.PasswordViewModel
 import de.christian2003.auth.viewmodels.RecoveryCodesViewModel
 import kotlinx.serialization.Serializable
@@ -24,9 +26,15 @@ import kotlinx.serialization.Serializable
 
 /**
  * Flow for the first-time master password setup
+ *
+ * @param navController             Navigation controller.
+ * @param onNotifyAuthSetupFinished Callback invoked to inform the nav host that the setup flow finished.
+ * @param onSetupBiometricAuth      Callback invoked to setup biometric authentication.
  */
 fun NavGraphBuilder.setupFlowDestination(
-    navController: NavController
+    navController: NavController,
+    onNotifyAuthSetupFinished: () -> Unit,
+    onSetupBiometricAuth: suspend () -> Boolean
 ) {
     navigation<SetupFlow>(
         startDestination = MasterPassword
@@ -58,8 +66,10 @@ fun NavGraphBuilder.setupFlowDestination(
                 navController.navigateUp()
             },
             onContinue = {
-                //TODO: Add next step
-            }
+                onNotifyAuthSetupFinished()
+                navController.popBackStack(SetupFlow, true)
+            },
+            onSetupBiometricAuth = onSetupBiometricAuth
         )
 
     }
@@ -113,12 +123,14 @@ fun NavGraphBuilder.recoveryCodesDestination(
 /**
  * Navigation destination for the screen for the setup of the biometric authentication.
  *
- * @param onNavigateUp  Callback invoked to navigate up the navigation stack.
- * @param onContinue    Callback invoked to navigate to the next setup step.
+ * @param onNavigateUp          Callback invoked to navigate up the navigation stack.
+ * @param onContinue            Callback invoked to navigate to the next setup step.
+ * @param onSetupBiometricAuth  Callback invoked to setup biometric authentication.
  */
 fun NavGraphBuilder.biometricsDestination(
     onNavigateUp: () -> Unit,
-    onContinue: () -> Unit
+    onContinue: () -> Unit,
+    onSetupBiometricAuth: suspend () -> Boolean
 ) {
     composable<Biometrics> {
         val viewModel: BiometricsViewModel = hiltViewModel()
@@ -126,6 +138,21 @@ fun NavGraphBuilder.biometricsDestination(
         BiometricsScreen(
             viewModel = viewModel,
             onNavigateUp = onNavigateUp,
+            onContinue = onContinue,
+            onSetupBiometricAuth = onSetupBiometricAuth
+        )
+    }
+}
+
+
+fun NavGraphBuilder.loginDestination(
+    onContinue: () -> Unit
+) {
+    composable<Login> {
+        val viewModel: LoginViewModel = hiltViewModel()
+
+        LoginScreen(
+            viewModel = viewModel,
             onContinue = onContinue
         )
     }

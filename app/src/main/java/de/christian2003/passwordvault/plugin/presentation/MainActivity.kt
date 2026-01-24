@@ -30,8 +30,8 @@ import androidx.navigation.navigation
 import dagger.hilt.android.AndroidEntryPoint
 import de.christian2003.auth.navigation.Login
 import de.christian2003.auth.navigation.SetupFlow
+import de.christian2003.auth.navigation.loginDestination
 import de.christian2003.auth.navigation.setupFlowDestination
-import de.christian2003.passwordvault.application.repository.AuthRepository
 import de.christian2003.passwordvault.application.usecases.auth.BiometricAuthUseCase
 import de.christian2003.passwordvault.application.usecases.auth.ToggleBiometricsUseCase
 import de.christian2003.passwordvault.plugin.presentation.ui.theme.PasswordVaultTheme
@@ -57,6 +57,7 @@ import de.christian2003.passwordvault.plugin.presentation.view.securityquestions
 import de.christian2003.passwordvault.plugin.presentation.view.settings.SettingsScreen
 import de.christian2003.passwordvault.plugin.presentation.view.settings.SettingsViewModel
 import de.christian2003.security.application.usecases.CanMasterKeyBeUnlockedUseCase
+import de.christian2003.security.application.usecases.SetupBiometricsUseCase
 import javax.inject.Inject
 
 
@@ -70,7 +71,8 @@ class MainActivity : FragmentActivity() {
      * it can use an activity context. Therefore, the use case cannot be injected into view models
      * and must be injected into the activity itself.
      */
-    @Inject lateinit var biometricAuthUseCase: BiometricAuthUseCase
+    @Deprecated("Use :core:security use case instead")
+    @Inject lateinit var biometricAuthUseCaseDeprecated: BiometricAuthUseCase
 
     /**
      * Use case to enable / disable the biometric authentication. This use case is activity-scoped,
@@ -80,6 +82,7 @@ class MainActivity : FragmentActivity() {
     @Inject lateinit var toggleBiometricsUseCase: ToggleBiometricsUseCase
 
     @Inject lateinit var canMasterKeyBeUnlockedUseCase: CanMasterKeyBeUnlockedUseCase
+    @Inject lateinit var setupBiometricsUseCase: SetupBiometricsUseCase
 
 
     /**
@@ -106,8 +109,16 @@ class MainActivity : FragmentActivity() {
         setContent {
             PasswordVault(
                 canUnlockMasterKey = canMasterKeyBeUnlockedUseCase.canBeUnlocked(),
+                onSetupBiometricAuth = {
+                    try {
+                        setupBiometricsUseCase.setupBiometrics()
+                        true
+                    } catch (_: Exception) {
+                        false
+                    }
+                },
                 onBiometricAuth = {
-                    biometricAuthUseCase.authenticate()
+                    biometricAuthUseCaseDeprecated.authenticate()
                 },
                 onToggleBiometrics = {
                     toggleBiometricsUseCase.toggleBiometrics()
@@ -140,6 +151,7 @@ class MainActivity : FragmentActivity() {
 @Composable
 fun PasswordVault(
     canUnlockMasterKey: Boolean,
+    onSetupBiometricAuth: suspend () -> Boolean,
     onBiometricAuth: suspend () -> Boolean,
     onToggleBiometrics: suspend () -> Boolean
 ) {
@@ -173,7 +185,22 @@ fun PasswordVault(
         ) {
             //Flow for the first-time master password setup:
             setupFlowDestination(
-                navController = navController
+                navController = navController,
+                onNotifyAuthSetupFinished = {
+                    isAuthSetupFinished = true
+                },
+                onSetupBiometricAuth = onSetupBiometricAuth
+            )
+
+            //Login screen:
+            loginDestination(
+                onContinue = {
+                    navController.navigate("main") {
+                        popUpTo<Login> {
+                            inclusive = true
+                        }
+                    }
+                }
             )
 
 
@@ -304,7 +331,7 @@ fun PasswordVault(
             }
 
 
-            composable<Login> {
+            /*composable<Login> {
                 applyFlags(true)
                 val viewModel: LoginViewModel = hiltViewModel()
                 LoginScreen(
@@ -321,7 +348,7 @@ fun PasswordVault(
                         navController.navigate("recovery")
                     }
                 )
-            }
+            }*/
 
 
             /**

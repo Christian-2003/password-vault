@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <resources>
+
     <!-- Screen through which to configure the master password -->
     <string name="password_titleFirstTimeSetup">Setup login</string>
     <string name="password_titleChangePassword">Edit master password</string>
@@ -17,6 +19,8 @@
     <string name="password_error_newPasswordsDoNotMatch">New passwords do not match</string>
     <string name="password_error_inputEmpty">This field cannot be empty</string>
 
+
+    <!-- Screen through which recovery codes are displayed -->
     <string name="recoveryCodes_title">Recovery codes</string>
     <string name="recoveryCodes_loadingInfo">Generating recovery codes</string>
     <string name="recoveryCodes_codesHeader">Your recovery codes</string>
@@ -36,10 +40,21 @@
     <string name="recoveryCodes_confirmContinueDialog_buttonGoBack">Go back</string>
     <string name="recoveryCodes_confirmContinueDialog_buttonContinue">Continue</string>
 
+
+    <!-- Screen through which the user can setup the biometric authentication -->
     <string name="biometrics_title">Setup biometrics</string>
     <string name="biometrics_help">Biometric authentication facilitates a quicker login without your master password.</string>
     <string name="biometrics_buttonSkip">Skip</string>
     <string name="biometrics_buttonEnable">Enable</string>
 
+
+    <!-- Screen through which the user can login -->
     <string name="login_title">Password Vault</string>
+    <string name="login_passwordLabel">Master password</string>
+    <string name="login_hint">Confirm your identity</string>
+    <string name="login_errorPassword">Password is invalid</string>
+    <string name="login_buttonLogin">Login</string>
+    <string name="login_buttonBiometrics">Use biometrics</string>
+    <string name="login_buttonRecovery">Forgot password</string>
+
 </resources>

@@ -24,8 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -232,13 +230,15 @@ private fun TopBar(
             )
         },
         navigationIcon = {
-            IconButton(
-                onClick = onNavigateUp
-            ) {
-                Icon(
-                    painter = painterResource(de.christian2003.ui.R.drawable.ic_back),
-                    contentDescription = ""
-                )
+            if (state != PasswordScreenState.FirstTimeSetup) {
+                IconButton(
+                    onClick = onNavigateUp
+                ) {
+                    Icon(
+                        painter = painterResource(de.christian2003.ui.R.drawable.ic_back),
+                        contentDescription = ""
+                    )
+                }
             }
         }
     )
