@@ -322,7 +322,7 @@ private fun GeneralSection() {
             )
     ) {
         Image(
-            painter = rememberAsyncImagePainter(R.mipmap.ic_launcher),
+            painter = rememberAsyncImagePainter(de.christian2003.ui.R.mipmap.launcher),
             contentDescription = "",
             modifier = Modifier.size(dimensionResource(R.dimen.image_l))
         )

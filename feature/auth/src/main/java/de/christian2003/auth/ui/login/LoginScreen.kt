@@ -108,7 +108,7 @@ fun LoginScreen(
                     .verticalScroll(rememberScrollState())
             ) {
                 Image(
-                    painter = rememberAsyncImagePainter(de.christian2003.ui.R.mipmap.ic_launcher),
+                    painter = rememberAsyncImagePainter(de.christian2003.ui.R.mipmap.launcher),
                     contentDescription = "",
                     modifier = Modifier.size(dimensionResource(de.christian2003.ui.R.dimen.image_l))
                 )
