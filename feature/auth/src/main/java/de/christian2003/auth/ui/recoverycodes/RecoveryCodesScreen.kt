@@ -42,8 +42,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import de.christian2003.auth.viewmodels.RecoveryCodesViewModel
 import de.christian2003.auth.R
-import de.christian2003.auth.models.recoverycodes.RecoveryCodesScreenDialog
-import de.christian2003.auth.models.recoverycodes.RecoveryCodesScreenState
+import de.christian2003.auth.models.dialogs.RecoveryCodesScreenDialog
+import de.christian2003.auth.models.states.RecoveryCodesScreenState
+import de.christian2003.auth.viewmodels.SetupFlowSharedViewModel
 import de.christian2003.ui.composables.DialogWithHeroSection
 import de.christian2003.ui.composables.HelpCard
 import de.christian2003.ui.composables.SimpleDialog
@@ -57,15 +58,17 @@ import kotlinx.coroutines.withContext
 /**
  * Screen displays the recovery codes to the user after they have set a new master password.
  *
- * @param viewModel     View model.
- * @param onNavigateUp  Callback invoked to navigate up the navigation stack.
- * @param onContinue    Callback invoked to navigate to the next setup step.
+ * @param viewModel             View model.
+ * @param onNavigateUp          Callback invoked to navigate up the navigation stack.
+ * @param onContinue            Callback invoked to navigate to the next setup step.
+ * @param setupFlowViewModel    Shared view model for the setup flow.
  */
 @Composable
 fun RecoveryCodesScreen(
     viewModel: RecoveryCodesViewModel,
     onNavigateUp: () -> Unit,
-    onContinue: () -> Unit
+    onContinue: () -> Unit,
+    setupFlowViewModel: SetupFlowSharedViewModel? = null
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
@@ -296,8 +299,8 @@ private fun RecoveryCodesContent(
         AnimatedVisibility(isHelpCardVisible) {
             HelpCard(
                 text = when (state) {
-                    RecoveryCodesScreenState.FirstTimeSetup -> stringResource(R.string.recoveryCodes_helpFirstTimeSetup)
-                    RecoveryCodesScreenState.RecoverPassword -> stringResource(R.string.recoveryCodes_helpRecoverPassword)
+                    RecoveryCodesScreenState.FirstTimeSetup -> stringResource(R.string.recoveryCodes_help_firstTimeSetup)
+                    RecoveryCodesScreenState.RecoverPassword -> stringResource(R.string.recoveryCodes_help_recoverPassword)
                 },
                 onDismiss = onDismissHelpCard,
                 modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
@@ -348,7 +351,7 @@ private fun RecoveryCodesContent(
                     contentDescription = "",
                     modifier = Modifier.padding(end = 8.dp)
                 )
-                Text(stringResource(R.string.recoveryCodes_buttonDownload))
+                Text(stringResource(R.string.recoveryCodes_button_download))
             }
         }
     }
@@ -396,8 +399,8 @@ private fun TopBar(
         title = {
             Text(
                 text = when (state) {
-                    RecoveryCodesScreenState.FirstTimeSetup -> stringResource(R.string.recoveryCodes_titleFirstTimeSetup)
-                    RecoveryCodesScreenState.RecoverPassword -> stringResource(R.string.recoveryCodes_titleRecoverPassword)
+                    RecoveryCodesScreenState.FirstTimeSetup -> stringResource(R.string.recoveryCodes_title_firstTimeSetup)
+                    RecoveryCodesScreenState.RecoverPassword -> stringResource(R.string.recoveryCodes_title_recoverPassword)
                 }
             )
         },
@@ -443,7 +446,7 @@ private fun BottomBar(
                     horizontal = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal) - 4.dp
                 )
             ) {
-                Text(stringResource(R.string.password_buttonContinue))
+                Text(stringResource(R.string.password_button_continue))
             }
         }
     }

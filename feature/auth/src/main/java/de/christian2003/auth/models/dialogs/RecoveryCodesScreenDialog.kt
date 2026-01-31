@@ -1,4 +1,4 @@
-package de.christian2003.auth.models.recoverycodes
+package de.christian2003.auth.models.dialogs
 
 
 /**

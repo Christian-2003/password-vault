@@ -5,8 +5,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import de.christian2003.auth.models.password.PasswordScreenState
-import de.christian2003.auth.models.recoverycodes.RecoveryCodesScreenState
+import de.christian2003.auth.models.states.FinishScreenState
+import de.christian2003.auth.models.states.PasswordScreenState
+import de.christian2003.auth.models.states.RecoveryCodesScreenState
 import de.christian2003.auth.ui.biometrics.BiometricsScreen
 import de.christian2003.auth.ui.login.LoginScreen
 import de.christian2003.auth.ui.password.PasswordScreen
@@ -52,6 +53,11 @@ private object Recovery
 
 @Serializable
 private object AuthSettings
+
+@Serializable
+internal data class FinishDestination(
+    val state: FinishScreenState
+)
 
 
 /**

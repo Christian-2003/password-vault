@@ -183,7 +183,7 @@ private fun BottomBar(
             modifier = Modifier.fillMaxWidth()
         ) {
             LoadingIndicatorButton(
-                label = stringResource(R.string.password_buttonContinue),
+                label = stringResource(R.string.password_button_continue),
                 isLoading = isVerifyingRecoveryCode,
                 enabled = canContinue,
                 onClick = {

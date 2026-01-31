@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.christian2003.auth.viewmodels.BiometricsViewModel
 import de.christian2003.auth.R
+import de.christian2003.auth.viewmodels.SetupFlowSharedViewModel
 import de.christian2003.ui.composables.HelpCard
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -38,7 +39,8 @@ fun BiometricsScreen(
     viewModel: BiometricsViewModel,
     onNavigateUp: () -> Unit,
     onContinue: () -> Unit,
-    onSetupBiometricAuth: suspend () -> Boolean
+    onSetupBiometricAuth: suspend () -> Boolean,
+    setupFlowViewModel: SetupFlowSharedViewModel? = null
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
 

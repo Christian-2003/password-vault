@@ -9,6 +9,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
 
 
@@ -297,4 +298,15 @@ fun PasswordVaultTheme(
         typography = AppTypography,
         content = content
     )
+}
+
+
+/**
+ * Determines whether the app is in dark mode currently.
+ *
+ * @return  Whether the app is in dark theme.
+ */
+@Composable
+fun MaterialTheme.isDarkTheme(): Boolean {
+    return this.colorScheme.background.luminance() < 0.5f
 }

@@ -10,7 +10,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
 import dagger.hilt.android.lifecycle.HiltViewModel
-import de.christian2003.auth.models.recoverycodes.RecoveryCodesFormatter
+import de.christian2003.auth.models.formatters.RecoveryCodesFormatter
 import de.christian2003.auth.ui.recovery.RecoveryCodeVisualTransformation
 import de.christian2003.security.application.usecases.UnlockWithRecoveryCodesUseCase
 import de.christian2003.ui.model.HelpCard

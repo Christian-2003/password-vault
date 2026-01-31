@@ -37,6 +37,7 @@ import de.christian2003.auth.R
 import de.christian2003.ui.composables.NavigationBarProtection
 import de.christian2003.ui.composables.Tooltip
 import de.christian2003.ui.theme.RobotoMono
+import de.christian2003.ui.theme.isDarkTheme
 
 
 /**
@@ -77,12 +78,18 @@ fun AuthSettingsScreen(
             //Master password:
             MasterPasswordSection(
                 onEditMasterPassword = onNavigateToPassword,
+                onGeneratePositiveColor = { negative, darkTheme ->
+                    viewModel.generatePositiveColorFromNegativeColor(negative, darkTheme)
+                },
                 modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
             )
 
             //Recovery codes:
             RecoveryCodesSection(
                 onGenerateNewRecoveryCodes = onNavigateToRecoveryCodes,
+                onGeneratePositiveColor = { negative, darkTheme ->
+                    viewModel.generatePositiveColorFromNegativeColor(negative, darkTheme)
+                },
                 modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
             )
 
@@ -90,6 +97,9 @@ fun AuthSettingsScreen(
             BiometricsSection(
                 onToggleBiometrics = onNavigateToBiometrics,
                 areBiometricsConfigured = viewModel.areBiometricsConfigured,
+                onGeneratePositiveColor = { negative, darkTheme ->
+                    viewModel.generatePositiveColorFromNegativeColor(negative, darkTheme)
+                },
                 modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
             )
 
@@ -104,6 +114,7 @@ fun AuthSettingsScreen(
 @Composable
 private fun MasterPasswordSection(
     onEditMasterPassword: () -> Unit,
+    onGeneratePositiveColor: (Color, Boolean) -> Color,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -121,6 +132,7 @@ private fun MasterPasswordSection(
             painter = painterResource(de.christian2003.ui.R.drawable.ic_password),
             isActive = true,
             activeLabelTooltip = stringResource(R.string.authSettings_masterPassword_activeLabelTooltip),
+            onGeneratePositiveColor = onGeneratePositiveColor,
             modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
         )
         Row {
@@ -154,6 +166,7 @@ private fun MasterPasswordSection(
 @Composable
 private fun RecoveryCodesSection(
     onGenerateNewRecoveryCodes: () -> Unit,
+    onGeneratePositiveColor: (Color, Boolean) -> Color,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -167,10 +180,11 @@ private fun RecoveryCodesSection(
             )
     ) {
         SectionHeader(
-            title = stringResource(R.string.authSettings_biometrics_title),
+            title = stringResource(R.string.authSettings_recoveryCodes_title),
             painter = painterResource(R.drawable.ic_recovery),
             isActive = true,
             activeLabelTooltip = stringResource(R.string.authSettings_recoveryCodes_activeLabelTooltip),
+            onGeneratePositiveColor = onGeneratePositiveColor,
             modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
         )
         Row {
@@ -213,6 +227,7 @@ private fun RecoveryCodesSection(
 private fun BiometricsSection(
     onToggleBiometrics: () -> Unit,
     areBiometricsConfigured: Boolean,
+    onGeneratePositiveColor: (Color, Boolean) -> Color,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -233,7 +248,8 @@ private fun BiometricsSection(
                 stringResource(R.string.authSettings_biometrics_activeLabelTooltip)
             } else {
                 stringResource(R.string.authSettings_biometrics_inactiveLabelTooltip)
-            }
+            },
+            onGeneratePositiveColor = onGeneratePositiveColor
         )
         TextButton(
             onClick = onToggleBiometrics,
@@ -257,6 +273,7 @@ private fun SectionHeader(
     painter: Painter,
     isActive: Boolean,
     activeLabelTooltip: String,
+    onGeneratePositiveColor: (Color, Boolean) -> Color,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -281,7 +298,8 @@ private fun SectionHeader(
             )
             ActiveIndicator(
                 isActive = isActive,
-                tooltipText = activeLabelTooltip
+                tooltipText = activeLabelTooltip,
+                onGeneratePositiveColor = onGeneratePositiveColor
             )
         }
     }
@@ -291,16 +309,18 @@ private fun SectionHeader(
 /**
  * Displays the label showing whether an authentication method is active or not.
  *
- * @param isActive      Whether the authentication method is active.
- * @param tooltipText   Text for the label tooltip.
+ * @param isActive                  Whether the authentication method is active.
+ * @param tooltipText               Text for the label tooltip.
+ * @param onGeneratePositiveColor   Callback invoked to generate a positive color.
  */
 @Composable
 private fun ActiveIndicator(
     isActive: Boolean,
-    tooltipText: String
+    tooltipText: String,
+    onGeneratePositiveColor: (Color, Boolean) -> Color
 ) {
     val foregroundColor: Color = if (isActive) {
-        MaterialTheme.colorScheme.primary
+        onGeneratePositiveColor(MaterialTheme.colorScheme.error, MaterialTheme.isDarkTheme())
     } else {
         MaterialTheme.colorScheme.error
     }

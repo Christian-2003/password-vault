@@ -11,7 +11,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.application
 import androidx.navigation.toRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
-import de.christian2003.auth.models.password.PasswordScreenState
+import de.christian2003.auth.models.states.PasswordScreenState
 import de.christian2003.auth.navigation.MasterPassword
 import de.christian2003.security.application.usecases.SetupNewMasterPasswordUseCase
 import de.christian2003.ui.model.HelpCard

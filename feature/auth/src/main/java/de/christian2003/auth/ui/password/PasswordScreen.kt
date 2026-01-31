@@ -29,9 +29,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import de.christian2003.auth.models.password.PasswordScreenState
+import de.christian2003.auth.models.states.PasswordScreenState
 import de.christian2003.auth.viewmodels.PasswordViewModel
 import de.christian2003.auth.R
+import de.christian2003.auth.viewmodels.SetupFlowSharedViewModel
 import de.christian2003.ui.composables.HelpCard
 import de.christian2003.ui.composables.LoadingIndicatorButton
 import de.christian2003.ui.composables.TextInput
@@ -44,15 +45,17 @@ import kotlinx.coroutines.withContext
 /**
  * Screen to set the master password.
  *
- * @param viewModel     View model.
- * @param onNavigateUp  Callback invoked to navigate up the navigation stack.
- * @param onContinue    Callback invoked to continue to the next setup step.
+ * @param viewModel             View model.
+ * @param onNavigateUp          Callback invoked to navigate up the navigation stack.
+ * @param onContinue            Callback invoked to continue to the next setup step.
+ * @param setupFlowViewModel    Shared view model for the setup flow.
  */
 @Composable
 fun PasswordScreen(
     viewModel: PasswordViewModel,
     onNavigateUp: () -> Unit,
-    onContinue: () -> Unit
+    onContinue: () -> Unit,
+    setupFlowViewModel: SetupFlowSharedViewModel? = null
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val currentPasswordFocusRequester: FocusRequester = remember { FocusRequester() }
@@ -106,9 +109,9 @@ fun PasswordScreen(
             AnimatedVisibility(viewModel.isHelpCardVisible) {
                 HelpCard(
                     text = when(viewModel.state) {
-                        PasswordScreenState.FirstTimeSetup -> stringResource(R.string.password_helpFirstTimeSetup)
-                        PasswordScreenState.ChangePassword -> stringResource(R.string.password_helpChangePassword)
-                        PasswordScreenState.RecoverPassword -> stringResource(R.string.password_helpRecoverPassword)
+                        PasswordScreenState.FirstTimeSetup -> stringResource(R.string.password_help_firstTimeSetup)
+                        PasswordScreenState.ChangePassword -> stringResource(R.string.password_help_changePassword)
+                        PasswordScreenState.RecoverPassword -> stringResource(R.string.password_help_recoverPassword)
                     },
                     onDismiss = {
                         viewModel.dismissHelpCard()
@@ -128,7 +131,7 @@ fun PasswordScreen(
                     onValueChange = {
                         viewModel.currentPassword = it
                     },
-                    label = stringResource(R.string.password_labelCurrentPassword),
+                    label = stringResource(R.string.password_label_currentPassword),
                     isPassword = true,
                     focusRequester = currentPasswordFocusRequester,
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
@@ -151,8 +154,8 @@ fun PasswordScreen(
                     viewModel.newPassword = it
                 },
                 label = when (viewModel.state) {
-                    PasswordScreenState.FirstTimeSetup -> stringResource(R.string.password_labelPassword)
-                    else -> stringResource(R.string.password_labelNewPassword)
+                    PasswordScreenState.FirstTimeSetup -> stringResource(R.string.password_label_password)
+                    else -> stringResource(R.string.password_label_newPassword)
                 },
                 isPassword = true,
                 focusRequester = newPasswordFocusRequester,
@@ -183,8 +186,8 @@ fun PasswordScreen(
                     viewModel.confirmNewPassword = it
                 },
                 label = when (viewModel.state) {
-                    PasswordScreenState.FirstTimeSetup -> stringResource(R.string.password_labelConfirmPassword)
-                    else -> stringResource(R.string.password_labelConfirmNewPassword)
+                    PasswordScreenState.FirstTimeSetup -> stringResource(R.string.password_label_confirmPassword)
+                    else -> stringResource(R.string.password_label_confirmNewPassword)
                 },
                 isPassword = true,
                 focusRequester = confirmNewPasswordFocusRequester,
@@ -223,9 +226,9 @@ private fun TopBar(
         title = {
             Text(
                 text = when(state) {
-                    PasswordScreenState.FirstTimeSetup -> stringResource(R.string.password_titleFirstTimeSetup)
-                    PasswordScreenState.ChangePassword -> stringResource(R.string.password_titleChangePassword)
-                    PasswordScreenState.RecoverPassword -> stringResource(R.string.password_titleRecoverPassword)
+                    PasswordScreenState.FirstTimeSetup -> stringResource(R.string.password_title_firstTimeSetup)
+                    PasswordScreenState.ChangePassword -> stringResource(R.string.password_title_changePassword)
+                    PasswordScreenState.RecoverPassword -> stringResource(R.string.password_title_recoverPassword)
                 }
             )
         },
@@ -265,7 +268,7 @@ private fun BottomBar(
             modifier = Modifier.fillMaxWidth()
         ) {
             LoadingIndicatorButton(
-                label = stringResource(R.string.password_buttonContinue),
+                label = stringResource(R.string.password_button_continue),
                 isLoading = isSettingNewMasterPassword,
                 enabled = canContinue,
                 onClick = {

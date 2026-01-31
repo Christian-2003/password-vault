@@ -21,6 +21,7 @@ enum class SecurityAliases(
     //Recovery codes:
     RecoveryCodeKek("recovery_%1\$d_kek"),
     RecoveryCodeSalt("recovery_%1\$d_salt"),
+    NumberOfRecoveryCodes("recovery_count"),
 
     //Biometrics:
     BiometricsHardwareBackedKey("hardware_backed_key_biometrics"),

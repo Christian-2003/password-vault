@@ -12,9 +12,9 @@ import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
-import de.christian2003.auth.models.recoverycodes.RecoveryCodesFormatter
-import de.christian2003.auth.models.recoverycodes.RecoveryCodesScreenDialog
-import de.christian2003.auth.models.recoverycodes.RecoveryCodesScreenState
+import de.christian2003.auth.models.formatters.RecoveryCodesFormatter
+import de.christian2003.auth.models.dialogs.RecoveryCodesScreenDialog
+import de.christian2003.auth.models.states.RecoveryCodesScreenState
 import de.christian2003.security.application.usecases.SetupCommitUseCase
 import de.christian2003.security.application.usecases.SetupNewRecoveryCodesUseCase
 import de.christian2003.security.domain.entities.RecoveryCodes
