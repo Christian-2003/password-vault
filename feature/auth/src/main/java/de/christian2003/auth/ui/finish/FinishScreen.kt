@@ -1,5 +1,8 @@
 package de.christian2003.auth.ui.finish
 
+import androidx.compose.animation.graphics.res.animatedVectorResource
+import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
+import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +21,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,6 +37,7 @@ import de.christian2003.auth.R
 import de.christian2003.auth.viewmodels.FinishViewModel
 import de.christian2003.auth.viewmodels.SetupFlowSharedViewModel
 import de.christian2003.ui.theme.isDarkTheme
+import kotlinx.coroutines.delay
 
 
 /**
@@ -49,10 +57,7 @@ internal fun FinishScreen(
 ) {
     LaunchedEffect(Unit) {
         if (!sharedViewModel.isSavingSession && !sharedViewModel.isFinishedSavingSession) {
-            when(viewModel.state) {
-                FinishScreenState.FirstTimeSetup -> sharedViewModel.save(viewModel.state)
-                else -> { }
-            }
+            sharedViewModel.save(viewModel.state)
         }
     }
 
@@ -140,12 +145,21 @@ private fun FinishedSavingContent(
     onGeneratePositiveColor: (Color, Boolean) -> Color,
     modifier: Modifier = Modifier
 ) {
+    var atEnd by remember { mutableStateOf(false) }
+    val painter = rememberAnimatedVectorPainter(AnimatedImageVector.animatedVectorResource(R.drawable.ic_active_animated), atEnd)
+
+    LaunchedEffect(Unit) {
+        if (!atEnd) {
+            atEnd = true
+        }
+    }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.fillMaxWidth()
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_active),
+            painter = painter,
             contentDescription = "",
             tint = onGeneratePositiveColor(MaterialTheme.colorScheme.error, MaterialTheme.isDarkTheme()),
             modifier = Modifier

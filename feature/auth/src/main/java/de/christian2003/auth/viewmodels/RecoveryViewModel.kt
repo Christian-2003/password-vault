@@ -1,6 +1,7 @@
 package de.christian2003.auth.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -13,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.auth.models.formatters.RecoveryCodesFormatter
 import de.christian2003.auth.ui.recovery.RecoveryCodeVisualTransformation
 import de.christian2003.security.application.usecases.UnlockWithRecoveryCodesUseCase
+import de.christian2003.security.application.usecases.VerifyRecoveryCodeUseCase
 import de.christian2003.ui.model.HelpCard
 import javax.inject.Inject
 
@@ -20,10 +22,13 @@ import javax.inject.Inject
 @HiltViewModel
 class RecoveryViewModel @Inject constructor(
     application: Application,
-    private val unlockWithRecoveryCodesUseCase: UnlockWithRecoveryCodesUseCase
+    private val verifyRecoveryCodeUseCase: VerifyRecoveryCodeUseCase
 ): AndroidViewModel(application) {
 
     private val recoveryCodeFormatter: RecoveryCodesFormatter = RecoveryCodesFormatter()
+
+    var recoveryCodeAsCharArray: CharArray = CharArray(0)
+        private set
 
     var isHelpCardVisible: Boolean by mutableStateOf(HelpCard.HelpRecovery.getVisible(application))
         private set
@@ -46,7 +51,13 @@ class RecoveryViewModel @Inject constructor(
             isVerifyingRecoveryCode = true
 
             val convertedRecoveryCode: CharArray = recoveryCodeFormatter.convertBack(recoveryCode)
-            val result = unlockWithRecoveryCodesUseCase.unlock(convertedRecoveryCode)
+            val result: Boolean = try {
+                verifyRecoveryCodeUseCase.verify(convertedRecoveryCode)
+            } catch (e: Exception) {
+                Log.e("Recovery", e.message ?: "Unknown error")
+                false
+            }
+            recoveryCodeAsCharArray = convertedRecoveryCode
             isRecoveryCodeValid = result
 
             isVerifyingRecoveryCode = false

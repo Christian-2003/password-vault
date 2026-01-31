@@ -8,7 +8,9 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.auth.models.states.FinishScreenState
 import de.christian2003.security.application.usecases.SaveFirstTimeSetupSessionUseCase
+import de.christian2003.security.application.usecases.SaveRecoverySessionUseCase
 import de.christian2003.security.domain.entities.FirstTimeSetupSession
+import de.christian2003.security.domain.entities.RecoverySession
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SetupFlowSharedViewModel @Inject constructor(
-    private val saveFirstTimeSetupSessionUseCase: SaveFirstTimeSetupSessionUseCase
+    private val saveFirstTimeSetupSessionUseCase: SaveFirstTimeSetupSessionUseCase,
+    private val saveRecoverySessionUseCase: SaveRecoverySessionUseCase
 ): ViewModel() {
 
     var currentMasterPassword: CharArray? = null
@@ -43,6 +46,7 @@ class SetupFlowSharedViewModel @Inject constructor(
             try {
                 when (state) {
                     FinishScreenState.FirstTimeSetup -> saveFirstTimeSetup()
+                    FinishScreenState.RecoverPassword -> saveRecovery()
                     else -> { /* TODO: Add saving for other states */ }
                 }
             }
@@ -58,17 +62,38 @@ class SetupFlowSharedViewModel @Inject constructor(
      * Saves the data for the first-time app setup.
      */
     private suspend fun saveFirstTimeSetup() {
-        val session = FirstTimeSetupSession(
-            masterPassword = newMasterPassword ?: CharArray(0),
-            recoveryCodes = recoveryCodes ?: listOf(),
-            useBiometrics = useBiometrics ?: false
-        )
+        var session: FirstTimeSetupSession? = null
 
         try {
+            session = FirstTimeSetupSession(
+                masterPassword = newMasterPassword ?: CharArray(0),
+                recoveryCodes = recoveryCodes ?: listOf(),
+                useBiometrics = useBiometrics ?: false
+            )
             saveFirstTimeSetupSessionUseCase.save(session)
         }
         finally {
-            session.clear()
+            session?.clear()
+        }
+    }
+
+
+    /**
+     * Saves the data for the recovery.
+     */
+    private suspend fun saveRecovery() {
+        var session: RecoverySession? = null
+
+        try {
+            session = RecoverySession(
+                recoveryCode = recoveryCode ?: CharArray(0),
+                newMasterPassword = newMasterPassword ?: CharArray(0),
+                newRecoveryCodes = recoveryCodes ?: listOf()
+            )
+            saveRecoverySessionUseCase.save(session)
+        }
+        finally {
+            session?.clear()
         }
     }
 

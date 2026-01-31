@@ -1,5 +1,6 @@
 [versions]
 accompanistDrawable = "0.37.3"
+animationGraphics = "1.8.3"
 agp = "8.6.1"                   #Newest version that supports Gradle version 8.7
 biometric = "1.4.0-alpha04"
 hilt = "2.57.2"
@@ -26,6 +27,7 @@ material = "1.13.0"
 
 [libraries]
 #Android
+androidx-animation-graphics = { group = "androidx.compose.animation", name = "animation-graphics", version.ref = "animationGraphics" }
 androidx-biometric = { group = "androidx.biometric", name = "biometric", version.ref = "biometric" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltCompose" }

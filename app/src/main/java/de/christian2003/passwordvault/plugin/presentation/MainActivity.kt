@@ -14,7 +14,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -26,7 +25,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import androidx.navigation.navigation
 import dagger.hilt.android.AndroidEntryPoint
 import de.christian2003.auth.navigation.AuthSettingsFlow
 import de.christian2003.auth.navigation.Login
@@ -36,7 +34,6 @@ import de.christian2003.auth.navigation.authSettingsFlowDestination
 import de.christian2003.auth.navigation.loginDestination
 import de.christian2003.auth.navigation.recoveryFlowDestination
 import de.christian2003.auth.navigation.setupFlowDestination
-import de.christian2003.passwordvault.application.usecases.auth.BiometricAuthUseCase
 import de.christian2003.passwordvault.application.usecases.auth.ToggleBiometricsUseCase
 import de.christian2003.passwordvault.plugin.presentation.ui.theme.PasswordVaultTheme
 import de.christian2003.passwordvault.plugin.presentation.ui.theme.ThemeContrast
@@ -50,6 +47,7 @@ import de.christian2003.passwordvault.plugin.presentation.view.main.MainScreen
 import de.christian2003.passwordvault.plugin.presentation.view.main.MainViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.settings.SettingsScreen
 import de.christian2003.passwordvault.plugin.presentation.view.settings.SettingsViewModel
+import de.christian2003.security.application.usecases.BiometricAuthUseCase
 import de.christian2003.security.application.usecases.CanMasterKeyBeUnlockedUseCase
 import de.christian2003.security.application.usecases.UnlockWithBiometricsUseCase
 import javax.inject.Inject
@@ -68,6 +66,7 @@ class MainActivity : FragmentActivity() {
 
     @Inject lateinit var canMasterKeyBeUnlockedUseCase: CanMasterKeyBeUnlockedUseCase
     @Inject lateinit var unlockWithBiometricsUseCase: UnlockWithBiometricsUseCase
+    @Inject lateinit var biometricAuthUseCase: BiometricAuthUseCase
 
 
     /**
@@ -102,7 +101,7 @@ class MainActivity : FragmentActivity() {
                     }
                 },
                 onBiometricAuth = {
-                    biometricAuthUseCaseDeprecated.authenticate()
+                    biometricAuthUseCase.authenticate()
                 },
                 onToggleBiometrics = {
                     toggleBiometricsUseCase.toggleBiometrics()

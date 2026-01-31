@@ -150,6 +150,7 @@ fun NavGraphBuilder.recoveryFlowDestination(
 
         //Recovery using recovery codes:
         recoveryDestination(
+            onQueryBackStackEntry = queryBackStackEntry,
             onNavigateUp = {
                 navController.navigateUp()
             },
@@ -176,6 +177,17 @@ fun NavGraphBuilder.recoveryFlowDestination(
                 navController.navigateUp()
             },
             onContinue = {
+                navController.navigate(FinishDestination(state = FinishScreenState.RecoverPassword))
+            }
+        )
+
+        //Finish recovery:
+        finishDestination(
+            onQueryBackStackEntry = queryBackStackEntry,
+            onNavigateUp = {
+                navController.navigateUp()
+            },
+            onFinish = {
                 navController.popBackStack(RecoveryFlow, true)
             }
         )
@@ -394,21 +406,28 @@ private fun NavGraphBuilder.finishDestination(
  * Navigation destination for the recovery screen through which to enter a recovery code if the
  * user forgets their master password.
  *
- * @param onNavigateUp  Callback invoked to navigate up the navigation stack.
- * @param onContinue    Callback invoked to navigate to the next recovery step.
+ * @param onQueryBackStackEntry Callback invoked to query the back stack entry of the parent.
+ * @param onNavigateUp          Callback invoked to navigate up the navigation stack.
+ * @param onContinue            Callback invoked to navigate to the next recovery step.
  */
 private fun NavGraphBuilder.recoveryDestination(
+    onQueryBackStackEntry: () -> NavBackStackEntry?,
     onNavigateUp: () -> Unit,
     onContinue: () -> Unit
 ) {
     composable<Recovery> {
-        val viewModel: RecoveryViewModel = hiltViewModel()
+        val parentBackStackEntry: NavBackStackEntry? = onQueryBackStackEntry()
+        if (parentBackStackEntry != null) {
+            val viewModel: RecoveryViewModel = hiltViewModel()
+            val sharedViewModel: SetupFlowSharedViewModel = hiltViewModel(parentBackStackEntry)
 
-        RecoveryScreen(
-            viewModel = viewModel,
-            onNavigateUp = onNavigateUp,
-            onContinue = onContinue
-        )
+            RecoveryScreen(
+                viewModel = viewModel,
+                sharedViewModel = sharedViewModel,
+                onNavigateUp = onNavigateUp,
+                onContinue = onContinue
+            )
+        }
     }
 }
 
@@ -441,7 +460,7 @@ private fun NavGraphBuilder.authSettingsDestination(
 }
 
 
-inline fun <reified T : Any> NavController.getParentBackStackEntry(route: T): NavBackStackEntry? {
+private inline fun <reified T : Any> NavController.getParentBackStackEntry(route: T): NavBackStackEntry? {
     return try {
         getBackStackEntry(route)
     } catch (_: Exception) {

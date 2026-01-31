@@ -1,7 +1,9 @@
 package de.christian2003.security.application.usecases
 
+import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import de.christian2003.security.application.services.SaltGeneratorService
+import de.christian2003.security.application.services.SourceKeyService
 import de.christian2003.security.domain.entities.FirstTimeSetupSession
 import de.christian2003.security.domain.entities.SecurityAliases
 import de.christian2003.security.domain.exceptions.AuthSetupException
@@ -28,6 +30,7 @@ import javax.inject.Inject
  * @param cipherService                 Service for cryptographic operations.
  * @param keyGeneratorService           Service to generate keys.
  * @param saltGeneratorService          Service to generate salts.
+ * @param sourceKeyService              Service for source key handling.
  */
 class SaveFirstTimeSetupSessionUseCase @Inject constructor(
     private val authRepository: AuthTransactionRepository,
@@ -35,7 +38,8 @@ class SaveFirstTimeSetupSessionUseCase @Inject constructor(
     private val kdfService: KdfService,
     private val cipherService: CipherService,
     private val keyGeneratorService: KeyGeneratorService,
-    private val saltGeneratorService: SaltGeneratorService
+    private val saltGeneratorService: SaltGeneratorService,
+    private val sourceKeyService: SourceKeyService
 ) {
 
     /**
@@ -44,10 +48,10 @@ class SaveFirstTimeSetupSessionUseCase @Inject constructor(
      * @param session   Session data for the first-time app setup.
      */
     suspend fun save(session: FirstTimeSetupSession) = coroutineScope {
-        if (session.masterPassword == null || session.masterPassword.isEmpty()) {
+        if (session.masterPassword.isEmpty()) {
             throw AuthSetupException("Master password cannot be empty")
         }
-        if (session.recoveryCodes == null) {
+        if (session.recoveryCodes.isEmpty()) {
             throw AuthSetupException("No recovery codes provided")
         }
         else {
@@ -63,10 +67,13 @@ class SaveFirstTimeSetupSessionUseCase @Inject constructor(
 
             val decryptedKekBytes: ByteArray = keyGeneratorService.generate()
 
+            //Synchronously save master password: When saving the master password, some setup happens
+            //that is required for further setup steps. Unfortunately, this impacts performance
+            //massively.
+            //TODO: Defer this as well
+            saveMasterPassword(session.masterPassword, decryptedKekBytes)
+
             //Start async operations:
-            val deferredMasterPassword: Deferred<Unit> = async {
-                saveMasterPassword(session.masterPassword, decryptedKekBytes)
-            }
             val deferredRecoveryCodes: List<Deferred<Unit>> = session.recoveryCodes.map { recoveryCode ->
                 async {
                     saveRecoveryCode(recoveryCode, decryptedKekBytes)
@@ -75,11 +82,14 @@ class SaveFirstTimeSetupSessionUseCase @Inject constructor(
             val deferredMasterKey: Deferred<Unit> = async {
                 saveMasterKey(decryptedKekBytes)
             }
-
-            //TODO: Biometrics setup!
+            val deferredBiometrics: Deferred<Unit> = async {
+                if (session.useBiometrics) {
+                    saveBiometricsKey(decryptedKekBytes)
+                }
+            }
 
             //Await all async operations:
-            awaitAll(deferredMasterPassword, *deferredRecoveryCodes.toTypedArray(), deferredMasterKey)
+            awaitAll(*deferredRecoveryCodes.toTypedArray(), deferredMasterKey, deferredBiometrics)
 
             authRepository.commitTransaction()
         }
@@ -99,7 +109,7 @@ class SaveFirstTimeSetupSessionUseCase @Inject constructor(
      */
     private suspend fun saveMasterPassword(masterPassword: CharArray, decryptedKekBytes: ByteArray) = coroutineScope {
         val salt: ByteArray = saltGeneratorService.generateSalt()
-        val encryptedKekBytes: ByteArray = encryptKekWithSource(masterPassword, salt, decryptedKekBytes)
+        val encryptedKekBytes: ByteArray = sourceKeyService.encryptKekWithSource(masterPassword, salt, decryptedKekBytes, true)
 
         authRepository.setMasterPassword(encryptedKekBytes, salt)
     }
@@ -115,7 +125,7 @@ class SaveFirstTimeSetupSessionUseCase @Inject constructor(
      */
     private suspend fun saveRecoveryCode(recoveryCode: CharArray, decryptedKekBytes: ByteArray) = coroutineScope {
         val salt: ByteArray = saltGeneratorService.generateSalt()
-        val encryptedKekBytes: ByteArray = encryptKekWithSource(recoveryCode, salt, decryptedKekBytes)
+        val encryptedKekBytes: ByteArray = sourceKeyService.encryptKekWithSource(recoveryCode, salt, decryptedKekBytes, true)
 
         authRepository.addRecoveryCode(encryptedKekBytes, salt)
     }
@@ -141,68 +151,33 @@ class SaveFirstTimeSetupSessionUseCase @Inject constructor(
 
 
     /**
-     * Encrypts the KEK using the provided source (i.e. master password or recovery code) and salt.
+     * Generates a new hardware-backed key that is only released after biometric auth. Then, the
+     * KEK is encrypted using this key and stored in the repository.
      *
-     * @param source                Source used for encryption (i.e. master password or recovery code).
-     * @param salt                  Salt used for KDF.
-     * @return                      Encrypted KEK.
-     * @throws AuthSetupException   Cannot encrypt the KEK.
+     * @param decryptedKekBytes Decrypted KEK.
      */
-    private suspend fun encryptKekWithSource(source: CharArray, salt: ByteArray, decryptedKekBytes: ByteArray) = coroutineScope {
-        val hardwareBackedKey: SecretKey = getOrGenerateHardwareBackedKey()
-        var sourceKeyBytes: ByteArray? = null
-        var partlyEncryptedKekBytes: ByteArray? = null
-        var fullyEncryptedKekBytes: ByteArray? = null
-
-        try {
-            sourceKeyBytes = try {
-                kdfService.derive(source, salt)
-            } catch (e: Exception) {
-                throw AuthSetupException("Cannot derive source key (${e.message ?: "Unknown error"})")
-            }
-
-            partlyEncryptedKekBytes = try {
-                cipherService.encrypt(decryptedKekBytes, sourceKeyBytes)
-            } catch (e: Exception) {
-                throw AuthSetupException("Cannot encrypt KEK using source key (${e.message ?: "Unknown error"})")
-            }
-
-            fullyEncryptedKekBytes = try {
-                cipherService.encrypt(partlyEncryptedKekBytes, hardwareBackedKey)
-            } catch (e: Exception) {
-                throw AuthSetupException("Cannot encrypt KEK using hardware-backed key (${e.message ?: "Unknown error"})")
-            }
-
-            return@coroutineScope fullyEncryptedKekBytes
-        }
-        finally {
-            sourceKeyBytes?.fill(0)
-            partlyEncryptedKekBytes?.fill(0)
-        }
-    }
-
-
-    /**
-     * Gets the hardware-backed key or generates a new one if none is available.
-     *
-     * @return  Hardware-backed key.
-     */
-    private fun getOrGenerateHardwareBackedKey(): SecretKey {
-        val alias: String = SecurityAliases.HardwareBackedKey.getAlias()
-        if (hardwareBackedKeyRepository.containsKey(alias)) {
-            val key: SecretKey? = hardwareBackedKeyRepository.getKey(alias)
-            if (key != null) {
-                return key
-            }
+    private suspend fun saveBiometricsKey(decryptedKekBytes: ByteArray) = coroutineScope {
+        val keyAlias: String = SecurityAliases.BiometricsHardwareBackedKey.getAlias()
+        if (hardwareBackedKeyRepository.containsKey(keyAlias)) {
+            hardwareBackedKeyRepository.deleteKey(keyAlias)
         }
 
-        val keyGenParameterSpec = keyGeneratorService.getKeyGenParameterSpec(alias)
-        val key: SecretKey = hardwareBackedKeyRepository.generateNewKey(
-            alias = alias,
+        //10s timeout until key is locked again after biometric auth:
+        val keyGenParameterSpec: KeyGenParameterSpec = keyGeneratorService.getKeyGenParameterSpecForSecureKey(keyAlias, 10)
+
+        val biometricsKey: SecretKey = hardwareBackedKeyRepository.generateNewKey(
+            alias = keyAlias,
             algorithm = KeyProperties.KEY_ALGORITHM_AES,
             keyGenParameterSpec = keyGenParameterSpec
         )
-        return key
+
+        val encryptedKekBytes: ByteArray = try {
+            cipherService.encrypt(decryptedKekBytes, biometricsKey)
+        } catch (e: Exception) {
+            throw AuthSetupException("Cannot encrypt KEK using biometrics key: ${e.message ?: "Unknown error"}")
+        }
+
+        authRepository.setBiometricsKek(encryptedKekBytes)
     }
 
 }

@@ -6,6 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import de.christian2003.security.application.services.RecoveryCodeEncoderService
 import de.christian2003.security.application.services.SaltGeneratorService
+import de.christian2003.security.application.services.SourceKeyService
 
 
 /**

@@ -31,6 +31,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import de.christian2003.auth.viewmodels.RecoveryViewModel
 import de.christian2003.auth.R
+import de.christian2003.auth.viewmodels.SetupFlowSharedViewModel
 import de.christian2003.ui.composables.HelpCard
 import de.christian2003.ui.composables.LoadingIndicatorButton
 import de.christian2003.ui.composables.TextInput
@@ -44,13 +45,15 @@ import kotlinx.coroutines.withContext
 /**
  * Screen through which the user can recover their master password.
  *
- * @param viewModel     View model.
- * @param onNavigateUp  Callback invoked to navigate up the navigation stack.
- * @param onContinue    Callback invoked to navigate to the next step of the recovery.
+ * @param viewModel         View model.
+ * @param sharedViewModel   Shared view model for the setup flow.
+ * @param onNavigateUp      Callback invoked to navigate up the navigation stack.
+ * @param onContinue        Callback invoked to navigate to the next step of the recovery.
  */
 @Composable
 fun RecoveryScreen(
     viewModel: RecoveryViewModel,
+    sharedViewModel: SetupFlowSharedViewModel,
     onNavigateUp: () -> Unit,
     onContinue: () -> Unit
 ) {
@@ -61,6 +64,7 @@ fun RecoveryScreen(
         coroutineScope.launch(Dispatchers.Default) {
             val result: Boolean = viewModel.verifyRecoveryCode()
             if (result) {
+                sharedViewModel.recoveryCode = viewModel.recoveryCodeAsCharArray
                 withContext(Dispatchers.Main) {
                     onContinue()
                 }
