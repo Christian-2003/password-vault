@@ -56,6 +56,7 @@ class PasswordViewModel @Inject constructor(
             PasswordScreenState.ChangePassword -> currentPassword.isNotBlank()
                     && newPassword.isNotBlank()
                     && confirmNewPassword.isNotBlank()
+            PasswordScreenState.GenerateNewRecoveryCodes -> currentPassword.isNotBlank()
             else -> newPassword.isNotBlank()
                     && confirmNewPassword.isNotBlank()
         }

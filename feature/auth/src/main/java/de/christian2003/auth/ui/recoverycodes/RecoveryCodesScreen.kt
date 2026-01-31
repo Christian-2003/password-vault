@@ -296,7 +296,7 @@ private fun RecoveryCodesContent(
             HelpCard(
                 text = when (state) {
                     RecoveryCodesScreenState.FirstTimeSetup -> stringResource(R.string.recoveryCodes_help_firstTimeSetup)
-                    RecoveryCodesScreenState.RecoverPassword -> stringResource(R.string.recoveryCodes_help_recoverPassword)
+                    else -> stringResource(R.string.recoveryCodes_help_newCodes)
                 },
                 onDismiss = onDismissHelpCard,
                 modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
@@ -396,7 +396,7 @@ private fun TopBar(
             Text(
                 text = when (state) {
                     RecoveryCodesScreenState.FirstTimeSetup -> stringResource(R.string.recoveryCodes_title_firstTimeSetup)
-                    RecoveryCodesScreenState.RecoverPassword -> stringResource(R.string.recoveryCodes_title_recoverPassword)
+                    else -> stringResource(R.string.recoveryCodes_title_newCodes)
                 }
             )
         },

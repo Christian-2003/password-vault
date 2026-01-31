@@ -65,26 +65,28 @@ fun PasswordScreen(
     val focusManager: FocusManager = LocalFocusManager.current
 
     val invokeOnContinue: () -> Unit = {
-        if (viewModel.state == PasswordScreenState.ChangePassword) {
-            //When changing password, verify if password is valid:
-            coroutineScope.launch(Dispatchers.Default) {
-                val result: Boolean = viewModel.verifyCurrentPassword()
-                if (result) {
-                    sharedViewModel.currentMasterPassword = viewModel.currentPassword.toCharArray()
-                    sharedViewModel.newMasterPassword = viewModel.newPassword.toCharArray()
-                    withContext(Dispatchers.Main) {
-                        focusManager.clearFocus()
-                        onContinue()
+        when (viewModel.state) {
+            PasswordScreenState.ChangePassword, PasswordScreenState.GenerateNewRecoveryCodes -> {
+                //When changing password, verify if password is valid:
+                coroutineScope.launch(Dispatchers.Default) {
+                    val result: Boolean = viewModel.verifyCurrentPassword()
+                    if (result) {
+                        sharedViewModel.currentMasterPassword = viewModel.currentPassword.toCharArray()
+                        sharedViewModel.newMasterPassword = viewModel.newPassword.toCharArray()
+                        withContext(Dispatchers.Main) {
+                            focusManager.clearFocus()
+                            onContinue()
+                        }
                     }
                 }
             }
-        }
-        else if (viewModel.isAllDataValid.value) {
-            //No need to verify password validity, since a new password is being set:
-            sharedViewModel.currentMasterPassword = viewModel.currentPassword.toCharArray()
-            sharedViewModel.newMasterPassword = viewModel.newPassword.toCharArray()
-            focusManager.clearFocus()
-            onContinue()
+            else -> {
+                //No need to verify password validity, since a new password is being set:
+                sharedViewModel.currentMasterPassword = viewModel.currentPassword.toCharArray()
+                sharedViewModel.newMasterPassword = viewModel.newPassword.toCharArray()
+                focusManager.clearFocus()
+                onContinue()
+            }
         }
     }
 
@@ -93,7 +95,7 @@ fun PasswordScreen(
         //for a very short period of time, during which this Launched effect is called. Without
         //this safe call, the app would crash throwing an IllegalStateException.
         when (viewModel.state) {
-            PasswordScreenState.ChangePassword -> currentPasswordFocusRequester?.requestFocus()
+            PasswordScreenState.ChangePassword, PasswordScreenState.GenerateNewRecoveryCodes -> currentPasswordFocusRequester?.requestFocus()
             else -> newPasswordFocusRequester?.requestFocus()
         }
     }
@@ -125,6 +127,7 @@ fun PasswordScreen(
                         PasswordScreenState.FirstTimeSetup -> stringResource(R.string.password_help_firstTimeSetup)
                         PasswordScreenState.ChangePassword -> stringResource(R.string.password_help_changePassword)
                         PasswordScreenState.RecoverPassword -> stringResource(R.string.password_help_recoverPassword)
+                        PasswordScreenState.GenerateNewRecoveryCodes -> stringResource(R.string.password_help_generateNewRecoveryCodes)
                     },
                     onDismiss = {
                         viewModel.dismissHelpCard()
@@ -138,7 +141,7 @@ fun PasswordScreen(
             }
 
             //Current password:
-            if (viewModel.state == PasswordScreenState.ChangePassword) {
+            if (viewModel.state == PasswordScreenState.ChangePassword || viewModel.state == PasswordScreenState.GenerateNewRecoveryCodes) {
                 TextInput(
                     value = viewModel.currentPassword,
                     onValueChange = {
@@ -151,6 +154,11 @@ fun PasswordScreen(
                     keyboardActions = KeyboardActions {
                         newPasswordFocusRequester.requestFocus()
                     },
+                    errorMessage = when {
+                        !viewModel.isCurrentPasswordValid && viewModel.currentPassword.isBlank() -> stringResource(R.string.password_error_inputEmpty)
+                        !viewModel.isCurrentPasswordValid -> stringResource(R.string.password_error_passwordInvalid)
+                        else -> null
+                    },
                     modifier = Modifier.padding(
                         start = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal),
                         end = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal),
@@ -159,66 +167,66 @@ fun PasswordScreen(
                 )
             }
 
-            //New password:
-            val errorEmptyInput: String = stringResource(R.string.password_error_inputEmpty)
-            TextInput(
-                value = viewModel.newPassword,
-                onValueChange = {
-                    viewModel.newPassword = it
-                },
-                label = when (viewModel.state) {
-                    PasswordScreenState.FirstTimeSetup -> stringResource(R.string.password_label_password)
-                    else -> stringResource(R.string.password_label_newPassword)
-                },
-                isPassword = true,
-                focusRequester = newPasswordFocusRequester,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                keyboardActions = KeyboardActions {
-                    confirmNewPasswordFocusRequester.requestFocus()
-                },
-                errorMessage = if (!viewModel.isNewPasswordValid) {
-                    errorEmptyInput
-                } else {
-                    null
-                },
-                modifier = Modifier.padding(
-                    start = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal),
-                    end = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal),
-                    bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical)
+            if (viewModel.state != PasswordScreenState.GenerateNewRecoveryCodes) {
+                //New password:
+                TextInput(
+                    value = viewModel.newPassword,
+                    onValueChange = {
+                        viewModel.newPassword = it
+                    },
+                    label = when (viewModel.state) {
+                        PasswordScreenState.FirstTimeSetup -> stringResource(R.string.password_label_password)
+                        else -> stringResource(R.string.password_label_newPassword)
+                    },
+                    isPassword = true,
+                    focusRequester = newPasswordFocusRequester,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                    keyboardActions = KeyboardActions {
+                        confirmNewPasswordFocusRequester.requestFocus()
+                    },
+                    errorMessage = if (!viewModel.isNewPasswordValid) {
+                        stringResource(R.string.password_error_inputEmpty)
+                    } else {
+                        null
+                    },
+                    modifier = Modifier.padding(
+                        start = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal),
+                        end = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal),
+                        bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical)
+                    )
                 )
-            )
 
-            //Confirm new password:
-            val errorConfirmNewPassword: String = when (viewModel.state) {
-                PasswordScreenState.FirstTimeSetup -> stringResource(R.string.password_error_passwordsDoNotMatch)
-                else -> stringResource(R.string.password_error_newPasswordsDoNotMatch)
-            }
-            TextInput(
-                value = viewModel.confirmNewPassword,
-                onValueChange = {
-                    viewModel.confirmNewPassword = it
-                },
-                label = when (viewModel.state) {
-                    PasswordScreenState.FirstTimeSetup -> stringResource(R.string.password_label_confirmPassword)
-                    else -> stringResource(R.string.password_label_confirmNewPassword)
-                },
-                isPassword = true,
-                focusRequester = confirmNewPasswordFocusRequester,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions {
-                    invokeOnContinue()
-                },
-                errorMessage = when {
-                    !viewModel.isConfirmNewPasswordValid && viewModel.confirmNewPassword.isEmpty() -> errorEmptyInput
-                    !viewModel.isConfirmNewPasswordValid -> errorConfirmNewPassword
-                    else -> null
-                },
-                modifier = Modifier.padding(
-                    start = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal),
-                    end = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal),
-                    bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical)
+                //Confirm new password:
+                TextInput(
+                    value = viewModel.confirmNewPassword,
+                    onValueChange = {
+                        viewModel.confirmNewPassword = it
+                    },
+                    label = when (viewModel.state) {
+                        PasswordScreenState.FirstTimeSetup -> stringResource(R.string.password_label_confirmPassword)
+                        else -> stringResource(R.string.password_label_confirmNewPassword)
+                    },
+                    isPassword = true,
+                    focusRequester = confirmNewPasswordFocusRequester,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions {
+                        invokeOnContinue()
+                    },
+                    errorMessage = when {
+                        !viewModel.isConfirmNewPasswordValid && viewModel.confirmNewPassword.isEmpty() -> stringResource(R.string.password_error_inputEmpty)
+                        !viewModel.isConfirmNewPasswordValid -> when (viewModel.state) {
+                            PasswordScreenState.FirstTimeSetup -> stringResource(R.string.password_error_passwordsDoNotMatch)
+                            else -> stringResource(R.string.password_error_newPasswordsDoNotMatch)
+                        }
+                        else -> null
+                    },
+                    modifier = Modifier.padding(
+                        start = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal),
+                        end = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal),
+                        bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical)
+                    )
                 )
-            )
+            }
         }
     }
 }
@@ -242,6 +250,7 @@ private fun TopBar(
                     PasswordScreenState.FirstTimeSetup -> stringResource(R.string.password_title_firstTimeSetup)
                     PasswordScreenState.ChangePassword -> stringResource(R.string.password_title_changePassword)
                     PasswordScreenState.RecoverPassword -> stringResource(R.string.password_title_recoverPassword)
+                    PasswordScreenState.GenerateNewRecoveryCodes -> stringResource(R.string.password_title_generateNewRecoveryCodes)
                 }
             )
         },

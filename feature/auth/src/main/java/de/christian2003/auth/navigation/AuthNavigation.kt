@@ -64,7 +64,10 @@ internal data class FinishDestination(
 )
 
 @Serializable
-internal object ChangePasswordFlowDestination
+private object ChangePasswordFlowDestination
+
+@Serializable
+private object GenerateNewRecoveryCodesFlowDestination
 
 
 /**
@@ -199,7 +202,7 @@ fun NavGraphBuilder.recoveryFlowDestination(
 }
 
 
-internal fun NavGraphBuilder.changePasswordFlowDestination(
+private fun NavGraphBuilder.changePasswordFlowDestination(
     navController: NavController
 ) {
     navigation<ChangePasswordFlowDestination>(
@@ -235,6 +238,53 @@ internal fun NavGraphBuilder.changePasswordFlowDestination(
 }
 
 
+private fun NavGraphBuilder.generateNewRecoveryCodesFlowDestination(
+    navController: NavController
+) {
+    navigation<GenerateNewRecoveryCodesFlowDestination>(
+        startDestination = MasterPassword(state = PasswordScreenState.GenerateNewRecoveryCodes)
+    ) {
+        val queryBackStackEntry: () -> NavBackStackEntry? = {
+            navController.getParentBackStackEntry(GenerateNewRecoveryCodesFlowDestination)
+        }
+
+        //Authenticate:
+        masterPasswordDestination(
+            onQueryBackStackEntry = queryBackStackEntry,
+            onNavigateUp = {
+                navController.navigateUp()
+            },
+            onContinue = {
+                navController.navigate(RecoveryCodes(state = RecoveryCodesScreenState.GenerateNewRecoveryCodes))
+            }
+        )
+
+        //New recovery codes:
+        recoveryCodesDestination(
+            onQueryBackStackEntry = queryBackStackEntry,
+            onNavigateUp = {
+                navController.navigateUp()
+            },
+            onContinue = {
+                navController.navigate(FinishDestination(state = FinishScreenState.GenerateNewRecoveryCodes))
+            }
+        )
+
+        //Finish:
+        finishDestination(
+            onQueryBackStackEntry = queryBackStackEntry,
+            onNavigateUp = {
+                navController.navigateUp()
+            },
+            onFinish = {
+                navController.popBackStack(GenerateNewRecoveryCodesFlowDestination, true)
+            }
+        )
+
+    }
+}
+
+
 /**
  * Flow for the authentication settings.
  *
@@ -262,7 +312,7 @@ fun NavGraphBuilder.authSettingsFlowDestination(
                 navController.navigate(Biometrics)
             },
             onNavigateToRecoveryCodes = {
-                navController.navigate(RecoveryCodes(RecoveryCodesScreenState.RecoverPassword))
+                navController.navigate(GenerateNewRecoveryCodesFlowDestination)
             }
         )
 
@@ -287,14 +337,8 @@ fun NavGraphBuilder.authSettingsFlowDestination(
         )
 
         //Generate new recovery codes:
-        recoveryCodesDestination(
-            onQueryBackStackEntry = queryBackStackEntry,
-            onNavigateUp = {
-                navController.navigateUp()
-            },
-            onContinue = {
-                navController.navigateUp()
-            }
+        generateNewRecoveryCodesFlowDestination(
+            navController = navController
         )
 
     }

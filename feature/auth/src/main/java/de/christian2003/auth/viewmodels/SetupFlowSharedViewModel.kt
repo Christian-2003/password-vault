@@ -9,9 +9,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.auth.models.states.FinishScreenState
 import de.christian2003.security.application.usecases.SaveChangePasswordSession
 import de.christian2003.security.application.usecases.SaveFirstTimeSetupSessionUseCase
+import de.christian2003.security.application.usecases.SaveGenerateNewRecoveryCodesSessionUseCase
 import de.christian2003.security.application.usecases.SaveRecoverySessionUseCase
 import de.christian2003.security.domain.entities.ChangePasswordSession
 import de.christian2003.security.domain.entities.FirstTimeSetupSession
+import de.christian2003.security.domain.entities.GenerateNewRecoveryCodesSession
 import de.christian2003.security.domain.entities.RecoverySession
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,7 +24,8 @@ import javax.inject.Inject
 class SetupFlowSharedViewModel @Inject constructor(
     private val saveFirstTimeSetupSessionUseCase: SaveFirstTimeSetupSessionUseCase,
     private val saveRecoverySessionUseCase: SaveRecoverySessionUseCase,
-    private val saveChangePasswordSession: SaveChangePasswordSession
+    private val saveChangePasswordSession: SaveChangePasswordSession,
+    private val saveGenerateNewRecoveryCodesSessionUseCase: SaveGenerateNewRecoveryCodesSessionUseCase
 ): ViewModel() {
 
     var currentMasterPassword: CharArray? = null
@@ -51,7 +54,7 @@ class SetupFlowSharedViewModel @Inject constructor(
                     FinishScreenState.FirstTimeSetup -> saveFirstTimeSetup()
                     FinishScreenState.RecoverPassword -> saveRecovery()
                     FinishScreenState.ChangePassword -> saveChangePassword()
-                    else -> { /* TODO: Add saving for other states */ }
+                    FinishScreenState.GenerateNewRecoveryCodes -> saveGenerateNewRecoveryCodes()
                 }
             }
             catch (_: Exception) {
@@ -111,6 +114,22 @@ class SetupFlowSharedViewModel @Inject constructor(
                 newMasterPassword = newMasterPassword ?: CharArray(0)
             )
             saveChangePasswordSession.save(session)
+        }
+        finally {
+            session?.clear()
+        }
+    }
+
+
+    private suspend fun saveGenerateNewRecoveryCodes() {
+        var session: GenerateNewRecoveryCodesSession? = null
+
+        try {
+            session = GenerateNewRecoveryCodesSession(
+                masterPassword = currentMasterPassword ?: CharArray(0),
+                recoveryCodes = recoveryCodes ?: listOf()
+            )
+            saveGenerateNewRecoveryCodesSessionUseCase.save(session)
         }
         finally {
             session?.clear()
