@@ -30,37 +30,27 @@ import de.christian2003.auth.R
 import de.christian2003.auth.viewmodels.FinishViewModel
 import de.christian2003.auth.viewmodels.SetupFlowSharedViewModel
 import de.christian2003.ui.theme.isDarkTheme
-import de.christian2003.ui.theme.onErrorContainerDark
 
 
 /**
  * Screen is displayed to the user while authentication data is being saved.
  *
- * @param viewModel             View model.
- * @param onNavigateUp          Callback invoked to navigate up the navigation stack.
- * @param onFinish              Callback invoked to finish the setup.
- * @param setupFlowViewModel    Shared view model for the flow.
+ * @param viewModel         View model.
+ * @param sharedViewModel   Shared view model for the flow.
+ * @param onNavigateUp      Callback invoked to navigate up the navigation stack.
+ * @param onFinish          Callback invoked to finish the setup.
  */
 @Composable
 internal fun FinishScreen(
     viewModel: FinishViewModel,
+    sharedViewModel: SetupFlowSharedViewModel,
     onNavigateUp: () -> Unit,
-    onFinish: () -> Unit,
-    setupFlowViewModel: SetupFlowSharedViewModel? = null
+    onFinish: () -> Unit
 ) {
-    val isSaving: Boolean = when(viewModel.state) {
-        FinishScreenState.FirstTimeSetup -> setupFlowViewModel?.isSavingSession ?: false
-        else -> false
-    }
-    val isFinishedSaving: Boolean = when(viewModel.state) {
-        FinishScreenState.FirstTimeSetup -> setupFlowViewModel?.isFinishedSavingSession ?: false
-        else -> false
-    }
-
     LaunchedEffect(Unit) {
-        if (!isSaving && !isFinishedSaving) {
+        if (!sharedViewModel.isSavingSession && !sharedViewModel.isFinishedSavingSession) {
             when(viewModel.state) {
-                FinishScreenState.FirstTimeSetup -> setupFlowViewModel?.save(viewModel.state)
+                FinishScreenState.FirstTimeSetup -> sharedViewModel.save(viewModel.state)
                 else -> { }
             }
         }
@@ -82,7 +72,7 @@ internal fun FinishScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal))
         ) {
-            if (isSaving) {
+            if (sharedViewModel.isSavingSession) {
                 SavingContent(
                     state = viewModel.state
                 )
@@ -113,12 +103,11 @@ private fun SavingContent(
     modifier: Modifier = Modifier
 ) {
     Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.fillMaxWidth()
     ) {
         LoadingIndicator(
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
+            modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
         )
         Text(
             text = when (state) {
@@ -127,7 +116,9 @@ private fun SavingContent(
                 else -> stringResource(R.string.finish_labelLoading_newPassword)
             },
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            style = MaterialTheme.typography.labelMedium
+            style = MaterialTheme.typography.labelMedium,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }

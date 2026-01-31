@@ -1,11 +1,16 @@
 package de.christian2003.auth.viewmodels
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.auth.models.states.FinishScreenState
 import de.christian2003.security.application.usecases.SaveFirstTimeSetupSessionUseCase
 import de.christian2003.security.domain.entities.FirstTimeSetupSession
-import kotlinx.serialization.builtins.CharArraySerializer
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -13,6 +18,8 @@ import javax.inject.Inject
 class SetupFlowSharedViewModel @Inject constructor(
     private val saveFirstTimeSetupSessionUseCase: SaveFirstTimeSetupSessionUseCase
 ): ViewModel() {
+
+    var currentMasterPassword: CharArray? = null
 
     var newMasterPassword: CharArray? = null
 
@@ -22,33 +29,28 @@ class SetupFlowSharedViewModel @Inject constructor(
 
     var useBiometrics: Boolean? = null
 
-    var isSavingSession: Boolean = false
+    var isSavingSession: Boolean by mutableStateOf(false)
         private set
 
-    var isFinishedSavingSession: Boolean = false
+    var isFinishedSavingSession: Boolean by mutableStateOf(false)
         private set
 
 
-    suspend fun save(state: FinishScreenState): Boolean {
+    fun save(state: FinishScreenState) = viewModelScope.launch(Dispatchers.Default) {
         if (!isSavingSession && !isFinishedSavingSession) {
             isSavingSession = true
 
-            val result: Boolean = try {
+            try {
                 when (state) {
                     FinishScreenState.FirstTimeSetup -> saveFirstTimeSetup()
                     else -> { /* TODO: Add saving for other states */ }
                 }
-                true
             }
             catch (_: Exception) {
-                false
             }
             isFinishedSavingSession = true
             isSavingSession = false
-
-            return result
         }
-        return false
     }
 
 

@@ -37,10 +37,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun BiometricsScreen(
     viewModel: BiometricsViewModel,
+    sharedViewModel: SetupFlowSharedViewModel,
     onNavigateUp: () -> Unit,
     onContinue: () -> Unit,
-    onSetupBiometricAuth: suspend () -> Boolean,
-    setupFlowViewModel: SetupFlowSharedViewModel? = null
+    onBiometricAuth: suspend () -> Boolean
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
 
@@ -54,18 +54,16 @@ fun BiometricsScreen(
             BottomBar(
                 onEnable = {
                     coroutineScope.launch {
-                        val result: Boolean = onSetupBiometricAuth()
+                        val result: Boolean = onBiometricAuth()
                         if (result) {
-                            viewModel.finishSetup()
+                            sharedViewModel.useBiometrics = true
                             onContinue()
                         }
                     }
                 },
                 onSkip = {
-                    coroutineScope.launch {
-                        viewModel.finishSetup()
-                        onContinue()
-                    }
+                    sharedViewModel.useBiometrics = false
+                    onContinue()
                 }
             )
         }

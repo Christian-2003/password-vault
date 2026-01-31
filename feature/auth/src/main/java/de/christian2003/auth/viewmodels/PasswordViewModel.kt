@@ -21,8 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PasswordViewModel @Inject constructor(
     application: Application,
-    savedStateHandle: SavedStateHandle,
-    private val setupNewMasterPasswordUseCase: SetupNewMasterPasswordUseCase
+    savedStateHandle: SavedStateHandle
 ): AndroidViewModel(application) {
 
     val state: PasswordScreenState = savedStateHandle.toRoute<MasterPassword>().state
@@ -42,50 +41,34 @@ class PasswordViewModel @Inject constructor(
     var isConfirmNewPasswordValid: Boolean by mutableStateOf(true)
         private set
 
+    /**
+     * Indicates whether the button to continue is enabled.
+     * If the button is enabled, this only means that all data required is entered, but it has not
+     * been validated yet.
+     */
     var isContinueButtonEnabled: State<Boolean> = derivedStateOf {
         return@derivedStateOf when(state) {
-            PasswordScreenState.ChangePassword -> currentPassword.isNotEmpty()
-                    && newPassword.isNotEmpty()
-                    && confirmNewPassword.isNotEmpty()
-            else -> newPassword.isNotEmpty()
-                    && confirmNewPassword.isNotEmpty()
+            PasswordScreenState.ChangePassword -> currentPassword.isNotBlank()
+                    && newPassword.isNotBlank()
+                    && confirmNewPassword.isNotBlank()
+            else -> newPassword.isNotBlank()
+                    && confirmNewPassword.isNotBlank()
         }
     }
 
-    var isSettingNewMasterPassword: Boolean by mutableStateOf(false)
-        private set
-
-    var isMasterPasswordSetSuccessfully: Boolean by mutableStateOf(false)
-        private set
+    /**
+     * Indicates whether all data is valid. This must be true before continuing to the next setup
+     * screen.
+     */
+    var isAllDataValid: State<Boolean> = derivedStateOf {
+        return@derivedStateOf isContinueButtonEnabled.value
+                && isCurrentPasswordValid
+                && isNewPasswordValid
+                && isConfirmNewPasswordValid
+    }
 
     var isHelpCardVisible: Boolean by mutableStateOf(HelpCard.HelpSetupMasterPassword.getVisible(application))
         private set
-
-
-    suspend fun setNewMasterPassword() {
-        if (!isSettingNewMasterPassword) {
-            val newPassword: String = this@PasswordViewModel.newPassword
-            val confirmNewPassword: String = this@PasswordViewModel.confirmNewPassword
-
-            //Validate inputs:
-            isNewPasswordValid = newPassword.isNotEmpty()
-            isConfirmNewPasswordValid = confirmNewPassword.isNotEmpty() && newPassword == confirmNewPassword
-
-            //Set new password:
-            if (isContinueButtonEnabled.value) {
-                isSettingNewMasterPassword = true
-
-                if (isNewPasswordValid && isConfirmNewPasswordValid) {
-                    isConfirmNewPasswordValid = true
-                    setupNewMasterPasswordUseCase.setupMasterPassword(newPassword.toCharArray())
-                    //TODO: When changing PW, we need to test whether the master password entered is correct!
-                    isMasterPasswordSetSuccessfully = true
-                }
-
-                isSettingNewMasterPassword = false
-            }
-        }
-    }
 
 
     fun dismissHelpCard() {

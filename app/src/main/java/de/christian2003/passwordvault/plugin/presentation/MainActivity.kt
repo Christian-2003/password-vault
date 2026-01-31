@@ -51,7 +51,6 @@ import de.christian2003.passwordvault.plugin.presentation.view.main.MainViewMode
 import de.christian2003.passwordvault.plugin.presentation.view.settings.SettingsScreen
 import de.christian2003.passwordvault.plugin.presentation.view.settings.SettingsViewModel
 import de.christian2003.security.application.usecases.CanMasterKeyBeUnlockedUseCase
-import de.christian2003.security.application.usecases.SetupBiometricsUseCase
 import de.christian2003.security.application.usecases.UnlockWithBiometricsUseCase
 import javax.inject.Inject
 
@@ -68,8 +67,6 @@ class MainActivity : FragmentActivity() {
 
 
     @Inject lateinit var canMasterKeyBeUnlockedUseCase: CanMasterKeyBeUnlockedUseCase
-    @Inject lateinit var setupBiometricsUseCase: SetupBiometricsUseCase
-
     @Inject lateinit var unlockWithBiometricsUseCase: UnlockWithBiometricsUseCase
 
 
@@ -97,14 +94,6 @@ class MainActivity : FragmentActivity() {
         setContent {
             PasswordVault(
                 canUnlockMasterKey = canMasterKeyBeUnlockedUseCase.canBeUnlocked(),
-                onSetupBiometricAuth = {
-                    try {
-                        setupBiometricsUseCase.setupBiometrics()
-                        true
-                    } catch (_: Exception) {
-                        false
-                    }
-                },
                 onBiometricUnlock = {
                     try {
                         unlockWithBiometricsUseCase.unlock()
@@ -146,7 +135,6 @@ class MainActivity : FragmentActivity() {
 @Composable
 fun PasswordVault(
     canUnlockMasterKey: Boolean,
-    onSetupBiometricAuth: suspend () -> Boolean,
     onBiometricUnlock: suspend () -> Boolean,
     onBiometricAuth: suspend () -> Boolean,
     onToggleBiometrics: suspend () -> Boolean
@@ -186,7 +174,7 @@ fun PasswordVault(
                 onNotifyAuthSetupFinished = {
                     isAuthSetupFinished = true
                 },
-                onSetupBiometricAuth = onSetupBiometricAuth
+                onBiometricAuth = onBiometricAuth
             )
 
             //Flow for the recovery of the master password:

@@ -7,24 +7,17 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
 import dagger.hilt.android.lifecycle.HiltViewModel
-import de.christian2003.security.application.usecases.SetupCommitUseCase
 import de.christian2003.ui.model.HelpCard
 import javax.inject.Inject
 
 
 @HiltViewModel
 class BiometricsViewModel @Inject constructor(
-    application: Application,
-    private val setupCommitUseCase: SetupCommitUseCase
+    application: Application
 ): AndroidViewModel(application) {
 
     var isHelpCardVisible: Boolean by mutableStateOf(HelpCard.HelpBiometrics.getVisible(application))
         private set
-
-
-    suspend fun finishSetup() {
-        setupCommitUseCase.commit()
-    }
 
 
     fun dismissHelpCard() {

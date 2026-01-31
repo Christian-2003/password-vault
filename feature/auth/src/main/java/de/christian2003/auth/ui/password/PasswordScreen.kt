@@ -10,6 +10,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -18,7 +19,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
@@ -34,44 +34,35 @@ import de.christian2003.auth.viewmodels.PasswordViewModel
 import de.christian2003.auth.R
 import de.christian2003.auth.viewmodels.SetupFlowSharedViewModel
 import de.christian2003.ui.composables.HelpCard
-import de.christian2003.ui.composables.LoadingIndicatorButton
 import de.christian2003.ui.composables.TextInput
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 /**
  * Screen to set the master password.
  *
  * @param viewModel             View model.
+ * @param sharedViewModel       Shared view model for the flow.
  * @param onNavigateUp          Callback invoked to navigate up the navigation stack.
  * @param onContinue            Callback invoked to continue to the next setup step.
- * @param setupFlowViewModel    Shared view model for the setup flow.
  */
 @Composable
 fun PasswordScreen(
     viewModel: PasswordViewModel,
+    sharedViewModel: SetupFlowSharedViewModel,
     onNavigateUp: () -> Unit,
     onContinue: () -> Unit,
-    setupFlowViewModel: SetupFlowSharedViewModel? = null
 ) {
-    val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val currentPasswordFocusRequester: FocusRequester = remember { FocusRequester() }
     val newPasswordFocusRequester: FocusRequester = remember { FocusRequester() }
     val confirmNewPasswordFocusRequester: FocusRequester = remember { FocusRequester() }
     val focusManager: FocusManager = LocalFocusManager.current
 
     val invokeOnContinue: () -> Unit = {
-        coroutineScope.launch(Dispatchers.Default) {
-            viewModel.setNewMasterPassword()
-            if (viewModel.isMasterPasswordSetSuccessfully) {
-                withContext(Dispatchers.Main) {
-                    focusManager.clearFocus()
-                    onContinue()
-                }
-            }
+        if (viewModel.isAllDataValid.value) {
+            sharedViewModel.currentMasterPassword = viewModel.currentPassword.toCharArray()
+            sharedViewModel.newMasterPassword = viewModel.newPassword.toCharArray()
+            focusManager.clearFocus()
+            onContinue()
         }
     }
 
@@ -95,7 +86,6 @@ fun PasswordScreen(
         bottomBar = {
             BottomBar(
                 canContinue = viewModel.isContinueButtonEnabled.value,
-                isSettingNewMasterPassword = viewModel.isSettingNewMasterPassword,
                 onContinue = invokeOnContinue
             )
         },
@@ -251,15 +241,12 @@ private fun TopBar(
 /**
  * Bar that is fixed at the bottom of the screen.
  *
- * @param canContinue                   Whether the use can continue to the next screen of the flow.
- * @param isSettingNewMasterPassword    Indicates whether a new master password is currently being set.
- * @param onContinue                    Callback invoked once the user continues to the next screen
- *                                      of the flow.
+ * @param canContinue   Whether the use can continue to the next screen of the flow.
+ * @param onContinue    Callback invoked once the user continues to the next screen of the flow.
  */
 @Composable
 private fun BottomBar(
     canContinue: Boolean,
-    isSettingNewMasterPassword: Boolean,
     onContinue: () -> Unit
 ) {
     BottomAppBar {
@@ -267,12 +254,10 @@ private fun BottomBar(
             horizontalAlignment = Alignment.End,
             modifier = Modifier.fillMaxWidth()
         ) {
-            LoadingIndicatorButton(
-                label = stringResource(R.string.password_button_continue),
-                isLoading = isSettingNewMasterPassword,
+            Button(
                 enabled = canContinue,
                 onClick = {
-                    if (canContinue && !isSettingNewMasterPassword) {
+                    if (canContinue) {
                         onContinue()
                     }
                 },
@@ -280,7 +265,9 @@ private fun BottomBar(
                     //Horizontal padding of bottom app bar: 4 dp
                     horizontal = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal) - 4.dp
                 )
-            )
+            ) {
+                Text(stringResource(R.string.password_button_continue))
+            }
         }
     }
 }

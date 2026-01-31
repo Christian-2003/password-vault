@@ -1,6 +1,7 @@
 package de.christian2003.auth.navigation
 
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -9,6 +10,7 @@ import de.christian2003.auth.models.states.FinishScreenState
 import de.christian2003.auth.models.states.PasswordScreenState
 import de.christian2003.auth.models.states.RecoveryCodesScreenState
 import de.christian2003.auth.ui.biometrics.BiometricsScreen
+import de.christian2003.auth.ui.finish.FinishScreen
 import de.christian2003.auth.ui.login.LoginScreen
 import de.christian2003.auth.ui.password.PasswordScreen
 import de.christian2003.auth.ui.recovery.RecoveryScreen
@@ -16,10 +18,12 @@ import de.christian2003.auth.ui.recoverycodes.RecoveryCodesScreen
 import de.christian2003.auth.ui.settings.AuthSettingsScreen
 import de.christian2003.auth.viewmodels.AuthSettingsViewModel
 import de.christian2003.auth.viewmodels.BiometricsViewModel
+import de.christian2003.auth.viewmodels.FinishViewModel
 import de.christian2003.auth.viewmodels.LoginViewModel
 import de.christian2003.auth.viewmodels.PasswordViewModel
 import de.christian2003.auth.viewmodels.RecoveryCodesViewModel
 import de.christian2003.auth.viewmodels.RecoveryViewModel
+import de.christian2003.auth.viewmodels.SetupFlowSharedViewModel
 import kotlinx.serialization.Serializable
 
 
@@ -65,19 +69,23 @@ internal data class FinishDestination(
  *
  * @param navController             Navigation controller.
  * @param onNotifyAuthSetupFinished Callback invoked to inform the nav host that the setup flow finished.
- * @param onSetupBiometricAuth      Callback invoked to setup biometric authentication.
+ * @param onBiometricAuth           Callback invoked for biometric authentication.
  */
 fun NavGraphBuilder.setupFlowDestination(
     navController: NavController,
     onNotifyAuthSetupFinished: () -> Unit,
-    onSetupBiometricAuth: suspend () -> Boolean
+    onBiometricAuth: suspend () -> Boolean
 ) {
     navigation<SetupFlow>(
         startDestination = MasterPassword(PasswordScreenState.FirstTimeSetup)
     ) {
+        val queryBackStackEntry: () -> NavBackStackEntry? = {
+            navController.getParentBackStackEntry(SetupFlow)
+        }
 
         //Master password setup:
         masterPasswordDestination(
+            onQueryBackStackEntry = queryBackStackEntry,
             onNavigateUp = {
                 navController.navigateUp()
             },
@@ -88,6 +96,7 @@ fun NavGraphBuilder.setupFlowDestination(
 
         //Recovery codes setup:
         recoveryCodesDestination(
+            onQueryBackStackEntry = queryBackStackEntry,
             onNavigateUp = {
                 navController.navigateUp()
             },
@@ -98,14 +107,26 @@ fun NavGraphBuilder.setupFlowDestination(
 
         //Biometrics setup:
         biometricsDestination(
+            onQueryBackStackEntry = queryBackStackEntry,
             onNavigateUp = {
                 navController.navigateUp()
             },
             onContinue = {
+                navController.navigate(FinishDestination(state = FinishScreenState.FirstTimeSetup))
+            },
+            onBiometricAuth = onBiometricAuth
+        )
+
+        //Finish setup:
+        finishDestination(
+            onQueryBackStackEntry = queryBackStackEntry,
+            onNavigateUp = {
+                navController.navigateUp()
+            },
+            onFinish = {
                 onNotifyAuthSetupFinished()
                 navController.popBackStack(SetupFlow, true)
-            },
-            onSetupBiometricAuth = onSetupBiometricAuth
+            }
         )
 
     }
@@ -123,6 +144,9 @@ fun NavGraphBuilder.recoveryFlowDestination(
     navigation<RecoveryFlow>(
         startDestination = Recovery
     ) {
+        val queryBackStackEntry: () -> NavBackStackEntry? = {
+            navController.getParentBackStackEntry(RecoveryFlow)
+        }
 
         //Recovery using recovery codes:
         recoveryDestination(
@@ -136,6 +160,7 @@ fun NavGraphBuilder.recoveryFlowDestination(
 
         //Master password setup:
         masterPasswordDestination(
+            onQueryBackStackEntry = queryBackStackEntry,
             onNavigateUp = {
                 navController.navigateUp()
             },
@@ -146,6 +171,7 @@ fun NavGraphBuilder.recoveryFlowDestination(
 
         //Recovery codes setup:
         recoveryCodesDestination(
+            onQueryBackStackEntry = queryBackStackEntry,
             onNavigateUp = {
                 navController.navigateUp()
             },
@@ -169,6 +195,9 @@ fun NavGraphBuilder.authSettingsFlowDestination(
     navigation<AuthSettingsFlow>(
         startDestination = AuthSettings
     ) {
+        val queryBackStackEntry: () -> NavBackStackEntry? = {
+            navController.getParentBackStackEntry(AuthSettingsFlow)
+        }
 
         //Base page for the auth settings:
         authSettingsDestination(
@@ -188,6 +217,7 @@ fun NavGraphBuilder.authSettingsFlowDestination(
 
         //Change master password:
         masterPasswordDestination(
+            onQueryBackStackEntry = queryBackStackEntry,
             onNavigateUp = {
                 navController.navigateUp()
             },
@@ -198,13 +228,14 @@ fun NavGraphBuilder.authSettingsFlowDestination(
 
         //Enable / disable biometrics:
         biometricsDestination(
+            onQueryBackStackEntry = queryBackStackEntry,
             onNavigateUp = {
                 navController.navigateUp()
             },
             onContinue = {
                 //TODO
             },
-            onSetupBiometricAuth = {
+            onBiometricAuth = {
                 //TODO
                 false
             }
@@ -212,6 +243,7 @@ fun NavGraphBuilder.authSettingsFlowDestination(
 
         //Generate new recovery codes:
         recoveryCodesDestination(
+            onQueryBackStackEntry = queryBackStackEntry,
             onNavigateUp = {
                 navController.navigateUp()
             },
@@ -256,17 +288,23 @@ fun NavGraphBuilder.loginDestination(
  * @param onContinue    Callback invoked to navigate to the next setup step.
  */
 private fun NavGraphBuilder.masterPasswordDestination(
+    onQueryBackStackEntry: () -> NavBackStackEntry?,
     onNavigateUp: () -> Unit,
     onContinue: () -> Unit
 ) {
     composable<MasterPassword> {
-        val viewModel: PasswordViewModel = hiltViewModel()
+        val parentBackStackEntry: NavBackStackEntry? = onQueryBackStackEntry()
+        if (parentBackStackEntry != null) {
+            val sharedViewModel: SetupFlowSharedViewModel = hiltViewModel(parentBackStackEntry)
+            val viewModel: PasswordViewModel = hiltViewModel()
 
-        PasswordScreen(
-            viewModel = viewModel,
-            onNavigateUp = onNavigateUp,
-            onContinue = onContinue
-        )
+            PasswordScreen(
+                viewModel = viewModel,
+                sharedViewModel = sharedViewModel,
+                onNavigateUp = onNavigateUp,
+                onContinue = onContinue
+            )
+        }
     }
 }
 
@@ -278,17 +316,23 @@ private fun NavGraphBuilder.masterPasswordDestination(
  * @param onContinue    Callback invoked to navigate to the next setup step.
  */
 private fun NavGraphBuilder.recoveryCodesDestination(
+    onQueryBackStackEntry: () -> NavBackStackEntry?,
     onNavigateUp: () -> Unit,
     onContinue: () -> Unit
 ) {
     composable<RecoveryCodes> {
-        val viewModel: RecoveryCodesViewModel = hiltViewModel()
+        val parentBackStackEntry: NavBackStackEntry? = onQueryBackStackEntry()
+        if (parentBackStackEntry != null) {
+            val viewModel: RecoveryCodesViewModel = hiltViewModel()
+            val sharedViewModel: SetupFlowSharedViewModel = hiltViewModel(parentBackStackEntry)
 
-        RecoveryCodesScreen(
-            viewModel = viewModel,
-            onNavigateUp = onNavigateUp,
-            onContinue = onContinue
-        )
+            RecoveryCodesScreen(
+                viewModel = viewModel,
+                sharedViewModel = sharedViewModel,
+                onNavigateUp = onNavigateUp,
+                onContinue = onContinue
+            )
+        }
     }
 }
 
@@ -296,24 +340,52 @@ private fun NavGraphBuilder.recoveryCodesDestination(
 /**
  * Navigation destination for the screen for the setup of the biometric authentication.
  *
- * @param onNavigateUp          Callback invoked to navigate up the navigation stack.
- * @param onContinue            Callback invoked to navigate to the next setup step.
- * @param onSetupBiometricAuth  Callback invoked to setup biometric authentication.
+ * @param onNavigateUp      Callback invoked to navigate up the navigation stack.
+ * @param onContinue        Callback invoked to navigate to the next setup step.
+ * @param onBiometricAuth   Callback invoked for biometric authentication.
  */
 private fun NavGraphBuilder.biometricsDestination(
+    onQueryBackStackEntry: () -> NavBackStackEntry?,
     onNavigateUp: () -> Unit,
     onContinue: () -> Unit,
-    onSetupBiometricAuth: suspend () -> Boolean
+    onBiometricAuth: suspend () -> Boolean
 ) {
     composable<Biometrics> {
-        val viewModel: BiometricsViewModel = hiltViewModel()
+        val parentBackStackEntry: NavBackStackEntry? = onQueryBackStackEntry()
+        if (parentBackStackEntry != null) {
+            val viewModel: BiometricsViewModel = hiltViewModel()
+            val sharedViewModel: SetupFlowSharedViewModel = hiltViewModel(parentBackStackEntry)
 
-        BiometricsScreen(
-            viewModel = viewModel,
-            onNavigateUp = onNavigateUp,
-            onContinue = onContinue,
-            onSetupBiometricAuth = onSetupBiometricAuth
-        )
+            BiometricsScreen(
+                viewModel = viewModel,
+                sharedViewModel = sharedViewModel,
+                onNavigateUp = onNavigateUp,
+                onContinue = onContinue,
+                onBiometricAuth = onBiometricAuth
+            )
+        }
+    }
+}
+
+
+private fun NavGraphBuilder.finishDestination(
+    onQueryBackStackEntry: () -> NavBackStackEntry?,
+    onNavigateUp: () -> Unit,
+    onFinish: () -> Unit
+) {
+    composable<FinishDestination> {
+        val parentBackStackEntry: NavBackStackEntry? = onQueryBackStackEntry()
+        if (parentBackStackEntry != null) {
+            val viewModel: FinishViewModel = hiltViewModel()
+            val sharedViewModel: SetupFlowSharedViewModel = hiltViewModel(parentBackStackEntry)
+
+            FinishScreen(
+                viewModel = viewModel,
+                sharedViewModel = sharedViewModel,
+                onNavigateUp = onNavigateUp,
+                onFinish = onFinish
+            )
+        }
     }
 }
 
@@ -365,5 +437,14 @@ private fun NavGraphBuilder.authSettingsDestination(
             onNavigateToBiometrics = onNavigateToBiometrics,
             onNavigateToRecoveryCodes = onNavigateToRecoveryCodes
         )
+    }
+}
+
+
+inline fun <reified T : Any> NavController.getParentBackStackEntry(route: T): NavBackStackEntry? {
+    return try {
+        getBackStackEntry(route)
+    } catch (_: Exception) {
+        null
     }
 }

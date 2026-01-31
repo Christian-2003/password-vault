@@ -58,17 +58,17 @@ import kotlinx.coroutines.withContext
 /**
  * Screen displays the recovery codes to the user after they have set a new master password.
  *
- * @param viewModel             View model.
- * @param onNavigateUp          Callback invoked to navigate up the navigation stack.
- * @param onContinue            Callback invoked to navigate to the next setup step.
- * @param setupFlowViewModel    Shared view model for the setup flow.
+ * @param viewModel         View model.
+ * @param sharedViewModel   Shared view model for the setup flow.
+ * @param onNavigateUp      Callback invoked to navigate up the navigation stack.
+ * @param onContinue        Callback invoked to navigate to the next setup step.
  */
 @Composable
 fun RecoveryCodesScreen(
     viewModel: RecoveryCodesViewModel,
+    sharedViewModel: SetupFlowSharedViewModel,
     onNavigateUp: () -> Unit,
-    onContinue: () -> Unit,
-    setupFlowViewModel: SetupFlowSharedViewModel? = null
+    onContinue: () -> Unit
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
@@ -95,13 +95,9 @@ fun RecoveryCodesScreen(
     }
 
     val invokeOnContinue: () -> Unit = {
-        coroutineScope.launch(Dispatchers.IO) {
-            val result: Boolean = viewModel.finishSetupIfRequired()
-            if (result) {
-                withContext(Dispatchers.Main) {
-                    onContinue()
-                }
-            }
+        if (!viewModel.isError && viewModel.recoveryCodes.isNotEmpty()) {
+            sharedViewModel.recoveryCodes = viewModel.recoveryCodesAsCharArray
+            onContinue()
         }
     }
 

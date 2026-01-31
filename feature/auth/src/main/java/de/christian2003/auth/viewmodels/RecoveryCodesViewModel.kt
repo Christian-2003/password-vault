@@ -2,7 +2,6 @@ package de.christian2003.auth.viewmodels
 
 import android.app.Application
 import android.net.Uri
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,9 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.auth.models.formatters.RecoveryCodesFormatter
 import de.christian2003.auth.models.dialogs.RecoveryCodesScreenDialog
 import de.christian2003.auth.models.states.RecoveryCodesScreenState
-import de.christian2003.security.application.usecases.SetupCommitUseCase
-import de.christian2003.security.application.usecases.SetupNewRecoveryCodesUseCase
-import de.christian2003.security.domain.entities.RecoveryCodes
+import de.christian2003.security.application.usecases.GenerateRecoveryCodesUseCase
 import de.christian2003.ui.model.HelpCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -30,21 +27,22 @@ import javax.inject.Inject
  *
  * @param application                   Application.
  * @param savedStateHandle              Saved state handle.
- * @param setupNewRecoveryCodesUseCase  Use case to generate new recovery codes.
- * @param setupCommitUseCase            Use case to commit changes, if this is the last screen of the flow.
+ * @param generateRecoveryCodesUseCase  Use case to generate new recovery codes.
  */
 @HiltViewModel
 class RecoveryCodesViewModel @Inject constructor(
     application: Application,
     savedStateHandle: SavedStateHandle,
-    private val setupNewRecoveryCodesUseCase: SetupNewRecoveryCodesUseCase,
-    private val setupCommitUseCase: SetupCommitUseCase
+    private val generateRecoveryCodesUseCase: GenerateRecoveryCodesUseCase,
 ): AndroidViewModel(application) {
 
     /**
      * State with which the screen is shown.
      */
     val state: RecoveryCodesScreenState = savedStateHandle.toRoute<de.christian2003.auth.navigation.RecoveryCodes>().state
+
+    var recoveryCodesAsCharArray: List<CharArray> = listOf()
+        private set
 
     /**
      * Formatted recovery codes. This is empty while new codes are generating.
@@ -82,17 +80,17 @@ class RecoveryCodesViewModel @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.Default) {
             try {
-                val recoveryCodes: RecoveryCodes = setupNewRecoveryCodesUseCase.setupRecoveryCodes()
+                val recoveryCodes: List<CharArray> = generateRecoveryCodesUseCase.generate()
                 val formatter = RecoveryCodesFormatter()
                 val formattedCodes: MutableList<String> = mutableListOf()
-                recoveryCodes.codes.forEach { recoveryCode ->
+                recoveryCodes.forEach { recoveryCode ->
                     formattedCodes.add(formatter.format(recoveryCode))
                 }
+                recoveryCodesAsCharArray = recoveryCodes
                 this@RecoveryCodesViewModel.recoveryCodes = formattedCodes
                 isError = false
             }
-            catch (e: Exception) {
-                Log.e("RecoveryScreen", e.message ?: "Unknown exception")
+            catch (_: Exception) {
                 isError = true
             }
         }
@@ -124,14 +122,6 @@ class RecoveryCodesViewModel @Inject constructor(
         }
         catch (_: Exception) { }
         return@coroutineScope false
-    }
-
-
-    suspend fun finishSetupIfRequired(): Boolean {
-        if (state == RecoveryCodesScreenState.RecoverPassword) {
-            setupCommitUseCase.commit()
-        }
-        return true
     }
 
 
