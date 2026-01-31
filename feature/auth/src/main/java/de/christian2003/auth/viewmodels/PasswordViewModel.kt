@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.auth.models.states.PasswordScreenState
 import de.christian2003.auth.navigation.MasterPassword
 import de.christian2003.security.application.usecases.SetupNewMasterPasswordUseCase
+import de.christian2003.security.application.usecases.VerifyMasterPasswordUseCase
 import de.christian2003.ui.model.HelpCard
 import javax.inject.Inject
 
@@ -21,7 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class PasswordViewModel @Inject constructor(
     application: Application,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val verifyMasterPasswordUseCase: VerifyMasterPasswordUseCase
 ): AndroidViewModel(application) {
 
     val state: PasswordScreenState = savedStateHandle.toRoute<MasterPassword>().state
@@ -39,6 +41,9 @@ class PasswordViewModel @Inject constructor(
         private set
 
     var isConfirmNewPasswordValid: Boolean by mutableStateOf(true)
+        private set
+
+    var isVerifyingCurrentPassword: Boolean by mutableStateOf(false)
         private set
 
     /**
@@ -69,6 +74,21 @@ class PasswordViewModel @Inject constructor(
 
     var isHelpCardVisible: Boolean by mutableStateOf(HelpCard.HelpSetupMasterPassword.getVisible(application))
         private set
+
+
+    suspend fun verifyCurrentPassword(): Boolean {
+        if (!isVerifyingCurrentPassword) {
+            isVerifyingCurrentPassword = true
+
+            val isValid = verifyMasterPasswordUseCase.verify(currentPassword.toCharArray())
+
+            isCurrentPasswordValid = isValid
+            isVerifyingCurrentPassword = false
+
+            return isValid
+        }
+        return false
+    }
 
 
     fun dismissHelpCard() {

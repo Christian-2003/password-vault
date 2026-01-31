@@ -63,6 +63,9 @@ internal data class FinishDestination(
     val state: FinishScreenState
 )
 
+@Serializable
+internal object ChangePasswordFlowDestination
+
 
 /**
  * Flow for the first-time master password setup.
@@ -196,6 +199,42 @@ fun NavGraphBuilder.recoveryFlowDestination(
 }
 
 
+internal fun NavGraphBuilder.changePasswordFlowDestination(
+    navController: NavController
+) {
+    navigation<ChangePasswordFlowDestination>(
+        startDestination = MasterPassword(state = PasswordScreenState.ChangePassword)
+    ) {
+        val queryBackStackEntry: () -> NavBackStackEntry? = {
+            navController.getParentBackStackEntry(ChangePasswordFlowDestination)
+        }
+
+        //Change password:
+        masterPasswordDestination(
+            onQueryBackStackEntry = queryBackStackEntry,
+            onNavigateUp = {
+                navController.navigateUp()
+            },
+            onContinue = {
+                navController.navigate(FinishDestination(state = FinishScreenState.ChangePassword))
+            }
+        )
+
+        //Finish changing password:
+        finishDestination(
+            onQueryBackStackEntry = queryBackStackEntry,
+            onNavigateUp = {
+                navController.navigateUp()
+            },
+            onFinish = {
+                navController.popBackStack(ChangePasswordFlowDestination, true)
+            }
+        )
+
+    }
+}
+
+
 /**
  * Flow for the authentication settings.
  *
@@ -217,7 +256,7 @@ fun NavGraphBuilder.authSettingsFlowDestination(
                 navController.navigateUp()
             },
             onNavigateToPassword = {
-                navController.navigate(MasterPassword(PasswordScreenState.ChangePassword))
+                navController.navigate(ChangePasswordFlowDestination)
             },
             onNavigateToBiometrics = {
                 navController.navigate(Biometrics)
@@ -228,14 +267,8 @@ fun NavGraphBuilder.authSettingsFlowDestination(
         )
 
         //Change master password:
-        masterPasswordDestination(
-            onQueryBackStackEntry = queryBackStackEntry,
-            onNavigateUp = {
-                navController.navigateUp()
-            },
-            onContinue = {
-                navController.navigate(RecoveryCodes(RecoveryCodesScreenState.RecoverPassword))
-            }
+        changePasswordFlowDestination(
+            navController = navController
         )
 
         //Enable / disable biometrics:

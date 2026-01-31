@@ -30,6 +30,11 @@ class SaveRecoverySessionUseCase @Inject constructor(
     private val sourceKeyService: SourceKeyService
 ) {
 
+    /**
+     * Saves the provided session to permanent storage.
+     *
+     * @param session   Session data for the recovery.
+     */
     suspend fun save(session: RecoverySession) = coroutineScope {
         if (session.recoveryCode.isEmpty()) {
             throw AuthSetupException("Recovery code cannot be empty")
@@ -116,34 +121,32 @@ class SaveRecoverySessionUseCase @Inject constructor(
      * @return              Whether the passed recovery code matches the code stored with the
      *                      specified index.
      */
-    private suspend fun decryptKekWithCurrentRecoveryCode(recoveryCode: CharArray, index: Int): ByteArray? {
-        return coroutineScope {
-            val saltBytes: ByteArray? = readonlyAuthRepository.getRecoveryCodeSalt(index)
-            val encryptedKeyBytes: ByteArray? = readonlyAuthRepository.getRecoveryCodeKek(index)
-            var decryptedKekBytes: ByteArray?
+    private suspend fun decryptKekWithCurrentRecoveryCode(recoveryCode: CharArray, index: Int): ByteArray? = coroutineScope {
+        val saltBytes: ByteArray? = readonlyAuthRepository.getRecoveryCodeSalt(index)
+        val encryptedKeyBytes: ByteArray? = readonlyAuthRepository.getRecoveryCodeKek(index)
+        var decryptedKekBytes: ByteArray?
 
-            //Decrypt recovery code:
-            try {
-                if (saltBytes == null || encryptedKeyBytes == null) {
-                    return@coroutineScope null
-                }
-
-                decryptedKekBytes = sourceKeyService.decryptKekWithSource(
-                    encryptedKeyBytes,
-                    recoveryCode,
-                    saltBytes
-                )
-
-                //KEK was decrypted successfully:
-                return@coroutineScope decryptedKekBytes
-            }
-            catch (_: Exception) {
+        //Decrypt recovery code:
+        try {
+            if (saltBytes == null || encryptedKeyBytes == null) {
                 return@coroutineScope null
             }
-            finally {
-                saltBytes?.fill(0)
-                encryptedKeyBytes?.fill(0)
-            }
+
+            decryptedKekBytes = sourceKeyService.decryptKekWithSource(
+                encryptedKeyBytes,
+                recoveryCode,
+                saltBytes
+            )
+
+            //KEK was decrypted successfully:
+            return@coroutineScope decryptedKekBytes
+        }
+        catch (_: Exception) {
+            return@coroutineScope null
+        }
+        finally {
+            saltBytes?.fill(0)
+            encryptedKeyBytes?.fill(0)
         }
     }
 

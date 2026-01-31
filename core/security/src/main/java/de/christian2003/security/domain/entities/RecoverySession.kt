@@ -2,7 +2,7 @@ package de.christian2003.security.domain.entities
 
 
 /**
- * Value-object contains the session data for the recovery of the master password.
+ * Value object contains the session data for the recovery of the master password.
  *
  * @param recoveryCode      Existing recovery code entered in order to recover the master password.
  * @param newMasterPassword New master password to use after recovery finishes.

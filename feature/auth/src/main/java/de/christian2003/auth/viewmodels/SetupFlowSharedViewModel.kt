@@ -7,8 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.auth.models.states.FinishScreenState
+import de.christian2003.security.application.usecases.SaveChangePasswordSession
 import de.christian2003.security.application.usecases.SaveFirstTimeSetupSessionUseCase
 import de.christian2003.security.application.usecases.SaveRecoverySessionUseCase
+import de.christian2003.security.domain.entities.ChangePasswordSession
 import de.christian2003.security.domain.entities.FirstTimeSetupSession
 import de.christian2003.security.domain.entities.RecoverySession
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SetupFlowSharedViewModel @Inject constructor(
     private val saveFirstTimeSetupSessionUseCase: SaveFirstTimeSetupSessionUseCase,
-    private val saveRecoverySessionUseCase: SaveRecoverySessionUseCase
+    private val saveRecoverySessionUseCase: SaveRecoverySessionUseCase,
+    private val saveChangePasswordSession: SaveChangePasswordSession
 ): ViewModel() {
 
     var currentMasterPassword: CharArray? = null
@@ -47,6 +50,7 @@ class SetupFlowSharedViewModel @Inject constructor(
                 when (state) {
                     FinishScreenState.FirstTimeSetup -> saveFirstTimeSetup()
                     FinishScreenState.RecoverPassword -> saveRecovery()
+                    FinishScreenState.ChangePassword -> saveChangePassword()
                     else -> { /* TODO: Add saving for other states */ }
                 }
             }
@@ -91,6 +95,22 @@ class SetupFlowSharedViewModel @Inject constructor(
                 newRecoveryCodes = recoveryCodes ?: listOf()
             )
             saveRecoverySessionUseCase.save(session)
+        }
+        finally {
+            session?.clear()
+        }
+    }
+
+
+    private suspend fun saveChangePassword() {
+        var session: ChangePasswordSession? = null
+
+        try {
+            session = ChangePasswordSession(
+                currentMasterPassword = currentMasterPassword ?: CharArray(0),
+                newMasterPassword = newMasterPassword ?: CharArray(0)
+            )
+            saveChangePasswordSession.save(session)
         }
         finally {
             session?.clear()
