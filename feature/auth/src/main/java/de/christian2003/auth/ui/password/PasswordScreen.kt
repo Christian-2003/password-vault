@@ -65,8 +65,8 @@ fun PasswordScreen(
 
     val invokeOnContinue: () -> Unit = {
         when (viewModel.state) {
-            PasswordScreenState.ChangePassword, PasswordScreenState.GenerateNewRecoveryCodes -> {
-                //When changing password, verify if password is valid:
+            PasswordScreenState.ChangePassword, PasswordScreenState.GenerateNewRecoveryCodes, PasswordScreenState.EnableBiometrics -> {
+                //When changing password or enabling biometrics, verify if password is valid:
                 coroutineScope.launch(Dispatchers.Default) {
                     val result: Boolean = viewModel.verifyCurrentPassword()
                     if (result) {
@@ -94,7 +94,7 @@ fun PasswordScreen(
         //for a very short period of time, during which this Launched effect is called. Without
         //this safe call, the app would crash throwing an IllegalStateException.
         when (viewModel.state) {
-            PasswordScreenState.ChangePassword, PasswordScreenState.GenerateNewRecoveryCodes -> currentPasswordFocusRequester?.requestFocus()
+            PasswordScreenState.ChangePassword, PasswordScreenState.GenerateNewRecoveryCodes, PasswordScreenState.EnableBiometrics -> currentPasswordFocusRequester?.requestFocus()
             else -> newPasswordFocusRequester?.requestFocus()
         }
     }
@@ -127,6 +127,7 @@ fun PasswordScreen(
                         PasswordScreenState.ChangePassword -> stringResource(R.string.password_help_changePassword)
                         PasswordScreenState.RecoverPassword -> stringResource(R.string.password_help_recoverPassword)
                         PasswordScreenState.GenerateNewRecoveryCodes -> stringResource(R.string.password_help_generateNewRecoveryCodes)
+                        PasswordScreenState.EnableBiometrics -> stringResource(R.string.password_help_enableBiometrics)
                     },
                     onDismiss = {
                         viewModel.dismissHelpCard()
@@ -140,7 +141,10 @@ fun PasswordScreen(
             }
 
             //Current password:
-            if (viewModel.state == PasswordScreenState.ChangePassword || viewModel.state == PasswordScreenState.GenerateNewRecoveryCodes) {
+            if (viewModel.state == PasswordScreenState.ChangePassword
+                || viewModel.state == PasswordScreenState.GenerateNewRecoveryCodes
+                || viewModel.state == PasswordScreenState.EnableBiometrics) {
+
                 TextInput(
                     value = viewModel.currentPassword,
                     onValueChange = {
@@ -166,7 +170,8 @@ fun PasswordScreen(
                 )
             }
 
-            if (viewModel.state != PasswordScreenState.GenerateNewRecoveryCodes) {
+            if (viewModel.state != PasswordScreenState.GenerateNewRecoveryCodes
+                && viewModel.state != PasswordScreenState.EnableBiometrics) {
                 //New password:
                 TextInput(
                     value = viewModel.newPassword,
@@ -250,6 +255,7 @@ private fun TopBar(
                     PasswordScreenState.ChangePassword -> stringResource(R.string.password_title_changePassword)
                     PasswordScreenState.RecoverPassword -> stringResource(R.string.password_title_recoverPassword)
                     PasswordScreenState.GenerateNewRecoveryCodes -> stringResource(R.string.password_title_generateNewRecoveryCodes)
+                    PasswordScreenState.EnableBiometrics -> stringResource(R.string.password_title_enableBiometrics)
                 }
             )
         },

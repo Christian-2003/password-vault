@@ -8,12 +8,14 @@ package de.christian2003.auth.models.states
  * @property RecoverPassword            Screen is shown for the recovery of the master password.
  * @property ChangePassword             Screen is shown to change the master password.
  * @property GenerateNewRecoveryCodes   Screen is shown to generate new recovery codes.
+ * @property EnableBiometrics           Screen is shown to enable biometric auth.
  */
 enum class FinishScreenState {
 
     FirstTimeSetup,
     RecoverPassword,
     ChangePassword,
-    GenerateNewRecoveryCodes
+    GenerateNewRecoveryCodes,
+    EnableBiometrics
 
 }

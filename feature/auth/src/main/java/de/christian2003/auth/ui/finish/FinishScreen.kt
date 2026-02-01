@@ -1,5 +1,6 @@
 package de.christian2003.auth.ui.finish
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
@@ -17,6 +18,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -24,6 +27,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,7 +41,9 @@ import de.christian2003.auth.R
 import de.christian2003.auth.viewmodels.FinishViewModel
 import de.christian2003.auth.viewmodels.SetupFlowSharedViewModel
 import de.christian2003.ui.theme.isDarkTheme
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 /**
@@ -45,28 +51,49 @@ import kotlinx.coroutines.delay
  *
  * @param viewModel         View model.
  * @param sharedViewModel   Shared view model for the flow.
- * @param onNavigateUp      Callback invoked to navigate up the navigation stack.
  * @param onFinish          Callback invoked to finish the setup.
  */
 @Composable
 internal fun FinishScreen(
     viewModel: FinishViewModel,
     sharedViewModel: SetupFlowSharedViewModel,
-    onNavigateUp: () -> Unit,
     onFinish: () -> Unit
 ) {
+    val coroutineScope: CoroutineScope = rememberCoroutineScope()
+    val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+
+    //Once finished, it does not make any sense to navigate up, so we finish instead!
+    val snackbarMessage: String = stringResource(R.string.finish_cannotNavigateBackWhileSaving)
+    val invokeOnNavigateUp: () -> Unit = {
+        if (!sharedViewModel.isSavingSession && sharedViewModel.isFinishedSavingSession) {
+            onFinish()
+        }
+        else {
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(snackbarMessage)
+            }
+        }
+    }
+
     LaunchedEffect(Unit) {
         if (!sharedViewModel.isSavingSession && !sharedViewModel.isFinishedSavingSession) {
             sharedViewModel.save(viewModel.state)
         }
     }
 
+    BackHandler {
+        invokeOnNavigateUp()
+    }
+
     Scaffold(
         topBar = {
             TopBar(
                 state = viewModel.state,
-                onNavigateUp = onNavigateUp
+                onNavigateUp = invokeOnNavigateUp
             )
+        },
+        snackbarHost = {
+            SnackbarHost(snackbarHostState)
         }
     ) { innerPadding ->
         Box(
@@ -118,6 +145,7 @@ private fun SavingContent(
             text = when (state) {
                 FinishScreenState.FirstTimeSetup -> stringResource(R.string.finish_labelLoading_firstTimeSetup)
                 FinishScreenState.GenerateNewRecoveryCodes -> stringResource(R.string.finish_labelLoading_generateNewRecoveryCodes)
+                FinishScreenState.EnableBiometrics -> stringResource(R.string.finish_labelLoading_enableBiometrics)
                 else -> stringResource(R.string.finish_labelLoading_newPassword)
             },
             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -170,6 +198,7 @@ private fun FinishedSavingContent(
             text = when (state) {
                 FinishScreenState.FirstTimeSetup -> stringResource(R.string.finish_labelFinished_firstTimeSetup)
                 FinishScreenState.GenerateNewRecoveryCodes -> stringResource(R.string.finish_labelFinished_generateNewRecoveryCodes)
+                FinishScreenState.EnableBiometrics -> stringResource(R.string.finish_labelFinished_enableBiometrics)
                 else -> stringResource(R.string.finish_labelFinished_newPassword)
             },
             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -207,6 +236,7 @@ private fun TopBar(
                     FinishScreenState.RecoverPassword -> stringResource(R.string.finish_title_recoverPassword)
                     FinishScreenState.ChangePassword -> stringResource(R.string.finish_title_changePassword)
                     FinishScreenState.GenerateNewRecoveryCodes -> stringResource(R.string.finish_title_generateNewRecoveryCodes)
+                    FinishScreenState.EnableBiometrics -> stringResource(R.string.finish_title_enableBiometrics)
                 }
             )
         },

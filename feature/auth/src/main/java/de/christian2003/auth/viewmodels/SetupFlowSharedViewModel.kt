@@ -8,10 +8,12 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.auth.models.states.FinishScreenState
 import de.christian2003.security.application.usecases.SaveChangePasswordSessionUseCase
+import de.christian2003.security.application.usecases.SaveEnableBiometricsSessionUseCase
 import de.christian2003.security.application.usecases.SaveFirstTimeSetupSessionUseCase
 import de.christian2003.security.application.usecases.SaveGenerateNewRecoveryCodesSessionUseCase
 import de.christian2003.security.application.usecases.SaveRecoverySessionUseCase
 import de.christian2003.security.domain.entities.ChangePasswordSession
+import de.christian2003.security.domain.entities.EnableBiometricsSession
 import de.christian2003.security.domain.entities.FirstTimeSetupSession
 import de.christian2003.security.domain.entities.GenerateNewRecoveryCodesSession
 import de.christian2003.security.domain.entities.RecoverySession
@@ -25,7 +27,8 @@ class SetupFlowSharedViewModel @Inject constructor(
     private val saveFirstTimeSetupSessionUseCase: SaveFirstTimeSetupSessionUseCase,
     private val saveRecoverySessionUseCase: SaveRecoverySessionUseCase,
     private val saveChangePasswordSession: SaveChangePasswordSessionUseCase,
-    private val saveGenerateNewRecoveryCodesSessionUseCase: SaveGenerateNewRecoveryCodesSessionUseCase
+    private val saveGenerateNewRecoveryCodesSessionUseCase: SaveGenerateNewRecoveryCodesSessionUseCase,
+    private val saveEnableBiometricsSessionUseCase: SaveEnableBiometricsSessionUseCase
 ): ViewModel() {
 
     var currentMasterPassword: CharArray? = null
@@ -55,6 +58,7 @@ class SetupFlowSharedViewModel @Inject constructor(
                     FinishScreenState.RecoverPassword -> saveRecovery()
                     FinishScreenState.ChangePassword -> saveChangePassword()
                     FinishScreenState.GenerateNewRecoveryCodes -> saveGenerateNewRecoveryCodes()
+                    FinishScreenState.EnableBiometrics -> saveEnableBiometrics()
                 }
             }
             catch (_: Exception) {
@@ -130,6 +134,21 @@ class SetupFlowSharedViewModel @Inject constructor(
                 recoveryCodes = recoveryCodes ?: listOf()
             )
             saveGenerateNewRecoveryCodesSessionUseCase.save(session)
+        }
+        finally {
+            session?.clear()
+        }
+    }
+
+
+    private suspend fun saveEnableBiometrics() {
+        var session: EnableBiometricsSession? = null
+
+        try {
+            session = EnableBiometricsSession(
+                masterPassword = currentMasterPassword ?: CharArray(0)
+            )
+            saveEnableBiometricsSessionUseCase.save(session)
         }
         finally {
             session?.clear()

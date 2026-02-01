@@ -22,22 +22,26 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MovableContent
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import de.christian2003.auth.viewmodels.AuthSettingsViewModel
 import de.christian2003.auth.R
 import de.christian2003.ui.composables.NavigationBarProtection
 import de.christian2003.ui.composables.Tooltip
 import de.christian2003.ui.theme.RobotoMono
 import de.christian2003.ui.theme.isDarkTheme
+import java.time.LocalDateTime
 
 
 /**
@@ -77,28 +81,59 @@ fun AuthSettingsScreen(
         ) {
             //Master password:
             MasterPasswordSection(
+                editedAt = viewModel.authMetadata.masterPasswordEditedAt,
                 onEditMasterPassword = onNavigateToPassword,
                 onGeneratePositiveColor = { negative, darkTheme ->
                     viewModel.generatePositiveColorFromNegativeColor(negative, darkTheme)
+                },
+                onGenerateNeutralColor = { seed, darkTheme ->
+                    viewModel.generateNeutralColorFromSeedColor(seed, darkTheme)
+                },
+                onFormatTime = {
+                    viewModel.formatTime(it)
                 },
                 modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
             )
 
             //Recovery codes:
             RecoveryCodesSection(
+                editedAt = viewModel.authMetadata.recoveryCodesEditedAt,
                 onGenerateNewRecoveryCodes = onNavigateToRecoveryCodes,
                 onGeneratePositiveColor = { negative, darkTheme ->
                     viewModel.generatePositiveColorFromNegativeColor(negative, darkTheme)
+                },
+                onGenerateNeutralColor = { seed, darkTheme ->
+                    viewModel.generateNeutralColorFromSeedColor(seed, darkTheme)
+                },
+                onFormatTime = {
+                    viewModel.formatTime(it)
                 },
                 modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
             )
 
             //Biometrics:
             BiometricsSection(
-                onToggleBiometrics = onNavigateToBiometrics,
+                editedAt = viewModel.authMetadata.biometricsEditedAt,
+                onToggleBiometrics = {
+                    if (viewModel.areBiometricsAvailable) {
+                        if (!viewModel.areBiometricsConfigured) {
+                            onNavigateToBiometrics()
+                        }
+                        else {
+                            viewModel.disableBiometrics()
+                        }
+                    }
+                },
+                areBiometricsAvailable = viewModel.areBiometricsAvailable,
                 areBiometricsConfigured = viewModel.areBiometricsConfigured,
                 onGeneratePositiveColor = { negative, darkTheme ->
                     viewModel.generatePositiveColorFromNegativeColor(negative, darkTheme)
+                },
+                onGenerateNeutralColor = { seed, darkTheme ->
+                    viewModel.generateNeutralColorFromSeedColor(seed, darkTheme)
+                },
+                onFormatTime = {
+                    viewModel.formatTime(it)
                 },
                 modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
             )
@@ -113,8 +148,11 @@ fun AuthSettingsScreen(
 
 @Composable
 private fun MasterPasswordSection(
+    editedAt: LocalDateTime?,
     onEditMasterPassword: () -> Unit,
     onGeneratePositiveColor: (Color, Boolean) -> Color,
+    onGenerateNeutralColor: (Color, Boolean) -> Color,
+    onFormatTime: (LocalDateTime) -> String,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -130,34 +168,42 @@ private fun MasterPasswordSection(
         SectionHeader(
             title = stringResource(R.string.authSettings_masterPassword_title),
             painter = painterResource(de.christian2003.ui.R.drawable.ic_password),
+            isAvailable = true,
             isActive = true,
             activeLabelTooltip = stringResource(R.string.authSettings_masterPassword_activeLabelTooltip),
             onGeneratePositiveColor = onGeneratePositiveColor,
-            modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
+            onGenerateNeutralColor = onGenerateNeutralColor
         )
-        Row {
-            Box(
-                modifier = Modifier.width(dimensionResource(de.christian2003.ui.R.dimen.image_xs) + dimensionResource(de.christian2003.ui.R.dimen.padding_horizontal))
+        SectionInnerContainer {
+            Text(
+                text = stringResource(R.string.authSettings_masterPassword_placeholderTitle),
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(bottom = 4.dp)
             )
-            Column(
-                modifier = Modifier.fillMaxWidth()
+            Tooltip(
+                tooltip = stringResource(R.string.authSettings_masterPassword_placeholderTooltip)
             ) {
-                Tooltip(
-                    tooltip = stringResource(R.string.authSettings_masterPassword_placeholderTooltip)
-                ) {
-                    Text(
-                        text = stringResource(R.string.authSettings_masterPassword_placeholder),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-                TextButton(
-                    onClick = onEditMasterPassword,
-                    modifier = Modifier.align(Alignment.End)
-                ) {
-                    Text(stringResource(R.string.authSettings_masterPassword_editButton))
-                }
+                Text(
+                    text = stringResource(R.string.authSettings_masterPassword_placeholder),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
+            if (editedAt != null) {
+            Text(
+                text = stringResource(R.string.authSettings_masterPassword_editedAtLabel, onFormatTime(editedAt)),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(top = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
+            )
+        }
+        }
+        TextButton(
+            onClick = onEditMasterPassword,
+            modifier = Modifier.align(Alignment.End)
+        ) {
+            Text(stringResource(R.string.authSettings_masterPassword_editButton))
         }
     }
 }
@@ -165,8 +211,11 @@ private fun MasterPasswordSection(
 
 @Composable
 private fun RecoveryCodesSection(
+    editedAt: LocalDateTime?,
     onGenerateNewRecoveryCodes: () -> Unit,
     onGeneratePositiveColor: (Color, Boolean) -> Color,
+    onGenerateNeutralColor: (Color, Boolean) -> Color,
+    onFormatTime: (LocalDateTime) -> String,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -182,42 +231,50 @@ private fun RecoveryCodesSection(
         SectionHeader(
             title = stringResource(R.string.authSettings_recoveryCodes_title),
             painter = painterResource(R.drawable.ic_recovery),
+            isAvailable = true,
             isActive = true,
             activeLabelTooltip = stringResource(R.string.authSettings_recoveryCodes_activeLabelTooltip),
             onGeneratePositiveColor = onGeneratePositiveColor,
-            modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
+            onGenerateNeutralColor = onGenerateNeutralColor
         )
-        Row {
-            Box(
-                modifier = Modifier.width(dimensionResource(de.christian2003.ui.R.dimen.image_xs) + dimensionResource(de.christian2003.ui.R.dimen.padding_horizontal))
+        SectionInnerContainer {
+            Text(
+                text = stringResource(R.string.authSettings_recoveryCodes_placeholderTitle),
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(bottom = 4.dp)
             )
-            Column(
-                modifier = Modifier.fillMaxWidth()
+            Tooltip(
+                tooltip = stringResource(R.string.authSettings_recoveryCodes_placeholderTooltip)
             ) {
-                Tooltip(
-                    tooltip = stringResource(R.string.authSettings_recoveryCodes_placeholderTooltip)
-                ) {
-                    Column {
-                        for (i: Int in 0 until 5) {
-                            Text(
-                                text = stringResource(R.string.authSettings_recoveryCodes_placeholder),
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                style = MaterialTheme.typography.bodyMedium.copy(
-                                    fontFamily = RobotoMono
-                                ),
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
+                Column {
+                    for (i: Int in 0 until 5) {
+                        Text(
+                            text = stringResource(R.string.authSettings_recoveryCodes_placeholder),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                fontFamily = RobotoMono
+                            ),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
                     }
                 }
-                TextButton(
-                    onClick = onGenerateNewRecoveryCodes,
-                    modifier = Modifier.align(Alignment.End)
-                ) {
-                    Text(stringResource(R.string.authSettings_recoveryCodes_generateButton))
-                }
             }
+            if (editedAt != null) {
+                Text(
+                    text = stringResource(R.string.authSettings_recoveryCodes_editedAtLabel, onFormatTime(editedAt)),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(top = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
+                )
+            }
+        }
+        TextButton(
+            onClick = onGenerateNewRecoveryCodes,
+            modifier = Modifier.align(Alignment.End)
+        ) {
+            Text(stringResource(R.string.authSettings_recoveryCodes_generateButton))
         }
     }
 }
@@ -225,9 +282,13 @@ private fun RecoveryCodesSection(
 
 @Composable
 private fun BiometricsSection(
-    onToggleBiometrics: () -> Unit,
+    areBiometricsAvailable: Boolean,
     areBiometricsConfigured: Boolean,
+    editedAt: LocalDateTime?,
+    onToggleBiometrics: () -> Unit,
     onGeneratePositiveColor: (Color, Boolean) -> Color,
+    onGenerateNeutralColor: (Color, Boolean) -> Color,
+    onFormatTime: (LocalDateTime) -> String,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -243,16 +304,48 @@ private fun BiometricsSection(
         SectionHeader(
             title = stringResource(R.string.authSettings_biometrics_title),
             painter = painterResource(de.christian2003.ui.R.drawable.ic_biometrics),
+            isAvailable = areBiometricsAvailable,
             isActive = areBiometricsConfigured,
-            activeLabelTooltip = if (areBiometricsConfigured) {
-                stringResource(R.string.authSettings_biometrics_activeLabelTooltip)
-            } else {
-                stringResource(R.string.authSettings_biometrics_inactiveLabelTooltip)
+            activeLabelTooltip = when {
+                !areBiometricsAvailable -> stringResource(R.string.authSettings_biometrics_unavailableLabelTooltip)
+                areBiometricsConfigured -> stringResource(R.string.authSettings_biometrics_activeLabelTooltip)
+                else -> stringResource(R.string.authSettings_biometrics_inactiveLabelTooltip)
             },
-            onGeneratePositiveColor = onGeneratePositiveColor
+            onGeneratePositiveColor = onGeneratePositiveColor,
+            onGenerateNeutralColor = onGenerateNeutralColor
         )
+        if (areBiometricsConfigured) {
+            SectionInnerContainer {
+                Text(
+                    text = stringResource(R.string.authSettings_biometrics_commonBiometrics_title),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                CommonlyUsedBiometricsRow(
+                    painter = painterResource(de.christian2003.ui.R.drawable.ic_biometrics),
+                    label = stringResource(R.string.authSettings_biometrics_commonBiometrics_fingerprint)
+                )
+                CommonlyUsedBiometricsRow(
+                    painter = painterResource(R.drawable.ic_face),
+                    label = stringResource(R.string.authSettings_biometrics_commonBiometrics_face)
+                )
+                CommonlyUsedBiometricsRow(
+                    painter = painterResource(R.drawable.ic_heartbeat),
+                    label = stringResource(R.string.authSettings_biometrics_commonBiometrics_heartbeat)
+                )
+                if (editedAt != null) {
+                    Text(
+                        text = stringResource(R.string.authSettings_biometrics_editedAtLabel, onFormatTime(editedAt)),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(top = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
+                    )
+                }
+            }
+        }
         TextButton(
             onClick = onToggleBiometrics,
+            enabled = areBiometricsAvailable,
             modifier = Modifier.align(Alignment.End)
         ) {
             Text(
@@ -268,12 +361,69 @@ private fun BiometricsSection(
 
 
 @Composable
+private fun CommonlyUsedBiometricsRow(
+    painter: Painter,
+    label: String,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.padding(top = 4.dp)
+    ) {
+        Icon(
+            painter = painter,
+            contentDescription = "",
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(end = dimensionResource(de.christian2003.ui.R.dimen.padding_horizontal))
+        )
+        Text(
+            text = label,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.bodyMedium
+        )
+    }
+}
+
+
+/**
+ * Inner container for the sections.
+ *
+ * @param modifier  Modifier.
+ * @param content   Content.
+ */
+@Composable
+private fun SectionInnerContainer(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(
+                start = dimensionResource(de.christian2003.ui.R.dimen.image_xs) + dimensionResource(de.christian2003.ui.R.dimen.padding_horizontal),
+                top = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical)
+            )
+            .clip(MaterialTheme.shapes.medium)
+            .background(MaterialTheme.colorScheme.surfaceContainerLow)
+            .padding(
+                horizontal = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal),
+                vertical = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical)
+            )
+    ) {
+        content()
+    }
+}
+
+
+@Composable
 private fun SectionHeader(
     title: String,
     painter: Painter,
+    isAvailable: Boolean,
     isActive: Boolean,
     activeLabelTooltip: String,
     onGeneratePositiveColor: (Color, Boolean) -> Color,
+    onGenerateNeutralColor: (Color, Boolean) -> Color,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -297,9 +447,11 @@ private fun SectionHeader(
                 style = MaterialTheme.typography.bodyLarge
             )
             ActiveIndicator(
+                isAvailable = isAvailable,
                 isActive = isActive,
                 tooltipText = activeLabelTooltip,
-                onGeneratePositiveColor = onGeneratePositiveColor
+                onGeneratePositiveColor = onGeneratePositiveColor,
+                onGenerateNeutralColor = onGenerateNeutralColor
             )
         }
     }
@@ -309,20 +461,24 @@ private fun SectionHeader(
 /**
  * Displays the label showing whether an authentication method is active or not.
  *
+ * @param isAvailable               Whether the authentication method is available.
  * @param isActive                  Whether the authentication method is active.
  * @param tooltipText               Text for the label tooltip.
  * @param onGeneratePositiveColor   Callback invoked to generate a positive color.
+ * @param onGenerateNeutralColor    Callback invoked to generate a neutral color.
  */
 @Composable
 private fun ActiveIndicator(
+    isAvailable: Boolean,
     isActive: Boolean,
     tooltipText: String,
-    onGeneratePositiveColor: (Color, Boolean) -> Color
+    onGeneratePositiveColor: (Color, Boolean) -> Color,
+    onGenerateNeutralColor: (Color, Boolean) -> Color
 ) {
-    val foregroundColor: Color = if (isActive) {
-        onGeneratePositiveColor(MaterialTheme.colorScheme.error, MaterialTheme.isDarkTheme())
-    } else {
-        MaterialTheme.colorScheme.error
+    val foregroundColor: Color = when {
+        isActive && isAvailable -> onGeneratePositiveColor(MaterialTheme.colorScheme.error, MaterialTheme.isDarkTheme())
+        !isAvailable -> onGenerateNeutralColor(MaterialTheme.colorScheme.primary, MaterialTheme.isDarkTheme())
+        else -> MaterialTheme.colorScheme.error
     }
 
     Tooltip(
@@ -332,10 +488,9 @@ private fun ActiveIndicator(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                painter = if (isActive) {
-                    painterResource(R.drawable.ic_active)
-                } else {
-                    painterResource(R.drawable.ic_inactive)
+                painter = when {
+                    isActive && isAvailable -> painterResource(R.drawable.ic_active)
+                    else -> painterResource(R.drawable.ic_inactive)
                 },
                 contentDescription = "",
                 tint = foregroundColor,
@@ -344,13 +499,13 @@ private fun ActiveIndicator(
                     .size(dimensionResource(de.christian2003.ui.R.dimen.image_xxs))
             )
             Text(
-                text = if (isActive) {
-                    stringResource(R.string.authSettings_activeLabel)
-                } else {
-                    stringResource(R.string.authSettings_inactiveLabel)
+                text = when {
+                    isActive && isAvailable -> stringResource(R.string.authSettings_activeLabel)
+                    !isAvailable -> stringResource(R.string.authSettings_unavailableLabel)
+                    else -> stringResource(R.string.authSettings_inactiveLabel)
                 },
                 color = foregroundColor,
-                style = MaterialTheme.typography.labelMedium
+                style = MaterialTheme.typography.labelLarge
             )
         }
     }

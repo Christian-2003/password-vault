@@ -62,6 +62,12 @@ internal interface AuthTransactionRepository {
 
 
     /**
+     * Deletes the encrypted KEK for the biometrics, if one is available.
+     */
+    fun deleteBiometricsKek()
+
+
+    /**
      * Sets the encrypted master key.
      *
      * @param masterKeyBytes            Bytes of the encrypted master key.

@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.christian2003.auth.viewmodels.BiometricsViewModel
 import de.christian2003.auth.R
+import de.christian2003.auth.models.states.BiometricsScreenState
 import de.christian2003.auth.viewmodels.SetupFlowSharedViewModel
 import de.christian2003.ui.composables.HelpCard
 import kotlinx.coroutines.CoroutineScope
@@ -47,11 +48,13 @@ fun BiometricsScreen(
     Scaffold(
         topBar = {
             TopBar(
+                state = viewModel.state,
                 onNavigateUp = onNavigateUp
             )
         },
         bottomBar = {
             BottomBar(
+                state = viewModel.state,
                 onEnable = {
                     coroutineScope.launch {
                         val result: Boolean = onBiometricAuth()
@@ -105,11 +108,17 @@ fun BiometricsScreen(
 
 @Composable
 private fun TopBar(
+    state: BiometricsScreenState,
     onNavigateUp: () -> Unit
 ) {
     TopAppBar(
         title = {
-            Text(stringResource(R.string.biometrics_title))
+            Text(
+                text = when(state) {
+                    BiometricsScreenState.FirstTimeSetup -> stringResource(R.string.biometrics_title_firstTimeSetup)
+                    BiometricsScreenState.EnableBiometrics -> stringResource(R.string.biometrics_title_enableBiometrics)
+                }
+            )
         },
         navigationIcon = {
             IconButton(
@@ -127,6 +136,7 @@ private fun TopBar(
 
 @Composable
 private fun BottomBar(
+    state: BiometricsScreenState,
     onEnable: () -> Unit,
     onSkip: () -> Unit
 ) {
@@ -143,10 +153,12 @@ private fun BottomBar(
                         horizontal = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal) - 4.dp
                     )
             ) {
-                TextButton(
-                    onClick = onSkip
-                ) {
-                    Text(stringResource(R.string.biometrics_buttonSkip))
+                if (state == BiometricsScreenState.FirstTimeSetup) {
+                    TextButton(
+                        onClick = onSkip
+                    ) {
+                        Text(stringResource(R.string.biometrics_buttonSkip))
+                    }
                 }
                 Button(
                     onClick = onEnable,

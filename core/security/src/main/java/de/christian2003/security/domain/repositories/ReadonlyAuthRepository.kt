@@ -1,5 +1,7 @@
 package de.christian2003.security.domain.repositories
 
+import java.time.LocalDateTime
+
 
 /**
  * Read-only repository provides access to read authentication data.
@@ -26,6 +28,14 @@ internal interface ReadonlyAuthRepository {
      * @return  Whether a master password is configured.
      */
     fun isMasterPasswordConfigured(): Boolean
+
+    /**
+     * Returns the timestamp at which the master password was edited the last time or null if
+     * unknown.
+     *
+     * @return  Timestamp at which the master password was edited the last time or null.
+     */
+    fun getMasterPasswordTimestamp(): LocalDateTime?
 
 
     /**
@@ -60,6 +70,14 @@ internal interface ReadonlyAuthRepository {
      */
     fun areRecoveryCodesConfigured(): Boolean
 
+    /**
+     * Returns the timestamp at which the recovery codes were edited the last time or null if
+     * unknown.
+     *
+     * @return  Timestamp at which the recovery codes were edited the last time or null.
+     */
+    fun getRecoveryCodesTimestamp(): LocalDateTime?
+
 
     /**
      * Returns the encrypted KEK for the biometrics or null if no KEK is available.
@@ -81,6 +99,14 @@ internal interface ReadonlyAuthRepository {
      * @return  Whether biometrics are available.
      */
     fun isBiometricsAvailable(): Boolean
+
+    /**
+     * Returns the timestamp at which the biometrics were edited the last time or null if
+     * unknown.
+     *
+     * @return  Timestamp at which the biometrics were edited the last time or null.
+     */
+    fun getBiometricsTimestamp(): LocalDateTime?
 
 
     /**

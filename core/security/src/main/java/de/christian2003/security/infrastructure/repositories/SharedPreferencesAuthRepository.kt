@@ -10,6 +10,8 @@ import de.christian2003.security.domain.exceptions.AuthTransactionException
 import de.christian2003.security.domain.repositories.AuthTransactionRepository
 import de.christian2003.security.domain.repositories.ReadonlyAuthRepository
 import de.christian2003.security.infrastructure.repositories.dto.AuthRepositoryKekItem
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.util.Base64
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -61,6 +63,11 @@ internal class SharedPreferencesAuthRepository @Inject constructor(
      */
     private var masterKeyBytes: ByteArray? = null
 
+    /**
+     * Flag indicates whether to remove the biometrics KEK during a commit.
+     */
+    private var deleteBiometricsKek: Boolean = false
+
 
     /**
      * Begins a new transaction.
@@ -71,6 +78,7 @@ internal class SharedPreferencesAuthRepository @Inject constructor(
         recoveryCodes = null
         biometricsKekBytes = null
         masterKeyBytes = null
+        deleteBiometricsKek = false
         transactionStarted = true
         transactionCommited = false
     }
@@ -87,12 +95,15 @@ internal class SharedPreferencesAuthRepository @Inject constructor(
             throw AuthTransactionException("Transaction cannot be committed, because it was not started")
         }
 
+        val now: LocalDateTime = LocalDateTime.now()
+
         preferences.edit {
             //Commit master password:
             val masterPassword: AuthRepositoryKekItem? = this@SharedPreferencesAuthRepository.masterPassword
             if (masterPassword != null) {
                 putString(SecurityAliases.MasterPasswordKek.getAlias(), bytesToString(masterPassword.keyBytes))
                 putString(SecurityAliases.MasterPasswordSalt.getAlias(), bytesToString(masterPassword.salt))
+                putLong(SecurityAliases.MasterPasswordTime.getAlias(), localDateTimeToEpochSecond(now))
             }
 
             //Commit recovery codes:
@@ -110,12 +121,17 @@ internal class SharedPreferencesAuthRepository @Inject constructor(
                 }
 
                 putInt(SecurityAliases.NumberOfRecoveryCodes.getAlias(), recoveryCodes.size)
+                putLong(SecurityAliases.RecoveryCodesTime.getAlias(), localDateTimeToEpochSecond(now))
             }
 
             //Commit biometrics:
             val biometricsKekBytes: ByteArray? = this@SharedPreferencesAuthRepository.biometricsKekBytes
             if (biometricsKekBytes != null) {
                 putString(SecurityAliases.BiometricsKek.getAlias(), bytesToString(biometricsKekBytes))
+                putLong(SecurityAliases.BiometricsTime.getAlias(), localDateTimeToEpochSecond(now))
+            } else if (deleteBiometricsKek) {
+                remove(SecurityAliases.BiometricsKek.getAlias())
+                remove(SecurityAliases.BiometricsTime.getAlias())
             }
 
             //Commit master key:
@@ -138,6 +154,7 @@ internal class SharedPreferencesAuthRepository @Inject constructor(
 
         biometricsKekBytes?.fill(0)
         biometricsKekBytes = null
+        deleteBiometricsKek = false
 
         masterKeyBytes?.fill(0)
         masterKeyBytes = null
@@ -211,6 +228,17 @@ internal class SharedPreferencesAuthRepository @Inject constructor(
 
 
     /**
+     * Deletes the encrypted KEK for the biometrics, if one is available.
+     */
+    override fun deleteBiometricsKek() {
+        if (!transactionStarted) {
+            throw AuthTransactionException("Cannot delete biometrics KEK because transaction has not started")
+        }
+        deleteBiometricsKek = true
+    }
+
+
+    /**
      * Sets the encrypted master key.
      *
      * @param masterKeyBytes            Bytes of the encrypted master key.
@@ -264,6 +292,22 @@ internal class SharedPreferencesAuthRepository @Inject constructor(
     override fun isMasterPasswordConfigured(): Boolean {
         return preferences.contains(SecurityAliases.MasterPasswordKek.getAlias())
                 && preferences.contains(SecurityAliases.MasterPasswordSalt.getAlias())
+    }
+
+
+    /**
+     * Returns the timestamp at which the master password was edited the last time or null if
+     * unknown.
+     *
+     * @return  Timestamp at which the master password was edited the last time or null.
+     */
+    override fun getMasterPasswordTimestamp(): LocalDateTime? {
+        val timestampAsEpochSecond: Long = preferences.getLong(SecurityAliases.MasterPasswordTime.getAlias(), -1)
+        if (timestampAsEpochSecond >= 0) {
+            val timestamp: LocalDateTime = epochSecondToLocalDateTime(timestampAsEpochSecond)
+            return timestamp
+        }
+        return null
     }
 
 
@@ -333,6 +377,22 @@ internal class SharedPreferencesAuthRepository @Inject constructor(
 
 
     /**
+     * Returns the timestamp at which the recovery codes were edited the last time or null if
+     * unknown.
+     *
+     * @return  Timestamp at which the recovery codes were edited the last time or null.
+     */
+    override fun getRecoveryCodesTimestamp(): LocalDateTime? {
+        val timestampAsEpochSecond: Long = preferences.getLong(SecurityAliases.RecoveryCodesTime.getAlias(), -1)
+        if (timestampAsEpochSecond >= 0) {
+            val timestamp: LocalDateTime = epochSecondToLocalDateTime(timestampAsEpochSecond)
+            return timestamp
+        }
+        return null
+    }
+
+
+    /**
      * Returns the encrypted KEK for the biometrics or null if no KEK is available.
      *
      * @return  Bytes of the encrypted KEK or null.
@@ -373,6 +433,22 @@ internal class SharedPreferencesAuthRepository @Inject constructor(
 
 
     /**
+     * Returns the timestamp at which the biometrics were edited the last time or null if
+     * unknown.
+     *
+     * @return  Timestamp at which the biometrics were edited the last time or null.
+     */
+    override fun getBiometricsTimestamp(): LocalDateTime? {
+        val timestampAsEpochSecond: Long = preferences.getLong(SecurityAliases.BiometricsTime.getAlias(), -1)
+        if (timestampAsEpochSecond >= 0) {
+            val timestamp: LocalDateTime = epochSecondToLocalDateTime(timestampAsEpochSecond)
+            return timestamp
+        }
+        return null
+    }
+
+
+    /**
      * Returns the bytes of the encrypted master key. If no master key has been saved, null is
      * returned.
      *
@@ -407,6 +483,28 @@ internal class SharedPreferencesAuthRepository @Inject constructor(
      */
     private fun stringToBytes(s: String): ByteArray {
         return Base64.getDecoder().decode(s)
+    }
+
+
+    /**
+     * Converts the specified local date time into epoch seconds.
+     *
+     * @param dateTime  Date time to convert to epoch seconds.
+     * @return          Epoch seconds.
+     */
+    private fun localDateTimeToEpochSecond(dateTime: LocalDateTime): Long {
+        return dateTime.toEpochSecond(ZoneOffset.UTC)
+    }
+
+
+    /**
+     * Converts the specified epoch seconds to a local date time.
+     *
+     * @param epochSecond   Epoch seconds to convert to local date time.
+     * @return              Local date time.
+     */
+    private fun epochSecondToLocalDateTime(epochSecond: Long): LocalDateTime {
+        return LocalDateTime.ofEpochSecond(epochSecond, 0, ZoneOffset.UTC)
     }
 
 }

@@ -183,7 +183,8 @@ fun PasswordVault(
 
             //Flow for the authentication settings:
             authSettingsFlowDestination(
-                navController = navController
+                navController = navController,
+                onBiometricAuth = onBiometricAuth
             )
 
             //Login screen:

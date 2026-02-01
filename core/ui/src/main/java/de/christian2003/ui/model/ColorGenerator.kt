@@ -28,7 +28,34 @@ class ColorGenerator {
 
         val hue = (baseHsl[0] + 140f) % 360f
         val saturation = 0.65f
-        val lightness = if(darkTheme) { 0.65f } else { 0.4f }
+        val lightness = if (darkTheme) { 0.65f } else { 0.4f }
+
+        return hslToColor(
+            h = hue,
+            s = saturation,
+            l = lightness
+        )
+    }
+
+
+    /**
+     * Generates a "neutral" (yellow-ish) color  based on the provided seed color (e.g
+     * MaterialTheme.colorScheme.primary).
+     *
+     * @param seed      Seed color.
+     * @param darkTheme Whether the system is in dark theme.
+     */
+    fun generateNeutralColorFromSeed(
+        seed: Color,
+        darkTheme: Boolean
+    ): Color {
+        val baseHsl: FloatArray = colorToHsl(seed)
+
+        val targetYellowHue = 50f
+
+        val hue: Float = (baseHsl[0] * 0.05f + targetYellowHue * 0.95f) % 360f
+        val saturation = 0.55f
+        val lightness = if (darkTheme) { 0.52f } else { 0.42f }
 
         return hslToColor(
             h = hue,

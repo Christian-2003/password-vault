@@ -12,12 +12,15 @@ package de.christian2003.auth.models.states
  *                                      password after successful recovery using recovery codes.
  * @property GenerateNewRecoveryCodes   State for the screen displayed when the user generates new
  *                                      recovery codes.
+ * @property EnableBiometrics           Screen is displayed to enter the password for enabling the
+ *                                      biometrics.
  */
 enum class PasswordScreenState {
 
     FirstTimeSetup,
     ChangePassword,
     RecoverPassword,
-    GenerateNewRecoveryCodes
+    GenerateNewRecoveryCodes,
+    EnableBiometrics
 
 }

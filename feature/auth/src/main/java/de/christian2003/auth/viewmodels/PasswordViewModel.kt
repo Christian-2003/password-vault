@@ -56,6 +56,7 @@ class PasswordViewModel @Inject constructor(
                     && newPassword.isNotBlank()
                     && confirmNewPassword.isNotBlank()
             PasswordScreenState.GenerateNewRecoveryCodes -> currentPassword.isNotBlank()
+            PasswordScreenState.EnableBiometrics -> currentPassword.isNotBlank()
             else -> newPassword.isNotBlank()
                     && confirmNewPassword.isNotBlank()
         }

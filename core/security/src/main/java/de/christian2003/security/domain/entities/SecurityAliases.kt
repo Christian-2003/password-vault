@@ -17,15 +17,18 @@ internal enum class SecurityAliases(
     //Master password:
     MasterPasswordKek("master_password_kek"),
     MasterPasswordSalt("master_password_salt"),
+    MasterPasswordTime("master_password_time"),
 
     //Recovery codes:
     RecoveryCodeKek("recovery_%1\$d_kek"),
     RecoveryCodeSalt("recovery_%1\$d_salt"),
     NumberOfRecoveryCodes("recovery_count"),
+    RecoveryCodesTime("recovery_time"),
 
     //Biometrics:
     BiometricsHardwareBackedKey("hardware_backed_key_biometrics"),
-    BiometricsKek("biometrics_kek");
+    BiometricsKek("biometrics_kek"),
+    BiometricsTime("biometrics_time");
 
 
     /**
