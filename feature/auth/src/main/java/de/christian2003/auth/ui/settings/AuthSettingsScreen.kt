@@ -11,33 +11,34 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MovableContent
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import de.christian2003.auth.viewmodels.AuthSettingsViewModel
 import de.christian2003.auth.R
+import de.christian2003.auth.models.other.AuthRecommendation
 import de.christian2003.ui.composables.NavigationBarProtection
+import de.christian2003.ui.composables.Shape
 import de.christian2003.ui.composables.Tooltip
 import de.christian2003.ui.theme.RobotoMono
 import de.christian2003.ui.theme.isDarkTheme
@@ -79,6 +80,15 @@ fun AuthSettingsScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal))
         ) {
+            //Recommended action:
+            RecommendedActionCard(
+                recommendation = viewModel.authRecommendation,
+                onEditMasterPassword = onNavigateToPassword,
+                onGenerateNewRecoveryCodes = onNavigateToRecoveryCodes,
+                onToggleBiometrics = onNavigateToBiometrics,
+                modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical) * 2)
+            )
+
             //Master password:
             MasterPasswordSection(
                 editedAt = viewModel.authMetadata.masterPasswordEditedAt,
@@ -142,6 +152,89 @@ fun AuthSettingsScreen(
         }
 
         NavigationBarProtection(innerPadding.calculateBottomPadding())
+    }
+}
+
+
+@Composable
+fun RecommendedActionCard(
+    recommendation: AuthRecommendation,
+    onEditMasterPassword: () -> Unit,
+    onGenerateNewRecoveryCodes: () -> Unit,
+    onToggleBiometrics: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    if (recommendation == AuthRecommendation.None) {
+        return
+    }
+
+    Column(
+        horizontalAlignment = Alignment.End,
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.extraLarge)
+            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+            .padding(
+                horizontal = dimensionResource(de.christian2003.ui.R.dimen.padding_horizontal),
+                vertical = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical)
+            )
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Shape(
+                shape = MaterialShapes.VerySunny,
+                color = MaterialTheme.colorScheme.secondaryContainer,
+                modifier = Modifier
+                    .padding(end = dimensionResource(de.christian2003.ui.R.dimen.padding_horizontal))
+                    .size(dimensionResource(de.christian2003.ui.R.dimen.image_m))
+            ) {
+                Icon(
+                    painter = painterResource(de.christian2003.ui.R.drawable.ic_recommendation),
+                    contentDescription = "",
+                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                    modifier = Modifier.size(dimensionResource(de.christian2003.ui.R.dimen.image_xs))
+                )
+            }
+            Column {
+                Text(
+                    text = stringResource(R.string.authSettings_recommendation_title),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+                Text(
+                    text = when (recommendation) {
+                        AuthRecommendation.ChangePassword -> stringResource(R.string.authSettings_recommendation_changePassword)
+                        AuthRecommendation.RegenerateRecoveryCodes -> stringResource(R.string.authSettings_recommendation_regenerateRecoveryCodes)
+                        AuthRecommendation.EnableBiometrics -> stringResource(R.string.authSettings_recommendation_enableBiometrics)
+                        else -> ""
+                    },
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+        TextButton(
+            onClick = {
+                when (recommendation) {
+                    AuthRecommendation.ChangePassword -> onEditMasterPassword()
+                    AuthRecommendation.RegenerateRecoveryCodes -> onGenerateNewRecoveryCodes()
+                    AuthRecommendation.EnableBiometrics -> onToggleBiometrics()
+                    else -> { }
+                }
+            }
+        ) {
+            Text(
+                text = when (recommendation) {
+                    AuthRecommendation.ChangePassword -> stringResource(R.string.authSettings_masterPassword_editButton)
+                    AuthRecommendation.RegenerateRecoveryCodes -> stringResource(R.string.authSettings_recoveryCodes_generateButton)
+                    AuthRecommendation.EnableBiometrics -> stringResource(R.string.authSettings_biometrics_enableButton)
+                    else -> ""
+                }
+            )
+        }
     }
 }
 

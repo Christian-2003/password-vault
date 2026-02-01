@@ -122,5 +122,9 @@
     <string name="authSettings_activeLabel">Active</string>
     <string name="authSettings_inactiveLabel">Inactive</string>
     <string name="authSettings_unavailableLabel">Unavailable</string>
+    <string name="authSettings_recommendation_title">Recommended actions</string>
+    <string name="authSettings_recommendation_changePassword">Your password has been edited more than half a year ago. We recommend to change your password.</string>
+    <string name="authSettings_recommendation_regenerateRecoveryCodes">Your recovery codes have been generated over a year ago. We recommend regenerating recovery codes occasionally.</string>
+    <string name="authSettings_recommendation_enableBiometrics">Enable biometrics for a quicker login without your master password.</string>
 
 </resources>
