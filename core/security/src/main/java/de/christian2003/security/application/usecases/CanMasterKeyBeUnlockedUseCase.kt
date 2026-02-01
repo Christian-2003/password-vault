@@ -1,24 +1,16 @@
 package de.christian2003.security.application.usecases
 
-import android.util.Log
-import de.christian2003.security.domain.repositories.BiometricsRepository
-import de.christian2003.security.domain.repositories.CommitRepository
-import de.christian2003.security.domain.repositories.MasterKeyRepository
-import de.christian2003.security.domain.repositories.MasterPasswordRepository
+import de.christian2003.security.domain.repositories.ReadonlyAuthRepository
 import javax.inject.Inject
 
 
 /**
  * Use case to test whether the master key can be unlocked.
  *
- * @param masterKeyRepository       Repository to access the master key.
- * @param masterPasswordRepository  Repository to access the master password.
- * @param commitRepository          Repository to check whether changes are staged for a commit.
+ * @param readonlyAuthRepository    Repository to access auth data.
  */
 class CanMasterKeyBeUnlockedUseCase @Inject constructor(
-    private val masterKeyRepository: MasterKeyRepository,
-    private val masterPasswordRepository: MasterPasswordRepository,
-    private val commitRepository: CommitRepository
+    private val readonlyAuthRepository: ReadonlyAuthRepository,
 ) {
 
     /**
@@ -29,11 +21,17 @@ class CanMasterKeyBeUnlockedUseCase @Inject constructor(
      * @return  Whether the master key can be unlocked.
      */
     fun canBeUnlocked(): Boolean {
-        Log.d("MasterKeyUnlock", "HasEncryptedMasterKey=${masterKeyRepository.hasEncryptedMasterKey()}, HasEncryptedMasterPasswordKek=${masterKeyRepository.hasEncryptedMasterKey()}, HasMasterPasswordSalt=${masterPasswordRepository.hasMasterPasswordSalt()}, AreChangesStaged=${commitRepository.areChangesStaged()}")
-        return masterKeyRepository.hasEncryptedMasterKey()
-                && masterPasswordRepository.hasEncryptedMasterPasswordKek()
-                && masterPasswordRepository.hasMasterPasswordSalt()
-                && !commitRepository.areChangesStaged()
+        val masterPasswordKek: ByteArray? = readonlyAuthRepository.getMasterPasswordKek()
+        val masterPasswordSalt: ByteArray? = readonlyAuthRepository.getMasterPasswordSalt()
+        val masterKey: ByteArray? = readonlyAuthRepository.getEncryptedMasterKey()
+
+        val canBeUnlocked: Boolean = masterPasswordKek != null && masterPasswordSalt != null && masterKey != null
+
+        masterPasswordKek?.fill(0)
+        masterPasswordSalt?.fill(0)
+        masterKey?.fill(0)
+
+        return canBeUnlocked
     }
 
 }

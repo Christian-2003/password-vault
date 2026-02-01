@@ -75,4 +75,20 @@ interface ReadonlyAuthRepository {
      */
     fun isBiometricsConfigured(): Boolean
 
+    /**
+     * Returns whether biometrics are available on the device.
+     *
+     * @return  Whether biometrics are available.
+     */
+    fun isBiometricsAvailable(): Boolean
+
+
+    /**
+     * Returns the bytes of the encrypted master key. If no master key has been saved, null is
+     * returned.
+     *
+     * @return  Bytes of the encrypted master key or null.
+     */
+    fun getEncryptedMasterKey(): ByteArray?
+
 }

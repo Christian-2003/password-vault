@@ -2,6 +2,7 @@ package de.christian2003.security.infrastructure.repositories
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.biometric.BiometricManager
 import androidx.core.content.edit
 import dagger.hilt.android.qualifiers.ApplicationContext
 import de.christian2003.security.domain.entities.SecurityAliases
@@ -22,7 +23,7 @@ import javax.inject.Singleton
  */
 @Singleton
 class SharedPreferencesAuthRepository @Inject constructor(
-    @ApplicationContext context: Context
+    @param:ApplicationContext private val context: Context
 ): AuthTransactionRepository, ReadonlyAuthRepository {
 
     /**
@@ -353,6 +354,37 @@ class SharedPreferencesAuthRepository @Inject constructor(
      */
     override fun isBiometricsConfigured(): Boolean {
         return preferences.contains(SecurityAliases.BiometricsKek.getAlias())
+    }
+
+
+    /**
+     * Returns whether biometrics are available on the device.
+     *
+     * @return  Whether biometrics are available.
+     */
+    override fun isBiometricsAvailable(): Boolean {
+        val biometricManager: BiometricManager = BiometricManager.from(context)
+        val canAuthenticate: Int = biometricManager.canAuthenticate(
+            BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL
+        )
+
+        return canAuthenticate == BiometricManager.BIOMETRIC_SUCCESS
+    }
+
+
+    /**
+     * Returns the bytes of the encrypted master key. If no master key has been saved, null is
+     * returned.
+     *
+     * @return  Bytes of the encrypted master key or null.
+     */
+    override fun getEncryptedMasterKey(): ByteArray? {
+        val masterKeyAsString: String? = preferences.getString(SecurityAliases.MasterKey.getAlias(), null)
+        if (masterKeyAsString != null) {
+            val masterKeyAsBytes: ByteArray? = stringToBytes(masterKeyAsString)
+            return masterKeyAsBytes
+        }
+        return null
     }
 
 

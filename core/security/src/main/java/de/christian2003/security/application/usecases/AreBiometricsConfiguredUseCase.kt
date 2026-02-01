@@ -1,19 +1,16 @@
 package de.christian2003.security.application.usecases
 
-import de.christian2003.security.domain.repositories.BiometricsRepository
-import de.christian2003.security.domain.repositories.CommitRepository
+import de.christian2003.security.domain.repositories.ReadonlyAuthRepository
 import javax.inject.Inject
 
 
 /**
  * Use case to test whether biometrics are configured and can be used to unlock the master key.
  *
- * @param biometricsRepository  Repository to access biometrics data.
- * @param commitRepository      Repository to check whether changes to authentication are staged.
+ * @param readonlyAuthRepository    Repository to access auth data.
  */
 class AreBiometricsConfiguredUseCase @Inject constructor(
-    private val biometricsRepository: BiometricsRepository,
-    private val commitRepository: CommitRepository
+    private val readonlyAuthRepository: ReadonlyAuthRepository
 ) {
 
     /**
@@ -22,9 +19,7 @@ class AreBiometricsConfiguredUseCase @Inject constructor(
      * @return  Whether biometrics are configured and can unlock the master key.
      */
     fun areBiometricsConfigured(): Boolean {
-        return biometricsRepository.areBiometricsAvailable()
-                && biometricsRepository.hasEncryptedBiometricsKek()
-                && !commitRepository.areChangesStaged()
+        return readonlyAuthRepository.isBiometricsConfigured() && readonlyAuthRepository.isBiometricsAvailable()
     }
 
 }
