@@ -11,7 +11,7 @@ import javax.inject.Inject
  *
  * @param recoveryCodeEncoderService    Service to encode recovery codes.
  */
-class GenerateRecoveryCodesUseCase @Inject constructor(
+class GenerateRecoveryCodesUseCase @Inject internal constructor(
     private val recoveryCodeEncoderService: RecoveryCodeEncoderService
 ) {
 

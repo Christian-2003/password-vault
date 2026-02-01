@@ -14,7 +14,7 @@ import de.christian2003.security.application.services.SourceKeyService
  */
 @Module
 @InstallIn(SingletonComponent::class)
-class SecurityInfrastructureSingletonModule {
+internal class SecurityInfrastructureSingletonModule {
 
     @Provides
     fun provideRecoveryCodeEncoderService(): RecoveryCodeEncoderService {

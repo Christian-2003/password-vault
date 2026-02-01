@@ -23,7 +23,7 @@ import javax.inject.Inject
  * @param kdfService                    Service for key derivation.
  * @param keyGeneratorService           Service for key generation.
  */
-class SourceKeyService @Inject constructor(
+internal class SourceKeyService @Inject constructor(
     private val hardwareBackedKeyRepository: HardwareBackedKeyRepository,
     private val cipherService: CipherService,
     private val kdfService: KdfService,

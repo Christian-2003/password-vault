@@ -7,7 +7,7 @@ import javax.crypto.SecretKey
 /**
  * Repository to access hardware-backed keys.
  */
-interface HardwareBackedKeyRepository {
+internal interface HardwareBackedKeyRepository {
 
     /**
      * Gets the hardware-backed key with the specified alias. If no key with the specified alias

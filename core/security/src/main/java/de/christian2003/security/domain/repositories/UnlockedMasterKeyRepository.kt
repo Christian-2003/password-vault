@@ -4,7 +4,7 @@ package de.christian2003.security.domain.repositories
 /**
  * Repository through which to access the unlocked master key.
  */
-interface UnlockedMasterKeyRepository {
+internal interface UnlockedMasterKeyRepository {
 
     /**
      * Returns whether the master key is unlocked.

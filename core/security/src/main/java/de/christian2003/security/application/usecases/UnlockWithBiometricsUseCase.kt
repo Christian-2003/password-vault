@@ -22,7 +22,7 @@ import javax.inject.Inject
  * @param cipherService                 Service for cryptographic operations.
  */
 @ActivityScoped
-class UnlockWithBiometricsUseCase @Inject constructor(
+class UnlockWithBiometricsUseCase @Inject internal constructor(
     private val readonlyAuthRepository: ReadonlyAuthRepository,
     private val hardwareBackedKeyRepository: HardwareBackedKeyRepository,
     private val unlockedMasterKeyRepository: UnlockedMasterKeyRepository,

@@ -15,7 +15,7 @@ import javax.inject.Inject
  * @param readonlyAuthRepository    Repository for auth data.
  * @param sourceKeyService          Service for source key handling.
  */
-class VerifyRecoveryCodeUseCase @Inject constructor(
+class VerifyRecoveryCodeUseCase @Inject internal constructor(
     private val readonlyAuthRepository: ReadonlyAuthRepository,
     private val sourceKeyService: SourceKeyService
 ) {

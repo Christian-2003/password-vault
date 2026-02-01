@@ -4,7 +4,7 @@ package de.christian2003.security.domain.repositories
 /**
  * Read-only repository provides access to read authentication data.
  */
-interface ReadonlyAuthRepository {
+internal interface ReadonlyAuthRepository {
 
     /**
      * Returns the encrypted KEK of the master password or null if no KEK is available.

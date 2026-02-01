@@ -11,7 +11,7 @@ import javax.inject.Inject
  * @param biometricsService Service for biometric authentication.
  */
 @ActivityScoped
-class BiometricAuthUseCase @Inject constructor(
+class BiometricAuthUseCase @Inject internal constructor(
     private val biometricsService: BiometricsService
 ) {
 

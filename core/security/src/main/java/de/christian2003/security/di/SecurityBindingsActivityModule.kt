@@ -13,7 +13,7 @@ import de.christian2003.security.infrastructure.services.AndroidBiometricsServic
  */
 @Module
 @InstallIn(ActivityComponent::class)
-abstract class SecurityBindingsActivityModule {
+internal abstract class SecurityBindingsActivityModule {
 
     @Binds
     abstract fun bindBiometricsService(

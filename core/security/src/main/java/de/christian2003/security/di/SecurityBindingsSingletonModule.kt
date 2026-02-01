@@ -24,7 +24,7 @@ import de.christian2003.security.infrastructure.services.Pbkdf2Service
  */
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class SecurityBindingsSingletonModule {
+internal abstract class SecurityBindingsSingletonModule {
 
     //========================= DOMAIN REPOSITORIES =========================
 

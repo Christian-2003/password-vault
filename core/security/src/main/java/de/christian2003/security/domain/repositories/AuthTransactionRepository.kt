@@ -6,7 +6,7 @@ import de.christian2003.security.domain.exceptions.AuthTransactionException
 /**
  * Transaction based repository to set the authentication data.
  */
-interface AuthTransactionRepository {
+internal interface AuthTransactionRepository {
 
     /**
      * Begins a new transaction.

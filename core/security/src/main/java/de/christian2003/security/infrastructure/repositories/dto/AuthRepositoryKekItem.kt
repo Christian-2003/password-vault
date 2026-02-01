@@ -7,7 +7,7 @@ package de.christian2003.security.infrastructure.repositories.dto
  * @param keyBytes  Bytes of the KEK.
  * @param salt      Bytes of the salt.
  */
-data class AuthRepositoryKekItem(
+internal data class AuthRepositoryKekItem(
     val keyBytes: ByteArray,
     val salt: ByteArray
 ) {

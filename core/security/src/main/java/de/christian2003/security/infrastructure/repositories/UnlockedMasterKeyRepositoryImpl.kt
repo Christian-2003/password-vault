@@ -1,6 +1,5 @@
 package de.christian2003.security.infrastructure.repositories
 
-import android.util.Log
 import de.christian2003.security.domain.repositories.UnlockedMasterKeyRepository
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -10,7 +9,7 @@ import javax.inject.Singleton
  * Implementation of the repository through which to access the unlocked master key.
  */
 @Singleton
-class UnlockedMasterKeyRepositoryImpl @Inject constructor(): UnlockedMasterKeyRepository {
+internal class UnlockedMasterKeyRepositoryImpl @Inject constructor(): UnlockedMasterKeyRepository {
 
     private var masterKeyBytes: ByteArray? = null
 

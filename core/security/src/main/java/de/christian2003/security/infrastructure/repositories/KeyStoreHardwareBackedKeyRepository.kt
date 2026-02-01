@@ -14,7 +14,7 @@ import javax.inject.Singleton
  * system to handle hardware-backed keys.
  */
 @Singleton
-class KeyStoreHardwareBackedKeyRepository @Inject constructor(): HardwareBackedKeyRepository {
+internal class KeyStoreHardwareBackedKeyRepository @Inject constructor(): HardwareBackedKeyRepository {
 
     /**
      * Android key store to use for accessing hardware-backed keys.

@@ -12,7 +12,7 @@ import javax.inject.Inject
 /**
  * Generator can generate cryptographic key for AES.
  */
-class AesKeyGeneratorService @Inject constructor(): KeyGeneratorService {
+internal class AesKeyGeneratorService @Inject constructor(): KeyGeneratorService {
 
     /**
      * Generates a cryptographic key.

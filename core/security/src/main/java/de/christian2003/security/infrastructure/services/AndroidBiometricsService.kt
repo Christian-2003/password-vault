@@ -21,7 +21,7 @@ import de.christian2003.security.R
  * @param context   Application context.
  */
 @ActivityScoped
-class AndroidBiometricsService @Inject constructor(
+internal class AndroidBiometricsService @Inject constructor(
     @param:ActivityContext private val context: Context
 ): BiometricsService {
 

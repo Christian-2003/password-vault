@@ -9,7 +9,7 @@ import javax.inject.Inject
 /**
  * Implementation of the KDF service using Password-Based Key Derivation Function 2.
  */
-class Pbkdf2Service @Inject constructor(): KdfService {
+internal class Pbkdf2Service @Inject constructor(): KdfService {
 
     /**
      * Derives another key based on the specified input.

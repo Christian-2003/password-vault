@@ -7,7 +7,7 @@ package de.christian2003.security.infrastructure.repositories.dto
  * @param encryptedKekBytes Bytes of the encrypted KEK.
  * @param salt              Salt used to derive the key with which the KEK was encrypted.
  */
-data class SharedPreferencesSetupRepositoryKekEntryDto(
+internal data class SharedPreferencesSetupRepositoryKekEntryDto(
     val encryptedKekBytes: ByteArray,
     val salt: ByteArray
 ) {

@@ -6,7 +6,7 @@ package de.christian2003.security.domain.entities
  *
  * @param securityAlias Alias with which the key, salt, etc. is stored
  */
-enum class SecurityAliases(
+internal enum class SecurityAliases(
     private val securityAlias: String
 ) {
 

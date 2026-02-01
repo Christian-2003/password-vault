@@ -15,7 +15,7 @@ import javax.inject.Inject
  * Implementation of the cipher service using Advanced Encryption Standard (AES) with
  * Galois / Counter Mode (GCM). This implementation verifies authentication tags during decryption.
  */
-class AesCipherService @Inject constructor(): CipherService {
+internal class AesCipherService @Inject constructor(): CipherService {
 
     /**
      * Encrypts the specified plain text using the provided key. The resulting cipher text is returned

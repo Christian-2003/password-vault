@@ -22,7 +22,7 @@ import javax.inject.Singleton
  * @param context   Application context.
  */
 @Singleton
-class SharedPreferencesAuthRepository @Inject constructor(
+internal class SharedPreferencesAuthRepository @Inject constructor(
     @param:ApplicationContext private val context: Context
 ): AuthTransactionRepository, ReadonlyAuthRepository {
 

@@ -4,7 +4,7 @@ package de.christian2003.security.application.services
 /**
  * Service can encode and decode recovery codes.
  */
-class RecoveryCodeEncoderService {
+internal class RecoveryCodeEncoderService {
 
     /**
      * Encodes the specified recovery code bytes into a Base32 char array.

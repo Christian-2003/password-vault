@@ -32,7 +32,7 @@ import javax.inject.Inject
  * @param saltGeneratorService          Service to generate salts.
  * @param sourceKeyService              Service for source key handling.
  */
-class SaveFirstTimeSetupSessionUseCase @Inject constructor(
+class SaveFirstTimeSetupSessionUseCase @Inject internal constructor(
     private val authRepository: AuthTransactionRepository,
     private val hardwareBackedKeyRepository: HardwareBackedKeyRepository,
     private val kdfService: KdfService,

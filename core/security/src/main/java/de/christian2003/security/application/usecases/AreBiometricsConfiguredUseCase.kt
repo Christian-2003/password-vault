@@ -9,7 +9,7 @@ import javax.inject.Inject
  *
  * @param readonlyAuthRepository    Repository to access auth data.
  */
-class AreBiometricsConfiguredUseCase @Inject constructor(
+class AreBiometricsConfiguredUseCase @Inject internal constructor(
     private val readonlyAuthRepository: ReadonlyAuthRepository
 ) {
 

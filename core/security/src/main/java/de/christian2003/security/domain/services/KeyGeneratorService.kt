@@ -6,7 +6,7 @@ import android.security.keystore.KeyGenParameterSpec
 /**
  * Service can generate a cryptographic key.
  */
-interface KeyGeneratorService {
+internal interface KeyGeneratorService {
 
     /**
      * Generates a cryptographic key.

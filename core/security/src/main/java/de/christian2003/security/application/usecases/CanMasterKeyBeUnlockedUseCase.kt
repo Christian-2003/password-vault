@@ -9,7 +9,7 @@ import javax.inject.Inject
  *
  * @param readonlyAuthRepository    Repository to access auth data.
  */
-class CanMasterKeyBeUnlockedUseCase @Inject constructor(
+class CanMasterKeyBeUnlockedUseCase @Inject internal constructor(
     private val readonlyAuthRepository: ReadonlyAuthRepository,
 ) {
 

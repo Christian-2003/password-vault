@@ -16,7 +16,7 @@ import javax.inject.Inject
  * @param cipherService                 Service to perform cryptographic operations.
  * @param sourceKeyService              Service for source key handling.
  */
-class UnlockWithMasterPasswordUseCase @Inject constructor(
+class UnlockWithMasterPasswordUseCase @Inject internal constructor(
     private val readonlyAuthRepository: ReadonlyAuthRepository,
     private val unlockedMasterKeyRepository: UnlockedMasterKeyRepository,
     private val cipherService: CipherService,

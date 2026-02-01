@@ -6,7 +6,7 @@ import java.security.SecureRandom
 /**
  * Service to generate a random salt.
  */
-class SaltGeneratorService {
+internal class SaltGeneratorService {
 
     /**
      * Generates a random salt as bytes.
