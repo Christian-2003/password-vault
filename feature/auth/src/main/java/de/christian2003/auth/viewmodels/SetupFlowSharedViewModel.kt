@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.auth.models.states.FinishScreenState
-import de.christian2003.security.application.usecases.SaveChangePasswordSession
+import de.christian2003.security.application.usecases.SaveChangePasswordSessionUseCase
 import de.christian2003.security.application.usecases.SaveFirstTimeSetupSessionUseCase
 import de.christian2003.security.application.usecases.SaveGenerateNewRecoveryCodesSessionUseCase
 import de.christian2003.security.application.usecases.SaveRecoverySessionUseCase
@@ -24,7 +24,7 @@ import javax.inject.Inject
 class SetupFlowSharedViewModel @Inject constructor(
     private val saveFirstTimeSetupSessionUseCase: SaveFirstTimeSetupSessionUseCase,
     private val saveRecoverySessionUseCase: SaveRecoverySessionUseCase,
-    private val saveChangePasswordSession: SaveChangePasswordSession,
+    private val saveChangePasswordSession: SaveChangePasswordSessionUseCase,
     private val saveGenerateNewRecoveryCodesSessionUseCase: SaveGenerateNewRecoveryCodesSessionUseCase
 ): ViewModel() {
 

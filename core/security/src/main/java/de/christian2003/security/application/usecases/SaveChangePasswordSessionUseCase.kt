@@ -21,7 +21,7 @@ import javax.inject.Inject
  * @param sourceKeyService          Service for source key handling.
  * @param saltGeneratorService      Service to generate salts.
  */
-class SaveChangePasswordSession @Inject internal constructor(
+class SaveChangePasswordSessionUseCase @Inject internal constructor(
     private val authRepository: AuthTransactionRepository,
     private val readonlyAuthRepository: ReadonlyAuthRepository,
     private val sourceKeyService: SourceKeyService,
