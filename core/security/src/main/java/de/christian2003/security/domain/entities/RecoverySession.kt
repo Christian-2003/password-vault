@@ -48,7 +48,8 @@ data class RecoverySession(
 
         if (!recoveryCode.contentEquals(other.recoveryCode)) return false
         if (!newMasterPassword.contentEquals(other.newMasterPassword)) return false
-        if (newRecoveryCodes != other.newRecoveryCodes) return false
+        if (newRecoveryCodes.size != other.newRecoveryCodes.size) return false
+        if (!newRecoveryCodes.zip(other.newRecoveryCodes).all { (a,b) -> a.contentEquals(b) }) return false
 
         return true
     }
@@ -58,7 +59,7 @@ data class RecoverySession(
     override fun hashCode(): Int {
         var result = recoveryCode.contentHashCode()
         result = 31 * result + newMasterPassword.contentHashCode()
-        result = 31 * result + newRecoveryCodes.hashCode()
+        result = 31 * result + newRecoveryCodes.fold(1) { acc, code -> 31 * acc + code.contentHashCode() }
         return result
     }
 

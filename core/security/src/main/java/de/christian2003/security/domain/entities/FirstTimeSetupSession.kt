@@ -55,8 +55,8 @@ data class FirstTimeSetupSession(
     //Auto-generated
     override fun hashCode(): Int {
         var result = useBiometrics.hashCode()
-        result = 31 * result + (masterPassword?.contentHashCode() ?: 0)
-        result = 31 * result + (recoveryCodes?.hashCode() ?: 0)
+        result = 31 * result + masterPassword.contentHashCode()
+        result = 31 * result + recoveryCodes.hashCode()
         return result
     }
 

@@ -40,7 +40,8 @@ data class GenerateNewRecoveryCodesSession(
         other as GenerateNewRecoveryCodesSession
 
         if (!masterPassword.contentEquals(other.masterPassword)) return false
-        if (recoveryCodes != other.recoveryCodes) return false
+        if (recoveryCodes.size != other.recoveryCodes.size) return false
+        if (!recoveryCodes.zip(other.recoveryCodes).all { (a, b) -> a.contentEquals(b) }) return false
 
         return true
     }
@@ -49,7 +50,9 @@ data class GenerateNewRecoveryCodesSession(
     //Auto-generated
     override fun hashCode(): Int {
         var result = masterPassword.contentHashCode()
-        result = 31 * result + recoveryCodes.hashCode()
+        result = 31 * result + recoveryCodes.fold(1) { acc, code ->
+            31 * acc + code.contentHashCode()
+        }
         return result
     }
 
