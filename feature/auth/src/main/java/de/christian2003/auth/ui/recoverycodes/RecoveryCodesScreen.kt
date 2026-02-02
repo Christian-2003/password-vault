@@ -45,9 +45,9 @@ import de.christian2003.auth.R
 import de.christian2003.auth.models.dialogs.RecoveryCodesScreenDialog
 import de.christian2003.auth.models.states.RecoveryCodesScreenState
 import de.christian2003.auth.viewmodels.SetupFlowSharedViewModel
-import de.christian2003.ui.composables.DialogWithHeroSection
+import de.christian2003.ui.composables.dialog.DialogWithHeroSection
 import de.christian2003.ui.composables.HelpCard
-import de.christian2003.ui.composables.SimpleDialog
+import de.christian2003.ui.composables.dialog.SimpleDialog
 import de.christian2003.ui.theme.RobotoMono
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

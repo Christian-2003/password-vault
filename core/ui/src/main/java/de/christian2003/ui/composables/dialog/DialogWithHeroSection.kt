@@ -1,4 +1,4 @@
-package de.christian2003.ui.composables
+package de.christian2003.ui.composables.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,23 +25,25 @@ import de.christian2003.ui.R
 
 
 /**
- * Displays a simple dialog with actions.
+ * Displays a dialog with a hero section.
  *
- * @param title             Title for the dialog.
- * @param text              Text for the dialog.
- * @param onDismiss         Callback invoked to dismiss the dialog.
- * @param onConfirm         Callback invoked to confirm an action.
- * @param dismissButtonText Text for the button to dismiss the dialog.
- * @param confirmButtonText Text for the button to confirm an action.
+ * @param title                 Title for the dialog.
+ * @param text                  Text for the dialog.
+ * @param onDismiss             Callback invoked to dismiss the dialog.
+ * @param dismissButtonText     Text for the dismiss button
+ * @param onConfirm             Optional callback to confirm an action.
+ * @param confirmButtonText     Text for the confirm button.
+ * @param heroSectionContent    Content for the hero section (e.g. an image).
  */
 @Composable
-fun SimpleDialog(
+fun DialogWithHeroSection(
     title: String,
     text: String,
     onDismiss: () -> Unit,
-    onConfirm: (() -> Unit)? = null,
     dismissButtonText: String = stringResource(R.string.button_dismiss),
-    confirmButtonText: String = stringResource(R.string.button_confirm)
+    onConfirm: (() -> Unit)? = null,
+    confirmButtonText: String = stringResource(R.string.button_confirm),
+    heroSectionContent: @Composable () -> Unit
 ) {
     Dialog(
         onDismissRequest = onDismiss
@@ -53,24 +55,53 @@ fun SimpleDialog(
                 modifier = Modifier
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState())
-                    .padding(24.dp)
             ) {
+                //Hero section:
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface)
+                        .padding(
+                            start = 24.dp,
+                            top = 24.dp,
+                            end = 24.dp,
+                            bottom = 16.dp
+                        )
+                ) {
+                    heroSectionContent()
+                }
+
+                HorizontalDivider()
+
+                //Scrollable content
                 Text(
                     text = title,
                     color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.headlineSmall
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.padding(
+                        horizontal = 24.dp,
+                        vertical = 16.dp
+                    )
                 )
                 Text(
                     text = text,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 16.dp)
+                        .padding(horizontal = 24.dp)
                 )
 
                 //Button row:
                 FlowRow(
                     horizontalArrangement = Arrangement.End,
-                    modifier = Modifier.align(Alignment.End)
+                    modifier = Modifier
+                        .align(Alignment.End)
+                        .padding(
+                            start = 24.dp,
+                            top = 16.dp,
+                            end = 24.dp,
+                            bottom = 24.dp
+                        )
                 ) {
                     TextButton(
                         onClick = onDismiss

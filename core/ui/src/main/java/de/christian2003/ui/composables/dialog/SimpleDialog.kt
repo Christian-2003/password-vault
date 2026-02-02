@@ -1,8 +1,6 @@
-package de.christian2003.ui.composables
+package de.christian2003.ui.composables.dialog
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -25,25 +22,23 @@ import de.christian2003.ui.R
 
 
 /**
- * Displays a dialog with a hero section.
+ * Displays a simple dialog with actions.
  *
- * @param title                 Title for the dialog.
- * @param text                  Text for the dialog.
- * @param onDismiss             Callback invoked to dismiss the dialog.
- * @param dismissButtonText     Text for the dismiss button
- * @param onConfirm             Optional callback to confirm an action.
- * @param confirmButtonText     Text for the confirm button.
- * @param heroSectionContent    Content for the hero section (e.g. an image).
+ * @param title             Title for the dialog.
+ * @param text              Text for the dialog.
+ * @param onDismiss         Callback invoked to dismiss the dialog.
+ * @param onConfirm         Callback invoked to confirm an action.
+ * @param dismissButtonText Text for the button to dismiss the dialog.
+ * @param confirmButtonText Text for the button to confirm an action.
  */
 @Composable
-fun DialogWithHeroSection(
+fun SimpleDialog(
     title: String,
     text: String,
     onDismiss: () -> Unit,
-    dismissButtonText: String = stringResource(R.string.button_dismiss),
     onConfirm: (() -> Unit)? = null,
-    confirmButtonText: String = stringResource(R.string.button_confirm),
-    heroSectionContent: @Composable () -> Unit
+    dismissButtonText: String = stringResource(R.string.button_dismiss),
+    confirmButtonText: String = stringResource(R.string.button_confirm)
 ) {
     Dialog(
         onDismissRequest = onDismiss
@@ -55,53 +50,24 @@ fun DialogWithHeroSection(
                 modifier = Modifier
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState())
+                    .padding(24.dp)
             ) {
-                //Hero section:
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.surface)
-                        .padding(
-                            start = 24.dp,
-                            top = 24.dp,
-                            end = 24.dp,
-                            bottom = 16.dp
-                        )
-                ) {
-                    heroSectionContent()
-                }
-
-                HorizontalDivider()
-
-                //Scrollable content
                 Text(
                     text = title,
                     color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.padding(
-                        horizontal = 24.dp,
-                        vertical = 16.dp
-                    )
+                    style = MaterialTheme.typography.headlineSmall
                 )
                 Text(
                     text = text,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 24.dp)
+                        .padding(vertical = 16.dp)
                 )
 
                 //Button row:
                 FlowRow(
                     horizontalArrangement = Arrangement.End,
-                    modifier = Modifier
-                        .align(Alignment.End)
-                        .padding(
-                            start = 24.dp,
-                            top = 16.dp,
-                            end = 24.dp,
-                            bottom = 24.dp
-                        )
+                    modifier = Modifier.align(Alignment.End)
                 ) {
                     TextButton(
                         onClick = onDismiss

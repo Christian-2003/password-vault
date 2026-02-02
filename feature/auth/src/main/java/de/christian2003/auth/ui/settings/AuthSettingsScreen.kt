@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,15 +32,18 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.christian2003.auth.viewmodels.AuthSettingsViewModel
 import de.christian2003.auth.R
+import de.christian2003.auth.models.dialogs.AuthSettingsScreenDialog
 import de.christian2003.auth.models.other.AuthRecommendation
+import de.christian2003.security.domain.entities.AuthMetadata
 import de.christian2003.ui.composables.NavigationBarProtection
 import de.christian2003.ui.composables.Shape
 import de.christian2003.ui.composables.Tooltip
+import de.christian2003.ui.composables.dialog.SimpleDialog
 import de.christian2003.ui.theme.RobotoMono
 import de.christian2003.ui.theme.isDarkTheme
 import java.time.LocalDateTime
@@ -55,13 +59,16 @@ import java.time.LocalDateTime
  * @param onNavigateToRecoveryCodes Callback invoked to generate new recovery codes.
  */
 @Composable
-fun AuthSettingsScreen(
+internal fun AuthSettingsScreen(
     viewModel: AuthSettingsViewModel,
     onNavigateUp: () -> Unit,
     onNavigateToPassword: () -> Unit,
     onNavigateToBiometrics: () -> Unit,
     onNavigateToRecoveryCodes: () -> Unit
 ) {
+    val authMetadata: AuthMetadata? by viewModel.authMetadata.collectAsStateWithLifecycle(null)
+    val areBiometricsConfigured: Boolean by viewModel.areBiometricsConfigured.collectAsStateWithLifecycle(false)
+
     Scaffold(
         topBar = {
             TopBar(
@@ -91,7 +98,7 @@ fun AuthSettingsScreen(
 
             //Master password:
             MasterPasswordSection(
-                editedAt = viewModel.authMetadata.masterPasswordEditedAt,
+                editedAt = authMetadata?.masterPasswordEditedAt,
                 onEditMasterPassword = onNavigateToPassword,
                 onGeneratePositiveColor = { negative, darkTheme ->
                     viewModel.generatePositiveColorFromNegativeColor(negative, darkTheme)
@@ -107,7 +114,7 @@ fun AuthSettingsScreen(
 
             //Recovery codes:
             RecoveryCodesSection(
-                editedAt = viewModel.authMetadata.recoveryCodesEditedAt,
+                editedAt = authMetadata?.recoveryCodesEditedAt,
                 onGenerateNewRecoveryCodes = onNavigateToRecoveryCodes,
                 onGeneratePositiveColor = { negative, darkTheme ->
                     viewModel.generatePositiveColorFromNegativeColor(negative, darkTheme)
@@ -123,19 +130,19 @@ fun AuthSettingsScreen(
 
             //Biometrics:
             BiometricsSection(
-                editedAt = viewModel.authMetadata.biometricsEditedAt,
+                editedAt = authMetadata?.biometricsEditedAt,
                 onToggleBiometrics = {
                     if (viewModel.areBiometricsAvailable) {
-                        if (!viewModel.areBiometricsConfigured) {
+                        if (!areBiometricsConfigured) {
                             onNavigateToBiometrics()
                         }
                         else {
-                            viewModel.disableBiometrics()
+                            viewModel.dialog = AuthSettingsScreenDialog.ConfirmDisableBiometrics
                         }
                     }
                 },
                 areBiometricsAvailable = viewModel.areBiometricsAvailable,
-                areBiometricsConfigured = viewModel.areBiometricsConfigured,
+                areBiometricsConfigured = areBiometricsConfigured,
                 onGeneratePositiveColor = { negative, darkTheme ->
                     viewModel.generatePositiveColorFromNegativeColor(negative, darkTheme)
                 },
@@ -152,12 +159,27 @@ fun AuthSettingsScreen(
         }
 
         NavigationBarProtection(innerPadding.calculateBottomPadding())
+
+        when (viewModel.dialog) {
+            AuthSettingsScreenDialog.ConfirmDisableBiometrics -> {
+                ConfirmDisableBiometricsDialog(
+                    onConfirm = {
+                        viewModel.disableBiometrics()
+                        viewModel.dialog = AuthSettingsScreenDialog.None
+                    },
+                    onDismiss = {
+                        viewModel.dialog = AuthSettingsScreenDialog.None
+                    }
+                )
+            }
+            else -> { }
+        }
     }
 }
 
 
 @Composable
-fun RecommendedActionCard(
+private fun RecommendedActionCard(
     recommendation: AuthRecommendation,
     onEditMasterPassword: () -> Unit,
     onGenerateNewRecoveryCodes: () -> Unit,
@@ -628,5 +650,27 @@ private fun TopBar(
                 )
             }
         }
+    )
+}
+
+
+/**
+ * Shows the dialog through which to confirm disabling the biometric authentication.
+ *
+ * @param onConfirm Callback invoked to confirm disabling.
+ * @param onDismiss Callback invoked to dismiss the dialog without disabling biometrics.
+ */
+@Composable
+private fun ConfirmDisableBiometricsDialog(
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    SimpleDialog(
+        title = stringResource(R.string.authSettings_biometrics_confirmDisableDialog_title),
+        text = stringResource(R.string.authSettings_biometrics_confirmDisableDialog_text),
+        onDismiss = onDismiss,
+        onConfirm = onConfirm,
+        dismissButtonText = stringResource(de.christian2003.ui.R.string.button_cancel),
+        confirmButtonText = stringResource(de.christian2003.ui.R.string.button_confirm)
     )
 }

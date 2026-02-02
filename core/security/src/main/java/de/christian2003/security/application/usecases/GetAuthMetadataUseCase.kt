@@ -2,6 +2,9 @@ package de.christian2003.security.application.usecases
 
 import de.christian2003.security.domain.entities.AuthMetadata
 import de.christian2003.security.domain.repositories.ReadonlyAuthRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 
@@ -19,13 +22,24 @@ class GetAuthMetadataUseCase @Inject internal constructor(
      *
      * @return  Metadata.
      */
-    fun getMetadata(): AuthMetadata {
-        val metadata = AuthMetadata(
-            masterPasswordEditedAt = readonlyAuthRepository.getMasterPasswordTimestamp(),
-            recoveryCodesEditedAt = readonlyAuthRepository.getRecoveryCodesTimestamp(),
-            biometricsEditedAt = readonlyAuthRepository.getBiometricsTimestamp()
-        )
-        return metadata
+    fun getMetadata(): Flow<AuthMetadata> {
+        val masterPasswordTimestampFlow: Flow<LocalDateTime?> = readonlyAuthRepository.getMasterPasswordTimestamp()
+        val recoveryCodesTimestampFlow: Flow<LocalDateTime?> = readonlyAuthRepository.getRecoveryCodesTimestamp()
+        val biometricsTimestampFlow: Flow<LocalDateTime?> = readonlyAuthRepository.getBiometricsTimestamp()
+
+        val metadataFlow: Flow<AuthMetadata> = combine(
+            flow = masterPasswordTimestampFlow,
+            flow2 = recoveryCodesTimestampFlow,
+            flow3 = biometricsTimestampFlow
+        ) { masterPasswordEditedAt, recoveryCodesEditedAt, biometricsEditedAt ->
+            AuthMetadata(
+                masterPasswordEditedAt = masterPasswordEditedAt,
+                recoveryCodesEditedAt = recoveryCodesEditedAt,
+                biometricsEditedAt = biometricsEditedAt
+            )
+        }
+
+        return metadataFlow
     }
 
 }

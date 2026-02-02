@@ -1,5 +1,6 @@
 package de.christian2003.security.domain.repositories
 
+import kotlinx.coroutines.flow.Flow
 import java.time.LocalDateTime
 
 
@@ -35,7 +36,7 @@ internal interface ReadonlyAuthRepository {
      *
      * @return  Timestamp at which the master password was edited the last time or null.
      */
-    fun getMasterPasswordTimestamp(): LocalDateTime?
+    fun getMasterPasswordTimestamp(): Flow<LocalDateTime?>
 
 
     /**
@@ -76,7 +77,7 @@ internal interface ReadonlyAuthRepository {
      *
      * @return  Timestamp at which the recovery codes were edited the last time or null.
      */
-    fun getRecoveryCodesTimestamp(): LocalDateTime?
+    fun getRecoveryCodesTimestamp(): Flow<LocalDateTime?>
 
 
     /**
@@ -94,6 +95,13 @@ internal interface ReadonlyAuthRepository {
     fun isBiometricsConfigured(): Boolean
 
     /**
+     * Returns whether biometrics are configured or not.
+     *
+     * @return  Whether biometrics are configured.
+     */
+    fun isBiometricsConfiguredAsFlow(): Flow<Boolean>
+
+    /**
      * Returns whether biometrics are available on the device.
      *
      * @return  Whether biometrics are available.
@@ -106,7 +114,7 @@ internal interface ReadonlyAuthRepository {
      *
      * @return  Timestamp at which the biometrics were edited the last time or null.
      */
-    fun getBiometricsTimestamp(): LocalDateTime?
+    fun getBiometricsTimestamp(): Flow<LocalDateTime?>
 
 
     /**

@@ -10,6 +10,10 @@ import de.christian2003.security.domain.exceptions.AuthTransactionException
 import de.christian2003.security.domain.repositories.AuthTransactionRepository
 import de.christian2003.security.domain.repositories.ReadonlyAuthRepository
 import de.christian2003.security.infrastructure.repositories.dto.AuthRepositoryKekItem
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.Base64
@@ -301,8 +305,34 @@ internal class SharedPreferencesAuthRepository @Inject constructor(
      *
      * @return  Timestamp at which the master password was edited the last time or null.
      */
-    override fun getMasterPasswordTimestamp(): LocalDateTime? {
-        val timestampAsEpochSecond: Long = preferences.getLong(SecurityAliases.MasterPasswordTime.getAlias(), -1)
+    override fun getMasterPasswordTimestamp(): Flow<LocalDateTime?> = callbackFlow {
+        //Emit current value immediately:
+        trySend(getMasterPasswordTimestampFromPreferences(preferences))
+
+        //Register listener for updates:
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
+            if (key == SecurityAliases.MasterPasswordTime.getAlias()) {
+                trySend(getMasterPasswordTimestampFromPreferences(prefs))
+            }
+        }
+        preferences.registerOnSharedPreferenceChangeListener(listener)
+
+        //Cleanup when flow is gone:
+        awaitClose {
+            preferences.unregisterOnSharedPreferenceChangeListener(listener)
+        }
+    }.distinctUntilChanged()
+
+
+    /**
+     * Returns the timestamp at which the master password was edited the last time or null if
+     * unknown.
+     *
+     * @param prefs Preferences from which to load the timestamp.
+     * @return      Timestamp at which the master password was edited the last time or null.
+     */
+    private fun getMasterPasswordTimestampFromPreferences(prefs: SharedPreferences): LocalDateTime? {
+        val timestampAsEpochSecond: Long = prefs.getLong(SecurityAliases.MasterPasswordTime.getAlias(), -1)
         if (timestampAsEpochSecond >= 0) {
             val timestamp: LocalDateTime = epochSecondToLocalDateTime(timestampAsEpochSecond)
             return timestamp
@@ -382,8 +412,34 @@ internal class SharedPreferencesAuthRepository @Inject constructor(
      *
      * @return  Timestamp at which the recovery codes were edited the last time or null.
      */
-    override fun getRecoveryCodesTimestamp(): LocalDateTime? {
-        val timestampAsEpochSecond: Long = preferences.getLong(SecurityAliases.RecoveryCodesTime.getAlias(), -1)
+    override fun getRecoveryCodesTimestamp(): Flow<LocalDateTime?> = callbackFlow {
+        //Emit current value immediately:
+        trySend(getRecoveryCodesTimestampFromPreferences(preferences))
+
+        //Register listener for updates:
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
+            if (key == SecurityAliases.RecoveryCodesTime.getAlias()) {
+                trySend(getRecoveryCodesTimestampFromPreferences(prefs))
+            }
+        }
+        preferences.registerOnSharedPreferenceChangeListener(listener)
+
+        //Cleanup when flow is gone:
+        awaitClose {
+            preferences.unregisterOnSharedPreferenceChangeListener(listener)
+        }
+    }.distinctUntilChanged()
+
+
+    /**
+     * Returns the timestamp at which the recovery codes were edited the last time or null if
+     * unknown.
+     *
+     * @param prefs Preferences from which to load the timestamp.
+     * @return      Timestamp at which the recovery codes were edited the last time or null.
+     */
+    fun getRecoveryCodesTimestampFromPreferences(prefs: SharedPreferences): LocalDateTime? {
+        val timestampAsEpochSecond: Long = prefs.getLong(SecurityAliases.RecoveryCodesTime.getAlias(), -1)
         if (timestampAsEpochSecond >= 0) {
             val timestamp: LocalDateTime = epochSecondToLocalDateTime(timestampAsEpochSecond)
             return timestamp
@@ -413,7 +469,41 @@ internal class SharedPreferencesAuthRepository @Inject constructor(
      * @return  Whether biometrics are configured.
      */
     override fun isBiometricsConfigured(): Boolean {
-        return preferences.contains(SecurityAliases.BiometricsKek.getAlias())
+        return isBiometricsConfiguredWithPreferences(preferences)
+    }
+
+
+    /**
+     * Returns whether biometrics are configured or not.
+     *
+     * @return  Whether biometrics are configured.
+     */
+    override fun isBiometricsConfiguredAsFlow(): Flow<Boolean> = callbackFlow {
+        //Emit current value immediately:
+        trySend(isBiometricsConfiguredWithPreferences(preferences))
+
+        //Register listener for updates:
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
+            if (key == SecurityAliases.BiometricsTime.getAlias()) {
+                trySend(isBiometricsConfiguredWithPreferences(prefs))
+            }
+        }
+        preferences.registerOnSharedPreferenceChangeListener(listener)
+
+        //Cleanup when flow is gone:
+        awaitClose {
+            preferences.unregisterOnSharedPreferenceChangeListener(listener)
+        }
+    }.distinctUntilChanged()
+
+
+    /**
+     * Returns whether biometrics are configured or not.
+     *
+     * @return  Whether biometrics are configured.
+     */
+    private fun isBiometricsConfiguredWithPreferences(prefs: SharedPreferences): Boolean {
+        return prefs.contains(SecurityAliases.BiometricsKek.getAlias())
     }
 
 
@@ -438,8 +528,34 @@ internal class SharedPreferencesAuthRepository @Inject constructor(
      *
      * @return  Timestamp at which the biometrics were edited the last time or null.
      */
-    override fun getBiometricsTimestamp(): LocalDateTime? {
-        val timestampAsEpochSecond: Long = preferences.getLong(SecurityAliases.BiometricsTime.getAlias(), -1)
+    override fun getBiometricsTimestamp(): Flow<LocalDateTime?> = callbackFlow {
+        //Emit current value immediately:
+        trySend(getBiometricsTimestampFromPreferences(preferences))
+
+        //Register listener for updates:
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
+            if (key == SecurityAliases.BiometricsTime.getAlias()) {
+                trySend(getBiometricsTimestampFromPreferences(prefs))
+            }
+        }
+        preferences.registerOnSharedPreferenceChangeListener(listener)
+
+        //Cleanup when flow is gone:
+        awaitClose {
+            preferences.unregisterOnSharedPreferenceChangeListener(listener)
+        }
+    }.distinctUntilChanged()
+
+
+    /**
+     * Returns the timestamp at which the biometrics were edited the last time or null if
+     * unknown.
+     *
+     * @param prefs Preferences from which to load the timestamp.
+     * @return      Timestamp at which the biometrics were edited the last time or null.
+     */
+    private fun getBiometricsTimestampFromPreferences(prefs: SharedPreferences): LocalDateTime? {
+        val timestampAsEpochSecond: Long = prefs.getLong(SecurityAliases.BiometricsTime.getAlias(), -1)
         if (timestampAsEpochSecond >= 0) {
             val timestamp: LocalDateTime = epochSecondToLocalDateTime(timestampAsEpochSecond)
             return timestamp

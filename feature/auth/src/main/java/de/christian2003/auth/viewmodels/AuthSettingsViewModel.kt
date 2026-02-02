@@ -6,7 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import de.christian2003.auth.models.dialogs.AuthSettingsScreenDialog
 import de.christian2003.auth.models.other.AuthRecommendation
 import de.christian2003.common.formatter.DateTimeFormatterService
 import de.christian2003.security.application.usecases.AreBiometricsAvailableUseCase
@@ -15,35 +17,63 @@ import de.christian2003.security.application.usecases.DisableBiometricsUseCase
 import de.christian2003.security.application.usecases.GetAuthMetadataUseCase
 import de.christian2003.security.domain.entities.AuthMetadata
 import de.christian2003.ui.model.ColorGenerator
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
 import javax.inject.Inject
 
 
 @HiltViewModel
-class AuthSettingsViewModel @Inject constructor(
+internal class AuthSettingsViewModel @Inject constructor(
     application: Application,
     areBiometricsConfiguredUseCase: AreBiometricsConfiguredUseCase,
     areBiometricsAvailableUseCase: AreBiometricsAvailableUseCase,
+    getAuthMetadataUseCase: GetAuthMetadataUseCase,
     private val colorGenerator: ColorGenerator,
     private val disableBiometricsUseCase: DisableBiometricsUseCase,
-    private val getAuthMetadataUseCase: GetAuthMetadataUseCase,
     private val dateTimeFormatterService: DateTimeFormatterService
 ): AndroidViewModel(application) {
 
     val areBiometricsAvailable: Boolean = areBiometricsAvailableUseCase.areBiometricsAvailable()
 
-    var areBiometricsConfigured: Boolean by mutableStateOf(areBiometricsConfiguredUseCase.areBiometricsConfigured())
-        private set
+    val areBiometricsConfigured: Flow<Boolean> = areBiometricsConfiguredUseCase.areBiometricsConfiguredAsFlow().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = false
+    )
+
+    val authMetadata: Flow<AuthMetadata?> = getAuthMetadataUseCase.getMetadata().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = null
+    )
 
     var authRecommendation: AuthRecommendation by mutableStateOf(AuthRecommendation.None)
-
-    var authMetadata: AuthMetadata by mutableStateOf(getAuthMetadataUseCase.getMetadata())
         private set
+
+    var dialog: AuthSettingsScreenDialog by mutableStateOf(AuthSettingsScreenDialog.None)
 
 
     init {
-        determineAuthRecommendation()
+        viewModelScope.launch {
+            combine(authMetadata, areBiometricsConfigured) { metadata, areBiometricsConfigured ->
+                Pair<AuthMetadata?, Boolean>(metadata, areBiometricsConfigured)
+            }.collect { (metadata, areBiometricsConfigured) ->
+                val now: LocalDate = LocalDate.now()
+                if (metadata != null) {
+                    authRecommendation = when {
+                        areBiometricsAvailable && !areBiometricsConfigured -> AuthRecommendation.EnableBiometrics
+                        daysBetween(metadata.masterPasswordEditedAt, now) > 182 -> AuthRecommendation.ChangePassword //Half a year
+                        daysBetween(metadata.recoveryCodesEditedAt, now) > 365 -> AuthRecommendation.RegenerateRecoveryCodes //Full year
+                        else -> AuthRecommendation.None
+                    }
+                }
+            }
+        }
     }
 
 
@@ -61,19 +91,6 @@ class AuthSettingsViewModel @Inject constructor(
 
     fun disableBiometrics() {
         disableBiometricsUseCase.disable()
-        areBiometricsConfigured = false
-        determineAuthRecommendation()
-    }
-
-
-    private fun determineAuthRecommendation() {
-        val now: LocalDate = LocalDate.now()
-        authRecommendation = when {
-            areBiometricsAvailable && !areBiometricsConfigured -> AuthRecommendation.EnableBiometrics
-            daysBetween(authMetadata.masterPasswordEditedAt, now) > 182 -> AuthRecommendation.ChangePassword //Half a year
-            daysBetween(authMetadata.recoveryCodesEditedAt, now) > 365 -> AuthRecommendation.RegenerateRecoveryCodes //Full year
-            else -> AuthRecommendation.None
-        }
     }
 
 

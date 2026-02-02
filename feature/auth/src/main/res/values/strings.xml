@@ -119,6 +119,8 @@
     <string name="authSettings_biometrics_commonBiometrics_fingerprint">Fingerprint</string>
     <string name="authSettings_biometrics_commonBiometrics_face">Facial recognition</string>
     <string name="authSettings_biometrics_commonBiometrics_heartbeat">Heartbeat recognition</string>
+    <string name="authSettings_biometrics_confirmDisableDialog_title">Confirm disable</string>
+    <string name="authSettings_biometrics_confirmDisableDialog_text">Are you sure you want to disable biometric authentication?</string>
     <string name="authSettings_activeLabel">Active</string>
     <string name="authSettings_inactiveLabel">Inactive</string>
     <string name="authSettings_unavailableLabel">Unavailable</string>

@@ -153,9 +153,17 @@ fun PasswordScreen(
                     label = stringResource(R.string.password_label_currentPassword),
                     isPassword = true,
                     focusRequester = currentPasswordFocusRequester,
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = when(viewModel.state) {
+                            PasswordScreenState.GenerateNewRecoveryCodes, PasswordScreenState.EnableBiometrics -> ImeAction.Done
+                            else -> ImeAction.Next
+                        }
+                    ),
                     keyboardActions = KeyboardActions {
-                        newPasswordFocusRequester.requestFocus()
+                        when(viewModel.state) {
+                            PasswordScreenState.GenerateNewRecoveryCodes, PasswordScreenState.EnableBiometrics -> invokeOnContinue()
+                            else -> newPasswordFocusRequester.requestFocus()
+                        }
                     },
                     errorMessage = when {
                         !viewModel.isCurrentPasswordValid && viewModel.currentPassword.isBlank() -> stringResource(R.string.password_error_inputEmpty)

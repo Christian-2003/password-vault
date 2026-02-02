@@ -5,4 +5,5 @@
 
     <string name="button_dismiss">Dismiss</string>
     <string name="button_confirm">Confirm</string>
+    <string name="button_cancel">Cancel</string>
 </resources>
