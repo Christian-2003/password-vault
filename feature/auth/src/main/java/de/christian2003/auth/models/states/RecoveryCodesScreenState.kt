@@ -11,7 +11,7 @@ package de.christian2003.auth.models.states
  * @property GenerateNewRecoveryCodes   State for the screen displayed when the user generates new
  *                                      recovery codes.
  */
-enum class RecoveryCodesScreenState {
+internal enum class RecoveryCodesScreenState {
 
     FirstTimeSetup,
     RecoverPassword,

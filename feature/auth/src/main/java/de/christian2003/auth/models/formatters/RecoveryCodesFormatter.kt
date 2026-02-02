@@ -4,7 +4,7 @@ package de.christian2003.auth.models.formatters
 /**
  * Formatter for recovery codes.
  */
-class RecoveryCodesFormatter {
+internal class RecoveryCodesFormatter {
 
     /**
      * Formats a Base32 recovery code into the following pattern:

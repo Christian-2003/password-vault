@@ -10,7 +10,7 @@ package de.christian2003.auth.models.states
  * @property GenerateNewRecoveryCodes   Screen is shown to generate new recovery codes.
  * @property EnableBiometrics           Screen is shown to enable biometric auth.
  */
-enum class FinishScreenState {
+internal enum class FinishScreenState {
 
     FirstTimeSetup,
     RecoverPassword,

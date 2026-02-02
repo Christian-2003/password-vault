@@ -42,7 +42,6 @@ import de.christian2003.auth.viewmodels.FinishViewModel
 import de.christian2003.auth.viewmodels.SetupFlowSharedViewModel
 import de.christian2003.ui.theme.isDarkTheme
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 

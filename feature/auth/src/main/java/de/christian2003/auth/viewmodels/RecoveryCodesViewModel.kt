@@ -30,7 +30,7 @@ import javax.inject.Inject
  * @param generateRecoveryCodesUseCase  Use case to generate new recovery codes.
  */
 @HiltViewModel
-class RecoveryCodesViewModel @Inject constructor(
+internal class RecoveryCodesViewModel @Inject constructor(
     application: Application,
     savedStateHandle: SavedStateHandle,
     private val generateRecoveryCodesUseCase: GenerateRecoveryCodesUseCase,
@@ -39,7 +39,7 @@ class RecoveryCodesViewModel @Inject constructor(
     /**
      * State with which the screen is shown.
      */
-    val state: RecoveryCodesScreenState = savedStateHandle.toRoute<de.christian2003.auth.navigation.RecoveryCodes>().state
+    val state: RecoveryCodesScreenState = savedStateHandle.toRoute<de.christian2003.auth.navigation.RecoveryCodesDestination>().state
 
     var recoveryCodesAsCharArray: List<CharArray> = listOf()
         private set

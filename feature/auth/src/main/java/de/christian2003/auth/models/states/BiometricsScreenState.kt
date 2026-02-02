@@ -7,7 +7,7 @@ package de.christian2003.auth.models.states
  * @property FirstTimeSetup     Screen is shown for the first time app setup.
  * @property EnableBiometrics   Screen is shown for the user to enable biometric auth.
  */
-enum class BiometricsScreenState {
+internal enum class BiometricsScreenState {
 
     FirstTimeSetup,
     EnableBiometrics

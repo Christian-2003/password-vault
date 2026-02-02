@@ -51,7 +51,7 @@ import kotlinx.coroutines.withContext
  * @param onContinue        Callback invoked to navigate to the next step of the recovery.
  */
 @Composable
-fun RecoveryScreen(
+internal fun RecoveryScreen(
     viewModel: RecoveryViewModel,
     sharedViewModel: SetupFlowSharedViewModel,
     onNavigateUp: () -> Unit,

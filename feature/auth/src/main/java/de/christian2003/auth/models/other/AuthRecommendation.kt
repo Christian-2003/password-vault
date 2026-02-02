@@ -9,7 +9,7 @@ package de.christian2003.auth.models.other
  * @property RegenerateRecoveryCodes    Recommendation to regenerate recovery codes.
  * @property EnableBiometrics           Recommendation to enable biometrics.
  */
-enum class AuthRecommendation {
+internal enum class AuthRecommendation {
 
     None,
     ChangePassword,

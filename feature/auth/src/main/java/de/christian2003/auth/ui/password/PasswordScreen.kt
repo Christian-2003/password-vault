@@ -51,7 +51,7 @@ import kotlinx.coroutines.withContext
  * @param onContinue            Callback invoked to continue to the next setup step.
  */
 @Composable
-fun PasswordScreen(
+internal fun PasswordScreen(
     viewModel: PasswordViewModel,
     sharedViewModel: SetupFlowSharedViewModel,
     onNavigateUp: () -> Unit,

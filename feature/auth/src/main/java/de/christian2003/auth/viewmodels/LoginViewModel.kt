@@ -21,7 +21,7 @@ import javax.inject.Inject
  * @param unlockWithMasterPasswordUseCase   Use case to unlock the master key with the master password.
  */
 @HiltViewModel
-class LoginViewModel @Inject constructor(
+internal class LoginViewModel @Inject constructor(
     application: Application,
     areBiometricsConfiguredUseCase: AreBiometricsConfiguredUseCase,
     private val unlockWithMasterPasswordUseCase: UnlockWithMasterPasswordUseCase

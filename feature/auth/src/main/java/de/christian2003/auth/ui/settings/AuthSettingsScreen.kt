@@ -178,6 +178,15 @@ internal fun AuthSettingsScreen(
 }
 
 
+/**
+ * Displays the card showing recommended actions to take for the user.
+ *
+ * @param recommendation                Recommendation.
+ * @param onEditMasterPassword          Callback invoked to edit the master password.
+ * @param onGenerateNewRecoveryCodes    Callback invoked to generate new codes.
+ * @param onToggleBiometrics            Callback invoked to toggle biometrics.
+ * @param modifier                      Modifier.
+ */
 @Composable
 private fun RecommendedActionCard(
     recommendation: AuthRecommendation,
@@ -261,6 +270,16 @@ private fun RecommendedActionCard(
 }
 
 
+/**
+ * Section displaying info about the master password..
+ *
+ * @param editedAt                      Time at which biometrics have been edited.
+ * @param onEditMasterPassword          Callback invoked to edit the master password.
+ * @param onGeneratePositiveColor       Callback invoked to generate a positive color.
+ * @param onGenerateNeutralColor        Callback invoked to generate a neutral color.
+ * @param onFormatTime                  Callback invoked to format a time.
+ * @param modifier                      Modifier.
+ */
 @Composable
 private fun MasterPasswordSection(
     editedAt: LocalDateTime?,
@@ -324,6 +343,16 @@ private fun MasterPasswordSection(
 }
 
 
+/**
+ * Section displaying info about recovery codes.
+ *
+ * @param editedAt                      Time at which biometrics have been edited.
+ * @param onGenerateNewRecoveryCodes    Callback invoked to generate new codes.
+ * @param onGeneratePositiveColor       Callback invoked to generate a positive color.
+ * @param onGenerateNeutralColor        Callback invoked to generate a neutral color.
+ * @param onFormatTime                  Callback invoked to format a time.
+ * @param modifier                      Modifier.
+ */
 @Composable
 private fun RecoveryCodesSection(
     editedAt: LocalDateTime?,
@@ -395,6 +424,18 @@ private fun RecoveryCodesSection(
 }
 
 
+/**
+ * Section displaying info about biometric authentication.
+ *
+ * @param areBiometricsAvailable    Whether biometrics are available.
+ * @param areBiometricsConfigured   Whether biometrics are configured.
+ * @param editedAt                  Time at which biometrics have been edited.
+ * @param onToggleBiometrics        Callback invoked to toggle biometrics.
+ * @param onGeneratePositiveColor   Callback invoked to generate a positive color.
+ * @param onGenerateNeutralColor    Callback invoked to generate a neutral color.
+ * @param onFormatTime              Callback invoked to format a time.
+ * @param modifier                  Modifier.
+ */
 @Composable
 private fun BiometricsSection(
     areBiometricsAvailable: Boolean,
@@ -475,6 +516,13 @@ private fun BiometricsSection(
 }
 
 
+/**
+ * Row displaying commonly used biometrics.
+ *
+ * @param painter   Icon painter.
+ * @param label     Label.
+ * @param modifier  Modifier.
+ */
 @Composable
 private fun CommonlyUsedBiometricsRow(
     painter: Painter,
@@ -530,6 +578,18 @@ private fun SectionInnerContainer(
 }
 
 
+/**
+ * Section header for 'Master password', 'Recovery codes' and 'Biometrics'.
+ *
+ * @param title                     Title for the section.
+ * @param painter                   Icon for the section.
+ * @param isAvailable               Whether the auth method is available.
+ * @param isActive                  Whether the auth method is active.
+ * @param activeLabelTooltip        Tooltip displayed for the active / inactive / unavailable label
+ * @param onGeneratePositiveColor   Callback invoked to generate a positive color.
+ * @param onGenerateNeutralColor    Callback invoked to generate a neutral color.
+ * @param modifier                  Modifier.
+ */
 @Composable
 private fun SectionHeader(
     title: String,

@@ -35,8 +35,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
+/**
+ * Screen through which the user can enable biometrics.
+ *
+ * @param viewModel         View model.
+ * @param sharedViewModel   View model shared across flows.
+ * @param onNavigateUp      Callback invoked to navigate up the navigation stack.
+ * @param onContinue        Callback invoked to continue to the next flow step.
+ * @param onBiometricAuth   Callback invoked to authenticate using biometrics.
+ */
 @Composable
-fun BiometricsScreen(
+internal fun BiometricsScreen(
     viewModel: BiometricsViewModel,
     sharedViewModel: SetupFlowSharedViewModel,
     onNavigateUp: () -> Unit,
@@ -106,6 +115,12 @@ fun BiometricsScreen(
 }
 
 
+/**
+ * Top bar for the screen.
+ *
+ * @param state         State of the screen.
+ * @param onNavigateUp  Callback invoked to navigate up the navigation stack.
+ */
 @Composable
 private fun TopBar(
     state: BiometricsScreenState,
@@ -134,6 +149,13 @@ private fun TopBar(
 }
 
 
+/**
+ * Bottom bar for the screen.
+ *
+ * @param state     State of the screen.
+ * @param onEnable  Callback invoked to enable biometrics.
+ * @param onSkip    Callback invoked to skip enabling biometrics (during setup).
+ */
 @Composable
 private fun BottomBar(
     state: BiometricsScreenState,

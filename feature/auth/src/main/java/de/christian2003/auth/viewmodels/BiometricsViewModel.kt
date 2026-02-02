@@ -15,18 +15,33 @@ import de.christian2003.ui.model.HelpCard
 import javax.inject.Inject
 
 
+/**
+ * View model for the screen through which the user can enable biometrics for authentication.
+ *
+ * @param application       Application.
+ * @param savedStateHandle  Saved state handle.
+ */
 @HiltViewModel
-class BiometricsViewModel @Inject constructor(
+internal class BiometricsViewModel @Inject constructor(
     application: Application,
     savedStateHandle: SavedStateHandle
 ): AndroidViewModel(application) {
 
+    /**
+     * State for the screen.
+     */
     val state: BiometricsScreenState = savedStateHandle.toRoute<BiometricsDestination>().state
 
+    /**
+     * Whether the help card is visible.
+     */
     var isHelpCardVisible: Boolean by mutableStateOf(HelpCard.HelpBiometrics.getVisible(application))
         private set
 
 
+    /**
+     * Dismisses the help card.
+     */
     fun dismissHelpCard() {
         isHelpCardVisible = false
         HelpCard.HelpBiometrics.setVisible(application, false)

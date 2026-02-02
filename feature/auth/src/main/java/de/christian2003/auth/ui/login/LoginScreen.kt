@@ -42,8 +42,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
+/**
+ * Screen through which the user can login to the app.
+ *
+ * @param viewModel             View model.
+ * @param onContinue            Callback invoked to continue to the app after login.
+ * @param onNavigateToRecovery  Callback invoked to navigate to the recovery.
+ * @param onBiometricUnlock     Callback invoked to unlock using biometrics.
+ */
 @Composable
-fun LoginScreen(
+internal fun LoginScreen(
     viewModel: LoginViewModel,
     onContinue: () -> Unit,
     onNavigateToRecovery: () -> Unit,

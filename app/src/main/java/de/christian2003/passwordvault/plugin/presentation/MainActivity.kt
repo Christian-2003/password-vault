@@ -27,13 +27,13 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import de.christian2003.auth.navigation.AuthSettingsFlow
-import de.christian2003.auth.navigation.Login
+import de.christian2003.auth.navigation.LoginDestination
 import de.christian2003.auth.navigation.RecoveryFlow
 import de.christian2003.auth.navigation.SetupFlow
-import de.christian2003.auth.navigation.authSettingsFlowDestination
+import de.christian2003.auth.navigation.authSettingsFlow
 import de.christian2003.auth.navigation.loginDestination
-import de.christian2003.auth.navigation.recoveryFlowDestination
-import de.christian2003.auth.navigation.setupFlowDestination
+import de.christian2003.auth.navigation.recoveryFlow
+import de.christian2003.auth.navigation.setupFlow
 import de.christian2003.passwordvault.application.usecases.auth.ToggleBiometricsUseCase
 import de.christian2003.passwordvault.plugin.presentation.ui.theme.PasswordVaultTheme
 import de.christian2003.passwordvault.plugin.presentation.ui.theme.ThemeContrast
@@ -160,7 +160,7 @@ fun PasswordVault(
         NavHost(
             navController = navController,
             startDestination = if (isAuthSetupFinished) {
-                Login
+                LoginDestination
             } else {
                 SetupFlow
             },
@@ -168,7 +168,7 @@ fun PasswordVault(
         ) {
 
             //Flow for the first-time master password setup:
-            setupFlowDestination(
+            setupFlow(
                 navController = navController,
                 onNotifyAuthSetupFinished = {
                     isAuthSetupFinished = true
@@ -177,12 +177,12 @@ fun PasswordVault(
             )
 
             //Flow for the recovery of the master password:
-            recoveryFlowDestination(
+            recoveryFlow(
                 navController = navController
             )
 
             //Flow for the authentication settings:
-            authSettingsFlowDestination(
+            authSettingsFlow(
                 navController = navController,
                 onBiometricAuth = onBiometricAuth
             )
@@ -191,7 +191,7 @@ fun PasswordVault(
             loginDestination(
                 onContinue = {
                     navController.navigate("main") {
-                        popUpTo<Login> {
+                        popUpTo<LoginDestination> {
                             inclusive = true
                         }
                     }

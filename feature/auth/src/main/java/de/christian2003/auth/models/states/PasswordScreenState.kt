@@ -15,7 +15,7 @@ package de.christian2003.auth.models.states
  * @property EnableBiometrics           Screen is displayed to enter the password for enabling the
  *                                      biometrics.
  */
-enum class PasswordScreenState {
+internal enum class PasswordScreenState {
 
     FirstTimeSetup,
     ChangePassword,

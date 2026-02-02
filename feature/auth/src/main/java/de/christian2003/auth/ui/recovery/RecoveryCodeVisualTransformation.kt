@@ -6,6 +6,9 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 
 
+/**
+ * Visual transformation transforms a recovery code from "ABCD1234ABCD1234" to "ABCD-1234-ABCD-1234".
+ */
 class RecoveryCodeVisualTransformation: VisualTransformation {
 
     /**
