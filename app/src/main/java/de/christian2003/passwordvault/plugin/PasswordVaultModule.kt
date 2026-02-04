@@ -15,7 +15,7 @@ import de.christian2003.passwordvault.application.repository.AuthRepository
 import de.christian2003.passwordvault.application.repository.PackagesRepository
 import de.christian2003.passwordvault.application.repository.TagRepository
 import de.christian2003.passwordvault.application.security.BiometricAuthService
-import de.christian2003.security.domain.services.HmacCipherService
+import de.christian2003.core.security.domain.services.HmacCipherService
 import de.christian2003.passwordvault.application.security.ClipboardService
 import de.christian2003.passwordvault.domain.model.target.PackageFingerprintService
 import de.christian2003.passwordvault.plugin.infrastructure.db.PasswordVaultDatabase

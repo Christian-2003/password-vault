@@ -19,7 +19,7 @@ import de.christian2003.passwordvault.plugin.infrastructure.db.mapper.DetailDbMa
 import de.christian2003.passwordvault.plugin.infrastructure.db.mapper.AccountDbMapper
 import de.christian2003.passwordvault.plugin.infrastructure.db.mapper.TagDbMapper
 import de.christian2003.passwordvault.plugin.infrastructure.db.mapper.TargetDbMapper
-import de.christian2003.security.domain.services.HmacCipherService
+import de.christian2003.core.security.domain.services.HmacCipherService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map

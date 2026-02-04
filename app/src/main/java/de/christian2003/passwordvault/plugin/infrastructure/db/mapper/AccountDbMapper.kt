@@ -6,7 +6,7 @@ import de.christian2003.passwordvault.domain.model.account.AccountMetadata
 import de.christian2003.passwordvault.domain.model.target.Target
 import de.christian2003.passwordvault.plugin.infrastructure.db.dto.AccountPayload
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.AccountEntity
-import de.christian2003.security.domain.services.HmacCipherService
+import de.christian2003.core.security.domain.services.HmacCipherService
 import kotlinx.serialization.cbor.Cbor
 
 

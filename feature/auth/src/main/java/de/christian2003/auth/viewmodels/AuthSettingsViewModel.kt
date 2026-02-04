@@ -11,11 +11,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.auth.models.dialogs.AuthSettingsScreenDialog
 import de.christian2003.auth.models.other.AuthRecommendation
 import de.christian2003.common.formatter.DateTimeFormatterService
-import de.christian2003.security.application.usecases.AreBiometricsAvailableUseCase
-import de.christian2003.security.application.usecases.AreBiometricsConfiguredUseCase
-import de.christian2003.security.application.usecases.DisableBiometricsUseCase
-import de.christian2003.security.application.usecases.GetAuthMetadataUseCase
-import de.christian2003.security.domain.entities.AuthMetadata
+import de.christian2003.core.security.application.usecases.AreBiometricsAvailableUseCase
+import de.christian2003.core.security.application.usecases.AreBiometricsConfiguredUseCase
+import de.christian2003.core.security.application.usecases.DisableBiometricsUseCase
+import de.christian2003.core.security.application.usecases.GetAuthMetadataUseCase
+import de.christian2003.core.security.domain.entities.AuthMetadata
 import de.christian2003.ui.model.ColorGenerator
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted

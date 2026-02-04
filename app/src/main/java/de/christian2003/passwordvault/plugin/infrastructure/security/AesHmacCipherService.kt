@@ -3,7 +3,7 @@ package de.christian2003.passwordvault.plugin.infrastructure.security
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import de.christian2003.passwordvault.application.security.MasterKeyService
-import de.christian2003.security.domain.services.HmacCipherService
+import de.christian2003.core.security.domain.services.HmacCipherService
 import java.security.KeyStore
 import javax.crypto.KeyGenerator
 import javax.crypto.Mac

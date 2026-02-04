@@ -39,7 +39,7 @@ import de.christian2003.auth.viewmodels.AuthSettingsViewModel
 import de.christian2003.auth.R
 import de.christian2003.auth.models.dialogs.AuthSettingsScreenDialog
 import de.christian2003.auth.models.other.AuthRecommendation
-import de.christian2003.security.domain.entities.AuthMetadata
+import de.christian2003.core.security.domain.entities.AuthMetadata
 import de.christian2003.ui.composables.NavigationBarProtection
 import de.christian2003.ui.composables.Shape
 import de.christian2003.ui.composables.Tooltip

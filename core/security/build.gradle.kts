@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "de.christian2003.security"
+    namespace = "de.christian2003.core.security"
     compileSdk = 35
 
     defaultConfig {

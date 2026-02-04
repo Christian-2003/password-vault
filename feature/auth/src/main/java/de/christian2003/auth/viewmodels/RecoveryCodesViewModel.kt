@@ -14,7 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.auth.models.formatters.RecoveryCodesFormatter
 import de.christian2003.auth.models.dialogs.RecoveryCodesScreenDialog
 import de.christian2003.auth.models.states.RecoveryCodesScreenState
-import de.christian2003.security.application.usecases.GenerateRecoveryCodesUseCase
+import de.christian2003.core.security.application.usecases.GenerateRecoveryCodesUseCase
 import de.christian2003.ui.model.HelpCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope

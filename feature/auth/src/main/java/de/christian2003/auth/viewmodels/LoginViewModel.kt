@@ -8,8 +8,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import de.christian2003.security.application.usecases.AreBiometricsConfiguredUseCase
-import de.christian2003.security.application.usecases.UnlockWithMasterPasswordUseCase
+import de.christian2003.core.security.application.usecases.AreBiometricsConfiguredUseCase
+import de.christian2003.core.security.application.usecases.UnlockWithMasterPasswordUseCase
 import javax.inject.Inject
 
 

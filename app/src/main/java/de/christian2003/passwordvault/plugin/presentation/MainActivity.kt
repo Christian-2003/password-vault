@@ -47,9 +47,9 @@ import de.christian2003.passwordvault.plugin.presentation.view.main.MainScreen
 import de.christian2003.passwordvault.plugin.presentation.view.main.MainViewModel
 import de.christian2003.passwordvault.plugin.presentation.view.settings.SettingsScreen
 import de.christian2003.passwordvault.plugin.presentation.view.settings.SettingsViewModel
-import de.christian2003.security.application.usecases.BiometricAuthUseCase
-import de.christian2003.security.application.usecases.CanMasterKeyBeUnlockedUseCase
-import de.christian2003.security.application.usecases.UnlockWithBiometricsUseCase
+import de.christian2003.core.security.application.usecases.BiometricAuthUseCase
+import de.christian2003.core.security.application.usecases.CanMasterKeyBeUnlockedUseCase
+import de.christian2003.core.security.application.usecases.UnlockWithBiometricsUseCase
 import javax.inject.Inject
 
 

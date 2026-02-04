@@ -4,7 +4,7 @@ import de.christian2003.passwordvault.domain.model.detail.Detail
 import de.christian2003.passwordvault.domain.model.detail.DetailMetadata
 import de.christian2003.passwordvault.plugin.infrastructure.db.dto.DetailPayload
 import de.christian2003.passwordvault.plugin.infrastructure.db.entities.DetailEntity
-import de.christian2003.security.domain.services.HmacCipherService
+import de.christian2003.core.security.domain.services.HmacCipherService
 import kotlinx.serialization.cbor.Cbor
 import kotlin.uuid.Uuid
 

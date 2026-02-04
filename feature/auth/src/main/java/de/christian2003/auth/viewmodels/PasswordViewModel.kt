@@ -13,7 +13,7 @@ import androidx.navigation.toRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.auth.models.states.PasswordScreenState
 import de.christian2003.auth.navigation.PasswordDestination
-import de.christian2003.security.application.usecases.VerifyMasterPasswordUseCase
+import de.christian2003.core.security.application.usecases.VerifyMasterPasswordUseCase
 import de.christian2003.ui.model.HelpCard
 import javax.inject.Inject
 
