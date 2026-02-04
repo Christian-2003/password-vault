@@ -1,10 +1,9 @@
-package de.christian2003.core.common.formatter
+package de.christian2003.core.common.application.services
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import javax.inject.Inject
-
 
 /**
  * Service for formatting dates and times.

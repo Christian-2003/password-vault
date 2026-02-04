@@ -110,12 +110,6 @@ class AndroidSystemModule {
     ): PackageManager = context.packageManager
 
     @Provides
-    @Singleton
-    fun provideClipboardManager(
-        @ApplicationContext context: Context
-    ): ClipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-
-    @Provides
     fun provideCipherService(): HmacCipherService = AesHmacCipherService()
 
     @Provides

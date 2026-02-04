@@ -10,6 +10,7 @@ import java.security.MessageDigest
 import java.security.cert.Certificate
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
+import javax.inject.Inject
 
 
 /**
@@ -17,7 +18,7 @@ import java.security.cert.X509Certificate
  *
  * @param packageManager    Package manager.
  */
-internal class AndroidPackageFingerprintService(
+internal class AndroidPackageFingerprintService @Inject constructor(
     private val packageManager: PackageManager
 ): PackageFingerprintService {
 
