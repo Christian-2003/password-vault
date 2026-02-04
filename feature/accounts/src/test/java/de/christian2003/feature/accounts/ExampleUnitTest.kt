@@ -1,4 +1,4 @@
-package de.christian2003.accounts
+package de.christian2003.feature.accounts
 
 import org.junit.Test
 

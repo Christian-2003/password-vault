@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "de.christian2003.accounts"
+    namespace = "de.christian2003.feature.accounts"
     compileSdk = 35
 
     defaultConfig {
