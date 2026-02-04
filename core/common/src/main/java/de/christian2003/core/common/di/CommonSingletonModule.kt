@@ -1,4 +1,4 @@
-package de.christian2003.common.di
+package de.christian2003.core.common.di
 
 import dagger.Module
 import dagger.hilt.InstallIn

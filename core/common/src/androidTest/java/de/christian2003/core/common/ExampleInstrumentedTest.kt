@@ -1,4 +1,4 @@
-package de.christian2003.common
+package de.christian2003.core.common
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("de.christian2003.common.test", appContext.packageName)
+        assertEquals("de.christian2003.core.common.test", appContext.packageName)
     }
 }

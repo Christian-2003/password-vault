@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "de.christian2003.common"
+    namespace = "de.christian2003.core.common"
     compileSdk = 35
 
     defaultConfig {

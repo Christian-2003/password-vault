@@ -1,4 +1,4 @@
-package de.christian2003.common
+package de.christian2003.core.common
 
 import org.junit.Test
 

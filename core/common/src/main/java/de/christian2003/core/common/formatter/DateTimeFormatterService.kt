@@ -1,4 +1,4 @@
-package de.christian2003.common.formatter
+package de.christian2003.core.common.formatter
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
