@@ -1,4 +1,4 @@
-package de.christian2003.ui
+package de.christian2003.core.ui
 
 import org.junit.Test
 

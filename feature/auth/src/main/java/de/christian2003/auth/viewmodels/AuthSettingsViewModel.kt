@@ -16,7 +16,7 @@ import de.christian2003.core.security.application.usecases.AreBiometricsConfigur
 import de.christian2003.core.security.application.usecases.DisableBiometricsUseCase
 import de.christian2003.core.security.application.usecases.GetAuthMetadataUseCase
 import de.christian2003.core.security.domain.entities.AuthMetadata
-import de.christian2003.ui.model.ColorGenerator
+import de.christian2003.core.ui.model.ColorGenerator
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine

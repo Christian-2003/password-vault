@@ -33,9 +33,9 @@ import de.christian2003.auth.models.states.PasswordScreenState
 import de.christian2003.auth.viewmodels.PasswordViewModel
 import de.christian2003.auth.R
 import de.christian2003.auth.viewmodels.SetupFlowSharedViewModel
-import de.christian2003.ui.composables.HelpCard
-import de.christian2003.ui.composables.LoadingIndicatorButton
-import de.christian2003.ui.composables.TextInput
+import de.christian2003.core.ui.composables.HelpCard
+import de.christian2003.core.ui.composables.LoadingIndicatorButton
+import de.christian2003.core.ui.composables.TextInput
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -133,9 +133,9 @@ internal fun PasswordScreen(
                         viewModel.dismissHelpCard()
                     },
                     modifier = Modifier.padding(
-                        start = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal),
-                        end = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal),
-                        bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical)
+                        start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                        end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                        bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
                     )
                 )
             }
@@ -171,9 +171,9 @@ internal fun PasswordScreen(
                         else -> null
                     },
                     modifier = Modifier.padding(
-                        start = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal),
-                        end = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal),
-                        bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical) * 3
+                        start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                        end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                        bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical) * 3
                     )
                 )
             }
@@ -202,9 +202,9 @@ internal fun PasswordScreen(
                         null
                     },
                     modifier = Modifier.padding(
-                        start = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal),
-                        end = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal),
-                        bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical)
+                        start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                        end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                        bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
                     )
                 )
 
@@ -233,9 +233,9 @@ internal fun PasswordScreen(
                         else -> null
                     },
                     modifier = Modifier.padding(
-                        start = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal),
-                        end = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal),
-                        bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical)
+                        start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                        end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                        bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
                     )
                 )
             }
@@ -273,7 +273,7 @@ private fun TopBar(
                     onClick = onNavigateUp
                 ) {
                     Icon(
-                        painter = painterResource(de.christian2003.ui.R.drawable.ic_back),
+                        painter = painterResource(de.christian2003.core.ui.R.drawable.ic_back),
                         contentDescription = ""
                     )
                 }
@@ -312,7 +312,7 @@ private fun BottomBar(
                 },
                 modifier = Modifier.padding(
                     //Horizontal padding of bottom app bar: 4 dp
-                    horizontal = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal) - 4.dp
+                    horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal) - 4.dp
                 )
             )
         }

@@ -1,4 +1,4 @@
-package de.christian2003.ui.composables
+package de.christian2003.core.ui.composables
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,7 +33,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
-import de.christian2003.ui.R
+import de.christian2003.core.ui.R
 import kotlinx.coroutines.launch
 import androidx.compose.ui.unit.dp
 

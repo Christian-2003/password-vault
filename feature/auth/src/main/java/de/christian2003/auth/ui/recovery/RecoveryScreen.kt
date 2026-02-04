@@ -32,10 +32,10 @@ import androidx.compose.ui.unit.dp
 import de.christian2003.auth.viewmodels.RecoveryViewModel
 import de.christian2003.auth.R
 import de.christian2003.auth.viewmodels.SetupFlowSharedViewModel
-import de.christian2003.ui.composables.HelpCard
-import de.christian2003.ui.composables.LoadingIndicatorButton
-import de.christian2003.ui.composables.TextInput
-import de.christian2003.ui.theme.RobotoMono
+import de.christian2003.core.ui.composables.HelpCard
+import de.christian2003.core.ui.composables.LoadingIndicatorButton
+import de.christian2003.core.ui.composables.TextInput
+import de.christian2003.core.ui.theme.RobotoMono
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -100,7 +100,7 @@ internal fun RecoveryScreen(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
                 .padding(
-                    horizontal = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal)
+                    horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal)
                 )
         ) {
             AnimatedVisibility(viewModel.isHelpCardVisible) {
@@ -109,7 +109,7 @@ internal fun RecoveryScreen(
                     onDismiss = {
                         viewModel.dismissHelpCard()
                     },
-                    modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
+                    modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
                 )
             }
 
@@ -159,7 +159,7 @@ private fun TopBar(
                 onClick = onNavigateUp
             ) {
                 Icon(
-                    painter = painterResource(de.christian2003.ui.R.drawable.ic_back),
+                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_back),
                     contentDescription = ""
                 )
             }
@@ -197,7 +197,7 @@ private fun BottomBar(
                 },
                 modifier = Modifier.padding(
                     //Horizontal padding of bottom app bar: 4 dp
-                    horizontal = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal) - 4.dp
+                    horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal) - 4.dp
                 )
             )
         }

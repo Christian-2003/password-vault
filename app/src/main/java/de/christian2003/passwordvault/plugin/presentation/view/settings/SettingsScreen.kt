@@ -116,7 +116,7 @@ fun SettingsScreen(
                 SettingsItemButton(
                     title = stringResource(R.string.settings_security_authTitle),
                     info = stringResource(R.string.settings_security_authInfo),
-                    prefixIcon = painterResource(de.christian2003.ui.R.drawable.ic_auth),
+                    prefixIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_auth),
                     endIcon = painterResource(R.drawable.ic_next),
                     onClick = onNavigateToAuthSettings
                 )
@@ -322,7 +322,7 @@ private fun GeneralSection() {
             )
     ) {
         Image(
-            painter = rememberAsyncImagePainter(de.christian2003.ui.R.mipmap.launcher),
+            painter = rememberAsyncImagePainter(de.christian2003.core.ui.R.mipmap.launcher),
             contentDescription = "",
             modifier = Modifier.size(dimensionResource(R.dimen.image_l))
         )

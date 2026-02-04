@@ -1,4 +1,4 @@
-package de.christian2003.ui.composables
+package de.christian2003.core.ui.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,7 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import de.christian2003.ui.R
+import de.christian2003.core.ui.R
 
 
 /**

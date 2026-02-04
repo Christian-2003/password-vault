@@ -13,7 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.auth.models.formatters.RecoveryCodesFormatter
 import de.christian2003.auth.ui.recovery.RecoveryCodeVisualTransformation
 import de.christian2003.core.security.application.usecases.VerifyRecoveryCodeUseCase
-import de.christian2003.ui.model.HelpCard
+import de.christian2003.core.ui.model.HelpCard
 import javax.inject.Inject
 
 

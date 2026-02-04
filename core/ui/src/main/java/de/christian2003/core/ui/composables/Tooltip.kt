@@ -1,4 +1,4 @@
-package de.christian2003.ui.composables
+package de.christian2003.core.ui.composables
 
 import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.Text

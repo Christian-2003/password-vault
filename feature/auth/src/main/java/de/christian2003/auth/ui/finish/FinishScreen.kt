@@ -40,7 +40,7 @@ import de.christian2003.auth.models.states.FinishScreenState
 import de.christian2003.auth.R
 import de.christian2003.auth.viewmodels.FinishViewModel
 import de.christian2003.auth.viewmodels.SetupFlowSharedViewModel
-import de.christian2003.ui.theme.isDarkTheme
+import de.christian2003.core.ui.theme.isDarkTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -101,7 +101,7 @@ internal fun FinishScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal))
+                .padding(horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal))
         ) {
             if (sharedViewModel.isSavingSession) {
                 SavingContent(
@@ -138,7 +138,7 @@ private fun SavingContent(
         modifier = modifier.fillMaxWidth()
     ) {
         LoadingIndicator(
-            modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
+            modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
         )
         Text(
             text = when (state) {
@@ -190,8 +190,8 @@ private fun FinishedSavingContent(
             contentDescription = "",
             tint = onGeneratePositiveColor(MaterialTheme.colorScheme.error, MaterialTheme.isDarkTheme()),
             modifier = Modifier
-                .padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
-                .size(dimensionResource(de.christian2003.ui.R.dimen.image_xxl))
+                .padding(bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
+                .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xxl))
         )
         Text(
             text = when (state) {
@@ -205,7 +205,7 @@ private fun FinishedSavingContent(
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
+                .padding(bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
         )
         Button(
             onClick = onContinue
@@ -244,7 +244,7 @@ private fun TopBar(
                 onClick = onNavigateUp
             ) {
                 Icon(
-                    painter = painterResource(de.christian2003.ui.R.drawable.ic_back),
+                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_back),
                     contentDescription = ""
                 )
             }

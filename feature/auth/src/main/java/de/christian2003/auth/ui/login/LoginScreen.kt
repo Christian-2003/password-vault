@@ -35,8 +35,8 @@ import coil.compose.rememberAsyncImagePainter
 import de.christian2003.auth.viewmodels.LoginViewModel
 import kotlinx.coroutines.CoroutineScope
 import de.christian2003.auth.R
-import de.christian2003.ui.composables.LoadingIndicatorButton
-import de.christian2003.ui.composables.TextInput
+import de.christian2003.core.ui.composables.LoadingIndicatorButton
+import de.christian2003.core.ui.composables.TextInput
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -104,7 +104,7 @@ internal fun LoginScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(
-                    horizontal = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal)
+                    horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal)
                 )
         ) {
             //Content:
@@ -116,15 +116,15 @@ internal fun LoginScreen(
                     .verticalScroll(rememberScrollState())
             ) {
                 Image(
-                    painter = rememberAsyncImagePainter(de.christian2003.ui.R.mipmap.launcher),
+                    painter = rememberAsyncImagePainter(de.christian2003.core.ui.R.mipmap.launcher),
                     contentDescription = "",
-                    modifier = Modifier.size(dimensionResource(de.christian2003.ui.R.dimen.image_l))
+                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_l))
                 )
                 Text(
                     text = stringResource(R.string.login_hint),
                     color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(vertical = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
+                    modifier = Modifier.padding(vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
                 )
                 TextInput(
                     value = viewModel.password,
@@ -162,7 +162,7 @@ internal fun LoginScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
-                                painter = painterResource(de.christian2003.ui.R.drawable.ic_biometrics),
+                                painter = painterResource(de.christian2003.core.ui.R.drawable.ic_biometrics),
                                 contentDescription = "",
                                 modifier = Modifier.padding(end = 8.dp)
                             )
@@ -176,7 +176,7 @@ internal fun LoginScreen(
                     onClick = invokeOnFinish,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
+                        .padding(vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
                 )
             }
         }

@@ -1,4 +1,4 @@
-package de.christian2003.ui.composables
+package de.christian2003.core.ui.composables
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box

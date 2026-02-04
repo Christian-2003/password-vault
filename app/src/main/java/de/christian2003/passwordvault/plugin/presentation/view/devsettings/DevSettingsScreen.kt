@@ -60,7 +60,7 @@ fun DevSettingsScreen(
                 SettingsItemButton(
                     title = stringResource(R.string.settings_dev_deleteMasterPasswordTitle),
                     info = stringResource(R.string.settings_dev_deleteMasterPasswordInfo),
-                    prefixIcon = painterResource(de.christian2003.ui.R.drawable.ic_password),
+                    prefixIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_password),
                     onClick = {
                         viewModel.deleteMasterPassword()
                     }
@@ -68,7 +68,7 @@ fun DevSettingsScreen(
                 SettingsItemSwitch(
                     title = stringResource(R.string.settings_dev_skipBiometricsTitle),
                     info = stringResource(R.string.settings_dev_skipBiometricsInfo),
-                    prefixIcon = painterResource(de.christian2003.ui.R.drawable.ic_biometrics),
+                    prefixIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_biometrics),
                     checked = viewModel.isSkipBiometrics,
                     onCheckedChange = {
                         viewModel.setIsSkipBiometrics(it)

@@ -30,7 +30,7 @@ import de.christian2003.auth.viewmodels.BiometricsViewModel
 import de.christian2003.auth.R
 import de.christian2003.auth.models.states.BiometricsScreenState
 import de.christian2003.auth.viewmodels.SetupFlowSharedViewModel
-import de.christian2003.ui.composables.HelpCard
+import de.christian2003.core.ui.composables.HelpCard
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -84,7 +84,7 @@ internal fun BiometricsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal))
+                .padding(horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal))
         ) {
             AnimatedVisibility(viewModel.isHelpCardVisible) {
                 HelpCard(
@@ -92,7 +92,7 @@ internal fun BiometricsScreen(
                     onDismiss = {
                         viewModel.dismissHelpCard()
                     },
-                    modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
+                    modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
                 )
             }
 
@@ -107,7 +107,7 @@ internal fun BiometricsScreen(
                 Image(
                     painter = painterResource(R.drawable.onboarding_biometrics),
                     contentDescription = "",
-                    modifier = Modifier.size(dimensionResource(de.christian2003.ui.R.dimen.image_xxl))
+                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xxl))
                 )
             }
         }
@@ -140,7 +140,7 @@ private fun TopBar(
                 onClick = onNavigateUp
             ) {
                 Icon(
-                    painter = painterResource(de.christian2003.ui.R.drawable.ic_back),
+                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_back),
                     contentDescription = ""
                 )
             }
@@ -172,7 +172,7 @@ private fun BottomBar(
                     .align(Alignment.End)
                     .padding(
                         //Horizontal padding of bottom app bar: 4 dp
-                        horizontal = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal) - 4.dp
+                        horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal) - 4.dp
                     )
             ) {
                 if (state == BiometricsScreenState.FirstTimeSetup) {
@@ -184,7 +184,7 @@ private fun BottomBar(
                 }
                 Button(
                     onClick = onEnable,
-                    modifier = Modifier.padding(start = dimensionResource(de.christian2003.ui.R.dimen.padding_horizontal))
+                    modifier = Modifier.padding(start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
                 ) {
                     Text(stringResource(R.string.biometrics_buttonEnable))
                 }

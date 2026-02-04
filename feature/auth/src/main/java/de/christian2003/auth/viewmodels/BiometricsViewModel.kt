@@ -11,7 +11,7 @@ import androidx.navigation.toRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.auth.models.states.BiometricsScreenState
 import de.christian2003.auth.navigation.BiometricsDestination
-import de.christian2003.ui.model.HelpCard
+import de.christian2003.core.ui.model.HelpCard
 import javax.inject.Inject
 
 

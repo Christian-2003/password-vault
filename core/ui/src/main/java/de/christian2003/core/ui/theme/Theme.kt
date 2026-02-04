@@ -1,4 +1,4 @@
-package de.christian2003.ui.theme
+package de.christian2003.core.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

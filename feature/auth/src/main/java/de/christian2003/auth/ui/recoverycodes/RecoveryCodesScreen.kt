@@ -45,10 +45,10 @@ import de.christian2003.auth.R
 import de.christian2003.auth.models.dialogs.RecoveryCodesScreenDialog
 import de.christian2003.auth.models.states.RecoveryCodesScreenState
 import de.christian2003.auth.viewmodels.SetupFlowSharedViewModel
-import de.christian2003.ui.composables.dialog.DialogWithHeroSection
-import de.christian2003.ui.composables.HelpCard
-import de.christian2003.ui.composables.dialog.SimpleDialog
-import de.christian2003.ui.theme.RobotoMono
+import de.christian2003.core.ui.composables.dialog.DialogWithHeroSection
+import de.christian2003.core.ui.composables.HelpCard
+import de.christian2003.core.ui.composables.dialog.SimpleDialog
+import de.christian2003.core.ui.theme.RobotoMono
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -130,7 +130,7 @@ internal fun RecoveryCodesScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(
-                    horizontal = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal)
+                    horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal)
                 )
         ) {
             when {
@@ -184,7 +184,7 @@ internal fun RecoveryCodesScreen(
                 Image(
                     painter = painterResource(R.drawable.onboarding_recovery),
                     contentDescription = "",
-                    modifier = Modifier.size(dimensionResource(de.christian2003.ui.R.dimen.image_xxl))
+                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xxl))
                 )
             }
         }
@@ -219,8 +219,8 @@ private fun ErrorContent() {
             .clip(MaterialTheme.shapes.extraLarge)
             .background(MaterialTheme.colorScheme.errorContainer)
             .padding(
-                horizontal = dimensionResource(de.christian2003.ui.R.dimen.padding_horizontal),
-                vertical = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical)
+                horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
+                vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
             )
     ) {
         Row(
@@ -228,10 +228,10 @@ private fun ErrorContent() {
             modifier = Modifier.fillMaxWidth()
         ) {
             Icon(
-                painter = painterResource(de.christian2003.ui.R.drawable.ic_error),
+                painter = painterResource(de.christian2003.core.ui.R.drawable.ic_error),
                 contentDescription = "",
                 tint = MaterialTheme.colorScheme.onErrorContainer,
-                modifier = Modifier.padding(end = dimensionResource(de.christian2003.ui.R.dimen.padding_horizontal))
+                modifier = Modifier.padding(end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
             )
             Text(
                 text = stringResource(R.string.recoveryCodes_error),
@@ -262,7 +262,7 @@ private fun LoadingContent() {
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.labelLarge,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
+                modifier = Modifier.padding(top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
             )
         }
     }
@@ -299,7 +299,7 @@ private fun RecoveryCodesContent(
                     else -> stringResource(R.string.recoveryCodes_help_newCodes)
                 },
                 onDismiss = onDismissHelpCard,
-                modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
+                modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
             )
         }
         Column(
@@ -308,8 +308,8 @@ private fun RecoveryCodesContent(
                 .clip(MaterialTheme.shapes.extraLarge)
                 .background(MaterialTheme.colorScheme.surfaceContainer)
                 .padding(
-                    horizontal = dimensionResource(de.christian2003.ui.R.dimen.padding_horizontal),
-                    vertical = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical)
+                    horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
+                    vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
                 )
         ) {
             Row(
@@ -319,7 +319,7 @@ private fun RecoveryCodesContent(
                     painter = painterResource(R.drawable.ic_recovery),
                     contentDescription = "",
                     tint = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(end = dimensionResource(de.christian2003.ui.R.dimen.padding_horizontal))
+                    modifier = Modifier.padding(end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
                 )
                 Text(
                     text = stringResource(R.string.recoveryCodes_codesHeader),
@@ -343,7 +343,7 @@ private fun RecoveryCodesContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    painter = painterResource(de.christian2003.ui.R.drawable.ic_download),
+                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_download),
                     contentDescription = "",
                     modifier = Modifier.padding(end = 8.dp)
                 )
@@ -369,7 +369,7 @@ private fun RecoveryCodesItem(
             fontFamily = RobotoMono
         ),
         modifier = Modifier
-            .padding(top = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
+            .padding(top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
             .clip(MaterialTheme.shapes.small)
             .background(MaterialTheme.colorScheme.surfaceContainerLow)
             .padding(
@@ -405,7 +405,7 @@ private fun TopBar(
                 onClick = onNavigateUp
             ) {
                 Icon(
-                    painter = painterResource(de.christian2003.ui.R.drawable.ic_back),
+                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_back),
                     contentDescription = ""
                 )
             }
@@ -439,7 +439,7 @@ private fun BottomBar(
                 },
                 modifier = Modifier.padding(
                     //Horizontal padding of bottom app bar: 4 dp
-                    horizontal = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal) - 4.dp
+                    horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal) - 4.dp
                 )
             ) {
                 Text(stringResource(R.string.password_button_continue))

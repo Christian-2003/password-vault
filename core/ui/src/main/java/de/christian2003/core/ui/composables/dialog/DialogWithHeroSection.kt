@@ -1,4 +1,4 @@
-package de.christian2003.ui.composables.dialog
+package de.christian2003.core.ui.composables.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +21,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import de.christian2003.ui.R
+import de.christian2003.core.ui.R
 
 
 /**

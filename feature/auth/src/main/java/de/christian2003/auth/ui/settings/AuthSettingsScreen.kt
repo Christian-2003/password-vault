@@ -40,12 +40,12 @@ import de.christian2003.auth.R
 import de.christian2003.auth.models.dialogs.AuthSettingsScreenDialog
 import de.christian2003.auth.models.other.AuthRecommendation
 import de.christian2003.core.security.domain.entities.AuthMetadata
-import de.christian2003.ui.composables.NavigationBarProtection
-import de.christian2003.ui.composables.Shape
-import de.christian2003.ui.composables.Tooltip
-import de.christian2003.ui.composables.dialog.SimpleDialog
-import de.christian2003.ui.theme.RobotoMono
-import de.christian2003.ui.theme.isDarkTheme
+import de.christian2003.core.ui.composables.NavigationBarProtection
+import de.christian2003.core.ui.composables.Shape
+import de.christian2003.core.ui.composables.Tooltip
+import de.christian2003.core.ui.composables.dialog.SimpleDialog
+import de.christian2003.core.ui.theme.RobotoMono
+import de.christian2003.core.ui.theme.isDarkTheme
 import java.time.LocalDateTime
 
 
@@ -85,7 +85,7 @@ internal fun AuthSettingsScreen(
                     end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
                 )
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal))
+                .padding(horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal))
         ) {
             //Recommended action:
             RecommendedActionCard(
@@ -93,7 +93,7 @@ internal fun AuthSettingsScreen(
                 onEditMasterPassword = onNavigateToPassword,
                 onGenerateNewRecoveryCodes = onNavigateToRecoveryCodes,
                 onToggleBiometrics = onNavigateToBiometrics,
-                modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical) * 2)
+                modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical) * 2)
             )
 
             //Master password:
@@ -109,7 +109,7 @@ internal fun AuthSettingsScreen(
                 onFormatTime = {
                     viewModel.formatTime(it)
                 },
-                modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
+                modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
             )
 
             //Recovery codes:
@@ -125,7 +125,7 @@ internal fun AuthSettingsScreen(
                 onFormatTime = {
                     viewModel.formatTime(it)
                 },
-                modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
+                modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
             )
 
             //Biometrics:
@@ -152,7 +152,7 @@ internal fun AuthSettingsScreen(
                 onFormatTime = {
                     viewModel.formatTime(it)
                 },
-                modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
+                modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
             )
 
             Box(modifier = Modifier.height(innerPadding.calculateBottomPadding()))
@@ -206,8 +206,8 @@ private fun RecommendedActionCard(
             .clip(MaterialTheme.shapes.extraLarge)
             .background(MaterialTheme.colorScheme.surfaceContainerHigh)
             .padding(
-                horizontal = dimensionResource(de.christian2003.ui.R.dimen.padding_horizontal),
-                vertical = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical)
+                horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
+                vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
             )
     ) {
         Row(
@@ -218,14 +218,14 @@ private fun RecommendedActionCard(
                 shape = MaterialShapes.VerySunny,
                 color = MaterialTheme.colorScheme.secondaryContainer,
                 modifier = Modifier
-                    .padding(end = dimensionResource(de.christian2003.ui.R.dimen.padding_horizontal))
-                    .size(dimensionResource(de.christian2003.ui.R.dimen.image_m))
+                    .padding(end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
+                    .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
             ) {
                 Icon(
-                    painter = painterResource(de.christian2003.ui.R.drawable.ic_recommendation),
+                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_recommendation),
                     contentDescription = "",
                     tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                    modifier = Modifier.size(dimensionResource(de.christian2003.ui.R.dimen.image_xs))
+                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xs))
                 )
             }
             Column {
@@ -295,13 +295,13 @@ private fun MasterPasswordSection(
             .clip(MaterialTheme.shapes.large)
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(
-                horizontal = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal),
-                vertical = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical)
+                horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
             )
     ) {
         SectionHeader(
             title = stringResource(R.string.authSettings_masterPassword_title),
-            painter = painterResource(de.christian2003.ui.R.drawable.ic_password),
+            painter = painterResource(de.christian2003.core.ui.R.drawable.ic_password),
             isAvailable = true,
             isActive = true,
             activeLabelTooltip = stringResource(R.string.authSettings_masterPassword_activeLabelTooltip),
@@ -329,7 +329,7 @@ private fun MasterPasswordSection(
                 text = stringResource(R.string.authSettings_masterPassword_editedAtLabel, onFormatTime(editedAt)),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(top = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
+                modifier = Modifier.padding(top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
             )
         }
         }
@@ -368,8 +368,8 @@ private fun RecoveryCodesSection(
             .clip(MaterialTheme.shapes.large)
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(
-                horizontal = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal),
-                vertical = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical)
+                horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
             )
     ) {
         SectionHeader(
@@ -410,7 +410,7 @@ private fun RecoveryCodesSection(
                     text = stringResource(R.string.authSettings_recoveryCodes_editedAtLabel, onFormatTime(editedAt)),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(top = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
+                    modifier = Modifier.padding(top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
                 )
             }
         }
@@ -453,13 +453,13 @@ private fun BiometricsSection(
             .clip(MaterialTheme.shapes.large)
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(
-                horizontal = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal),
-                vertical = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical)
+                horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
             )
     ) {
         SectionHeader(
             title = stringResource(R.string.authSettings_biometrics_title),
-            painter = painterResource(de.christian2003.ui.R.drawable.ic_biometrics),
+            painter = painterResource(de.christian2003.core.ui.R.drawable.ic_biometrics),
             isAvailable = areBiometricsAvailable,
             isActive = areBiometricsConfigured,
             activeLabelTooltip = when {
@@ -478,7 +478,7 @@ private fun BiometricsSection(
                     style = MaterialTheme.typography.bodyLarge
                 )
                 CommonlyUsedBiometricsRow(
-                    painter = painterResource(de.christian2003.ui.R.drawable.ic_biometrics),
+                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_biometrics),
                     label = stringResource(R.string.authSettings_biometrics_commonBiometrics_fingerprint)
                 )
                 CommonlyUsedBiometricsRow(
@@ -494,7 +494,7 @@ private fun BiometricsSection(
                         text = stringResource(R.string.authSettings_biometrics_editedAtLabel, onFormatTime(editedAt)),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(top = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical))
+                        modifier = Modifier.padding(top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
                     )
                 }
             }
@@ -537,7 +537,7 @@ private fun CommonlyUsedBiometricsRow(
             painter = painter,
             contentDescription = "",
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(end = dimensionResource(de.christian2003.ui.R.dimen.padding_horizontal))
+            modifier = Modifier.padding(end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
         )
         Text(
             text = label,
@@ -563,14 +563,14 @@ private fun SectionInnerContainer(
         modifier = modifier
             .fillMaxWidth()
             .padding(
-                start = dimensionResource(de.christian2003.ui.R.dimen.image_xs) + dimensionResource(de.christian2003.ui.R.dimen.padding_horizontal),
-                top = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical)
+                start = dimensionResource(de.christian2003.core.ui.R.dimen.image_xs) + dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
+                top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
             )
             .clip(MaterialTheme.shapes.medium)
             .background(MaterialTheme.colorScheme.surfaceContainerLow)
             .padding(
-                horizontal = dimensionResource(de.christian2003.ui.R.dimen.margin_horizontal),
-                vertical = dimensionResource(de.christian2003.ui.R.dimen.padding_vertical)
+                horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
             )
     ) {
         content()
@@ -610,8 +610,8 @@ private fun SectionHeader(
             contentDescription = "",
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
-                .padding(end = dimensionResource(de.christian2003.ui.R.dimen.padding_horizontal))
-                .size(dimensionResource(de.christian2003.ui.R.dimen.image_xs))
+                .padding(end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
+                .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xs))
         )
         Column(
             modifier = Modifier.fillMaxWidth()
@@ -670,8 +670,8 @@ private fun ActiveIndicator(
                 contentDescription = "",
                 tint = foregroundColor,
                 modifier = Modifier
-                    .padding(end = dimensionResource(de.christian2003.ui.R.dimen.padding_horizontal) / 2)
-                    .size(dimensionResource(de.christian2003.ui.R.dimen.image_xxs))
+                    .padding(end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal) / 2)
+                    .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xxs))
             )
             Text(
                 text = when {
@@ -705,7 +705,7 @@ private fun TopBar(
                 onClick = onNavigateUp
             ) {
                 Icon(
-                    painter = painterResource(de.christian2003.ui.R.drawable.ic_back),
+                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_back),
                     contentDescription = ""
                 )
             }
@@ -730,7 +730,7 @@ private fun ConfirmDisableBiometricsDialog(
         text = stringResource(R.string.authSettings_biometrics_confirmDisableDialog_text),
         onDismiss = onDismiss,
         onConfirm = onConfirm,
-        dismissButtonText = stringResource(de.christian2003.ui.R.string.button_cancel),
-        confirmButtonText = stringResource(de.christian2003.ui.R.string.button_confirm)
+        dismissButtonText = stringResource(de.christian2003.core.ui.R.string.button_cancel),
+        confirmButtonText = stringResource(de.christian2003.core.ui.R.string.button_confirm)
     )
 }

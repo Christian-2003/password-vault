@@ -1,9 +1,9 @@
-package de.christian2003.ui.theme
+package de.christian2003.core.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import de.christian2003.ui.R
+import de.christian2003.core.ui.R
 
 
 val AppTypography = Typography()

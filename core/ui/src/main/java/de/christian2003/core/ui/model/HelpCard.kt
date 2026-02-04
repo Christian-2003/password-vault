@@ -1,4 +1,4 @@
-package de.christian2003.ui.model
+package de.christian2003.core.ui.model
 
 import android.content.Context
 import androidx.core.content.edit
