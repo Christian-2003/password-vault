@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "de.christian2003.auth"
+    namespace = "de.christian2003.feature.auth"
     compileSdk = 35
 
     defaultConfig {
