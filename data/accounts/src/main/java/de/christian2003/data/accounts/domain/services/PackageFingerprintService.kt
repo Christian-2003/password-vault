@@ -4,7 +4,7 @@ package de.christian2003.data.accounts.domain.services
 /**
  * Service through which to get access to a package's fingerprint.
  */
-internal interface PackageFingerprintService {
+interface PackageFingerprintService {
 
     /**
      * Returns the fingerprint of the signing certificate for the package that is passed as argument.

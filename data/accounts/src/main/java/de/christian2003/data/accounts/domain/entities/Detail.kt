@@ -18,7 +18,7 @@ class Detail(
     name: String,
     content: String,
     val id: Uuid = Uuid.random(),
-    type: DetailType = DetailType.TEXT,
+    type: DetailType = DetailType.Text,
     icon: DetailIcon? = null,
     metadata: DetailMetadata = DetailMetadata()
 ) {
