@@ -2,13 +2,22 @@ package de.christian2003.passwordvault.ui.help
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -16,22 +25,29 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import de.christian2003.core.ui.composables.HelpCard
+import de.christian2003.core.ui.composables.ListItemContainer
+import de.christian2003.core.ui.composables.NavigationBarProtection
+import de.christian2003.core.ui.composables.Shape
 import de.christian2003.core.ui.model.HelpCard
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.viewmodels.HelpViewModel
 
 
 /**
- * Screen displays a list of all help messages through which the user can reactivate help messages
- * that they dismissed previously.
+ * Screen displays a list of all help messages that help the user understand functionalities all over
+ * the app. Through this screen, a user can reactivate a help message if they have dismissed it
+ * previously.
  *
- * @param viewModel     View model for the screen.
- * @param onNavigateUp  Callback invoked to navigate up the navigation stack.
+ * @param viewModel     View model.
+ * @param onNavigateUp  Callback invoked to navigate up on the navigation stack.
  */
 @Composable
 fun HelpScreen(
@@ -55,10 +71,18 @@ fun HelpScreen(
                     }
                 }
             )
-        },
+        }
     ) { innerPadding ->
+        val bottomPadding: Dp = innerPadding.calculateBottomPadding()
+
         LazyColumn(
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
+                    top = innerPadding.calculateTopPadding(),
+                    end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
+                )
         ) {
             item {
                 AnimatedVisibility(viewModel.helpCards[HelpCard.Help] == true) {
@@ -75,18 +99,26 @@ fun HelpScreen(
                     )
                 }
             }
-            viewModel.helpCards.forEach { (helpCard, visible) ->
-                item {
-                    HelpListItem(
-                        helpCard = helpCard,
-                        visible = visible,
-                        onClick = { helpCard ->
-                            viewModel.toggleHelpCardVisibility(helpCard)
-                        }
-                    )
-                }
+            val helpCards = viewModel.helpCards.toList()
+            itemsIndexed(helpCards) { index, (helpCard, visible) ->
+                HelpListItem(
+                    helpCard = helpCard,
+                    visible = visible,
+                    isFirst = index == 0,
+                    isLast = index == helpCards.size - 1,
+                    onClick = { helpCard ->
+                        viewModel.toggleHelpCardVisibility(helpCard)
+                    }
+                )
+            }
+            item {
+                Box(
+                    modifier = Modifier.height(bottomPadding)
+                )
             }
         }
+
+        NavigationBarProtection(bottomPadding)
     }
 }
 
@@ -96,47 +128,75 @@ fun HelpScreen(
  *
  * @param helpCard  Help card for which to display an item.
  * @param visible   Whether the help message is visible.
+ * @param isFirst   Whether this is the first list item.
+ * @param isLast    Whether this is the last list item.
  * @param onClick   List item was clicked (i.e. the help message should be toggled to be visible).
  */
 @Composable
 private fun HelpListItem(
     helpCard: HelpCard,
     visible: Boolean,
+    isFirst: Boolean,
+    isLast: Boolean,
     onClick: (HelpCard) -> Unit
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(!visible) {
-                onClick(helpCard)
-            }
-            .padding(
-                horizontal = dimensionResource(R.dimen.margin_horizontal),
-                vertical = dimensionResource(R.dimen.padding_vertical)
-            )
+    ListItemContainer(
+        isFirst = isFirst,
+        isLast = isLast
     ) {
-        Column(
-            modifier = Modifier.weight(1f)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    onClick(helpCard)
+                }
+                .padding(
+                    horizontal = dimensionResource(R.dimen.padding_horizontal),
+                    vertical = dimensionResource(R.dimen.padding_vertical)
+                )
         ) {
-            Text(
-                text = stringArrayResource(R.array.help_shortNames)[helpCard.ordinal],
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyLarge
-            )
-            AnimatedVisibility(!visible) {
-                Text(
-                    text = stringResource(R.string.help_reactivate),
-                    color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.bodyMedium
+            Shape(
+                shape = MaterialShapes.Cookie12Sided,
+                color = MaterialTheme.colorScheme.surface,
+                modifier = Modifier
+                    .padding(end = dimensionResource(R.dimen.padding_horizontal))
+                    .size(dimensionResource(R.dimen.image_m))
+            ) {
+                Icon(
+                    painter = if (visible) {
+                        painterResource(de.christian2003.core.ui.R.drawable.ic_visibility_on)
+                    } else {
+                        painterResource(de.christian2003.core.ui.R.drawable.ic_visibility_off)
+                    },
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    contentDescription = "",
+                    modifier = Modifier.size(dimensionResource(R.dimen.image_xs))
                 )
             }
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = stringArrayResource(R.array.help_shortNames)[helpCard.ordinal],
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Text(
+                    text = if (visible) { stringResource(R.string.help_visibleLabel) } else { stringResource(R.string.help_dismissedLabel) },
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+            Checkbox(
+                checked = visible,
+                onCheckedChange = {
+                    onClick(helpCard)
+                },
+                modifier = Modifier
+                    .padding(start = dimensionResource(R.dimen.padding_horizontal))
+                    .size(24.dp)
+            )
         }
-        Text(
-            text = if (visible) { stringResource(R.string.help_visibleLabel) } else { stringResource(R.string.help_dismissedLabel) },
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            style = MaterialTheme.typography.bodySmall,
-            modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
-        )
     }
 }

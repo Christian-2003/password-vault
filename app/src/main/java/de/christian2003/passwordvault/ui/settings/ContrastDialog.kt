@@ -186,7 +186,7 @@ fun ContrastDialog(
                             onDismiss()
                         }
                     ) {
-                        Text(stringResource(R.string.button_cancel))
+                        Text(stringResource(de.christian2003.core.ui.R.string.button_cancel))
                     }
                     TextButton(
                         onClick = {
@@ -194,7 +194,7 @@ fun ContrastDialog(
                         },
                         modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
                     ) {
-                        Text(stringResource(R.string.button_save))
+                        Text(stringResource(de.christian2003.core.ui.R.string.button_save))
                     }
                 }
             }

@@ -1,6 +1,7 @@
 package de.christian2003.passwordvault.viewmodels
 
 import android.app.Application
+import android.content.Context
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
@@ -41,8 +42,9 @@ class HelpViewModel @Inject constructor(
      * @param helpCard  Help card whose visibility to toggle.
      */
     fun toggleHelpCardVisibility(helpCard: HelpCard) {
-        helpCard.setVisible(application, !helpCard.getVisible(application))
-        helpCards[helpCard] = helpCard.getVisible(application)
+        val context: Context = getApplication<Application>().baseContext
+        helpCard.setVisible(context, !helpCard.getVisible(context))
+        helpCards[helpCard] = helpCard.getVisible(context)
     }
 
 
@@ -50,7 +52,8 @@ class HelpViewModel @Inject constructor(
      * Dismisses the help card on the page.
      */
     fun dismissHelpCard() {
-        HelpCard.Help.setVisible(application, false)
+        val context: Context = getApplication<Application>().baseContext
+        HelpCard.Help.setVisible(context, false)
         helpCards[HelpCard.Help] = false
     }
 

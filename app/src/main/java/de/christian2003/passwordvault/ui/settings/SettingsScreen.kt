@@ -332,7 +332,7 @@ private fun GeneralSection() {
                 .padding(start = dimensionResource(R.dimen.padding_horizontal))
         ) {
             Text(
-                text = stringResource(R.string.app_name),
+                text = stringResource(de.christian2003.core.ui.R.string.app_name),
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.bodyLarge
             )

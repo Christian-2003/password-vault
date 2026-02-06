@@ -1,103 +1,6 @@
 <resources>
-    <string name="app_name">Password Vault</string>
-    <string name="placeholder_obfuscated">•••••</string> <!-- '•' is U+2022  -->
-    <string name="confirm_delete">Confirm deletion</string>
-    <string name="confirm_discard">Discard changes?</string>
-    <string name="biometricPrompt_title">Biometric authentication</string>
-    <string name="biometricPrompt_subtitle">To continue, you need to verify your identity.</string>
 
-    <string name="main_emptyPlaceholder_title">No accounts</string>
-    <string name="main_emptyPlaceholder_subtitle">Create an account and it will show up here</string>
-    <string name="main_accounts_edit">Edit account</string>
-    <string name="main_accounts_delete">Delete account</string>
-    <string name="main_deleteAccountText">Are you sure you want to delete \"%1$s\"? This cannot be undone.</string>
-
-    <string name="account_titleReorder">Reorder</string>
-    <plurals name="account_titleMultiselect">
-        <item quantity="one">%1$d detail</item>
-        <item quantity="other">%1$d details</item>
-    </plurals>
-    <string name="account_nameLabel">Name</string>
-    <string name="account_nameTitle">Edit name</string>
-    <string name="account_namePlaceholder">Enter name</string>
-    <string name="account_descriptionLabel">Description</string>
-    <string name="account_descriptionTitle">Edit description</string>
-    <string name="account_descriptionPlaceholder">Enter description</string>
-    <string name="account_contextActions_editName">Edit name</string>
-    <string name="account_contextActions_editDescription">Edit description</string>
-    <string name="account_contextActions_selectAutofillTargets">Autofill targets</string>
-    <string name="account_contextActions_selectTags">Tags</string>
-    <string name="account_contextActions_createDetail">Create detail</string>
-    <string name="account_contextActions_reorderDetails">Reorder details</string>
-    <string name="account_details_title">Details</string>
-    <string name="account_details_edit">Edit detail</string>
-    <string name="account_details_delete">Remove detail</string>
-    <string name="account_details_copyToClipboard">Copy to clipboard</string>
-    <string name="account_details_reorder">Reorder details</string>
-    <string name="account_details_showContent">Show content</string>
-    <string name="account_details_hideContent">Hide content</string>
-    <string name="account_details_confirmDeleteTitle">Remove detail</string>
-    <string name="account_details_confirmDeleteText">Are you sure you want to remove the detail \"%1$s\"?</string>
-    <plurals name="account_details_confirmDeleteTitleMultiselect">
-        <item quantity="one">Remove detail</item>
-        <item quantity="other">Remove details</item>
-    </plurals>
-    <plurals name="account_details_confirmDeleteTextMultiselect">
-        <item quantity="one">Are you sure you want to remove %1$d selected detail</item>
-        <item quantity="other">Are you sure you want to remove %1$d selected details</item>
-    </plurals>
-    <string name="account_details_emptyPlaceholder_title">No details</string>
-    <string name="account_details_emptyPlaceholder_subtitle">Available details are shown here</string>
-    <string name="account_tags_emptyPlaceholder_title">No tags</string>
-    <string-array name="account_helpMessages">
-        <item>Let\'s configure your account. First, enter a name for the account.</item>
-        <item>Next, enter a description which describes the account in greater detail.</item>
-        <item>Let\'s add the actual account information, like a password or email address.</item>
-        <item>Select an app or website you want to autofill the information.</item>
-        <item>Now, save your account by clicking the "Save" button.</item>
-        <item>To continue, close the multiselect mode.</item>
-        <item>To continue, close the reorder mode.</item>
-    </string-array>
-    <string name="account_discardChanges">Are you sure you want to discard the changes you made to the account?</string>
-
-    <string name="tag_title">Tags</string>
-    <string name="tag_titleCreate">Create tag</string>
-    <string name="tag_titleEdit">Edit tag</string>
-    <string name="tag_nameLabel">Tag name</string>
-    <string name="tag_nameError">Invalid tag name</string>
-    <string name="tag_editTag">Edit tag</string>
-    <string name="tag_deleteTag">Delete tag</string>
-    <string name="tag_deleteTagText">Are you sure you want to delete the tag \"%1$s\"? This cannot be undone.</string>
-    <string name="tag_emptyPlaceholder_title">No tags</string>
-    <string name="tag_emptyPlaceholder_subtitle">Create a tag and it will show up here</string>
-    <string name="tag_discardChanges">Are you sure you want to discard the changes you made?</string>
-    <string name="tag_helpCreate">Create tags to group related accounts.</string>
-    <string name="tag_helpSelect">Select or create new tags to group accounts.</string>
-
-    <string name="target_title">Targets</string>
-    <string name="target_emptyPlaceholder_title">No targets</string>
-    <string name="target_emptyPlaceholder_subtitle">Select targets and they will show up here</string>
-    <string name="target_packages_title">Select apps</string>
-    <string name="target_website_title">Select website</string>
-    <string name="target_website_label">Website</string>
-    <string name="target_discardChanges">Are you sure you want to discard the changes you made?</string>
-    <string name="target_help">Select installed apps and websites as targets for the autofill service.</string>
-    <string name="target_remove_title">Remove target</string>
-    <string name="target_remove_textPackage">Are you sure you want to remove the Android app \"%1$s\" from the autofill targets?</string>
-    <string name="target_remove_textWebsite">Are you sure you want to remove the website \"%1$s\" from the autofill targets?</string>
-
-    <string name="detail_titleCreate">Create detail</string>
-    <string name="detail_titleEdit">Edit detail</string>
-    <string name="detail_nameLabel">Name</string>
-    <string name="detail_contentLabel">Content</string>
-    <string name="detail_obfuscatedTitle">Obfuscated</string>
-    <string name="detail_obfuscatedText">Whether the content should be obfuscated</string>
-    <string name="detail_visibleTitle">Visible</string>
-    <string name="detail_visibleText">Whether the detail should be visible</string>
-    <string name="detail_iconsTitle">Choose an icon</string>
-    <string name="detail_discardChanges">Are you sure you want to discard the changes you made to the detail?</string>
-    <string name="detail_help">Each detail has two parts: A name (what it is) and a content (the actual information).</string>
-
+    <!-- Screen displaying app settings -->
     <string name="settings_title">Settings</string>
     <string name="settings_customization">Customization</string>
     <string name="settings_customization_globalThemeTitle">Global theme</string>
@@ -128,101 +31,23 @@
     <string name="settings_dev_enableScreenshotsTitle">Enable screenshots</string>
     <string name="settings_dev_enableScreenshotsInfo">Enable screenshots on sensitive screens.</string>
 
+
+    <!-- Screen through which to enable / disable help messages -->
     <string name="help_title">Help messages</string>
     <string name="help_help">Reactivate help messages that were dismissed earlier.</string>
     <string name="help_reactivate">Click to reactivate</string>
     <string name="help_visibleLabel">Visible</string>
     <string name="help_dismissedLabel">Dismissed</string>
     <string-array name="help_shortNames">
-        <item>Tags</item>
-        <item>Help</item>
-        <item>Targets</item>
-        <item>Detail</item>
-        <item>Account</item>
-        <item>Master password</item>
-        <item>Security questions</item>
-        <item>Master password recovery</item>
+        <item>Change master password</item>
+        <item>Generate new recovery codes</item>
+        <item>Enable biometrics</item>
+        <item>Recover forgotten master password</item>
+        <item>Create, edit or delete tags for accounts</item>
+        <item>Select autofill targets for accounts</item>
+        <item>Create, edit or delete details for accounts</item>
+        <item>Create, edit or view accounts</item>
+        <item>List of help messages</item>
     </string-array>
-
-    <string name="password_titleSetup">Setup login</string>
-    <string name="password_titleEdit">Edit password</string>
-    <string name="password_titleRecovery">Recover password</string>
-    <string name="password_oldPasswordLabel">Old password</string>
-    <string name="password_newPasswordLabel">New password</string>
-    <string name="password_repeatNewPasswordLabel">Repeat new password</string>
-    <string name="password_passwordLabel">Password</string>
-    <string name="password_repeatPasswordLabel">Repeat password</string>
-    <string name="password_errorSaving">Cannot save password</string>
-    <string name="password_errorOldPassword">Old password is invalid</string>
-    <string name="password_errorRepeatNewPassword">New passwords do not match</string>
-    <string name="password_errorRepeatPassword">Passwords do not match</string>
-    <string name="password_helpSetup">In order to use Password Vault, you need to setup a master password to prevent unauthorized access.</string>
-    <string name="password_helpEdit">Edit the master password you use for authentication.</string>
-    <string name="password_helpRecovery">Enter a new master password that you want to use for authentication.</string>
-
-    <string name="securityQuestion_titleSetup">Setup recovery</string>
-    <string name="securityQuestion_titleEdit">Edit Recovery</string>
-    <string name="securityQuestion_emptyPlaceholder_title">No security questions</string>
-    <string name="securityQuestion_emptyPlaceholder_subtitle">Add security questions and they will show up here</string>
-    <string name="securityQuestion_edit_titleAdd">Add security question</string>
-    <string name="securityQuestion_edit_titleEdit">Edit security question</string>
-    <string name="securityQuestion_edit_labelQuestion">Security question</string>
-    <string name="securityQuestion_edit_labelAnswer">Answer</string>
-    <string name="securityQuestion_helpSetup">Answer some security questions that we can use to verify your identity in case you forget your password.</string>
-    <string name="securityQuestion_helpEdit">Edit the security questions that you have setup</string>
-    <string name="securityQuestion_inactiveTitle">Recovery inactive</string>
-    <plurals name="securityQuestion_inactiveSubtitle">
-        <item quantity="one">Add %1$d security question</item>
-        <item quantity="other">Add %1$d security questions</item>
-    </plurals>
-    <string name="securityQuestion_activeTitle">Recovery active</string>
-    <string name="securityQuestion_activeSubtitle">%1$d security questions</string>
-    <string name="securityQuestion_edit">Edit question</string>
-    <string name="securityQuestion_delete">Delete question</string>
-    <string name="securityQuestion_confirmDeleteMessage">Are you sure you want to delete the security question? This cannot be undone.</string>
-    <string name="securityQuestion_noAnswerDialog_title">Where is the answer to this question?</string>
-    <string name="securityQuestion_noAnswerDialog_text">For security purposes, we cannot display your answer to the security question. But do not worry, the app remembers the answer until you delete the question.</string>
-    <string-array name="securityQuestion_questions">
-        <item>What was the name of your first childhood friend?</item>
-        <item>What was the name of your first school teacher?</item>
-        <item>What is your grandmothers maiden name?</item>
-        <item>In what city did you meet your spouse / significant other?</item>
-        <item>What is the middle name of your youngest child?</item>
-        <item>What was the name of your first stuffed animal?</item>
-        <item>In what city did your mother and father meet?</item>
-        <item>What was the first exam you failed?</item>
-        <item>Where was the destination of your first school field trip?</item>
-        <item>What was your driving instructor\'s first name?</item>
-        <item>What is the first name of your oldest cousin?</item>
-        <item>What was your favorite elementary school teacher\'s name?</item>
-        <item>What was the name of your first pet?</item>
-    </string-array>
-
-    <string name="login_passwordLabel">Master password</string>
-    <string name="login_hint">Confirm your identity</string>
-    <string name="login_errorPassword">Password is invalid</string>
-
-    <string name="button_save">Save</string>
-    <string name="button_cancel">Cancel</string>
-    <string name="button_delete">Delete</string>
-    <string name="button_add">Add</string>
-    <string name="button_ok">OK</string>
-    <string name="button_discard">Discard</string>
-    <string name="button_remove">Remove</string>
-    <string name="button_continue">Continue</string>
-    <string name="button_login">Login</string>
-    <string name="button_skip">Skip</string>
-    <string name="button_createTag">Create tag</string>
-    <string name="button_dismissHelp">Dismiss</string>
-    <string name="button_selectTargetPackage">Select apps</string>
-    <string name="button_selectTargetWebsite">Select website</string>
-    <string name="button_showMore">Show more</string>
-    <string name="button_showLess">Show less</string>
-    <string name="button_useBiometrics">Use biometrics</string>
-    <string name="button_addSecurityQuestion">Add security question</string>
-    <string name="button_forgotPassword">Forgot password?</string>
-
-
-
 
 </resources>
