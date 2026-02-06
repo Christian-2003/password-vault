@@ -21,10 +21,14 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -74,6 +78,7 @@ import de.christian2003.core.ui.composables.EmptyPlaceholder
 import de.christian2003.core.ui.composables.Eyecatcher
 import de.christian2003.core.ui.composables.Headline
 import de.christian2003.core.ui.composables.HelpCard
+import de.christian2003.core.ui.composables.ListItemContainer
 import de.christian2003.core.ui.composables.NavigationBarProtection
 import de.christian2003.core.ui.composables.Tooltip
 import de.christian2003.core.ui.composables.dialog.ConfirmDeleteDialog
@@ -92,6 +97,8 @@ import de.christian2003.feature.accounts.viewmodels.TagViewModel
 import de.christian2003.feature.accounts.viewmodels.TargetViewModel
 import sh.calvin.reorderable.ReorderableCollectionItemScope
 import sh.calvin.reorderable.ReorderableItem
+import sh.calvin.reorderable.ReorderableLazyListState
+import sh.calvin.reorderable.ReorderableListState
 import sh.calvin.reorderable.rememberReorderableLazyListState
 import kotlin.text.ifEmpty
 
@@ -193,6 +200,7 @@ fun AccountScreen(
                     end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
                 )
                 .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
         ) {
             item {
                 GeneralSection(
@@ -219,9 +227,12 @@ fun AccountScreen(
                     onDismissHelpCard = {
                         viewModel.dismissHelpCard()
                     },
-                    modifier = Modifier.padding(horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal))
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface)
+                        .padding(horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal))
                 )
-                HorizontalDivider()
+
                 Headline(
                     title = stringResource(R.string.account_details_title),
                     endIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_add),
@@ -229,7 +240,14 @@ fun AccountScreen(
                     onClick = {
                         viewModel.visibleDialog = AccountScreenDialog.Detail
                     },
-                    modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface)
+                        .clip(RoundedCornerShape(
+                            topStart = 24.dp,
+                            topEnd = 24.dp
+                        ))
+                        .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                 )
             }
             if (viewModel.details.isEmpty()) {
@@ -242,56 +260,46 @@ fun AccountScreen(
                 }
             }
             else {
-                items(
+                itemsIndexed(
                     items = viewModel.visibleDetails.value,
-                    key = { it.id }
-                ) { detail ->
-                    ReorderableItem(
-                        state = reorderableLazyListState,
-                        key = detail.id
-                    ) { isDragging ->
-                        val detailListRowModifier: Modifier = if (isDragging) {
-                            Modifier
-                                .draggableHandle()
-                                .shadow(16.dp)
-                        } else {
-                            Modifier
+                    key = { index, detail -> detail.id }
+                ) { index, detail ->
+                    DetailListRow(
+                        detail = detail,
+                        isFirst = index == 0,
+                        isLast = index == viewModel.visibleDetails.value.size - 1,
+                        screenState = viewModel.screenState,
+                        reorderableLazyListState = reorderableLazyListState,
+                        onEdit = {
+                            viewModel.detailToEdit = it
+                        },
+                        onDelete = {
+                            viewModel.detailToDelete = it
+                        },
+                        onCopyToClipboard = {
+                            viewModel.copyToClipboard(it)
+                        },
+                        onReorderDetails = {
+                            viewModel.startReorderableState()
+                        },
+                        onMultiselect = { detail ->
+                            viewModel.startMultiselectState(detail.id)
+                        },
+                        onToggleSelection = { detail, selected ->
+                            if (selected) {
+                                viewModel.selectedDetailIds.add(detail.id)
+                            }
+                            else {
+                                viewModel.selectedDetailIds.remove(detail.id)
+                                if (viewModel.selectedDetailIds.isEmpty()) {
+                                    viewModel.dismissMultiselectState()
+                                }
+                            }
+                        },
+                        isDetailSelected = { detail ->
+                            viewModel.isDetailSelected(detail.id)
                         }
-                        DetailListRow(
-                            detail = detail,
-                            screenState = viewModel.screenState,
-                            onEdit = {
-                                viewModel.detailToEdit = it
-                            },
-                            onDelete = {
-                                viewModel.detailToDelete = it
-                            },
-                            onCopyToClipboard = {
-                                viewModel.copyToClipboard(it)
-                            },
-                            onReorderDetails = {
-                                viewModel.startReorderableState()
-                            },
-                            onMultiselect = { detail ->
-                                viewModel.startMultiselectState(detail.id)
-                            },
-                            onToggleSelection = { detail, selected ->
-                                if (selected) {
-                                    viewModel.selectedDetailIds.add(detail.id)
-                                }
-                                else {
-                                    viewModel.selectedDetailIds.remove(detail.id)
-                                    if (viewModel.selectedDetailIds.isEmpty()) {
-                                        viewModel.dismissMultiselectState()
-                                    }
-                                }
-                            },
-                            isDetailSelected = { detail ->
-                                viewModel.isDetailSelected(detail.id)
-                            },
-                            modifier = detailListRowModifier
-                        )
-                    }
+                    )
                 }
                 if (viewModel.invisibleDetails.value.isNotEmpty()) {
                     item {
@@ -330,56 +338,46 @@ fun AccountScreen(
                     }
                 }
                 if (viewModel.areInvisibleDetailsVisible) {
-                    items(
+                    itemsIndexed(
                         items = viewModel.invisibleDetails.value,
-                        key = { it.id }
-                    ) { detail ->
-                        ReorderableItem(
-                            state = reorderableLazyListState,
-                            key = detail.id
-                        ) { isDragging ->
-                            val detailListRowModifier: Modifier = if (isDragging) {
-                                Modifier
-                                    .draggableHandle()
-                                    .shadow(16.dp)
-                            } else {
-                                Modifier
+                        key = { index, detail -> detail.id }
+                    ) { index, detail ->
+                        DetailListRow(
+                            detail = detail,
+                            isFirst = index == 0,
+                            isLast = index == viewModel.invisibleDetails.value.size - 1,
+                            screenState = viewModel.screenState,
+                            reorderableLazyListState = reorderableLazyListState,
+                            onEdit = {
+                                viewModel.detailToEdit = it
+                            },
+                            onDelete = {
+                                viewModel.detailToDelete = it
+                            },
+                            onCopyToClipboard = {
+                                viewModel.copyToClipboard(it)
+                            },
+                            onReorderDetails = {
+                                viewModel.startReorderableState()
+                            },
+                            onMultiselect = { detail ->
+                                viewModel.startMultiselectState(detail.id)
+                            },
+                            onToggleSelection = { detail, selected ->
+                                if (selected) {
+                                    viewModel.selectedDetailIds.add(detail.id)
+                                }
+                                else {
+                                    viewModel.selectedDetailIds.remove(detail.id)
+                                    if (viewModel.selectedDetailIds.isEmpty()) {
+                                        viewModel.dismissMultiselectState()
+                                    }
+                                }
+                            },
+                            isDetailSelected = { detail ->
+                                viewModel.isDetailSelected(detail.id)
                             }
-                            DetailListRow(
-                                detail = detail,
-                                screenState = viewModel.screenState,
-                                onEdit = {
-                                    viewModel.detailToEdit = it
-                                },
-                                onDelete = {
-                                    viewModel.detailToDelete = it
-                                },
-                                onCopyToClipboard = {
-                                    viewModel.copyToClipboard(it)
-                                },
-                                onReorderDetails = {
-                                    viewModel.startReorderableState()
-                                },
-                                onMultiselect = { detail ->
-                                    viewModel.startMultiselectState(detail.id)
-                                },
-                                onToggleSelection = { detail, selected ->
-                                    if (selected) {
-                                        viewModel.selectedDetailIds.add(detail.id)
-                                    }
-                                    else {
-                                        viewModel.selectedDetailIds.remove(detail.id)
-                                        if (viewModel.selectedDetailIds.isEmpty()) {
-                                            viewModel.dismissMultiselectState()
-                                        }
-                                    }
-                                },
-                                isDetailSelected = { detail ->
-                                    viewModel.isDetailSelected(detail.id)
-                                },
-                                modifier = detailListRowModifier
-                            )
-                        }
+                        )
                     }
                 }
                 item {
@@ -820,171 +818,173 @@ private fun GeneralSection(
     onDismissHelpCard: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    if (helpState != null) {
-        HelpCard(
-            text = when (screenState) {
-                AccountScreenState.Multiselect -> stringArrayResource(R.array.account_helpMessages)[AccountScreenHelpState.CloseMultiselect.ordinal]
-                AccountScreenState.Reorder -> stringArrayResource(R.array.account_helpMessages)[AccountScreenHelpState.CloseReorder.ordinal]
-                else -> stringArrayResource(R.array.account_helpMessages)[helpState.ordinal]
-            },
-            onDismiss = onDismissHelpCard,
-            modifier = Modifier.padding(
-                horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
-                vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
-            )
-        )
-    }
-    Row(
+    Column(
         modifier = modifier
     ) {
-        Box(
-            contentAlignment = Alignment.TopEnd,
-            modifier = Modifier.padding(top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
-        ) {
-            if (icon == null) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xl))
-                        .clip(MaterialTheme.shapes.large)
-                        .background(MaterialTheme.colorScheme.surfaceContainer)
-                        .clickable {
-                            onEditTargets()
-                        }
-                ) {
-                    Text(
-                        text = if (!name.isEmpty()) { name.first().toString() } else { "?" },
-                        color = MaterialTheme.colorScheme.primary,
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 32.sp
+        if (helpState != null) {
+            HelpCard(
+                text = when (screenState) {
+                    AccountScreenState.Multiselect -> stringArrayResource(R.array.account_helpMessages)[AccountScreenHelpState.CloseMultiselect.ordinal]
+                    AccountScreenState.Reorder -> stringArrayResource(R.array.account_helpMessages)[AccountScreenHelpState.CloseReorder.ordinal]
+                    else -> stringArrayResource(R.array.account_helpMessages)[helpState.ordinal]
+                },
+                onDismiss = onDismissHelpCard,
+                modifier = Modifier.padding(
+                    horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                    vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
+                )
+            )
+        }
+        Row {
+            Box(
+                contentAlignment = Alignment.TopEnd,
+                modifier = Modifier.padding(top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
+            ) {
+                if (icon == null) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xl))
+                            .clip(MaterialTheme.shapes.large)
+                            .background(MaterialTheme.colorScheme.surfaceContainer)
+                            .clickable {
+                                onEditTargets()
+                            }
+                    ) {
+                        Text(
+                            text = if (!name.isEmpty()) { name.first().toString() } else { "?" },
+                            color = MaterialTheme.colorScheme.primary,
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 32.sp
+                        )
+                    }
+                }
+                else {
+                    Image(
+                        painter = rememberDrawablePainter(icon),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xl))
+                            .clip(MaterialTheme.shapes.medium)
+                            .clickable {
+                                onEditTargets()
+                            }
                     )
                 }
+                if (helpState == AccountScreenHelpState.Targets) {
+                    Eyecatcher()
+                }
             }
-            else {
-                Image(
-                    painter = rememberDrawablePainter(icon),
-                    contentDescription = "",
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xl))
-                        .clip(MaterialTheme.shapes.medium)
+                        .padding(
+                            start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal) - 8.dp,
+                            top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical) - 4.dp
+                        )
+                        .clip(MaterialTheme.shapes.small)
                         .clickable {
-                            onEditTargets()
+                            onEditDescription()
                         }
-                )
-            }
-            if (helpState == AccountScreenHelpState.Targets) {
-                Eyecatcher()
+                        .padding(
+                            horizontal = 8.dp,
+                            vertical = 4.dp
+                        )
+                ) {
+                    Text(
+                        text = description.ifEmpty { stringResource(R.string.account_descriptionPlaceholder) },
+                        color = if (!description.isEmpty()) { MaterialTheme.colorScheme.onSurface } else { MaterialTheme.colorScheme.onSurface.copy(0.5f) },
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                    if (helpState == AccountScreenHelpState.Description) {
+                        Eyecatcher()
+                    }
+                }
+                Box(
+                    contentAlignment = Alignment.TopEnd,
+                    modifier = Modifier.padding(start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
+                ) {
+                    Button(
+                        onClick = onSave,
+                        enabled = isDataValid
+                    ) {
+                        Text(stringResource(de.christian2003.core.ui.R.string.button_save))
+                    }
+                    if (helpState == AccountScreenHelpState.Save) {
+                        Eyecatcher()
+                    }
+                }
             }
         }
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
+        if (tags.isEmpty()) {
+            //No tags:
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
+                    .fillMaxWidth()
                     .padding(
-                        start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal) - 8.dp,
-                        top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical) - 4.dp
+                        start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                        end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal) - 12.dp
                     )
-                    .clip(MaterialTheme.shapes.small)
-                    .clickable {
-                        onEditDescription()
-                    }
-                    .padding(
-                        horizontal = 8.dp,
-                        vertical = 4.dp
-                    )
-            ) {
-                Text(
-                    text = description.ifEmpty { stringResource(R.string.account_descriptionPlaceholder) },
-                    color = if (!description.isEmpty()) { MaterialTheme.colorScheme.onSurface } else { MaterialTheme.colorScheme.onSurface.copy(0.5f) },
-                    style = MaterialTheme.typography.bodyLarge
-                )
-                if (helpState == AccountScreenHelpState.Description) {
-                    Eyecatcher()
-                }
-            }
-            Box(
-                contentAlignment = Alignment.TopEnd,
-                modifier = Modifier.padding(start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
-            ) {
-                Button(
-                    onClick = onSave,
-                    enabled = isDataValid
-                ) {
-                    Text(stringResource(de.christian2003.core.ui.R.string.button_save))
-                }
-                if (helpState == AccountScreenHelpState.Save) {
-                    Eyecatcher()
-                }
-            }
-        }
-    }
-    if (tags.isEmpty()) {
-        //No tags:
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
-                    end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal) - 12.dp
-                )
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_tag),
-                contentDescription = "",
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Text(
-                text = stringResource(R.string.account_tags_emptyPlaceholder_title),
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .padding(
-                        horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal)
-                    )
-                    .weight(1f)
-            )
-            IconButton(
-                onClick = onEditTags
             ) {
                 Icon(
-                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_edit),
+                    painter = painterResource(R.drawable.ic_tag),
                     contentDescription = "",
-                    tint = MaterialTheme.colorScheme.onSurface
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-            }
-        }
-    }
-    else {
-        //List of tags:
-        LazyRow(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            items(tags) { tag ->
-                SuggestionChip(
-                    onClick = {
-                        onEditTags()
-                    },
-                    label = {
-                        Text(tag.name)
-                    },
+                Text(
+                    text = stringResource(R.string.account_tags_emptyPlaceholder_title),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier
                         .padding(
-                            start = if (tags.indexOf(tag) == 0) {
-                                dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal)
-                            } else {
-                                0.dp
-                            },
-                            end = if (tags.indexOf(tag) == tags.size - 1 ) {
-                                dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal)
-                            } else {
-                                dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal)
-                            }
+                            horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal)
                         )
+                        .weight(1f)
                 )
+                IconButton(
+                    onClick = onEditTags
+                ) {
+                    Icon(
+                        painter = painterResource(de.christian2003.core.ui.R.drawable.ic_edit),
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
+        }
+        else {
+            //List of tags:
+            LazyRow(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items(tags) { tag ->
+                    SuggestionChip(
+                        onClick = {
+                            onEditTags()
+                        },
+                        label = {
+                            Text(tag.name)
+                        },
+                        modifier = Modifier
+                            .padding(
+                                start = if (tags.indexOf(tag) == 0) {
+                                    dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal)
+                                } else {
+                                    0.dp
+                                },
+                                end = if (tags.indexOf(tag) == tags.size - 1 ) {
+                                    dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal)
+                                } else {
+                                    dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal)
+                                }
+                            )
+                    )
+                }
             }
         }
     }
@@ -994,20 +994,26 @@ private fun GeneralSection(
 /**
  * Displays a single account detail in a list row.
  *
- * @param detail                Detail to display.
- * @param screenState           Screen state.
- * @param onEdit                Callback invoked to edit the detail.
- * @param onDelete              Callback invoked to delete the detail.
- * @param onCopyToClipboard     Callback invoked to copy the detail content to the clipboard.
- * @param onReorderDetails      Callback invoked to begin reordering the details.
- * @param onMultiselect         Callback invoked to begin selecting details.
- * @param isDetailSelected      Callback invoked to determine whether a detail is selected.
- * @param modifier              Modifier.
+ * @param detail                    Detail to display.
+ * @param isFirst                   Whether this is the first item in the list.
+ * @param isLast                    Whether this is the last item in the list.
+ * @param screenState               Screen state.
+ * @param reorderableLazyListState  Reorderable list state.
+ * @param onEdit                    Callback invoked to edit the detail.
+ * @param onDelete                  Callback invoked to delete the detail.
+ * @param onCopyToClipboard         Callback invoked to copy the detail content to the clipboard.
+ * @param onReorderDetails          Callback invoked to begin reordering the details.
+ * @param onMultiselect             Callback invoked to begin selecting details.
+ * @param isDetailSelected          Callback invoked to determine whether a detail is selected.
+ * @param modifier                  Modifier.
  */
 @Composable
-private fun ReorderableCollectionItemScope.DetailListRow(
+private fun LazyItemScope.DetailListRow(
     detail: Detail,
+    isFirst: Boolean,
+    isLast: Boolean,
     screenState: AccountScreenState,
+    reorderableLazyListState: ReorderableLazyListState,
     onEdit: (Detail) -> Unit,
     onDelete: (Detail) -> Unit,
     onCopyToClipboard: (Detail) -> Unit,
@@ -1023,158 +1029,165 @@ private fun ReorderableCollectionItemScope.DetailListRow(
     } else {
         false
     }
-    val quarterVerticalPadding: Dp = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical) / 4
 
-    Row(
+    ReorderableItem(
+        state = reorderableLazyListState,
+        key = detail.id,
         modifier = modifier
-            .fillMaxWidth()
-            .combinedClickable(
-                onClick = {
-                    if (screenState == AccountScreenState.Multiselect) {
-                        onToggleSelection(detail, !isSelected)
-                    } else {
-                        onEdit(detail)
-                    }
-                },
-                onLongClick = if (screenState == AccountScreenState.Default) {
-                    { onMultiselect(detail) }
-                } else {
-                    null
-                }
-            )
-            .padding(
-                vertical = quarterVerticalPadding
-            )
-            .background(
-                if (isSelected) {
-                    MaterialTheme.colorScheme.secondaryContainer
-                } else {
-                    MaterialTheme.colorScheme.surface
-                }
-            )
-            .padding(
-                start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
-                top = quarterVerticalPadding * 3,
-                end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal) - 12.dp,
-                bottom = quarterVerticalPadding * 3
-            )
-    ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
-                .clip(MaterialTheme.shapes.medium)
-                .background(MaterialTheme.colorScheme.surfaceContainer)
-        ) {
-            Icon(
-                painter = painterResource(if (detail.icon != null) {
-                    DetailIconDrawable.getDrawableForDetailIcon(detail.icon!!).drawableRes
-                } else {
-                    DetailIconDrawable.getDrawableForDetailIcon(detail.type.defaultIcon).drawableRes
-                }),
-                contentDescription = "",
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_s))
-            )
+    ) { isDragging ->
+        val detailListRowModifier: Modifier = if (isDragging) {
+            Modifier.draggableHandle()
+        } else {
+            Modifier
         }
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
+
+        ListItemContainer(
+            isFirst = isFirst,
+            isLast = isLast,
+            isSelected = isSelected
         ) {
-            Text(
-                text = detail.name,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                style = MaterialTheme.typography.bodyMedium
-            )
-            Text(
-                text = if (detail.metadata.isObfuscated && isObfuscated) { stringResource(R.string.account_details_obfuscatedContent) } else { detail.content },
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyLarge
-            )
-        }
-        when (screenState) {
-            AccountScreenState.Reorder -> IconButton(
-                onClick = { },
-                modifier = Modifier
-                    .draggableHandle()
-                    .align(Alignment.CenterVertically)
-            ) {
-                Icon(
-                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_draghandle),
-                    contentDescription = "",
-                )
-            }
-            AccountScreenState.Multiselect -> RadioButton(
-                selected = isSelected,
-                onClick = {
-                    onToggleSelection(detail, !isSelected)
-                }
-            )
-            else -> Row(
-                modifier = Modifier.align(Alignment.CenterVertically)
-            ) {
-                if (detail.metadata.isObfuscated) {
-                    IconButton(
+            Row(
+                modifier = detailListRowModifier
+                    .fillMaxWidth()
+                    .combinedClickable(
                         onClick = {
-                            isObfuscated = !isObfuscated
+                            if (screenState == AccountScreenState.Multiselect) {
+                                onToggleSelection(detail, !isSelected)
+                            } else {
+                                onEdit(detail)
+                            }
+                        },
+                        onLongClick = if (screenState == AccountScreenState.Default) {
+                            { onMultiselect(detail) }
+                        } else {
+                            null
                         }
+                    )
+                    .padding(
+                        start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                        top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical),
+                        end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal) - 12.dp,
+                        bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
+                    )
+            ) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
+                        .clip(MaterialTheme.shapes.medium)
+                        .background(MaterialTheme.colorScheme.surfaceContainer)
+                ) {
+                    Icon(
+                        painter = painterResource(if (detail.icon != null) {
+                            DetailIconDrawable.getDrawableForDetailIcon(detail.icon!!).drawableRes
+                        } else {
+                            DetailIconDrawable.getDrawableForDetailIcon(detail.type.defaultIcon).drawableRes
+                        }),
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_s))
+                    )
+                }
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
+                ) {
+                    Text(
+                        text = detail.name,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Text(
+                        text = if (detail.metadata.isObfuscated && isObfuscated) { stringResource(R.string.account_details_obfuscatedContent) } else { detail.content },
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
+                when (screenState) {
+                    AccountScreenState.Reorder -> IconButton(
+                        onClick = { },
+                        modifier = Modifier
+                            .draggableHandle()
+                            .align(Alignment.CenterVertically)
                     ) {
                         Icon(
-                            painter = if (isObfuscated) {
-                                painterResource(de.christian2003.core.ui.R.drawable.ic_visibility_on)
-                            } else {
-                                painterResource(de.christian2003.core.ui.R.drawable.ic_visibility_off)
-                            },
-                            contentDescription = ""
+                            painter = painterResource(de.christian2003.core.ui.R.drawable.ic_draghandle),
+                            contentDescription = "",
                         )
                     }
-                }
-
-                val contextActions: MutableList<ContextActionBase> = mutableListOf(
-                    ContextAction(
-                        text = stringResource(R.string.account_details_edit),
-                        icon = painterResource(de.christian2003.core.ui.R.drawable.ic_edit)
-                    ) {
-                        onEdit(detail)
-                    },
-                    ContextAction(
-                        text = stringResource(R.string.account_details_delete),
-                        icon = painterResource(de.christian2003.core.ui.R.drawable.ic_delete)
-                    ) {
-                        onDelete(detail)
-                    },
-                    ContextActionDivider(),
-                    ContextAction(
-                        text = stringResource(R.string.account_details_copyToClipboard),
-                        icon = painterResource(de.christian2003.core.ui.R.drawable.ic_copy)
-                    ) {
-                        onCopyToClipboard(detail)
-                    },
-                    ContextAction(
-                        text = stringResource(R.string.account_details_reorder),
-                        icon = painterResource(de.christian2003.core.ui.R.drawable.ic_reorder)
-                    ) {
-                        onReorderDetails()
-                    }
-                )
-                if (detail.metadata.isObfuscated) {
-                    contextActions.add(ContextAction(
-                        text = if (isObfuscated) {
-                            stringResource(R.string.account_details_showContent)
-                        } else {
-                            stringResource(R.string.account_details_hideContent)
-                               },
-                        icon = if (isObfuscated) {
-                            painterResource(de.christian2003.core.ui.R.drawable.ic_visibility_on)
-                        } else {
-                            painterResource(de.christian2003.core.ui.R.drawable.ic_visibility_off)
+                    AccountScreenState.Multiselect -> RadioButton(
+                        selected = isSelected,
+                        onClick = {
+                            onToggleSelection(detail, !isSelected)
                         }
+                    )
+                    else -> Row(
+                        modifier = Modifier.align(Alignment.CenterVertically)
                     ) {
-                        isObfuscated = !isObfuscated
-                    })
+                        if (detail.metadata.isObfuscated) {
+                            IconButton(
+                                onClick = {
+                                    isObfuscated = !isObfuscated
+                                }
+                            ) {
+                                Icon(
+                                    painter = if (isObfuscated) {
+                                        painterResource(de.christian2003.core.ui.R.drawable.ic_visibility_on)
+                                    } else {
+                                        painterResource(de.christian2003.core.ui.R.drawable.ic_visibility_off)
+                                    },
+                                    contentDescription = ""
+                                )
+                            }
+                        }
+
+                        val contextActions: MutableList<ContextActionBase> = mutableListOf(
+                            ContextAction(
+                                text = stringResource(R.string.account_details_edit),
+                                icon = painterResource(de.christian2003.core.ui.R.drawable.ic_edit)
+                            ) {
+                                onEdit(detail)
+                            },
+                            ContextAction(
+                                text = stringResource(R.string.account_details_delete),
+                                icon = painterResource(de.christian2003.core.ui.R.drawable.ic_delete)
+                            ) {
+                                onDelete(detail)
+                            },
+                            ContextActionDivider(),
+                            ContextAction(
+                                text = stringResource(R.string.account_details_copyToClipboard),
+                                icon = painterResource(de.christian2003.core.ui.R.drawable.ic_copy)
+                            ) {
+                                onCopyToClipboard(detail)
+                            },
+                            ContextAction(
+                                text = stringResource(R.string.account_details_reorder),
+                                icon = painterResource(de.christian2003.core.ui.R.drawable.ic_reorder)
+                            ) {
+                                onReorderDetails()
+                            }
+                        )
+                        if (detail.metadata.isObfuscated) {
+                            contextActions.add(ContextAction(
+                                text = if (isObfuscated) {
+                                    stringResource(R.string.account_details_showContent)
+                                } else {
+                                    stringResource(R.string.account_details_hideContent)
+                                },
+                                icon = if (isObfuscated) {
+                                    painterResource(de.christian2003.core.ui.R.drawable.ic_visibility_on)
+                                } else {
+                                    painterResource(de.christian2003.core.ui.R.drawable.ic_visibility_off)
+                                }
+                            ) {
+                                isObfuscated = !isObfuscated
+                            })
+                        }
+                        ContextActions(contextActions)
+                    }
                 }
-                ContextActions(contextActions)
             }
         }
     }
