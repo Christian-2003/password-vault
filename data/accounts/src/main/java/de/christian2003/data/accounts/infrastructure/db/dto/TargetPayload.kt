@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
  * Models the payload for the target that is serialized using CBOR.
  */
 @Serializable
-internal class TargetPayload(
+class TargetPayload(
 
     /**
      * Name of the target.

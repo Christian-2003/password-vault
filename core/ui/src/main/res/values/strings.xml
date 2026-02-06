@@ -1,9 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
+    <string name="app_name">Password Vault</string>
+
+    <string name="dialog_confirmDiscard_title">Discard changes?</string>
+    <string name="dialog_confirmDelete_title">Confirm deletion</string>
+
     <string name="help_dismissHelpCard">Dismiss</string>
 
+
+    <!-- Buttons -->
+    <string name="button_save">Save</string>
     <string name="button_dismiss">Dismiss</string>
     <string name="button_confirm">Confirm</string>
     <string name="button_cancel">Cancel</string>
+    <string name="button_discard">Discard</string>
+    <string name="button_delete">Delete</string>
+    <string name="button_remove">Remove</string>
+    <string name="button_ok">OK</string>
+    <string name="button_showMore">Show more</string>
+    <string name="button_showLess">Show less</string>
+    <string name="button_createTag">Create tag</string>
+    <string name="button_selectTargetPackage">Select apps</string>
+    <string name="button_selectTargetWebsite">Select website</string>
+
+
+    <!-- Error messages -->
+    <string name="error_blankInput">The input cannot be blank</string>
+    <string name="error_invalidUrl">The input is no valid URL</string>
+
+
+    <!-- Tooltips -->
+    <string name="tooltip_selectAllDetails">Select all details</string>
+    <string name="tooltip_deleteSelectedDetails">Remove selected details</string>
+    <string name="tooltip_closeMultiselect">Close multiselect</string>
+    <string name="tooltip_removeTargetAndroidApp">Remove app %1$s</string>
+    <string name="tooltip_removeTargetWebsite">Remove website %1$s</string>
+    <string name="tooltip_closeWithoutSaving">Close without saving</string>
 </resources>

@@ -8,7 +8,7 @@ import java.time.ZoneOffset
 /**
  * Converter for Room database to convert a local date time field into a long and vice versa.
  */
-internal class LocalDateTimeConverter {
+class LocalDateTimeConverter {
 
     /**
      * Converts the passed local date time into a long.

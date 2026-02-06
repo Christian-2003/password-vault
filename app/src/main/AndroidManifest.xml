@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" tools:ignore="PackageVisibilityPolicy,QueryAllPackagesPermission"/>
 
     <application
-        android:name=".plugin.PasswordVaultApplication"
+        android:name=".PasswordVaultApplication"
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -19,7 +19,7 @@
         android:theme="@style/Theme.PasswordVault">
 
         <activity
-            android:name=".plugin.presentation.MainActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.PasswordVault"
             android:windowSoftInputMode="adjustNothing">

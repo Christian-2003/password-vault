@@ -14,7 +14,17 @@ enum class HelpCard(
 
     HelpBiometrics("help_biometrics"),
 
-    HelpRecovery("help_recovery");
+    HelpRecovery("help_recovery"),
+
+    Tags("help_tags"),
+
+    Targets("help_targets"),
+
+    Detail("help_detail"),
+
+    Account("help_account"),
+
+    Help("help_help");
 
     fun getVisible(context: Context): Boolean {
         return context.getSharedPreferences("settings", Context.MODE_PRIVATE).getBoolean(key, true)

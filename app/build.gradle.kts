@@ -101,7 +101,9 @@ dependencies {
     implementation(libs.hilt.android)
 
     implementation(project(":core:security"))
+    implementation(project(":core:ui"))
     implementation(project(":feature:auth"))
+    implementation(project(":feature:accounts"))
 
     testImplementation(libs.junit)
 

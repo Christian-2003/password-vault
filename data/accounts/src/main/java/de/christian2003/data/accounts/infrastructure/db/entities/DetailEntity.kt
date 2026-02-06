@@ -23,7 +23,7 @@ import kotlin.uuid.Uuid
         )
     ]
 )
-internal data class DetailEntity(
+data class DetailEntity(
 
     @PrimaryKey
     @ColumnInfo(name = "id")

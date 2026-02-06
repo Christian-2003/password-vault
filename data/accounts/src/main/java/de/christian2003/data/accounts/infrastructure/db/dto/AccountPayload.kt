@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  * Models the payload for the entry, that is being serialized into CBOR.
  */
 @Serializable
-internal class AccountPayload (
+class AccountPayload (
 
     /**
      * Name for the entry, which is set by the user.

@@ -222,13 +222,7 @@
     <string name="button_addSecurityQuestion">Add security question</string>
     <string name="button_forgotPassword">Forgot password?</string>
 
-    <string name="error_blankInput">The input cannot be blank</string>
-    <string name="error_invalidUrl">The input is no valid URL</string>
 
-    <string name="tooltip_selectAllDetails">Select all details</string>
-    <string name="tooltip_deleteSelectedDetails">Remove selected details</string>
-    <string name="tooltip_closeMultiselect">Close multiselect</string>
-    <string name="tooltip_removeTargetAndroidApp">Remove app %1$s</string>
-    <string name="tooltip_removeTargetWebsite">Remove website %1$s</string>
-    <string name="tooltip_closeWithoutSaving">Close without saving</string>
+
+
 </resources>

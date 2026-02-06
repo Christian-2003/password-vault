@@ -1,6 +1,5 @@
 package de.christian2003.data.accounts.di
 
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.pm.PackageManager
 import dagger.Module

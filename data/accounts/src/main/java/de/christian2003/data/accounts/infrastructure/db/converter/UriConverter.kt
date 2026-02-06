@@ -8,7 +8,7 @@ import androidx.room.TypeConverter
 /**
  * Converter for Room database to convert an Uri field into a string and vice versa.
  */
-internal class UriConverter {
+class UriConverter {
 
     /**
      * Converts the passed Uri into a string.

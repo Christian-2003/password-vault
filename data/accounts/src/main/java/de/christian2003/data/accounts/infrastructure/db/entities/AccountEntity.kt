@@ -14,7 +14,7 @@ import kotlin.uuid.Uuid
         Index(value = ["id"])
     ]
 )
-internal data class AccountEntity (
+data class AccountEntity (
 
     @PrimaryKey
     @ColumnInfo(name = "id")

@@ -9,12 +9,14 @@ import de.christian2003.core.security.domain.repositories.HardwareBackedKeyRepos
 import de.christian2003.core.security.domain.repositories.ReadonlyAuthRepository
 import de.christian2003.core.security.domain.repositories.UnlockedMasterKeyRepository
 import de.christian2003.core.security.domain.services.CipherService
+import de.christian2003.core.security.domain.services.HmacCipherService
 import de.christian2003.core.security.domain.services.KdfService
 import de.christian2003.core.security.domain.services.KeyGeneratorService
 import de.christian2003.core.security.infrastructure.repositories.KeyStoreHardwareBackedKeyRepository
 import de.christian2003.core.security.infrastructure.repositories.SharedPreferencesAuthRepository
 import de.christian2003.core.security.infrastructure.repositories.UnlockedMasterKeyRepositoryImpl
 import de.christian2003.core.security.infrastructure.services.AesCipherService
+import de.christian2003.core.security.infrastructure.services.AesHmacCipherService
 import de.christian2003.core.security.infrastructure.services.AesKeyGeneratorService
 import de.christian2003.core.security.infrastructure.services.Pbkdf2Service
 
@@ -65,5 +67,10 @@ internal abstract class SecurityBindingsSingletonModule {
     abstract fun bindKeyGeneratorService(
         impl: AesKeyGeneratorService
     ): KeyGeneratorService
+
+    @Binds
+    abstract fun bindHmacCipherService(
+        impl: AesHmacCipherService
+    ): HmacCipherService
 
 }

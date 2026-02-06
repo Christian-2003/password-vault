@@ -28,14 +28,14 @@ import de.christian2003.data.accounts.infrastructure.db.entities.TargetEntity
         AccountTagCrossRef::class
     ],
     version = 1,
-    exportSchema = true
+    exportSchema = false
 )
 @TypeConverters(
     UuidConverter::class,
     LocalDateTimeConverter::class,
     UriConverter::class
 )
-internal abstract class PasswordVaultDatabase(): RoomDatabase() {
+abstract class PasswordVaultDatabase(): RoomDatabase() {
 
     /**
      * DAO through which to access the entries.

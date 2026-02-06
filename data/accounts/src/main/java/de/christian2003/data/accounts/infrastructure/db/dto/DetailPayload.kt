@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
  * Models the payload for the detail, that is being serialized into CBOR.
  */
 @Serializable
-internal class DetailPayload (
+class DetailPayload (
 
     /**
      * Name of the detail.
@@ -28,7 +28,7 @@ internal class DetailPayload (
      * Type of the detail.
      */
     @SerialName("type")
-    val type: DetailType = DetailType.TEXT,
+    val type: DetailType = DetailType.Text,
 
     /**
      * Icon of the detail. This can be null. In this case, the default icon of the detail type is

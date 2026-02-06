@@ -12,7 +12,7 @@ import androidx.core.net.toUri
  * Serializer to serialize an Uri instance with the Kotlin serialization API.
  */
 @Serializer(forClass = Uri::class)
-internal class UriSerializer: KSerializer<Uri> {
+class UriSerializer: KSerializer<Uri> {
 
     /**
      * Serializes the Uri instance to the encoder passed.
