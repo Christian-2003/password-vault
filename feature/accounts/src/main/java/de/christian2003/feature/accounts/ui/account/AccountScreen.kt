@@ -11,7 +11,6 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,7 +21,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
-import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -30,9 +28,9 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
@@ -55,7 +53,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
@@ -65,7 +62,6 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -80,11 +76,13 @@ import de.christian2003.core.ui.composables.Headline
 import de.christian2003.core.ui.composables.HelpCard
 import de.christian2003.core.ui.composables.ListItemContainer
 import de.christian2003.core.ui.composables.NavigationBarProtection
+import de.christian2003.core.ui.composables.Shape
 import de.christian2003.core.ui.composables.Tooltip
 import de.christian2003.core.ui.composables.dialog.ConfirmDeleteDialog
 import de.christian2003.core.ui.composables.dialog.ConfirmDiscardDialog
 import de.christian2003.core.ui.composables.dialog.EditValueDialog
 import de.christian2003.data.accounts.domain.entities.Detail
+import de.christian2003.data.accounts.domain.entities.DetailIcon
 import de.christian2003.feature.accounts.models.dialogs.AccountScreenDialog
 import de.christian2003.feature.accounts.models.dto.TagUiDto
 import de.christian2003.feature.accounts.models.states.AccountScreenHelpState
@@ -95,10 +93,8 @@ import de.christian2003.feature.accounts.models.other.DetailIconDrawable
 import de.christian2003.feature.accounts.viewmodels.DetailViewModel
 import de.christian2003.feature.accounts.viewmodels.TagViewModel
 import de.christian2003.feature.accounts.viewmodels.TargetViewModel
-import sh.calvin.reorderable.ReorderableCollectionItemScope
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.ReorderableLazyListState
-import sh.calvin.reorderable.ReorderableListState
 import sh.calvin.reorderable.rememberReorderableLazyListState
 import kotlin.text.ifEmpty
 
@@ -230,7 +226,7 @@ fun AccountScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(MaterialTheme.colorScheme.surface)
-                        .padding(horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal))
+                        .padding(bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical) * 2)
                 )
 
                 Headline(
@@ -830,30 +826,44 @@ private fun GeneralSection(
                 },
                 onDismiss = onDismissHelpCard,
                 modifier = Modifier.padding(
-                    horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
-                    vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
+                    start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                    end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                    bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
                 )
             )
         }
-        Row {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal)
+                )
+                .clip(MaterialTheme.shapes.extraLarge)
+                .background(MaterialTheme.colorScheme.surfaceContainer)
+                .padding(
+                    start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
+                    end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
+                    bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
+                )
+        ) {
             Box(
                 contentAlignment = Alignment.TopEnd,
                 modifier = Modifier.padding(top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
             ) {
                 if (icon == null) {
-                    Box(
-                        contentAlignment = Alignment.Center,
+                    Shape(
+                        shape = MaterialShapes.Clover8Leaf,
+                        color = MaterialTheme.colorScheme.secondaryContainer,
                         modifier = Modifier
                             .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xl))
                             .clip(MaterialTheme.shapes.large)
-                            .background(MaterialTheme.colorScheme.surfaceContainer)
                             .clickable {
                                 onEditTargets()
                             }
                     ) {
                         Text(
                             text = if (!name.isEmpty()) { name.first().toString() } else { "?" },
-                            color = MaterialTheme.colorScheme.primary,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer,
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold,
                             fontSize = 32.sp
@@ -1070,22 +1080,33 @@ private fun LazyItemScope.DetailListRow(
                         bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
                     )
             ) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
-                        .clip(MaterialTheme.shapes.medium)
-                        .background(MaterialTheme.colorScheme.surfaceContainer)
+                val detailIconDrawable: DetailIconDrawable = if (detail.icon != null) {
+                    DetailIconDrawable.getDrawableForDetailIcon(detail.icon!!)
+                } else {
+                    DetailIconDrawable.getDrawableForDetailIcon(detail.type.defaultIcon)
+                }
+                Shape(
+                    shape = detailIconDrawable.getShape(),
+                    color = if (!isSelected) {
+                        MaterialTheme.colorScheme.secondaryContainer
+                    } else {
+                        MaterialTheme.colorScheme.primary
+                    },
+                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
                 ) {
                     Icon(
-                        painter = painterResource(if (detail.icon != null) {
-                            DetailIconDrawable.getDrawableForDetailIcon(detail.icon!!).drawableRes
+                        painter = if (!isSelected) {
+                            painterResource(detailIconDrawable.drawableRes)
                         } else {
-                            DetailIconDrawable.getDrawableForDetailIcon(detail.type.defaultIcon).drawableRes
-                        }),
+                            painterResource(de.christian2003.core.ui.R.drawable.ic_check)
+                        },
                         contentDescription = "",
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_s))
+                        tint = if (!isSelected) {
+                            MaterialTheme.colorScheme.onSecondaryContainer
+                        } else {
+                            MaterialTheme.colorScheme.onPrimary
+                        },
+                        modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xs))
                     )
                 }
                 Column(
@@ -1116,12 +1137,7 @@ private fun LazyItemScope.DetailListRow(
                             contentDescription = "",
                         )
                     }
-                    AccountScreenState.Multiselect -> RadioButton(
-                        selected = isSelected,
-                        onClick = {
-                            onToggleSelection(detail, !isSelected)
-                        }
-                    )
+                    AccountScreenState.Multiselect -> { /* Originally, we had a radio button here that we no longer use */  }
                     else -> Row(
                         modifier = Modifier.align(Alignment.CenterVertically)
                     ) {

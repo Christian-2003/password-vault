@@ -1,6 +1,8 @@
 package de.christian2003.feature.accounts.models.other
 
 import androidx.annotation.DrawableRes
+import androidx.compose.material3.MaterialShapes
+import androidx.graphics.shapes.RoundedPolygon
 import de.christian2003.data.accounts.domain.entities.DetailIcon
 import de.christian2003.feature.accounts.R
 
@@ -26,7 +28,32 @@ enum class DetailIconDrawable(
     Username(R.drawable.detail_username);
 
 
+    /**
+     * Returns the shape to use as background for the detail icon.
+     *
+     * @return  Rounded polygon shape.
+     */
+    fun getShape(): RoundedPolygon {
+        return shapes[ordinal % shapes.size]
+    }
+
+
     companion object {
+
+        /**
+         * List of shapes that can be applied as background for a detail icon.
+         */
+        private val shapes: Array<RoundedPolygon> = arrayOf(
+            MaterialShapes.Circle,
+            MaterialShapes.VerySunny,
+            MaterialShapes.Sunny,
+            MaterialShapes.Cookie6Sided,
+            MaterialShapes.Cookie12Sided,
+            MaterialShapes.Clover8Leaf,
+            MaterialShapes.SoftBurst,
+            MaterialShapes.Flower
+        )
+
 
         /**
          * Returns the drawable for the specified detail icon.

@@ -50,7 +50,7 @@ fun ListItemContainer(
             .background(if (!isSelected) {
                 MaterialTheme.colorScheme.surfaceContainerLow
             } else {
-                MaterialTheme.colorScheme.primaryContainer
+                MaterialTheme.colorScheme.primaryContainer.copy(0.5f)
             })
     ) {
         content()
