@@ -9,24 +9,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalBottomSheetProperties
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -44,6 +44,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import de.christian2003.core.ui.composables.EmptyPlaceholder
 import de.christian2003.core.ui.composables.HelpCard
+import de.christian2003.core.ui.composables.ListItemContainer
 import de.christian2003.core.ui.composables.Tooltip
 import de.christian2003.core.ui.composables.dialog.ConfirmDeleteDialog
 import de.christian2003.core.ui.composables.dialog.ConfirmDiscardDialog
@@ -93,56 +94,39 @@ fun TagSheet(
         sheetGesturesEnabled = false,
         properties = ModalBottomSheetProperties(
             shouldDismissOnBackPress = false
-        )
+        ),
+        containerColor = MaterialTheme.colorScheme.surface
     ) {
         BackHandler {
             invokeOnDismiss()
         }
 
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            TopAppBar(
-                title = {
-                    Text(stringResource(R.string.tag_title))
-                },
-                navigationIcon = {
-                    Tooltip(
-                        tooltip = stringResource(de.christian2003.core.ui.R.string.tooltip_closeWithoutSaving),
-                        anchor = TooltipAnchorPosition.End
-                    ) {
-                        IconButton(
-                            onClick = invokeOnDismiss
-                        ) {
-                            Icon(
-                                painter = painterResource(de.christian2003.core.ui.R.drawable.ic_cancel),
-                                contentDescription = ""
-                            )
+        Scaffold(
+            topBar = {
+                TopBar(
+                    onDismiss = invokeOnDismiss,
+                    onSave = {
+                        coroutineScope.launch {
+                            sheetState.hide()
+                        }.invokeOnCompletion {
+                            onSave(viewModel.selectedTagIds)
                         }
                     }
-                },
-                actions = {
-                    TextButton(
-                        onClick = {
-                            coroutineScope.launch {
-                                sheetState.hide()
-                            }.invokeOnCompletion {
-                                onSave(viewModel.selectedTagIds)
-                            }
-                        }
-                    ) {
-                        Text(stringResource(de.christian2003.core.ui.R.string.button_ok))
+                )
+            },
+            bottomBar = {
+                BottomBar(
+                    onCreateTag = {
+                        viewModel.isCreateTagDialogVisible = true
                     }
-                },
-                colors = TopAppBarDefaults.topAppBarColors().copy(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
-            )
-
-            HorizontalDivider()
+                )
+            }
+        ) { innerPadding ->
             if (tags.isEmpty()) {
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
+                        .padding(innerPadding)
+                        .fillMaxSize()
                         .verticalScroll(rememberScrollState())
                 ) {
                     AnimatedVisibility(viewModel.isHelpCardVisible) {
@@ -188,23 +172,8 @@ fun TagSheet(
                     dismissHelpCard = {
                         viewModel.dismissHelpCard()
                     },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.padding(innerPadding)
                 )
-            }
-
-            HorizontalDivider()
-            TextButton(
-                onClick = {
-                    viewModel.isCreateTagDialogVisible = true
-                },
-                modifier = Modifier
-                    .padding(
-                        horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
-                        vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
-                    )
-                    .align(Alignment.End)
-            ) {
-                Text(stringResource(de.christian2003.core.ui.R.string.button_createTag))
             }
         }
     }
@@ -299,15 +268,18 @@ private fun TagList(
                     text = stringResource(R.string.tag_helpSelect),
                     onDismiss = dismissHelpCard,
                     modifier = Modifier.padding(
-                        horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
-                        vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
+                        start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                        end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                        bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
                     )
                 )
             }
         }
-        items(tags) { tag ->
+        itemsIndexed(tags) { index, tag ->
             TagListRow(
                 tag = tag,
+                isFirst = index == 0,
+                isLast = index == tags.size - 1,
                 selected = isTagSelected(tag),
                 onSelectedChange = { isSelected ->
                     if (isSelected) {
@@ -329,91 +301,104 @@ private fun TagList(
  * Displays a single tag within the tags list.
  *
  * @param tag               Tag to display.
+ * @param isFirst           Whether the tag is the first in the list.
+ * @param isLast            Whether the tag is the last in the list.
  * @param selected          Whether the tag is currently selected.
  * @param onSelectedChange  Callback invoked once the tag selection has changed.
  * @param onEditTag         Callback invoked to edit a tag.
  * @param onDeleteTag       Callback invoked to delete a tag.
+ * @param modifier          Modifier.
  */
 @Composable
 private fun TagListRow(
     tag: TagUiDto,
+    isFirst: Boolean,
+    isLast: Boolean,
     selected: Boolean,
     onSelectedChange: (Boolean) -> Unit,
     onEditTag: (TagUiDto) -> Unit,
-    onDeleteTag: (TagUiDto) -> Unit
+    onDeleteTag: (TagUiDto) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     var isDropdownVisible: Boolean by remember { mutableStateOf(false) }
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onSelectedChange(!selected)
-            }
-            .padding(
-                start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal) - 12.dp,
-                top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical),
-                end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal) - 12.dp,
-                bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
-            )
+
+    ListItemContainer(
+        isFirst = isFirst,
+        isLast = isLast,
+        modifier = modifier
     ) {
-        Checkbox(
-            checked = selected,
-            onCheckedChange = onSelectedChange
-        )
-        Text(
-            text = tag.name,
-            color = MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.bodyLarge,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(1f)
-        )
-        IconButton(
-            onClick = {
-                isDropdownVisible = !isDropdownVisible
-            }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    onSelectedChange(!selected)
+                }
+                .padding(
+                    start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal) - 12.dp,
+                    top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical),
+                    end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal) - 12.dp,
+                    bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
+                )
         ) {
-            Icon(
-                painter = painterResource(de.christian2003.core.ui.R.drawable.ic_more),
-                contentDescription = ""
+            Checkbox(
+                checked = selected,
+                onCheckedChange = onSelectedChange
             )
-            DropdownMenu(
-                expanded = isDropdownVisible,
-                onDismissRequest = {
-                    isDropdownVisible = false
+            Text(
+                text = tag.name,
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyLarge,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f)
+            )
+            IconButton(
+                onClick = {
+                    isDropdownVisible = !isDropdownVisible
                 }
             ) {
-                DropdownMenuItem(
-                    text = {
-                        Text(stringResource(R.string.tag_editTag))
-                    },
-                    leadingIcon = {
-                        Icon(
-                            painter = painterResource(de.christian2003.core.ui.R.drawable.ic_edit),
-                            contentDescription = ""
-                        )
-                    },
-                    onClick = {
-                        isDropdownVisible = false
-                        onEditTag(tag)
-                    }
+                Icon(
+                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_more),
+                    contentDescription = ""
                 )
-                DropdownMenuItem(
-                    text = {
-                        Text(stringResource(R.string.tag_deleteTag))
-                    },
-                    leadingIcon = {
-                        Icon(
-                            painter = painterResource(de.christian2003.core.ui.R.drawable.ic_delete),
-                            contentDescription = ""
-                        )
-                    },
-                    onClick = {
+                DropdownMenu(
+                    expanded = isDropdownVisible,
+                    onDismissRequest = {
                         isDropdownVisible = false
-                        onDeleteTag(tag)
                     }
-                )
+                ) {
+                    DropdownMenuItem(
+                        text = {
+                            Text(stringResource(R.string.tag_editTag))
+                        },
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(de.christian2003.core.ui.R.drawable.ic_edit),
+                                contentDescription = ""
+                            )
+                        },
+                        onClick = {
+                            isDropdownVisible = false
+                            onEditTag(tag)
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = {
+                            Text(stringResource(R.string.tag_deleteTag))
+                        },
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(de.christian2003.core.ui.R.drawable.ic_delete),
+                                contentDescription = ""
+                            )
+                        },
+                        onClick = {
+                            isDropdownVisible = false
+                            onDeleteTag(tag)
+                        }
+                    )
+                }
             }
         }
     }
@@ -451,4 +436,74 @@ private fun EditTagDialog(
         onSave = onSave,
         primaryButtonText = stringResource(de.christian2003.core.ui.R.string.button_save)
     )
+}
+
+
+/**
+ * Top app bar for the sheet.
+ *
+ * @param onDismiss Callback invoked to dismiss the sheet without saving.
+ * @param onSave    Callback invoked to dismiss the sheet and save data.
+ */
+@Composable
+private fun TopBar(
+    onDismiss: () -> Unit,
+    onSave: () -> Unit
+) {
+    TopAppBar(
+        title = {
+            Text(stringResource(R.string.tag_title))
+        },
+        navigationIcon = {
+            Tooltip(
+                tooltip = stringResource(de.christian2003.core.ui.R.string.tooltip_closeWithoutSaving),
+                anchor = TooltipAnchorPosition.End
+            ) {
+                IconButton(
+                    onClick = onDismiss
+                ) {
+                    Icon(
+                        painter = painterResource(de.christian2003.core.ui.R.drawable.ic_cancel),
+                        contentDescription = ""
+                    )
+                }
+            }
+        },
+        actions = {
+            TextButton(
+                onClick = onSave
+            ) {
+                Text(stringResource(de.christian2003.core.ui.R.string.button_ok))
+            }
+        }
+    )
+}
+
+
+/**
+ * Bottom bar for the sheet.
+ *
+ * @param onCreateTag   Callback invoked to create a new tag.
+ */
+@Composable
+private fun BottomBar(
+    onCreateTag: () -> Unit
+) {
+    BottomAppBar {
+        Column(
+            horizontalAlignment = Alignment.End,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    //Horizontal padding of bottom app bar: 4 dp
+                    horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal) - 4.dp
+                )
+        ) {
+            TextButton(
+                onClick = onCreateTag
+            ) {
+                Text(stringResource(de.christian2003.core.ui.R.string.button_createTag))
+            }
+        }
+    }
 }
