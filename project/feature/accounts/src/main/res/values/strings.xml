@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <!-- Screen through which to show accounts -->
+    <string name="main_emptyPlaceholder_title">No accounts</string>
+    <string name="main_emptyPlaceholder_subtitle">Create an account and it will show up here</string>
+    <string name="main_accounts_edit">Edit account</string>
+    <string name="main_accounts_delete">Delete account</string>
+    <string name="main_deleteAccountText">Are you sure you want to delete \"%1$s\"? This cannot be undone.</string>
+
+
+    <!-- Screen through which to view / edit accounts -->
+    <string name="account_titleReorder">Reorder</string>
+    <plurals name="account_titleMultiselect">
+        <item quantity="one">%1$d detail</item>
+        <item quantity="other">%1$d details</item>
+    </plurals>
+    <string name="account_nameLabel">Name</string>
+    <string name="account_nameTitle">Edit name</string>
+    <string name="account_namePlaceholder">Enter name</string>
+    <string name="account_descriptionLabel">Description</string>
+    <string name="account_descriptionTitle">Edit description</string>
+    <string name="account_descriptionPlaceholder">Enter description</string>
+    <string name="account_contextActions_editName">Edit name</string>
+    <string name="account_contextActions_editDescription">Edit description</string>
+    <string name="account_contextActions_selectAutofillTargets">Autofill targets</string>
+    <string name="account_contextActions_selectTags">Tags</string>
+    <string name="account_contextActions_createDetail">Create detail</string>
+    <string name="account_contextActions_reorderDetails">Reorder details</string>
+    <string name="account_details_title">Details</string>
+    <string name="account_details_edit">Edit detail</string>
+    <string name="account_details_delete">Remove detail</string>
+    <string name="account_details_copyToClipboard">Copy to clipboard</string>
+    <string name="account_details_reorder">Reorder details</string>
+    <string name="account_details_showContent">Show content</string>
+    <string name="account_details_hideContent">Hide content</string>
+    <string name="account_details_obfuscatedContent">•••••</string> <!-- '•' is U+2022  -->
+    <string name="account_details_confirmDeleteTitle">Remove detail</string>
+    <string name="account_details_confirmDeleteText">Are you sure you want to remove the detail \"%1$s\"?</string>
+    <plurals name="account_details_confirmDeleteTitleMultiselect">
+        <item quantity="one">Remove detail</item>
+        <item quantity="other">Remove details</item>
+    </plurals>
+    <plurals name="account_details_confirmDeleteTextMultiselect">
+        <item quantity="one">Are you sure you want to remove %1$d selected detail</item>
+        <item quantity="other">Are you sure you want to remove %1$d selected details</item>
+    </plurals>
+    <string name="account_details_emptyPlaceholder_title">No details</string>
+    <string name="account_details_emptyPlaceholder_subtitle">Available details are shown here</string>
+    <string name="account_tags_emptyPlaceholder_title">No tags</string>
+    <string-array name="account_helpMessages">
+        <item>Let\'s configure your account. First, enter a name for the account.</item>
+        <item>Next, enter a description which describes the account in greater detail.</item>
+        <item>Let\'s add the actual account information, like a password or email address.</item>
+        <item>Select an app or website you want to autofill the information.</item>
+        <item>Now, save your account by clicking the "Save" button.</item>
+        <item>To continue, close the multiselect mode.</item>
+        <item>To continue, close the reorder mode.</item>
+    </string-array>
+    <string name="account_discardChanges">Are you sure you want to discard the changes you made to the account?</string>
+
+
+    <!-- Sheet through which to select tags for accounts -->
+    <string name="tag_title">Tags</string>
+    <string name="tag_titleCreate">Create tag</string>
+    <string name="tag_titleEdit">Edit tag</string>
+    <string name="tag_nameLabel">Tag name</string>
+    <string name="tag_nameError">Invalid tag name</string>
+    <string name="tag_editTag">Edit tag</string>
+    <string name="tag_deleteTag">Delete tag</string>
+    <string name="tag_deleteTagText">Are you sure you want to delete the tag \"%1$s\"? This cannot be undone.</string>
+    <string name="tag_emptyPlaceholder_title">No tags</string>
+    <string name="tag_emptyPlaceholder_subtitle">Create a tag and it will show up here</string>
+    <string name="tag_discardChanges">Are you sure you want to discard the changes you made?</string>
+    <string name="tag_helpCreate">Create tags to group related accounts.</string>
+    <string name="tag_helpSelect">Select or create new tags to group accounts.</string>
+
+
+    <!-- Sheet through which to select autofill targets for accounts -->
+    <string name="target_title">Targets</string>
+    <string name="target_emptyPlaceholder_title">No targets</string>
+    <string name="target_emptyPlaceholder_subtitle">Select targets and they will show up here</string>
+    <string name="target_packages_title">Select apps</string>
+    <string name="target_website_title">Select website</string>
+    <string name="target_website_label">Website</string>
+    <string name="target_discardChanges">Are you sure you want to discard the changes you made?</string>
+    <string name="target_help">Select installed apps and websites as targets for the autofill service.</string>
+    <string name="target_remove_title">Remove target</string>
+    <string name="target_remove_textPackage">Are you sure you want to remove the Android app \"%1$s\" from the autofill targets?</string>
+    <string name="target_remove_textWebsite">Are you sure you want to remove the website \"%1$s\" from the autofill targets?</string>
+
+
+    <!-- Sheet through which to edit details for accounts -->
+    <string name="detail_titleCreate">Create detail</string>
+    <string name="detail_titleEdit">Edit detail</string>
+    <string name="detail_nameLabel">Name</string>
+    <string name="detail_contentLabel">Content</string>
+    <string name="detail_obfuscatedTitle">Obfuscated</string>
+    <string name="detail_obfuscatedText">Whether the content should be obfuscated</string>
+    <string name="detail_visibleTitle">Visible</string>
+    <string name="detail_visibleText">Whether the detail should be visible</string>
+    <string name="detail_iconsTitle">Choose an icon</string>
+    <string name="detail_discardChanges">Are you sure you want to discard the changes you made to the detail?</string>
+    <string name="detail_help">Each detail has two parts: A name (what it is) and a content (the actual information).</string>
+</resources>

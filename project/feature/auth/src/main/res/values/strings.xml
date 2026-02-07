@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <!-- Screen through which to configure the master password -->
+    <string name="password_title_firstTimeSetup">Setup login</string>
+    <string name="password_title_changePassword">Edit master password</string>
+    <string name="password_title_recoverPassword">New master password</string>
+    <string name="password_title_generateNewRecoveryCodes">Authenticate</string>
+    <string name="password_title_enableBiometrics">Enable biometrics</string>
+    <string name="password_help_firstTimeSetup">The master password is used to verify your identity whenever you access your data.</string>
+    <string name="password_help_changePassword">You can change the master password that you use to verify your identity when you access your data.</string>
+    <string name="password_help_recoverPassword">You need to set a new master password with which you verify your identity in the future.</string>
+    <string name="password_help_generateNewRecoveryCodes">You need to authenticate before new recovery codes can be generated.</string>
+    <string name="password_help_enableBiometrics">You need to authenticate before biometrics can be enabled.</string>
+    <string name="password_label_currentPassword">Current password</string>
+    <string name="password_label_newPassword">New password</string>
+    <string name="password_label_confirmNewPassword">Confirm new password</string>
+    <string name="password_label_password">Password</string>
+    <string name="password_label_confirmPassword">Confirm password</string>
+    <string name="password_button_continue">Continue</string>
+    <string name="password_error_passwordsDoNotMatch">Passwords do not match</string>
+    <string name="password_error_newPasswordsDoNotMatch">New passwords do not match</string>
+    <string name="password_error_inputEmpty">This field cannot be empty</string>
+    <string name="password_error_passwordInvalid">The password is invalid</string>
+
+
+    <!-- Screen through which recovery codes are displayed -->
+    <string name="recoveryCodes_title_firstTimeSetup">Recovery codes</string>
+    <string name="recoveryCodes_title_newCodes">New recovery codes</string>
+    <string name="recoveryCodes_loadingInfo">Generating recovery codes</string>
+    <string name="recoveryCodes_codesHeader">Your recovery codes</string>
+    <string name="recoveryCodes_error">We cannot generate any recovery codes at the moment. Please try again later.</string>
+    <string name="recoveryCodes_help_firstTimeSetup">Recovery codes are used to verify your identity if you forget your master password. Store these codes in a safe location where only you have access.</string>
+    <string name="recoveryCodes_help_newCodes">Your old recovery codes have been invalidated. Store these new codes in a safe location where only you have access.</string>
+    <string name="recoveryCodes_button_continue">Continue</string>
+    <string name="recoveryCodes_button_download">Download</string>
+    <string name="recoveryCodes_downloadDialog_title">Warning</string>
+    <string name="recoveryCodes_downloadDialog_text">Recovery codes are downloaded in an unsecured file. Everybody who has access to your device can see these codes. Make sure to move them to another device immediately and clear any traces of the codes on this device.</string>
+    <string name="recoveryCodes_downloadDialog_buttonCancel">Cancel download</string>
+    <string name="recoveryCodes_downloadDialog_buttonConfirm">Continue to download</string>
+    <string name="recoveryCodes_downloadFilename">recovery_codes.txt</string>
+    <string name="recoveryCodes_downloadSnackbar_success">Recovery codes saved</string>
+    <string name="recoveryCodes_downloadSnackbar_error">Cannot save recovery codes</string>
+    <string name="recoveryCodes_confirmContinueDialog_title">Confirm continue</string>
+    <string name="recoveryCodes_confirmContinueDialog_text">Are you sure you have written down the recovery codes and want to continue to the next step?</string>
+    <string name="recoveryCodes_confirmContinueDialog_buttonGoBack">Go back</string>
+    <string name="recoveryCodes_confirmContinueDialog_buttonContinue">Continue</string>
+
+
+    <!-- Screen through which the user can setup the biometric authentication -->
+    <string name="biometrics_title_firstTimeSetup">Setup biometrics</string>
+    <string name="biometrics_title_enableBiometrics">Enable biometrics</string>
+    <string name="biometrics_help">Biometric authentication facilitates a quicker login without your master password.</string>
+    <string name="biometrics_buttonSkip">Skip</string>
+    <string name="biometrics_buttonEnable">Enable</string>
+
+
+    <!-- Screen through which to finish changes to auth -->
+    <string name="finish_title_firstTimeSetup">Finish setup</string>
+    <string name="finish_title_recoverPassword">Finish recovery</string>
+    <string name="finish_title_changePassword">Saving password</string>
+    <string name="finish_title_generateNewRecoveryCodes">Saving changes</string>
+    <string name="finish_title_enableBiometrics">Enabling biometrics</string>
+    <string name="finish_labelLoading_firstTimeSetup">Please wait while we are saving your login data</string>
+    <string name="finish_labelLoading_newPassword">Please wait while we are saving your new master password</string>
+    <string name="finish_labelLoading_generateNewRecoveryCodes">Please wait while we are saving your new recovery codes</string>
+    <string name="finish_labelLoading_enableBiometrics">Please wait while we are enabling biometrics</string>
+    <string name="finish_labelFinished_firstTimeSetup">Your login data was saved successfully</string>
+    <string name="finish_labelFinished_newPassword">Your new master password was saved successfully</string>
+    <string name="finish_labelFinished_generateNewRecoveryCodes">Your new recovery codes were saved successfully</string>
+    <string name="finish_labelFinished_enableBiometrics">Biometrics have been enabled</string>
+    <string name="finish_buttonContinue">Continue</string>
+    <string name="finish_cannotNavigateBackWhileSaving">Please wait until all data is saved</string>
+
+
+    <!-- Screen through which the user can login -->
+    <string name="login_title">Password Vault</string>
+    <string name="login_passwordLabel">Master password</string>
+    <string name="login_hint">Confirm your identity</string>
+    <string name="login_errorPassword">Password is invalid</string>
+    <string name="login_buttonLogin">Login</string>
+    <string name="login_buttonBiometrics">Use biometrics</string>
+    <string name="login_buttonRecovery">Forgot password</string>
+
+
+    <!-- Screen through which to enter the master password -->
+    <string name="recovery_title">Recovery</string>
+    <string name="recovery_help">During the app setup, you received five recovery codes. You need to enter one of these codes in order to continue.</string>
+    <string name="recovery_recoveryCodeLabel">Recovery code</string>
+    <string name="recovery_error_codeInvalid">Recovery code is invalid</string>
+    <string name="recovery_error_codeEmpty">This field cannot be empty</string>
+
+
+    <!-- Screen for authentication settings -->
+    <string name="authSettings_title">Authentication</string>
+    <string name="authSettings_masterPassword_title">Master password</string>
+    <string name="authSettings_masterPassword_placeholderTitle">Your password</string>
+    <string name="authSettings_masterPassword_placeholder">••••••</string> <!-- '•' is U+2022  -->
+    <string name="authSettings_masterPassword_placeholderTooltip">We cannot show your master password</string>
+    <string name="authSettings_masterPassword_activeLabelTooltip">You have set a master password</string>
+    <string name="authSettings_masterPassword_editButton">Change password</string>
+    <string name="authSettings_masterPassword_editedAtLabel">Edited on %1$s</string>
+    <string name="authSettings_recoveryCodes_title">Recovery codes</string>
+    <string name="authSettings_recoveryCodes_placeholderTitle">Your recovery codes</string>
+    <string name="authSettings_recoveryCodes_placeholder">XXXX-XXXX-XXXX-XXXX-XXXX-XXXX</string>
+    <string name="authSettings_recoveryCodes_activeLabelTooltip">You have set 5 recovery codes</string>
+    <string name="authSettings_recoveryCodes_placeholderTooltip">We cannot show your recovery codes</string>
+    <string name="authSettings_recoveryCodes_generateButton">Generate new codes</string>
+    <string name="authSettings_recoveryCodes_editedAtLabel">Generated on %1$s</string>
+    <string name="authSettings_biometrics_title">Biometrics</string>
+    <string name="authSettings_biometrics_activeLabelTooltip">Biometric authentication is active</string>
+    <string name="authSettings_biometrics_inactiveLabelTooltip">Biometric authentication is disabled</string>
+    <string name="authSettings_biometrics_unavailableLabelTooltip">Biometrics are unavailable on your device</string>
+    <string name="authSettings_biometrics_enableButton">Enable biometrics</string>
+    <string name="authSettings_biometrics_disableButton">Disable biometrics</string>
+    <string name="authSettings_biometrics_editedAtLabel">Enabled on %1$s</string>
+    <string name="authSettings_biometrics_commonBiometrics_title">Commonly used biometrics</string>
+    <string name="authSettings_biometrics_commonBiometrics_fingerprint">Fingerprint</string>
+    <string name="authSettings_biometrics_commonBiometrics_face">Facial recognition</string>
+    <string name="authSettings_biometrics_commonBiometrics_heartbeat">Heartbeat recognition</string>
+    <string name="authSettings_biometrics_confirmDisableDialog_title">Confirm disable</string>
+    <string name="authSettings_biometrics_confirmDisableDialog_text">Are you sure you want to disable biometric authentication?</string>
+    <string name="authSettings_activeLabel">Active</string>
+    <string name="authSettings_inactiveLabel">Inactive</string>
+    <string name="authSettings_unavailableLabel">Unavailable</string>
+    <string name="authSettings_recommendation_title">Recommended actions</string>
+    <string name="authSettings_recommendation_changePassword">Your password has been edited more than half a year ago. We recommend to change your password.</string>
+    <string name="authSettings_recommendation_regenerateRecoveryCodes">Your recovery codes have been generated over a year ago. We recommend regenerating recovery codes occasionally.</string>
+    <string name="authSettings_recommendation_enableBiometrics">Enable biometrics for a quicker login without your master password.</string>
+
+</resources>
