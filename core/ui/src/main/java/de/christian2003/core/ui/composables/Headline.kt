@@ -41,6 +41,7 @@ fun Headline(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
+            .padding(top = dimensionResource(R.dimen.padding_vertical))
             .clickable(onClick != null) {
                 onClick!!()
             }

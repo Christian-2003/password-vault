@@ -3,14 +3,18 @@ package de.christian2003.passwordvault.ui.settings
 import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Badge
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -19,9 +23,9 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
@@ -30,11 +34,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import coil.compose.rememberAsyncImagePainter
 import de.christian2003.core.ui.composables.Headline
+import de.christian2003.core.ui.composables.ListItemContainer
 import de.christian2003.core.ui.theme.ThemeContrast
 import de.christian2003.passwordvault.R
 import de.christian2003.passwordvault.models.dialogs.SettingsScreenDialog
 import de.christian2003.passwordvault.viewmodels.SettingsViewModel
-import kotlinx.coroutines.CoroutineScope
 import java.time.LocalDate
 
 
@@ -48,8 +52,6 @@ fun SettingsScreen(
     onUseGlobalThemeChange: (Boolean) -> Unit,
     onThemeContrastChange: (ThemeContrast) -> Unit
 ) {
-    val coroutineScope: CoroutineScope = rememberCoroutineScope()
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -79,16 +81,14 @@ fun SettingsScreen(
 
             //Customization:
             item {
-                HorizontalDivider()
-                Headline(
-                    title = stringResource(R.string.settings_customization),
-                    indentToPrefixIcon = true
-                )
+                Headline(stringResource(R.string.settings_customization))
                 SettingsItemSwitch(
                     title = stringResource(R.string.settings_customization_globalThemeTitle),
                     info = stringResource(R.string.settings_customization_globalThemeInfo),
                     prefixIcon = painterResource(R.drawable.ic_theme),
                     checked = viewModel.useGlobalTheme,
+                    isFirst = true,
+                    isLast = viewModel.useGlobalTheme,
                     onCheckedChange = { enabled ->
                         viewModel.updateUseGlobalTheme(enabled)
                         onUseGlobalThemeChange(enabled)
@@ -99,6 +99,7 @@ fun SettingsScreen(
                         title = stringResource(R.string.settings_customization_contrastTitle),
                         info = stringResource(R.string.settings_customization_contrastInfo),
                         prefixIcon = painterResource(R.drawable.ic_contrast),
+                        isLast = true,
                         onClick = {
                             viewModel.dialog = SettingsScreenDialog.Contrast
                         }
@@ -108,44 +109,41 @@ fun SettingsScreen(
 
             //Security:
             item {
-                HorizontalDivider()
-                Headline(
-                    title = stringResource(R.string.settings_security),
-                    indentToPrefixIcon = true
-                )
+                Headline(stringResource(R.string.settings_security))
                 SettingsItemButton(
                     title = stringResource(R.string.settings_security_authTitle),
                     info = stringResource(R.string.settings_security_authInfo),
                     prefixIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_auth),
                     endIcon = painterResource(R.drawable.ic_next),
+                    isFirst = true,
+                    isLast = true,
                     onClick = onNavigateToAuthSettings
                 )
             }
 
             //Help:
             item {
-                HorizontalDivider()
-                Headline(
-                    title = stringResource(R.string.settings_help),
-                    indentToPrefixIcon = true
-                )
+                Headline(stringResource(R.string.settings_help))
                 SettingsItemButton(
                     title = stringResource(R.string.settings_help_helpMessagesTitle),
                     info = stringResource(R.string.settings_help_helpMessagesInfo),
                     prefixIcon = painterResource(R.drawable.ic_help_outlined),
                     endIcon = painterResource(R.drawable.ic_next),
+                    isFirst = true,
+                    isLast = true,
                     onClick = onNavigateToHelp
                 )
             }
 
             //Other:
             item {
-                HorizontalDivider()
                 SettingsItemButton(
                     title = stringResource(R.string.settings_developmentTitle),
                     info = stringResource(R.string.settings_developmentInfo),
                     prefixIcon = painterResource(R.drawable.ic_dev),
                     endIcon = painterResource(R.drawable.ic_next),
+                    isFirst = true,
+                    isLast = true,
                     onClick = onNavigateToDevSettings
                 )
             }
@@ -178,7 +176,10 @@ fun SettingsScreen(
  * @param info          Info for the setting.
  * @param onClick       Callback to invoke when the item button is clicked.
  * @param endIcon       Optional end icon.
+ * @param isFirst       Whether this is the first list item.
+ * @param isLast        Whether this is the last list item.
  * @param prefixIcon    Optional prefix icon.
+ * @param badgeCount    Optional count shown in a badge.
  */
 @Composable
 fun SettingsItemButton(
@@ -186,58 +187,81 @@ fun SettingsItemButton(
     info: String,
     onClick: () -> Unit,
     endIcon: Painter? = null,
-    prefixIcon: Painter? = null
+    isFirst: Boolean = false,
+    isLast: Boolean = false,
+    prefixIcon: Painter? = null,
+    badgeCount: Int = 0
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onClick()
-            }
-            .padding(
-                vertical = dimensionResource(R.dimen.padding_vertical),
-                horizontal = dimensionResource(R.dimen.margin_horizontal)
-            ),
-        verticalAlignment = Alignment.CenterVertically
+    ListItemContainer(
+        isFirst = isFirst,
+        isLast = isLast
     ) {
-        if (prefixIcon != null) {
-            Icon(
-                painter = prefixIcon,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                contentDescription = "",
-                modifier = Modifier
-                    .padding(end = dimensionResource(R.dimen.padding_horizontal))
-                    .size(dimensionResource(R.dimen.image_xs))
-            )
-        }
-        Column(
-            modifier = Modifier.weight(1f)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    onClick()
+                }
+                .padding(
+                    horizontal = dimensionResource(R.dimen.padding_horizontal),
+                    vertical = dimensionResource(R.dimen.padding_vertical)
+                ),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = title,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold
-                )
-                if (endIcon != null) {
+            if (prefixIcon != null) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .padding(end = dimensionResource(R.dimen.padding_horizontal))
+                        .size(dimensionResource(R.dimen.image_xs))
+                ) {
                     Icon(
-                        painter = endIcon,
-                        tint = MaterialTheme.colorScheme.onSurface,
+                        painter = prefixIcon,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         contentDescription = "",
-                        modifier = Modifier
-                            .padding(start = dimensionResource(R.dimen.padding_horizontal) / 2)
-                            .size(dimensionResource(R.dimen.image_xxs))
+                        modifier = Modifier.fillMaxSize()
                     )
+                    if (badgeCount > 0) {
+                        Badge(
+                            modifier = Modifier.offset(
+                                x = dimensionResource(R.dimen.image_xs) / 3,
+                                y = dimensionResource(R.dimen.image_xs) / -3
+                            )
+                        ) {
+                            Text(badgeCount.toString())
+                        }
+                    }
                 }
             }
-            Text(
-                text = info,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                style = MaterialTheme.typography.bodyMedium
-            )
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = title,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                    if (endIcon != null) {
+                        Icon(
+                            painter = endIcon,
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .padding(start = dimensionResource(R.dimen.padding_horizontal) / 2)
+                                .size(dimensionResource(R.dimen.image_xxs))
+                        )
+                    }
+                }
+                Text(
+                    text = info,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         }
     }
 }
@@ -258,50 +282,57 @@ fun SettingsItemSwitch(
     info: String,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
+    isFirst: Boolean = false,
+    isLast: Boolean = false,
     prefixIcon: Painter? = null
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onCheckedChange(!checked)
-            }
-            .padding(
-                vertical = dimensionResource(R.dimen.padding_vertical),
-                horizontal = dimensionResource(R.dimen.margin_horizontal)
-            ),
-        verticalAlignment = Alignment.CenterVertically
+    ListItemContainer(
+        isFirst = isFirst,
+        isLast = isLast
     ) {
-        if (prefixIcon != null) {
-            Icon(
-                painter = prefixIcon,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                contentDescription = "",
-                modifier = Modifier
-                    .padding(end = dimensionResource(R.dimen.padding_horizontal))
-                    .size(dimensionResource(R.dimen.image_xs))
-            )
-        }
-        Column(
-            modifier = Modifier.weight(1f)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    onCheckedChange(!checked)
+                }
+                .padding(
+                    vertical = dimensionResource(R.dimen.padding_vertical),
+                    horizontal = dimensionResource(R.dimen.padding_horizontal)
+                ),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = title,
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = info,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                style = MaterialTheme.typography.bodyMedium
+            if (prefixIcon != null) {
+                Icon(
+                    painter = prefixIcon,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    contentDescription = "",
+                    modifier = Modifier
+                        .padding(end = dimensionResource(R.dimen.padding_horizontal))
+                        .size(dimensionResource(R.dimen.image_xs))
+                )
+            }
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = title,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = info,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+            Switch(
+                checked = checked,
+                onCheckedChange = onCheckedChange,
+                modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
             )
         }
-        Switch(
-            checked = checked,
-            onCheckedChange = onCheckedChange,
-            modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
-        )
     }
 }
 
@@ -317,7 +348,14 @@ private fun GeneralSection() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                horizontal = dimensionResource(R.dimen.margin_horizontal),
+                start = dimensionResource(R.dimen.margin_horizontal),
+                end = dimensionResource(R.dimen.margin_horizontal),
+                bottom = dimensionResource(R.dimen.padding_vertical)
+            )
+            .clip(MaterialTheme.shapes.extraLarge)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .padding(
+                horizontal = dimensionResource(R.dimen.padding_horizontal),
                 vertical = dimensionResource(R.dimen.padding_vertical)
             )
     ) {
@@ -334,7 +372,7 @@ private fun GeneralSection() {
             Text(
                 text = stringResource(de.christian2003.core.ui.R.string.app_name),
                 color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLargeEmphasized
             )
             if (version != null) {
                 Text(

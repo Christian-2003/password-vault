@@ -62,6 +62,7 @@ fun DevSettingsScreen(
                     title = stringResource(R.string.settings_dev_deleteMasterPasswordTitle),
                     info = stringResource(R.string.settings_dev_deleteMasterPasswordInfo),
                     prefixIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_password),
+                    isFirst = true,
                     onClick = {
                         viewModel.deleteMasterPassword()
                     }
@@ -80,6 +81,7 @@ fun DevSettingsScreen(
                     info = stringResource(R.string.settings_dev_enableScreenshotsInfo),
                     prefixIcon = painterResource(R.drawable.ic_dev),
                     checked = viewModel.isEnableScreenshots,
+                    isLast = true,
                     onCheckedChange = {
                         viewModel.setIsEnableScreenshots(it)
                         onEnableScreenshotsChanged()
