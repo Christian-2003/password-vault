@@ -89,14 +89,14 @@ fun ContrastDialog(
                                 color = MaterialTheme.colorScheme.primary,
                                 style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_vertical))
+                                modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
                             )
                             Row {
                                 val firstChar: Char? = stringResource(R.string.settings_customization_contrast_dialogPreview_itemTitle).firstOrNull { !it.isWhitespace() }
                                 Box(
                                     contentAlignment = Alignment.Center,
                                     modifier = Modifier
-                                        .size(dimensionResource(R.dimen.image_m))
+                                        .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
                                         .clip(MaterialTheme.shapes.medium)
                                         .background(MaterialTheme.colorScheme.surfaceContainer)
                                 ) {
@@ -110,7 +110,7 @@ fun ContrastDialog(
                                 Column(
                                     modifier = Modifier
                                         .weight(1f)
-                                        .padding(horizontal = dimensionResource(R.dimen.padding_horizontal))
+                                        .padding(horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
                                 ) {
                                     Text(
                                         text = stringResource(R.string.settings_customization_contrast_dialogPreview_itemTitle),
@@ -192,7 +192,7 @@ fun ContrastDialog(
                         onClick = {
                             onSave(mutableContrast)
                         },
-                        modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
+                        modifier = Modifier.padding(start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
                     ) {
                         Text(stringResource(de.christian2003.core.ui.R.string.button_save))
                     }

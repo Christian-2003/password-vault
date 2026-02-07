@@ -63,7 +63,7 @@ fun SettingsScreen(
                         onClick = onNavigateUp
                     ) {
                         Icon(
-                            painter = painterResource(R.drawable.ic_back),
+                            painter = painterResource(de.christian2003.core.ui.R.drawable.ic_back),
                             contentDescription = ""
                         )
                     }
@@ -203,8 +203,8 @@ fun SettingsItemButton(
                     onClick()
                 }
                 .padding(
-                    horizontal = dimensionResource(R.dimen.padding_horizontal),
-                    vertical = dimensionResource(R.dimen.padding_vertical)
+                    horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
+                    vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
                 ),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -212,8 +212,8 @@ fun SettingsItemButton(
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
-                        .padding(end = dimensionResource(R.dimen.padding_horizontal))
-                        .size(dimensionResource(R.dimen.image_xs))
+                        .padding(end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
+                        .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xs))
                 ) {
                     Icon(
                         painter = prefixIcon,
@@ -224,8 +224,8 @@ fun SettingsItemButton(
                     if (badgeCount > 0) {
                         Badge(
                             modifier = Modifier.offset(
-                                x = dimensionResource(R.dimen.image_xs) / 3,
-                                y = dimensionResource(R.dimen.image_xs) / -3
+                                x = dimensionResource(de.christian2003.core.ui.R.dimen.image_xs) / 3,
+                                y = dimensionResource(de.christian2003.core.ui.R.dimen.image_xs) / -3
                             )
                         ) {
                             Text(badgeCount.toString())
@@ -251,8 +251,8 @@ fun SettingsItemButton(
                             tint = MaterialTheme.colorScheme.onSurface,
                             contentDescription = "",
                             modifier = Modifier
-                                .padding(start = dimensionResource(R.dimen.padding_horizontal) / 2)
-                                .size(dimensionResource(R.dimen.image_xxs))
+                                .padding(start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal) / 2)
+                                .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xxs))
                         )
                     }
                 }
@@ -297,8 +297,8 @@ fun SettingsItemSwitch(
                     onCheckedChange(!checked)
                 }
                 .padding(
-                    vertical = dimensionResource(R.dimen.padding_vertical),
-                    horizontal = dimensionResource(R.dimen.padding_horizontal)
+                    vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical),
+                    horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal)
                 ),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -308,8 +308,8 @@ fun SettingsItemSwitch(
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     contentDescription = "",
                     modifier = Modifier
-                        .padding(end = dimensionResource(R.dimen.padding_horizontal))
-                        .size(dimensionResource(R.dimen.image_xs))
+                        .padding(end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
+                        .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xs))
                 )
             }
             Column(
@@ -330,7 +330,7 @@ fun SettingsItemSwitch(
             Switch(
                 checked = checked,
                 onCheckedChange = onCheckedChange,
-                modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
+                modifier = Modifier.padding(start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
             )
         }
     }
@@ -348,26 +348,26 @@ private fun GeneralSection() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                start = dimensionResource(R.dimen.margin_horizontal),
-                end = dimensionResource(R.dimen.margin_horizontal),
-                bottom = dimensionResource(R.dimen.padding_vertical)
+                start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
             )
             .clip(MaterialTheme.shapes.extraLarge)
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(
-                horizontal = dimensionResource(R.dimen.padding_horizontal),
-                vertical = dimensionResource(R.dimen.padding_vertical)
+                horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
+                vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
             )
     ) {
         Image(
             painter = rememberAsyncImagePainter(de.christian2003.core.ui.R.mipmap.launcher),
             contentDescription = "",
-            modifier = Modifier.size(dimensionResource(R.dimen.image_l))
+            modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_l))
         )
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = dimensionResource(R.dimen.padding_horizontal))
+                .padding(start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
         ) {
             Text(
                 text = stringResource(de.christian2003.core.ui.R.string.app_name),
@@ -385,7 +385,7 @@ private fun GeneralSection() {
                 text = stringResource(R.string.settings_about_copyright, LocalDate.now().year.toString()),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_vertical))
+                modifier = Modifier.padding(top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
             )
         }
     }

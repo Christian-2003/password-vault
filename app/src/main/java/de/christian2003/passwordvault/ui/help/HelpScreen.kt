@@ -65,7 +65,7 @@ fun HelpScreen(
                         onClick = onNavigateUp
                     ) {
                         Icon(
-                            painter = painterResource(R.drawable.ic_back),
+                            painter = painterResource(de.christian2003.core.ui.R.drawable.ic_back),
                             contentDescription = ""
                         )
                     }
@@ -92,9 +92,9 @@ fun HelpScreen(
                             viewModel.dismissHelpCard()
                         },
                         modifier = Modifier.padding(
-                            start = dimensionResource(R.dimen.margin_horizontal),
-                            end = dimensionResource(R.dimen.margin_horizontal),
-                            bottom = dimensionResource(R.dimen.padding_vertical)
+                            start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                            end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                            bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
                         )
                     )
                 }
@@ -152,16 +152,16 @@ private fun HelpListItem(
                     onClick(helpCard)
                 }
                 .padding(
-                    horizontal = dimensionResource(R.dimen.padding_horizontal),
-                    vertical = dimensionResource(R.dimen.padding_vertical)
+                    horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
+                    vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
                 )
         ) {
             Shape(
                 shape = MaterialShapes.Cookie12Sided,
                 color = MaterialTheme.colorScheme.surface,
                 modifier = Modifier
-                    .padding(end = dimensionResource(R.dimen.padding_horizontal))
-                    .size(dimensionResource(R.dimen.image_m))
+                    .padding(end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
+                    .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
             ) {
                 Icon(
                     painter = if (visible) {
@@ -171,7 +171,7 @@ private fun HelpListItem(
                     },
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     contentDescription = "",
-                    modifier = Modifier.size(dimensionResource(R.dimen.image_xs))
+                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xs))
                 )
             }
             Column(
@@ -194,7 +194,7 @@ private fun HelpListItem(
                     onClick(helpCard)
                 },
                 modifier = Modifier
-                    .padding(start = dimensionResource(R.dimen.padding_horizontal))
+                    .padding(start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
                     .size(24.dp)
             )
         }

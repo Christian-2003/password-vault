@@ -44,7 +44,7 @@ fun DevSettingsScreen(
                         onClick = onNavigateUp
                     ) {
                         Icon(
-                            painter = painterResource(R.drawable.ic_back),
+                            painter = painterResource(de.christian2003.core.ui.R.drawable.ic_back),
                             contentDescription = ""
                         )
                     }
