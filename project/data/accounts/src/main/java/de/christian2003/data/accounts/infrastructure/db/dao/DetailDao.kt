@@ -12,7 +12,7 @@ import kotlin.uuid.Uuid
 
 
 @Dao
-interface DetailDao {
+internal interface DetailDao {
 
     @Query("SELECT * FROM details WHERE account = :account")
     fun selectAllForAccount(account: Uuid): Flow<List<DetailEntity>>

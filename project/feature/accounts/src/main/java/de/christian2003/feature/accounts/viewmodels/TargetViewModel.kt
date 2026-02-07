@@ -30,7 +30,7 @@ import javax.inject.Inject
  * @param packageFingerprintService         Service to generate the fingerprint for a package.
  */
 @HiltViewModel
-class TargetViewModel @Inject constructor(
+internal class TargetViewModel @Inject constructor(
     application: Application,
     private val getAllPackagesUseCase: GetAllPackagesUseCase,
     private val getLocalizedPackageNameUseCase: GetLocalizedPackageNameUseCase,

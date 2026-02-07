@@ -21,7 +21,7 @@ import javax.inject.Inject
  * View model for the sheet through which to edit (or create) a detail.
  */
 @HiltViewModel
-class DetailViewModel @Inject constructor(
+internal class DetailViewModel @Inject constructor(
     application: Application
 ): AndroidViewModel(application) {
 

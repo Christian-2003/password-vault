@@ -12,7 +12,7 @@ import de.christian2003.feature.accounts.R
  *
  * @param drawableRes   ID of the drawable resource.
  */
-enum class DetailIconDrawable(
+internal enum class DetailIconDrawable(
     @param:DrawableRes val drawableRes: Int
 ) {
 

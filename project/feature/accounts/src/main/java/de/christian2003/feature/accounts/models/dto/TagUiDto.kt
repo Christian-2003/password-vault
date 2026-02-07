@@ -19,7 +19,7 @@ import kotlin.uuid.Uuid
  * @param id        ID for the tag.
  * @param metadata  Metadata for the tag.
  */
-data class TagUiDto(
+internal data class TagUiDto(
     val name: String,
     val id: Uuid,
     val metadata: TagMetadata

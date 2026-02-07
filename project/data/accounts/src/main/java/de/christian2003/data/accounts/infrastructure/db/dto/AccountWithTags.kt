@@ -8,7 +8,7 @@ import de.christian2003.data.accounts.infrastructure.db.entities.AccountTagCross
 import de.christian2003.data.accounts.infrastructure.db.entities.TagEntity
 
 
-data class AccountWithTags(
+internal data class AccountWithTags(
 
     @Embedded
     val account: AccountEntity,

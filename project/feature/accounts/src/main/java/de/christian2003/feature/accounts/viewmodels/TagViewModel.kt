@@ -34,7 +34,7 @@ import kotlin.uuid.Uuid
  * @param deleteTagUseCase  Use case to delete an existing tag.
  */
 @HiltViewModel
-class TagViewModel @Inject constructor(
+internal class TagViewModel @Inject constructor(
     application: Application,
     getAllTagsUseCase: GetAllTagsUseCase,
     private val createTagUseCase: CreateTagUseCase,

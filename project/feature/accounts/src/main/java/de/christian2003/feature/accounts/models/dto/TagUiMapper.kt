@@ -8,7 +8,7 @@ import de.christian2003.data.accounts.domain.entities.Tag
  *
  * For the reason on why DTOs are needed for the UI, see the documentation of "TagUiDto".
  */
-class TagUiMapper {
+internal class TagUiMapper {
 
     /**
      * Maps the DTO that is passed as argument to the domain model 'Tag'.

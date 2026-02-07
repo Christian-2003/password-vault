@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
  * Models the payload for the detail, that is being serialized into CBOR.
  */
 @Serializable
-class DetailPayload (
+internal class DetailPayload (
 
     /**
      * Name of the detail.

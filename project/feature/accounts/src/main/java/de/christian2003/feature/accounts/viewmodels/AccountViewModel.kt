@@ -60,7 +60,7 @@ import kotlin.uuid.toKotlinUuid
  * @param clipboardService      Service to copy content to the clipboard.
  */
 @HiltViewModel
-class AccountViewModel @Inject constructor(
+internal class AccountViewModel @Inject constructor(
     application: Application,
     savedStateHandle: SavedStateHandle,
     getAccountByIdUseCase: GetAccountByIdUseCase,

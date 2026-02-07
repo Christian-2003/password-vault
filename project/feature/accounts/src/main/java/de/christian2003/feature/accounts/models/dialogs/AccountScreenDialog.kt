@@ -1,7 +1,7 @@
 package de.christian2003.feature.accounts.models.dialogs
 
 
-enum class AccountScreenDialog {
+internal enum class AccountScreenDialog {
     None,
     Name,
     Description,

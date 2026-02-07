@@ -65,7 +65,7 @@ import kotlin.uuid.Uuid
  * @param onSave    Callback invoked to dismiss the sheet and save a list of selected tags.
  */
 @Composable
-fun TagSheet(
+internal fun TagSheet(
     viewModel: TagViewModel,
     onDismiss: () -> Unit,
     onSave: (Set<Uuid>) -> Unit

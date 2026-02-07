@@ -14,7 +14,7 @@ import java.time.ZoneOffset
  */
 @OptIn(ExperimentalSerializationApi::class)
 @Serializer(forClass = LocalDateTime::class)
-class LocalDateTimeSerializer: KSerializer<LocalDateTime> {
+internal class LocalDateTimeSerializer: KSerializer<LocalDateTime> {
 
     /**
      * Serializes the local date time instance to the encoder passed.

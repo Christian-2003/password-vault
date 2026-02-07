@@ -14,7 +14,7 @@ import kotlin.uuid.Uuid
 
 
 @Dao
-interface AccountDao {
+internal interface AccountDao {
 
     @Query("SELECT * FROM accounts")
     @Transaction

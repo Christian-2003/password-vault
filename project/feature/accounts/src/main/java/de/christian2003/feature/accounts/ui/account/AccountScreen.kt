@@ -105,7 +105,7 @@ import kotlin.text.ifEmpty
  *
  */
 @Composable
-fun AccountScreen(
+internal fun AccountScreen(
     viewModel: AccountViewModel,
     onNavigateUp: () -> Unit
 ) {

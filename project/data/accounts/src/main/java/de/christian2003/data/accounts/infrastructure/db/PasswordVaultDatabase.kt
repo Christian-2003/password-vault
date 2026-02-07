@@ -35,7 +35,7 @@ import de.christian2003.data.accounts.infrastructure.db.entities.TargetEntity
     LocalDateTimeConverter::class,
     UriConverter::class
 )
-abstract class PasswordVaultDatabase(): RoomDatabase() {
+internal abstract class PasswordVaultDatabase(): RoomDatabase() {
 
     /**
      * DAO through which to access the entries.
