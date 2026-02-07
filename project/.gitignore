@@ -10,9 +10,12 @@
 /.idea/deploymentTargetDropDown.xml
 /.idea/deploymentTargetSelectors.xml
 /.idea/deploymentTargetSelector.xml
+/.idea/workspace.xml
+/.idea
 .DS_Store
 /build
 /captures
+/.gradle
 .externalNativeBuild
 .cxx
 local.properties
