@@ -21,6 +21,7 @@ import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalBottomSheetProperties
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -103,59 +104,36 @@ fun DetailSheet(
         sheetGesturesEnabled = false,
         properties = ModalBottomSheetProperties(
             shouldDismissOnBackPress = false
-        )
+        ),
+        containerColor = MaterialTheme.colorScheme.surface
     ) {
         BackHandler {
             invokeOnDismiss()
         }
 
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            TopAppBar(
-                title = {
-                    Text(if (viewModel.isCreatingNewDetail) { stringResource(R.string.detail_titleCreate) } else { stringResource(R.string.detail_titleEdit) })
-                },
-                navigationIcon = {
-                    Tooltip(
-                        tooltip = stringResource(de.christian2003.core.ui.R.string.tooltip_closeWithoutSaving),
-                        anchor = TooltipAnchorPosition.End
-                    ) {
-                        IconButton(
-                            onClick = invokeOnDismiss
-                        ) {
-                            Icon(
-                                painter = painterResource(de.christian2003.core.ui.R.drawable.ic_cancel),
-                                contentDescription = ""
-                            )
-                        }
-                    }
-                },
-                actions = {
-                    TextButton(
-                        enabled = viewModel.isDataValid.value,
-                        onClick = {
-                            val detail: Detail? = viewModel.createDetailToSave()
-                            if (detail != null) {
-                                coroutineScope.launch {
-                                    sheetState.hide()
-                                }.invokeOnCompletion {
-                                    onSave(detail)
-                                }
+        Scaffold(
+            topBar = {
+                TopBar(
+                    isCreatingNewDetail = viewModel.isCreatingNewDetail,
+                    isDataValid = viewModel.isDataValid.value,
+                    onDismiss = invokeOnDismiss,
+                    onSave = {
+                        val detail: Detail? = viewModel.createDetailToSave()
+                        if (detail != null) {
+                            coroutineScope.launch {
+                                sheetState.hide()
+                            }.invokeOnCompletion {
+                                onSave(detail)
                             }
                         }
-                    ) {
-                        Text(stringResource(de.christian2003.core.ui.R.string.button_ok))
                     }
-                },
-                colors = TopAppBarDefaults.topAppBarColors().copy(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
-            )
-
-            HorizontalDivider()
-
+                )
+            }
+        ) { innerPadding ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(innerPadding)
                     .verticalScroll(rememberScrollState())
             ) {
                 AnimatedVisibility(viewModel.isHelpCardVisible) {
@@ -165,8 +143,9 @@ fun DetailSheet(
                             viewModel.dismissHelpCard()
                         },
                         modifier = Modifier.padding(
-                            horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
-                            vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
+                            start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                            end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                            bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
                         )
                     )
                 }
@@ -211,7 +190,11 @@ fun DetailSheet(
                             horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
                             vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
                         ),
-                    visualTransformation = if (viewModel.isObfuscated) { PasswordVisualTransformation() } else { VisualTransformation.None }
+                    visualTransformation = if (viewModel.isObfuscated) {
+                        PasswordVisualTransformation()
+                    } else {
+                        VisualTransformation.None
+                    }
                 )
 
                 Checkbox(
@@ -234,7 +217,11 @@ fun DetailSheet(
                 Headline(title = stringResource(R.string.detail_iconsTitle))
 
                 IconSelection(
-                    selected = if (viewModel.icon != null) { viewModel.icon!! } else { viewModel.type.defaultIcon },
+                    selected = if (viewModel.icon != null) {
+                        viewModel.icon!!
+                    } else {
+                        viewModel.type.defaultIcon
+                    },
                     onSelectedChange = {
                         viewModel.icon = it
                     }
@@ -309,4 +296,42 @@ private fun IconSelection(
             }
         }
     }
+}
+
+
+@Composable
+private fun TopBar(
+    isCreatingNewDetail: Boolean,
+    isDataValid: Boolean,
+    onDismiss: () -> Unit,
+    onSave: () -> Unit
+) {
+    TopAppBar(
+        title = {
+            Text(if (isCreatingNewDetail) { stringResource(R.string.detail_titleCreate) } else { stringResource(R.string.detail_titleEdit) })
+        },
+        navigationIcon = {
+            Tooltip(
+                tooltip = stringResource(de.christian2003.core.ui.R.string.tooltip_closeWithoutSaving),
+                anchor = TooltipAnchorPosition.End
+            ) {
+                IconButton(
+                    onClick = onDismiss
+                ) {
+                    Icon(
+                        painter = painterResource(de.christian2003.core.ui.R.drawable.ic_cancel),
+                        contentDescription = ""
+                    )
+                }
+            }
+        },
+        actions = {
+            TextButton(
+                enabled = isDataValid,
+                onClick = onSave
+            ) {
+                Text(stringResource(de.christian2003.core.ui.R.string.button_ok))
+            }
+        }
+    )
 }
