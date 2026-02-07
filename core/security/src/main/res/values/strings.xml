@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<resources>
-    <string name="biometricPrompt_title">Biometric authentication</string>
-    <string name="biometricPrompt_subtitle">To continue, you need to verify your identity.</string>
-    <string name="biometricPrompt_buttonCancel">Cancel</string>
-</resources>
