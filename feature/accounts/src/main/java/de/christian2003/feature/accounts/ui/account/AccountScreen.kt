@@ -32,7 +32,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
@@ -82,7 +81,6 @@ import de.christian2003.core.ui.composables.dialog.ConfirmDeleteDialog
 import de.christian2003.core.ui.composables.dialog.ConfirmDiscardDialog
 import de.christian2003.core.ui.composables.dialog.EditValueDialog
 import de.christian2003.data.accounts.domain.entities.Detail
-import de.christian2003.data.accounts.domain.entities.DetailIcon
 import de.christian2003.feature.accounts.models.dialogs.AccountScreenDialog
 import de.christian2003.feature.accounts.models.dto.TagUiDto
 import de.christian2003.feature.accounts.models.states.AccountScreenHelpState

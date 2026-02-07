@@ -18,23 +18,26 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalBottomSheetProperties
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateSetOf
@@ -47,13 +50,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.core.net.toUri
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import de.christian2003.core.ui.composables.EmptyPlaceholder
 import de.christian2003.core.ui.composables.HelpCard
+import de.christian2003.core.ui.composables.ListItemContainer
+import de.christian2003.core.ui.composables.Shape
 import de.christian2003.core.ui.composables.Tooltip
 import de.christian2003.core.ui.composables.dialog.ConfirmDeleteDialog
 import de.christian2003.core.ui.composables.dialog.ConfirmDiscardDialog
@@ -93,7 +100,6 @@ fun TargetSheet(
         }
     }
 
-
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
@@ -101,51 +107,37 @@ fun TargetSheet(
         sheetGesturesEnabled = false,
         properties = ModalBottomSheetProperties(
             shouldDismissOnBackPress = false
-        )
+        ),
+        containerColor = MaterialTheme.colorScheme.surface
     ) {
         BackHandler {
             invokeOnDismiss()
         }
 
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            TopAppBar(
-                title = {
-                    Text(stringResource(R.string.target_title))
-                },
-                navigationIcon = {
-                    Tooltip(
-                        tooltip = stringResource(de.christian2003.core.ui.R.string.tooltip_closeWithoutSaving),
-                        anchor = TooltipAnchorPosition.End
-                    ) {
-                        IconButton(
-                            onClick = invokeOnDismiss
-                        ) {
-                            Icon(
-                                painter = painterResource(de.christian2003.core.ui.R.drawable.ic_cancel),
-                                contentDescription = ""
-                            )
+        Scaffold(
+            topBar = {
+                TopBar(
+                    onDismiss = invokeOnDismiss,
+                    onSave = {
+                        coroutineScope.launch {
+                            sheetState.hide()
+                        }.invokeOnCompletion {
+                            onSave(viewModel.targets)
                         }
                     }
-                },
-                actions = {
-                    TextButton(
-                        onClick = {
-                            coroutineScope.launch {
-                                sheetState.hide()
-                            }.invokeOnCompletion {
-                                onSave(viewModel.targets)
-                            }
-                        }
-                    ) {
-                        Text(stringResource(de.christian2003.core.ui.R.string.button_save))
+                )
+            },
+            bottomBar = {
+                BottomBar(
+                    onSelectPackagesClick = {
+                        viewModel.isSelectPackageDialogVisible = true
+                    },
+                    onSelectWebsiteClick = {
+                        viewModel.isSelectWebsiteDialogVisible = true
                     }
-                },
-                colors = TopAppBarDefaults.topAppBarColors().copy(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
-            )
-            HorizontalDivider()
-
+                )
+            }
+        ) { innerPadding ->
             TargetsList(
                 targets = viewModel.targets,
                 isHelpCardVisible = viewModel.isHelpCardVisible,
@@ -162,19 +154,8 @@ fun TargetSheet(
                     viewModel.dismissHelpCard()
                 },
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-            )
-
-            HorizontalDivider()
-            BottomButtonRow(
-                onSelectPackagesClick = {
-                    viewModel.isSelectPackageDialogVisible = true
-                },
-                onSelectWebsiteClick = {
-                    viewModel.isSelectWebsiteDialogVisible = true
-                },
-                modifier = Modifier.align(Alignment.End)
+                    .fillMaxSize()
+                    .padding(innerPadding)
             )
         }
     }
@@ -267,65 +248,6 @@ fun TargetSheet(
 
 
 /**
- * Displays the bottom button row.
- *
- * @param onSelectPackagesClick Callback invoked to show the dialog to select an Android package.
- * @param onSelectWebsiteClick  Callback invoked to show the dialog to select a website.
- * @param modifier              Modifier.
- */
-@Composable
-private fun BottomButtonRow(
-    onSelectPackagesClick: () -> Unit,
-    onSelectWebsiteClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    FlowRow(
-        horizontalArrangement = Arrangement.End,
-        modifier = modifier
-    ) {
-        TextButton(
-            onClick = onSelectPackagesClick,
-            modifier = Modifier
-                .padding(
-                    horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
-                    vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
-                )
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_packages),
-                    contentDescription = "",
-                    modifier = Modifier.padding(end = 8.dp)
-                )
-                Text(stringResource(de.christian2003.core.ui.R.string.button_selectTargetPackage))
-            }
-        }
-        TextButton(
-            onClick = onSelectWebsiteClick,
-            modifier = Modifier
-                .padding(
-                    horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
-                    vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
-                )
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_website),
-                    contentDescription = "",
-                    modifier = Modifier.padding(end = 8.dp)
-                )
-                Text(stringResource(de.christian2003.core.ui.R.string.button_selectTargetWebsite))
-            }
-        }
-    }
-}
-
-
-/**
  * Displays a list of all targets.
  *
  * @param targets                       List of targets to display.
@@ -357,8 +279,9 @@ private fun TargetsList(
                     text = stringResource(R.string.target_help),
                     onDismiss = onDismissHelpCard,
                     modifier = Modifier.padding(
-                        horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
-                        vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
+                        start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                        end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                        bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
                     )
                 )
             }
@@ -381,16 +304,19 @@ private fun TargetsList(
                         text = stringResource(R.string.target_help),
                         onDismiss = onDismissHelpCard,
                         modifier = Modifier.padding(
-                            horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
-                            vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
+                            start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                            end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                            bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
                         )
                     )
                 }
             }
-            items(targets) { target ->
+            itemsIndexed(targets) { index, target ->
                 if (target.isAndroidApp()) {
                     TargetsListRowPackage(
                         target = target,
+                        isFirst = index == 0,
+                        isLast = index == targets.size - 1,
                         onRemove = onRemoveTarget,
                         onQueryLocalizedPackageName = onQueryLocalizedPackageName,
                         onQueryPackageIcon = onQueryPackageIcon
@@ -399,6 +325,8 @@ private fun TargetsList(
                 else {
                     TargetsListRowWebsite(
                         target = target,
+                        isFirst = index == 0,
+                        isLast = index == targets.size - 1,
                         onRemove = onRemoveTarget
                     )
                 }
@@ -412,6 +340,8 @@ private fun TargetsList(
  * List row for the targets list to display an Android app target.
  *
  * @param target                        Android app target to display.
+ * @param isFirst                       Whether the android app is the first in the list.
+ * @param isLast                        Whether the android app is the last in the list.
  * @param onRemove                      Callback invoked to remove the target.
  * @param onQueryLocalizedPackageName   Callback invoked to query the localized name for an
  *                                      installed package
@@ -420,48 +350,56 @@ private fun TargetsList(
 @Composable
 private fun TargetsListRowPackage(
     target: Target,
+    isFirst: Boolean,
+    isLast: Boolean,
     onRemove: (Target) -> Unit,
     onQueryLocalizedPackageName: (String) -> String?,
     onQueryPackageIcon: (String) -> Drawable?
 ) {
     val localizedPackageName: String = onQueryLocalizedPackageName(target.name) ?: ""
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
-                top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical),
-                end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal) - 12.dp,
-                bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
-            )
+
+    ListItemContainer(
+        isFirst = isFirst,
+        isLast = isLast
     ) {
-        Image(
-            painter = rememberDrawablePainter(onQueryPackageIcon(target.name)),
-            contentDescription = "",
-            modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
-        )
-        Text(
-            text = localizedPackageName,
-            color = MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.bodyLarge,
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
-        )
-        Tooltip(
-            tooltip = stringResource(de.christian2003.core.ui.R.string.tooltip_removeTargetAndroidApp, localizedPackageName),
-            anchor = TooltipAnchorPosition.Start
-        ) {
-            IconButton(
-                onClick = {
-                    onRemove(target)
-                }
-            ) {
-                Icon(
-                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_cancel),
-                    contentDescription = ""
+                .fillMaxWidth()
+                .padding(
+                    start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                    top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical),
+                    end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal) - 12.dp,
+                    bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
                 )
+        ) {
+            Image(
+                painter = rememberDrawablePainter(onQueryPackageIcon(target.name)),
+                contentDescription = "",
+                modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
+            )
+            Text(
+                text = localizedPackageName,
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
+            )
+            Tooltip(
+                tooltip = stringResource(de.christian2003.core.ui.R.string.tooltip_removeTargetAndroidApp, localizedPackageName),
+                anchor = TooltipAnchorPosition.Start
+            ) {
+                IconButton(
+                    onClick = {
+                        onRemove(target)
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(de.christian2003.core.ui.R.drawable.ic_cancel),
+                        contentDescription = ""
+                    )
+                }
             }
         }
     }
@@ -472,66 +410,74 @@ private fun TargetsListRowPackage(
  * List row for the targets list to display a website target.
  *
  * @param target    Website target to display.
+ * @param isFirst   Whether the website is the first in the list.
+ * @param isLast    Whether the website is the last in the list.
  * @param onRemove  Callback invoked to remove the target.
  */
 @Composable
 private fun TargetsListRowWebsite(
     target: Target,
+    isFirst: Boolean,
+    isLast: Boolean,
     onRemove: (Target) -> Unit
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
-                top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical),
-                end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal) - 12.dp,
-                bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
-            )
+    ListItemContainer(
+        isFirst = isFirst,
+        isLast = isLast
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
-                .clip(MaterialTheme.shapes.medium)
-                .background(MaterialTheme.colorScheme.surfaceContainer)
+                .fillMaxWidth()
+                .padding(
+                    start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                    top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical),
+                    end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal) - 12.dp,
+                    bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
+                )
         ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_website),
-                contentDescription = "",
-                tint = MaterialTheme.colorScheme.primary
-            )
-        }
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
-        ) {
-            Text(
-                text = target.name,
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyLarge
-            )
-            Text(
-                text = target.url.toString(),
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
-        Tooltip(
-            tooltip = stringResource(de.christian2003.core.ui.R.string.tooltip_removeTargetWebsite, target.name),
-            anchor = TooltipAnchorPosition.Start
-        ) {
-            IconButton(
-                onClick = {
-                    onRemove(target)
-                }
+            Shape(
+                shape = MaterialShapes.Clover8Leaf,
+                color = MaterialTheme.colorScheme.secondaryContainer,
+                modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
             ) {
                 Icon(
-                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_cancel),
-                    contentDescription = ""
+                    painter = painterResource(R.drawable.ic_website),
+                    contentDescription = "",
+                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xs))
                 )
+            }
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
+            ) {
+                Text(
+                    text = target.name,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Text(
+                    text = target.url.toString(),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+            Tooltip(
+                tooltip = stringResource(de.christian2003.core.ui.R.string.tooltip_removeTargetWebsite, target.name),
+                anchor = TooltipAnchorPosition.Start
+            ) {
+                IconButton(
+                    onClick = {
+                        onRemove(target)
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(de.christian2003.core.ui.R.drawable.ic_cancel),
+                        contentDescription = ""
+                    )
+                }
             }
         }
     }
@@ -676,6 +622,106 @@ private fun SelectPackageDialog(
                         modifier = Modifier.padding(start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
                     ) {
                         Text(stringResource(de.christian2003.core.ui.R.string.button_ok))
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+/**
+ * Top bar for the sheet.
+ *
+ * @param onDismiss Callback invoked to dismiss the sheet without saving.
+ * @param onSave    Callback invoked to dismiss the sheet and save changes.
+ */
+@Composable
+private fun TopBar(
+    onDismiss: () -> Unit,
+    onSave: () -> Unit
+) {
+    TopAppBar(
+        title = {
+            Text(stringResource(R.string.target_title))
+        },
+        navigationIcon = {
+            Tooltip(
+                tooltip = stringResource(de.christian2003.core.ui.R.string.tooltip_closeWithoutSaving),
+                anchor = TooltipAnchorPosition.End
+            ) {
+                IconButton(
+                    onClick = onDismiss
+                ) {
+                    Icon(
+                        painter = painterResource(de.christian2003.core.ui.R.drawable.ic_cancel),
+                        contentDescription = ""
+                    )
+                }
+            }
+        },
+        actions = {
+            TextButton(
+                onClick = onSave
+            ) {
+                Text(stringResource(de.christian2003.core.ui.R.string.button_ok))
+            }
+        }
+    )
+}
+
+
+/**
+ * Bottom bar for the sheet.
+ *
+ * @param onSelectPackagesClick Callback invoked to select an installed app.
+ * @param onSelectWebsiteClick  Callback invoked to select a website.
+ */
+@Composable
+private fun BottomBar(
+    onSelectPackagesClick: () -> Unit,
+    onSelectWebsiteClick: () -> Unit
+) {
+    BottomAppBar {
+        Column(
+            horizontalAlignment = Alignment.End,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            FlowRow(
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier
+                    .padding(
+                        //Horizontal padding of bottom app bar: 4 dp
+                        horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal) - 4.dp
+                    )
+            ) {
+                TextButton(
+                    onClick = onSelectPackagesClick
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_packages),
+                            contentDescription = "",
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                        Text(stringResource(de.christian2003.core.ui.R.string.button_selectTargetPackage))
+                    }
+                }
+                TextButton(
+                    onClick = onSelectWebsiteClick,
+                    modifier = Modifier.padding(start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_website),
+                            contentDescription = "",
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                        Text(stringResource(de.christian2003.core.ui.R.string.button_selectTargetWebsite))
                     }
                 }
             }
