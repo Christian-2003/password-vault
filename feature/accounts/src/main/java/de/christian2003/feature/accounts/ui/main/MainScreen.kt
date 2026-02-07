@@ -17,13 +17,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -50,7 +51,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import de.christian2003.core.ui.composables.EmptyPlaceholder
+import de.christian2003.core.ui.composables.ListItemContainer
 import de.christian2003.core.ui.composables.NavigationBarProtection
+import de.christian2003.core.ui.composables.Shape
 import de.christian2003.core.ui.composables.dialog.ConfirmDeleteDialog
 import de.christian2003.data.accounts.domain.entities.AccountDescriptor
 import de.christian2003.feature.accounts.viewmodels.MainViewModel
@@ -184,9 +187,11 @@ private fun AccountDescriptorsList(
         LazyColumn(
             modifier = Modifier.fillMaxSize()
         ) {
-            items(accountDescriptors) { accountDescriptor ->
+            itemsIndexed(accountDescriptors) { index, accountDescriptor ->
                 AccountDescriptorsListItem(
                     accountDescriptor = accountDescriptor,
+                    isFirst = index == 0,
+                    isLast = index == accountDescriptors.size - 1,
                     onEdit = onEditAccount,
                     onDelete = onDeleteAccount,
                     onQueryIcon = onQueryIcon
@@ -209,6 +214,8 @@ private fun AccountDescriptorsList(
  * Displays a list item for an account descriptor.
  *
  * @param accountDescriptor Descriptor for which to display the list item.
+ * @param isFirst           Whether the descriptor is the first in the list.
+ * @param isLast            Whether the descriptor is the last in the list.
  * @param onEdit            Callback invoked to edit the account.
  * @param onDelete          Callback invoked to delete the account.
  * @param onQueryIcon       Callback invoked to query the account icon.
@@ -216,123 +223,128 @@ private fun AccountDescriptorsList(
 @Composable
 private fun AccountDescriptorsListItem(
     accountDescriptor: AccountDescriptor,
+    isFirst: Boolean,
+    isLast: Boolean,
     onEdit: (AccountDescriptor) -> Unit,
     onDelete: (AccountDescriptor) -> Unit,
     onQueryIcon: (AccountDescriptor) -> Drawable?
 ) {
     var isDropdownVisible: Boolean by remember { mutableStateOf(false) }
 
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onEdit(accountDescriptor)
-            }
-            .padding(
-                start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
-                top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical),
-                end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal) - 12.dp,
-                bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
-            )
+    ListItemContainer(
+        isFirst = isFirst,
+        isLast = isLast
     ) {
-        //Icon:
-        val icon: Drawable? = onQueryIcon(accountDescriptor)
-        if (icon == null) {
-            val firstChar: Char? = accountDescriptor.name.firstOrNull { !it.isWhitespace() }
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
-                    .clip(MaterialTheme.shapes.medium)
-                    .background(MaterialTheme.colorScheme.surfaceContainer)
-            ) {
-                Text(
-                    text = firstChar?.toString() ?: "",
-                    color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    onEdit(accountDescriptor)
+                }
+                .padding(
+                    start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
+                    top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical),
+                    end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal) - 12.dp,
+                    bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
+                )
+        ) {
+            //Icon:
+            val icon: Drawable? = onQueryIcon(accountDescriptor)
+            if (icon == null) {
+                val firstChar: Char? = accountDescriptor.name.firstOrNull { !it.isWhitespace() }
+                Shape(
+                    shape = MaterialShapes.Clover8Leaf,
+                    color = MaterialTheme.colorScheme.secondaryContainer,
+                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
+                ) {
+                    Text(
+                        text = firstChar?.toString() ?: "",
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+            else {
+                Image(
+                    painter = rememberDrawablePainter(icon),
+                    contentDescription = "",
+                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
                 )
             }
-        }
-        else {
-            Image(
-                painter = rememberDrawablePainter(icon),
-                contentDescription = "",
-                modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
-            )
-        }
 
-        //Name and description:
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
-        ) {
-            Text(
-                text = accountDescriptor.name,
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyLarge,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            if (accountDescriptor.description.isNotBlank()) {
+            //Name and description:
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
+            ) {
                 Text(
-                    text = accountDescriptor.description,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    style = MaterialTheme.typography.bodyMedium,
-                    maxLines = 2,
+                    text = accountDescriptor.name,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyLarge,
+                    maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
+                if (accountDescriptor.description.isNotBlank()) {
+                    Text(
+                        text = accountDescriptor.description,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.bodyMedium,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
-        }
 
-        //Dropdown menu:
-        IconButton(
-            onClick = {
-                isDropdownVisible = !isDropdownVisible
-            }
-        ) {
-            Icon(
-                painter = painterResource(de.christian2003.core.ui.R.drawable.ic_more),
-                contentDescription = ""
-            )
-            DropdownMenu(
-                expanded = isDropdownVisible,
-                onDismissRequest = {
-                    isDropdownVisible = false
+            //Dropdown menu:
+            IconButton(
+                onClick = {
+                    isDropdownVisible = !isDropdownVisible
                 }
             ) {
-                DropdownMenuItem(
-                    text = {
-                        Text(stringResource(R.string.main_accounts_edit))
-                    },
-                    leadingIcon = {
-                        Icon(
-                            painter = painterResource(de.christian2003.core.ui.R.drawable.ic_edit),
-                            contentDescription = ""
-                        )
-                    },
-                    onClick = {
-                        isDropdownVisible = false
-                        onEdit(accountDescriptor)
-                    }
+                Icon(
+                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_more),
+                    contentDescription = ""
                 )
-                DropdownMenuItem(
-                    text = {
-                        Text(stringResource(R.string.main_accounts_delete))
-                    },
-                    leadingIcon = {
-                        Icon(
-                            painter = painterResource(de.christian2003.core.ui.R.drawable.ic_delete),
-                            contentDescription = ""
-                        )
-                    },
-                    onClick = {
+                DropdownMenu(
+                    expanded = isDropdownVisible,
+                    onDismissRequest = {
                         isDropdownVisible = false
-                        onDelete(accountDescriptor)
                     }
-                )
+                ) {
+                    DropdownMenuItem(
+                        text = {
+                            Text(stringResource(R.string.main_accounts_edit))
+                        },
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(de.christian2003.core.ui.R.drawable.ic_edit),
+                                contentDescription = ""
+                            )
+                        },
+                        onClick = {
+                            isDropdownVisible = false
+                            onEdit(accountDescriptor)
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = {
+                            Text(stringResource(R.string.main_accounts_delete))
+                        },
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(de.christian2003.core.ui.R.drawable.ic_delete),
+                                contentDescription = ""
+                            )
+                        },
+                        onClick = {
+                            isDropdownVisible = false
+                            onDelete(accountDescriptor)
+                        }
+                    )
+                }
             }
         }
     }

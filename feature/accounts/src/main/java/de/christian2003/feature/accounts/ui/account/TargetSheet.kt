@@ -367,9 +367,9 @@ private fun TargetsListRowPackage(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                    start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
                     top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical),
-                    end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal) - 12.dp,
+                    end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal) - 12.dp,
                     bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
                 )
         ) {
@@ -430,9 +430,9 @@ private fun TargetsListRowWebsite(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                    start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
                     top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical),
-                    end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal) - 12.dp,
+                    end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal) - 12.dp,
                     bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
                 )
         ) {
