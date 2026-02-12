@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import de.christian2003.data.accounts.domain.entities.DetailType
 import java.time.LocalDateTime
 import kotlin.uuid.Uuid
 
@@ -34,6 +35,9 @@ internal data class DetailEntity(
 
     @ColumnInfo(name = "payload")
     val payload: ByteArray,
+
+    @ColumnInfo(name = "type")
+    val type: DetailType,
 
     @ColumnInfo(name = "createdAt")
     val createdAt: LocalDateTime,

@@ -25,12 +25,6 @@ internal class DetailPayload (
     val content: String = "",
 
     /**
-     * Type of the detail.
-     */
-    @SerialName("type")
-    val type: DetailType = DetailType.Text,
-
-    /**
      * Icon of the detail. This can be null. In this case, the default icon of the detail type is
      * used.
      */

@@ -42,9 +42,7 @@ internal class AndroidPackageFingerprintService @Inject constructor(
      */
     override fun getPackageFingerprint(packageName: String): ByteArray? {
         try {
-            val packageInfo: PackageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNING_CERTIFICATES)
-
-            val signingInfo: SigningInfo? = packageInfo.signingInfo
+            val signingInfo: SigningInfo? = getSigningInfo(packageName)
             if (signingInfo == null) {
                 return null
             }
@@ -59,6 +57,43 @@ internal class AndroidPackageFingerprintService @Inject constructor(
         catch (_: Exception) {
             return null
         }
+    }
+
+
+    /**
+     * Validates whether the fingerprint of the specified package matches the provided fingerprint.
+     *
+     * @param packageName   Package to validate.
+     * @param fingerprint   Fingerprint against which to verify the package.
+     * @return              Whether the package matches the specified fingerprint.
+     */
+    override fun validate(packageName: String, fingerprint: ByteArray): Boolean {
+        try {
+            val signingInfo: SigningInfo? = getSigningInfo(packageName)
+            if (signingInfo == null) {
+                return false
+            }
+
+            signingInfo.apkContentsSigners.forEach { signature ->
+                try {
+                    val hash = hashSignature(signature)
+                    if (hash.contentEquals(fingerprint)) {
+                        //Package fingerprint matches:
+                        return true
+                    }
+                }
+                catch (_: Exception) { }
+            }
+        }
+        catch (_: Exception) { }
+        return false
+    }
+
+
+    private fun getSigningInfo(packageName: String): SigningInfo? {
+        val packageInfo: PackageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNING_CERTIFICATES)
+        val signingInfo: SigningInfo? = packageInfo.signingInfo
+        return signingInfo
     }
 
 

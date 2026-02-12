@@ -25,7 +25,10 @@ internal enum class DetailIconDrawable(
     Password(R.drawable.detail_password),
     Url(R.drawable.detail_url),
     Pin(R.drawable.detail_pin),
-    Username(R.drawable.detail_username);
+    Username(R.drawable.detail_username),
+    Payment(R.drawable.detail_payment),
+    Identification(R.drawable.detail_identification),
+    Phone(R.drawable.detail_phone);
 
 
     /**
@@ -78,6 +81,9 @@ internal enum class DetailIconDrawable(
                 DetailIcon.Url -> Url
                 DetailIcon.Pin -> Pin
                 DetailIcon.Username -> Username
+                DetailIcon.Payment -> Payment
+                DetailIcon.Identification -> Identification
+                DetailIcon.Phone -> Phone
             }
         }
 

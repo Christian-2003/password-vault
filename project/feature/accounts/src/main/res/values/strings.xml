@@ -94,6 +94,7 @@
     <!-- Sheet through which to edit details for accounts -->
     <string name="detail_titleCreate">Create detail</string>
     <string name="detail_titleEdit">Edit detail</string>
+    <string name="detail_typeLabel">Type</string>
     <string name="detail_nameLabel">Name</string>
     <string name="detail_contentLabel">Content</string>
     <string name="detail_obfuscatedTitle">Obfuscated</string>
@@ -103,4 +104,20 @@
     <string name="detail_iconsTitle">Choose an icon</string>
     <string name="detail_discardChanges">Are you sure you want to discard the changes you made to the detail?</string>
     <string name="detail_help">Each detail has two parts: A name (what it is) and a content (the actual information).</string>
+    <string-array name="detail_types">
+        <item>Email address</item>
+        <item>Username</item>
+        <item>Password</item>
+        <item>Pin code</item>
+        <item>Security question</item>
+        <item>Personal name</item>
+        <item>Phone number</item>
+        <item>Date</item>
+        <item>URL</item>
+        <item>Address</item>
+        <item>Credit card number</item>
+        <item>Text</item>
+        <item>Number</item>
+    </string-array>
+
 </resources>

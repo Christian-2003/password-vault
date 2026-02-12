@@ -7,6 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import de.christian2003.data.accounts.domain.repositories.AccountRepository
 import de.christian2003.data.accounts.domain.repositories.PackagesRepository
 import de.christian2003.data.accounts.domain.repositories.TagRepository
+import de.christian2003.data.accounts.domain.repositories.TargetRepository
 import de.christian2003.data.accounts.domain.services.PackageFingerprintService
 import de.christian2003.data.accounts.infrastructure.db.PasswordVaultRepository
 import de.christian2003.data.accounts.infrastructure.packages.AndroidPackageFingerprintService
@@ -33,6 +34,11 @@ internal abstract class AccountsBindingsSingletonModule {
     abstract fun bindTagRepository(
         impl: PasswordVaultRepository
     ): TagRepository
+
+    @Binds
+    abstract fun bindTargetRepository(
+        impl: PasswordVaultRepository
+    ): TargetRepository
 
 
     //========================= DOMAIN SERVICES =========================

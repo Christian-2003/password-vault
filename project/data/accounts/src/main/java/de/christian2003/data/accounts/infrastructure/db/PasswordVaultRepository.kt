@@ -8,11 +8,13 @@ import de.christian2003.data.accounts.domain.entities.Tag
 import de.christian2003.data.accounts.domain.repositories.AccountRepository
 import de.christian2003.data.accounts.domain.repositories.TagRepository
 import de.christian2003.data.accounts.domain.entities.Target
+import de.christian2003.data.accounts.domain.repositories.TargetRepository
 import de.christian2003.data.accounts.infrastructure.db.dao.AccountDao
 import de.christian2003.data.accounts.infrastructure.db.dao.DetailDao
 import de.christian2003.data.accounts.infrastructure.db.dao.TagDao
 import de.christian2003.data.accounts.infrastructure.db.dao.TargetDao
 import de.christian2003.data.accounts.infrastructure.db.dto.AccountWithTags
+import de.christian2003.data.accounts.infrastructure.db.entities.AccountEntity
 import de.christian2003.data.accounts.infrastructure.db.entities.DetailEntity
 import de.christian2003.data.accounts.infrastructure.db.entities.TagEntity
 import de.christian2003.data.accounts.infrastructure.db.entities.TargetEntity
@@ -43,7 +45,7 @@ internal class PasswordVaultRepository @Inject constructor(
     private val tagDao: TagDao,
     private val targetDao: TargetDao,
     private val cipherService: HmacCipherService
-): AccountRepository, TagRepository {
+): AccountRepository, TagRepository, TargetRepository {
 
     /**
      * Mapper maps the domain model 'Account' to its entity.
@@ -269,6 +271,48 @@ internal class PasswordVaultRepository @Inject constructor(
      */
     override suspend fun deleteTag(tag: Tag) {
         tagDao.delete(tagMapper.toEntity(tag))
+    }
+
+
+    /**
+     * Returns the targets with the specified package name (e.g. "de.christian2003.passwordvault") or
+     * URL host (e.g. "passwordvault.christian2003.de").
+     *
+     * @param name  Name of the targets to return (either package name or URL host).
+     * @return      List of targets with the specified name.
+     */
+    override fun getTargetsByName(name: String): Flow<List<Target>> {
+        val targetEntities: Flow<List<TargetEntity>> = targetDao.selectByName(name)
+        val targets: Flow<List<Target>> = targetEntities.map { list ->
+            list.map { entity ->
+                targetMapper.toDomain(entity)
+            }
+        }
+        return targets
+    }
+
+
+    /**
+     * For the specified target, the account is returned. If no account can be retrieved, null is
+     * returned.
+     *
+     * @param target    Target whose account to return.
+     * @return          Account of the specified target.
+     */
+    override suspend fun getAccountForTarget(target: Target): Account? {
+        val targetEntity: TargetEntity? = targetDao.selectById(target.id)
+        if (targetEntity != null) {
+            val accountEntity: AccountEntity? = accountDao.selectAccountById(targetEntity.account)?.account
+            if (accountEntity != null) {
+                val targets: List<Target> = targetDao.selectAllForAccount(accountEntity.id).first().map { targetEntity ->
+                    targetMapper.toDomain(targetEntity)
+                }
+                val account: Account = accountMapper.toDomain(accountEntity, targets)
+                return account
+            }
+        }
+
+        return null
     }
 
 }

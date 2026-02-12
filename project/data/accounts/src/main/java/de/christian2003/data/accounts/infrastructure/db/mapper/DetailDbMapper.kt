@@ -40,7 +40,7 @@ internal class DetailDbMapper(
             id = entity.id,
             name = payload.name,
             content = payload.content,
-            type = payload.type,
+            type = entity.type,
             icon = payload.icon,
             metadata = DetailMetadata(
                 createdAt = entity.createdAt,
@@ -63,7 +63,6 @@ internal class DetailDbMapper(
         val payload = DetailPayload(
             name = domain.name,
             content = domain.content,
-            type = domain.type,
             icon = domain.icon
         )
 
@@ -74,6 +73,7 @@ internal class DetailDbMapper(
             id = domain.id,
             account = entry,
             payload = encryptedPayload,
+            type = domain.type,
             createdAt = domain.metadata.createdAt,
             editedAt = domain.metadata.editedAt,
             isObfuscated = domain.metadata.isObfuscated,

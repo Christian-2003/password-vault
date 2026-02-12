@@ -38,10 +38,8 @@ class Account (
             return field.toList()
         }
         set(value) {
-            if (field != value) {
-                field = value.toList()
-                metadata = metadata.copy(editedAt = LocalDateTime.now())
-            }
+            field = value.toList()
+            metadata = metadata.copy(editedAt = LocalDateTime.now())
         }
 
     /**

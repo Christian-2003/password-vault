@@ -15,6 +15,9 @@ enum class DetailIcon {
     Password,
     Url,
     Pin,
-    Username;
+    Username,
+    Payment,
+    Identification,
+    Phone;
 
 }

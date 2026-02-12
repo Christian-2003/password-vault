@@ -10,14 +10,18 @@ enum class DetailType(
     val defaultIcon: DetailIcon
 ) {
 
-    Text(DetailIcon.Text),
-    Number(DetailIcon.Number),
-    SecurityQuestion(DetailIcon.SecurityQuestion),
-    Address(DetailIcon.Address),
-    Date(DetailIcon.Date),
     Email(DetailIcon.Email),
+    Username(DetailIcon.Username),
     Password(DetailIcon.Password),
+    Pin(DetailIcon.Pin),
+    SecurityQuestion(DetailIcon.SecurityQuestion),
+    PersonalName(DetailIcon.Identification),
+    PhoneNumber(DetailIcon.Phone),
+    Date(DetailIcon.Date),
     Url(DetailIcon.Url),
-    Pin(DetailIcon.Pin)
+    Address(DetailIcon.Address),
+    CreditCardNumber(DetailIcon.Payment),
+    Text(DetailIcon.Text),
+    Number(DetailIcon.Number)
 
 }

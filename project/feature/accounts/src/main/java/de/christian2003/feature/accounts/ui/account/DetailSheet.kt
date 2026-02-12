@@ -35,12 +35,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import de.christian2003.core.ui.composables.Checkbox
+import de.christian2003.core.ui.composables.DropdownInput
 import de.christian2003.core.ui.composables.Headline
 import de.christian2003.core.ui.composables.HelpCard
 import de.christian2003.core.ui.composables.TextInput
@@ -48,6 +50,7 @@ import de.christian2003.core.ui.composables.Tooltip
 import de.christian2003.core.ui.composables.dialog.ConfirmDiscardDialog
 import de.christian2003.data.accounts.domain.entities.Detail
 import de.christian2003.data.accounts.domain.entities.DetailIcon
+import de.christian2003.data.accounts.domain.entities.DetailType
 import de.christian2003.feature.accounts.viewmodels.DetailViewModel
 import de.christian2003.feature.accounts.R
 import de.christian2003.feature.accounts.models.other.DetailIconDrawable
@@ -147,6 +150,22 @@ internal fun DetailSheet(
                         )
                     )
                 }
+
+                DropdownInput(
+                    items = stringArrayResource(R.array.detail_types).toList(),
+                    itemIcons = DetailType.entries.map { painterResource(DetailIconDrawable.getDrawableForDetailIcon(it.defaultIcon).drawableRes) },
+                    selectedItemIndex = viewModel.type.ordinal,
+                    onSelectedItemIndexChange = {
+                        viewModel.type = DetailType.entries[it]
+                    },
+                    label = stringResource(R.string.detail_typeLabel),
+                    prefixIcon = painterResource(R.drawable.ic_type),
+                    modifier = Modifier.padding(
+                        start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                        end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                        bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
+                    )
+                )
 
                 TextInput(
                     value = viewModel.name,

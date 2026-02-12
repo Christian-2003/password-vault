@@ -15,6 +15,12 @@ internal interface TargetDao {
     @Query("SELECT * FROM targets WHERE account = :account")
     fun selectAllForAccount(account: Uuid): Flow<List<TargetEntity>>
 
+    @Query("SELECT * FROM targets WHERE name = :name")
+    fun selectByName(name: String): Flow<List<TargetEntity>>
+
+    @Query("SELECT * FROM targets WHERE id = :id")
+    fun selectById(id: Uuid): TargetEntity?
+
     @Query("DELETE FROM targets WHERE account = :account")
     suspend fun deleteAllForAccount(account: Uuid)
 

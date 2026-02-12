@@ -15,4 +15,14 @@ interface PackageFingerprintService {
      */
     fun getPackageFingerprint(packageName: String): ByteArray?
 
+
+    /**
+     * Validates whether the fingerprint of the specified package matches the provided fingerprint.
+     *
+     * @param packageName   Package to validate.
+     * @param fingerprint   Fingerprint against which to verify the package.
+     * @return              Whether the package matches the specified fingerprint.
+     */
+    fun validate(packageName: String, fingerprint: ByteArray): Boolean
+
 }
