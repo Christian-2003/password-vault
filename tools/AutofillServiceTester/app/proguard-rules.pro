@@ -19,3 +19,14 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+
+# Keep Compose semantics and autofill-related metadata
+-keep class androidx.compose.ui.semantics.** { *; }
+-keep class androidx.compose.ui.platform.** { *; }
+-keep class androidx.compose.ui.text.input.** { *; }
+
+# If your autofill service uses reflection on semantics
+-keepattributes RuntimeVisibleAnnotations
+-keepattributes RuntimeVisibleParameterAnnotations
+-keepattributes Signature

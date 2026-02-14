@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AutofillServiceTester">
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

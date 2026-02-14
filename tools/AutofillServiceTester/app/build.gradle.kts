@@ -13,7 +13,7 @@ android {
         minSdk = 34
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -41,6 +41,15 @@ android {
 }
 
 
+android.applicationVariants.all {
+    outputs.all {
+        val appName = "autofill-service-tester"
+        val versionName = versionName
+        (this as com.android.build.gradle.internal.api.BaseVariantOutputImpl).outputFileName = "$appName-v$versionName.apk"
+    }
+}
+
+
 plugins.withId("org.jetbrains.kotlin.android") {
     extensions.configure<org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension> {
         compilerOptions {
@@ -49,7 +58,8 @@ plugins.withId("org.jetbrains.kotlin.android") {
                 "-opt-in=kotlin.uuid.ExperimentalUuidApi",
                 "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
                 "-opt-in=androidx.compose.material3.ExperimentalMaterial3ExpressiveApi",
-                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi"
             )
         }
     }
