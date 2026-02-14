@@ -79,8 +79,6 @@
     <string name="login_passwordLabel">Master password</string>
     <string name="login_hint">Confirm your identity</string>
     <string name="login_errorPassword">Password is invalid</string>
-    <string name="login_buttonLogin">Login</string>
-    <string name="login_buttonBiometrics">Use biometrics</string>
     <string name="login_buttonRecovery">Forgot password</string>
 
 

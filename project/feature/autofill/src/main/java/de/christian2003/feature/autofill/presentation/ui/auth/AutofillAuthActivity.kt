@@ -1,0 +1,262 @@
+package de.christian2003.feature.autofill.presentation.ui.auth
+
+import android.content.res.Configuration
+import android.graphics.Color
+import android.os.Bundle
+import androidx.activity.SystemBarStyle
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.dp
+import androidx.fragment.app.FragmentActivity
+import dagger.hilt.android.AndroidEntryPoint
+import de.christian2003.core.security.application.usecases.BiometricAuthUseCase
+import de.christian2003.core.security.application.usecases.UnlockWithBiometricsUseCase
+import de.christian2003.core.ui.composables.LoadingIndicatorButton
+import de.christian2003.core.ui.composables.TextInput
+import de.christian2003.core.ui.theme.PasswordVaultTheme
+import de.christian2003.feature.autofill.R
+import de.christian2003.feature.autofill.presentation.viewmodels.AutofillAuthViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
+
+
+@AndroidEntryPoint
+class AutofillAuthActivity : FragmentActivity() {
+
+    private val viewModel: AutofillAuthViewModel by viewModels()
+
+    @Inject internal lateinit var unlockWithBiometricsUseCase: UnlockWithBiometricsUseCase
+    @Inject internal lateinit var biometricAuthUseCase: BiometricAuthUseCase
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        //App content:
+        enableEdgeToEdge(
+            navigationBarStyle = if (isNightMode()) {
+                SystemBarStyle.dark(
+                    scrim = Color.TRANSPARENT
+                )
+            } else {
+                SystemBarStyle.light(
+                    scrim = Color.TRANSPARENT,
+                    darkScrim = Color.TRANSPARENT
+                )
+            }
+        )
+        setContent {
+            AutofillActivityContent(
+                viewModel = viewModel,
+                onBiometricUnlock = {
+                    try {
+                        unlockWithBiometricsUseCase.unlock()
+                    } catch (_: Exception) {
+                        false
+                    }
+                },
+                onDismiss = {
+                    setResult(RESULT_CANCELED)
+                    finish()
+                },
+                onConfirm = {
+                    setResult(RESULT_OK)
+                    finish()
+                }
+            )
+        }
+    }
+
+    /**
+     * Determines whether the system is in night or day mode.
+     *
+     * @return  Whether the system is night or day mode.
+     */
+    private fun isNightMode(): Boolean {
+        val currentMode: Int = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        return currentMode == Configuration.UI_MODE_NIGHT_YES
+    }
+
+}
+
+
+@Composable
+private fun AutofillActivityContent(
+    viewModel: AutofillAuthViewModel,
+    onBiometricUnlock: suspend () -> Boolean,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    val coroutineScope: CoroutineScope = rememberCoroutineScope()
+    val sheetState: SheetState = rememberModalBottomSheetState()
+    val focusManager: FocusManager = LocalFocusManager.current
+
+    val invokeOnConfirm: () -> Unit = {
+        coroutineScope.launch(Dispatchers.Default) {
+            viewModel.unlockMasterKey()
+            if (!viewModel.isUnlockingMasterKey && viewModel.isPasswordValid) {
+                withContext(Dispatchers.Main) {
+                    focusManager.clearFocus()
+                    onConfirm()
+                }
+            }
+        }
+    }
+
+    PasswordVaultTheme(
+        dynamicColor = viewModel.useGlobalTheme,
+        contrast = viewModel.themeContrast
+    ) {
+        ModalBottomSheet(
+            onDismissRequest = onDismiss,
+            sheetState = sheetState,
+            dragHandle = null
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .imePadding()
+                    .verticalScroll(rememberScrollState())
+                    .padding(
+                        horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal)
+                    )
+            ) {
+                DragHandle()
+                Icon(
+                    painter = painterResource(de.christian2003.core.ui.R.drawable.launcher_foreground_fullscale),
+                    contentDescription = "",
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
+                )
+                Text(
+                    text = stringResource(R.string.autofill_auth_title),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                TextInput(
+                    value = viewModel.password,
+                    onValueChange = {
+                        viewModel.password = it
+                    },
+                    label = stringResource(R.string.autofill_auth_labelMasterPassword),
+                    isPassword = true,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(
+                        onAny = {
+                            focusManager.clearFocus()
+                            invokeOnConfirm()
+                        }
+                    ),
+                    errorMessage = when {
+                        !viewModel.isPasswordValid && viewModel.password.isBlank() -> stringResource(de.christian2003.core.ui.R.string.error_blankInput)
+                        !viewModel.isPasswordValid -> stringResource(de.christian2003.core.ui.R.string.error_invalidPassword)
+                        else -> null
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
+                )
+                if (viewModel.areBiometricsConfigured) {
+                    OutlinedButton(
+                        onClick = {
+                            coroutineScope.launch {
+                                if (onBiometricUnlock()) {
+                                    coroutineScope.launch {
+                                        sheetState.hide()
+                                    }.invokeOnCompletion {
+                                        onConfirm()
+                                    }
+                                }
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                painter = painterResource(de.christian2003.core.ui.R.drawable.ic_biometrics),
+                                contentDescription = "",
+                                modifier = Modifier.padding(end = 8.dp)
+                            )
+                            Text(stringResource(de.christian2003.core.ui.R.string.button_biometrics))
+                        }
+                    }
+                }
+                LoadingIndicatorButton(
+                    label = stringResource(de.christian2003.core.ui.R.string.button_authenticate),
+                    isLoading = viewModel.isUnlockingMasterKey,
+                    onClick = {
+                        focusManager.clearFocus()
+                        invokeOnConfirm()
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
+    }
+}
+
+
+/**
+ * Custom drag handle for the bottom sheet. We use this custom drag handle, because I do not like
+ * the visual appearance of the default drag handle.
+ *
+ * @param modifier  Modifier.
+ */
+@Composable
+private fun DragHandle(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .padding(8.dp)
+            .size(
+                width = 48.dp,
+                height = 4.dp
+            )
+            .clip(
+                RoundedCornerShape(2.dp)
+            )
+            .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+    )
+}

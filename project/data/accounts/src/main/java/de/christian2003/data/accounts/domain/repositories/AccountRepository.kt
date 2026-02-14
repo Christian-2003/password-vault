@@ -1,7 +1,9 @@
 package de.christian2003.data.accounts.domain.repositories
 
 import de.christian2003.data.accounts.domain.entities.Account
+import de.christian2003.data.accounts.domain.entities.AccountCapability
 import de.christian2003.data.accounts.domain.entities.AccountDescriptor
+import de.christian2003.data.accounts.domain.entities.DetailType
 import kotlinx.coroutines.flow.Flow
 import kotlin.uuid.Uuid
 
@@ -20,12 +22,32 @@ internal interface AccountRepository {
 
 
     /**
+     * Returns a list with the accounts whose IDs are passed as argument.
+     *
+     * @param accountIds    List of IDs whose accounts to return.
+     * @return              Accounts with the provided IDs.
+     */
+    suspend fun getAccountsByIds(accountIds: List<Uuid>): List<Account>
+
+
+    /**
      * Returns the account with the passed UUID. If no account exists, null is returned.
      *
      * @param id    UUID of the account to return.
      * @return      Account with the specified UUID or null.
      */
     suspend fun getAccountById(id: Uuid): Account?
+
+
+    /**
+     * Returns an account capability (i.e. account IDs and IDs of details) that whose account and
+     * details match the specified metadata.
+     *
+     * @param targetName    Target name (e.g. Android package name or website host).
+     * @param detailTypes   Types of details.
+     * @return              List of account capabilities.
+     */
+    suspend fun getAccountsByMetadata(targetName: String, detailTypes: List<DetailType>): List<AccountCapability>
 
 
     /**

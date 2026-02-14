@@ -64,7 +64,7 @@ internal fun LoginScreen(
     val invokeOnFinish: () -> Unit = {
         coroutineScope.launch(Dispatchers.Default) {
             viewModel.unlockMasterKey()
-            if (viewModel.isPasswordValid) {
+            if (!viewModel.isUnlockingMasterKey && viewModel.isPasswordValid) {
                 withContext(Dispatchers.Main) {
                     onContinue()
                 }
@@ -166,12 +166,12 @@ internal fun LoginScreen(
                                 contentDescription = "",
                                 modifier = Modifier.padding(end = 8.dp)
                             )
-                            Text(stringResource(R.string.login_buttonBiometrics))
+                            Text(stringResource(de.christian2003.core.ui.R.string.button_biometrics))
                         }
                     }
                 }
                 LoadingIndicatorButton(
-                    label = stringResource(R.string.login_buttonLogin),
+                    label = stringResource(de.christian2003.core.ui.R.string.button_login),
                     isLoading = viewModel.isUnlockingMasterKey,
                     onClick = invokeOnFinish,
                     modifier = Modifier

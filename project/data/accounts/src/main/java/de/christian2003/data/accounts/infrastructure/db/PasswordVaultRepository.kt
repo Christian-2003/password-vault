@@ -2,8 +2,10 @@ package de.christian2003.data.accounts.infrastructure.db
 
 import de.christian2003.core.security.domain.services.HmacCipherService
 import de.christian2003.data.accounts.domain.entities.Account
+import de.christian2003.data.accounts.domain.entities.AccountCapability
 import de.christian2003.data.accounts.domain.entities.AccountDescriptor
 import de.christian2003.data.accounts.domain.entities.Detail
+import de.christian2003.data.accounts.domain.entities.DetailType
 import de.christian2003.data.accounts.domain.entities.Tag
 import de.christian2003.data.accounts.domain.repositories.AccountRepository
 import de.christian2003.data.accounts.domain.repositories.TagRepository
@@ -13,11 +15,13 @@ import de.christian2003.data.accounts.infrastructure.db.dao.AccountDao
 import de.christian2003.data.accounts.infrastructure.db.dao.DetailDao
 import de.christian2003.data.accounts.infrastructure.db.dao.TagDao
 import de.christian2003.data.accounts.infrastructure.db.dao.TargetDao
+import de.christian2003.data.accounts.infrastructure.db.dto.AccountDetailsDto
 import de.christian2003.data.accounts.infrastructure.db.dto.AccountWithTags
 import de.christian2003.data.accounts.infrastructure.db.entities.AccountEntity
 import de.christian2003.data.accounts.infrastructure.db.entities.DetailEntity
 import de.christian2003.data.accounts.infrastructure.db.entities.TagEntity
 import de.christian2003.data.accounts.infrastructure.db.entities.TargetEntity
+import de.christian2003.data.accounts.infrastructure.db.mapper.AccountCapabilityDbMapper
 import de.christian2003.data.accounts.infrastructure.db.mapper.AccountDbMapper
 import de.christian2003.data.accounts.infrastructure.db.mapper.DetailDbMapper
 import de.christian2003.data.accounts.infrastructure.db.mapper.TagDbMapper
@@ -73,6 +77,11 @@ internal class PasswordVaultRepository @Inject constructor(
      */
     private val targetMapper: TargetDbMapper = TargetDbMapper()
 
+    /**
+     * Mapper for account capabilities.
+     */
+    private val accountCapabilityMapper: AccountCapabilityDbMapper = AccountCapabilityDbMapper()
+
 
     /**
      * Flow contains a list of all account descriptors. This can be null until
@@ -109,6 +118,25 @@ internal class PasswordVaultRepository @Inject constructor(
 
 
     /**
+     * Returns a list with the accounts whose IDs are passed as argument.
+     *
+     * @param accountIds    List of IDs whose accounts to return.
+     * @return              Accounts with the provided IDs.
+     */
+    override suspend fun getAccountsByIds(accountIds: List<Uuid>): List<Account> {
+        val accountEntities: List<AccountEntity> = accountDao.selectAccountsByIds(accountIds)
+        val accounts: List<Account> = accountEntities.map { accountEntity ->
+            val targetEntities: List<TargetEntity> = targetDao.selectAllForAccount(accountEntity.id).first()
+            val targets: List<Target> = targetEntities.map { targetEntity ->
+                targetMapper.toDomain(targetEntity)
+            }
+            accountMapper.toDomain(accountEntity, targets)
+        }
+        return accounts
+    }
+
+
+    /**
      * Returns the account with the passed UUID. If no account exists, null is returned.
      *
      * @param id    UUID of the account to return.
@@ -138,6 +166,21 @@ internal class PasswordVaultRepository @Inject constructor(
         else {
             return null
         }
+    }
+
+
+    /**
+     * Returns an account capability (i.e. account IDs and IDs of details) that whose account and
+     * details match the specified metadata.
+     *
+     * @param targetName    Target name (e.g. Android package name or website host).
+     * @param detailTypes   Types of details.
+     * @return              List of account capabilities.
+     */
+    override suspend fun getAccountsByMetadata(targetName: String, detailTypes: List<DetailType>): List<AccountCapability> {
+        val capabilityEntities: List<AccountDetailsDto> = accountDao.selectAccountsAndDetailsByMetadata(targetName, detailTypes)
+        val capabilities: List<AccountCapability> = accountCapabilityMapper.toDomain(capabilityEntities)
+        return capabilities
     }
 
 

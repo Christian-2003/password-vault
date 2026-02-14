@@ -84,7 +84,12 @@ internal fun MainScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(stringResource(de.christian2003.core.ui.R.string.app_name))
+                    Icon(
+                        painter = painterResource(de.christian2003.core.ui.R.drawable.launcher_foreground_fullscale),
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_l))
+                    )
                 },
                 scrollBehavior = scrollBehavior,
                 actions = {

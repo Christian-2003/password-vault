@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "de.christian2003.feature.accounts"
+    namespace = "de.christian2003.feature.autofill"
     compileSdk = 35
 
     defaultConfig {
@@ -44,8 +44,10 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.androidx.autofill)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
@@ -54,9 +56,7 @@ dependencies {
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.accompanist.drawablepainter)
     implementation(libs.hilt.android)
-    implementation(libs.reorderable)
 
     implementation(project(":core:security"))
     implementation(project(":core:common"))

@@ -20,6 +20,9 @@
     <string name="button_ok">OK</string>
     <string name="button_showMore">Show more</string>
     <string name="button_showLess">Show less</string>
+    <string name="button_login">Login</string>
+    <string name="button_authenticate">Authenticate</string>
+    <string name="button_biometrics">Use biometrics</string>
     <string name="button_createTag">Create tag</string>
     <string name="button_selectTargetPackage">Select apps</string>
     <string name="button_selectTargetWebsite">Select website</string>
@@ -28,6 +31,7 @@
     <!-- Error messages -->
     <string name="error_blankInput">The input cannot be blank</string>
     <string name="error_invalidUrl">The input is no valid URL</string>
+    <string name="error_invalidPassword">Password invalid</string>
 
 
     <!-- Tooltips -->
