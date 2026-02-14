@@ -1,9 +1,9 @@
 package de.christian2003.data.accounts.domain.entities
 
 import android.net.Uri
-import android.util.Base64
 import android.webkit.URLUtil
 import androidx.core.net.toUri
+import de.christian2003.data.accounts.application.services.PackageFingerprintEncoderService
 import de.christian2003.data.accounts.domain.services.PackageFingerprintService
 import kotlin.uuid.Uuid
 
@@ -72,11 +72,12 @@ data class Target(
             if (fingerprint == null) {
                 return null
             }
-            val fingerprintBase64: String = Base64.encodeToString(fingerprint, Base64.DEFAULT)
+            val fingerprintEncoderService = PackageFingerprintEncoderService()
+            val encodedFingerprint: String = fingerprintEncoderService.encode(fingerprint)
 
             val url: Uri = Uri.Builder()
                 .scheme("android")
-                .encodedAuthority("$fingerprintBase64@$packageName")
+                .encodedAuthority("$encodedFingerprint@$packageName")
                 .path("/")
                 .build()
 

@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import de.christian2003.core.ui.R
@@ -39,6 +40,39 @@ import de.christian2003.core.ui.R
 fun DialogWithHeroSection(
     title: String,
     text: String,
+    onDismiss: () -> Unit,
+    dismissButtonText: String = stringResource(R.string.button_dismiss),
+    onConfirm: (() -> Unit)? = null,
+    confirmButtonText: String = stringResource(R.string.button_confirm),
+    heroSectionContent: @Composable () -> Unit
+) {
+    DialogWithHeroSection(
+        title = title,
+        text = text,
+        onDismiss = onDismiss,
+        dismissButtonText = dismissButtonText,
+        onConfirm = onConfirm,
+        confirmButtonText = confirmButtonText,
+        heroSectionContent = heroSectionContent
+    )
+}
+
+
+/**
+ * Displays a dialog with a hero section.
+ *
+ * @param title                 Title for the dialog.
+ * @param text                  Text for the dialog.
+ * @param onDismiss             Callback invoked to dismiss the dialog.
+ * @param dismissButtonText     Text for the dismiss button
+ * @param onConfirm             Optional callback to confirm an action.
+ * @param confirmButtonText     Text for the confirm button.
+ * @param heroSectionContent    Content for the hero section (e.g. an image).
+ */
+@Composable
+fun DialogWithHeroSection(
+    title: String,
+    text: AnnotatedString,
     onDismiss: () -> Unit,
     dismissButtonText: String = stringResource(R.string.button_dismiss),
     onConfirm: (() -> Unit)? = null,

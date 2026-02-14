@@ -2,6 +2,8 @@ package de.christian2003.feature.accounts.viewmodels
 
 import android.app.Application
 import android.graphics.drawable.Drawable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -14,20 +16,25 @@ import de.christian2003.core.ui.model.HelpCard
 import de.christian2003.data.accounts.application.usecases.GetAllPackagesUseCase
 import de.christian2003.data.accounts.application.usecases.GetLocalizedPackageNameUseCase
 import de.christian2003.data.accounts.application.usecases.GetPackageIconUseCase
+import de.christian2003.data.accounts.application.usecases.ValidatePackageAgainstTargetUseCase
 import de.christian2003.data.accounts.domain.services.PackageFingerprintService
 import de.christian2003.data.accounts.domain.entities.Target
+import de.christian2003.feature.accounts.models.dialogs.TargetSheetDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.uuid.Uuid
 
 
 /**
  * View model for the sheet through which to select autofill targets for an account.
  *
- * @param application                       Application.
- * @param getPackageIconUseCase             Use case to get a list of all installed packages.
- * @param getLocalizedPackageNameUseCase    Use case to get the localized name for a package.
- * @param packageFingerprintService         Service to generate the fingerprint for a package.
+ * @param application                           Application.
+ * @param getPackageIconUseCase                 Use case to get a list of all installed packages.
+ * @param getLocalizedPackageNameUseCase        Use case to get the localized name for a package.
+ * @param validatePackageAgainstTargetUseCase   Use case to validate an installed package against an
+ *                                              autofill target.
+ * @param packageFingerprintService             Service to generate the fingerprint for a package.
  */
 @HiltViewModel
 internal class TargetViewModel @Inject constructor(
@@ -35,6 +42,7 @@ internal class TargetViewModel @Inject constructor(
     private val getAllPackagesUseCase: GetAllPackagesUseCase,
     private val getLocalizedPackageNameUseCase: GetLocalizedPackageNameUseCase,
     private val getPackageIconUseCase: GetPackageIconUseCase,
+    private val validatePackageAgainstTargetUseCase: ValidatePackageAgainstTargetUseCase,
     private val packageFingerprintService: PackageFingerprintService
 ): AndroidViewModel(application) {
 
@@ -42,6 +50,23 @@ internal class TargetViewModel @Inject constructor(
      * Targets that were selected when the init-function was called.
      */
     private var targetsAtInit: List<Target>? = null
+
+    /**
+     * Stores the IDs of invalid targets. A target is invalid if the installed package's singing
+     * certificates do not match the fingerprint stored in the autofill target.
+     */
+    private val invalidTargets: State<Set<Uuid>> = derivedStateOf {
+        val invalidTargetIds: MutableSet<Uuid> = mutableSetOf()
+        targets.forEach { target ->
+            if (target.isAndroidApp()) {
+                val isValid: Boolean = validatePackageAgainstTargetUseCase.validate(target.name, target)
+                if (!isValid) {
+                    invalidTargetIds.add(target.id)
+                }
+            }
+        }
+        return@derivedStateOf invalidTargetIds
+    }
 
     /**
      * List of all targets that are selected.
@@ -79,6 +104,11 @@ internal class TargetViewModel @Inject constructor(
     var isHelpCardVisible: Boolean by mutableStateOf(HelpCard.Targets.getVisible(application))
         private set
 
+    /**
+     * Dialogs for the sheet.
+     */
+    var dialog: TargetSheetDialog by mutableStateOf(TargetSheetDialog.None)
+
 
     /**
      * Initializes the view model.
@@ -90,6 +120,17 @@ internal class TargetViewModel @Inject constructor(
             this.targetsAtInit = targets
             this.targets.addAll(targets)
         }
+    }
+
+
+    /**
+     * Returns whether the specified target is valid.
+     *
+     * @param target    Target.
+     * @return          Whether the specified target is valid.
+     */
+    fun isTargetValid(target: Target): Boolean {
+        return !invalidTargets.value.contains(target.id)
     }
 
 

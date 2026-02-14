@@ -47,6 +47,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -59,10 +61,12 @@ import de.christian2003.core.ui.composables.Shape
 import de.christian2003.core.ui.composables.Tooltip
 import de.christian2003.core.ui.composables.dialog.ConfirmDeleteDialog
 import de.christian2003.core.ui.composables.dialog.ConfirmDiscardDialog
+import de.christian2003.core.ui.composables.dialog.DialogWithHeroSection
 import de.christian2003.core.ui.composables.dialog.EditValueDialog
 import de.christian2003.feature.accounts.viewmodels.TargetViewModel
 import de.christian2003.data.accounts.domain.entities.Target
 import de.christian2003.feature.accounts.R
+import de.christian2003.feature.accounts.models.dialogs.TargetSheetDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -139,6 +143,9 @@ internal fun TargetSheet(
                 onRemoveTarget = { target ->
                     viewModel.targetToRemove = target
                 },
+                onShowCertificateHelp = {
+                    viewModel.dialog = TargetSheetDialog.CertificatesDoNotMatch
+                },
                 onQueryLocalizedPackageName = { packageName ->
                     viewModel.getLocalizedPackageName(packageName)
                 },
@@ -147,6 +154,9 @@ internal fun TargetSheet(
                 },
                 onDismissHelpCard = {
                     viewModel.dismissHelpCard()
+                },
+                onQueryIsTargetValid = { target ->
+                    viewModel.isTargetValid(target)
                 },
                 modifier = Modifier
                     .fillMaxSize()
@@ -239,6 +249,26 @@ internal fun TargetSheet(
             }
         )
     }
+
+    when (viewModel.dialog) {
+        TargetSheetDialog.CertificatesDoNotMatch -> {
+            DialogWithHeroSection(
+                title = stringResource(R.string.target_packages_certDialog_title),
+                text = AnnotatedString.fromHtml(stringResource(R.string.target_packages_certDialog_text)),
+                dismissButtonText = stringResource(de.christian2003.core.ui.R.string.button_ok),
+                onDismiss = {
+                    viewModel.dialog = TargetSheetDialog.None
+                }
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.error_certificate),
+                    contentDescription = "",
+                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xxl))
+                )
+            }
+        }
+        else -> { }
+    }
 }
 
 
@@ -248,10 +278,12 @@ internal fun TargetSheet(
  * @param targets                       List of targets to display.
  * @param isHelpCardVisible             Whether the help card is visible.
  * @param onRemoveTarget                Callback invoked to remove a target.
+ * @param onShowCertificateHelp         Callback invoked to show help about certificate issues.
  * @param onQueryLocalizedPackageName   Callback invoked to query the localized name for an
  *                                      installed package
  * @param onQueryPackageIcon            Callback invoked to query the icon for an installed package.
  * @param onDismissHelpCard             Callback invoked to dismiss the help card.
+ * @param onQueryIsTargetValid          Callback invoked to query whether a target is valid.
  * @param modifier                      Modifier.
  */
 @Composable
@@ -259,9 +291,11 @@ private fun TargetsList(
     targets: List<Target>,
     isHelpCardVisible: Boolean,
     onRemoveTarget: (Target) -> Unit,
+    onShowCertificateHelp: () -> Unit,
     onQueryLocalizedPackageName: (String) -> String?,
     onQueryPackageIcon: (String) -> Drawable?,
     onDismissHelpCard: () -> Unit,
+    onQueryIsTargetValid: (Target) -> Boolean,
     modifier: Modifier = Modifier
 ) {
     if (targets.isEmpty()) {
@@ -313,8 +347,10 @@ private fun TargetsList(
                         isFirst = index == 0,
                         isLast = index == targets.size - 1,
                         onRemove = onRemoveTarget,
+                        onShowCertificateHelp = onShowCertificateHelp,
                         onQueryLocalizedPackageName = onQueryLocalizedPackageName,
-                        onQueryPackageIcon = onQueryPackageIcon
+                        onQueryPackageIcon = onQueryPackageIcon,
+                        onQueryIsTargetValid = onQueryIsTargetValid
                     )
                 }
                 else {
@@ -338,9 +374,11 @@ private fun TargetsList(
  * @param isFirst                       Whether the android app is the first in the list.
  * @param isLast                        Whether the android app is the last in the list.
  * @param onRemove                      Callback invoked to remove the target.
+ * @param onShowCertificateHelp         Callback invoked to show help about certificate issues.
  * @param onQueryLocalizedPackageName   Callback invoked to query the localized name for an
  *                                      installed package
  * @param onQueryPackageIcon            Callback invoked to query the icon for an installed package.
+ * @param onQueryIsTargetValid          Callback invoked to query whether a target is valid.
  */
 @Composable
 private fun TargetsListRowPackage(
@@ -348,10 +386,14 @@ private fun TargetsListRowPackage(
     isFirst: Boolean,
     isLast: Boolean,
     onRemove: (Target) -> Unit,
+    onShowCertificateHelp: () -> Unit,
     onQueryLocalizedPackageName: (String) -> String?,
-    onQueryPackageIcon: (String) -> Drawable?
+    onQueryPackageIcon: (String) -> Drawable?,
+    onQueryIsTargetValid: (Target) -> Boolean,
 ) {
     val localizedPackageName: String = onQueryLocalizedPackageName(target.name) ?: ""
+    val isValid: Boolean = onQueryIsTargetValid(target)
+    val packageIcon: Drawable? = onQueryPackageIcon(target.name)
 
     ListItemContainer(
         isFirst = isFirst,
@@ -368,19 +410,60 @@ private fun TargetsListRowPackage(
                     bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
                 )
         ) {
-            Image(
-                painter = rememberDrawablePainter(onQueryPackageIcon(target.name)),
-                contentDescription = "",
-                modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
-            )
-            Text(
-                text = localizedPackageName,
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyLarge,
+            if (packageIcon == null) {
+                Shape(
+                    shape = MaterialShapes.Clover8Leaf,
+                    color = MaterialTheme.colorScheme.secondaryContainer,
+                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_packages),
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                        modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xs))
+                    )
+                }
+            }
+            else  {
+                Image(
+                    painter = rememberDrawablePainter(onQueryPackageIcon(target.name)),
+                    contentDescription = "",
+                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
+                )
+            }
+            Column(
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
-            )
+            ) {
+                Text(
+                    text = localizedPackageName.ifBlank { target.name },
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+                if (!isValid) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.clickable {
+                            onShowCertificateHelp()
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(de.christian2003.core.ui.R.drawable.ic_error),
+                            contentDescription = "",
+                            tint = MaterialTheme.colorScheme.error,
+                            modifier = Modifier
+                                .padding(end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal) / 2)
+                                .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xxs))
+                        )
+                        Text(
+                            text = stringResource(R.string.target_packages_signingCertsNotMatching),
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
+            }
             Tooltip(
                 tooltip = stringResource(de.christian2003.core.ui.R.string.tooltip_removeTargetAndroidApp, localizedPackageName),
                 anchor = TooltipAnchorPosition.Start

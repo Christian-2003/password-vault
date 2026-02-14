@@ -82,6 +82,9 @@
     <string name="target_emptyPlaceholder_title">No targets</string>
     <string name="target_emptyPlaceholder_subtitle">Select targets and they will show up here</string>
     <string name="target_packages_title">Select apps</string>
+    <string name="target_packages_signingCertsNotMatching">Certificates do not match</string>
+    <string name="target_packages_certDialog_title">Security check failed</string>
+    <string name="target_packages_certDialog_text">The app no longer matches the security identity that was saved before.&lt;br/&gt;This can happen if: &lt;ul&gt;&lt;li&gt;The app was reinstalled&lt;/li&gt;&lt;li&gt;The app was installed from a different store&lt;/li&gt;&lt;li&gt;The app was replaced by another app with the same name&lt;/li&gt;&lt;/ul&gt;For your protection, autofill is blocked until this conflict is resolved.</string>
     <string name="target_website_title">Select website</string>
     <string name="target_website_label">Website</string>
     <string name="target_discardChanges">Are you sure you want to discard the changes you made?</string>
