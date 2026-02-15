@@ -1,8 +1,17 @@
 package de.christian2003.feature.autofill.presentation.ui.auth
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
+import android.service.autofill.Dataset
+import android.service.autofill.Field
+import android.service.autofill.FillResponse
+import android.service.autofill.Presentations
+import android.util.Log
+import android.view.autofill.AutofillId
+import android.view.autofill.AutofillValue
+import android.widget.RemoteViews
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -48,6 +57,8 @@ import de.christian2003.core.ui.composables.LoadingIndicatorButton
 import de.christian2003.core.ui.composables.TextInput
 import de.christian2003.core.ui.theme.PasswordVaultTheme
 import de.christian2003.feature.autofill.R
+import de.christian2003.feature.autofill.domain.entities.AutofillType
+import de.christian2003.feature.autofill.infrastructure.services.dto.AutofillFieldMap
 import de.christian2003.feature.autofill.presentation.viewmodels.AutofillAuthViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -96,12 +107,53 @@ class AutofillAuthActivity : FragmentActivity() {
                     finish()
                 },
                 onConfirm = {
-                    setResult(RESULT_OK)
-                    finish()
+                    onFinishAutofill()
                 }
             )
         }
     }
+
+
+    private fun onFinishAutofill() {
+        val myIntent: Intent = intent
+        val replyIntent = Intent()
+
+        val autofillTypes: Map<AutofillId, List<AutofillType>>? = myIntent.extras?.getParcelable("autofill", AutofillFieldMap::class.java)?.map
+        if (autofillTypes == null) {
+            Log.e("Autofill", "AutofillTypes == null")
+        }
+        else {
+            val datasetBuilder = Dataset.Builder()
+            var i = 0
+            autofillTypes.forEach { (autofillId, autofillTypes) ->
+                val presentationView = RemoteViews(this.packageName, R.layout.autofill_presentation_item)
+                presentationView.setTextViewText(R.id.label, "Result $i")
+                presentationView.setTextViewText(R.id.content, "Tap here to autofill")
+                val presentation: Presentations = Presentations.Builder()
+                    .setMenuPresentation(presentationView)
+                    .build()
+
+                datasetBuilder.setField(autofillId, Field.Builder()
+                    .setPresentations(presentation)
+                    .setValue(AutofillValue.forText("Value $i"))
+                    .build())
+                i++
+            }
+
+            val response: FillResponse = FillResponse.Builder()
+                .addDataset(datasetBuilder.build())
+                .build()
+
+            replyIntent.putExtra(android.view.autofill.AutofillManager.EXTRA_AUTHENTICATION_RESULT, response)
+
+            setResult(RESULT_OK, replyIntent)
+            finish()
+        }
+
+        setResult(RESULT_CANCELED)
+        finish()
+    }
+
 
     /**
      * Determines whether the system is in night or day mode.

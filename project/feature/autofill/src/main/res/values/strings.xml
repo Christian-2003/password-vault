@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <resources>
     <string name="autofill_auth_title">Authenticate to access your data</string>
+    <string name="autofill_auth_presentation_title">Autofill</string>
     <string name="autofill_auth_labelMasterPassword">Master password</string>
 </resources>

@@ -13,7 +13,7 @@ import javax.inject.Inject
  * @param packageFingerprintService Service for package fingerprints.
  * @param fingerprintEncoderService Service for encoding and decoding package fingerprints.
  */
-class ValidatePackageAgainstTargetUseCase @Inject internal constructor(
+class ValidatePackageSignatureUseCase @Inject internal constructor(
     private val packageFingerprintService: PackageFingerprintService,
     private val fingerprintEncoderService: PackageFingerprintEncoderService,
 ) {
@@ -27,25 +27,42 @@ class ValidatePackageAgainstTargetUseCase @Inject internal constructor(
      */
     fun validate(packageName: String, target: Target): Boolean {
         if (target.isAndroidApp()) {
-            val fingerprint: ByteArray? = getFingerprintFromAndroidTarget(target)
-            if (fingerprint != null) {
-                return packageFingerprintService.validate(packageName, fingerprint)
-            }
+            return validate(packageName, target.url)
         }
         return false
     }
 
 
     /**
-     * Retrieves the package fingerprint from the target. The provided target must be an Android app.
+     * Validates the specified installed Android package against it's target URL (the URL should be
+     * from an autofill target).
      *
-     * @param target    Target from which to extract the package fingerprint.
+     * @param packageName   Package to verify.
+     * @param targetUrl     URL of the Android app target against which to verify the installed package.
+     * @return              Whether the installed package's fingerprint matches the target URL fingerprint.
+     */
+    fun validate(packageName: String, targetUrl: Uri): Boolean {
+        try {
+            val fingerprint: ByteArray? = getFingerprintFromTargetUrl(targetUrl)
+            if (fingerprint != null) {
+                return packageFingerprintService.validate(packageName, fingerprint)
+            }
+        }
+        catch (_: Exception) { }
+        return false
+    }
+
+
+    /**
+     * Retrieves the package fingerprint from the target URL. The provided URL must be from an
+     * Android app.
+     *
+     * @param targetUrl URL of the target from which to extract the package fingerprint.
      * @return          Bytes of the fingerprint.
      */
-    private fun getFingerprintFromAndroidTarget(target: Target): ByteArray? {
+    private fun getFingerprintFromTargetUrl(targetUrl: Uri): ByteArray? {
         try {
-            val url: Uri = target.url
-            val fingerprint: String? = url.userInfo
+            val fingerprint: String? = targetUrl.userInfo
             if (fingerprint != null) {
                 val decodedFingerprint: ByteArray = fingerprintEncoderService.decode(fingerprint)
                 return decodedFingerprint

@@ -16,7 +16,7 @@ import de.christian2003.core.ui.model.HelpCard
 import de.christian2003.data.accounts.application.usecases.GetAllPackagesUseCase
 import de.christian2003.data.accounts.application.usecases.GetLocalizedPackageNameUseCase
 import de.christian2003.data.accounts.application.usecases.GetPackageIconUseCase
-import de.christian2003.data.accounts.application.usecases.ValidatePackageAgainstTargetUseCase
+import de.christian2003.data.accounts.application.usecases.ValidatePackageSignatureUseCase
 import de.christian2003.data.accounts.domain.services.PackageFingerprintService
 import de.christian2003.data.accounts.domain.entities.Target
 import de.christian2003.feature.accounts.models.dialogs.TargetSheetDialog
@@ -42,7 +42,7 @@ internal class TargetViewModel @Inject constructor(
     private val getAllPackagesUseCase: GetAllPackagesUseCase,
     private val getLocalizedPackageNameUseCase: GetLocalizedPackageNameUseCase,
     private val getPackageIconUseCase: GetPackageIconUseCase,
-    private val validatePackageAgainstTargetUseCase: ValidatePackageAgainstTargetUseCase,
+    private val validatePackageAgainstTargetUseCase: ValidatePackageSignatureUseCase,
     private val packageFingerprintService: PackageFingerprintService
 ): AndroidViewModel(application) {
 

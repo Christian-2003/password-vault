@@ -1,9 +1,8 @@
-package de.christian2003.feature.autofill.infrastructure.services
+package de.christian2003.feature.autofill.infrastructure.services.mapper
 
+import androidx.autofill.HintConstants
 import de.christian2003.feature.autofill.domain.entities.AutofillType
 import javax.inject.Inject
-import androidx.autofill.HintConstants
-
 
 /**
  * Mapper maps the official android-specific autofill hints to their domain representation.
