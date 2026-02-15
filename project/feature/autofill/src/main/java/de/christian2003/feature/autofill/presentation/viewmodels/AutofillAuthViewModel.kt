@@ -3,7 +3,14 @@ package de.christian2003.feature.autofill.presentation.viewmodels
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import android.service.autofill.Dataset
+import android.service.autofill.Field
+import android.service.autofill.FillResponse
+import android.service.autofill.Presentations
 import android.util.Log
+import android.view.autofill.AutofillId
+import android.view.autofill.AutofillValue
+import android.widget.RemoteViews
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,14 +19,22 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.core.security.application.usecases.AreBiometricsConfiguredUseCase
 import de.christian2003.core.security.application.usecases.UnlockWithMasterPasswordUseCase
 import de.christian2003.core.ui.theme.ThemeContrast
+import de.christian2003.data.accounts.domain.entities.AccountCapability
+import de.christian2003.feature.autofill.R
+import de.christian2003.feature.autofill.application.usecases.FetchAutofillDataUseCase
+import de.christian2003.feature.autofill.domain.entities.AutofillItem
+import de.christian2003.feature.autofill.domain.entities.AutofillResponse
+import de.christian2003.feature.autofill.domain.entities.AutofillType
 import javax.inject.Inject
+import kotlin.uuid.Uuid
 
 
 @HiltViewModel
 internal class AutofillAuthViewModel @Inject constructor(
     application: Application,
     areBiometricsConfiguredUseCase: AreBiometricsConfiguredUseCase,
-    private val unlockWithMasterPasswordUseCase: UnlockWithMasterPasswordUseCase
+    private val unlockWithMasterPasswordUseCase: UnlockWithMasterPasswordUseCase,
+    private val fetchAutofillDataUseCase: FetchAutofillDataUseCase
 ) : AndroidViewModel(application) {
 
     private val preferences: SharedPreferences = application.getSharedPreferences("settings", Context.MODE_PRIVATE)
@@ -57,6 +72,101 @@ internal class AutofillAuthViewModel @Inject constructor(
             }
             isUnlockingMasterKey = false
         }
+    }
+
+
+    suspend fun fetchAutofillData(packageName: String, autofillTypes: Map<AutofillId, List<AutofillType>>, capabilities: List<AccountCapability>): FillResponse {
+        val accountIds: Set<Uuid> = capabilitiesToAccountIds(capabilities)
+        val autofillTypesSet: Set<AutofillType> = autofillTypesMapToSet(autofillTypes)
+        val data: List<AutofillResponse> = fetchAutofillDataUseCase.fetchData(accountIds, autofillTypesSet)
+
+        //Generate fill response:
+        val fillResponseBuilder = FillResponse.Builder()
+        data.forEach { response ->
+            Log.d("Autofill", "Response for ${response.accountId} with ${response.items.size} items")
+            val datasetBuilder = Dataset.Builder()
+
+            val autofillIdsWithFields: MutableList<AutofillId> = mutableListOf()
+            var fieldsCount = 0
+
+            response.items.forEach { item ->
+                Log.d("Autofill", "Response item ${item.label}")
+                val autofillIds: List<AutofillId> = getAutofillIdsForAutofillType(item.type, autofillTypes)
+                autofillIds.forEach { autofillId ->
+                    if (!autofillIdsWithFields.contains(autofillId)) {
+                        Log.d("Autofill", "Response item ${item.label} with ID $autofillId")
+                        val presentations: Presentations = buildPresentations(packageName, item)
+                        val field: Field = Field.Builder()
+                            .setValue(AutofillValue.forText(item.content))
+                            .setPresentations(presentations)
+                            .build()
+                        datasetBuilder.setField(autofillId, field)
+                        autofillIdsWithFields.add(autofillId)
+                        fieldsCount++
+                    }
+                    else {
+                        Log.d("Autofill", "Response item ${item.label} with ID $autofillId: ID already used")
+                    }
+                }
+            }
+            if (fieldsCount > 0) {
+                Log.d("Autofill", "Add dataset to fill response")
+                fillResponseBuilder.addDataset(datasetBuilder.build())
+            }
+            autofillIdsWithFields.clear()
+        }
+
+        return fillResponseBuilder.build()
+    }
+
+
+    private fun buildPresentations(packageName: String, item: AutofillItem): Presentations {
+        val presentationView = RemoteViews(packageName, R.layout.autofill_presentation_item)
+        presentationView.setTextViewText(R.id.label, item.label)
+        if (item.isObfuscated) {
+            presentationView.setTextViewText(R.id.content, "*****")
+        }
+        else {
+            presentationView.setTextViewText(R.id.content, item.content)
+        }
+
+        val presentation: Presentations = Presentations.Builder()
+            .setMenuPresentation(presentationView)
+            .build()
+
+        return presentation
+    }
+
+
+    private fun getAutofillIdsForAutofillType(autofillType: AutofillType, autofillTypes: Map<AutofillId, List<AutofillType>>): List<AutofillId> {
+        val autofillIds: MutableList<AutofillId> = mutableListOf()
+        autofillTypes.forEach { (autofillId, types) ->
+            if (types.contains(autofillType)) {
+                if (!autofillIds.contains(autofillId)) {
+                    autofillIds.add(autofillId)
+                }
+            }
+        }
+        return autofillIds
+    }
+
+
+    private fun capabilitiesToAccountIds(capabilities: List<AccountCapability>): Set<Uuid> {
+        val accountIds: MutableSet<Uuid> = mutableSetOf()
+        capabilities.forEach { capability ->
+            accountIds.add(capability.account)
+        }
+        return accountIds
+    }
+
+    private fun autofillTypesMapToSet(autofillTypes: Map<AutofillId, List<AutofillType>>): Set<AutofillType> {
+        val autofillTypesSet: MutableSet<AutofillType> = mutableSetOf()
+        autofillTypes.forEach { (_, autofillTypes) ->
+            autofillTypes.forEach { autofillType ->
+                autofillTypesSet.add(autofillType)
+            }
+        }
+        return autofillTypesSet
     }
 
 }

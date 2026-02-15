@@ -130,8 +130,17 @@ internal class PasswordVaultRepository @Inject constructor(
             val targets: List<Target> = targetEntities.map { targetEntity ->
                 targetMapper.toDomain(targetEntity)
             }
-            accountMapper.toDomain(accountEntity, targets)
+            val account: Account = accountMapper.toDomain(accountEntity, targets)
+
+            val details: List<Detail> = detailDao.selectAllForAccount(account.descriptor.id).first().map { detailEntity ->
+                detailMapper.toDomain(detailEntity)
+            }
+            account.details = details
+
+            return@map account
         }
+
+
         return accounts
     }
 

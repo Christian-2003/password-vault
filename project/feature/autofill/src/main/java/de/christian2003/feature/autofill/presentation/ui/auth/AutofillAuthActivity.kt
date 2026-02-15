@@ -56,9 +56,10 @@ import de.christian2003.core.security.application.usecases.UnlockWithBiometricsU
 import de.christian2003.core.ui.composables.LoadingIndicatorButton
 import de.christian2003.core.ui.composables.TextInput
 import de.christian2003.core.ui.theme.PasswordVaultTheme
+import de.christian2003.data.accounts.domain.entities.AccountCapability
 import de.christian2003.feature.autofill.R
 import de.christian2003.feature.autofill.domain.entities.AutofillType
-import de.christian2003.feature.autofill.infrastructure.services.dto.AutofillFieldMap
+import de.christian2003.feature.autofill.infrastructure.dto.ParcelableAutofillData
 import de.christian2003.feature.autofill.presentation.viewmodels.AutofillAuthViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -69,6 +70,10 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class AutofillAuthActivity : FragmentActivity() {
+
+    companion object {
+        const val EXTRA_AUTOFILL_DATA: String = "autofill_data"
+    }
 
     private val viewModel: AutofillAuthViewModel by viewModels()
 
@@ -114,11 +119,25 @@ class AutofillAuthActivity : FragmentActivity() {
     }
 
 
-    private fun onFinishAutofill() {
+    private suspend fun onFinishAutofill() {
         val myIntent: Intent = intent
         val replyIntent = Intent()
 
-        val autofillTypes: Map<AutofillId, List<AutofillType>>? = myIntent.extras?.getParcelable("autofill", AutofillFieldMap::class.java)?.map
+        val autofillData: ParcelableAutofillData? = myIntent.extras?.getParcelable(EXTRA_AUTOFILL_DATA, ParcelableAutofillData::class.java)
+        if (autofillData != null) {
+            val autofillTypes: Map<AutofillId, List<AutofillType>> = autofillData.fieldMap
+            val capabilities: List<AccountCapability> = autofillData.capabilities
+            val fillResponse: FillResponse = viewModel.fetchAutofillData(this.packageName, autofillTypes, capabilities)
+
+            replyIntent.putExtra(android.view.autofill.AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillResponse)
+
+            setResult(RESULT_OK, replyIntent)
+            finish()
+            return
+        }
+
+        /*
+        val autofillTypes: Map<AutofillId, List<AutofillType>>? = myIntent.extras?.getParcelable(EXTRA_AUTOFILL_DATA, ParcelableAutofillData::class.java)?.fieldMap
         if (autofillTypes == null) {
             Log.e("Autofill", "AutofillTypes == null")
         }
@@ -149,7 +168,7 @@ class AutofillAuthActivity : FragmentActivity() {
             setResult(RESULT_OK, replyIntent)
             finish()
         }
-
+        */
         setResult(RESULT_CANCELED)
         finish()
     }
@@ -173,7 +192,7 @@ private fun AutofillActivityContent(
     viewModel: AutofillAuthViewModel,
     onBiometricUnlock: suspend () -> Boolean,
     onDismiss: () -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: suspend () -> Unit
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val sheetState: SheetState = rememberModalBottomSheetState()
@@ -252,7 +271,6 @@ private fun AutofillActivityContent(
                                 if (onBiometricUnlock()) {
                                     coroutineScope.launch {
                                         sheetState.hide()
-                                    }.invokeOnCompletion {
                                         onConfirm()
                                     }
                                 }

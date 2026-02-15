@@ -3,7 +3,7 @@ package de.christian2003.feature.autofill.infrastructure.services
 import android.app.assist.AssistStructure
 import android.view.autofill.AutofillId
 import de.christian2003.feature.autofill.domain.entities.AutofillType
-import de.christian2003.feature.autofill.infrastructure.services.mapper.AutofillHintMapper
+import de.christian2003.feature.autofill.infrastructure.mapper.AutofillHintMapper
 import javax.inject.Inject
 
 

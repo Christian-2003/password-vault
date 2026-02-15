@@ -1,4 +1,4 @@
-package de.christian2003.feature.autofill.infrastructure.services.mapper
+package de.christian2003.feature.autofill.infrastructure.mapper
 
 import androidx.autofill.HintConstants
 import de.christian2003.feature.autofill.domain.entities.AutofillType
