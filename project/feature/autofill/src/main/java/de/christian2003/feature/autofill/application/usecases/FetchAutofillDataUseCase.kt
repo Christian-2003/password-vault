@@ -8,7 +8,7 @@ import de.christian2003.data.accounts.domain.entities.DetailType
 import de.christian2003.feature.autofill.domain.entities.AutofillItem
 import de.christian2003.feature.autofill.domain.entities.AutofillResponse
 import de.christian2003.feature.autofill.domain.entities.AutofillType
-import de.christian2003.feature.autofill.infrastructure.mapper.AutofillTypeMapper
+import de.christian2003.feature.autofill.application.services.AutofillTypeMapper
 import javax.inject.Inject
 import kotlin.uuid.Uuid
 

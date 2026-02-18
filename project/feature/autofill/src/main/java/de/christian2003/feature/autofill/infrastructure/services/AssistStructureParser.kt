@@ -23,15 +23,20 @@ internal class AssistStructureParser @Inject constructor(
      * @param assistStructure   Assist structure to parse.
      * @return                  Autofill types mapped to a corresponding autofill ID.
      */
-    fun parse(assistStructure: AssistStructure): Map<AutofillId, List<AutofillType>> {
-        val autofillHints: MutableMap<AutofillId, List<AutofillType>> = mutableMapOf()
+    fun parse(assistStructure: AssistStructure): Map<AutofillType, List<AutofillId>> {
+        val autofillHints: MutableMap<AutofillType, MutableList<AutofillId>> = mutableMapOf()
 
         val viewNodes: List<AssistStructure.ViewNode> = flattenAssistStructure(assistStructure)
         viewNodes.forEach { node ->
             val autofillId: AutofillId? = node.autofillId
             if (autofillId != null) {
                 val types: List<AutofillType> = parseViewNode(node)
-                autofillHints[autofillId] = types
+                types.forEach { autofillType ->
+                    if (!autofillHints.containsKey(autofillType)) {
+                        autofillHints[autofillType] = mutableListOf()
+                    }
+                    autofillHints[autofillType]!!.add(autofillId)
+                }
             }
         }
 

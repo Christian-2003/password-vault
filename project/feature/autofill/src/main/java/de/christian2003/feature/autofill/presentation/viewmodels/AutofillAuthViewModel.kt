@@ -75,9 +75,9 @@ internal class AutofillAuthViewModel @Inject constructor(
     }
 
 
-    suspend fun fetchAutofillData(packageName: String, autofillTypes: Map<AutofillId, List<AutofillType>>, capabilities: List<AccountCapability>): FillResponse {
+    suspend fun fetchAutofillData(packageName: String, autofillTypes: Map<AutofillType, List<AutofillId>>, capabilities: List<AccountCapability>): FillResponse {
         val accountIds: Set<Uuid> = capabilitiesToAccountIds(capabilities)
-        val autofillTypesSet: Set<AutofillType> = autofillTypesMapToSet(autofillTypes)
+        val autofillTypesSet: Set<AutofillType> = autofillTypes.keys
         val data: List<AutofillResponse> = fetchAutofillDataUseCase.fetchData(accountIds, autofillTypesSet)
 
         //Generate fill response:
@@ -91,8 +91,8 @@ internal class AutofillAuthViewModel @Inject constructor(
 
             response.items.forEach { item ->
                 Log.d("Autofill", "Response item ${item.label}")
-                val autofillIds: List<AutofillId> = getAutofillIdsForAutofillType(item.type, autofillTypes)
-                autofillIds.forEach { autofillId ->
+                val autofillIds: List<AutofillId>? = autofillTypes[item.type]
+                autofillIds?.forEach { autofillId ->
                     if (!autofillIdsWithFields.contains(autofillId)) {
                         Log.d("Autofill", "Response item ${item.label} with ID $autofillId")
                         val presentations: Presentations = buildPresentations(packageName, item)
@@ -138,35 +138,12 @@ internal class AutofillAuthViewModel @Inject constructor(
     }
 
 
-    private fun getAutofillIdsForAutofillType(autofillType: AutofillType, autofillTypes: Map<AutofillId, List<AutofillType>>): List<AutofillId> {
-        val autofillIds: MutableList<AutofillId> = mutableListOf()
-        autofillTypes.forEach { (autofillId, types) ->
-            if (types.contains(autofillType)) {
-                if (!autofillIds.contains(autofillId)) {
-                    autofillIds.add(autofillId)
-                }
-            }
-        }
-        return autofillIds
-    }
-
-
     private fun capabilitiesToAccountIds(capabilities: List<AccountCapability>): Set<Uuid> {
         val accountIds: MutableSet<Uuid> = mutableSetOf()
         capabilities.forEach { capability ->
             accountIds.add(capability.account)
         }
         return accountIds
-    }
-
-    private fun autofillTypesMapToSet(autofillTypes: Map<AutofillId, List<AutofillType>>): Set<AutofillType> {
-        val autofillTypesSet: MutableSet<AutofillType> = mutableSetOf()
-        autofillTypes.forEach { (_, autofillTypes) ->
-            autofillTypes.forEach { autofillType ->
-                autofillTypesSet.add(autofillType)
-            }
-        }
-        return autofillTypesSet
     }
 
 }

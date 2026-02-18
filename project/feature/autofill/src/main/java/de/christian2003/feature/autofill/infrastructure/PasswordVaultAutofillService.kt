@@ -24,7 +24,7 @@ import de.christian2003.feature.autofill.domain.entities.AutofillType
 import de.christian2003.feature.autofill.infrastructure.services.AssistStructureFetcher
 import de.christian2003.feature.autofill.infrastructure.services.AssistStructureParser
 import de.christian2003.feature.autofill.infrastructure.dto.ParcelableAutofillData
-import de.christian2003.feature.autofill.infrastructure.mapper.AutofillTypeMapper
+import de.christian2003.feature.autofill.application.services.AutofillTypeMapper
 import de.christian2003.feature.autofill.presentation.ui.auth.AutofillAuthActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +32,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class PasswordVaultAutofillService: AutofillService() {
@@ -78,7 +79,7 @@ class PasswordVaultAutofillService: AutofillService() {
                 }
 
                 //Get autofill types from assist structure:
-                val autofillTypes: Map<AutofillId, List<AutofillType>> = assistStructureParser.parse(assistStructure)
+                val autofillTypes: Map<AutofillType, List<AutofillId>> = assistStructureParser.parse(assistStructure)
 
                 //Get accounts:
                 val detailTypes: List<DetailType> = autofillTypesToDetailTypes(autofillTypes)
@@ -108,7 +109,7 @@ class PasswordVaultAutofillService: AutofillService() {
                 )
                 val authPendingIntent: PendingIntent = PendingIntent.getActivity(this@PasswordVaultAutofillService, 0, authIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
 
-                val autofillIds: List<AutofillId> = autofillTypes.entries.map { (autofillId, _) -> autofillId }
+                val autofillIds: List<AutofillId> = autofillTypesToAutofillIds(autofillTypes)
 
                 val presentations: Presentations = Presentations.Builder()
                     .setMenuPresentation(
@@ -150,19 +151,32 @@ class PasswordVaultAutofillService: AutofillService() {
 
 
 
-    private fun autofillTypesToDetailTypes(autofillTypes: Map<AutofillId, List<AutofillType>>): List<DetailType> {
+    private fun autofillTypesToDetailTypes(autofillTypes: Map<AutofillType, List<AutofillId>>): List<DetailType> {
         val detailTypes: MutableList<DetailType> = mutableListOf()
 
-        autofillTypes.entries.forEach { (_, autofillTypes) ->
-            autofillTypes.forEach { autofillType ->
-                val detailType: DetailType? = autofillTypeMapper.toDetailType(autofillType)
-                if (detailType != null && !detailTypes.contains(detailType)) {
-                    detailTypes.add(detailType)
-                }
+        autofillTypes.keys.forEach { autofillType ->
+            val detailType: DetailType? = autofillTypeMapper.toDetailType(autofillType)
+            if (detailType != null && !detailTypes.contains(detailType)) {
+                detailTypes.add(detailType)
             }
         }
 
         return detailTypes
+    }
+
+
+    private fun autofillTypesToAutofillIds(autofillTypes: Map<AutofillType, List<AutofillId>>): List<AutofillId> {
+        val autofillIds: MutableList<AutofillId> = mutableListOf()
+
+        autofillTypes.values.forEach { ids ->
+            ids.forEach { id ->
+                if (!autofillIds.contains(id)) {
+                    autofillIds.add(id)
+                }
+            }
+        }
+
+        return autofillIds
     }
 
 }

@@ -125,7 +125,7 @@ class AutofillAuthActivity : FragmentActivity() {
 
         val autofillData: ParcelableAutofillData? = myIntent.extras?.getParcelable(EXTRA_AUTOFILL_DATA, ParcelableAutofillData::class.java)
         if (autofillData != null) {
-            val autofillTypes: Map<AutofillId, List<AutofillType>> = autofillData.fieldMap
+            val autofillTypes: Map<AutofillType, List<AutofillId>> = autofillData.fieldMap
             val capabilities: List<AccountCapability> = autofillData.capabilities
             val fillResponse: FillResponse = viewModel.fetchAutofillData(this.packageName, autofillTypes, capabilities)
 
@@ -135,40 +135,6 @@ class AutofillAuthActivity : FragmentActivity() {
             finish()
             return
         }
-
-        /*
-        val autofillTypes: Map<AutofillId, List<AutofillType>>? = myIntent.extras?.getParcelable(EXTRA_AUTOFILL_DATA, ParcelableAutofillData::class.java)?.fieldMap
-        if (autofillTypes == null) {
-            Log.e("Autofill", "AutofillTypes == null")
-        }
-        else {
-            val datasetBuilder = Dataset.Builder()
-            var i = 0
-            autofillTypes.forEach { (autofillId, autofillTypes) ->
-                val presentationView = RemoteViews(this.packageName, R.layout.autofill_presentation_item)
-                presentationView.setTextViewText(R.id.label, "Result $i")
-                presentationView.setTextViewText(R.id.content, "Tap here to autofill")
-                val presentation: Presentations = Presentations.Builder()
-                    .setMenuPresentation(presentationView)
-                    .build()
-
-                datasetBuilder.setField(autofillId, Field.Builder()
-                    .setPresentations(presentation)
-                    .setValue(AutofillValue.forText("Value $i"))
-                    .build())
-                i++
-            }
-
-            val response: FillResponse = FillResponse.Builder()
-                .addDataset(datasetBuilder.build())
-                .build()
-
-            replyIntent.putExtra(android.view.autofill.AutofillManager.EXTRA_AUTHENTICATION_RESULT, response)
-
-            setResult(RESULT_OK, replyIntent)
-            finish()
-        }
-        */
         setResult(RESULT_CANCELED)
         finish()
     }

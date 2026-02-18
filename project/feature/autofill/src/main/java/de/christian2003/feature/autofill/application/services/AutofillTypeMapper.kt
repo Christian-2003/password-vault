@@ -1,4 +1,4 @@
-package de.christian2003.feature.autofill.infrastructure.mapper
+package de.christian2003.feature.autofill.application.services
 
 import de.christian2003.data.accounts.domain.entities.DetailType
 import de.christian2003.feature.autofill.domain.entities.AutofillType

@@ -4,6 +4,7 @@ import androidx.autofill.HintConstants
 import de.christian2003.feature.autofill.domain.entities.AutofillType
 import javax.inject.Inject
 
+
 /**
  * Mapper maps the official android-specific autofill hints to their domain representation.
  */

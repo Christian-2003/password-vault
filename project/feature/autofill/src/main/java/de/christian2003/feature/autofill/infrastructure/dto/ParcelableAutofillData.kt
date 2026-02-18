@@ -11,28 +11,30 @@ import kotlin.uuid.toKotlinUuid
 
 
 internal class ParcelableAutofillData(
-    val fieldMap: Map<AutofillId, List<AutofillType>>,
+    val fieldMap: Map<AutofillType, List<AutofillId>>,
     val capabilities: List<AccountCapability>
 ): Parcelable {
 
     constructor(parcel: Parcel) : this(
         fieldMap = buildMap {
-            val size = parcel.readInt()
-            repeat(size) {
-                val key = parcel.readParcelable(AutofillId::class.java.classLoader, AutofillId::class.java)!!
+            val mapSize = parcel.readInt()
+            repeat(mapSize) {
+                val key = AutofillType.valueOf(parcel.readString()!!)
 
                 val listSize = parcel.readInt()
-                val list = MutableList(listSize) {
-                    AutofillType.valueOf(parcel.readString()!!)
+                val ids = MutableList(listSize) {
+                    parcel.readParcelable<AutofillId>(
+                        AutofillId::class.java.classLoader
+                    )!!
                 }
 
-                put(key, list)
+                put(key, ids)
             }
         },
         capabilities = buildList {
             val size = parcel.readInt()
             repeat(size) {
-                val account = UUID.fromString(parcel.readString()!!)
+                val account: Uuid = UUID.fromString(parcel.readString()!!).toKotlinUuid()
 
                 val detailsSize = parcel.readInt()
                 val details: List<Uuid> = List(detailsSize) {
@@ -43,7 +45,7 @@ internal class ParcelableAutofillData(
 
                 add(
                     AccountCapability(
-                        account = account.toKotlinUuid(),
+                        account = account,
                         details = details,
                         targetUrl = targetUrl
                     )
@@ -54,18 +56,18 @@ internal class ParcelableAutofillData(
 
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        // ---- Write Map ----
+        // ---- Write Map<AutofillType, List<AutofillId>> ----
         parcel.writeInt(fieldMap.size)
-        fieldMap.forEach { (key, value) ->
-            parcel.writeParcelable(key, flags)
+        fieldMap.forEach { (type, ids) ->
+            parcel.writeString(type.name)
 
-            parcel.writeInt(value.size)
-            value.forEach {
-                parcel.writeString(it.name)
+            parcel.writeInt(ids.size)
+            ids.forEach {
+                parcel.writeParcelable(it, flags)
             }
         }
 
-        // ---- Write AccountCapabilities ----
+        // ---- Write List<AccountCapability> ----
         parcel.writeInt(capabilities.size)
         capabilities.forEach { capability ->
             parcel.writeString(capability.account.toString())
@@ -86,13 +88,16 @@ internal class ParcelableAutofillData(
 
 
     companion object CREATOR : Parcelable.Creator<ParcelableAutofillData> {
+
         override fun createFromParcel(parcel: Parcel): ParcelableAutofillData {
             return ParcelableAutofillData(parcel)
         }
 
+
         override fun newArray(size: Int): Array<ParcelableAutofillData?> {
             return arrayOfNulls(size)
         }
+
     }
 
 }
