@@ -78,42 +78,28 @@ internal class AutofillAuthViewModel @Inject constructor(
     suspend fun fetchAutofillData(packageName: String, autofillTypes: Map<AutofillType, List<AutofillId>>, capabilities: List<AccountCapability>): FillResponse {
         val accountIds: Set<Uuid> = capabilitiesToAccountIds(capabilities)
         val autofillTypesSet: Set<AutofillType> = autofillTypes.keys
-        val data: List<AutofillResponse> = fetchAutofillDataUseCase.fetchData(accountIds, autofillTypesSet)
+        val autofillResponses: List<AutofillResponse> = fetchAutofillDataUseCase.fetchData(accountIds, autofillTypesSet)
 
         //Generate fill response:
         val fillResponseBuilder = FillResponse.Builder()
-        data.forEach { response ->
+        autofillResponses.forEach { response ->
             Log.d("Autofill", "Response for ${response.accountId} with ${response.items.size} items")
             val datasetBuilder = Dataset.Builder()
-
-            val autofillIdsWithFields: MutableList<AutofillId> = mutableListOf()
-            var fieldsCount = 0
 
             response.items.forEach { item ->
                 Log.d("Autofill", "Response item ${item.label}")
                 val autofillIds: List<AutofillId>? = autofillTypes[item.type]
                 autofillIds?.forEach { autofillId ->
-                    if (!autofillIdsWithFields.contains(autofillId)) {
-                        Log.d("Autofill", "Response item ${item.label} with ID $autofillId")
-                        val presentations: Presentations = buildPresentations(packageName, item)
-                        val field: Field = Field.Builder()
-                            .setValue(AutofillValue.forText(item.content))
-                            .setPresentations(presentations)
-                            .build()
-                        datasetBuilder.setField(autofillId, field)
-                        autofillIdsWithFields.add(autofillId)
-                        fieldsCount++
-                    }
-                    else {
-                        Log.d("Autofill", "Response item ${item.label} with ID $autofillId: ID already used")
-                    }
+                    Log.d("Autofill", "Response item ${item.label} with ID $autofillId")
+                    val presentations: Presentations = buildPresentations(packageName, item)
+                    val field: Field = Field.Builder()
+                        .setValue(AutofillValue.forText(item.content))
+                        .setPresentations(presentations)
+                        .build()
+                    datasetBuilder.setField(autofillId, field)
                 }
             }
-            if (fieldsCount > 0) {
-                Log.d("Autofill", "Add dataset to fill response")
-                fillResponseBuilder.addDataset(datasetBuilder.build())
-            }
-            autofillIdsWithFields.clear()
+            fillResponseBuilder.addDataset(datasetBuilder.build())
         }
 
         return fillResponseBuilder.build()

@@ -1,4 +1,4 @@
-package de.christian2003.feature.autofill.infrastructure
+package de.christian2003.feature.autofill.infrastructure.android
 
 import android.app.PendingIntent
 import android.app.assist.AssistStructure
@@ -21,9 +21,9 @@ import de.christian2003.data.accounts.domain.entities.AccountCapability
 import de.christian2003.data.accounts.domain.entities.DetailType
 import de.christian2003.feature.autofill.R
 import de.christian2003.feature.autofill.domain.entities.AutofillType
-import de.christian2003.feature.autofill.infrastructure.services.AssistStructureFetcher
-import de.christian2003.feature.autofill.infrastructure.services.AssistStructureParser
-import de.christian2003.feature.autofill.infrastructure.dto.ParcelableAutofillData
+import de.christian2003.feature.autofill.infrastructure.android.services.AssistStructureFetcher
+import de.christian2003.feature.autofill.infrastructure.android.services.AssistStructureParser
+import de.christian2003.feature.autofill.infrastructure.android.dto.ParcelableAutofillData
 import de.christian2003.feature.autofill.application.services.AutofillTypeMapper
 import de.christian2003.feature.autofill.presentation.ui.auth.AutofillAuthActivity
 import kotlinx.coroutines.CoroutineScope

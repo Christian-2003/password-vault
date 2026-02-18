@@ -1,4 +1,4 @@
-package de.christian2003.feature.autofill.infrastructure.services
+package de.christian2003.feature.autofill.infrastructure.android.services
 
 import android.app.assist.AssistStructure
 import android.service.autofill.FillContext

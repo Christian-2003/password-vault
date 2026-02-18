@@ -4,14 +4,8 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
-import android.service.autofill.Dataset
-import android.service.autofill.Field
 import android.service.autofill.FillResponse
-import android.service.autofill.Presentations
-import android.util.Log
 import android.view.autofill.AutofillId
-import android.view.autofill.AutofillValue
-import android.widget.RemoteViews
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -59,7 +53,7 @@ import de.christian2003.core.ui.theme.PasswordVaultTheme
 import de.christian2003.data.accounts.domain.entities.AccountCapability
 import de.christian2003.feature.autofill.R
 import de.christian2003.feature.autofill.domain.entities.AutofillType
-import de.christian2003.feature.autofill.infrastructure.dto.ParcelableAutofillData
+import de.christian2003.feature.autofill.infrastructure.android.dto.ParcelableAutofillData
 import de.christian2003.feature.autofill.presentation.viewmodels.AutofillAuthViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

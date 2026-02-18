@@ -1,4 +1,4 @@
-package de.christian2003.feature.autofill.infrastructure.dto
+package de.christian2003.feature.autofill.infrastructure.android.dto
 
 import android.os.Parcel
 import android.os.Parcelable
