@@ -2,6 +2,7 @@ package de.christian2003.feature.autofill.infrastructure.services
 
 import android.location.Address
 import android.location.Geocoder
+import android.util.Log
 import de.christian2003.feature.autofill.domain.AddressParserService
 import de.christian2003.feature.autofill.domain.entities.AutofillType
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -27,7 +28,11 @@ internal class GeocoderAddressParserService @Inject constructor(
      */
     override suspend fun parseAddressToParts(fullAddress: String): Map<AutofillType, String> {
         if (!Geocoder.isPresent()) {
+            Log.d("Autofill", "Geocoder unavailable")
             return emptyMap()
+        }
+        else {
+            Log.d("Autofill", "Geocoder available")
         }
 
         val address: Address? = geocode(fullAddress)
@@ -71,7 +76,10 @@ internal class GeocoderAddressParserService @Inject constructor(
             }
 
             //Street (including house number):
-            val street = listOfNotNull(address.thoroughfare, address.subThoroughfare).joinToString(" ")
+            val street = listOfNotNull(
+                address.thoroughfare,
+                address.subThoroughfare
+            ).joinToString(" ")
             if (street.isNotBlank()) {
                 put(AutofillType.AddressStreet, street)
             }
