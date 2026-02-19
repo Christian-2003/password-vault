@@ -1,4 +1,4 @@
-package de.christian2003.feature.autofill.domain
+package de.christian2003.feature.autofill.domain.services
 
 import de.christian2003.feature.autofill.domain.entities.AutofillType
 

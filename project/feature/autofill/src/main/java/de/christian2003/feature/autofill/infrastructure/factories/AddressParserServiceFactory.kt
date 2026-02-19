@@ -2,7 +2,7 @@ package de.christian2003.feature.autofill.infrastructure.factories
 
 import android.location.Geocoder
 import de.christian2003.core.common.domain.services.ConnectivityCheckerService
-import de.christian2003.feature.autofill.domain.AddressParserService
+import de.christian2003.feature.autofill.domain.services.AddressParserService
 import de.christian2003.feature.autofill.infrastructure.services.GeocoderAddressParserService
 import de.christian2003.feature.autofill.infrastructure.services.HeuristicAddressParserService
 import javax.inject.Inject

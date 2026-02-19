@@ -3,7 +3,7 @@ package de.christian2003.feature.autofill.infrastructure.services
 import android.location.Address
 import android.location.Geocoder
 import android.util.Log
-import de.christian2003.feature.autofill.domain.AddressParserService
+import de.christian2003.feature.autofill.domain.services.AddressParserService
 import de.christian2003.feature.autofill.domain.entities.AutofillType
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject

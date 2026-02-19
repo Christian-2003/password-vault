@@ -1,6 +1,6 @@
 package de.christian2003.feature.autofill.infrastructure.services
 
-import de.christian2003.feature.autofill.domain.AddressParserService
+import de.christian2003.feature.autofill.domain.services.AddressParserService
 import de.christian2003.feature.autofill.domain.entities.AutofillType
 import javax.inject.Inject
 

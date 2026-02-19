@@ -9,7 +9,7 @@ import de.christian2003.feature.autofill.domain.entities.AutofillItem
 import de.christian2003.feature.autofill.domain.entities.AutofillResponse
 import de.christian2003.feature.autofill.domain.entities.AutofillType
 import de.christian2003.feature.autofill.application.services.AutofillTypeMapper
-import de.christian2003.feature.autofill.domain.AddressParserService
+import de.christian2003.feature.autofill.domain.services.AddressParserService
 import javax.inject.Inject
 import kotlin.uuid.Uuid
 
