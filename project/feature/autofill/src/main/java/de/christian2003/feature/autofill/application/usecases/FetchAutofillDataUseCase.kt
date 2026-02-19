@@ -9,7 +9,9 @@ import de.christian2003.feature.autofill.domain.entities.AutofillItem
 import de.christian2003.feature.autofill.domain.entities.AutofillResponse
 import de.christian2003.feature.autofill.domain.entities.AutofillType
 import de.christian2003.feature.autofill.application.services.AutofillTypeMapper
+import de.christian2003.feature.autofill.domain.entities.AutofillGroup
 import de.christian2003.feature.autofill.domain.services.AddressParserService
+import de.christian2003.feature.autofill.domain.services.PersonNameParserService
 import javax.inject.Inject
 import kotlin.uuid.Uuid
 
@@ -17,10 +19,13 @@ import kotlin.uuid.Uuid
 internal class FetchAutofillDataUseCase @Inject constructor(
     private val getAccountsByIdsUseCase: GetAccountsByIdsUseCase,
     private val addressParserService: AddressParserService,
+    private val personNameParserService: PersonNameParserService,
     private val autofillTypeMapper: AutofillTypeMapper
 ) {
 
     private var addressPartsCache: Map<AutofillType, String>? = null
+
+    private var personNamePartsCache: Map<AutofillType, String>? = null
 
 
     suspend fun fetchData(accountIds: Set<Uuid>, autofillTypes: Set<AutofillType>): List<AutofillResponse> {
@@ -65,26 +70,46 @@ internal class FetchAutofillDataUseCase @Inject constructor(
             Log.d("Autofill", "DetailType=$detailType, autofillType=$autofillType (${account.details.size} details)")
             val detail: Detail? = account.details.find { it.type == detailType }
             if (detail != null) {
-                if (isAddress(autofillType)) {
-                    val addressPart: String? = getAddressPartForAutofillType(detail.content, autofillType)
-                    if (addressPart != null) {
+                when(autofillType.group) {
+                    AutofillGroup.Address -> {
+                        val addressPart: String? = getAddressPartForAutofillType(detail.content, autofillType)
+                        if (addressPart != null) {
+                            val item = AutofillItem(
+                                label = detail.name,
+                                content = addressPart,
+                                type = autofillType,
+                                isObfuscated = detail.metadata.isObfuscated
+                            )
+                            items.add(item)
+                        }
+                    }
+                    AutofillGroup.Birthday -> {
+
+                    }
+                    AutofillGroup.PersonName -> {
+                        val namePart: String? = getPersonNamePartForAutofillType(detail.content, autofillType)
+                        if (namePart != null) {
+                            val item = AutofillItem(
+                                label = detail.name,
+                                content = namePart,
+                                type = autofillType,
+                                isObfuscated = detail.metadata.isObfuscated
+                            )
+                            items.add(item)
+                        }
+                    }
+                    AutofillGroup.PhoneNumber -> {
+
+                    }
+                    AutofillGroup.Other -> {
                         val item = AutofillItem(
                             label = detail.name,
-                            content = addressPart,
+                            content = detail.content,
                             type = autofillType,
                             isObfuscated = detail.metadata.isObfuscated
                         )
                         items.add(item)
                     }
-                }
-                else {
-                    val item = AutofillItem(
-                        label = detail.name,
-                        content = detail.content,
-                        type = autofillType,
-                        isObfuscated = detail.metadata.isObfuscated
-                    )
-                    items.add(item)
                 }
                 Log.d("Autofill", "Add item for detail ${detail.name}")
             }
@@ -99,18 +124,6 @@ internal class FetchAutofillDataUseCase @Inject constructor(
     }
 
 
-    private fun isAddress(type: AutofillType): Boolean {
-        return type == AutofillType.PostalCode
-                || type == AutofillType.PostalCodeExtended
-                || type == AutofillType.PostalAddress
-                || type == AutofillType.AddressAuxiliaryDetails
-                || type == AutofillType.AddressCountry
-                || type == AutofillType.AddressLocality
-                || type == AutofillType.AddressRegion
-                || type == AutofillType.AddressStreet
-    }
-
-
     private suspend fun getAddressPartForAutofillType(fullAddress: String, type: AutofillType): String? {
         var addressPartsCache: Map<AutofillType, String> ? = this.addressPartsCache
         if (addressPartsCache == null) {
@@ -120,6 +133,21 @@ internal class FetchAutofillDataUseCase @Inject constructor(
 
         return if (addressPartsCache.containsKey(type)) {
             addressPartsCache[type]
+        } else {
+            null
+        }
+    }
+
+
+    private suspend fun getPersonNamePartForAutofillType(fullName: String, type: AutofillType): String? {
+        var personNamePartsCache: Map<AutofillType, String> ? = this.personNamePartsCache
+        if (personNamePartsCache == null) {
+            personNamePartsCache = personNameParserService.parseNameToParts(fullName)
+            this.personNamePartsCache = personNamePartsCache
+        }
+
+        return if (personNamePartsCache.containsKey(type)) {
+            personNamePartsCache[type]
         } else {
             null
         }
