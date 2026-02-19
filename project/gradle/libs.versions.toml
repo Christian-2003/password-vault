@@ -29,6 +29,7 @@ navigation = "2.9.5"
 appcompat = "1.7.1"
 material = "1.13.0"
 mockito = "6.0.0"
+libphonenumber = "9.0.24"
 
 
 [libraries]
@@ -63,6 +64,7 @@ accompanist-drawablepainter = { group = "com.google.accompanist", name = "accomp
 reorderable = { group = "sh.calvin.reorderable", name = "reorderable", version.ref = "reorderable" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 coil-svg = { module = "io.coil-kt:coil-svg", version.ref = "coilCompose" }
+googlecode-libphonenumber = { group= "com.googlecode.libphonenumber", name = "libphonenumber", version.ref = "libphonenumber" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }

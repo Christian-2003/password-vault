@@ -161,7 +161,7 @@ internal class HeuristicPersonNameParserService @Inject constructor(): PersonNam
 
         val lastName = tokens.subList(particleStart, tokens.size).joinToString(" ")
 
-        return lastName to particleStart
+        return Pair(lastName, particleStart)
     }
 
 }

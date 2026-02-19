@@ -12,6 +12,7 @@ import de.christian2003.feature.autofill.application.services.AutofillTypeMapper
 import de.christian2003.feature.autofill.domain.entities.AutofillGroup
 import de.christian2003.feature.autofill.domain.services.AddressParserService
 import de.christian2003.feature.autofill.domain.services.PersonNameParserService
+import de.christian2003.feature.autofill.domain.services.PhoneNumberParserService
 import javax.inject.Inject
 import kotlin.uuid.Uuid
 
@@ -20,12 +21,15 @@ internal class FetchAutofillDataUseCase @Inject constructor(
     private val getAccountsByIdsUseCase: GetAccountsByIdsUseCase,
     private val addressParserService: AddressParserService,
     private val personNameParserService: PersonNameParserService,
+    private val phoneNumberParserService: PhoneNumberParserService,
     private val autofillTypeMapper: AutofillTypeMapper
 ) {
 
     private var addressPartsCache: Map<AutofillType, String>? = null
 
     private var personNamePartsCache: Map<AutofillType, String>? = null
+
+    private var phoneNumberPartsCache: Map<AutofillType, String>? = null
 
 
     suspend fun fetchData(accountIds: Set<Uuid>, autofillTypes: Set<AutofillType>): List<AutofillResponse> {
@@ -83,9 +87,6 @@ internal class FetchAutofillDataUseCase @Inject constructor(
                             items.add(item)
                         }
                     }
-                    AutofillGroup.Birthday -> {
-
-                    }
                     AutofillGroup.PersonName -> {
                         val namePart: String? = getPersonNamePartForAutofillType(detail.content, autofillType)
                         if (namePart != null) {
@@ -99,6 +100,18 @@ internal class FetchAutofillDataUseCase @Inject constructor(
                         }
                     }
                     AutofillGroup.PhoneNumber -> {
+                        val phonePart: String? = getPhoneNumberPartForAutofillType(detail.content, autofillType)
+                        if (phonePart != null) {
+                            val item = AutofillItem(
+                                label = detail.name,
+                                content = phonePart,
+                                type = autofillType,
+                                isObfuscated = detail.metadata.isObfuscated
+                            )
+                            items.add(item)
+                        }
+                    }
+                    AutofillGroup.Birthday -> {
 
                     }
                     AutofillGroup.Other -> {
@@ -148,6 +161,21 @@ internal class FetchAutofillDataUseCase @Inject constructor(
 
         return if (personNamePartsCache.containsKey(type)) {
             personNamePartsCache[type]
+        } else {
+            null
+        }
+    }
+
+
+    private suspend fun getPhoneNumberPartForAutofillType(fullNumber: String, type: AutofillType): String? {
+        var phoneNumberPartsCache: Map<AutofillType, String> ? = this.phoneNumberPartsCache
+        if (phoneNumberPartsCache == null) {
+            phoneNumberPartsCache = phoneNumberParserService.parsePhoneNumberToParts(fullNumber)
+            this.phoneNumberPartsCache = phoneNumberPartsCache
+        }
+
+        return if (phoneNumberPartsCache.containsKey(type)) {
+            phoneNumberPartsCache[type]
         } else {
             null
         }

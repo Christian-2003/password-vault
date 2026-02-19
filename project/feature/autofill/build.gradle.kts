@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.googlecode.libphonenumber)
     implementation(libs.hilt.android)
 
     implementation(project(":core:security"))
