@@ -4,8 +4,10 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import de.christian2003.feature.autofill.domain.services.DateParserService
 import de.christian2003.feature.autofill.domain.services.PersonNameParserService
 import de.christian2003.feature.autofill.domain.services.PhoneNumberParserService
+import de.christian2003.feature.autofill.infrastructure.services.HeuristicDateParserService
 import de.christian2003.feature.autofill.infrastructure.services.HeuristicPersonNameParserService
 import de.christian2003.feature.autofill.infrastructure.services.LibPhoneNumberParserService
 
@@ -13,6 +15,11 @@ import de.christian2003.feature.autofill.infrastructure.services.LibPhoneNumberP
 @Module
 @InstallIn(SingletonComponent::class)
 internal abstract class AutofillBindingsSingletonModule {
+
+    @Binds
+    abstract fun bindDateParserService(
+        impl: HeuristicDateParserService
+    ): DateParserService
 
     @Binds
     abstract fun bindPersonNameParserService(
