@@ -14,6 +14,7 @@ import android.widget.RemoteViews
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.autofill.Autofill
 import androidx.lifecycle.AndroidViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.core.security.application.usecases.AreBiometricsConfiguredUseCase
@@ -80,6 +81,8 @@ internal class AutofillAuthViewModel @Inject constructor(
         val autofillTypesSet: Set<AutofillType> = autofillTypes.keys
         val autofillResponses: List<AutofillResponse> = fetchAutofillDataUseCase.fetchData(accountIds, autofillTypesSet)
 
+        val usedAutofillIds: MutableList<AutofillId> = mutableListOf()
+
         //Generate fill response:
         val fillResponseBuilder = FillResponse.Builder()
         autofillResponses.forEach { response ->
@@ -97,12 +100,32 @@ internal class AutofillAuthViewModel @Inject constructor(
                         .setPresentations(presentations)
                         .build()
                     datasetBuilder.setField(autofillId, field)
+                    usedAutofillIds.add(autofillId)
                 }
             }
             fillResponseBuilder.addDataset(datasetBuilder.build())
         }
 
+        val unusedAutofillIds: List<AutofillId> = getUnusedAutofillIds(autofillTypes, usedAutofillIds)
+        if (unusedAutofillIds.isNotEmpty()) {
+            fillResponseBuilder.setIgnoredIds(*unusedAutofillIds.toTypedArray())
+            Log.d("Autofill", "${unusedAutofillIds.size} unused autofill IDs")
+        }
+
         return fillResponseBuilder.build()
+    }
+
+
+    private fun getUnusedAutofillIds(autofillTypes: Map<AutofillType, List<AutofillId>>, usedAutofillIds: List<AutofillId>): List<AutofillId> {
+        val unusedAutofillIds: MutableList<AutofillId> = mutableListOf()
+        autofillTypes.values.forEach { autofillIds ->
+            autofillIds.forEach { autofillId ->
+                if (!usedAutofillIds.contains(autofillId)) {
+                    unusedAutofillIds.add(autofillId)
+                }
+            }
+        }
+        return unusedAutofillIds
     }
 
 

@@ -48,7 +48,7 @@ fun DialogWithHeroSection(
 ) {
     DialogWithHeroSection(
         title = title,
-        text = text,
+        text = AnnotatedString(text),
         onDismiss = onDismiss,
         dismissButtonText = dismissButtonText,
         onConfirm = onConfirm,
