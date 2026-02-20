@@ -1,6 +1,5 @@
 package de.christian2003.feature.autofill.application.usecases
 
-import android.util.Log
 import de.christian2003.data.accounts.application.usecases.GetAccountsByIdsUseCase
 import de.christian2003.data.accounts.domain.entities.Account
 import de.christian2003.data.accounts.domain.entities.Detail
@@ -18,6 +17,16 @@ import javax.inject.Inject
 import kotlin.uuid.Uuid
 
 
+/**
+ * Use case to fetch autofill data from the app and parse it into suitable parts if required.
+ *
+ * @param getAccountsByIdsUseCase   Use case to get a list of accounts based on their IDs.
+ * @param addressParserService      Service to parse addresses.
+ * @param personNameParserService   Service to parse person names.
+ * @param phoneNumberParserService  Service to parse mobile phone numbers.
+ * @param dateParserService         Service to parse dates.
+ * @param autofillTypeMapper        Mapper maps autofill types to detail types.
+ */
 internal class FetchAutofillDataUseCase @Inject constructor(
     private val getAccountsByIdsUseCase: GetAccountsByIdsUseCase,
     private val addressParserService: AddressParserService,
@@ -27,23 +36,39 @@ internal class FetchAutofillDataUseCase @Inject constructor(
     private val autofillTypeMapper: AutofillTypeMapper
 ) {
 
+    /**
+     * Caches the parsed address.
+     */
     private var addressPartsCache: Map<AutofillType, String>? = null
 
+    /**
+     * Caches the parsed person name.
+     */
     private var personNamePartsCache: Map<AutofillType, String>? = null
 
+    /**
+     * Caches the parsed phone number.
+     */
     private var phoneNumberPartsCache: Map<AutofillType, String>? = null
 
+    /**
+     * Caches the parsed date.
+     */
     private var datePartsCache: Map<AutofillType, String>? = null
 
 
-
+    /**
+     * Fetches the autofill data.
+     *
+     * @param accountIds    IDs of the account whose data to fetch for the response.
+     * @param autofillTypes Autofill types for which to fetch data.
+     * @return              List of responses. One item for each account.
+     */
     suspend fun fetchData(accountIds: Set<Uuid>, autofillTypes: Set<AutofillType>): List<AutofillResponse> {
         val accounts: List<Account> = getAccountsByIdsUseCase.getAccountsByIds(accountIds.toList())
         val detailTypes: Map<AutofillType, DetailType> = autofillTypesToDetailTypes(autofillTypes)
 
         val autofillResponses: MutableList<AutofillResponse> = mutableListOf()
-
-        Log.d("Autofill", "Fetched ${accounts.size} accounts")
 
         accounts.forEach { account ->
             val response: AutofillResponse = generateAutofillResponse(
@@ -57,6 +82,13 @@ internal class FetchAutofillDataUseCase @Inject constructor(
     }
 
 
+    /**
+     * Converts the specified set of autofill types to detail types. The resulting detail types are
+     * mapped to the corresponding autofill type.
+     *
+     * @param autofillTypes Set of autofill types.
+     * @return              Detail types mapped to their autofill type.
+     */
     private fun autofillTypesToDetailTypes(autofillTypes: Set<AutofillType>): Map<AutofillType, DetailType> {
         val detailTypes: MutableMap<AutofillType, DetailType> = mutableMapOf()
 
@@ -71,12 +103,17 @@ internal class FetchAutofillDataUseCase @Inject constructor(
     }
 
 
+    /**
+     * Generates the autofill response for the provided account and detail types.
+     *
+     * @param account       Account containing the data with which to populate the response.
+     * @param detailTypes   Detail types mapped to autofill types.
+     * @return              Response containing the autofill data.
+     */
     private suspend fun generateAutofillResponse(account: Account, detailTypes: Map<AutofillType, DetailType>): AutofillResponse {
-        Log.d("Autofill", "Generate response for account ${account.descriptor.name}")
         val items: MutableList<AutofillItem> = mutableListOf()
 
         detailTypes.forEach { (autofillType, detailType) ->
-            Log.d("Autofill", "DetailType=$detailType, autofillType=$autofillType (${account.details.size} details)")
             val detail: Detail? = account.details.find { it.type == detailType }
             if (detail != null) {
                 when(autofillType.group) {
@@ -138,7 +175,6 @@ internal class FetchAutofillDataUseCase @Inject constructor(
                         items.add(item)
                     }
                 }
-                Log.d("Autofill", "Add item for detail ${detail.name}")
             }
         }
 
@@ -151,6 +187,14 @@ internal class FetchAutofillDataUseCase @Inject constructor(
     }
 
 
+    /**
+     * Returns the address part matching the specified autofill type or null if no data can be
+     * returned.
+     *
+     * @param fullAddress   Full address from which to get the part.
+     * @param type          Type for the result.
+     * @return              Address part or null.
+     */
     private suspend fun getAddressPartForAutofillType(fullAddress: String, type: AutofillType): String? {
         var addressPartsCache: Map<AutofillType, String> ? = this.addressPartsCache
         if (addressPartsCache == null) {
@@ -166,6 +210,14 @@ internal class FetchAutofillDataUseCase @Inject constructor(
     }
 
 
+    /**
+     * Returns the person name part matching the specified autofill type or null if no data can be
+     * returned.
+     *
+     * @param fullName  Full person name from which to get the part.
+     * @param type      Type for the result.
+     * @return          Person name part or null.
+     */
     private suspend fun getPersonNamePartForAutofillType(fullName: String, type: AutofillType): String? {
         var personNamePartsCache: Map<AutofillType, String> ? = this.personNamePartsCache
         if (personNamePartsCache == null) {
@@ -181,6 +233,14 @@ internal class FetchAutofillDataUseCase @Inject constructor(
     }
 
 
+    /**
+     * Returns the phone number part matching the specified autofill type or null if no data can be
+     * returned.
+     *
+     * @param fullNumber    Full phone number from which to get the part.
+     * @param type          Type for the result.
+     * @return              Phone number part or null.
+     */
     private suspend fun getPhoneNumberPartForAutofillType(fullNumber: String, type: AutofillType): String? {
         var phoneNumberPartsCache: Map<AutofillType, String> ? = this.phoneNumberPartsCache
         if (phoneNumberPartsCache == null) {
@@ -196,6 +256,13 @@ internal class FetchAutofillDataUseCase @Inject constructor(
     }
 
 
+    /**
+     * Returns the date part matching the specified autofill type or null if no data can be returned.
+     *
+     * @param fullDate  Full date from which to get the part.
+     * @param type      Type for the result.
+     * @return          Date part or null.
+     */
     private suspend fun getDatePartForAutofillType(fullDate: String, type: AutofillType): String? {
         var datePartsCache: Map<AutofillType, String> ? = this.datePartsCache
         if (datePartsCache == null) {

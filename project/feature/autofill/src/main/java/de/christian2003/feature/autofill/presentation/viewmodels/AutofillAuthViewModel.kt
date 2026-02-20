@@ -29,6 +29,16 @@ import javax.inject.Inject
 import kotlin.uuid.Uuid
 
 
+/**
+ * View model for the activity through which the user can authenticate before any other app is
+ * auto-filled.
+ *
+ * @param application                       Application.
+ * @param areBiometricsConfiguredUseCase    Use case to get whether biometrics are configured for
+ *                                          unlocking the master key.
+ * @param unlockWithMasterPasswordUseCase   Use case to unlock the master key with the master password.
+ * @param fetchAutofillDataUseCase          Use case to fetch autofill data.
+ */
 @HiltViewModel
 internal class AutofillAuthViewModel @Inject constructor(
     application: Application,
@@ -37,14 +47,29 @@ internal class AutofillAuthViewModel @Inject constructor(
     private val fetchAutofillDataUseCase: FetchAutofillDataUseCase
 ) : AndroidViewModel(application) {
 
+    /**
+     * Shared preferences.
+     */
     private val preferences: SharedPreferences = application.getSharedPreferences("settings", Context.MODE_PRIVATE)
 
+    /**
+     * Whether to use global theme.
+     */
     val useGlobalTheme: Boolean = preferences.getBoolean("global_theme", false)
 
+    /**
+     * Theme contrast.
+     */
     val themeContrast: ThemeContrast = ThemeContrast.entries[preferences.getInt("theme_contrast", 0)]
 
+    /**
+     * Indicates whether biometrics are configured for unlocking the master key.
+     */
     val areBiometricsConfigured: Boolean = areBiometricsConfiguredUseCase.areBiometricsConfigured()
 
+    /**
+     * Password entered by the user.
+     */
     var password: String by mutableStateOf("")
 
     /**
@@ -75,6 +100,16 @@ internal class AutofillAuthViewModel @Inject constructor(
     }
 
 
+    /**
+     * Fetches the autofill data from the app and returns a FillResponse that can be returned to the
+     * app which should be auto-filled.
+     *
+     * @param packageName               Package name of the app that is being auto-filled.
+     * @param autofillTypes             Autofill types mapped to their autofill IDs.
+     * @param focusedAutofillPartition  Autofill partition whose data to autofill.
+     * @param capabilities              List of account capabilities.
+     * @return                          FillResponse for the auto-filled app.
+     */
     suspend fun fetchAutofillData(
         packageName: String,
         autofillTypes: Map<AutofillType, List<AutofillId>>,
@@ -118,6 +153,13 @@ internal class AutofillAuthViewModel @Inject constructor(
     }
 
 
+    /**
+     * Gets a list of unused autofill IDs from the provided map of autofill types.
+     *
+     * @param autofillTypes     Maps lists of autofill IDs to their corresponding autofill type.
+     * @param usedAutofillIds   List of autofill IDs that are auto-filled by the service.
+     * @return                  List of unused autofill IDs.
+     */
     private fun getUnusedAutofillIds(autofillTypes: Map<AutofillType, List<AutofillId>>, usedAutofillIds: List<AutofillId>): List<AutofillId> {
         val unusedAutofillIds: MutableList<AutofillId> = mutableListOf()
         autofillTypes.values.forEach { autofillIds ->
@@ -131,6 +173,13 @@ internal class AutofillAuthViewModel @Inject constructor(
     }
 
 
+    /**
+     * Builds the presentations for the specified autofill item.
+     *
+     * @param packageName   Package name of this app (i.e. Password Vault).
+     * @param item          Autofill item for which to build the presentation.
+     * @return              Presentations for the specified autofill item.
+     */
     private fun buildPresentations(packageName: String, item: AutofillItem): Presentations {
         val presentationView = RemoteViews(packageName, R.layout.autofill_presentation_item)
         presentationView.setTextViewText(R.id.label, item.label)
@@ -149,6 +198,12 @@ internal class AutofillAuthViewModel @Inject constructor(
     }
 
 
+    /**
+     * Converts the provided list of account capabilities to a set of IDs of accounts.
+     *
+     * @param capabilities  Account capabilities.
+     * @return              Set of account IDs.
+     */
     private fun capabilitiesToAccountIds(capabilities: List<AccountCapability>): Set<Uuid> {
         val accountIds: MutableSet<Uuid> = mutableSetOf()
         capabilities.forEach { capability ->

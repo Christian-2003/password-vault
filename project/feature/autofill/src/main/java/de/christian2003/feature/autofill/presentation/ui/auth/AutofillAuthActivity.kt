@@ -45,7 +45,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import dagger.hilt.android.AndroidEntryPoint
-import de.christian2003.core.security.application.usecases.BiometricAuthUseCase
 import de.christian2003.core.security.application.usecases.UnlockWithBiometricsUseCase
 import de.christian2003.core.ui.composables.LoadingIndicatorButton
 import de.christian2003.core.ui.composables.TextInput
@@ -62,19 +61,39 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
+/**
+ * Activity which allows the user to authenticate before any other app can be auto-filled.
+ */
 @AndroidEntryPoint
 class AutofillAuthActivity : FragmentActivity() {
 
     companion object {
+
+        /**
+         * Extra key with which to pass the autofill data to the activity. The extra must contain
+         * a parcelable which can be deserialized into ParcelableAutofillData.
+         */
         const val EXTRA_AUTOFILL_DATA: String = "autofill_data"
+
     }
 
+    /**
+     * View model for the activity.
+     */
     private val viewModel: AutofillAuthViewModel by viewModels()
 
+    /**
+     * Use case to unlock the master key with biometrics. The use case is activity-scoped, which is
+     * why it's injected into the activity and not the view model.
+     */
     @Inject internal lateinit var unlockWithBiometricsUseCase: UnlockWithBiometricsUseCase
-    @Inject internal lateinit var biometricAuthUseCase: BiometricAuthUseCase
 
 
+    /**
+     * Creates the activity.
+     *
+     * @param savedInstanceState    Previously saved state of the instance.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -113,6 +132,10 @@ class AutofillAuthActivity : FragmentActivity() {
     }
 
 
+    /**
+     * Invoked to finish autofill after successfully unlocking the master key. Prerequisite for this
+     * method is that the master key is unlocked.
+     */
     private suspend fun onFinishAutofill() {
         val myIntent: Intent = intent
         val replyIntent = Intent()
@@ -152,6 +175,16 @@ class AutofillAuthActivity : FragmentActivity() {
 }
 
 
+/**
+ * Composable content for the autofill activity. This shows a bottom sheet dialog through which
+ * the user can authenticate.
+ *
+ * @param viewModel         View model for the activity.
+ * @param onBiometricUnlock Callback invoked to perform biometric unlock of the master key.
+ * @param onDismiss         Callback invoked to dismiss of the dialog.
+ * @param onConfirm         Callback invoked to dismiss the dialog after successfully unlocking the
+ *                          master key.
+ */
 @Composable
 private fun AutofillActivityContent(
     viewModel: AutofillAuthViewModel,

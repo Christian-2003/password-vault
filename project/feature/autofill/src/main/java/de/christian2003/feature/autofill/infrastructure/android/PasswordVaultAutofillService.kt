@@ -35,24 +35,47 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
+/**
+ * Autofill service for password vault can autofill other apps with the data that is saved in
+ * Password Vault.
+ * Saving data from other apps is not supported currently.
+ */
 @AndroidEntryPoint
 class PasswordVaultAutofillService: AutofillService() {
 
+    /**
+     * Service fetches the active assist structure.
+     */
     @Inject
     internal lateinit var assistStructureFetcher: AssistStructureFetcher
 
+    /**
+     * Parser for assist structures.
+     */
     @Inject
     internal lateinit var assistStructureParser: AssistStructureParser
 
+    /**
+     * Use case to get account capabilities.
+     */
     @Inject
     internal lateinit var getAccountCapabilitiesUseCase: GetAccountCapabilitiesUseCase
 
+    /**
+     * Use case to validate the signature of a package.
+     */
     @Inject
     internal lateinit var validatePackageSignatureUseCase: ValidatePackageSignatureUseCase
 
+    /**
+     * Mapper maps Android autofill hints to the domain autofill types.
+     */
     @Inject
     internal lateinit var autofillTypeMapper: AutofillTypeMapper
 
+    /**
+     * Coroutine scope for the service.
+     */
     private val serviceScope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
 
@@ -112,7 +135,7 @@ class PasswordVaultAutofillService: AutofillService() {
                 )
                 val authPendingIntent: PendingIntent = PendingIntent.getActivity(this@PasswordVaultAutofillService, 0, authIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
 
-                val autofillIds: List<AutofillId> = autofillTypesToAutofillIds(parsedStructure.data)
+                val autofillIds: List<AutofillId> = extractAutofillIds(parsedStructure.data)
 
                 val presentations: Presentations = Presentations.Builder()
                     .setMenuPresentation(
@@ -149,11 +172,16 @@ class PasswordVaultAutofillService: AutofillService() {
         request: SaveRequest,
         callback: SaveCallback
     ) {
-        //TODO
+        //TODO: Unsure if this can be done, since we require UI to unlock MK before saving data \(°.°)/
     }
 
 
-
+    /**
+     * Converts the provided map to a list of detail types that match the provided autofill types.
+     *
+     * @param autofillTypes Lists of autofill IDs mapped to their corresponding autofill type.
+     * @return              List of detail types that match the autofill types.
+     */
     private fun autofillTypesToDetailTypes(autofillTypes: Map<AutofillType, List<AutofillId>>): List<DetailType> {
         val detailTypes: MutableList<DetailType> = mutableListOf()
 
@@ -168,7 +196,13 @@ class PasswordVaultAutofillService: AutofillService() {
     }
 
 
-    private fun autofillTypesToAutofillIds(autofillTypes: Map<AutofillType, List<AutofillId>>): List<AutofillId> {
+    /**
+     * Extracts all autofill IDs from the provided map.
+     *
+     * @param autofillTypes Lists of autofill IDs mapped to their corresponding autofill type.
+     * @return              List of all extracted autofill IDs.
+     */
+    private fun extractAutofillIds(autofillTypes: Map<AutofillType, List<AutofillId>>): List<AutofillId> {
         val autofillIds: MutableList<AutofillId> = mutableListOf()
 
         autofillTypes.values.forEach { ids ->
