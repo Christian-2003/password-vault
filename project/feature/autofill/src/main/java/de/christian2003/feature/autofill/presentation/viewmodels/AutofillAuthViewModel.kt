@@ -7,14 +7,12 @@ import android.service.autofill.Dataset
 import android.service.autofill.Field
 import android.service.autofill.FillResponse
 import android.service.autofill.Presentations
-import android.util.Log
 import android.view.autofill.AutofillId
 import android.view.autofill.AutofillValue
 import android.widget.RemoteViews
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.autofill.Autofill
 import androidx.lifecycle.AndroidViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.core.security.application.usecases.AreBiometricsConfiguredUseCase
@@ -24,6 +22,7 @@ import de.christian2003.data.accounts.domain.entities.AccountCapability
 import de.christian2003.feature.autofill.R
 import de.christian2003.feature.autofill.application.usecases.FetchAutofillDataUseCase
 import de.christian2003.feature.autofill.domain.entities.AutofillItem
+import de.christian2003.feature.autofill.domain.entities.AutofillPartition
 import de.christian2003.feature.autofill.domain.entities.AutofillResponse
 import de.christian2003.feature.autofill.domain.entities.AutofillType
 import javax.inject.Inject
@@ -76,7 +75,12 @@ internal class AutofillAuthViewModel @Inject constructor(
     }
 
 
-    suspend fun fetchAutofillData(packageName: String, autofillTypes: Map<AutofillType, List<AutofillId>>, capabilities: List<AccountCapability>): FillResponse {
+    suspend fun fetchAutofillData(
+        packageName: String,
+        autofillTypes: Map<AutofillType, List<AutofillId>>,
+        focusedAutofillPartition: AutofillPartition,
+        capabilities: List<AccountCapability>
+    ): FillResponse {
         val accountIds: Set<Uuid> = capabilitiesToAccountIds(capabilities)
         val autofillTypesSet: Set<AutofillType> = autofillTypes.keys
         val autofillResponses: List<AutofillResponse> = fetchAutofillDataUseCase.fetchData(accountIds, autofillTypesSet)
@@ -86,20 +90,19 @@ internal class AutofillAuthViewModel @Inject constructor(
         //Generate fill response:
         val fillResponseBuilder = FillResponse.Builder()
         autofillResponses.forEach { response ->
-            Log.d("Autofill", "Response for ${response.accountId} with ${response.items.size} items")
             val datasetBuilder = Dataset.Builder()
 
             response.items.forEach { item ->
-                Log.d("Autofill", "Response item ${item.label}")
                 val autofillIds: List<AutofillId>? = autofillTypes[item.type]
                 autofillIds?.forEach { autofillId ->
-                    Log.d("Autofill", "Response item ${item.label} with ID $autofillId")
-                    val presentations: Presentations = buildPresentations(packageName, item)
-                    val field: Field = Field.Builder()
-                        .setValue(AutofillValue.forText(item.content))
-                        .setPresentations(presentations)
-                        .build()
-                    datasetBuilder.setField(autofillId, field)
+                    if (item.type.partition == focusedAutofillPartition) {
+                        val presentations: Presentations = buildPresentations(packageName, item)
+                        val field: Field = Field.Builder()
+                            .setValue(AutofillValue.forText(item.content))
+                            .setPresentations(presentations)
+                            .build()
+                        datasetBuilder.setField(autofillId, field)
+                    }
                     usedAutofillIds.add(autofillId)
                 }
             }
@@ -109,7 +112,6 @@ internal class AutofillAuthViewModel @Inject constructor(
         val unusedAutofillIds: List<AutofillId> = getUnusedAutofillIds(autofillTypes, usedAutofillIds)
         if (unusedAutofillIds.isNotEmpty()) {
             fillResponseBuilder.setIgnoredIds(*unusedAutofillIds.toTypedArray())
-            Log.d("Autofill", "${unusedAutofillIds.size} unused autofill IDs")
         }
 
         return fillResponseBuilder.build()

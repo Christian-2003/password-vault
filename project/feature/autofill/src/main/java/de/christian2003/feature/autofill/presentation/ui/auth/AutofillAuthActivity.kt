@@ -121,7 +121,12 @@ class AutofillAuthActivity : FragmentActivity() {
         if (autofillData != null) {
             val autofillTypes: Map<AutofillType, List<AutofillId>> = autofillData.fieldMap
             val capabilities: List<AccountCapability> = autofillData.capabilities
-            val fillResponse: FillResponse = viewModel.fetchAutofillData(this.packageName, autofillTypes, capabilities)
+            val fillResponse: FillResponse = viewModel.fetchAutofillData(
+                packageName = this.packageName,
+                autofillTypes = autofillTypes,
+                focusedAutofillPartition = autofillData.focusedAutofillPartition,
+                capabilities = capabilities
+            )
 
             replyIntent.putExtra(android.view.autofill.AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillResponse)
 

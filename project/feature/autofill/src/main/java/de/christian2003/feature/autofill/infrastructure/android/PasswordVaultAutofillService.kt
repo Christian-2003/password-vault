@@ -25,6 +25,7 @@ import de.christian2003.feature.autofill.infrastructure.android.services.AssistS
 import de.christian2003.feature.autofill.infrastructure.android.services.AssistStructureParser
 import de.christian2003.feature.autofill.infrastructure.android.dto.ParcelableAutofillData
 import de.christian2003.feature.autofill.application.services.AutofillTypeMapper
+import de.christian2003.feature.autofill.infrastructure.android.dto.AssistStructureParserResult
 import de.christian2003.feature.autofill.presentation.ui.auth.AutofillAuthActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -79,10 +80,10 @@ class PasswordVaultAutofillService: AutofillService() {
                 }
 
                 //Get autofill types from assist structure:
-                val autofillTypes: Map<AutofillType, List<AutofillId>> = assistStructureParser.parse(assistStructure)
+                val parsedStructure: AssistStructureParserResult = assistStructureParser.parse(assistStructure)
 
                 //Get accounts:
-                val detailTypes: List<DetailType> = autofillTypesToDetailTypes(autofillTypes)
+                val detailTypes: List<DetailType> = autofillTypesToDetailTypes(parsedStructure.data)
                 val capabilities: List<AccountCapability> = getAccountCapabilitiesUseCase.getAccountCapabilities(
                     targetName = remotePackageName,
                     detailTypes
@@ -103,13 +104,15 @@ class PasswordVaultAutofillService: AutofillService() {
                 val authIntent = Intent(this@PasswordVaultAutofillService, AutofillAuthActivity::class.java)
                 authIntent.putExtra(
                     AutofillAuthActivity.Companion.EXTRA_AUTOFILL_DATA, ParcelableAutofillData(
-                        fieldMap = autofillTypes,
+                        fieldMap = parsedStructure.data,
+                        focusedAutofillId = parsedStructure.focusedAutofillId,
+                        focusedAutofillPartition = parsedStructure.focusedAutofillPartition,
                         capabilities = capabilities
                     )
                 )
                 val authPendingIntent: PendingIntent = PendingIntent.getActivity(this@PasswordVaultAutofillService, 0, authIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
 
-                val autofillIds: List<AutofillId> = autofillTypesToAutofillIds(autofillTypes)
+                val autofillIds: List<AutofillId> = autofillTypesToAutofillIds(parsedStructure.data)
 
                 val presentations: Presentations = Presentations.Builder()
                     .setMenuPresentation(

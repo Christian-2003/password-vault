@@ -2,7 +2,9 @@ package de.christian2003.feature.autofill.infrastructure.android.services
 
 import android.app.assist.AssistStructure
 import android.view.autofill.AutofillId
+import de.christian2003.feature.autofill.domain.entities.AutofillPartition
 import de.christian2003.feature.autofill.domain.entities.AutofillType
+import de.christian2003.feature.autofill.infrastructure.android.dto.AssistStructureParserResult
 import de.christian2003.feature.autofill.infrastructure.android.mapper.AutofillHintMapper
 import javax.inject.Inject
 
@@ -17,13 +19,27 @@ internal class AssistStructureParser @Inject constructor(
 ) {
 
     /**
+     * Autofill ID of the focused view.
+     */
+    private var focusedAutofillId: AutofillId? = null
+
+    /**
+     * Partition of the data from the focused view.
+     */
+    private var focusedAutofillPartition: AutofillPartition? = null
+
+
+    /**
      * Parses the specified assist structure and returns all autofill hints mapped to the autofill
      * ID.
      *
      * @param assistStructure   Assist structure to parse.
      * @return                  Autofill types mapped to a corresponding autofill ID.
      */
-    fun parse(assistStructure: AssistStructure): Map<AutofillType, List<AutofillId>> {
+    fun parse(assistStructure: AssistStructure): AssistStructureParserResult {
+        focusedAutofillId = null
+        focusedAutofillPartition = null
+
         val autofillHints: MutableMap<AutofillType, MutableList<AutofillId>> = mutableMapOf()
 
         val viewNodes: List<AssistStructure.ViewNode> = flattenAssistStructure(assistStructure)
@@ -40,7 +56,16 @@ internal class AssistStructureParser @Inject constructor(
             }
         }
 
-        return autofillHints
+        if (focusedAutofillId == null || focusedAutofillPartition == null) {
+            throw UnsupportedOperationException("Focused ID or partition cannot be determined for specified assist structure")
+        }
+
+        val result = AssistStructureParserResult(
+            data = autofillHints,
+            focusedAutofillId = focusedAutofillId!!,
+            focusedAutofillPartition = focusedAutofillPartition!!
+        )
+        return result
     }
 
 
@@ -50,7 +75,7 @@ internal class AssistStructureParser @Inject constructor(
      * @param structure Assist structure to flatten.
      * @return          Flattened list that contains all view nodes of the provided structure.
      */
-    fun flattenAssistStructure(structure: AssistStructure): List<AssistStructure.ViewNode> {
+    private fun flattenAssistStructure(structure: AssistStructure): List<AssistStructure.ViewNode> {
         val flattenedNodes: MutableList<AssistStructure.ViewNode> = mutableListOf()
 
         for (i: Int in 0 until structure.windowNodeCount) {
@@ -70,7 +95,7 @@ internal class AssistStructureParser @Inject constructor(
      * @param node  View node to flatten.
      * @return      Flattened list that contains all view nodes.
      */
-    fun flattenViewNode(node: AssistStructure.ViewNode): List<AssistStructure.ViewNode> {
+    private fun flattenViewNode(node: AssistStructure.ViewNode): List<AssistStructure.ViewNode> {
         val flattenedNodes: MutableList<AssistStructure.ViewNode> = mutableListOf()
 
         flattenedNodes.add(node)
@@ -87,6 +112,8 @@ internal class AssistStructureParser @Inject constructor(
 
     /**
      * Parses the provided view node and returns a list of autofill types for the node.
+     * If the node is focused, the attributes "focusedAutofillId" and "focusedAutofillPartition"
+     * are set afterwards with data that matches the contents of this node.
      *
      * @param node  View node to parse.
      * @return      List of autofill types from the node.
@@ -102,7 +129,48 @@ internal class AssistStructureParser @Inject constructor(
             }
         }
 
+        if (node.isFocused) {
+            focusedAutofillId = node.autofillId
+            focusedAutofillPartition = getPartitionForAutofillTypes(types)
+        }
+
         return types
+    }
+
+
+    /**
+     * Returns the autofill partition which best matches the list of autofill types. If no partition
+     * can be determined, null is returned.
+     *
+     * @param types List of types for which to determine the partition.
+     * @return      Partition which best matches the provided types or null.
+     */
+    private fun getPartitionForAutofillTypes(types: List<AutofillType>): AutofillPartition? {
+        val partitionsCount: MutableMap<AutofillPartition, Int> = mutableMapOf()
+
+        types.forEach { type ->
+            if (!partitionsCount.containsKey((type.partition))) {
+                partitionsCount[type.partition] = 0
+            }
+            partitionsCount[type.partition] = partitionsCount[type.partition]!! + 1
+        }
+
+        var highestCount = 0
+        partitionsCount.values.forEach { count ->
+            if (count > highestCount) {
+                highestCount = count
+            }
+        }
+        var bestMatch: AutofillPartition? = partitionsCount.entries.find { (_, count) ->
+            count == highestCount
+        }?.key
+
+        if (bestMatch == null && types.isNotEmpty()) {
+            //Fallback: Use first type:
+            bestMatch = types.first().partition
+        }
+
+        return bestMatch
     }
 
 }
