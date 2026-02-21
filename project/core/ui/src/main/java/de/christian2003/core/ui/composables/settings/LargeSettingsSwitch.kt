@@ -36,7 +36,7 @@ fun LargeSettingsSwitch(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
-            .clip(MaterialTheme.shapes.large)
+            .clip(MaterialTheme.shapes.largeIncreased)
             .background(MaterialTheme.colorScheme.secondaryContainer)
             .clickable {
                 onCheckedChange(!checked)
