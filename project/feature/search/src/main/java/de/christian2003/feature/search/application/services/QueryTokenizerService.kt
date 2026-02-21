@@ -1,13 +1,15 @@
 package de.christian2003.feature.search.application.services
 
 import de.christian2003.feature.search.domain.entities.QueryToken
+import de.christian2003.feature.search.domain.entities.QueryTokenCollection
 import de.christian2003.feature.search.domain.entities.QueryTokenType
+import javax.inject.Inject
 
 
 /**
  * Service can tokenize search queries.
  */
-internal class QueryTokenizerService {
+internal class QueryTokenizerService @Inject constructor() {
 
     /**
      * Tokenizes the provided query string.
@@ -17,7 +19,7 @@ internal class QueryTokenizerService {
      * @throws IllegalArgumentException The provided query string is illegal (e.g. a quoted literal
      *                                  is not closed),
      */
-    fun tokenize(query: String): List<QueryToken> {
+    fun tokenize(query: String): QueryTokenCollection {
         val tokens: MutableList<QueryToken> = mutableListOf()
         var i = 0
 
@@ -72,7 +74,7 @@ internal class QueryTokenizerService {
                     i++ //Skip closing quote
 
                     val token = QueryToken(
-                        type = QueryTokenType.QuotedLiteral,
+                        type = QueryTokenType.Literal,
                         value = builder.toString()
                     )
                     tokens.add(token)
@@ -129,7 +131,7 @@ internal class QueryTokenizerService {
             }
         }
 
-        return tokens
+        return QueryTokenCollection(tokens)
     }
 
 }

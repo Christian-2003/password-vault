@@ -16,8 +16,8 @@ class QueryTokenizerServiceUnitTest {
         val tokens = tokenizer.tokenize("hello")
 
         Assert.assertEquals(1, tokens.size)
-        Assert.assertEquals(QueryTokenType.Literal, tokens[0].type)
-        Assert.assertEquals("hello", tokens[0].value)
+        Assert.assertEquals(QueryTokenType.Literal, tokens.peek()!!.type)
+        Assert.assertEquals("hello", tokens.consume().value)
     }
 
 
@@ -26,8 +26,8 @@ class QueryTokenizerServiceUnitTest {
         val tokens = tokenizer.tokenize("hello world")
 
         Assert.assertEquals(2, tokens.size)
-        Assert.assertEquals("hello", tokens[0].value)
-        Assert.assertEquals("world", tokens[1].value)
+        Assert.assertEquals("hello", tokens.consume().value)
+        Assert.assertEquals("world", tokens.consume().value)
     }
 
 
@@ -36,8 +36,8 @@ class QueryTokenizerServiceUnitTest {
         val tokens = tokenizer.tokenize("\"hello world\"")
 
         Assert.assertEquals(1, tokens.size)
-        Assert.assertEquals(QueryTokenType.QuotedLiteral, tokens[0].type)
-        Assert.assertEquals("hello world", tokens[0].value)
+        Assert.assertEquals(QueryTokenType.Literal, tokens.peek()!!.type)
+        Assert.assertEquals("hello world", tokens.consume().value)
     }
 
 
@@ -46,14 +46,14 @@ class QueryTokenizerServiceUnitTest {
         val tokens = tokenizer.tokenize("(hello)")
 
         Assert.assertEquals(3, tokens.size)
-        Assert.assertEquals(QueryTokenType.ParenthesesOpen, tokens[0].type)
-        Assert.assertEquals("(", tokens[0].value)
+        Assert.assertEquals(QueryTokenType.ParenthesesOpen, tokens.peek()!!.type)
+        Assert.assertEquals("(", tokens.consume().value)
 
-        Assert.assertEquals(QueryTokenType.Literal, tokens[1].type)
-        Assert.assertEquals("hello", tokens[1].value)
+        Assert.assertEquals(QueryTokenType.Literal, tokens.peek()!!.type)
+        Assert.assertEquals("hello", tokens.consume().value)
 
-        Assert.assertEquals(QueryTokenType.ParenthesesClose, tokens[2].type)
-        Assert.assertEquals(")", tokens[2].value)
+        Assert.assertEquals(QueryTokenType.ParenthesesClose, tokens.peek()!!.type)
+        Assert.assertEquals(")", tokens.consume().value)
     }
 
 
@@ -63,11 +63,11 @@ class QueryTokenizerServiceUnitTest {
 
         Assert. assertEquals(2, tokens.size)
 
-        Assert.assertEquals(QueryTokenType.OperatorBool, tokens[0].type)
-        Assert.assertEquals("and", tokens[0].value)
+        Assert.assertEquals(QueryTokenType.OperatorBool, tokens.peek()!!.type)
+        Assert.assertEquals("and", tokens.consume().value)
 
-        Assert.assertEquals(QueryTokenType.OperatorBool, tokens[1].type)
-        Assert.assertEquals("or", tokens[1].value)
+        Assert.assertEquals(QueryTokenType.OperatorBool, tokens.peek()!!.type)
+        Assert.assertEquals("or", tokens.consume().value)
     }
 
 
@@ -77,20 +77,20 @@ class QueryTokenizerServiceUnitTest {
 
         Assert.assertEquals(5, tokens.size)
 
-        Assert.assertEquals(QueryTokenType.OperatorRelation, tokens[0].type)
-        Assert.assertEquals("<=", tokens[0].value)
+        Assert.assertEquals(QueryTokenType.OperatorRelation, tokens.peek()!!.type)
+        Assert.assertEquals("<=", tokens.consume().value)
 
-        Assert.assertEquals(QueryTokenType.OperatorRelation, tokens[1].type)
-        Assert.assertEquals(">", tokens[1].value)
+        Assert.assertEquals(QueryTokenType.OperatorRelation, tokens.peek()!!.type)
+        Assert.assertEquals(">", tokens.consume().value)
 
-        Assert.assertEquals(QueryTokenType.OperatorRelation, tokens[2].type)
-        Assert.assertEquals("<", tokens[2].value)
+        Assert.assertEquals(QueryTokenType.OperatorRelation, tokens.peek()!!.type)
+        Assert.assertEquals("<", tokens.consume().value)
 
-        Assert.assertEquals(QueryTokenType.OperatorRelation, tokens[3].type)
-        Assert.assertEquals(">=", tokens[3].value)
+        Assert.assertEquals(QueryTokenType.OperatorRelation, tokens.peek()!!.type)
+        Assert.assertEquals(">=", tokens.consume().value)
 
-        Assert.assertEquals(QueryTokenType.OperatorRelation, tokens[4].type)
-        Assert.assertEquals("<>", tokens[4].value)
+        Assert.assertEquals(QueryTokenType.OperatorRelation, tokens.peek()!!.type)
+        Assert.assertEquals("<>", tokens.consume().value)
     }
 
 
@@ -108,7 +108,7 @@ class QueryTokenizerServiceUnitTest {
             QueryToken(QueryTokenType.OperatorBool, "or"),
             QueryToken(QueryTokenType.Literal, "name"),
             QueryToken(QueryTokenType.Colon, ":"),
-            QueryToken(QueryTokenType.QuotedLiteral, "Bank account"),
+            QueryToken(QueryTokenType.Literal, "Bank account"),
             QueryToken(QueryTokenType.ParenthesesClose, ")"),
             QueryToken(QueryTokenType.OperatorBool, "and"),
             QueryToken(QueryTokenType.Literal, "created"),
@@ -120,7 +120,7 @@ class QueryTokenizerServiceUnitTest {
         Assert.assertEquals(expected.size, tokens.size)
 
         for (i in expected.indices) {
-            val actual = tokens[i]
+            val actual = tokens.consume()
             val exp = expected[i]
 
             Assert.assertEquals(exp.type, actual.type)

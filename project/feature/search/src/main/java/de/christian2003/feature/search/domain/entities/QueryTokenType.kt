@@ -7,7 +7,6 @@ package de.christian2003.feature.search.domain.entities
  * (name:Bank OR name:"Bank account") AND created:<=2025-11-12
  *
  * @property Literal            Literal token       e.g. 'Bank', '2025-11-12', 'name' or 'created'.
- * @property QuotedLiteral      Quoted literal      e.g. '"Bank account"'
  * @property Colon              Colon               e.g. ':'.
  * @property OperatorRelation   Relational operator e.g. '<='.
  * @property OperatorBool       Boolean operator    e.g. 'OR' or 'AND'.
@@ -17,7 +16,6 @@ package de.christian2003.feature.search.domain.entities
 internal enum class QueryTokenType {
 
     Literal,
-    QuotedLiteral,
     Colon,
     OperatorRelation,
     OperatorBool,
