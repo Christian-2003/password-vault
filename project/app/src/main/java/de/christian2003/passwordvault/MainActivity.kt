@@ -46,6 +46,8 @@ import de.christian2003.core.ui.theme.PasswordVaultTheme
 import de.christian2003.core.ui.theme.ThemeContrast
 import de.christian2003.feature.accounts.navigation.AccountsFlow
 import de.christian2003.feature.accounts.navigation.accountsFlow
+import de.christian2003.feature.autofill.navigation.AutofillSettingsFlow
+import de.christian2003.feature.autofill.navigation.autofillSettingsFlow
 import javax.inject.Inject
 
 
@@ -195,6 +197,11 @@ fun PasswordVault(
                 }
             )
 
+            //Flow for the autofill settings:
+            autofillSettingsFlow(
+                navController = navController
+            )
+
 
 
             composable("settings") {
@@ -210,6 +217,9 @@ fun PasswordVault(
                     },
                     onNavigateToAuthSettings = {
                         navController.navigate(AuthSettingsFlow)
+                    },
+                    onNavigateToAutofillSettings = {
+                        navController.navigate(AutofillSettingsFlow)
                     },
                     onNavigateToDevSettings = {
                         navController.navigate("devSettings")

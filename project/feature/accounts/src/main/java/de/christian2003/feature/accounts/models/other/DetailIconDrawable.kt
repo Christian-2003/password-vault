@@ -22,7 +22,7 @@ internal enum class DetailIconDrawable(
     Address(R.drawable.detail_address),
     Date(R.drawable.detail_date),
     Email(R.drawable.detail_email),
-    Password(R.drawable.detail_password),
+    Password(de.christian2003.core.ui.R.drawable.ic_autofill), //Moved and renamed icon, since it's used for autofill as well
     Url(R.drawable.detail_url),
     Pin(R.drawable.detail_pin),
     Username(R.drawable.detail_username),

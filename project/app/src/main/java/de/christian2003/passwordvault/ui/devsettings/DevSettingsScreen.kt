@@ -12,9 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import de.christian2003.core.ui.composables.settings.SettingsItemButton
+import de.christian2003.core.ui.composables.settings.SettingsItemSwitch
 import de.christian2003.passwordvault.R
-import de.christian2003.passwordvault.ui.settings.SettingsItemButton
-import de.christian2003.passwordvault.ui.settings.SettingsItemSwitch
 import de.christian2003.passwordvault.viewmodels.DevSettingsViewModel
 
 

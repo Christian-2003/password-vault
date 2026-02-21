@@ -25,6 +25,7 @@ import de.christian2003.feature.autofill.infrastructure.android.services.AssistS
 import de.christian2003.feature.autofill.infrastructure.android.services.AssistStructureParser
 import de.christian2003.feature.autofill.infrastructure.android.dto.ParcelableAutofillData
 import de.christian2003.feature.autofill.application.services.AutofillTypeMapper
+import de.christian2003.feature.autofill.domain.repositories.AutofillConfigRepository
 import de.christian2003.feature.autofill.infrastructure.android.dto.AssistStructureParserResult
 import de.christian2003.feature.autofill.presentation.ui.auth.AutofillAuthActivity
 import kotlinx.coroutines.CoroutineScope
@@ -42,6 +43,12 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class PasswordVaultAutofillService: AutofillService() {
+
+    /**
+     * Repository for the autofill config.
+     */
+    @Inject
+    internal lateinit var configRepository: AutofillConfigRepository
 
     /**
      * Service fetches the active assist structure.
@@ -93,6 +100,11 @@ class PasswordVaultAutofillService: AutofillService() {
     ) {
         serviceScope.launch {
             try {
+                if (!configRepository.isAutofillEnabled()) {
+                    callback.onFailure("Service disabled by user")
+                    return@launch
+                }
+
                 //Get assist structure:
                 val assistStructure: AssistStructure? = assistStructureFetcher.fetchAssistStructure(request.fillContexts)
                 val remotePackageName: String? = assistStructure?.activityComponent?.packageName

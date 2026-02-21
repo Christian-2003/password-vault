@@ -9,6 +9,7 @@ import de.christian2003.feature.autofill.domain.entities.AutofillResponse
 import de.christian2003.feature.autofill.domain.entities.AutofillType
 import de.christian2003.feature.autofill.application.services.AutofillTypeMapper
 import de.christian2003.feature.autofill.domain.entities.AutofillGroup
+import de.christian2003.feature.autofill.domain.repositories.AutofillConfigRepository
 import de.christian2003.feature.autofill.domain.services.AddressParserService
 import de.christian2003.feature.autofill.domain.services.DateParserService
 import de.christian2003.feature.autofill.domain.services.PersonNameParserService
