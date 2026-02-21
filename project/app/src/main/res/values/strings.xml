@@ -50,6 +50,7 @@
         <item>Create, edit or delete details for accounts</item>
         <item>Create, edit or view accounts</item>
         <item>List of help messages</item>
+        <item>Autofill settings</item>
     </string-array>
 
 </resources>

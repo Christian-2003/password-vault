@@ -24,7 +24,9 @@ enum class HelpCard(
 
     Account("help_account"),
 
-    Help("help_help");
+    Help("help_help"),
+
+    Autofill("help_autofill");
 
     fun getVisible(context: Context): Boolean {
         return context.getSharedPreferences("settings", Context.MODE_PRIVATE).getBoolean(key, true)

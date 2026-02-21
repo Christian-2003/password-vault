@@ -10,8 +10,11 @@
     <!-- Autofill settings -->
     <string name="autofillSettings_title">Autofill</string>
     <string name="autofillSettings_enabledLabel">Use autofill</string>
+    <string name="autofillSettings_help">Use autofill to fill stored account data into other apps and services.</string>
     <string name="autofillSettings_furtherSettings_title">Further settings</string>
     <string name="autofillSettings_furtherSettings_geocoderTitle">Improved address parsing</string>
     <string name="autofillSettings_furtherSettings_geocoderInfo">Improve address parsing by using the Geocoder (Requires internet)</string>
+    <string name="autofillSettings_furtherSettings_androidTitle">Available autofill services</string>
+    <string name="autofillSettings_furtherSettings_androidInfo">Show all available Autofill services</string>
 
 </resources>

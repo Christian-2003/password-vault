@@ -7,6 +7,7 @@ import android.net.Uri
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -34,7 +35,10 @@ import de.christian2003.feature.autofill.presentation.viewmodels.AutofillSetting
 import de.christian2003.feature.autofill.R
 import androidx.core.net.toUri
 import de.christian2003.core.ui.composables.Headline
+import de.christian2003.core.ui.composables.HeadlineIndentation
+import de.christian2003.core.ui.composables.HelpCard
 import de.christian2003.core.ui.composables.settings.LargeSettingsSwitch
+import de.christian2003.core.ui.composables.settings.SettingsItemButton
 import de.christian2003.core.ui.composables.settings.SettingsItemSwitch
 
 
@@ -54,6 +58,10 @@ internal fun AutofillSettingsScreen(
         if (result.resultCode == Activity.RESULT_OK) {
             //Service was selected:
             viewModel.setIsAutofillEnabled(true)
+        }
+        else {
+            //Service was not selected:
+            viewModel.updateIsSelected()
         }
     }
 
@@ -75,6 +83,20 @@ internal fun AutofillSettingsScreen(
                 )
                 .verticalScroll(rememberScrollState())
         ) {
+            AnimatedVisibility(viewModel.isHelpCardVisible) {
+                HelpCard(
+                    text = stringResource(R.string.autofillSettings_help),
+                    onDismiss = {
+                        viewModel.dismissHelpCard()
+                    },
+                    modifier = Modifier.padding(
+                        start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                        end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                        bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
+                    )
+                )
+            }
+
             LargeSettingsSwitch(
                 label = stringResource(R.string.autofillSettings_enabledLabel),
                 checked = viewModel.isAutofillEnabled && viewModel.isAutofillSelected,
@@ -102,7 +124,11 @@ internal fun AutofillSettingsScreen(
                 modifier = Modifier.padding(horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal))
             )
 
-            Headline(stringResource(R.string.autofillSettings_furtherSettings_title))
+            Headline(
+                title = stringResource(R.string.autofillSettings_furtherSettings_title),
+                indentation = HeadlineIndentation.TextLevel,
+                modifier = Modifier.padding(top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
+            )
 
             SettingsItemSwitch(
                 title = stringResource(R.string.autofillSettings_furtherSettings_geocoderTitle),
@@ -112,7 +138,22 @@ internal fun AutofillSettingsScreen(
                     viewModel.setIsGeocoderEnabled(it)
                 },
                 isFirst = true,
+                isLast = false,
+                isEnabled = viewModel.isAutofillEnabled && viewModel.isAutofillSelected
+            )
+            SettingsItemButton(
+                title = stringResource(R.string.autofillSettings_furtherSettings_androidTitle),
+                info = stringResource(R.string.autofillSettings_furtherSettings_androidInfo),
+                onClick = {
+                    val uri: Uri = "package: ${context.packageName}".toUri()
+                    val intent = Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE, uri)
+                    try {
+                        selectServiceLauncher.launch(intent)
+                    } catch (_: Exception) { }
+                },
+                isFirst = false,
                 isLast = true,
+                endIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_external),
                 isEnabled = viewModel.isAutofillEnabled && viewModel.isAutofillSelected
             )
 

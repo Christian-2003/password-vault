@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import coil.compose.rememberAsyncImagePainter
 import de.christian2003.core.ui.composables.Headline
+import de.christian2003.core.ui.composables.HeadlineIndentation
 import de.christian2003.core.ui.composables.settings.SettingsItemButton
 import de.christian2003.core.ui.composables.settings.SettingsItemSwitch
 import de.christian2003.core.ui.theme.ThemeContrast
@@ -74,7 +75,10 @@ fun SettingsScreen(
 
             //Customization:
             item {
-                Headline(stringResource(R.string.settings_customization))
+                Headline(
+                    title = stringResource(R.string.settings_customization),
+                    indentation = HeadlineIndentation.PrefixIconLevel
+                )
                 SettingsItemSwitch(
                     title = stringResource(R.string.settings_customization_globalThemeTitle),
                     info = stringResource(R.string.settings_customization_globalThemeInfo),
@@ -102,7 +106,10 @@ fun SettingsScreen(
 
             //Security:
             item {
-                Headline(stringResource(R.string.settings_security))
+                Headline(
+                    title = stringResource(R.string.settings_security),
+                    indentation = HeadlineIndentation.PrefixIconLevel
+                )
                 SettingsItemButton(
                     title = stringResource(R.string.settings_security_authTitle),
                     info = stringResource(R.string.settings_security_authInfo),
@@ -125,7 +132,10 @@ fun SettingsScreen(
 
             //Help:
             item {
-                Headline(stringResource(R.string.settings_help))
+                Headline(
+                    title = stringResource(R.string.settings_help),
+                    indentation = HeadlineIndentation.PrefixIconLevel
+                )
                 SettingsItemButton(
                     title = stringResource(R.string.settings_help_helpMessagesTitle),
                     info = stringResource(R.string.settings_help_helpMessagesInfo),

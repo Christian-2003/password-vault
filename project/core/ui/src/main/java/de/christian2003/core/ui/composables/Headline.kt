@@ -23,8 +23,7 @@ import de.christian2003.core.ui.R
  * @param title                 Title of the headline.
  * @param modifier              Modifier.
  * @param isEyecatcherVisible   Whether an eyecatcher is displayed for the endIcon.
- * @param indentToPrefixIcon    Whether to indent the headline with the same start padding used with
- *                              a prefix icon on GenericTextButton.
+ * @param indentation           Indentation of the headline text.
  * @param endIcon               End icon for the headline.
  * @param onClick               Callback invoked once the headline is clicked.
  */
@@ -33,7 +32,7 @@ fun Headline(
     title: String,
     modifier: Modifier = Modifier,
     isEyecatcherVisible: Boolean = false,
-    indentToPrefixIcon: Boolean = false,
+    indentation: HeadlineIndentation = HeadlineIndentation.None,
     endIcon: Painter? = null,
     onClick: (() -> Unit)? = null
 ) {
@@ -46,10 +45,10 @@ fun Headline(
                 onClick!!()
             }
             .padding(
-                start = if (indentToPrefixIcon) {
-                    dimensionResource(R.dimen.margin_horizontal) + dimensionResource(R.dimen.image_xs) + dimensionResource(R.dimen.padding_horizontal)
-                } else {
-                    dimensionResource(R.dimen.margin_horizontal)
+                start = when (indentation) {
+                    HeadlineIndentation.None -> dimensionResource(R.dimen.margin_horizontal)
+                    HeadlineIndentation.TextLevel -> dimensionResource(R.dimen.margin_horizontal) + dimensionResource(R.dimen.padding_horizontal)
+                    HeadlineIndentation.PrefixIconLevel -> dimensionResource(R.dimen.margin_horizontal) + dimensionResource(R.dimen.image_xs) + dimensionResource(R.dimen.padding_horizontal) * 2
                 },
                 top = dimensionResource(R.dimen.padding_vertical),
                 end = dimensionResource(R.dimen.margin_horizontal),
@@ -79,4 +78,18 @@ fun Headline(
             }
         }
     }
+}
+
+
+/**
+ * Indentations for the headline.
+ *
+ * @property None               No indentation.
+ * @property TextLevel          Indentation to the text of list items.
+ * @property PrefixIconLevel    Indentation to the prefix icon of list items.
+ */
+enum class HeadlineIndentation {
+    None,
+    TextLevel,
+    PrefixIconLevel
 }

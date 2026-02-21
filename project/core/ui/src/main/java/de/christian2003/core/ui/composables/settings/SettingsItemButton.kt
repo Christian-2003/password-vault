@@ -31,6 +31,7 @@ import de.christian2003.core.ui.composables.ListItemContainer
  * @param endIcon       Optional end icon.
  * @param isFirst       Whether this is the first list item.
  * @param isLast        Whether this is the last list item.
+ * @param isEnabled     Whether the button is enabled.
  * @param prefixIcon    Optional prefix icon.
  * @param badgeCount    Optional count shown in a badge.
  */
@@ -42,6 +43,7 @@ fun SettingsItemButton(
     endIcon: Painter? = null,
     isFirst: Boolean = false,
     isLast: Boolean = false,
+    isEnabled: Boolean = true,
     prefixIcon: Painter? = null,
     badgeCount: Int = 0
 ) {
@@ -52,7 +54,7 @@ fun SettingsItemButton(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable {
+                .clickable(isEnabled) {
                     onClick()
                 }
                 .padding(
@@ -70,7 +72,11 @@ fun SettingsItemButton(
                 ) {
                     Icon(
                         painter = prefixIcon,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        tint = if (isEnabled) {
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                        } else {
+                            MaterialTheme.colorScheme.onSurfaceVariant.copy(0.5f)
+                        },
                         contentDescription = "",
                         modifier = Modifier.fillMaxSize()
                     )
@@ -94,14 +100,22 @@ fun SettingsItemButton(
                 ) {
                     Text(
                         text = title,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = if (isEnabled) {
+                            MaterialTheme.colorScheme.onSurface
+                        } else {
+                            MaterialTheme.colorScheme.onSurface.copy(0.5f)
+                        },
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold
                     )
                     if (endIcon != null) {
                         Icon(
                             painter = endIcon,
-                            tint = MaterialTheme.colorScheme.onSurface,
+                            tint = if (isEnabled) {
+                                MaterialTheme.colorScheme.onSurface
+                            } else {
+                                MaterialTheme.colorScheme.onSurface.copy(0.5f)
+                            },
                             contentDescription = "",
                             modifier = Modifier
                                 .padding(start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal) / 2)
@@ -111,7 +125,11 @@ fun SettingsItemButton(
                 }
                 Text(
                     text = info,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = if (isEnabled) {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant.copy(0.5f)
+                    },
                     style = MaterialTheme.typography.bodyMedium
                 )
             }

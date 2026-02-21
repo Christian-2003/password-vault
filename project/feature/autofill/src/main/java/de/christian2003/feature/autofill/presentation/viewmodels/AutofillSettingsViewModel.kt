@@ -5,7 +5,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.application
 import dagger.hilt.android.lifecycle.HiltViewModel
+import de.christian2003.core.ui.model.HelpCard
 import de.christian2003.feature.autofill.application.usecases.IsAutofillEnabledUseCase
 import de.christian2003.feature.autofill.application.usecases.IsGeocoderEnabledUseCase
 import de.christian2003.feature.autofill.application.usecases.IsServiceSelectedUseCase
@@ -53,6 +55,12 @@ internal class AutofillSettingsViewModel @Inject constructor(
     var isGeocoderEnabled: Boolean by mutableStateOf(isGeocoderEnabledUseCase.isEnabled())
         private set
 
+    /**
+     * Whether the help card is visible.
+     */
+    var isHelpCardVisible: Boolean by mutableStateOf(HelpCard.Autofill.getVisible(application))
+        private set
+
 
     /**
      * Changes whether the autofill service is enabled by the user.
@@ -67,6 +75,15 @@ internal class AutofillSettingsViewModel @Inject constructor(
 
 
     /**
+     * Updates whether the service is selected.
+     */
+    fun updateIsSelected() {
+        this.isAutofillSelected = isServiceSelectedUseCase.isSelected()
+
+    }
+
+
+    /**
      * Changes whether the geocoder is enabled by the user.
      *
      * @param isGeocoderEnabled Whether the geocoder is enabled.
@@ -74,6 +91,15 @@ internal class AutofillSettingsViewModel @Inject constructor(
     fun setIsGeocoderEnabled(isGeocoderEnabled: Boolean) {
         setGeocoderEnabledUseCase.setEnabled(isGeocoderEnabled)
         this.isGeocoderEnabled = isGeocoderEnabledUseCase.isEnabled()
+    }
+
+
+    /**
+     * Dismisses the help card.
+     */
+    fun dismissHelpCard() {
+        HelpCard.Autofill.setVisible(application, false)
+        isHelpCardVisible = false
     }
 
 }
