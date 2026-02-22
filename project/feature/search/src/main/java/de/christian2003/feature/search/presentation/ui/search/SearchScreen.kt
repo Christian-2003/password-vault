@@ -19,6 +19,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -28,6 +30,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.Dp
 import de.christian2003.core.ui.composables.NavigationBarProtection
+import de.christian2003.data.accounts.domain.entities.Tag
 import de.christian2003.feature.search.presentation.viewmodels.SearchViewModel
 import kotlin.uuid.Uuid
 import de.christian2003.feature.search.R
@@ -40,6 +43,8 @@ internal fun SearchScreen(
     onNavigateUp: () -> Unit,
     onNavigateToAccount: (Uuid) -> Unit
 ) {
+    val allTags: List<Tag> by viewModel.allTags.collectAsState(emptyList())
+
     Scaffold(
         topBar = {
             TopBar(
@@ -69,8 +74,7 @@ internal fun SearchScreen(
                 viewModel.isSearching -> {
                     Box(
                         contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .fillMaxSize()
+                        modifier = Modifier.fillMaxSize()
                     ) {
                         LoadingIndicator()
                     }
@@ -84,13 +88,31 @@ internal fun SearchScreen(
                         SearchResultView(
                             bottomPadding = bottomPadding,
                             searchResult = searchResult,
-                            modifier = Modifier
-                                .fillMaxSize()
+                            onAccountSelected = onNavigateToAccount,
+                            onQueryIcon = {
+                                viewModel.queryAccountIcon(it)
+                            },
+                            modifier = Modifier.fillMaxSize()
                         )
                     }
                 }
                 else -> {
-                    Text("Enter query")
+                    SearchFilterView(
+                        bottomPadding = bottomPadding,
+                        allTags = allTags,
+                        selectedTags = viewModel.selectedTags,
+                        recentQueries = viewModel.recentQueries,
+                        onTagToggled = { tagId ->
+                            viewModel.toggleTag(tagId)
+                        },
+                        onRemoveRecentQueries = {
+                            viewModel.removeRecentQueries()
+                        },
+                        onRecentQuerySelected = {
+                            viewModel.query = it
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
             }
         }

@@ -4,4 +4,9 @@
     <string name="search_hint">Search…</string>
     <string name="search_emptyPlaceholder_title">No results</string>
     <string name="search_emptyPlaceholder_subtitle">Accounts which match your query are shown here</string>
+    <string name="search_filter_title">Recommended filters</string>
+    <string name="search_filter_tagsLabel">Tags</string>
+    <string name="search_filter_queriesTitle">Recent queries</string>
+    <string name="search_filter_queriesEmptyLabel">No recent queries</string>
+    <string name="search_filter_queriesDeleteTooltip">Delete all recent queries</string>
 </resources>
