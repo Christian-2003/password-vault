@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.animation.graphics)
+    implementation(libs.accompanist.drawablepainter)
     implementation(libs.hilt.android)
     implementation(libs.hilt.android)
     implementation(libs.coil.compose)

@@ -44,12 +44,14 @@ import de.christian2003.core.security.application.usecases.CanMasterKeyBeUnlocke
 import de.christian2003.core.security.application.usecases.UnlockWithBiometricsUseCase
 import de.christian2003.core.ui.theme.PasswordVaultTheme
 import de.christian2003.core.ui.theme.ThemeContrast
-import de.christian2003.feature.accounts.navigation.AccountsFlow
-import de.christian2003.feature.accounts.navigation.accountsFlow
+import de.christian2003.feature.accounts.navigation.AccountDestination
+import de.christian2003.feature.accounts.navigation.AccountsDestination
+import de.christian2003.feature.accounts.navigation.accountDestination
+import de.christian2003.feature.accounts.navigation.accountsDestination
 import de.christian2003.feature.autofill.navigation.AutofillSettingsFlow
 import de.christian2003.feature.autofill.navigation.autofillSettingsFlow
-import de.christian2003.feature.search.navigation.SearchFlow
-import de.christian2003.feature.search.navigation.searchFlow
+import de.christian2003.feature.search.navigation.SearchDestination
+import de.christian2003.feature.search.navigation.searchDestination
 import javax.inject.Inject
 
 
@@ -179,7 +181,7 @@ fun PasswordVault(
             //Login screen:
             loginDestination(
                 onContinue = {
-                    navController.navigate(AccountsFlow) {
+                    navController.navigate(AccountsDestination) {
                         popUpTo<LoginDestination> {
                             inclusive = true
                         }
@@ -191,14 +193,26 @@ fun PasswordVault(
                 onBiometricUnlock = onBiometricUnlock
             )
 
-            //Flow for accounts:
-            accountsFlow(
-                navController = navController,
+            //List of accounts destination:
+            accountsDestination(
+                onEditAccount = { accountId ->
+                    navController.navigate(AccountDestination(accountId.toString()))
+                },
+                onCreateNewAccount = {
+                    navController.navigate(AccountDestination(null))
+                },
                 onNavigateToSettings = {
                     navController.navigate("settings")
                 },
                 onNavigateToSearch = {
-                    navController.navigate(SearchFlow)
+                    navController.navigate(SearchDestination)
+                }
+            )
+
+            //Create, edit or delete accounts:
+            accountDestination(
+                onNavigateUp = {
+                    navController.navigateUp()
                 }
             )
 
@@ -208,10 +222,12 @@ fun PasswordVault(
             )
 
             //Flow for the in-app search:
-            searchFlow(
-                navController = navController,
+            searchDestination(
+                onNavigateUp = {
+                    navController.navigateUp()
+                },
                 onNavigateToAccount = { accountId ->
-                    //TODO: Navigate to account screen
+                    navController.navigate(AccountDestination(accountId.toString()))
                 }
             )
 
