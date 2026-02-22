@@ -6,21 +6,21 @@ import org.junit.Assert
 import org.junit.Test
 
 
-class QueryAstNodeBuilderServiceUnitTest {
+class QueryParserServiceUnitTest {
 
-    private val builder = QueryAstNodeBuilderService()
+    private val parser = QueryParserService()
 
 
-    private fun build(query: String): QueryAstNode? {
+    private fun parse(query: String): QueryAstNode? {
         val tokenizer = QueryTokenizerService()
         val tokens = tokenizer.tokenize(query)
-        return builder.parse(tokens)
+        return parser.parse(tokens)
     }
 
 
     @Test
     fun `parse simple literal`() {
-        val ast = build("hello")
+        val ast = parse("hello")
 
         Assert.assertNotNull(ast)
         Assert.assertEquals(QueryTokenType.Literal, ast!!.token.type)
@@ -32,7 +32,7 @@ class QueryAstNodeBuilderServiceUnitTest {
 
     @Test
     fun `parse quoted literal`() {
-        val ast = build("\"hello world\"")
+        val ast = parse("\"hello world\"")
 
         Assert.assertNotNull(ast)
         Assert.assertEquals(QueryTokenType.Literal, ast!!.token.type)
@@ -42,7 +42,7 @@ class QueryAstNodeBuilderServiceUnitTest {
 
     @Test
     fun `parse comparison`() {
-        val ast = build("created:<=2025-01-01")
+        val ast = parse("created:<=2025-01-01")
 
         Assert.assertNotNull(ast)
         Assert.assertEquals(QueryTokenType.OperatorRelation, ast!!.token.type)
@@ -59,8 +59,26 @@ class QueryAstNodeBuilderServiceUnitTest {
 
 
     @Test
+    fun `parse inequality`() {
+        val ast = parse("created:<>2025-01-01")
+
+        Assert.assertNotNull(ast)
+        Assert.assertEquals(QueryTokenType.OperatorRelation, ast!!.token.type)
+        Assert.assertEquals("<>", ast.token.value)
+
+        Assert.assertNotNull(ast.left)
+        Assert.assertEquals(QueryTokenType.Literal, ast.left!!.token.type)
+        Assert.assertEquals("created", ast.left!!.token.value)
+
+        Assert.assertNotNull(ast.right)
+        Assert.assertEquals(QueryTokenType.Literal, ast.right!!.token.type)
+        Assert.assertEquals("2025-01-01", ast.right!!.token.value)
+    }
+
+
+    @Test
     fun `implicit AND between expressions`() {
-        val ast = build("name:Bank created:2025")
+        val ast = parse("name:Bank created:2025")
 
         Assert.assertNotNull(ast)
         Assert.assertEquals(QueryTokenType.OperatorBool, ast!!.token.type)
@@ -73,7 +91,7 @@ class QueryAstNodeBuilderServiceUnitTest {
 
     @Test
     fun `explicit AND`() {
-        val ast = build("name:Bank AND created:2025")
+        val ast = parse("name:Bank AND created:2025")
 
         Assert.assertNotNull(ast)
         Assert.assertEquals(QueryTokenType.OperatorBool, ast!!.token.type)
@@ -83,7 +101,7 @@ class QueryAstNodeBuilderServiceUnitTest {
 
     @Test
     fun `OR precedence`() {
-        val ast = build("a OR b AND c")
+        val ast = parse("a OR b AND c")
 
         Assert.assertNotNull(ast)
 
@@ -101,7 +119,7 @@ class QueryAstNodeBuilderServiceUnitTest {
 
     @Test
     fun `parentheses grouping`() {
-        val ast = build("(a OR b) AND c")
+        val ast = parse("(a OR b) AND c")
 
         Assert.assertNotNull(ast)
         Assert.assertEquals(QueryTokenType.OperatorBool, ast!!.token.type)
@@ -117,7 +135,7 @@ class QueryAstNodeBuilderServiceUnitTest {
     @Test
     fun `empty group throws error`() {
         Assert.assertThrows(IllegalArgumentException::class.java) {
-            build("()")
+            parse("()")
         }
     }
 
@@ -125,14 +143,14 @@ class QueryAstNodeBuilderServiceUnitTest {
     @Test
     fun `trailing token throws error`() {
         Assert.assertThrows(IllegalArgumentException::class.java) {
-            build("name:Bank )")
+            parse("name:Bank )")
         }
     }
 
 
     @Test
     fun `complex combined query`() {
-        val ast = build("(name:Bank OR name:\"Bank account\") AND created:<=2025-11-12")
+        val ast = parse("(name:Bank OR name:\"Bank account\") AND created:<=2025-11-12")
 
         Assert.assertNotNull(ast)
         Assert.assertEquals(QueryTokenType.OperatorBool, ast!!.token.type)
@@ -142,7 +160,7 @@ class QueryAstNodeBuilderServiceUnitTest {
 
     @Test
     fun `unknown syntax is always root`() {
-        val ast = build("@@@")
+        val ast = parse("@@@")
         Assert.assertNotNull(ast)
         Assert.assertEquals(ast!!.token.value, "@@@")
     }

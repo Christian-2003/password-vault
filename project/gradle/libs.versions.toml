@@ -23,6 +23,7 @@ ksp = "2.1.21-2.0.1"
 mockitoAndroid = "5.5.0"
 mockitoCore = "5.7.0"
 reorderable = "3.0.0"
+robolectric = "4.16.1"
 room = "2.8.2"
 coroutines = "1.10.2"
 navigation = "2.9.5"
@@ -80,6 +81,7 @@ mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mo
 mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito" }
 mockito-android = { group = "org.mockito", name = "mockito-android", version.ref = "mockitoAndroid" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref="robolectric" }
 
 
 [plugins]

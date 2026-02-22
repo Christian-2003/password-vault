@@ -10,7 +10,7 @@ import javax.inject.Inject
 /**
  * Service that builds an AST from a collection of tokens.
  */
-internal class QueryAstNodeBuilderService @Inject constructor() {
+internal class QueryParserService @Inject constructor() {
 
     /**
      * List of tokens that are being parsed.
