@@ -17,7 +17,7 @@ internal class QueryTokenizerService @Inject constructor() {
      * @param query                     Query to tokenize.
      * @return                          List of tokens.
      * @throws IllegalArgumentException The provided query string is illegal (e.g. a quoted literal
-     *                                  is not closed),
+     *                                  is not closed).
      */
     fun tokenize(query: String): QueryTokenCollection {
         val tokens: MutableList<QueryToken> = mutableListOf()

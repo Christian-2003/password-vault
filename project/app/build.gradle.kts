@@ -105,6 +105,7 @@ dependencies {
     implementation(project(":feature:auth"))
     implementation(project(":feature:accounts"))
     implementation(project(":feature:autofill"))
+    implementation(project(":feature:search"))
 
     testImplementation(libs.junit)
 

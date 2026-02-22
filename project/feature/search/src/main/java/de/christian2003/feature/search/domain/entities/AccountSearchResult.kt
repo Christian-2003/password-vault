@@ -5,7 +5,5 @@ import de.christian2003.data.accounts.domain.entities.Tag
 
 
 data class AccountSearchResult(
-    val matchingStrings: List<String>,
     val accountDescriptor: AccountDescriptor,
-    val matchingTags: List<Tag>
 )

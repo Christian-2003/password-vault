@@ -146,7 +146,6 @@ internal class QueryEvaluatorService @Inject constructor(
                     }
                 }
                 "<>" -> {
-                    println("<> $value")
                     !evaluateEqualityInternal(field, value, account)
                 }
                 else -> false

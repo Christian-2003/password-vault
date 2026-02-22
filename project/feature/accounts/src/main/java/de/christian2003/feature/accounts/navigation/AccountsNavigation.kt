@@ -24,10 +24,12 @@ object AccountsFlow
  *
  * @param navController         Navigation controller.
  * @param onNavigateToSettings  Callback invoked to navigate to the app settings.
+ * @param onNavigateToSearch    Callback invoked to navigate to the search screen.
  */
 fun NavGraphBuilder.accountsFlow(
     navController: NavController,
-    onNavigateToSettings: () -> Unit
+    onNavigateToSettings: () -> Unit,
+    onNavigateToSearch: () -> Unit
 ) {
     navigation<AccountsFlow>(
         startDestination = AccountsDestination
@@ -41,7 +43,8 @@ fun NavGraphBuilder.accountsFlow(
             onCreateNewAccount = {
                 navController.navigate(AccountDestination(null))
             },
-            onNavigateToSettings = onNavigateToSettings
+            onNavigateToSettings = onNavigateToSettings,
+            onNavigateToSearch = onNavigateToSearch
         )
 
         //Create, edit or delete accounts:
@@ -73,11 +76,13 @@ internal data class AccountDestination(
  * @param onEditAccount         Callback invoked to edit the account whose ID is provided.
  * @param onCreateNewAccount    Callback invoked to create a new account.
  * @param onNavigateToSettings  Callback invoked to navigate to the settings.
+ * @param onNavigateToSearch    Callback invoked to navigate to the search screen.
  */
 private fun NavGraphBuilder.accountsDestination(
     onEditAccount: (Uuid) -> Unit,
     onCreateNewAccount: () -> Unit,
-    onNavigateToSettings: () -> Unit
+    onNavigateToSettings: () -> Unit,
+    onNavigateToSearch: () -> Unit
 ) {
     composable<AccountsDestination> {
         val viewModel: MainViewModel = hiltViewModel()
@@ -86,7 +91,8 @@ private fun NavGraphBuilder.accountsDestination(
             viewModel = viewModel,
             onEditAccount = onEditAccount,
             onCreateNewAccount = onCreateNewAccount,
-            onNavigateToSettings =  onNavigateToSettings
+            onNavigateToSettings =  onNavigateToSettings,
+            onNavigateToSearch = onNavigateToSearch
         )
     }
 }

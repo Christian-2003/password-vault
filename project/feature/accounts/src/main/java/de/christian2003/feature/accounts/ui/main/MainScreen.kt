@@ -2,7 +2,6 @@ package de.christian2003.feature.accounts.ui.main
 
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,10 +23,12 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.TopAppBarState
@@ -40,7 +41,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
@@ -54,6 +54,7 @@ import de.christian2003.core.ui.composables.EmptyPlaceholder
 import de.christian2003.core.ui.composables.ListItemContainer
 import de.christian2003.core.ui.composables.NavigationBarProtection
 import de.christian2003.core.ui.composables.Shape
+import de.christian2003.core.ui.composables.StaticSearchBar
 import de.christian2003.core.ui.composables.dialog.ConfirmDeleteDialog
 import de.christian2003.data.accounts.domain.entities.AccountDescriptor
 import de.christian2003.feature.accounts.viewmodels.MainViewModel
@@ -68,13 +69,15 @@ import de.christian2003.feature.accounts.R
  * @param onEditAccount         Callback invoked to edit an account. The account ID is passed as argument.
  * @param onCreateNewAccount    Callback invoked to create a new account.
  * @param onNavigateToSettings  Callback invoked to navigate to the settings.
+ * @param onNavigateToSearch    Callback invoked to navigate to the search screen.
  */
 @Composable
 internal fun MainScreen(
     viewModel: MainViewModel,
     onEditAccount: (Uuid) -> Unit,
     onCreateNewAccount: () -> Unit,
-    onNavigateToSettings: () -> Unit
+    onNavigateToSettings: () -> Unit,
+    onNavigateToSearch: () -> Unit
 ) {
     val accountDescriptors: List<AccountDescriptor> by viewModel.accountDescriptors.collectAsState(emptyList())
     val appBarState: TopAppBarState = rememberTopAppBarState()
@@ -82,16 +85,21 @@ internal fun MainScreen(
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
+            TopAppBar(
                 title = {
-                    Icon(
-                        painter = painterResource(de.christian2003.core.ui.R.drawable.launcher_foreground_fullscale),
-                        contentDescription = "",
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_l))
+                    StaticSearchBar(
+                        hint = stringResource(R.string.main_searchHint),
+                        onClick = onNavigateToSearch,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
                     )
                 },
                 scrollBehavior = scrollBehavior,
+                navigationIcon = {
+                    //Placeholder so that the search bar is centered
+                    Box(modifier = Modifier.size(IconButtonDefaults.smallContainerSize()))
+                },
                 actions = {
                     IconButton(
                         onClick = onNavigateToSettings

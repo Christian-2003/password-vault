@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="search_hint">Search…</string>
+    <string name="search_emptyPlaceholder_title">No results</string>
+    <string name="search_emptyPlaceholder_subtitle">Accounts which match your query are shown here</string>
+</resources>

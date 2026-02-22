@@ -48,6 +48,8 @@ import de.christian2003.feature.accounts.navigation.AccountsFlow
 import de.christian2003.feature.accounts.navigation.accountsFlow
 import de.christian2003.feature.autofill.navigation.AutofillSettingsFlow
 import de.christian2003.feature.autofill.navigation.autofillSettingsFlow
+import de.christian2003.feature.search.navigation.SearchFlow
+import de.christian2003.feature.search.navigation.searchFlow
 import javax.inject.Inject
 
 
@@ -194,12 +196,23 @@ fun PasswordVault(
                 navController = navController,
                 onNavigateToSettings = {
                     navController.navigate("settings")
+                },
+                onNavigateToSearch = {
+                    navController.navigate(SearchFlow)
                 }
             )
 
             //Flow for the autofill settings:
             autofillSettingsFlow(
                 navController = navController
+            )
+
+            //Flow for the in-app search:
+            searchFlow(
+                navController = navController,
+                onNavigateToAccount = { accountId ->
+                    //TODO: Navigate to account screen
+                }
             )
 
 
