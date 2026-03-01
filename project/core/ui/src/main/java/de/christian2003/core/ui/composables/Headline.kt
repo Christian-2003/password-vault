@@ -24,6 +24,7 @@ import de.christian2003.core.ui.R
  * @param modifier              Modifier.
  * @param isEyecatcherVisible   Whether an eyecatcher is displayed for the endIcon.
  * @param indentation           Indentation of the headline text.
+ * @param tooltip               Optional tooltip.
  * @param endIcon               End icon for the headline.
  * @param onClick               Callback invoked once the headline is clicked.
  */
@@ -33,49 +34,68 @@ fun Headline(
     modifier: Modifier = Modifier,
     isEyecatcherVisible: Boolean = false,
     indentation: HeadlineIndentation = HeadlineIndentation.None,
+    tooltip: String? = null,
     endIcon: Painter? = null,
     onClick: (() -> Unit)? = null
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+    val headlineContent: @Composable () -> Unit = {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick != null) {
+                    onClick!!()
+                }
+                .padding(
+                    start = when (indentation) {
+                        HeadlineIndentation.None -> dimensionResource(R.dimen.margin_horizontal)
+                        HeadlineIndentation.TextLevel -> dimensionResource(R.dimen.margin_horizontal) + dimensionResource(R.dimen.padding_horizontal)
+                        HeadlineIndentation.PrefixIconLevel -> dimensionResource(R.dimen.margin_horizontal) + dimensionResource(R.dimen.image_xs) + dimensionResource(R.dimen.padding_horizontal) * 2
+                    },
+                    top = dimensionResource(R.dimen.padding_vertical),
+                    end = dimensionResource(R.dimen.margin_horizontal),
+                    bottom = dimensionResource(R.dimen.padding_vertical)
+                )
+        ) {
+            Text(
+                text = title,
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.weight(1f)
+            )
+            if (endIcon != null) {
+                Box(
+                    contentAlignment = Alignment.BottomEnd
+                ) {
+                    Icon(
+                        painter = endIcon,
+                        tint = MaterialTheme.colorScheme.primary,
+                        contentDescription = "",
+                        modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
+                    )
+                    if (isEyecatcherVisible) {
+                        Eyecatcher()
+                    }
+                }
+            }
+        }
+    }
+
+    Box(
         modifier = modifier
             .fillMaxWidth()
             .padding(top = dimensionResource(R.dimen.padding_vertical))
-            .clickable(onClick != null) {
-                onClick!!()
-            }
-            .padding(
-                start = when (indentation) {
-                    HeadlineIndentation.None -> dimensionResource(R.dimen.margin_horizontal)
-                    HeadlineIndentation.TextLevel -> dimensionResource(R.dimen.margin_horizontal) + dimensionResource(R.dimen.padding_horizontal)
-                    HeadlineIndentation.PrefixIconLevel -> dimensionResource(R.dimen.margin_horizontal) + dimensionResource(R.dimen.image_xs) + dimensionResource(R.dimen.padding_horizontal) * 2
-                },
-                top = dimensionResource(R.dimen.padding_vertical),
-                end = dimensionResource(R.dimen.margin_horizontal),
-                bottom = dimensionResource(R.dimen.padding_vertical)
-            )
     ) {
-        Text(
-            text = title,
-            color = MaterialTheme.colorScheme.primary,
-            style = MaterialTheme.typography.titleSmall,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.weight(1f)
-        )
-        if (endIcon != null) {
-            Box(
-                contentAlignment = Alignment.BottomEnd
+        if (tooltip != null) {
+            Tooltip(
+                tooltip = tooltip
             ) {
-                Icon(
-                    painter = endIcon,
-                    tint = MaterialTheme.colorScheme.primary,
-                    contentDescription = "",
-                    modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_horizontal))
-                )
-                if (isEyecatcherVisible) {
-                    Eyecatcher()
-                }
+                headlineContent()
             }
+        }
+        else {
+            headlineContent()
         }
     }
 }

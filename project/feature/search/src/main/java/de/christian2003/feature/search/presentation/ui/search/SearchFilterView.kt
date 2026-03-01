@@ -63,25 +63,23 @@ internal fun SearchFilterView(
         )
 
         //Recent queries:
-        Tooltip(
-            tooltip = stringResource(R.string.search_filter_queriesDeleteTooltip)
-        ) {
-            Headline(
-                title = stringResource(R.string.search_filter_queriesTitle),
-                endIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_delete),
-                onClick = {
-                    onRemoveRecentQueries()
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surface)
-                    .clip(RoundedCornerShape(
-                        topStart = 24.dp,
-                        topEnd = 24.dp
-                    ))
-                    .background(MaterialTheme.colorScheme.surfaceContainerLowest)
-            )
-        }
+        Headline(
+            title = stringResource(R.string.search_filter_queriesTitle),
+            endIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_delete),
+            tooltip = stringResource(R.string.search_filter_queriesDeleteTooltip),
+            onClick = {
+                onRemoveRecentQueries()
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical) * 2)
+                .clip(RoundedCornerShape(
+                    topStart = 24.dp,
+                    topEnd = 24.dp
+                ))
+                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
+        )
         RecentQueriesList(
             recentQueries = recentQueries,
             onRecentQuerySelected = onRecentQuerySelected
