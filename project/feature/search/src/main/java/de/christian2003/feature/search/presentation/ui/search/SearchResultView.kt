@@ -31,6 +31,7 @@ import de.christian2003.core.ui.composables.EmptyPlaceholder
 import de.christian2003.core.ui.composables.ListItemContainer
 import de.christian2003.core.ui.composables.Shape
 import de.christian2003.data.accounts.domain.entities.AccountDescriptor
+import de.christian2003.data.accounts.domain.entities.Detail
 import de.christian2003.feature.search.domain.entities.SearchResult
 import de.christian2003.feature.search.R
 import de.christian2003.feature.search.domain.entities.AccountSearchResult
@@ -90,67 +91,129 @@ private fun AccountSearchResultItem(
         isFirst = isFirst,
         isLast = isLast
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+        Column(
+            modifier = Modifier.padding(
+                bottom = if (accountSearchResult.details.isNotEmpty()) {
+                    dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
+                } else {
+                    0.dp
+                }
+            )
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        onAccountSelected(accountSearchResult.accountDescriptor.id)
+                    }
+                    .padding(
+                        start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
+                        top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical),
+                        end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal) - 12.dp,
+                        bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
+                    )
+            ) {
+                //Icon:
+                val icon: Drawable? = onQueryIcon(accountSearchResult.accountDescriptor)
+                if (icon == null) {
+                    val firstChar: Char? = accountSearchResult.accountDescriptor.name.firstOrNull { !it.isWhitespace() }
+                    Shape(
+                        shape = MaterialShapes.Clover8Leaf,
+                        color = MaterialTheme.colorScheme.secondaryContainer,
+                        modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
+                    ) {
+                        Text(
+                            text = firstChar?.toString() ?: "",
+                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                } else {
+                    Image(
+                        painter = rememberDrawablePainter(icon),
+                        contentDescription = "",
+                        modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
+                    )
+                }
+
+                //Name and description:
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
+                ) {
+                    Text(
+                        text = accountSearchResult.accountDescriptor.name,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.bodyLarge,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    if (accountSearchResult.accountDescriptor.description.isNotBlank()) {
+                        Text(
+                            text = accountSearchResult.accountDescriptor.description,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = MaterialTheme.typography.bodyMedium,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                }
+            }
+
+            //Details:
+            accountSearchResult.details.forEachIndexed { index, detail ->
+                DetailSearchResultItem(
+                    detail = detail,
+                    isFirst = index == 0,
+                    isLast = index == accountSearchResult.details.size - 1,
+                    onDetailSelected = {
+                        onAccountSelected(accountSearchResult.accountDescriptor.id)
+                    }
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+private fun DetailSearchResultItem(
+    detail: Detail,
+    isFirst: Boolean,
+    isLast: Boolean,
+    onDetailSelected: (Uuid) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    ListItemContainer(
+        isFirst = isFirst,
+        isLast = isLast,
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+        modifier = modifier
+    ) {
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable {
-                    onAccountSelected(accountSearchResult.accountDescriptor.id)
+                    onDetailSelected(detail.id)
                 }
                 .padding(
-                    start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
-                    top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical),
-                    end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal) - 12.dp,
-                    bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
+                    horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
+                    vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
                 )
         ) {
-            //Icon:
-            val icon: Drawable? = onQueryIcon(accountSearchResult.accountDescriptor)
-            if (icon == null) {
-                val firstChar: Char? = accountSearchResult.accountDescriptor.name.firstOrNull { !it.isWhitespace() }
-                Shape(
-                    shape = MaterialShapes.Clover8Leaf,
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
-                ) {
-                    Text(
-                        text = firstChar?.toString() ?: "",
-                        color = MaterialTheme.colorScheme.onSecondaryContainer,
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            } else {
-                Image(
-                    painter = rememberDrawablePainter(icon),
-                    contentDescription = "",
-                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
-                )
-            }
-
-            //Name and description:
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
-            ) {
-                Text(
-                    text = accountSearchResult.accountDescriptor.name,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.bodyLarge,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                if (accountSearchResult.accountDescriptor.description.isNotBlank()) {
-                    Text(
-                        text = accountSearchResult.accountDescriptor.description,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.bodyMedium,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            }
+            Text(
+                text = detail.name,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Text(
+                text = detail.content,
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyLarge
+            )
         }
     }
 }
