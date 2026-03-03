@@ -78,35 +78,8 @@ internal class QueryAccountEvaluatorService @Inject constructor(
             return when (field) {
                 "name" -> account.descriptor.name.contains(value, true)
                 "description" -> account.descriptor.description.contains(value, true)
-                "tag" -> {
-                    var tagResult = false
-                    account.tags.forEach { tag ->
-                        if (tag.name.contains(value, true)) {
-                            tagResult = true
-                            return@forEach
-                        }
-                    }
-                    tagResult
-                }
-                "target" -> {
-                    var targetResult = false
-                    account.descriptor.targets.forEach { target ->
-                        //Test package name:
-                        if (target.name.contains(value, true)) {
-                            targetResult = true
-                            return@forEach
-                        }
-                        else if (target.isAndroidApp()) {
-                            //Test for localized name:
-                            val localizedName: String? = getLocalizedPackageNameUseCase.getLocalizedPackageName(target.name)
-                            if (localizedName != null && localizedName.contains(value, true)) {
-                                targetResult = true
-                                return@forEach
-                            }
-                        }
-                    }
-                    targetResult
-                }
+                "tag" -> evaluateTagEqualityInternal(value, account)
+                "target" -> evaluateTargetEqualityInternal(value, account)
                 "createdAt" -> {
                     val valueDate: LocalDate = LocalDate.parse(value)
                     return account.metadata.createdAt.toLocalDate() == valueDate
@@ -115,12 +88,71 @@ internal class QueryAccountEvaluatorService @Inject constructor(
                     val valueDate: LocalDate = LocalDate.parse(value)
                     return account.metadata.editedAt.toLocalDate() == valueDate
                 }
+                "any" -> {
+                    return account.descriptor.name.contains(value, true)
+                            || account.descriptor.description.contains(value, true)
+                            || evaluateTagEqualityInternal(value, account)
+                            || evaluateTargetEqualityInternal(value, account)
+                }
                 else -> false
             }
         }
         catch (_: Exception) {
             return false
         }
+    }
+
+
+    /**
+     * Internal evaluation of equality for the value (e.g. "Work") against the targets
+     * of the specified account.
+     *
+     * @param value     Expression value.
+     * @param account   Account for the evaluation.
+     * @return          Whether the evaluation is true or false.
+     */
+    private fun evaluateTagEqualityInternal(value: String, account: Account): Boolean {
+        var tagResult = false
+
+        account.tags.forEach { tag ->
+            if (tag.name.contains(value, true)) {
+                tagResult = true
+                return@forEach
+            }
+        }
+
+        return tagResult
+    }
+
+
+    /**
+     * Internal evaluation of equality for the value (e.g. "Password Vault") against the targets
+     * of the specified account.
+     *
+     * @param value     Expression value.
+     * @param account   Account for the evaluation.
+     * @return          Whether the evaluation is true or false.
+     */
+    private fun evaluateTargetEqualityInternal(value: String, account: Account): Boolean {
+        var targetResult = false
+
+        account.descriptor.targets.forEach { target ->
+            //Test package name:
+            if (target.name.contains(value, true)) {
+                targetResult = true
+                return@forEach
+            }
+            else if (target.isAndroidApp()) {
+                //Test for localized name:
+                val localizedName: String? = getLocalizedPackageNameUseCase.getLocalizedPackageName(target.name)
+                if (localizedName != null && localizedName.contains(value, true)) {
+                    targetResult = true
+                    return@forEach
+                }
+            }
+        }
+
+        return targetResult
     }
 
 

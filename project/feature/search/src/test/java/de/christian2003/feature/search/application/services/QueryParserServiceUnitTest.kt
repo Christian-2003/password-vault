@@ -19,29 +19,41 @@ class QueryParserServiceUnitTest {
 
 
     @Test
-    fun `parse simple literal`() {
+    fun `parse simple literal resulting to implicit any`() {
         val ast = parse("hello")
 
         Assert.assertNotNull(ast)
-        Assert.assertEquals(QueryTokenType.Literal, ast!!.token.type)
-        Assert.assertEquals("hello", ast.token.value)
-        Assert.assertNull(ast.left)
-        Assert.assertNull(ast.right)
+
+        Assert.assertEquals(":", ast!!.token.value)
+        Assert.assertEquals(QueryTokenType.Colon, ast.token.type)
+
+        Assert.assertEquals("any", ast.left!!.token.value)
+        Assert.assertEquals(QueryTokenType.Literal, ast.left.token.type)
+
+        Assert.assertEquals("hello", ast.right!!.token.value)
+        Assert.assertEquals(QueryTokenType.Literal, ast.right.token.type)
     }
 
 
     @Test
-    fun `parse quoted literal`() {
+    fun `parse quoted literal resulting in implicit any`() {
         val ast = parse("\"hello world\"")
 
         Assert.assertNotNull(ast)
-        Assert.assertEquals(QueryTokenType.Literal, ast!!.token.type)
-        Assert.assertEquals("hello world", ast.token.value)
+
+        Assert.assertEquals(":", ast!!.token.value)
+        Assert.assertEquals(QueryTokenType.Colon, ast.token.type)
+
+        Assert.assertEquals("any", ast.left!!.token.value)
+        Assert.assertEquals(QueryTokenType.Literal, ast.left.token.type)
+
+        Assert.assertEquals("hello world", ast.right!!.token.value)
+        Assert.assertEquals(QueryTokenType.Literal, ast.right.token.type)
     }
 
 
     @Test
-    fun `parse comparison`() {
+    fun `parse comparison (less than or equal to)`() {
         val ast = parse("created:<=2025-01-01")
 
         Assert.assertNotNull(ast)
@@ -50,11 +62,65 @@ class QueryParserServiceUnitTest {
 
         Assert.assertNotNull(ast.left)
         Assert.assertEquals(QueryTokenType.Literal, ast.left!!.token.type)
-        Assert.assertEquals("created", ast.left!!.token.value)
+        Assert.assertEquals("created", ast.left.token.value)
 
         Assert.assertNotNull(ast.right)
         Assert.assertEquals(QueryTokenType.Literal, ast.right!!.token.type)
-        Assert.assertEquals("2025-01-01", ast.right!!.token.value)
+        Assert.assertEquals("2025-01-01", ast.right.token.value)
+    }
+
+
+    @Test
+    fun `parse comparison (less than)`() {
+        val ast = parse("created:<2025-01-01")
+
+        Assert.assertNotNull(ast)
+        Assert.assertEquals(QueryTokenType.OperatorRelation, ast!!.token.type)
+        Assert.assertEquals("<", ast.token.value)
+
+        Assert.assertNotNull(ast.left)
+        Assert.assertEquals(QueryTokenType.Literal, ast.left!!.token.type)
+        Assert.assertEquals("created", ast.left.token.value)
+
+        Assert.assertNotNull(ast.right)
+        Assert.assertEquals(QueryTokenType.Literal, ast.right!!.token.type)
+        Assert.assertEquals("2025-01-01", ast.right.token.value)
+    }
+
+
+    @Test
+    fun `parse comparison (greater than or equal to)`() {
+        val ast = parse("created:>=2025-01-01")
+
+        Assert.assertNotNull(ast)
+        Assert.assertEquals(QueryTokenType.OperatorRelation, ast!!.token.type)
+        Assert.assertEquals(">=", ast.token.value)
+
+        Assert.assertNotNull(ast.left)
+        Assert.assertEquals(QueryTokenType.Literal, ast.left!!.token.type)
+        Assert.assertEquals("created", ast.left.token.value)
+
+        Assert.assertNotNull(ast.right)
+        Assert.assertEquals(QueryTokenType.Literal, ast.right!!.token.type)
+        Assert.assertEquals("2025-01-01", ast.right.token.value)
+    }
+
+
+    @Test
+    fun `parse comparison (greater than)`() {
+        val ast = parse("created:>2025-01-01")
+
+        Assert.assertNotNull(ast)
+        Assert.assertEquals(QueryTokenType.OperatorRelation, ast!!.token.type)
+        Assert.assertEquals(">", ast.token.value)
+
+        Assert.assertNotNull(ast.left)
+        Assert.assertEquals(QueryTokenType.Literal, ast.left!!.token.type)
+        Assert.assertEquals("created", ast.left.token.value)
+
+        Assert.assertNotNull(ast.right)
+        Assert.assertEquals(QueryTokenType.Literal, ast.right!!.token.type)
+        Assert.assertEquals("2025-01-01", ast.right.token.value)
     }
 
 
@@ -68,11 +134,11 @@ class QueryParserServiceUnitTest {
 
         Assert.assertNotNull(ast.left)
         Assert.assertEquals(QueryTokenType.Literal, ast.left!!.token.type)
-        Assert.assertEquals("created", ast.left!!.token.value)
+        Assert.assertEquals("created", ast.left.token.value)
 
         Assert.assertNotNull(ast.right)
         Assert.assertEquals(QueryTokenType.Literal, ast.right!!.token.type)
-        Assert.assertEquals("2025-01-01", ast.right!!.token.value)
+        Assert.assertEquals("2025-01-01", ast.right.token.value)
     }
 
 
@@ -159,10 +225,19 @@ class QueryParserServiceUnitTest {
 
 
     @Test
-    fun `unknown syntax is always root`() {
+    fun `unknown syntax is always implicit any`() {
         val ast = parse("@@@")
+
         Assert.assertNotNull(ast)
-        Assert.assertEquals(ast!!.token.value, "@@@")
+
+        Assert.assertEquals(":", ast!!.token.value)
+        Assert.assertEquals(QueryTokenType.Colon, ast.token.type)
+
+        Assert.assertEquals("any", ast.left!!.token.value)
+        Assert.assertEquals(QueryTokenType.Literal, ast.left.token.type)
+
+        Assert.assertEquals("@@@", ast.right!!.token.value)
+        Assert.assertEquals(QueryTokenType.Literal, ast.right.token.type)
     }
 
 }

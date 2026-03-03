@@ -126,14 +126,14 @@ internal class QueryParserService @Inject constructor() {
             QueryTokenType.Literal -> {
                 val left: QueryToken = tokens.consume()
 
-                //Comparison detection (field:relation value)
+                //field:...
                 if (tokens.match(QueryTokenType.Colon)) {
                     tokens.consume()
 
-                    //If relation exists, use it
+                    //field:<relation>value
                     if (tokens.match(QueryTokenType.OperatorRelation)) {
-                        val relation = tokens.consume()
-                        val right = tokens.expect(QueryTokenType.Literal)
+                        val relation: QueryToken = tokens.consume()
+                        val right: QueryToken = tokens.expect(QueryTokenType.Literal)
                         return QueryAstNode(
                             token = relation,
                             left = QueryAstNode(left, null, null),
@@ -141,8 +141,8 @@ internal class QueryParserService @Inject constructor() {
                         )
                     }
 
-                    //Otherwise treat as equality (field:value)
-                    val right = tokens.expect(QueryTokenType.Literal)
+                    // field:value
+                    val right: QueryToken = tokens.expect(QueryTokenType.Literal)
                     return QueryAstNode(
                         token = QueryToken(QueryTokenType.Colon, ":"),
                         left = QueryAstNode(left, null, null),
@@ -150,7 +150,16 @@ internal class QueryParserService @Inject constructor() {
                     )
                 }
 
-                QueryAstNode(left, null, null)
+                //Implicit any-field for free text
+                return QueryAstNode(
+                    token = QueryToken(QueryTokenType.Colon, ":"),
+                    left = QueryAstNode(
+                        QueryToken(QueryTokenType.Literal, "any"),
+                        null,
+                        null
+                    ),
+                    right = QueryAstNode(left, null, null)
+                )
             }
             else -> throw IllegalArgumentException("Unexpected token: ${token.type}")
         }

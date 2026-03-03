@@ -78,6 +78,10 @@ internal class QueryDetailEvaluatorService @Inject constructor(
                     val valueDate: LocalDate = LocalDate.parse(value)
                     return detail.metadata.editedAt.toLocalDate() == valueDate
                 }
+                "any" -> {
+                    return detail.name.contains(value, true)
+                            || (!detail.metadata.isObfuscated && detail.content.contains(value, true))
+                }
                 else -> false
             }
         }
