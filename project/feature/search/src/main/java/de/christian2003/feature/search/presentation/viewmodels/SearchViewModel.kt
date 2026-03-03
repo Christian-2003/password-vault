@@ -2,6 +2,7 @@ package de.christian2003.feature.search.presentation.viewmodels
 
 import android.app.Application
 import android.graphics.drawable.Drawable
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -21,6 +22,7 @@ import de.christian2003.feature.search.application.usecases.SearchUseCase
 import de.christian2003.feature.search.domain.entities.SearchResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.uuid.Uuid
@@ -60,14 +62,20 @@ internal class SearchViewModel @Inject constructor(
 
 
     fun startSearch() = viewModelScope.launch(Dispatchers.IO) {
+        //Query entered by user:
         val query: String = this@SearchViewModel.query
+
         if (!isSearching) {
             isSearching = true
+
+            //Query extended with filters provided through UI:
+            val extendedQuery: String = buildExtendedQuery(query)
+
             if (query.isNotBlank() && !recentQueries.contains(query)) {
                 addRecentQueryUseCase.addRecentQuery(query)
             }
             try {
-                val searchResult: SearchResult = searchUseCase.search(query)
+                val searchResult: SearchResult = searchUseCase.search(extendedQuery)
                 this@SearchViewModel.searchResult = searchResult
                 isQueryInvalid = false
             }
@@ -96,6 +104,59 @@ internal class SearchViewModel @Inject constructor(
     fun removeRecentQueries() {
         removeRecentQueriesUseCase.removeRecentQueries()
         recentQueries = getRecentQueriesUseCase.getQueries()
+    }
+
+
+    private suspend fun buildExtendedQuery(query: String): String {
+        val queryBuilder = StringBuilder()
+        queryBuilder.append("($query)")
+
+        //tags should be AND (tag:A OR tag:B OR tag:C)
+        val queryForTags: String = buildExtendedQueryForTags()
+        if (queryForTags.isNotEmpty()) {
+            queryBuilder.append(queryForTags)
+        }
+
+        Log.d("Search", "Final query: '${queryBuilder.toString()}'")
+        return queryBuilder.toString()
+    }
+
+    /**
+     * Builds the extended query for the selected tags of the following format:
+     * "AND (tag:a OR tag:b OR tag:c OR tag:d)"
+     * If no tags are selected, an empty string is returned.
+     *
+     * @return  Extended query for the tags.
+     */
+    private suspend fun buildExtendedQueryForTags(): String {
+        val queryBuilder = StringBuilder()
+
+        //Get all selected tags:
+        val tags: MutableList<Tag> = mutableListOf()
+        selectedTags.forEach { tagId ->
+            val tag: Tag? = allTags.first().find { it.id == tagId }
+            if (tag != null) {
+                tags.add(tag)
+            }
+        }
+
+        //Build query for tags:
+        if (tags.isNotEmpty()) {
+            queryBuilder.append(" AND (")
+
+            tags.forEachIndexed { index, tag ->
+                if (index == 0) {
+                    queryBuilder.append("tag:\"${tag.name}\"")
+                }
+                else {
+                    queryBuilder.append(" OR tag:\"${tag.name}\"")
+                }
+            }
+
+            queryBuilder.append(")")
+        }
+
+        return queryBuilder.toString()
     }
 
 }
