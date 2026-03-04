@@ -75,12 +75,24 @@ internal class SearchViewModel @Inject constructor(
                 addRecentQueryUseCase.addRecentQuery(query)
             }
             try {
-                val searchResult: SearchResult = searchUseCase.search(extendedQuery)
+                val searchResult: SearchResult = searchUseCase.search(extendedQuery, false)
                 this@SearchViewModel.searchResult = searchResult
                 isQueryInvalid = false
             }
             catch (_: Exception) {
-                isQueryInvalid = true
+                //The query entered is not a simple free-text search, since it contains words or elements
+                //of the query language that are used incorrectly. Therefore, we assume that the query
+                //is simply a more complex free-text-search:
+                try {
+                    val searchResult: SearchResult = searchUseCase.search(extendedQuery, true)
+                    this@SearchViewModel.searchResult = searchResult
+                    isQueryInvalid = false
+                }
+                catch (e: Exception) {
+                    //Some error occurred that cannot be recovered:
+                    Log.d("Search", "Irrecoverable error: ${e.message ?: "Unknown"}")
+                    isQueryInvalid = true
+                }
             }
             isSearchingFinished = true
             isSearching = false
@@ -117,9 +129,9 @@ internal class SearchViewModel @Inject constructor(
             queryBuilder.append(queryForTags)
         }
 
-        Log.d("Search", "Final query: '${queryBuilder.toString()}'")
         return queryBuilder.toString()
     }
+
 
     /**
      * Builds the extended query for the selected tags of the following format:

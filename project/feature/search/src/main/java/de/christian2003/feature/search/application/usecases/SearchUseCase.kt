@@ -11,7 +11,9 @@ import de.christian2003.feature.search.application.services.QueryParserService
 import de.christian2003.feature.search.application.services.QueryTokenizerService
 import de.christian2003.feature.search.domain.entities.AccountSearchResult
 import de.christian2003.feature.search.domain.entities.QueryAstNode
+import de.christian2003.feature.search.domain.entities.QueryToken
 import de.christian2003.feature.search.domain.entities.QueryTokenCollection
+import de.christian2003.feature.search.domain.entities.QueryTokenType
 import de.christian2003.feature.search.domain.entities.SearchResult
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -26,8 +28,8 @@ internal class SearchUseCase @Inject constructor(
     private val getAccountByIdUseCase: GetAccountByIdUseCase
 ) {
 
-    suspend fun search(query: String): SearchResult {
-        val queryAst: QueryAstNode = parseQuery(query)
+    suspend fun search(query: String, isFreeTextSearch: Boolean): SearchResult {
+        val queryAst: QueryAstNode = parseQuery(query, isFreeTextSearch)
         val accountDescriptors: List<AccountDescriptor> = getAllAccountDescriptorsUseCase.getAllAccountDescriptors().first()
         val accountResults: MutableList<AccountSearchResult> = mutableListOf()
 
@@ -42,13 +44,44 @@ internal class SearchUseCase @Inject constructor(
     }
 
 
-    private fun parseQuery(query: String): QueryAstNode {
-        val tokens: QueryTokenCollection = queryTokenizerService.tokenize(query)
-        val ast: QueryAstNode? = queryParserService.parse(tokens)
-        if (ast == null) {
-            throw IllegalArgumentException("Invalid query")
+    private fun parseQuery(query: String, isFreeTextSearch: Boolean): QueryAstNode {
+        if (isFreeTextSearch || isQuerySimpleFreeText(query)) {
+            //Free text entered:
+            val left = QueryAstNode(
+                token = QueryToken(QueryTokenType.Literal, "any"),
+                left = null,
+                right = null
+            )
+            val right = QueryAstNode(
+                token = QueryToken(QueryTokenType.Literal, query),
+                left = null,
+                right = null
+            )
+            val ast = QueryAstNode(
+                token = QueryToken(QueryTokenType.Colon, ":"),
+                left = left,
+                right = right
+            )
+            return ast
         }
-        return ast
+        else {
+            //Query entered:
+            val tokens: QueryTokenCollection = queryTokenizerService.tokenize(query)
+            val ast: QueryAstNode? = queryParserService.parse(tokens)
+            if (ast == null) {
+                throw IllegalArgumentException("Invalid query")
+            }
+            return ast
+        }
+    }
+
+
+    private fun isQuerySimpleFreeText(query: String): Boolean {
+        return !query.contains(':')
+                && !query.contains("(")
+                && !query.contains(")")
+                && !Regex("\\bAND\\b|\\bOR\\b", RegexOption.IGNORE_CASE).containsMatchIn(query)
+                && !Regex("<=|>=|<>|<|>").containsMatchIn(query)
     }
 
 
@@ -79,16 +112,6 @@ internal class SearchUseCase @Inject constructor(
         }
 
         return null
-    }
-
-
-    private suspend fun doesAccountDescriptorMatchQuery(queryAst: QueryAstNode, accountDescriptor: AccountDescriptor): Boolean {
-        val account: Account? = getAccountByIdUseCase.getAccountById(accountDescriptor.id)
-        if (account != null) {
-            val result: Boolean = queryAccountEvaluatorService.evaluate(queryAst, account)
-            return result
-        }
-        return false
     }
 
 }
