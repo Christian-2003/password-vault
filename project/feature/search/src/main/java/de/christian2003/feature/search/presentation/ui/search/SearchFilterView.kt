@@ -28,7 +28,6 @@ import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -51,6 +50,24 @@ import java.time.ZoneOffset
 import kotlin.uuid.Uuid
 
 
+/**
+ * Displays the filter view for the search screen. The view is displayed once the search screen
+ * is shown and no search operation was performed yet.
+ *
+ * @param bottomPadding             Bottom padding.
+ * @param allTags                   List of all tags.
+ * @param selectedTags              Set containing the IDs of the selected tags.
+ * @param editedTimeSpan            Edited time span that is selected currently.
+ * @param createdTimeSpan           Created time span that is selected currently.
+ * @param recentQueries             List of recent queries.
+ * @param onTagToggled              Callback invoked once a tag is selected or deselected.
+ * @param onEditedTimeSpanSelected  Callback invoked once the edited time span changes.
+ * @param onCreatedTimeSpanSelected Callback invoked once the created time span changes.
+ * @param onRemoveRecentQueries     Callback invoked to remove the recent queries.
+ * @param onRecentQuerySelected     Callback invoked once a query is selected.
+ * @param onFormatDate              Callback invoked to format a date.
+ * @param modifier                  Modifier.
+ */
 @Composable
 internal fun SearchFilterView(
     bottomPadding: Dp,
@@ -144,6 +161,40 @@ internal fun SearchFilterView(
 }
 
 
+/**
+ * Displays a label for a row of chips.
+ *
+ * @param label     Label.
+ * @param modifier  Modifier.
+ */
+@Composable
+private fun CategoryLabel(
+    label: String,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = label,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        style = MaterialTheme.typography.labelMedium,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(
+                start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical),
+                end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal)
+            )
+    )
+}
+
+
+/**
+ * Displays the selector through which to select tags.
+ *
+ * @param allTags       List of all tags.
+ * @param selectedTags  Set containing the IDs of the selected tags.
+ * @param onTagToggled  Callback invoked once a tag is selected or deselected.
+ * @param modifier      Modifier.
+ */
 @Composable
 private fun TagsSelector(
     allTags: List<Tag>,
@@ -169,6 +220,14 @@ private fun TagsSelector(
 }
 
 
+/**
+ * Displays the selector through which to select a time span.
+ *
+ * @param selectedTimeSpan      Time span that is selected currently.
+ * @param onSelectionChanged    Callback invoked once the selected time span changes.
+ * @param onFormatDate          Callback invoked to format a date.
+ * @param modifier              Modifier.
+ */
 @Composable
 private fun FilterTimeSpanSelector(
     selectedTimeSpan: FilterTimeSpan,
@@ -228,6 +287,12 @@ private fun FilterTimeSpanSelector(
 }
 
 
+/**
+ * List of recent queries.
+ *
+ * @param recentQueries         List of recent queries.
+ * @param onRecentQuerySelected Callback invoked once a query is selected.
+ */
 @Composable
 private fun RecentQueriesList(
     recentQueries: List<String>,
@@ -275,26 +340,14 @@ private fun RecentQueriesList(
 }
 
 
-@Composable
-private fun CategoryLabel(
-    label: String,
-    modifier: Modifier = Modifier
-) {
-    Text(
-        text = label,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        style = MaterialTheme.typography.labelMedium,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(
-                start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
-                top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical),
-                end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal)
-            )
-    )
-}
-
-
+/**
+ * Displays a row of filter chips through which the user can filter data for search operations.
+ *
+ * @param chipLabels            Labels for the chips.
+ * @param selectedIndices       List of indices for the chips that are selected.
+ * @param onSelectionChanged    Callback invoked once a chip is selected or deselected.
+ * @param modifier              Modifier.
+ */
 @Composable
 private fun ChipRow(
     chipLabels: List<String>,

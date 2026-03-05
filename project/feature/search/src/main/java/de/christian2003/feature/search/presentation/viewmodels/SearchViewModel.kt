@@ -4,7 +4,6 @@ import android.app.Application
 import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.setValue
@@ -33,6 +32,18 @@ import javax.inject.Inject
 import kotlin.uuid.Uuid
 
 
+/**
+ * View model for the screen through which app data can be searched.
+ *
+ * @param application                   Application.
+ * @param getAllTagsUseCase             Use case to get a list of all tags.
+ * @param searchUseCase                 Use case to perform a search operation.
+ * @param getAccountIconUseCase         Use case to get the icon for an account.
+ * @param getRecentQueriesUseCase       Use case to get a list of recent search queries.
+ * @param addRecentQueryUseCase         Use case to add a new recent query.
+ * @param removeRecentQueriesUseCase    Use case to remove all recent queries.
+ * @param dateTimeFormatterService      Service to format dates.
+ */
 @HiltViewModel
 internal class SearchViewModel @Inject constructor(
     application: Application,
@@ -45,32 +56,65 @@ internal class SearchViewModel @Inject constructor(
     private val dateTimeFormatterService: DateTimeFormatterService
 ) : AndroidViewModel(application) {
 
+    /**
+     * Query entered by the user in the search bar.
+     */
     var query: String by mutableStateOf("")
 
+    /**
+     * List of recent queries.
+     */
     var recentQueries: List<String> by mutableStateOf(getRecentQueriesUseCase.getQueries())
         private set
 
+    /**
+     * Search result provided after a search operation finishes. Before searching finishes, this is
+     * null.
+     */
     var searchResult: SearchResult? by mutableStateOf(null)
         private set
 
+    /**
+     * Indicates whether the search operation is running currently.
+     */
     var isSearching: Boolean by mutableStateOf(false)
         private set
 
+    /**
+     * Indicates whether the search operation is finished.
+     */
     var isSearchingFinished: Boolean by mutableStateOf(false)
         private set
 
+    /**
+     * Flow contains a list of all tags.
+     */
     val allTags: Flow<List<Tag>> = getAllTagsUseCase.getAllTags()
 
+    /**
+     * Set of the IDs of the tags that are selected.
+     */
     val selectedTags: MutableSet<Uuid> = mutableStateSetOf()
 
+    /**
+     * Selected time span for the "editedAt" field.
+     */
     var editedTimeSpan: FilterTimeSpan by mutableStateOf(FilterTimeSpan.All)
 
+    /**
+     * Selected time span for the "createdAt" field.
+     */
     var createdTimeSpan: FilterTimeSpan by mutableStateOf(FilterTimeSpan.All)
 
+    /**
+     * Dialog that is displayed currently.
+     */
     var dialog: SearchScreenDialog by mutableStateOf(SearchScreenDialog.None)
 
 
-
+    /**
+     * Starts the search operation.
+     */
     fun startSearch() = viewModelScope.launch(Dispatchers.IO) {
         //Query entered by user:
         val query: String = this@SearchViewModel.query
@@ -107,16 +151,33 @@ internal class SearchViewModel @Inject constructor(
     }
 
 
+    /**
+     * Queries the account icon for the specified descriptor.
+     *
+     * @param accountDescriptor Descriptor whose account icon to query.
+     * @return                  Account icon or null if no icon can be retrieved.
+     */
     fun queryAccountIcon(accountDescriptor: AccountDescriptor): Drawable? {
         return getAccountIconUseCase.getAccountIcon(accountDescriptor)
     }
 
 
+    /**
+     * Formats the provided date.
+     *
+     * @param date  Date to format.
+     * @return      Formatted date.
+     */
     fun formatDate(date: LocalDate): String {
         return dateTimeFormatterService.format(date)
     }
 
 
+    /**
+     * Toggles whether the tag whose ID is passed is selected.
+     *
+     * @param tagId Tag ID for which to toggle whether it's selected.
+     */
     fun toggleTag(tagId: Uuid) {
         if (selectedTags.contains(tagId))  {
             selectedTags.remove(tagId)
@@ -127,12 +188,22 @@ internal class SearchViewModel @Inject constructor(
     }
 
 
+    /**
+     * Removes the recent queries.
+     */
     fun removeRecentQueries() {
         removeRecentQueriesUseCase.removeRecentQueries()
         recentQueries = getRecentQueriesUseCase.getQueries()
     }
 
 
+    /**
+     * Builds the extended query based on the user-provided query specified as parameter, and the
+     * filters that are selected by the user.
+     *
+     * @param query Query entered by the user in the search bar.
+     * @return      Extended query for the query parser.
+     */
     private suspend fun buildExtendedQuery(query: String): String {
         val queryBuilder = StringBuilder()
         if (query.isNotBlank()) {
@@ -206,6 +277,17 @@ internal class SearchViewModel @Inject constructor(
     }
 
 
+    /**
+     * Builds the query for the provided time span (and field). The result is something like this:
+     * For field = "editedAt":  '(editedAt:>=2025-12-12 AND editedAt:<=2025-12-24)'
+     *                          'editedAt:>=2025-12-12'
+     *                          'editedAt:<=2025-12-24'
+     *                          'editedAt:2025-12-12'
+     *
+     * @param field     Field for the query.
+     * @param timeSpan  Time span.
+     * @return          Generated query.
+     */
     private fun buildExtendedQueryForTimeSpan(field: String, timeSpan: FilterTimeSpan): String {
         val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         return when {

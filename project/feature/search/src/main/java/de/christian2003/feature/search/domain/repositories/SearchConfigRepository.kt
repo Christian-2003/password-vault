@@ -1,7 +1,5 @@
 package de.christian2003.feature.search.domain.repositories
 
-import javax.inject.Inject
-
 
 /**
  * Repository for the configuration of the search feature.

@@ -7,6 +7,11 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 
+/**
+ * Service to evaluate whether an account detail matches a query.
+ *
+ * @param dateEvaluatorService  Evaluator service for dates.
+ */
 internal class QueryDetailEvaluatorService @Inject constructor(
     private val dateEvaluatorService: QueryDateEvaluatorService
 ): QueryEvaluatorService<Detail> {
@@ -95,7 +100,7 @@ internal class QueryDetailEvaluatorService @Inject constructor(
      * Evaluates the relation described by the provided node.
      *
      * @param node      AST node representing the relational expression.
-     * @param account   Detail to use for evaluation.
+     * @param detail    Detail to use for evaluation.
      * @return          Whether the expression is true or false.
      */
     private fun evaluateRelation(node: QueryAstNode, detail: Detail): Boolean {

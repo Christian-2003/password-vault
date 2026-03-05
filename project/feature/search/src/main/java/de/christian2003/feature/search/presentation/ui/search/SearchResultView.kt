@@ -37,13 +37,22 @@ import de.christian2003.feature.search.domain.entities.AccountSearchResult
 import kotlin.uuid.Uuid
 
 
+/**
+ * View displays the search results within the SearchScreen.
+ *
+ * @param bottomPadding     Bottom padding.
+ * @param searchResult      Search result to display.
+ * @param onAccountSelected Callback invoked once an account is selected.
+ * @param onQueryIcon       Callback invoked to query an icon for an account.
+ * @param modifier          Modifier.
+ */
 @Composable
 internal fun SearchResultView(
     bottomPadding: Dp,
     searchResult: SearchResult,
-    modifier: Modifier = Modifier,
     onAccountSelected: (Uuid) -> Unit,
-    onQueryIcon: (AccountDescriptor) -> Drawable?
+    onQueryIcon: (AccountDescriptor) -> Drawable?,
+    modifier: Modifier = Modifier
 ) {
     if (searchResult.accountResults.isEmpty()) {
         //Empty placeholder:
@@ -77,7 +86,15 @@ internal fun SearchResultView(
 }
 
 
-
+/**
+ * Displays an account that matches the search query within the search results.
+ *
+ * @param accountSearchResult   Search result for the account to display.
+ * @param isFirst               Whether the item is the first in the list of search results.
+ * @param isLast                Whether the item is the last in the list of search results.
+ * @param onQueryIcon           Callback invoked to query an account icon.
+ * @param onAccountSelected     Callback invoked once the account is selected.
+ */
 @Composable
 private fun AccountSearchResultItem(
     accountSearchResult: AccountSearchResult,
@@ -178,6 +195,15 @@ private fun AccountSearchResultItem(
 }
 
 
+/**
+ * Displays a detail that matches the search query within the search results.
+ *
+ * @param detail            Detail to display.
+ * @param isFirst           Whether the item is the first in a list of details.
+ * @param isLast            Whether the item is the last in a list of details.
+ * @param onDetailSelected  Callback invoked once the detail is selected.
+ * @param modifier          Modifier.
+ */
 @Composable
 private fun DetailSearchResultItem(
     detail: Detail,

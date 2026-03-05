@@ -5,7 +5,6 @@ import de.christian2003.data.accounts.application.usecases.GetAllAccountDescript
 import de.christian2003.data.accounts.domain.entities.Account
 import de.christian2003.data.accounts.domain.entities.AccountDescriptor
 import de.christian2003.data.accounts.domain.entities.Detail
-import de.christian2003.feature.search.application.services.QueryDetailEvaluatorService
 import de.christian2003.feature.search.application.services.QueryEvaluatorService
 import de.christian2003.feature.search.application.services.QueryParserService
 import de.christian2003.feature.search.application.services.QueryTokenizerService
@@ -19,6 +18,16 @@ import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 
+/**
+ * Use case to perform a search operation.
+ *
+ * @param queryTokenizerService             Service to tokenize a query.
+ * @param queryParserService                Service to parse a query.
+ * @param queryAccountEvaluatorService      Service to evaluate a query for an account.
+ * @param queryDetailEvaluatorService       Service to evaluate a query for an account detail.
+ * @param getAllAccountDescriptorsUseCase   Use case to get a list of all account descriptors.
+ * @param getAccountByIdUseCase             Use case to get an account by it's ID.
+ */
 internal class SearchUseCase @Inject constructor(
     private val queryTokenizerService: QueryTokenizerService,
     private val queryParserService: QueryParserService,
@@ -28,6 +37,13 @@ internal class SearchUseCase @Inject constructor(
     private val getAccountByIdUseCase: GetAccountByIdUseCase
 ) {
 
+    /**
+     * Performs the search operations for the specified query.
+     *
+     * @param query             Search query.
+     * @param isFreeTextSearch  Whether the query is a free-text search.
+     * @return                  Search result for the provided query.
+     */
     suspend fun search(query: String, isFreeTextSearch: Boolean): SearchResult {
         val queryAst: QueryAstNode = parseQuery(query, isFreeTextSearch)
         val accountDescriptors: List<AccountDescriptor> = getAllAccountDescriptorsUseCase.getAllAccountDescriptors().first()
@@ -44,6 +60,13 @@ internal class SearchUseCase @Inject constructor(
     }
 
 
+    /**
+     * Parses the provided query and returns it's AST.
+     *
+     * @param query             Query to parse.
+     * @param isFreeTextSearch  Whether the query should be treated as free-text search.
+     * @return                  AST for the query.
+     */
     private fun parseQuery(query: String, isFreeTextSearch: Boolean): QueryAstNode {
         if (isFreeTextSearch || isQuerySimpleFreeText(query)) {
             //Free text entered:
@@ -76,6 +99,12 @@ internal class SearchUseCase @Inject constructor(
     }
 
 
+    /**
+     * Tests whether the provided query is a simple free-text search.
+     *
+     * @param query Query to test.
+     * @return      Whether the query is a free-text search.
+     */
     private fun isQuerySimpleFreeText(query: String): Boolean {
         return !query.contains(':')
                 && !query.contains("(")
@@ -85,6 +114,14 @@ internal class SearchUseCase @Inject constructor(
     }
 
 
+    /**
+     * Generates a search result for the specified account descriptor. If the account does not match
+     * the provided query, null is returned.
+     *
+     * @param queryAst          AST modelling the search query.
+     * @param accountDescriptor Account descriptor.
+     * @return                  Search result or null.
+     */
     private suspend fun getResultForAccountDescriptor(queryAst: QueryAstNode, accountDescriptor: AccountDescriptor): AccountSearchResult? {
         val account: Account? = getAccountByIdUseCase.getAccountById(accountDescriptor.id)
 
