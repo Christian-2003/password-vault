@@ -36,7 +36,6 @@
     <string name="account_details_reorder">Reorder details</string>
     <string name="account_details_showContent">Show content</string>
     <string name="account_details_hideContent">Hide content</string>
-    <string name="account_details_obfuscatedContent">•••••</string> <!-- '•' is U+2022  -->
     <string name="account_details_confirmDeleteTitle">Remove detail</string>
     <string name="account_details_confirmDeleteText">Are you sure you want to remove the detail \"%1$s\"?</string>
     <plurals name="account_details_confirmDeleteTitleMultiselect">

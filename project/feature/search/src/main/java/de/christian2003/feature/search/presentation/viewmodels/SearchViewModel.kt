@@ -11,6 +11,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import de.christian2003.core.common.application.services.DateTimeFormatterService
 import de.christian2003.data.accounts.application.usecases.GetAccountIconUseCase
 import de.christian2003.data.accounts.application.usecases.GetAllTagsUseCase
 import de.christian2003.data.accounts.domain.entities.AccountDescriptor
@@ -20,10 +21,14 @@ import de.christian2003.feature.search.application.usecases.GetRecentQueriesUseC
 import de.christian2003.feature.search.application.usecases.RemoveRecentQueriesUseCase
 import de.christian2003.feature.search.application.usecases.SearchUseCase
 import de.christian2003.feature.search.domain.entities.SearchResult
+import de.christian2003.feature.search.presentation.models.dialogs.SearchScreenDialog
+import de.christian2003.feature.search.presentation.models.other.FilterTimeSpan
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 import kotlin.uuid.Uuid
 
@@ -36,7 +41,8 @@ internal class SearchViewModel @Inject constructor(
     private val getAccountIconUseCase: GetAccountIconUseCase,
     private val getRecentQueriesUseCase: GetRecentQueriesUseCase,
     private val addRecentQueryUseCase: AddRecentQueryUseCase,
-    private val removeRecentQueriesUseCase: RemoveRecentQueriesUseCase
+    private val removeRecentQueriesUseCase: RemoveRecentQueriesUseCase,
+    private val dateTimeFormatterService: DateTimeFormatterService
 ) : AndroidViewModel(application) {
 
     var query: String by mutableStateOf("")
@@ -45,9 +51,6 @@ internal class SearchViewModel @Inject constructor(
         private set
 
     var searchResult: SearchResult? by mutableStateOf(null)
-        private set
-
-    var isQueryInvalid: Boolean by mutableStateOf(false)
         private set
 
     var isSearching: Boolean by mutableStateOf(false)
@@ -60,6 +63,13 @@ internal class SearchViewModel @Inject constructor(
 
     val selectedTags: MutableSet<Uuid> = mutableStateSetOf()
 
+    var editedTimeSpan: FilterTimeSpan by mutableStateOf(FilterTimeSpan.All)
+
+    var createdTimeSpan: FilterTimeSpan by mutableStateOf(FilterTimeSpan.All)
+
+    var dialog: SearchScreenDialog by mutableStateOf(SearchScreenDialog.None)
+
+
 
     fun startSearch() = viewModelScope.launch(Dispatchers.IO) {
         //Query entered by user:
@@ -70,6 +80,7 @@ internal class SearchViewModel @Inject constructor(
 
             //Query extended with filters provided through UI:
             val extendedQuery: String = buildExtendedQuery(query)
+            Log.d("Search", "Extended query: '$extendedQuery'")
 
             if (query.isNotBlank() && !recentQueries.contains(query)) {
                 addRecentQueryUseCase.addRecentQuery(query)
@@ -77,7 +88,6 @@ internal class SearchViewModel @Inject constructor(
             try {
                 val searchResult: SearchResult = searchUseCase.search(extendedQuery, false)
                 this@SearchViewModel.searchResult = searchResult
-                isQueryInvalid = false
             }
             catch (_: Exception) {
                 //The query entered is not a simple free-text search, since it contains words or elements
@@ -86,12 +96,10 @@ internal class SearchViewModel @Inject constructor(
                 try {
                     val searchResult: SearchResult = searchUseCase.search(extendedQuery, true)
                     this@SearchViewModel.searchResult = searchResult
-                    isQueryInvalid = false
                 }
                 catch (e: Exception) {
                     //Some error occurred that cannot be recovered:
                     Log.d("Search", "Irrecoverable error: ${e.message ?: "Unknown"}")
-                    isQueryInvalid = true
                 }
             }
             isSearchingFinished = true
@@ -104,6 +112,12 @@ internal class SearchViewModel @Inject constructor(
         return getAccountIconUseCase.getAccountIcon(accountDescriptor)
     }
 
+
+    fun formatDate(date: LocalDate): String {
+        return dateTimeFormatterService.format(date)
+    }
+
+
     fun toggleTag(tagId: Uuid) {
         if (selectedTags.contains(tagId))  {
             selectedTags.remove(tagId)
@@ -112,6 +126,7 @@ internal class SearchViewModel @Inject constructor(
             selectedTags.add(tagId)
         }
     }
+
 
     fun removeRecentQueries() {
         removeRecentQueriesUseCase.removeRecentQueries()
@@ -127,6 +142,15 @@ internal class SearchViewModel @Inject constructor(
         val queryForTags: String = buildExtendedQueryForTags()
         if (queryForTags.isNotEmpty()) {
             queryBuilder.append(queryForTags)
+        }
+
+        val queryForEdited: String = buildExtendedQueryForTimeSpan("editedAt", editedTimeSpan)
+        if (queryForEdited.isNotEmpty()) {
+            queryBuilder.append(queryForEdited)
+        }
+        val queryForCreated: String = buildExtendedQueryForTimeSpan("createdAt", createdTimeSpan)
+        if (queryForCreated.isNotEmpty()) {
+            queryBuilder.append(queryForCreated)
         }
 
         return queryBuilder.toString()
@@ -169,6 +193,35 @@ internal class SearchViewModel @Inject constructor(
         }
 
         return queryBuilder.toString()
+    }
+
+
+    private fun buildExtendedQueryForTimeSpan(field: String, timeSpan: FilterTimeSpan): String {
+        val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return when {
+            timeSpan.start == null && timeSpan.end != null -> {
+                //Before end date:
+                " AND $field:<=${timeSpan.end.format(formatter)}"
+            }
+            timeSpan.start != null && timeSpan.end == null -> {
+                //After start date:
+                " AND $field:>=${timeSpan.start.format(formatter)}"
+            }
+            timeSpan.start != null && timeSpan.end != null -> {
+                if (timeSpan.start == timeSpan.end) {
+                    //Single day:
+                    " AND $field:${timeSpan.start.format(formatter)}"
+                }
+                else {
+                    //Between dates:
+                    " AND ($field:>=${timeSpan.start.format(formatter)} AND $field:<=${timeSpan.end.format(formatter)})"
+                }
+            }
+            else -> {
+                //Any dates - no filter required:
+                ""
+            }
+        }
     }
 
 }

@@ -1,9 +1,11 @@
 package de.christian2003.core.common.application.services
 
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import javax.inject.Inject
+
 
 /**
  * Service for formatting dates and times.
@@ -19,6 +21,18 @@ class DateTimeFormatterService @Inject constructor() {
     fun format(time: LocalDateTime): String {
         val formatter: DateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
         return time.format(formatter)
+    }
+
+
+    /**
+     * Formats the specified date.
+     *
+     * @param date  Date to format.
+     * @return      Formatted date.
+     */
+    fun format(date: LocalDate): String {
+        val formatter: DateTimeFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
+        return date.format(formatter)
     }
 
 }

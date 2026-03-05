@@ -1118,7 +1118,7 @@ private fun LazyItemScope.DetailListRow(
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        text = if (detail.metadata.isObfuscated && isObfuscated) { stringResource(R.string.account_details_obfuscatedContent) } else { detail.content },
+                        text = if (detail.metadata.isObfuscated && isObfuscated) { stringResource(de.christian2003.core.ui.R.string.obfuscated_placeholder) } else { detail.content },
                         color = MaterialTheme.colorScheme.onSurface,
                         style = MaterialTheme.typography.bodyLarge
                     )

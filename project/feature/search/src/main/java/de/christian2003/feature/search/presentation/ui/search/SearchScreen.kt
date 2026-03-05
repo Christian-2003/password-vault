@@ -30,11 +30,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.Dp
 import de.christian2003.core.ui.composables.NavigationBarProtection
+import de.christian2003.core.ui.composables.dialog.ConfirmDeleteDialog
 import de.christian2003.data.accounts.domain.entities.Tag
 import de.christian2003.feature.search.presentation.viewmodels.SearchViewModel
 import kotlin.uuid.Uuid
 import de.christian2003.feature.search.R
 import de.christian2003.feature.search.domain.entities.SearchResult
+import de.christian2003.feature.search.presentation.models.dialogs.SearchScreenDialog
 
 
 @Composable
@@ -79,9 +81,6 @@ internal fun SearchScreen(
                         LoadingIndicator()
                     }
                 }
-                viewModel.isQueryInvalid -> {
-                    Text("ERROR")
-                }
                 viewModel.searchResult != null -> {
                     val searchResult: SearchResult? = viewModel.searchResult
                     if (searchResult != null) {
@@ -102,14 +101,25 @@ internal fun SearchScreen(
                         allTags = allTags,
                         selectedTags = viewModel.selectedTags,
                         recentQueries = viewModel.recentQueries,
+                        editedTimeSpan = viewModel.editedTimeSpan,
+                        createdTimeSpan = viewModel.createdTimeSpan,
                         onTagToggled = { tagId ->
                             viewModel.toggleTag(tagId)
                         },
+                        onEditedTimeSpanSelected = {
+                            viewModel.editedTimeSpan = it
+                        },
+                        onCreatedTimeSpanSelected = {
+                            viewModel.createdTimeSpan = it
+                        },
                         onRemoveRecentQueries = {
-                            viewModel.removeRecentQueries()
+                            viewModel.dialog = SearchScreenDialog.ConfirmDeleteRecentQueries
                         },
                         onRecentQuerySelected = {
                             viewModel.query = it
+                        },
+                        onFormatDate = { date ->
+                            viewModel.formatDate(date)
                         },
                         modifier = Modifier.fillMaxSize()
                     )
@@ -117,6 +127,22 @@ internal fun SearchScreen(
             }
         }
         NavigationBarProtection(bottomPadding)
+    }
+
+    when (viewModel.dialog) {
+        SearchScreenDialog.ConfirmDeleteRecentQueries -> {
+            ConfirmDeleteDialog(
+                text = stringResource(R.string.search_filter_queriesDeleteDialogText),
+                onConfirm = {
+                    viewModel.removeRecentQueries()
+                    viewModel.dialog = SearchScreenDialog.None
+                },
+                onDismiss = {
+                    viewModel.dialog = SearchScreenDialog.None
+                }
+            )
+        }
+        else -> { }
     }
 }
 

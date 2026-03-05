@@ -2,6 +2,7 @@
 
 <resources>
     <string name="app_name">Password Vault</string>
+    <string name="obfuscated_placeholder">•••••</string> <!-- '•' is U+2022  -->
 
     <string name="dialog_confirmDiscard_title">Discard changes?</string>
     <string name="dialog_confirmDelete_title">Confirm deletion</string>

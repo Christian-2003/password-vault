@@ -18,7 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -210,7 +209,11 @@ private fun DetailSearchResultItem(
                 style = MaterialTheme.typography.bodyMedium
             )
             Text(
-                text = detail.content,
+                text = if (detail.metadata.isObfuscated) {
+                    stringResource(de.christian2003.core.ui.R.string.obfuscated_placeholder)
+                } else {
+                    detail.content
+                },
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.bodyLarge
             )

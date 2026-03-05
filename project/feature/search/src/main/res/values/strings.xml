@@ -6,7 +6,18 @@
     <string name="search_emptyPlaceholder_subtitle">Accounts which match your query are shown here</string>
     <string name="search_filter_title">Recommended filters</string>
     <string name="search_filter_tagsLabel">Tags</string>
+    <string name="search_filter_createdLabel">Created</string>
+    <string name="search_filter_editedLabel">Edited</string>
+    <string name="search_filter_timeSpan_all">All</string>
+    <string name="search_filter_timeSpan_today">Today</string>
+    <string name="search_filter_timeSpan_lastWeek">Last week</string>
+    <string name="search_filter_timeSpan_custom">Custom</string>
+    <plurals name="search_filter_timeSpan_customWithDates">
+        <item quantity="one">%1$s</item>
+        <item quantity="other">%1$s - %2$s</item>
+    </plurals>
     <string name="search_filter_queriesTitle">Recent queries</string>
     <string name="search_filter_queriesEmptyLabel">No recent queries</string>
     <string name="search_filter_queriesDeleteTooltip">Delete all recent queries</string>
+    <string name="search_filter_queriesDeleteDialogText">Are you sure you want to delete all recent queries?</string>
 </resources>
