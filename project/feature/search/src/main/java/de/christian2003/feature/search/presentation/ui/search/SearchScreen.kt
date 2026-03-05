@@ -1,5 +1,7 @@
 package de.christian2003.feature.search.presentation.ui.search
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -8,22 +10,33 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -46,11 +59,21 @@ internal fun SearchScreen(
     onNavigateToAccount: (Uuid) -> Unit
 ) {
     val allTags: List<Tag> by viewModel.allTags.collectAsState(emptyList())
+    val focusRequester: FocusRequester = remember { FocusRequester() }
+    val keyboardController: SoftwareKeyboardController? = LocalSoftwareKeyboardController.current
+
+    LaunchedEffect(Unit) {
+        //Require safe call since, focusRequester can be null during recomposition after rotating
+        //the screen:
+        focusRequester?.requestFocus()
+        keyboardController?.show()
+    }
 
     Scaffold(
         topBar = {
             TopBar(
                 query = viewModel.query,
+                focusRequester = focusRequester,
                 onQueryChange = {
                     viewModel.query = it
                 },
@@ -150,6 +173,7 @@ internal fun SearchScreen(
 @Composable
 private fun TopBar(
     query: String,
+    focusRequester: FocusRequester,
     onQueryChange: (String) -> Unit,
     onNavigateUp: () -> Unit,
     onSearch: () -> Unit
@@ -181,7 +205,8 @@ private fun TopBar(
                     keyboardActions = KeyboardActions {
                         onSearch()
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+                    modifier = Modifier.focusRequester(focusRequester).fillMaxWidth()
                 )
             }
         },

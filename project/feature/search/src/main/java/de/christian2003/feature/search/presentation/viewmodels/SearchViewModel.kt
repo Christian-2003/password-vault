@@ -80,7 +80,6 @@ internal class SearchViewModel @Inject constructor(
 
             //Query extended with filters provided through UI:
             val extendedQuery: String = buildExtendedQuery(query)
-            Log.d("Search", "Extended query: '$extendedQuery'")
 
             if (query.isNotBlank() && !recentQueries.contains(query)) {
                 addRecentQueryUseCase.addRecentQuery(query)
@@ -136,20 +135,31 @@ internal class SearchViewModel @Inject constructor(
 
     private suspend fun buildExtendedQuery(query: String): String {
         val queryBuilder = StringBuilder()
-        queryBuilder.append("($query)")
+        if (query.isNotBlank()) {
+            queryBuilder.append("($query)")
+        }
 
-        //tags should be AND (tag:A OR tag:B OR tag:C)
+        //tags should be '(tag:"A" OR tag:"B" OR tag:"C")'
         val queryForTags: String = buildExtendedQueryForTags()
         if (queryForTags.isNotEmpty()) {
+            if (queryBuilder.isNotEmpty()) {
+                queryBuilder.append(" AND ")
+            }
             queryBuilder.append(queryForTags)
         }
 
         val queryForEdited: String = buildExtendedQueryForTimeSpan("editedAt", editedTimeSpan)
         if (queryForEdited.isNotEmpty()) {
+            if (queryBuilder.isNotEmpty()) {
+                queryBuilder.append(" AND ")
+            }
             queryBuilder.append(queryForEdited)
         }
         val queryForCreated: String = buildExtendedQueryForTimeSpan("createdAt", createdTimeSpan)
         if (queryForCreated.isNotEmpty()) {
+            if (queryBuilder.isNotEmpty()) {
+                queryBuilder.append(" AND ")
+            }
             queryBuilder.append(queryForCreated)
         }
 
@@ -159,7 +169,7 @@ internal class SearchViewModel @Inject constructor(
 
     /**
      * Builds the extended query for the selected tags of the following format:
-     * "AND (tag:a OR tag:b OR tag:c OR tag:d)"
+     * '(tag:"a" OR tag:"b" OR tag:"c" OR tag:"d")'
      * If no tags are selected, an empty string is returned.
      *
      * @return  Extended query for the tags.
@@ -178,7 +188,7 @@ internal class SearchViewModel @Inject constructor(
 
         //Build query for tags:
         if (tags.isNotEmpty()) {
-            queryBuilder.append(" AND (")
+            queryBuilder.append("(")
 
             tags.forEachIndexed { index, tag ->
                 if (index == 0) {
@@ -201,20 +211,20 @@ internal class SearchViewModel @Inject constructor(
         return when {
             timeSpan.start == null && timeSpan.end != null -> {
                 //Before end date:
-                " AND $field:<=${timeSpan.end.format(formatter)}"
+                "$field:<=${timeSpan.end.format(formatter)}"
             }
             timeSpan.start != null && timeSpan.end == null -> {
                 //After start date:
-                " AND $field:>=${timeSpan.start.format(formatter)}"
+                "$field:>=${timeSpan.start.format(formatter)}"
             }
             timeSpan.start != null && timeSpan.end != null -> {
                 if (timeSpan.start == timeSpan.end) {
                     //Single day:
-                    " AND $field:${timeSpan.start.format(formatter)}"
+                    "$field:${timeSpan.start.format(formatter)}"
                 }
                 else {
                     //Between dates:
-                    " AND ($field:>=${timeSpan.start.format(formatter)} AND $field:<=${timeSpan.end.format(formatter)})"
+                    "($field:>=${timeSpan.start.format(formatter)} AND $field:<=${timeSpan.end.format(formatter)})"
                 }
             }
             else -> {
