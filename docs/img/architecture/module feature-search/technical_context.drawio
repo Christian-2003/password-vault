@@ -1,0 +1,68 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:148.0) Gecko/20100101 Firefox/148.0" version="29.6.1">
+  <diagram name="Page-1" id="9u9C1iQMatOKtjDHVW9T">
+    <mxGraphModel dx="983" dy="504" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="SK58jMAsi7TUHw_xC3Fl-7" edge="1" parent="1" source="SK58jMAsi7TUHw_xC3Fl-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fillColor=#ffe6cc;strokeColor=#d79b00;" target="SK58jMAsi7TUHw_xC3Fl-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SK58jMAsi7TUHw_xC3Fl-16" connectable="0" parent="SK58jMAsi7TUHw_xC3Fl-7" style="edgeLabel;html=1;align=left;verticalAlign=middle;resizable=0;points=[];labelBackgroundColor=none;" value="&lt;div&gt;Seamless integration&lt;/div&gt;&lt;div&gt;in user interface&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.0635" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SK58jMAsi7TUHw_xC3Fl-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value=":app" vertex="1">
+          <mxGeometry height="40" width="100" x="210" as="geometry" />
+        </mxCell>
+        <mxCell id="SK58jMAsi7TUHw_xC3Fl-12" edge="1" parent="1" source="SK58jMAsi7TUHw_xC3Fl-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fillColor=#dae8fc;strokeColor=#6c8ebf;curved=0;" target="SK58jMAsi7TUHw_xC3Fl-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SK58jMAsi7TUHw_xC3Fl-17" connectable="0" parent="SK58jMAsi7TUHw_xC3Fl-12" style="edgeLabel;html=1;align=left;verticalAlign=middle;resizable=0;points=[];labelBackgroundColor=none;" value="&lt;div&gt;Query accounts for&lt;/div&gt;&lt;div&gt;search operations&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.2052" y="1" as="geometry">
+            <mxPoint x="-55" y="-17" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SK58jMAsi7TUHw_xC3Fl-13" edge="1" parent="1" source="SK58jMAsi7TUHw_xC3Fl-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fillColor=#e1d5e7;strokeColor=#9673a6;" target="SK58jMAsi7TUHw_xC3Fl-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SK58jMAsi7TUHw_xC3Fl-20" connectable="0" parent="SK58jMAsi7TUHw_xC3Fl-13" style="edgeLabel;html=1;align=right;verticalAlign=middle;resizable=0;points=[];labelBackgroundColor=none;" value="&lt;div&gt;Access common&lt;/div&gt;&lt;div&gt;security logic&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.1738" y="2" as="geometry">
+            <mxPoint x="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SK58jMAsi7TUHw_xC3Fl-14" edge="1" parent="1" source="SK58jMAsi7TUHw_xC3Fl-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fillColor=#e1d5e7;strokeColor=#9673a6;" target="SK58jMAsi7TUHw_xC3Fl-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SK58jMAsi7TUHw_xC3Fl-19" connectable="0" parent="SK58jMAsi7TUHw_xC3Fl-14" style="edgeLabel;html=1;align=left;verticalAlign=middle;resizable=0;points=[];labelBackgroundColor=none;" value="&lt;div&gt;Access common&lt;/div&gt;&lt;div&gt;domain logic&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.1223" y="-1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SK58jMAsi7TUHw_xC3Fl-15" edge="1" parent="1" source="SK58jMAsi7TUHw_xC3Fl-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fillColor=#e1d5e7;strokeColor=#9673a6;" target="SK58jMAsi7TUHw_xC3Fl-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SK58jMAsi7TUHw_xC3Fl-18" connectable="0" parent="SK58jMAsi7TUHw_xC3Fl-15" style="edgeLabel;html=1;align=right;verticalAlign=middle;resizable=0;points=[];labelBackgroundColor=none;" value="&lt;div&gt;Access common&lt;/div&gt;&lt;div&gt;UI elements&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.0001" y="1" as="geometry">
+            <mxPoint x="26" y="-16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SK58jMAsi7TUHw_xC3Fl-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1" value=":feature:search" vertex="1">
+          <mxGeometry height="40" width="100" x="210" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="SK58jMAsi7TUHw_xC3Fl-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value=":data:accounts" vertex="1">
+          <mxGeometry height="40" width="100" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="SK58jMAsi7TUHw_xC3Fl-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value=":core:security" vertex="1">
+          <mxGeometry height="40" width="100" x="140" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="SK58jMAsi7TUHw_xC3Fl-5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value=":core:common" vertex="1">
+          <mxGeometry height="40" width="100" x="280" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="SK58jMAsi7TUHw_xC3Fl-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value=":core:ui" vertex="1">
+          <mxGeometry height="40" width="100" x="420" y="240" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,43 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:148.0) Gecko/20100101 Firefox/148.0" version="29.6.1">
+  <diagram name="Page-1" id="TStzVVhAVxiJ_bMmh8ed">
+    <mxGraphModel dx="983" dy="504" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="nckV1RD66mB6v5vXsyYU-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=5;verticalAlign=top;fontStyle=0;" value="Android device" vertex="1">
+          <mxGeometry height="270" width="300" as="geometry" />
+        </mxCell>
+        <mxCell id="nckV1RD66mB6v5vXsyYU-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=5;verticalAlign=top;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" value="Password Vault" vertex="1">
+          <mxGeometry height="220" width="140" x="20" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="nckV1RD66mB6v5vXsyYU-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=15;verticalAlign=middle;" value="&lt;div&gt;Other Android&lt;/div&gt;&lt;div&gt;app 1&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="100" x="180" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="nckV1RD66mB6v5vXsyYU-5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=15;verticalAlign=middle;" value="&lt;div&gt;Other Android&lt;/div&gt;&lt;div&gt;app 2&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="100" x="180" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="nckV1RD66mB6v5vXsyYU-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=15;verticalAlign=middle;" value="&lt;div&gt;Other Android&lt;/div&gt;&lt;div&gt;app 3&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="100" x="180" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="nckV1RD66mB6v5vXsyYU-11" edge="1" parent="1" source="nckV1RD66mB6v5vXsyYU-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="nckV1RD66mB6v5vXsyYU-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nckV1RD66mB6v5vXsyYU-7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=15;verticalAlign=middle;fillColor=#d5e8d4;strokeColor=#82b366;" value=":app" vertex="1">
+          <mxGeometry height="40" width="100" x="40" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="nckV1RD66mB6v5vXsyYU-12" edge="1" parent="1" source="nckV1RD66mB6v5vXsyYU-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="nckV1RD66mB6v5vXsyYU-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nckV1RD66mB6v5vXsyYU-9" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=15;verticalAlign=middle;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1" value=":feature:search" vertex="1">
+          <mxGeometry height="40" width="100" x="40" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="nckV1RD66mB6v5vXsyYU-10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=15;verticalAlign=middle;fillColor=#dae8fc;strokeColor=#6c8ebf;" value=":data:accounts" vertex="1">
+          <mxGeometry height="40" width="100" x="40" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="nckV1RD66mB6v5vXsyYU-14" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=15;verticalAlign=middle;" value="..." vertex="1">
+          <mxGeometry height="40" width="100" x="180" y="210" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
