@@ -1,7 +1,9 @@
 <img src="../img/icon.png" height="150" align="right">
 
 # Module :feature:search
-The module :feature:search module contains the entire functionality for the search feature within the app Password Vault.
+The module :feature:search contains the entire functionality for the search feature within the app Password Vault.
+
+<br/>
 
 ### Table of Contents
 * [1 Introduction and Goals](#1-introduction-and-goals)
@@ -119,7 +121,7 @@ Technically, the search functionality could be amended to the :feature:accounts-
 
 Internally, the module handles the following:
 * Implementation of the domain layer for the search logic
-* Implementation on business logic for search operations. This includes the parsing and evaluation of search queries, as well as the orchestration for the entire search operation
+* Implementation of business logic for search operations. This includes the parsing and evaluation of search queries, as well as the orchestration for the entire search operation
 * Interaction with the Android OS and device through an infrastructute layer to remember user configuration
 * Presentation of the search results as well as views to start search operations
 
@@ -149,7 +151,7 @@ Android | The Android OS provides capabilities for storage that are required for
 <br/>
 
 ### 5.2 Level 1
-The following figure defines the scope and context:
+The following figure defines level 1:
 
 ![Building Blocks - Level 1](./../img/architecture/module%20feature-search/building_blocks_level1.drawio.svg)
 
@@ -165,7 +167,7 @@ Query parser | :feature:search | The query parser handles the parsing and evalua
 <br/>
 
 ### 5.3 Level 2
-The following figure defines the scope and context:
+The following figure defines level 2:
 
 ![Building Blocks - Level 2](./../img/architecture/module%20feature-search/building_blocks_level2.drawio.svg)
 
