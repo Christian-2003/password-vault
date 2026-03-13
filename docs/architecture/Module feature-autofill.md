@@ -36,7 +36,9 @@ The :feature:autofill-module contains the entire functionality for the autofill 
 * [11 Risks and Technical Debt](#11-risks-and-technical-debt)
     * [11.1 Interactions with Other Modules](#111-interactions-with-other-modules)
     * [11.2 Concurrency](#112-concurrency)
-* [12 Glossary](#12-glossary)
+* [12 Appendix](#12-appendix)
+    * [12.1 Glossary](#121-glossary)
+    * [12.2 Related Documents](#122-related-documents)
 
 <br/>
 
@@ -453,7 +455,12 @@ However, no concurrency is employed at the moment to improve performance since t
 
 <br/>
 
-## 12 Glossary
+## 12 Appendix
+The following section contains the appendix for this document.
+
+<br/>
+
+### 12.1 Glossary
 The following terms and abbreviations are used in this document:
 
 Term | Description
@@ -463,6 +470,16 @@ DRY | Dont repeat yourself
 IME | Input Method Editor (e.g. a system keyboard)
 MVVM | Model View ViewModel
 SOLID | Single Responsibility, Open-Closed, Liskov Substitution, Interface Segregation and Dependency Inversion
+
+<br/>
+
+### 12.2 Related Documents
+The following documents are related:
+
+Document | Description
+--- | ---
+[Module feature-auth.md](./Module%20feature-auth.md) | Module architecture for the authentication feature. The authentication feature is not related to the authentication for the autofill service itself, but describes workflows which apply to the authentication described in the :feature:autofill-module.
+[Authentication Risk Analysis.md](./../security/Authentication%20Risk%20Analysis.md) | Analysis for risks associated with the authentication feature. This document focuses on attack vectors and appropriate mitigations.
 
 <br/>
 
