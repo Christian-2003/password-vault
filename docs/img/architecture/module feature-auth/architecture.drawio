@@ -1,0 +1,172 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:148.0) Gecko/20100101 Firefox/148.0" version="29.6.1">
+  <diagram name="Page-1" id="kPcPlIdu1v3qD1Mi0LXp">
+    <mxGraphModel dx="1809" dy="937" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="J87evH8350A-USeKG7PN-14" parent="1" style="shape=folder;fontStyle=0;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;fillColor=#dae8fc;align=left;verticalAlign=top;strokeColor=#6c8ebf;" value="viewmodels" vertex="1">
+          <mxGeometry height="100" width="1300" x="60" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-1" parent="1" style="shape=folder;fontStyle=0;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;fillColor=#d5e8d4;align=left;verticalAlign=top;strokeColor=#82b366;" value="biometrics" vertex="1">
+          <mxGeometry height="100" width="140" x="60" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-31" edge="1" parent="1" source="J87evH8350A-USeKG7PN-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="J87evH8350A-USeKG7PN-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="BiometricsScreen" vertex="1">
+          <mxGeometry height="40" width="100" x="80" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-3" parent="1" style="shape=folder;fontStyle=0;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;fillColor=#d5e8d4;align=left;verticalAlign=top;strokeColor=#82b366;" value="finish" vertex="1">
+          <mxGeometry height="100" width="140" x="210" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-32" edge="1" parent="1" source="J87evH8350A-USeKG7PN-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="J87evH8350A-USeKG7PN-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="FinishScreen" vertex="1">
+          <mxGeometry height="40" width="100" x="230" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-5" parent="1" style="shape=folder;fontStyle=0;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;fillColor=#d5e8d4;align=left;verticalAlign=top;strokeColor=#82b366;" value="login" vertex="1">
+          <mxGeometry height="100" width="140" x="360" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-33" edge="1" parent="1" source="J87evH8350A-USeKG7PN-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="J87evH8350A-USeKG7PN-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="LoginScreen" vertex="1">
+          <mxGeometry height="40" width="100" x="380" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-7" parent="1" style="shape=folder;fontStyle=0;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;fillColor=#d5e8d4;align=left;verticalAlign=top;strokeColor=#82b366;" value="password" vertex="1">
+          <mxGeometry height="100" width="140" x="510" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-34" edge="1" parent="1" source="J87evH8350A-USeKG7PN-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="J87evH8350A-USeKG7PN-20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="PasswordScreen" vertex="1">
+          <mxGeometry height="40" width="100" x="530" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-9" parent="1" style="shape=folder;fontStyle=0;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;fillColor=#d5e8d4;align=left;verticalAlign=top;strokeColor=#82b366;" value="recovery" vertex="1">
+          <mxGeometry height="100" width="250" x="660" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-35" edge="1" parent="1" source="J87evH8350A-USeKG7PN-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="J87evH8350A-USeKG7PN-21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-38" edge="1" parent="1" source="J87evH8350A-USeKG7PN-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="J87evH8350A-USeKG7PN-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="RecoveryScreen" vertex="1">
+          <mxGeometry height="40" width="100" x="680" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-11" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 10px;&quot;&gt;RecoveryCodes-VisualTransformation&lt;/font&gt;" vertex="1">
+          <mxGeometry height="40" width="100" x="790" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-12" parent="1" style="shape=folder;fontStyle=0;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;fillColor=#d5e8d4;align=left;verticalAlign=top;strokeColor=#82b366;" value="recoverycodes" vertex="1">
+          <mxGeometry height="100" width="140" x="920" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-36" edge="1" parent="1" source="J87evH8350A-USeKG7PN-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="J87evH8350A-USeKG7PN-22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-13" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="RecoveryCodes-Screen" vertex="1">
+          <mxGeometry height="40" width="100" x="940" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-15" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="AuthSettings-ViewModel" vertex="1">
+          <mxGeometry height="40" width="100" x="1090" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-16" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Biometrics-ViewModel" vertex="1">
+          <mxGeometry height="40" width="100" x="80" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-17" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;div&gt;Finish-&lt;/div&gt;&lt;div&gt;ViewModel&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="100" x="230" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-19" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;div&gt;Login-&lt;/div&gt;&lt;div&gt;ViewModel&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="100" x="380" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-20" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;div&gt;Password-&lt;/div&gt;&lt;div&gt;ViewModel&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="100" x="530" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-21" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Recovery-ViewModel" vertex="1">
+          <mxGeometry height="40" width="100" x="680" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-22" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="RecoveryCodes-ViewModel" vertex="1">
+          <mxGeometry height="40" width="100" x="940" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-23" parent="1" style="shape=folder;fontStyle=0;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;fillColor=#d5e8d4;align=left;verticalAlign=top;strokeColor=#82b366;" value="settings" vertex="1">
+          <mxGeometry height="100" width="140" x="1070" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-37" edge="1" parent="1" source="J87evH8350A-USeKG7PN-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="J87evH8350A-USeKG7PN-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-24" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="AuthSettings-Screen" vertex="1">
+          <mxGeometry height="40" width="100" x="1090" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-48" edge="1" parent="1" source="J87evH8350A-USeKG7PN-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=none;endFill=0;" target="J87evH8350A-USeKG7PN-24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-49" edge="1" parent="1" source="J87evH8350A-USeKG7PN-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;endArrow=none;endFill=0;jumpStyle=arc;" target="J87evH8350A-USeKG7PN-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-50" edge="1" parent="1" source="J87evH8350A-USeKG7PN-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;endArrow=none;endFill=0;jumpStyle=arc;" target="J87evH8350A-USeKG7PN-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-51" edge="1" parent="1" source="J87evH8350A-USeKG7PN-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;endArrow=none;endFill=0;jumpStyle=arc;" target="J87evH8350A-USeKG7PN-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-52" edge="1" parent="1" source="J87evH8350A-USeKG7PN-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;endArrow=none;endFill=0;jumpStyle=arc;" target="J87evH8350A-USeKG7PN-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-53" edge="1" parent="1" source="J87evH8350A-USeKG7PN-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;endArrow=none;endFill=0;jumpStyle=arc;" target="J87evH8350A-USeKG7PN-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-54" edge="1" parent="1" source="J87evH8350A-USeKG7PN-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;endArrow=none;endFill=0;jumpStyle=arc;" target="J87evH8350A-USeKG7PN-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-25" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="SetupFlow-SharedViewModel" vertex="1">
+          <mxGeometry height="40" width="100" x="1240" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-55" parent="1" style="shape=folder;fontStyle=0;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;fillColor=#e1d5e7;align=left;verticalAlign=top;strokeColor=#9673a6;" value="dialogs" vertex="1">
+          <mxGeometry height="100" width="250" x="60" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-56" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="AuthSettings-ScreenDialog" vertex="1">
+          <mxGeometry height="40" width="100" x="80" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-57" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="RecoveryCodes-ScreenDialog" vertex="1">
+          <mxGeometry height="40" width="100" x="190" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-58" parent="1" style="shape=folder;fontStyle=0;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;fillColor=#e1d5e7;align=left;verticalAlign=top;strokeColor=#9673a6;" value="formatters" vertex="1">
+          <mxGeometry height="100" width="140" x="320" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-59" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="RecoveryCodes-Formatter" vertex="1">
+          <mxGeometry height="40" width="100" x="340" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-60" parent="1" style="shape=folder;fontStyle=0;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;fillColor=#e1d5e7;align=left;verticalAlign=top;strokeColor=#9673a6;" value="states" vertex="1">
+          <mxGeometry height="100" width="470" x="470" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-61" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;div&gt;Biometrics-ScreenState&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="100" x="490" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-62" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Finish-ScreenState" vertex="1">
+          <mxGeometry height="40" width="100" x="600" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-63" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Password-ScreenState" vertex="1">
+          <mxGeometry height="40" width="100" x="710" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-64" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="RecoveryCodes-ScreenState" vertex="1">
+          <mxGeometry height="40" width="100" x="820" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-65" parent="1" style="shape=folder;fontStyle=0;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;fillColor=#e1d5e7;align=left;verticalAlign=top;strokeColor=#9673a6;" value="other" vertex="1">
+          <mxGeometry height="100" width="140" x="950" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-66" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Auth-Recommendation" vertex="1">
+          <mxGeometry height="40" width="100" x="970" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-67" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;horizontal=0;fontStyle=1" value="View" vertex="1">
+          <mxGeometry height="100" width="60" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-68" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;horizontal=0;fontStyle=1" value="ViewModel" vertex="1">
+          <mxGeometry height="100" width="60" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="J87evH8350A-USeKG7PN-69" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;horizontal=0;fontStyle=1" value="Model" vertex="1">
+          <mxGeometry height="100" width="60" y="240" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
