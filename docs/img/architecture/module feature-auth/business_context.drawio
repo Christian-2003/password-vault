@@ -1,0 +1,53 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:148.0) Gecko/20100101 Firefox/148.0" version="29.6.1">
+  <diagram name="Page-1" id="LomyhYydi8zYb0TKz6yt">
+    <mxGraphModel dx="1141" dy="585" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="It8Cg-eU1C3MdVgNRAZY-8" edge="1" parent="1" source="It8Cg-eU1C3MdVgNRAZY-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;startArrow=none;startFill=0;endArrow=classic;endFill=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="30" y="70" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="It8Cg-eU1C3MdVgNRAZY-12" connectable="0" parent="It8Cg-eU1C3MdVgNRAZY-8" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontColor=default;labelBackgroundColor=none;" value="UI updates" vertex="1">
+          <mxGeometry relative="1" x="-0.0618" y="-1" as="geometry">
+            <mxPoint x="-9" y="9" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="It8Cg-eU1C3MdVgNRAZY-15" edge="1" parent="1" source="It8Cg-eU1C3MdVgNRAZY-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" target="It8Cg-eU1C3MdVgNRAZY-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="It8Cg-eU1C3MdVgNRAZY-18" connectable="0" parent="It8Cg-eU1C3MdVgNRAZY-15" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];labelBackgroundColor=none;" value="Try unlock MK" vertex="1">
+          <mxGeometry relative="1" x="-0.184" as="geometry">
+            <mxPoint x="4" y="-9" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="It8Cg-eU1C3MdVgNRAZY-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1" value=":feature:auth" vertex="1">
+          <mxGeometry height="40" width="100" x="140" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="It8Cg-eU1C3MdVgNRAZY-5" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontStyle=1" value="User" vertex="1">
+          <mxGeometry height="60" width="30" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="It8Cg-eU1C3MdVgNRAZY-7" edge="1" parent="1" source="It8Cg-eU1C3MdVgNRAZY-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.3333333333333333;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=classic;startFill=1;endArrow=none;endFill=0;" target="It8Cg-eU1C3MdVgNRAZY-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="It8Cg-eU1C3MdVgNRAZY-11" connectable="0" parent="It8Cg-eU1C3MdVgNRAZY-7" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];labelBackgroundColor=none;" value="Enter credentials" vertex="1">
+          <mxGeometry relative="1" x="0.1345" y="-1" as="geometry">
+            <mxPoint y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="It8Cg-eU1C3MdVgNRAZY-16" edge="1" parent="1" source="It8Cg-eU1C3MdVgNRAZY-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" target="It8Cg-eU1C3MdVgNRAZY-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="It8Cg-eU1C3MdVgNRAZY-19" connectable="0" parent="It8Cg-eU1C3MdVgNRAZY-16" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];labelBackgroundColor=none;" value="Result" vertex="1">
+          <mxGeometry relative="1" y="1" as="geometry">
+            <mxPoint y="6" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="It8Cg-eU1C3MdVgNRAZY-14" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Business logic" vertex="1">
+          <mxGeometry height="40" width="100" x="340" y="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
