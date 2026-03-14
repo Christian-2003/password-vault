@@ -426,7 +426,7 @@ private fun TargetsListRowPackage(
             }
             else  {
                 Image(
-                    painter = rememberDrawablePainter(onQueryPackageIcon(target.name)),
+                    painter = rememberDrawablePainter(packageIcon),
                     contentDescription = "",
                     modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
                 )
