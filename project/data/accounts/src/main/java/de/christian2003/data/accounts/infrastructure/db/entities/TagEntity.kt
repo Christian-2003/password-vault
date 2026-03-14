@@ -14,7 +14,7 @@ import kotlin.uuid.Uuid
         Index(value = ["id"])
     ]
 )
-internal data class TagEntity(
+data class TagEntity(
 
     @PrimaryKey
     @ColumnInfo("id")

@@ -102,6 +102,7 @@ dependencies {
 
     implementation(project(":core:security"))
     implementation(project(":core:ui"))
+    implementation(project(":data:database"))
     implementation(project(":feature:auth"))
     implementation(project(":feature:accounts"))
     implementation(project(":feature:autofill"))

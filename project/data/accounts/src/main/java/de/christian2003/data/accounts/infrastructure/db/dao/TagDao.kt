@@ -11,7 +11,7 @@ import kotlin.uuid.Uuid
 
 
 @Dao
-internal interface TagDao {
+interface TagDao {
 
     @Query("SELECT * FROM tags")
     fun selectAll(): Flow<List<TagEntity>>

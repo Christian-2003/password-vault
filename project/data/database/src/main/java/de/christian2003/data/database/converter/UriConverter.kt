@@ -1,4 +1,4 @@
-package de.christian2003.data.accounts.infrastructure.db.converter
+package de.christian2003.data.database.converter
 
 import android.net.Uri
 import androidx.core.net.toUri

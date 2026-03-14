@@ -11,7 +11,7 @@ import kotlin.uuid.Uuid
  * @param detail    ID of the detail.
  * @param url       URL of the autofill target.
  */
-internal data class AccountDetailsDto(
+data class AccountDetailsDto(
     @ColumnInfo("accountId") val account: Uuid,
     @ColumnInfo("detailId") val detail: Uuid,
     @ColumnInfo("targetUrl") val url: String

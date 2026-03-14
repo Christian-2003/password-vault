@@ -23,7 +23,7 @@ import kotlin.uuid.Uuid
         )
     ]
 )
-internal data class TargetEntity(
+data class TargetEntity(
 
     @PrimaryKey
     @ColumnInfo("id")

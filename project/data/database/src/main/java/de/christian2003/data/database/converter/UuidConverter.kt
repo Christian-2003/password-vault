@@ -1,4 +1,4 @@
-package de.christian2003.data.accounts.infrastructure.db.converter
+package de.christian2003.data.database.converter
 
 import androidx.room.TypeConverter
 import kotlin.uuid.ExperimentalUuidApi

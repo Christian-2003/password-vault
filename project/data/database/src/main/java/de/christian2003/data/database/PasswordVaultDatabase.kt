@@ -1,13 +1,13 @@
-package de.christian2003.data.accounts.infrastructure.db
+package de.christian2003.data.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import de.christian2003.data.accounts.infrastructure.db.converter.LocalDateTimeConverter
-import de.christian2003.data.accounts.infrastructure.db.converter.UriConverter
-import de.christian2003.data.accounts.infrastructure.db.converter.UuidConverter
+import de.christian2003.data.database.converter.LocalDateTimeConverter
+import de.christian2003.data.database.converter.UriConverter
+import de.christian2003.data.database.converter.UuidConverter
 import de.christian2003.data.accounts.infrastructure.db.dao.AccountDao
 import de.christian2003.data.accounts.infrastructure.db.dao.DetailDao
 import de.christian2003.data.accounts.infrastructure.db.dao.TagDao
