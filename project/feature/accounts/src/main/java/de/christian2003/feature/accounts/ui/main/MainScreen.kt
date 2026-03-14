@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FloatingActionButton
@@ -70,6 +69,7 @@ import de.christian2003.feature.accounts.R
  * @param onCreateNewAccount    Callback invoked to create a new account.
  * @param onNavigateToSettings  Callback invoked to navigate to the settings.
  * @param onNavigateToSearch    Callback invoked to navigate to the search screen.
+ * @param onNavigateToFiles     Callback invoked to navigate to the files.
  */
 @Composable
 internal fun MainScreen(
@@ -77,7 +77,8 @@ internal fun MainScreen(
     onEditAccount: (Uuid) -> Unit,
     onCreateNewAccount: () -> Unit,
     onNavigateToSettings: () -> Unit,
-    onNavigateToSearch: () -> Unit
+    onNavigateToSearch: () -> Unit,
+    onNavigateToFiles: () -> Unit
 ) {
     val accountDescriptors: List<AccountDescriptor> by viewModel.accountDescriptors.collectAsState(emptyList())
     val appBarState: TopAppBarState = rememberTopAppBarState()
@@ -97,8 +98,16 @@ internal fun MainScreen(
                 },
                 scrollBehavior = scrollBehavior,
                 navigationIcon = {
+                    IconButton(
+                        onClick = onNavigateToFiles
+                    ) {
+                        Icon(
+                            painter = painterResource(de.christian2003.core.ui.R.drawable.ic_content),
+                            contentDescription = ""
+                        )
+                    }
                     //Placeholder so that the search bar is centered
-                    Box(modifier = Modifier.size(IconButtonDefaults.smallContainerSize()))
+                    /*Box(modifier = Modifier.size(IconButtonDefaults.smallContainerSize()))*/
                 },
                 actions = {
                     IconButton(

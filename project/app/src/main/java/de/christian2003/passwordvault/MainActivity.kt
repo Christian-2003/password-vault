@@ -50,6 +50,8 @@ import de.christian2003.feature.accounts.navigation.accountDestination
 import de.christian2003.feature.accounts.navigation.accountsDestination
 import de.christian2003.feature.autofill.navigation.AutofillSettingsFlow
 import de.christian2003.feature.autofill.navigation.autofillSettingsFlow
+import de.christian2003.feature.files.navigation.DirectoriesFlow
+import de.christian2003.feature.files.navigation.directoriesFlow
 import de.christian2003.feature.search.navigation.SearchDestination
 import de.christian2003.feature.search.navigation.searchDestination
 import javax.inject.Inject
@@ -206,6 +208,9 @@ fun PasswordVault(
                 },
                 onNavigateToSearch = {
                     navController.navigate(SearchDestination)
+                },
+                onNavigateToFiles = {
+                    navController.navigate(DirectoriesFlow)
                 }
             )
 
@@ -231,6 +236,10 @@ fun PasswordVault(
                 }
             )
 
+            //Flow for the files:
+            directoriesFlow(
+                navController = navController
+            )
 
 
             composable("settings") {

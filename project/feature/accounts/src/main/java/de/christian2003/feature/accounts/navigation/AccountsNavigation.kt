@@ -29,12 +29,14 @@ data class AccountDestination(
  * @param onCreateNewAccount    Callback invoked to create a new account.
  * @param onNavigateToSettings  Callback invoked to navigate to the settings.
  * @param onNavigateToSearch    Callback invoked to navigate to the search screen.
+ * @param onNavigateToFiles     Callback invoked to navigate to the files.
  */
 fun NavGraphBuilder.accountsDestination(
     onEditAccount: (Uuid) -> Unit,
     onCreateNewAccount: () -> Unit,
     onNavigateToSettings: () -> Unit,
-    onNavigateToSearch: () -> Unit
+    onNavigateToSearch: () -> Unit,
+    onNavigateToFiles: () -> Unit
 ) {
     composable<AccountsDestination> {
         val viewModel: MainViewModel = hiltViewModel()
@@ -44,7 +46,8 @@ fun NavGraphBuilder.accountsDestination(
             onEditAccount = onEditAccount,
             onCreateNewAccount = onCreateNewAccount,
             onNavigateToSettings =  onNavigateToSettings,
-            onNavigateToSearch = onNavigateToSearch
+            onNavigateToSearch = onNavigateToSearch,
+            onNavigateToFiles = onNavigateToFiles
         )
     }
 }

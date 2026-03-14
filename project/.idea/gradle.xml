@@ -18,10 +18,12 @@
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/data/accounts" />
             <option value="$PROJECT_DIR$/data/database" />
+            <option value="$PROJECT_DIR$/data/files" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/accounts" />
             <option value="$PROJECT_DIR$/feature/auth" />
             <option value="$PROJECT_DIR$/feature/autofill" />
+            <option value="$PROJECT_DIR$/feature/files" />
             <option value="$PROJECT_DIR$/feature/search" />
           </set>
         </option>
