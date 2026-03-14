@@ -18,7 +18,7 @@ data class InternalDirectory(
     val internalName: String
         get() {
             val separatorIndex: Int = internalPath.lastIndexOf('/')
-            return if (separatorIndex >= 0 && separatorIndex < internalPath.length - 2) {
+            return if (separatorIndex >= 0 && separatorIndex < internalPath.length - 1) {
                 internalPath.substring(separatorIndex + 1)
             }
             else {

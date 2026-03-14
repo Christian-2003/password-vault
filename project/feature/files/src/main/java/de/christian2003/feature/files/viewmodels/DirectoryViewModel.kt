@@ -26,7 +26,7 @@ internal class DirectoryViewModel @Inject constructor(
     private val deleteInternalDirectoryUseCase: DeleteInternalDirectoryUseCase
 ): AndroidViewModel(application) {
 
-    val directory: InternalDirectory = InternalDirectory("") //TODO
+    val directory: InternalDirectory = InternalDirectory(savedStateHandle["internalDirectoryPath"] ?: "") //TODO
 
     val subDirectories: Flow<List<InternalDirectory>> = getInternalSubDirectoriesUseCase.getSubDirectories(directory)
 

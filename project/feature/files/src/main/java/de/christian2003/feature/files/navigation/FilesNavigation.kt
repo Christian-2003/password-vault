@@ -59,7 +59,8 @@ private fun NavGraphBuilder.directoryDestination(
 
         DirectoryScreen(
             viewModel = viewModel,
-            onNavigateUp = onNavigateUp
+            onNavigateUp = onNavigateUp,
+            onNavigateToDirectory = onNavigateToDirectory
         )
     }
 }
