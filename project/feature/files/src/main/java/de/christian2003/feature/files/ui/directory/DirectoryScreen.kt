@@ -1,5 +1,8 @@
 package de.christian2003.feature.files.ui.directory
 
+import android.content.Intent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -54,13 +57,25 @@ internal fun DirectoryScreen(
     onNavigateToDirectory: (String) -> Unit
 ) {
     val subDirectories: List<InternalDirectory> by viewModel.subDirectories.collectAsState(emptyList())
+    val files: List<String> by viewModel.files.collectAsState(emptyList())
+
+    val importLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        viewModel.importFile(result)
+    }
 
     Scaffold(
         topBar = {
             TopBar(
+                directoryName = viewModel.directory.internalName,
                 onNavigateUp = onNavigateUp,
                 onCreateDirectory = {
-                    viewModel.dialog = DirectoryScreenDialog.CreateSubDirectory
+                    viewModel.createNewDirectory()
+                },
+                onImportFile = {
+                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                    intent.addCategory(Intent.CATEGORY_OPENABLE)
+                    intent.setType("*/*")
+                    importLauncher.launch(intent)
                 }
             )
         },
@@ -86,11 +101,18 @@ internal fun DirectoryScreen(
                             onNavigateToDirectory(directory.internalPath)
                         },
                         onRename = { directory ->
-
+                            viewModel.editDirectory(directory)
                         },
                         onDelete = { directory ->
                             viewModel.deleteDirectory(directory)
                         }
+                    )
+                }
+                itemsIndexed(files) { index, file ->
+                    FileListItem(
+                        fileName = file,
+                        isFirst = index == 0,
+                        isLast = index == files.size - 1
                     )
                 }
                 item {
@@ -103,19 +125,32 @@ internal fun DirectoryScreen(
     }
 
     when (viewModel.dialog) {
-        DirectoryScreenDialog.CreateSubDirectory -> {
+        DirectoryScreenDialog.CreateSubDirectory, DirectoryScreenDialog.EditSubDirectory -> {
+            val directoryToEdit: InternalDirectory? = viewModel.directoryToEdit
+            val errorBlankInput: String = stringResource(de.christian2003.core.ui.R.string.error_blankInput)
+            val errorIllegalChars: String = stringResource(de.christian2003.core.ui.R.string.error_illegalCharacters)
+
             EditValueDialog(
-                value = "",
-                onValidateValue = {
-                    null //TODO: Dir name validation
+                value = directoryToEdit?.internalName ?: "",
+                onValidateValue = { directoryName ->
+                    val isValid: Boolean = viewModel.isDirectoryNameValid(directoryName)
+                    when {
+                        !isValid && directoryName.isBlank() -> errorBlankInput
+                        !isValid -> errorIllegalChars
+                        else -> null
+                    }
                 },
-                label = "DIRECTORY NAME",
-                title = "CREATE DIRECTORY",
+                label = stringResource(R.string.directory_label_directoryName),
+                title = if (directoryToEdit == null) {
+                    stringResource(R.string.directory_createNewDirectory)
+                } else {
+                    stringResource(R.string.directory_rename)
+                },
                 onDismiss = {
-                    viewModel.dismissCreateDirectoryDialog()
+                    viewModel.dismissEditDirectoryDialog()
                 },
                 onSave = { directoryName ->
-                    viewModel.dismissCreateDirectoryDialog(directoryName)
+                    viewModel.dismissEditDirectoryDialog(directoryName)
                 }
             )
         }
@@ -232,13 +267,69 @@ private fun DirectoryListItem(
 
 
 @Composable
-private fun TopBar(
-    onNavigateUp: () -> Unit,
-    onCreateDirectory: () -> Unit
+private fun FileListItem(
+    fileName: String,
+    isFirst: Boolean,
+    isLast: Boolean
 ) {
+    ListItemContainer(
+        isFirst = isFirst,
+        isLast = isLast
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
+                    top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical),
+                    end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal) - 12.dp,
+                    bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
+                )
+        ) {
+            Shape(
+                shape = MaterialShapes.Cookie4Sided,
+                color = MaterialTheme.colorScheme.secondaryContainer,
+                modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_file_generic),
+                    contentDescription = "",
+                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xs))
+                )
+            }
+            Text(
+                text = fileName,
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(
+                        horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal)
+                    )
+            )
+
+            //Dropdown:
+            //TODO
+        }
+    }
+}
+
+
+@Composable
+private fun TopBar(
+    directoryName: String,
+    onNavigateUp: () -> Unit,
+    onCreateDirectory: () -> Unit,
+    onImportFile: () -> Unit
+) {
+    var isDropdownExpanded: Boolean by remember { mutableStateOf(false) }
     TopAppBar(
         title = {
-            Text("DIRECTORY")
+            Text(
+                text = directoryName.ifBlank { stringResource(R.string.directory_title) }
+            )
         },
         navigationIcon = {
             IconButton(
@@ -251,13 +342,54 @@ private fun TopBar(
             }
         },
         actions = {
-            IconButton(
-                onClick = onCreateDirectory
-            ) {
-                Icon(
-                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_add),
-                    contentDescription = ""
-                )
+            Box {
+                IconButton(
+                    onClick = {
+                        isDropdownExpanded = !isDropdownExpanded
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(de.christian2003.core.ui.R.drawable.ic_more),
+                        contentDescription = ""
+                    )
+                    DropdownMenu(
+                        expanded = isDropdownExpanded,
+                        onDismissRequest = {
+                            isDropdownExpanded = false
+                        }
+                    ) {
+                        DropdownMenuItem(
+                            text = {
+                                Text(stringResource(R.string.directory_createNewDirectory))
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_add_directory),
+                                    contentDescription = ""
+                                )
+                            },
+                            onClick = {
+                                onCreateDirectory()
+                                isDropdownExpanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = {
+                                Text(stringResource(R.string.directory_file_import))
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_add_file),
+                                    contentDescription = ""
+                                )
+                            },
+                            onClick = {
+                                onImportFile()
+                                isDropdownExpanded = false
+                            }
+                        )
+                    }
+                }
             }
         }
     )

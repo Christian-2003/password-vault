@@ -1,20 +1,24 @@
 package de.christian2003.data.files.infrastructure.repositories
 
 import android.content.Context
-import android.util.Log
+import android.net.Uri
 import dagger.hilt.android.qualifiers.ApplicationContext
 import de.christian2003.data.files.domain.entities.InternalDirectory
 import de.christian2003.data.files.domain.repositories.InternalFilesystemRepository
+import de.christian2003.data.files.domain.services.FileCopyService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.math.abs
+import kotlin.uuid.Uuid
 
 
 @Singleton
 internal class AppInternalFilesystemRepository @Inject constructor(
-    @ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context,
+    private val fileCopyService: FileCopyService
 ): InternalFilesystemRepository {
 
     /**
@@ -23,56 +27,109 @@ internal class AppInternalFilesystemRepository @Inject constructor(
      */
     private val absoluteInternalDirPath: File = File(context.filesDir, "userfiles")
 
-    private val directoryFlows: MutableMap<String, MutableStateFlow<List<InternalDirectory>>> = mutableMapOf()
+    /**
+     * Flows for subdirectories within a directory:
+     * key = internal directory path        value = all subdirectories
+     */
+    private val subDirectoriesFlows: MutableMap<String, MutableStateFlow<List<InternalDirectory>>> = mutableMapOf()
+
+    /**
+     * Flows for files within a directory:
+     * key = internal directory path        value = all files in internal directory
+     */
+    private val filesInDirectoriesFlows: MutableMap<String, MutableStateFlow<List<String>>> = mutableMapOf()
 
 
     override fun getAllSubdirectories(directory: InternalDirectory): Flow<List<InternalDirectory>> {
         val key = directory.internalPath
-        return directoryFlows.getOrPut(key) {
+        return subDirectoriesFlows.getOrPut(key) {
             MutableStateFlow(scanSubDirs(directory))
         }
     }
 
 
     override fun addDirectory(directory: InternalDirectory) {
-        Log.d("Files", "Repository start creation of '${directory.internalPath}'")
-        val absoluteDirPath: File = getAbsolutePathForDir(directory)
+        val absoluteDirPath: File = getAbsolutePathForDir(directory.internalPath)
 
         if (!absoluteDirPath.exists()) {
             absoluteDirPath.mkdirs()
-            emitDirParentUpdate(directory)
-            Log.d("Files", "Added directory '${directory.internalPath}'")
+            emitDirParentUpdate(directory.internalPath)
         }
-        else {
-            Log.d("Files", "'${absoluteDirPath.path}' is no directory or exists")
+    }
+
+
+    override fun updateDirectory(currentInternalPath: String, updatedDirectory: InternalDirectory) {
+        val currentAbsoluteDirPath: File = getAbsolutePathForDir(currentInternalPath)
+        val newAbsoluteDirPath: File = getAbsolutePathForDir(updatedDirectory.internalPath)
+
+        if (currentAbsoluteDirPath.exists()) {
+            currentAbsoluteDirPath.renameTo(newAbsoluteDirPath)
+
+            emitDirParentUpdate(currentInternalPath)
+            emitDirParentUpdate(updatedDirectory.internalPath)
+
+            //Move the flow for the updated directory:
+            subDirectoriesFlows[currentInternalPath]?.let { flow ->
+                subDirectoriesFlows.remove(currentInternalPath)
+                subDirectoriesFlows[updatedDirectory.internalPath] = flow
+            }
         }
-        Log.d("Files", "Repository finish creation of '${directory.internalPath}'")
     }
 
 
     override fun deleteDirectory(directory: InternalDirectory) {
-        val absoluteDirPath: File = getAbsolutePathForDir(directory)
+        val absoluteDirPath: File = getAbsolutePathForDir(directory.internalPath)
 
         if (absoluteDirPath.exists()) {
             absoluteDirPath.deleteRecursively()
-            emitDirParentUpdate(directory)
-            Log.d("Files", "Deleted directory '${directory.internalPath}'")
+            emitDirParentUpdate(directory.internalPath)
         }
     }
 
 
-    private fun getAbsolutePathForDir(directory: InternalDirectory): File {
-        val internalDirPath = directory.internalPath //directory.internalPath always begins with "/"
+    override fun getAllFileNamesInDirectory(directory: InternalDirectory): Flow<List<String>> {
+        val key = directory.internalPath
+        return filesInDirectoriesFlows.getOrPut(key) {
+            MutableStateFlow(scanDirForFiles(directory))
+        }
+    }
 
-        return File(absoluteInternalDirPath, internalDirPath)
+    override suspend fun copyFileToDirectory(sourceFileUri: Uri, destinationFileName: String, directory: InternalDirectory) {
+        val internalFilePath = directory.internalPath + "/" + destinationFileName
+
+        fileCopyService.copyExternalFileToInternal(sourceFileUri, internalFilePath)
+        emitDirFilesUpdate(directory)
+    }
+
+    override fun deleteFileFromDirectory(fileName: String, directory: InternalDirectory) {
+        val internalFilePath = directory.internalPath + "/" + fileName
+        val absoluteFilePath: File = getAbsolutePathForDir(internalFilePath)
+
+        if (absoluteFilePath.exists()) {
+            absoluteFilePath.delete()
+            emitDirFilesUpdate(directory)
+        }
     }
 
 
-    private fun emitDirParentUpdate(directory: InternalDirectory) {
-        val internalParentPath: String = File(directory.internalPath).parent?.trim('/') ?: ""
+
+    private fun getAbsolutePathForDir(internalPath: String): File {
+        return File(absoluteInternalDirPath, internalPath)
+    }
+
+
+    private fun emitDirFilesUpdate(directory: InternalDirectory) {
+        val flow: MutableStateFlow<List<String>>? = filesInDirectoriesFlows[directory.internalPath]
+        if (flow != null) {
+            flow.value = scanDirForFiles(directory)
+        }
+    }
+
+    private fun emitDirParentUpdate(internalPath: String) {
+        val internalParentPath: String = File(internalPath).parent?.trim('/') ?: ""
         val internalParentDir = InternalDirectory(internalParentPath)
 
-        val flow: MutableStateFlow<List<InternalDirectory>>? = directoryFlows[internalParentPath]
+        val flow: MutableStateFlow<List<InternalDirectory>>? = subDirectoriesFlows[internalParentPath]
         if (flow != null) {
             flow.value = scanSubDirs(internalParentDir)
         }
@@ -80,13 +137,24 @@ internal class AppInternalFilesystemRepository @Inject constructor(
 
 
     private fun scanSubDirs(directory: InternalDirectory): List<InternalDirectory> {
-        val absoluteDirPath: File = getAbsolutePathForDir(directory)
+        val absoluteDirPath: File = getAbsolutePathForDir(directory.internalPath)
         val absoluteSubDirs: List<File> = absoluteDirPath.listFiles()?.filter { it.isDirectory } ?: listOf()
 
         val internalSubDirs: List<InternalDirectory> = absoluteSubDirs.map { absoluteSubDir ->
             InternalDirectory(absoluteSubDir.relativeTo(absoluteInternalDirPath).path)
         }
         return internalSubDirs
+    }
+
+
+    private fun scanDirForFiles(directory: InternalDirectory): List<String> {
+        val absoluteDirPath: File = getAbsolutePathForDir(directory.internalPath)
+        val absoluteFiles: List<File> = absoluteDirPath.listFiles()?.filter { it.isFile } ?: listOf()
+
+        val fileNames: List<String> = absoluteFiles.map { absoluteFile ->
+            absoluteFile.name
+        }
+        return fileNames
     }
 
 }

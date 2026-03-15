@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
+    <string name="directory_title">Your files</string>
     <string name="directory_rename">Rename directory</string>
     <string name="directory_delete">Delete directory</string>
+    <string name="directory_createNewDirectory">Create new directory</string>
+    <string name="directory_label_directoryName">Directory name</string>
+    <string name="directory_file_import">Import file</string>
 </resources>

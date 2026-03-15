@@ -2,18 +2,16 @@ package de.christian2003.data.files.application.usecases
 
 import de.christian2003.data.files.domain.entities.InternalDirectory
 import de.christian2003.data.files.domain.repositories.InternalFilesystemRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 
-class CreateInternalDirectoryUseCase @Inject internal constructor(
+class GetInternalFilesInDirectoryUseCase @Inject internal constructor(
     private val repository: InternalFilesystemRepository
 ) {
 
-    fun create(name: String, parentDirectory: InternalDirectory) {
-        val directory = InternalDirectory(
-            internalPath = parentDirectory.internalPath + "/" + name
-        )
-        repository.addDirectory(directory)
+    fun getInternalFiles(directory: InternalDirectory): Flow<List<String>> {
+        return repository.getAllFileNamesInDirectory(directory)
     }
 
 }

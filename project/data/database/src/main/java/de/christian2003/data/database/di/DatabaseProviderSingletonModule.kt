@@ -11,6 +11,7 @@ import de.christian2003.data.accounts.infrastructure.db.dao.DetailDao
 import de.christian2003.data.accounts.infrastructure.db.dao.TagDao
 import de.christian2003.data.accounts.infrastructure.db.dao.TargetDao
 import de.christian2003.data.database.PasswordVaultDatabase
+import de.christian2003.data.files.infrastructure.db.dao.InternalFileDao
 import javax.inject.Singleton
 
 
@@ -46,6 +47,11 @@ internal class DatabaseProviderSingletonModule {
     @Provides
     fun provideTargetDao(db: PasswordVaultDatabase): TargetDao {
         return db.targetDao
+    }
+
+    @Provides
+    fun provideInternalFileDao(db: PasswordVaultDatabase): InternalFileDao {
+        return db.internalFileDao
     }
 
 }
