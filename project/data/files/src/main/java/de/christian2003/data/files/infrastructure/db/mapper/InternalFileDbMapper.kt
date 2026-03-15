@@ -22,7 +22,7 @@ internal class InternalFileDbMapper @Inject constructor(
                 createdAt = entity.createdAt,
                 editedAt = entity.editedAt,
                 accessedAt = entity.accessedAt,
-                sizeInKilobytes = entity.sizeInKilobytes
+                size = entity.size
             )
         )
     }
@@ -38,7 +38,7 @@ internal class InternalFileDbMapper @Inject constructor(
             createdAt = domain.metadata.createdAt,
             editedAt = domain.metadata.editedAt,
             accessedAt = domain.metadata.accessedAt,
-            sizeInKilobytes = domain.metadata.sizeInKilobytes
+            size = domain.metadata.size
         )
     }
 

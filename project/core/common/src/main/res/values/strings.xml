@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <!-- Units -->
+    <string name="unit_size_storage_b">%1$d B</string>
+    <string name="unit_size_storage_kb">%1$d kB</string> <!-- kB is the correct format according to SI (https://en.wikipedia.org/wiki/International_System_of_Units) -->
+    <string name="unit_size_storage_mb">%1$d MB</string>
+    <string name="unit_size_storage_gb">%1$d GB</string>
+
+</resources>

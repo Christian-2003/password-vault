@@ -3,15 +3,18 @@ package de.christian2003.data.files.application.usecases
 import android.net.Uri
 import de.christian2003.data.files.domain.entities.InternalDirectory
 import de.christian2003.data.files.domain.entities.InternalFile
+import de.christian2003.data.files.domain.entities.InternalFileMetadata
 import de.christian2003.data.files.domain.repositories.FileLookupRepository
 import de.christian2003.data.files.domain.repositories.InternalFilesystemRepository
+import de.christian2003.data.files.domain.services.InternalFileUtilsService
 import javax.inject.Inject
 import kotlin.uuid.Uuid
 
 
 class ImportExternalFileUseCase @Inject internal constructor(
     private val internalFilesystemRepository: InternalFilesystemRepository,
-    private val fileLookupRepository: FileLookupRepository
+    private val fileLookupRepository: FileLookupRepository,
+    private val fileUtilsService: InternalFileUtilsService
 ) {
 
     suspend fun importExternalFile(externalFileUri: Uri, internalDirectory: InternalDirectory) {
@@ -23,9 +26,15 @@ class ImportExternalFileUseCase @Inject internal constructor(
             directory = internalDirectory
         )
 
+        val internalFilePath = "${internalDirectory.internalPath}/$internalFileName"
+        val internalFileSize: Long = fileUtilsService.getSizeOfInternalFile(internalFilePath)
+
         val internalFile = InternalFile(
             internalName = internalFileName,
-            actualFileName = originalFileName
+            actualFileName = originalFileName,
+            metadata = InternalFileMetadata(
+                size = internalFileSize
+            )
         )
         fileLookupRepository.createFile(internalFile)
     }

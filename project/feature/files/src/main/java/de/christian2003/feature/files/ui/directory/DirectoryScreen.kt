@@ -49,6 +49,7 @@ import de.christian2003.data.files.domain.entities.InternalFile
 import de.christian2003.feature.files.viewmodels.DirectoryViewModel
 import de.christian2003.feature.files.R
 import de.christian2003.feature.files.models.dialog.DirectoryScreenDialog
+import java.time.LocalDateTime
 
 
 @Composable
@@ -113,7 +114,13 @@ internal fun DirectoryScreen(
                     FileListItem(
                         internalFile = file,
                         isFirst = index == 0,
-                        isLast = index == files.size - 1
+                        isLast = index == files.size - 1,
+                        onFormatStorageSize = {
+                            viewModel.formatBytes(it)
+                        },
+                        onFormatDateTime = {
+                            viewModel.formateDateTime(it)
+                        }
                     )
                 }
                 item {
@@ -271,7 +278,9 @@ private fun DirectoryListItem(
 private fun FileListItem(
     internalFile: InternalFile,
     isFirst: Boolean,
-    isLast: Boolean
+    isLast: Boolean,
+    onFormatStorageSize: (Long) -> String,
+    onFormatDateTime: (LocalDateTime) -> String
 ) {
     ListItemContainer(
         isFirst = isFirst,
@@ -310,13 +319,25 @@ private fun FileListItem(
                 Text(
                     text = internalFile.actualFileName,
                     color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.bodyLarge
                 )
-                Text(
-                    text = internalFile.internalName,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    style = MaterialTheme.typography.bodyMedium,
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = onFormatDateTime(internalFile.metadata.editedAt),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier
+                            .padding(end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
+                            .weight(1f)
+                    )
+                    Text(
+                        text = onFormatStorageSize(internalFile.metadata.size),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
             }
 
             //Dropdown:

@@ -11,6 +11,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import de.christian2003.core.common.application.services.DateTimeFormatterService
+import de.christian2003.core.common.application.services.StorageUnitFormatterService
 import de.christian2003.data.files.application.services.InternalDirectoryNameValidatorService
 import de.christian2003.data.files.application.usecases.CreateInternalDirectoryUseCase
 import de.christian2003.data.files.application.usecases.DeleteInternalDirectoryUseCase
@@ -24,6 +26,7 @@ import de.christian2003.feature.files.models.dialog.DirectoryScreenDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 
@@ -37,7 +40,9 @@ internal class DirectoryViewModel @Inject constructor(
     private val renameInternalDirectoryUseCase: RenameInternalDirectoryUseCase,
     private val deleteInternalDirectoryUseCase: DeleteInternalDirectoryUseCase,
     private val importExternalFileUseCase: ImportExternalFileUseCase,
-    private val directoryNameValidatorService: InternalDirectoryNameValidatorService
+    private val directoryNameValidatorService: InternalDirectoryNameValidatorService,
+    private val storageUnitFormatterService: StorageUnitFormatterService,
+    private val dateTimeFormatterService: DateTimeFormatterService
 ): AndroidViewModel(application) {
 
     val directory: InternalDirectory = InternalDirectory(savedStateHandle["internalDirectoryPath"] ?: "") //TODO
@@ -58,6 +63,15 @@ internal class DirectoryViewModel @Inject constructor(
             val externalFileUri: Uri = result.data!!.data!!
             importExternalFileUseCase.importExternalFile(externalFileUri, directory)
         }
+    }
+
+
+    fun formatBytes(bytes: Long): String {
+        return storageUnitFormatterService.formatSize(bytes)
+    }
+
+    fun formateDateTime(dateTime: LocalDateTime): String {
+        return dateTimeFormatterService.format(dateTime)
     }
 
 

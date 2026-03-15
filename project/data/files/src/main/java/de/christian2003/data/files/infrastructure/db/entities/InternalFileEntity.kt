@@ -15,7 +15,7 @@ import java.time.LocalDateTime
  * @param createdAt                 Timestamp at which the file was created.
  * @param editedAt                  Timestamp at which the file was last edited.
  * @param accessedAt                Timestamp at which the file was last accessed (e.g. viewed).
- * @param sizeInKilobytes           Size of the file in kilo bytes (kB).
+ * @param size                      Size of the file in bytes.
  */
 @Entity("files_lookup")
 data class InternalFileEntity(
@@ -37,7 +37,7 @@ data class InternalFileEntity(
     val accessedAt: LocalDateTime,
 
     @ColumnInfo(name = "size")
-    val sizeInKilobytes: Long
+    val size: Long
 
 ) {
 
@@ -48,7 +48,7 @@ data class InternalFileEntity(
 
         other as InternalFileEntity
 
-        if (sizeInKilobytes != other.sizeInKilobytes) return false
+        if (size != other.size) return false
         if (internalName != other.internalName) return false
         if (!encryptedActualFileName.contentEquals(other.encryptedActualFileName)) return false
         if (createdAt != other.createdAt) return false
@@ -61,7 +61,7 @@ data class InternalFileEntity(
 
     //Auto-generated
     override fun hashCode(): Int {
-        var result = sizeInKilobytes.hashCode()
+        var result = size.hashCode()
         result = 31 * result + internalName.hashCode()
         result = 31 * result + encryptedActualFileName.contentHashCode()
         result = 31 * result + createdAt.hashCode()
