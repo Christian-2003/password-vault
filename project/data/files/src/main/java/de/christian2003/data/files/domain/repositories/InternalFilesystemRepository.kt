@@ -22,7 +22,7 @@ internal interface InternalFilesystemRepository {
 
     fun getAllFileNamesInDirectory(directory: InternalDirectory): Flow<List<String>>
 
-    suspend fun copyFileToDirectory(sourceFileUri: Uri, destinationFileName: String, directory: InternalDirectory)
+    suspend fun copyFileToDirectory(sourceFileUri: Uri, destinationFileName: String, directory: InternalDirectory): String
 
     fun deleteFileFromDirectory(fileName: String, directory: InternalDirectory)
 

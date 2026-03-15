@@ -11,5 +11,5 @@ package de.christian2003.data.files.domain.entities
 data class InternalFile(
     val internalName: String,
     val actualFileName: String,
-    val metadata: InternalFileMetadata
+    val metadata: InternalFileMetadata = InternalFileMetadata()
 )

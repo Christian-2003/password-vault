@@ -19,6 +19,7 @@ import de.christian2003.data.files.application.usecases.GetInternalSubDirectorie
 import de.christian2003.data.files.application.usecases.ImportExternalFileUseCase
 import de.christian2003.data.files.application.usecases.RenameInternalDirectoryUseCase
 import de.christian2003.data.files.domain.entities.InternalDirectory
+import de.christian2003.data.files.domain.entities.InternalFile
 import de.christian2003.feature.files.models.dialog.DirectoryScreenDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -43,7 +44,7 @@ internal class DirectoryViewModel @Inject constructor(
 
     val subDirectories: Flow<List<InternalDirectory>> = getInternalSubDirectoriesUseCase.getSubDirectories(directory)
 
-    val files: Flow<List<String>> = getInternalFilesInDirectoryUseCase.getInternalFiles(directory)
+    val files: Flow<List<InternalFile>> = getInternalFilesInDirectoryUseCase.getInternalFiles(directory)
 
     var dialog: DirectoryScreenDialog by mutableStateOf(DirectoryScreenDialog.None)
         private set

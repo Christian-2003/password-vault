@@ -2,6 +2,7 @@ package de.christian2003.data.files.infrastructure.services
 
 import android.content.Context
 import android.net.Uri
+import android.provider.OpenableColumns
 import dagger.hilt.android.qualifiers.ApplicationContext
 import de.christian2003.core.security.domain.services.HmacCipherService
 import de.christian2003.data.files.domain.services.FileCopyService
@@ -24,7 +25,7 @@ internal class AndroidFileCopyService @Inject constructor(
     override suspend fun copyExternalFileToInternal(
         sourceUri: Uri,
         destinationInternalFilePath: String
-    ) {
+    ): String {
         val inputStream: InputStream? = context.contentResolver.openInputStream(sourceUri)
         if (inputStream == null) {
             throw IllegalArgumentException("Cannot open input stream")
@@ -37,6 +38,17 @@ internal class AndroidFileCopyService @Inject constructor(
                 input.copyTo(output)
             }
         }
+
+        //Get the original file name:
+        var originalFileName: String = ""
+        context.contentResolver.query(sourceUri, null, null, null, null)?.use { cursor ->
+            val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            if (nameIndex >= 0 && cursor.moveToFirst()) {
+                originalFileName = cursor.getString(nameIndex)
+            }
+        }
+
+        return originalFileName
     }
 
 

@@ -45,6 +45,7 @@ import de.christian2003.core.ui.composables.NavigationBarProtection
 import de.christian2003.core.ui.composables.Shape
 import de.christian2003.core.ui.composables.dialog.EditValueDialog
 import de.christian2003.data.files.domain.entities.InternalDirectory
+import de.christian2003.data.files.domain.entities.InternalFile
 import de.christian2003.feature.files.viewmodels.DirectoryViewModel
 import de.christian2003.feature.files.R
 import de.christian2003.feature.files.models.dialog.DirectoryScreenDialog
@@ -57,7 +58,7 @@ internal fun DirectoryScreen(
     onNavigateToDirectory: (String) -> Unit
 ) {
     val subDirectories: List<InternalDirectory> by viewModel.subDirectories.collectAsState(emptyList())
-    val files: List<String> by viewModel.files.collectAsState(emptyList())
+    val files: List<InternalFile> by viewModel.files.collectAsState(emptyList())
 
     val importLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         viewModel.importFile(result)
@@ -110,7 +111,7 @@ internal fun DirectoryScreen(
                 }
                 itemsIndexed(files) { index, file ->
                     FileListItem(
-                        fileName = file,
+                        internalFile = file,
                         isFirst = index == 0,
                         isLast = index == files.size - 1
                     )
@@ -268,7 +269,7 @@ private fun DirectoryListItem(
 
 @Composable
 private fun FileListItem(
-    fileName: String,
+    internalFile: InternalFile,
     isFirst: Boolean,
     isLast: Boolean
 ) {
@@ -299,16 +300,24 @@ private fun FileListItem(
                     modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xs))
                 )
             }
-            Text(
-                text = fileName,
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyLarge,
+            Column(
                 modifier = Modifier
                     .weight(1f)
                     .padding(
                         horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal)
                     )
-            )
+            ) {
+                Text(
+                    text = internalFile.actualFileName,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+                Text(
+                    text = internalFile.internalName,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+            }
 
             //Dropdown:
             //TODO

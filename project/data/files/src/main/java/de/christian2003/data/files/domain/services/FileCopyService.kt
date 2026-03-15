@@ -8,6 +8,6 @@ internal interface FileCopyService {
     suspend fun copyExternalFileToInternal(
         sourceUri: Uri,
         destinationInternalFilePath: String
-    )
+    ): String
 
 }

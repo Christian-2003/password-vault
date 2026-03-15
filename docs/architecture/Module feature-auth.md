@@ -100,7 +100,7 @@ The following constraints are established:
 <br/>
 
 ## 3 Context and Scope
-The following section describes the context and scope for the search feature.
+The following section describes the context and scope for the authentication feature.
 
 <br/>
 

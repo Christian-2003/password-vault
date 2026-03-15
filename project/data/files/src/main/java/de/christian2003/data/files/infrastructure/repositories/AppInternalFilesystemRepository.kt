@@ -94,11 +94,13 @@ internal class AppInternalFilesystemRepository @Inject constructor(
         }
     }
 
-    override suspend fun copyFileToDirectory(sourceFileUri: Uri, destinationFileName: String, directory: InternalDirectory) {
+    override suspend fun copyFileToDirectory(sourceFileUri: Uri, destinationFileName: String, directory: InternalDirectory): String {
         val internalFilePath = directory.internalPath + "/" + destinationFileName
 
-        fileCopyService.copyExternalFileToInternal(sourceFileUri, internalFilePath)
+        val originalFileName: String = fileCopyService.copyExternalFileToInternal(sourceFileUri, internalFilePath)
         emitDirFilesUpdate(directory)
+
+        return originalFileName
     }
 
     override fun deleteFileFromDirectory(fileName: String, directory: InternalDirectory) {
