@@ -12,4 +12,6 @@ internal interface FileLookupRepository {
 
     suspend fun deleteFile(internalFile: InternalFile)
 
+    suspend fun updateFile(internalFile: InternalFile)
+
 }

@@ -36,4 +36,10 @@ internal class RoomFileLookupRepository @Inject constructor(
         internalFileDao.delete(entity)
     }
 
+
+    override suspend fun updateFile(internalFile: InternalFile) {
+        val entity: InternalFileEntity = internalFileMapper.toEntity(internalFile)
+        internalFileDao.update(entity)
+    }
+
 }

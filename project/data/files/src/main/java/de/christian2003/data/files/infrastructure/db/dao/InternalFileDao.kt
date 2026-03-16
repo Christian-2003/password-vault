@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import de.christian2003.data.files.infrastructure.db.entities.InternalFileEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -22,5 +23,8 @@ interface InternalFileDao {
 
     @Delete
     suspend fun delete(internalFile: InternalFileEntity)
+
+    @Update
+    suspend fun update(internalFile: InternalFileEntity)
 
 }

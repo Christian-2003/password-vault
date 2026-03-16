@@ -16,10 +16,12 @@ import de.christian2003.core.common.application.services.StorageUnitFormatterSer
 import de.christian2003.data.files.application.services.InternalDirectoryNameValidatorService
 import de.christian2003.data.files.application.usecases.CreateInternalDirectoryUseCase
 import de.christian2003.data.files.application.usecases.DeleteInternalDirectoryUseCase
+import de.christian2003.data.files.application.usecases.DeleteInternalFileUseCase
 import de.christian2003.data.files.application.usecases.GetInternalFilesInDirectoryUseCase
 import de.christian2003.data.files.application.usecases.GetInternalSubDirectoriesUseCase
 import de.christian2003.data.files.application.usecases.ImportExternalFileUseCase
 import de.christian2003.data.files.application.usecases.RenameInternalDirectoryUseCase
+import de.christian2003.data.files.application.usecases.RenameInternalFileUseCase
 import de.christian2003.data.files.domain.entities.InternalDirectory
 import de.christian2003.data.files.domain.entities.InternalFile
 import de.christian2003.feature.files.models.dialog.DirectoryScreenDialog
@@ -40,6 +42,8 @@ internal class DirectoryViewModel @Inject constructor(
     private val renameInternalDirectoryUseCase: RenameInternalDirectoryUseCase,
     private val deleteInternalDirectoryUseCase: DeleteInternalDirectoryUseCase,
     private val importExternalFileUseCase: ImportExternalFileUseCase,
+    private val deleteInternalFileUseCase: DeleteInternalFileUseCase,
+    private val renameInternalFileUseCase: RenameInternalFileUseCase,
     private val directoryNameValidatorService: InternalDirectoryNameValidatorService,
     private val storageUnitFormatterService: StorageUnitFormatterService,
     private val dateTimeFormatterService: DateTimeFormatterService
@@ -55,6 +59,12 @@ internal class DirectoryViewModel @Inject constructor(
         private set
 
     var directoryToEdit: InternalDirectory? = null
+        private set
+
+    var fileToDelete: InternalFile? = null
+        private set
+
+    var fileToEdit: InternalFile? = null
         private set
 
 
@@ -84,6 +94,16 @@ internal class DirectoryViewModel @Inject constructor(
         dialog = DirectoryScreenDialog.EditSubDirectory
     }
 
+    fun deleteFile(file: InternalFile) {
+        fileToDelete = file
+        dialog = DirectoryScreenDialog.ConfirmDeleteFile
+    }
+
+    fun renameFile(file: InternalFile) {
+        fileToEdit = file
+        dialog = DirectoryScreenDialog.RenameFile
+    }
+
     fun dismissEditDirectoryDialog(directoryName: String? = null) {
         dialog = DirectoryScreenDialog.None
         val directoryToEdit: InternalDirectory? = this.directoryToEdit
@@ -96,6 +116,30 @@ internal class DirectoryViewModel @Inject constructor(
             }
         }
         this.directoryToEdit = null
+    }
+
+
+    fun dismissConfirmDeleteFileDialog(delete: Boolean = false) = viewModelScope.launch {
+        dialog = DirectoryScreenDialog.None
+
+        val fileToDelete: InternalFile? = this@DirectoryViewModel.fileToDelete
+        this@DirectoryViewModel.fileToDelete = null
+
+        if (delete && fileToDelete != null) {
+            deleteInternalFileUseCase.delete(fileToDelete, directory)
+        }
+    }
+
+
+    fun dismissRenameFileDialog(newFileName: String? = null) = viewModelScope.launch {
+        dialog = DirectoryScreenDialog.None
+
+        val fileToEdit: InternalFile? = this@DirectoryViewModel.fileToEdit
+        this@DirectoryViewModel.fileToEdit = null
+
+        if (fileToEdit != null && newFileName != null) {
+            renameInternalFileUseCase.renameFile(fileToEdit, newFileName)
+        }
     }
 
 

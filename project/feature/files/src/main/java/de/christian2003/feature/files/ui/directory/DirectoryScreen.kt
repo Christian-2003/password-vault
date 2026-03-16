@@ -38,11 +38,14 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.christian2003.core.ui.composables.ListItemContainer
 import de.christian2003.core.ui.composables.NavigationBarProtection
 import de.christian2003.core.ui.composables.Shape
+import de.christian2003.core.ui.composables.Tooltip
+import de.christian2003.core.ui.composables.dialog.ConfirmDeleteDialog
 import de.christian2003.core.ui.composables.dialog.EditValueDialog
 import de.christian2003.data.files.domain.entities.InternalDirectory
 import de.christian2003.data.files.domain.entities.InternalFile
@@ -120,6 +123,12 @@ internal fun DirectoryScreen(
                         },
                         onFormatDateTime = {
                             viewModel.formateDateTime(it)
+                        },
+                        onDelete = { file ->
+                            viewModel.deleteFile(file)
+                        },
+                        onRename = { file ->
+                            viewModel.renameFile(file)
                         }
                     )
                 }
@@ -161,6 +170,39 @@ internal fun DirectoryScreen(
                     viewModel.dismissEditDirectoryDialog(directoryName)
                 }
             )
+        }
+        DirectoryScreenDialog.ConfirmDeleteFile -> {
+            val fileToDelete: InternalFile? = viewModel.fileToDelete
+            if (fileToDelete != null) {
+                ConfirmDeleteDialog(
+                    text = stringResource(R.string.directory_file_confirmDelete, fileToDelete.actualFileName),
+                    onDismiss = {
+                        viewModel.dismissConfirmDeleteFileDialog(false)
+                    },
+                    onConfirm = {
+                        viewModel.dismissConfirmDeleteFileDialog(true)
+                    }
+                )
+            }
+        }
+        DirectoryScreenDialog.RenameFile -> {
+            val fileToEdit: InternalFile? = viewModel.fileToEdit
+            if (fileToEdit != null) {
+                EditValueDialog(
+                    value = fileToEdit.actualFileName,
+                    onValidateValue = { fileName ->
+                        null //TODO: Validate
+                    },
+                    label = stringResource(R.string.directory_label_fileName),
+                    title = stringResource(R.string.directory_file_rename),
+                    onDismiss = {
+                        viewModel.dismissRenameFileDialog(null)
+                    },
+                    onSave = { fileName ->
+                        viewModel.dismissRenameFileDialog(fileName)
+                    }
+                )
+            }
         }
         else -> { }
     }
@@ -280,8 +322,12 @@ private fun FileListItem(
     isFirst: Boolean,
     isLast: Boolean,
     onFormatStorageSize: (Long) -> String,
-    onFormatDateTime: (LocalDateTime) -> String
+    onFormatDateTime: (LocalDateTime) -> String,
+    onDelete: (InternalFile) -> Unit,
+    onRename: (InternalFile) -> Unit
 ) {
+    var isDropdownExpanded: Boolean by remember { mutableStateOf(false) }
+
     ListItemContainer(
         isFirst = isFirst,
         isLast = isLast
@@ -316,11 +362,17 @@ private fun FileListItem(
                         horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal)
                     )
             ) {
-                Text(
-                    text = internalFile.actualFileName,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.bodyLarge
-                )
+                Tooltip(
+                    tooltip = internalFile.actualFileName
+                ) {
+                    Text(
+                        text = internalFile.actualFileName,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.bodyLarge,
+                        maxLines = 1,
+                        overflow = TextOverflow.MiddleEllipsis
+                    )
+                }
                 Row(
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -341,7 +393,55 @@ private fun FileListItem(
             }
 
             //Dropdown:
-            //TODO
+            Box {
+                IconButton(
+                    onClick = {
+                        isDropdownExpanded = !isDropdownExpanded
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(de.christian2003.core.ui.R.drawable.ic_more),
+                        contentDescription = ""
+                    )
+                    DropdownMenu(
+                        expanded = isDropdownExpanded,
+                        onDismissRequest = {
+                            isDropdownExpanded = false
+                        }
+                    ) {
+                        DropdownMenuItem(
+                            text = {
+                                Text(stringResource(R.string.directory_file_rename))
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_edit),
+                                    contentDescription = ""
+                                )
+                            },
+                            onClick = {
+                                onRename(internalFile)
+                                isDropdownExpanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = {
+                                Text(stringResource(R.string.directory_file_delete))
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_delete),
+                                    contentDescription = ""
+                                )
+                            },
+                            onClick = {
+                                onDelete(internalFile)
+                                isDropdownExpanded = false
+                            }
+                        )
+                    }
+                }
+            }
         }
     }
 }
