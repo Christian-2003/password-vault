@@ -10,5 +10,6 @@
     <string name="directory_file_import">Import file</string>
     <string name="directory_file_rename">Rename file</string>
     <string name="directory_file_delete">Delete file</string>
+    <string name="directory_file_openWith">Open with</string>
     <string name="directory_file_confirmDelete">Are you sure you want to delete the file \"%1$s\"? This cannot be undone.</string>
 </resources>

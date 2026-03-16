@@ -20,10 +20,12 @@ import de.christian2003.data.files.application.usecases.DeleteInternalFileUseCas
 import de.christian2003.data.files.application.usecases.GetInternalFilesInDirectoryUseCase
 import de.christian2003.data.files.application.usecases.GetInternalSubDirectoriesUseCase
 import de.christian2003.data.files.application.usecases.ImportExternalFileUseCase
+import de.christian2003.data.files.application.usecases.PrepareFileForViewingUseCase
 import de.christian2003.data.files.application.usecases.RenameInternalDirectoryUseCase
 import de.christian2003.data.files.application.usecases.RenameInternalFileUseCase
 import de.christian2003.data.files.domain.entities.InternalDirectory
 import de.christian2003.data.files.domain.entities.InternalFile
+import de.christian2003.data.files.domain.entities.SharedFile
 import de.christian2003.feature.files.models.dialog.DirectoryScreenDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -44,6 +46,7 @@ internal class DirectoryViewModel @Inject constructor(
     private val importExternalFileUseCase: ImportExternalFileUseCase,
     private val deleteInternalFileUseCase: DeleteInternalFileUseCase,
     private val renameInternalFileUseCase: RenameInternalFileUseCase,
+    private val prepareFileForViewingUseCase: PrepareFileForViewingUseCase,
     private val directoryNameValidatorService: InternalDirectoryNameValidatorService,
     private val storageUnitFormatterService: StorageUnitFormatterService,
     private val dateTimeFormatterService: DateTimeFormatterService
@@ -82,6 +85,11 @@ internal class DirectoryViewModel @Inject constructor(
 
     fun formateDateTime(dateTime: LocalDateTime): String {
         return dateTimeFormatterService.format(dateTime)
+    }
+
+
+    suspend fun prepareFileForViewing(file: InternalFile): SharedFile? {
+        return prepareFileForViewingUseCase.prepare(file, directory)
     }
 
 

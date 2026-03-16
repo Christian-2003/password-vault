@@ -1,6 +1,8 @@
 package de.christian2003.feature.files.ui.directory
 
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -31,9 +33,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -49,9 +53,14 @@ import de.christian2003.core.ui.composables.dialog.ConfirmDeleteDialog
 import de.christian2003.core.ui.composables.dialog.EditValueDialog
 import de.christian2003.data.files.domain.entities.InternalDirectory
 import de.christian2003.data.files.domain.entities.InternalFile
+import de.christian2003.data.files.domain.entities.SharedFile
 import de.christian2003.feature.files.viewmodels.DirectoryViewModel
 import de.christian2003.feature.files.R
 import de.christian2003.feature.files.models.dialog.DirectoryScreenDialog
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 
 
@@ -64,6 +73,8 @@ internal fun DirectoryScreen(
     val subDirectories: List<InternalDirectory> by viewModel.subDirectories.collectAsState(emptyList())
     val files: List<InternalFile> by viewModel.files.collectAsState(emptyList())
 
+    val context: Context = LocalContext.current
+    val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val importLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         viewModel.importFile(result)
     }
@@ -129,6 +140,23 @@ internal fun DirectoryScreen(
                         },
                         onRename = { file ->
                             viewModel.renameFile(file)
+                        },
+                        onOpenWith = { file ->
+                            coroutineScope.launch(Dispatchers.IO) {
+                                val sharedFile: SharedFile? = viewModel.prepareFileForViewing(file)
+                                if (sharedFile != null) {
+                                    val intent = Intent(Intent.ACTION_VIEW).apply {
+                                        setDataAndType(sharedFile.contentUri, sharedFile.mimeType)
+                                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                    }
+                                    val chooser = Intent.createChooser(intent, context.getString(R.string.directory_file_openWith))
+                                    if (intent.resolveActivity(context.packageManager) != null) {
+                                        withContext(Dispatchers.Main) {
+                                            context.startActivity(chooser)
+                                        }
+                                    }
+                                }
+                            }
                         }
                     )
                 }
@@ -324,7 +352,8 @@ private fun FileListItem(
     onFormatStorageSize: (Long) -> String,
     onFormatDateTime: (LocalDateTime) -> String,
     onDelete: (InternalFile) -> Unit,
-    onRename: (InternalFile) -> Unit
+    onRename: (InternalFile) -> Unit,
+    onOpenWith: (InternalFile) -> Unit
 ) {
     var isDropdownExpanded: Boolean by remember { mutableStateOf(false) }
 
@@ -336,6 +365,9 @@ private fun FileListItem(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
+                .clickable {
+                    onOpenWith(internalFile)
+                }
                 .padding(
                     start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
                     top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical),
@@ -436,6 +468,21 @@ private fun FileListItem(
                             },
                             onClick = {
                                 onDelete(internalFile)
+                                isDropdownExpanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = {
+                                Text(stringResource(R.string.directory_file_openWith))
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_external),
+                                    contentDescription = ""
+                                )
+                            },
+                            onClick = {
+                                onOpenWith(internalFile)
                                 isDropdownExpanded = false
                             }
                         )
