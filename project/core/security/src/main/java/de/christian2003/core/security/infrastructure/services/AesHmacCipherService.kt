@@ -1,16 +1,16 @@
 package de.christian2003.core.security.infrastructure.services
 
-import android.security.keystore.KeyGenParameterSpec
-import android.security.keystore.KeyProperties
 import de.christian2003.core.security.domain.exceptions.CryptographicException
 import de.christian2003.core.security.domain.repositories.UnlockedMasterKeyRepository
 import de.christian2003.core.security.domain.services.HmacCipherService
-import java.security.KeyStore
+import java.io.EOFException
+import java.io.InputStream
+import java.io.OutputStream
 import java.security.SecureRandom
 import javax.crypto.Cipher
-import javax.crypto.KeyGenerator
+import javax.crypto.CipherInputStream
+import javax.crypto.CipherOutputStream
 import javax.crypto.Mac
-import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 import javax.crypto.spec.SecretKeySpec
 import javax.inject.Inject
@@ -24,12 +24,6 @@ import javax.inject.Inject
 internal class AesHmacCipherService @Inject constructor(
     private val unlockedMasterKeyRepository: UnlockedMasterKeyRepository
 ): HmacCipherService {
-
-    /**
-     * Alias with which to store the HMAC master key in the key store.
-     */
-    private val hmacKeyAlias = "HMACMasterKey"
-
 
     /**
      * Encrypts the content passed using the specified seed for an HMAC.
@@ -82,6 +76,54 @@ internal class AesHmacCipherService @Inject constructor(
 
 
     /**
+     * Encrypts the provided stream using the specified seed for an HMAC.
+     *
+     * @param output        Output stream to encrypt.
+     * @param hmacSeed      Seed for the HMAC to generate. The HMAC is used as key to encrypt the
+     *                      stream content.
+     * @return              Encrypted output stream.
+     * @throws Exception    Cannot encrypt the stream.
+     */
+    override fun encryptStream(output: OutputStream, hmacSeed: ByteArray): OutputStream {
+        val cipher: Cipher = Cipher.getInstance("AES/GCM/NoPadding")
+        val hmac: ByteArray = deriveHmac(hmacSeed)
+        val iv = ByteArray(12)
+        SecureRandom().nextBytes(iv)
+
+        val secretKeySpec = SecretKeySpec(hmac, "AES")
+        val gcmSpec = GCMParameterSpec(128, iv)
+
+        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, gcmSpec)
+        output.write(iv)
+
+        return CipherOutputStream(output, cipher)
+    }
+
+
+    /**
+     * Decrypts the provided stream using the specified seed for an HMAC.
+     *
+     * @param input         Input stream to decrypt.
+     * @param hmacSeed      Seed for the HMAC to generate. The HMAC is used as key to decrypt the
+     *                      stream content.
+     * @return              Decrypted input stream.
+     * @throws Exception    Cannot decrypt the stream.
+     */
+    override fun decryptStream(input: InputStream, hmacSeed: ByteArray): InputStream {
+        val cipher: Cipher = Cipher.getInstance("AES/GCM/NoPadding")
+        val hmac: ByteArray = deriveHmac(hmacSeed)
+        val iv = readFullIvFromStream(input)
+
+        val secretKeySpec = SecretKeySpec(hmac, "AES")
+        val gcmSpec = GCMParameterSpec(128, iv)
+
+        cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, gcmSpec)
+
+        return CipherInputStream(input, cipher)
+    }
+
+
+    /**
      * Method derives the HMAC from the specified bytes (seed).
      *
      * @param bytes         Seed used to generate HMAC.
@@ -105,30 +147,26 @@ internal class AesHmacCipherService @Inject constructor(
 
 
     /**
-     * Gets a secret key for HMAC operations. This is the master key used with all HMAC used.
+     * Reads the full IV from the provided input stream. If the input stream does not contain enough
+     * bytes, an EOF exception is thrown.
      *
-     * @return              Secret key to use with HMAC.
-     * @throws Exception    Cannot get or create secret key.
+     * @param input         Input stream from which to read the IV.
+     * @return              IV read from the input stream
+     * @throws EOFException The input stream does not contain enough bytes for the IV.
      */
-    private fun getOrCreateHmacKey(): SecretKey {
-        val keyStore: KeyStore = KeyStore.getInstance("AndroidKeyStore").apply {
-            load(null)
+    private fun readFullIvFromStream(input: InputStream): ByteArray {
+        val iv = ByteArray(12)
+        var offset = 0
+
+        while (offset < iv.size) {
+            val bytesRead: Int = input.read(iv, offset, iv.size - offset)
+            if (bytesRead == -1) {
+                throw EOFException("Unexpected end of stream")
+            }
+            offset += bytesRead
         }
-        if (keyStore.containsAlias(hmacKeyAlias)) {
-            //Get existing HMAC master key:
-            val entry: KeyStore.SecretKeyEntry = keyStore.getEntry(hmacKeyAlias, null) as KeyStore.SecretKeyEntry
-            return entry.secretKey
-        }
-        else {
-            //Create new HMAC master key:
-            val keyGenerator: KeyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_HMAC_SHA512, "AndroidKeyStore")
-            val keySpec: KeyGenParameterSpec = KeyGenParameterSpec.Builder(
-                hmacKeyAlias,
-                KeyProperties.PURPOSE_SIGN or KeyProperties.PURPOSE_VERIFY
-            ).build()
-            keyGenerator.init(keySpec)
-            return keyGenerator.generateKey()
-        }
+
+        return iv
     }
 
 }
