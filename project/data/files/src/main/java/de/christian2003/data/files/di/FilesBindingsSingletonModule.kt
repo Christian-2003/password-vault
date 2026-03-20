@@ -6,10 +6,12 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import de.christian2003.data.files.domain.repositories.FileLookupRepository
 import de.christian2003.data.files.domain.repositories.InternalFilesystemRepository
+import de.christian2003.data.files.domain.repositories.SharedFilesRepository
 import de.christian2003.data.files.domain.services.FileCopyService
 import de.christian2003.data.files.domain.services.InternalFileUtilsService
 import de.christian2003.data.files.infrastructure.db.RoomFileLookupRepository
 import de.christian2003.data.files.infrastructure.repositories.AppInternalFilesystemRepository
+import de.christian2003.data.files.infrastructure.repositories.SharedFilesRepositoryImpl
 import de.christian2003.data.files.infrastructure.services.AndroidFileCopyService
 import de.christian2003.data.files.infrastructure.services.AndroidFileUtilsService
 
@@ -29,6 +31,11 @@ internal abstract class FilesBindingsSingletonModule {
     abstract fun bindFileLookupRepository(
         impl: RoomFileLookupRepository
     ): FileLookupRepository
+
+    @Binds
+    abstract fun bindSharedFilesRepository(
+        impl: SharedFilesRepositoryImpl
+    ): SharedFilesRepository
 
 
 

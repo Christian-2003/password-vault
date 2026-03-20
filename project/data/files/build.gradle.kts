@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 
@@ -42,8 +43,11 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.room)
     implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.hilt.work)
     implementation(libs.material)
     implementation(libs.hilt.android)
+    implementation(libs.apache.commons.csv)
 
     implementation(project(":core:security"))
 

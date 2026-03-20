@@ -4,9 +4,11 @@ animationGraphics = "1.8.3"
 autofill = "1.3.0"
 agp = "8.6.1"                   #Newest version that supports Gradle version 8.7
 biometric = "1.4.0-alpha04"
+commonsCsv = "1.14.1"
 core = "1.5.0"
 hilt = "2.57.2"
 hiltCompose = "1.3.0"
+hiltWork = "1.3.0"
 kotlin = "2.2.20"
 coreKtx = "1.16.0"              #Newest version that supports API 35
 coilCompose = "2.7.0"
@@ -31,6 +33,7 @@ appcompat = "1.7.1"
 material = "1.13.0"
 mockito = "6.0.0"
 libphonenumber = "9.0.24"
+workRuntime = "2.11.1"
 
 
 [libraries]
@@ -55,6 +58,8 @@ androidx-room-runtime = { group = "androidx.room", name = "room-runtime", versio
 androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigation" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workRuntime" }
+androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltWork" }
 
 #Kotlin
 kotlinx-serialization-cbor = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-cbor", version.ref = "kotlinxSerializationCbor" }
@@ -69,6 +74,7 @@ googlecode-libphonenumber = { group= "com.googlecode.libphonenumber", name = "li
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+apache-commons-csv = { group = "org.apache.commons", name = "commons-csv", version.ref  = "commonsCsv" }
 
 #Test
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
