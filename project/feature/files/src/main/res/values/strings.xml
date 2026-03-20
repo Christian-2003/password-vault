@@ -12,7 +12,18 @@
     <string name="directory_file_rename">Rename file</string>
     <string name="directory_file_delete">Delete file</string>
     <string name="directory_file_openWith">Open with</string>
+    <string name="directory_file_moreInfo">More info</string>
     <string name="directory_file_confirmDelete">Are you sure you want to delete the file \"%1$s\"? This cannot be undone.</string>
     <string name="directory_emptyPlaceholder_title">No files</string>
     <string name="directory_emptyPlaceholder_subtitle">Import files and they show up here</string>
+
+    <string name="fileDetails_title">File details</string>
+    <string name="fileDetails_size">Size</string>
+    <string name="fileDetails_accessedAt">Last viewed</string>
+    <string name="fileDetails_editedAt">Last edited</string>
+    <string name="fileDetails_createdAt">Created</string>
+    <string name="fileDetails_path">Path</string>
+    <string name="fileDetails_isShared_title">Not encrypted</string>
+    <string name="fileDetails_isShared_text">Your file has been shared. After some time, your file gets encrypted again automatically</string>
+    <string name="fileDetails_isNotShared_title">Encrypted</string>
 </resources>

@@ -664,7 +664,7 @@ private fun ActiveIndicator(
         ) {
             Icon(
                 painter = when {
-                    isActive && isAvailable -> painterResource(R.drawable.ic_active)
+                    isActive && isAvailable -> painterResource(de.christian2003.core.ui.R.drawable.ic_check_filled)
                     else -> painterResource(R.drawable.ic_inactive)
                 },
                 contentDescription = "",

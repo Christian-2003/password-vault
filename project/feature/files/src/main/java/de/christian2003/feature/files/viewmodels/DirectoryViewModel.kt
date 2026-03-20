@@ -6,6 +6,7 @@ import androidx.activity.result.ActivityResult
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -13,6 +14,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.core.common.application.services.DateTimeFormatterService
 import de.christian2003.core.common.application.services.StorageUnitFormatterService
+import de.christian2003.core.ui.model.ColorGenerator
 import de.christian2003.data.files.application.services.InternalDirectoryNameValidatorService
 import de.christian2003.data.files.application.services.InternalFileNameValidatorService
 import de.christian2003.data.files.application.usecases.CreateInternalDirectoryUseCase
@@ -21,6 +23,7 @@ import de.christian2003.data.files.application.usecases.DeleteInternalFileUseCas
 import de.christian2003.data.files.application.usecases.GetInternalFilesInDirectoryUseCase
 import de.christian2003.data.files.application.usecases.GetInternalSubDirectoriesUseCase
 import de.christian2003.data.files.application.usecases.ImportExternalFileUseCase
+import de.christian2003.data.files.application.usecases.IsFileSharedUseCase
 import de.christian2003.data.files.application.usecases.PrepareFileForViewingUseCase
 import de.christian2003.data.files.application.usecases.RenameInternalDirectoryUseCase
 import de.christian2003.data.files.application.usecases.RenameInternalFileUseCase
@@ -50,11 +53,13 @@ internal class DirectoryViewModel @Inject constructor(
     private val deleteInternalFileUseCase: DeleteInternalFileUseCase,
     private val renameInternalFileUseCase: RenameInternalFileUseCase,
     private val prepareFileForViewingUseCase: PrepareFileForViewingUseCase,
+    private val isFileSharedUseCase: IsFileSharedUseCase,
     private val directoryNameValidatorService: InternalDirectoryNameValidatorService,
     private val fileNameValidatorService: InternalFileNameValidatorService,
     private val storageUnitFormatterService: StorageUnitFormatterService,
     private val dateTimeFormatterService: DateTimeFormatterService,
-    private val fileTypeMapper: FileTypeMapper
+    private val fileTypeMapper: FileTypeMapper,
+    private val colorGenerator: ColorGenerator
 ): AndroidViewModel(application) {
 
     val directory: InternalDirectory = InternalDirectory(savedStateHandle["internalDirectoryPath"] ?: "") //TODO
@@ -69,13 +74,16 @@ internal class DirectoryViewModel @Inject constructor(
     var directoryToEdit: InternalDirectory? = null
         private set
 
+    var directoryToDelete: InternalDirectory? = null
+        private set
+
     var fileToDelete: InternalFile? = null
         private set
 
     var fileToEdit: InternalFile? = null
         private set
 
-    var directoryToDelete: InternalDirectory? = null
+    var fileForDetails: InternalFile? = null
         private set
 
 
@@ -98,6 +106,10 @@ internal class DirectoryViewModel @Inject constructor(
 
     fun queryFileType(mimeType: String): FileType {
         return fileTypeMapper.mapMimeTypeToFileType(mimeType)
+    }
+
+    fun generatePositiveColor(negativeColor: Color, darkTheme: Boolean): Color {
+        return colorGenerator.generatePositiveColorFromNegativeColor(negativeColor, darkTheme)
     }
 
 
@@ -128,6 +140,11 @@ internal class DirectoryViewModel @Inject constructor(
     fun renameFile(file: InternalFile) {
         fileToEdit = file
         dialog = DirectoryScreenDialog.RenameFile
+    }
+
+    fun moreInfoForFile(file: InternalFile) {
+        fileForDetails = file
+        dialog = DirectoryScreenDialog.FileDetails
     }
 
     fun dismissEditDirectoryDialog(directoryName: String? = null) {
@@ -179,6 +196,11 @@ internal class DirectoryViewModel @Inject constructor(
         }
     }
 
+    fun dismissFileDetailsDialog() {
+        dialog = DirectoryScreenDialog.None
+        fileForDetails = null
+    }
+
 
     fun isDirectoryNameValid(directoryName: String): Boolean {
         return directoryNameValidatorService.isValid(directoryName)
@@ -186,6 +208,10 @@ internal class DirectoryViewModel @Inject constructor(
 
     fun isFileNameValid(fileName: String): Boolean {
         return fileNameValidatorService.isValid(fileName)
+    }
+
+    fun isFileShared(file: InternalFile): Boolean {
+        return isFileSharedUseCase.isShared(file)
     }
 
 }

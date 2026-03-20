@@ -12,5 +12,6 @@ internal enum class DirectoryScreenDialog {
     ConfirmDeleteDirectory,
     ConfirmDeleteFile,
     RenameFile,
+    FileDetails
 
 }

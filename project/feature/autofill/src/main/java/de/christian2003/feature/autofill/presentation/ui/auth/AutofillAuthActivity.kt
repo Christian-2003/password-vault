@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import dagger.hilt.android.AndroidEntryPoint
 import de.christian2003.core.security.application.usecases.UnlockWithBiometricsUseCase
+import de.christian2003.core.ui.composables.DragHandle
 import de.christian2003.core.ui.composables.LoadingIndicatorButton
 import de.christian2003.core.ui.composables.TextInput
 import de.christian2003.core.ui.theme.PasswordVaultTheme
@@ -302,29 +303,4 @@ private fun AutofillActivityContent(
             }
         }
     }
-}
-
-
-/**
- * Custom drag handle for the bottom sheet. We use this custom drag handle, because I do not like
- * the visual appearance of the default drag handle.
- *
- * @param modifier  Modifier.
- */
-@Composable
-private fun DragHandle(
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .padding(8.dp)
-            .size(
-                width = 48.dp,
-                height = 4.dp
-            )
-            .clip(
-                RoundedCornerShape(2.dp)
-            )
-            .background(MaterialTheme.colorScheme.surfaceContainerHighest)
-    )
 }

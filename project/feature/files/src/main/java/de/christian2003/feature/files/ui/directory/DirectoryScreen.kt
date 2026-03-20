@@ -175,6 +175,9 @@ internal fun DirectoryScreen(
                                         }
                                     }
                                 }
+                            },
+                            onMoreInfo = { file ->
+                                viewModel.moreInfoForFile(file)
                             }
                         )
                     }
@@ -269,6 +272,33 @@ internal fun DirectoryScreen(
                     },
                     onSave = { fileName ->
                         viewModel.dismissRenameFileDialog(fileName)
+                    }
+                )
+            }
+        }
+        DirectoryScreenDialog.FileDetails -> {
+            val fileForDetails: InternalFile? = viewModel.fileForDetails
+            if (fileForDetails != null) {
+                val isShared: Boolean = remember(fileForDetails) { viewModel.isFileShared(fileForDetails) }
+                FileDetailSheet(
+                    file = fileForDetails,
+                    directory = viewModel.directory,
+                    isShared = isShared,
+                    bottomPadding = 0.dp,
+                    onQueryFileType = { mimeType ->
+                        viewModel.queryFileType(mimeType)
+                    },
+                    onFormatStorageUnit = { bytes ->
+                        viewModel.formatBytes(bytes)
+                    },
+                    onFormatTime = { time ->
+                        viewModel.formateDateTime(time)
+                    },
+                    onGeneratePositiveColor = { negativeColor, darkTheme ->
+                        viewModel.generatePositiveColor(negativeColor, darkTheme)
+                    },
+                    onDismiss = {
+                        viewModel.dismissFileDetailsDialog()
                     }
                 )
             }
@@ -395,7 +425,8 @@ private fun FileListItem(
     onQueryFileType: (String) -> FileType,
     onDelete: (InternalFile) -> Unit,
     onRename: (InternalFile) -> Unit,
-    onOpenWith: (InternalFile) -> Unit
+    onOpenWith: (InternalFile) -> Unit,
+    onMoreInfo: (InternalFile) -> Unit
 ) {
     var isDropdownExpanded: Boolean by remember { mutableStateOf(false) }
     val fileType: FileType = onQueryFileType(internalFile.metadata.mimeType)
@@ -526,6 +557,21 @@ private fun FileListItem(
                             },
                             onClick = {
                                 onOpenWith(internalFile)
+                                isDropdownExpanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = {
+                                Text(stringResource(R.string.directory_file_moreInfo))
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_info_outlined),
+                                    contentDescription = ""
+                                )
+                            },
+                            onClick = {
+                                onMoreInfo(internalFile)
                                 isDropdownExpanded = false
                             }
                         )
