@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.core.common.application.services.DateTimeFormatterService
 import de.christian2003.core.common.application.services.StorageUnitFormatterService
 import de.christian2003.data.files.application.services.InternalDirectoryNameValidatorService
+import de.christian2003.data.files.application.services.InternalFileNameValidatorService
 import de.christian2003.data.files.application.usecases.CreateInternalDirectoryUseCase
 import de.christian2003.data.files.application.usecases.DeleteInternalDirectoryUseCase
 import de.christian2003.data.files.application.usecases.DeleteInternalFileUseCase
@@ -48,6 +49,7 @@ internal class DirectoryViewModel @Inject constructor(
     private val renameInternalFileUseCase: RenameInternalFileUseCase,
     private val prepareFileForViewingUseCase: PrepareFileForViewingUseCase,
     private val directoryNameValidatorService: InternalDirectoryNameValidatorService,
+    private val fileNameValidatorService: InternalFileNameValidatorService,
     private val storageUnitFormatterService: StorageUnitFormatterService,
     private val dateTimeFormatterService: DateTimeFormatterService
 ): AndroidViewModel(application) {
@@ -68,6 +70,9 @@ internal class DirectoryViewModel @Inject constructor(
         private set
 
     var fileToEdit: InternalFile? = null
+        private set
+
+    var directoryToDelete: InternalDirectory? = null
         private set
 
 
@@ -95,6 +100,11 @@ internal class DirectoryViewModel @Inject constructor(
 
     fun createNewDirectory() {
         dialog = DirectoryScreenDialog.CreateSubDirectory
+    }
+
+    fun deleteDirectory(internalDirectory: InternalDirectory) {
+        directoryToDelete = internalDirectory
+        dialog = DirectoryScreenDialog.ConfirmDeleteDirectory
     }
 
     fun editDirectory(internalDirectory: InternalDirectory) {
@@ -127,6 +137,17 @@ internal class DirectoryViewModel @Inject constructor(
     }
 
 
+    fun dismissDeleteDirectoryDialog(delete: Boolean = false) {
+        dialog = DirectoryScreenDialog.None
+
+        val directoryToDelete: InternalDirectory? = this.directoryToDelete
+        this.directoryToDelete = null
+        if (delete && directoryToDelete != null) {
+            deleteInternalDirectoryUseCase.delete(directoryToDelete)
+        }
+    }
+
+
     fun dismissConfirmDeleteFileDialog(delete: Boolean = false) = viewModelScope.launch {
         dialog = DirectoryScreenDialog.None
 
@@ -155,9 +176,8 @@ internal class DirectoryViewModel @Inject constructor(
         return directoryNameValidatorService.isValid(directoryName)
     }
 
-
-    fun deleteDirectory(directory: InternalDirectory) {
-        deleteInternalDirectoryUseCase.delete(directory)
+    fun isFileNameValid(fileName: String): Boolean {
+        return fileNameValidatorService.isValid(fileName)
     }
 
 }

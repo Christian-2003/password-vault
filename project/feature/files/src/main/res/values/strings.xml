@@ -4,6 +4,7 @@
     <string name="directory_title">Your files</string>
     <string name="directory_rename">Rename directory</string>
     <string name="directory_delete">Delete directory</string>
+    <string name="directory_confirmDelete">Are you sure you want to delete the directory \"%1$s\" and all it\'s children? This cannot be undone.</string>
     <string name="directory_createNewDirectory">Create new directory</string>
     <string name="directory_label_directoryName">Directory name</string>
     <string name="directory_label_fileName">File name</string>
@@ -12,4 +13,6 @@
     <string name="directory_file_delete">Delete file</string>
     <string name="directory_file_openWith">Open with</string>
     <string name="directory_file_confirmDelete">Are you sure you want to delete the file \"%1$s\"? This cannot be undone.</string>
+    <string name="directory_emptyPlaceholder_title">No files</string>
+    <string name="directory_emptyPlaceholder_subtitle">Import files and they show up here</string>
 </resources>

@@ -2,7 +2,6 @@ package de.christian2003.feature.files.ui.directory
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -45,6 +44,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import de.christian2003.core.ui.composables.EmptyPlaceholder
 import de.christian2003.core.ui.composables.ListItemContainer
 import de.christian2003.core.ui.composables.NavigationBarProtection
 import de.christian2003.core.ui.composables.Shape
@@ -79,6 +79,13 @@ internal fun DirectoryScreen(
         viewModel.importFile(result)
     }
 
+    val onImportFile: () -> Unit = {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.setType("*/*")
+        importLauncher.launch(intent)
+    }
+
     Scaffold(
         topBar = {
             TopBar(
@@ -87,12 +94,7 @@ internal fun DirectoryScreen(
                 onCreateDirectory = {
                     viewModel.createNewDirectory()
                 },
-                onImportFile = {
-                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-                    intent.addCategory(Intent.CATEGORY_OPENABLE)
-                    intent.setType("*/*")
-                    importLauncher.launch(intent)
-                }
+                onImportFile = onImportFile
             )
         },
         modifier = Modifier.imePadding()
@@ -107,61 +109,74 @@ internal fun DirectoryScreen(
                     end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
                 )
         ) {
-            LazyColumn {
-                itemsIndexed(subDirectories) { index, internalDirectory ->
-                    DirectoryListItem(
-                        internalDirectory = internalDirectory,
-                        isFirst = index == 0,
-                        isLast = index == subDirectories.size - 1,
-                        onClick = { directory ->
-                            onNavigateToDirectory(directory.internalPath)
-                        },
-                        onRename = { directory ->
-                            viewModel.editDirectory(directory)
-                        },
-                        onDelete = { directory ->
-                            viewModel.deleteDirectory(directory)
-                        }
-                    )
+            if (subDirectories.isEmpty() && files.isEmpty()) {
+                EmptyPlaceholder(
+                    title = stringResource(R.string.directory_emptyPlaceholder_title),
+                    subtitle = stringResource(R.string.directory_emptyPlaceholder_subtitle),
+                    painter = painterResource(R.drawable.el_directory),
+                    onButtonClick = onImportFile,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Text(stringResource(R.string.directory_file_import))
                 }
-                itemsIndexed(files) { index, file ->
-                    FileListItem(
-                        internalFile = file,
-                        isFirst = index == 0,
-                        isLast = index == files.size - 1,
-                        onFormatStorageSize = {
-                            viewModel.formatBytes(it)
-                        },
-                        onFormatDateTime = {
-                            viewModel.formateDateTime(it)
-                        },
-                        onDelete = { file ->
-                            viewModel.deleteFile(file)
-                        },
-                        onRename = { file ->
-                            viewModel.renameFile(file)
-                        },
-                        onOpenWith = { file ->
-                            coroutineScope.launch(Dispatchers.IO) {
-                                val sharedFile: SharedFile? = viewModel.prepareFileForViewing(file)
-                                if (sharedFile != null) {
-                                    val intent = Intent(Intent.ACTION_VIEW).apply {
-                                        setDataAndType(sharedFile.contentUri, sharedFile.mimeType)
-                                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                                    }
-                                    val chooser = Intent.createChooser(intent, context.getString(R.string.directory_file_openWith))
-                                    if (intent.resolveActivity(context.packageManager) != null) {
-                                        withContext(Dispatchers.Main) {
-                                            context.startActivity(chooser)
+            }
+            else {
+                LazyColumn {
+                    itemsIndexed(subDirectories) { index, internalDirectory ->
+                        DirectoryListItem(
+                            internalDirectory = internalDirectory,
+                            isFirst = index == 0,
+                            isLast = index == subDirectories.size - 1,
+                            onClick = { directory ->
+                                onNavigateToDirectory(directory.internalPath)
+                            },
+                            onRename = { directory ->
+                                viewModel.editDirectory(directory)
+                            },
+                            onDelete = { directory ->
+                                viewModel.deleteDirectory(directory)
+                            }
+                        )
+                    }
+                    itemsIndexed(files) { index, file ->
+                        FileListItem(
+                            internalFile = file,
+                            isFirst = index == 0,
+                            isLast = index == files.size - 1,
+                            onFormatStorageSize = {
+                                viewModel.formatBytes(it)
+                            },
+                            onFormatDateTime = {
+                                viewModel.formateDateTime(it)
+                            },
+                            onDelete = { file ->
+                                viewModel.deleteFile(file)
+                            },
+                            onRename = { file ->
+                                viewModel.renameFile(file)
+                            },
+                            onOpenWith = { file ->
+                                coroutineScope.launch(Dispatchers.IO) {
+                                    val sharedFile: SharedFile? = viewModel.prepareFileForViewing(file)
+                                    if (sharedFile != null) {
+                                        val intent = Intent(Intent.ACTION_VIEW).apply {
+                                            setDataAndType(sharedFile.contentUri, sharedFile.mimeType)
+                                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                        }
+                                        val chooser = Intent.createChooser(intent, context.getString(R.string.directory_file_openWith))
+                                        if (intent.resolveActivity(context.packageManager) != null) {
+                                            withContext(Dispatchers.Main) {
+                                                context.startActivity(chooser)
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
-                    )
-                }
-                item {
-                    Box(modifier = Modifier.height(bottomPadding))
+                        )
+                    }
+                    item {
+                        Box(modifier = Modifier.height(bottomPadding))
+                    }
                 }
             }
         }
@@ -199,6 +214,20 @@ internal fun DirectoryScreen(
                 }
             )
         }
+        DirectoryScreenDialog.ConfirmDeleteDirectory -> {
+            val directoryToDelete: InternalDirectory? = viewModel.directoryToDelete
+            if (directoryToDelete != null) {
+                ConfirmDeleteDialog(
+                    text = stringResource(R.string.directory_confirmDelete, directoryToDelete.internalName),
+                    onDismiss = {
+                        viewModel.dismissDeleteDirectoryDialog(false)
+                    },
+                    onConfirm = {
+                        viewModel.dismissDeleteDirectoryDialog(true)
+                    }
+                )
+            }
+        }
         DirectoryScreenDialog.ConfirmDeleteFile -> {
             val fileToDelete: InternalFile? = viewModel.fileToDelete
             if (fileToDelete != null) {
@@ -215,11 +244,19 @@ internal fun DirectoryScreen(
         }
         DirectoryScreenDialog.RenameFile -> {
             val fileToEdit: InternalFile? = viewModel.fileToEdit
+            val errorBlankInput: String = stringResource(de.christian2003.core.ui.R.string.error_blankInput)
+            val errorIllegalChars: String = stringResource(de.christian2003.core.ui.R.string.error_illegalCharacters)
+
             if (fileToEdit != null) {
                 EditValueDialog(
                     value = fileToEdit.actualFileName,
                     onValidateValue = { fileName ->
-                        null //TODO: Validate
+                        val isValid: Boolean = viewModel.isFileNameValid(fileName)
+                        when {
+                            !isValid && fileName.isBlank() -> errorBlankInput
+                            !isValid -> errorIllegalChars
+                            else -> null
+                        }
                     },
                     label = stringResource(R.string.directory_label_fileName),
                     title = stringResource(R.string.directory_file_rename),

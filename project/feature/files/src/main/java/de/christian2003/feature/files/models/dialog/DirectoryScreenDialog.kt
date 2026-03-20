@@ -9,6 +9,7 @@ internal enum class DirectoryScreenDialog {
     None,
     CreateSubDirectory,
     EditSubDirectory,
+    ConfirmDeleteDirectory,
     ConfirmDeleteFile,
     RenameFile,
 
