@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <!-- Derived from mime types -->
+    <color name="file_image_surface">#2A1F33</color>
+    <color name="file_image_onSurface">#D0A6FF</color>
+    <color name="file_audio_surface">#3A2F1B</color>
+    <color name="file_audio_onSurface">#FFD54F</color>
+    <color name="file_video_surface">#3A1F1A</color>
+    <color name="file_video_onSurface">#FF8A80</color>
+    <color name="file_text_surface">#2A2A2A</color>
+    <color name="file_text_onSurface">#E0E0E0</color>
+    <color name="file_font_surface">#2A2230</color>
+    <color name="file_font_onSurface">#CE93D8</color>
+    <color name="file_message_surface">#1E2A33</color>
+    <color name="file_message_onSurface">#81D4FA</color>
+    <color name="file_model_surface">#1E3A38</color>
+    <color name="file_model_onSurface">#64FFDA</color>
+
+
+    <!-- Office -->
+    <color name="file_word_surface">#1B2A44</color>
+    <color name="file_word_onSurface">#A8C7FF</color>
+    <color name="file_excel_surface">#1E3A2F</color>
+    <color name="file_excel_onSurface">#6FE3B4</color>
+    <color name="file_powerpoint_surface">#3A1F1A</color>
+    <color name="file_powerpoint_onSurface">#FF9B85</color>
+
+
+    <!-- Specialized types -->
+    <color name="file_archive_surface">#2F2623</color>
+    <color name="file_archive_onSurface">#D7CCC8</color>
+    <color name="file_code_surface">#1E2545</color>
+    <color name="file_code_onSurface">#9FA8FF</color>
+    <color name="file_markdown_surface">#1E1E1E</color>
+    <color name="file_markdown_onSurface">#B0BEC5</color>
+    <color name="file_apk_surface">#1E3A2F</color>
+    <color name="file_apk_onSurface">#69F0AE</color>
+    <color name="file_pdf_surface">#3A1D1D</color>
+    <color name="file_pdf_onSurface">#FF8A80</color>
+
+
+    <!-- Other -->
+    <color name="file_generic_surface">#263238</color>
+    <color name="file_generic_onSurface">#B0BEC5</color>
+
+</resources>

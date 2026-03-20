@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Derived from mime types -->
+    <color name="file_image_surface">#F0E1FF</color>
+    <color name="file_image_onSurface">#8E44AD</color>
+    <color name="file_audio_surface">#FFF3CD</color>
+    <color name="file_audio_onSurface">#F39C12</color>
+    <color name="file_video_surface">#FFDAD4</color>
+    <color name="file_video_onSurface">#C0392B</color>
+    <color name="file_text_surface">#F5F5F5</color>
+    <color name="file_text_onSurface">#616161</color>
+    <color name="file_font_surface">#F3E5F5</color>
+    <color name="file_font_onSurface">#9B59B6</color>
+    <color name="file_message_surface">#E3F2FD</color>
+    <color name="file_message_onSurface">#3498DB</color>
+    <color name="file_model_surface">#DFF5F2</color>
+    <color name="file_model_onSurface">#16A085</color>
+
+
+    <!-- Office -->
+    <color name="file_word_surface">#D6E4FF</color>
+    <color name="file_word_onSurface">#2B579A</color>
+    <color name="file_excel_surface">#D7F5E8</color>
+    <color name="file_excel_onSurface">#217346</color>
+    <color name="file_powerpoint_surface">#FFE0D6</color>
+    <color name="file_powerpoint_onSurface">#D24726</color>
+
+
+    <!-- Specialized types -->
+    <color name="file_archive_surface">#EDE0DC</color>
+    <color name="file_archive_onSurface">#8D6E63</color>
+    <color name="file_code_surface">#E3E8FF</color>
+    <color name="file_code_onSurface">#3F51B5</color>
+    <color name="file_markdown_surface">#EAEAEA</color>
+    <color name="file_markdown_onSurface">#2D3436</color>
+    <color name="file_apk_surface">#DFF7E5</color>
+    <color name="file_apk_onSurface">#3DDC84</color>
+    <color name="file_pdf_surface">#FFE1E1</color>
+    <color name="file_pdf_onSurface">#E53935</color>
+
+
+    <!-- Other -->
+    <color name="file_generic_surface">#ECEFF1</color>
+    <color name="file_generic_onSurface">#607D8B</color>
+
+</resources>

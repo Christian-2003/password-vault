@@ -57,6 +57,7 @@ import de.christian2003.data.files.domain.entities.SharedFile
 import de.christian2003.feature.files.viewmodels.DirectoryViewModel
 import de.christian2003.feature.files.R
 import de.christian2003.feature.files.models.dialog.DirectoryScreenDialog
+import de.christian2003.feature.files.models.other.FileType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -148,6 +149,9 @@ internal fun DirectoryScreen(
                             },
                             onFormatDateTime = {
                                 viewModel.formateDateTime(it)
+                            },
+                            onQueryFileType = { mimeType ->
+                                viewModel.queryFileType(mimeType)
                             },
                             onDelete = { file ->
                                 viewModel.deleteFile(file)
@@ -388,11 +392,13 @@ private fun FileListItem(
     isLast: Boolean,
     onFormatStorageSize: (Long) -> String,
     onFormatDateTime: (LocalDateTime) -> String,
+    onQueryFileType: (String) -> FileType,
     onDelete: (InternalFile) -> Unit,
     onRename: (InternalFile) -> Unit,
     onOpenWith: (InternalFile) -> Unit
 ) {
     var isDropdownExpanded: Boolean by remember { mutableStateOf(false) }
+    val fileType: FileType = onQueryFileType(internalFile.metadata.mimeType)
 
     ListItemContainer(
         isFirst = isFirst,
@@ -414,13 +420,13 @@ private fun FileListItem(
         ) {
             Shape(
                 shape = MaterialShapes.Cookie4Sided,
-                color = MaterialTheme.colorScheme.secondaryContainer,
+                color = fileType.getSurfaceColor(),
                 modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_file_generic),
+                    painter = painterResource(fileType.drawableRes),
                     contentDescription = "",
-                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                    tint = fileType.getOnSurfaceColor(),
                     modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xs))
                 )
             }

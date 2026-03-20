@@ -1,6 +1,7 @@
 package de.christian2003.data.files.infrastructure.db.mapper
 
 import de.christian2003.core.security.domain.services.HmacCipherService
+import de.christian2003.data.files.application.services.MimeTypeMapperService
 import de.christian2003.data.files.domain.entities.InternalFile
 import de.christian2003.data.files.domain.entities.InternalFileMetadata
 import de.christian2003.data.files.infrastructure.db.entities.InternalFileEntity
@@ -8,7 +9,8 @@ import javax.inject.Inject
 
 
 internal class InternalFileDbMapper @Inject constructor(
-    private val cipherService: HmacCipherService
+    private val cipherService: HmacCipherService,
+    private val mimeTypeMapperService: MimeTypeMapperService
 ) {
 
     suspend fun toDomain(entity: InternalFileEntity): InternalFile {
@@ -19,6 +21,7 @@ internal class InternalFileDbMapper @Inject constructor(
             internalName = entity.internalName,
             actualFileName = nameAsString,
             metadata = InternalFileMetadata(
+                mimeType = mimeTypeMapperService.mapFilenameToMimeType(nameAsString),
                 createdAt = entity.createdAt,
                 editedAt = entity.editedAt,
                 accessedAt = entity.accessedAt,

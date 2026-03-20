@@ -79,7 +79,7 @@ fun DevSettingsScreen(
                 SettingsItemSwitch(
                     title = stringResource(R.string.settings_dev_enableScreenshotsTitle),
                     info = stringResource(R.string.settings_dev_enableScreenshotsInfo),
-                    prefixIcon = painterResource(R.drawable.ic_dev),
+                    prefixIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_dev),
                     checked = viewModel.isEnableScreenshots,
                     isLast = true,
                     onCheckedChange = {

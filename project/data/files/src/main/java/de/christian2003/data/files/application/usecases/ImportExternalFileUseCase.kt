@@ -1,6 +1,7 @@
 package de.christian2003.data.files.application.usecases
 
 import android.net.Uri
+import de.christian2003.data.files.application.services.MimeTypeMapperService
 import de.christian2003.data.files.domain.entities.InternalDirectory
 import de.christian2003.data.files.domain.entities.InternalFile
 import de.christian2003.data.files.domain.entities.InternalFileMetadata
@@ -14,7 +15,8 @@ import kotlin.uuid.Uuid
 class ImportExternalFileUseCase @Inject internal constructor(
     private val internalFilesystemRepository: InternalFilesystemRepository,
     private val fileLookupRepository: FileLookupRepository,
-    private val fileUtilsService: InternalFileUtilsService
+    private val fileUtilsService: InternalFileUtilsService,
+    private val mimeTypeMapperService: MimeTypeMapperService
 ) {
 
     suspend fun importExternalFile(externalFileUri: Uri, internalDirectory: InternalDirectory) {
@@ -33,6 +35,7 @@ class ImportExternalFileUseCase @Inject internal constructor(
             internalName = internalFileName,
             actualFileName = originalFileName,
             metadata = InternalFileMetadata(
+                mimeType = mimeTypeMapperService.mapFilenameToMimeType(originalFileName),
                 size = internalFileSize
             )
         )

@@ -28,6 +28,8 @@ import de.christian2003.data.files.domain.entities.InternalDirectory
 import de.christian2003.data.files.domain.entities.InternalFile
 import de.christian2003.data.files.domain.entities.SharedFile
 import de.christian2003.feature.files.models.dialog.DirectoryScreenDialog
+import de.christian2003.feature.files.models.other.FileType
+import de.christian2003.feature.files.models.other.FileTypeMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -51,7 +53,8 @@ internal class DirectoryViewModel @Inject constructor(
     private val directoryNameValidatorService: InternalDirectoryNameValidatorService,
     private val fileNameValidatorService: InternalFileNameValidatorService,
     private val storageUnitFormatterService: StorageUnitFormatterService,
-    private val dateTimeFormatterService: DateTimeFormatterService
+    private val dateTimeFormatterService: DateTimeFormatterService,
+    private val fileTypeMapper: FileTypeMapper
 ): AndroidViewModel(application) {
 
     val directory: InternalDirectory = InternalDirectory(savedStateHandle["internalDirectoryPath"] ?: "") //TODO
@@ -90,6 +93,11 @@ internal class DirectoryViewModel @Inject constructor(
 
     fun formateDateTime(dateTime: LocalDateTime): String {
         return dateTimeFormatterService.format(dateTime)
+    }
+
+
+    fun queryFileType(mimeType: String): FileType {
+        return fileTypeMapper.mapMimeTypeToFileType(mimeType)
     }
 
 

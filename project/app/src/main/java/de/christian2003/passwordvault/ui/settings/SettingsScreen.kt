@@ -152,7 +152,7 @@ fun SettingsScreen(
                 SettingsItemButton(
                     title = stringResource(R.string.settings_developmentTitle),
                     info = stringResource(R.string.settings_developmentInfo),
-                    prefixIcon = painterResource(R.drawable.ic_dev),
+                    prefixIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_dev),
                     endIcon = painterResource(R.drawable.ic_next),
                     isFirst = true,
                     isLast = true,
