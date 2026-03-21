@@ -24,4 +24,26 @@ class InternalFileNameValidatorService @Inject constructor() {
         return fileName.isNotBlank() && !fileName.matches(invalidCharacters)
     }
 
+
+    /**
+     * Replaces all illegal characters in the provided file name with '_'.
+     *
+     * @param fileName  File name in which to replace illegal characters.
+     * @return          File name containing only legal characters.
+     */
+    fun replaceIllegalChars(fileName: String): String {
+        var validated: String = fileName
+
+        val illegalCharacters: List<Char> = listOf('\\', '/', ':', '*', '?', '"', '<', '>', '|')
+        illegalCharacters.forEach { illegalChar ->
+            validated = validated.replace(illegalChar, '_')
+        }
+
+        if (validated.startsWith('.')) {
+            validated = validated.replaceRange(0, 1, "_")
+        }
+
+        return validated
+    }
+
 }

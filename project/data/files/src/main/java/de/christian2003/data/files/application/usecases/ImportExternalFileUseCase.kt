@@ -1,6 +1,7 @@
 package de.christian2003.data.files.application.usecases
 
 import android.net.Uri
+import de.christian2003.data.files.application.services.InternalFileNameValidatorService
 import de.christian2003.data.files.application.services.MimeTypeMapperService
 import de.christian2003.data.files.domain.entities.InternalDirectory
 import de.christian2003.data.files.domain.entities.InternalFile
@@ -16,7 +17,8 @@ class ImportExternalFileUseCase @Inject internal constructor(
     private val internalFilesystemRepository: InternalFilesystemRepository,
     private val fileLookupRepository: FileLookupRepository,
     private val fileUtilsService: InternalFileUtilsService,
-    private val mimeTypeMapperService: MimeTypeMapperService
+    private val mimeTypeMapperService: MimeTypeMapperService,
+    private val fileNameValidatorService: InternalFileNameValidatorService
 ) {
 
     suspend fun importExternalFile(externalFileUri: Uri, internalDirectory: InternalDirectory) {
@@ -28,14 +30,20 @@ class ImportExternalFileUseCase @Inject internal constructor(
             directory = internalDirectory
         )
 
+        val validatedFileName: String = if (!fileNameValidatorService.isValid(originalFileName)) {
+            fileNameValidatorService.replaceIllegalChars(originalFileName)
+        } else {
+            originalFileName
+        }
+
         val internalFilePath = "${internalDirectory.internalPath}/$internalFileName"
         val internalFileSize: Long = fileUtilsService.getSizeOfInternalFile(internalFilePath)
 
         val internalFile = InternalFile(
             internalName = internalFileName,
-            actualFileName = originalFileName,
+            actualFileName = validatedFileName,
             metadata = InternalFileMetadata(
-                mimeType = mimeTypeMapperService.mapFilenameToMimeType(originalFileName),
+                mimeType = mimeTypeMapperService.mapFilenameToMimeType(validatedFileName),
                 size = internalFileSize
             )
         )
