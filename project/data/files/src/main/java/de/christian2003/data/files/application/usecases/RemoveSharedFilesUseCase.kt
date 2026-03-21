@@ -3,6 +3,7 @@ package de.christian2003.data.files.application.usecases
 import android.content.Context
 import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
+import de.christian2003.data.files.domain.entities.SharedFileMetadata
 import de.christian2003.data.files.domain.repositories.SharedFilesRepository
 import java.io.File
 import java.time.Duration
@@ -16,17 +17,17 @@ class RemoveSharedFilesUseCase @Inject internal constructor(
 ) {
 
     fun removeSharedFiles() {
-        val filesToDelete: List<String> = getAllFilesToDelete()
+        val filesToDelete: List<SharedFileMetadata> = getAllFilesToDelete()
         val deletedFiles: MutableList<String> = mutableListOf()
 
         val sharedDir = File(context.cacheDir, "shared")
 
-        filesToDelete.forEach { fileName ->
-            val fileToDelete = File(sharedDir, fileName)
+        filesToDelete.forEach { file ->
+            val fileToDelete = File(sharedDir, file.actualFileName)
             try {
                 val result: Boolean = fileToDelete.delete()
                 if (result) {
-                    deletedFiles.add(fileName)
+                    deletedFiles.add(file.actualFileName)
                 }
             }
             catch (_: Exception) { }
@@ -42,19 +43,19 @@ class RemoveSharedFilesUseCase @Inject internal constructor(
      *
      * @return  List of files to delete.
      */
-    private fun getAllFilesToDelete(): List<String> {
-        val sharedFiles: Map<String, LocalDateTime> = sharedFilesRepository.getSharedFiles()
-        val filesToDelete: MutableList<String> = mutableListOf()
+    private fun getAllFilesToDelete(): List<SharedFileMetadata> {
+        val sharedFiles: List<SharedFileMetadata> = sharedFilesRepository.getSharedFiles()
+        val filesToDelete: MutableList<SharedFileMetadata> = mutableListOf()
         val now: LocalDateTime = LocalDateTime.now()
 
-        sharedFiles.forEach { fileName, timestamp ->
-            val minutesBetween: Long = Duration.between(timestamp, now).abs().toMinutes()
+        sharedFiles.forEach { sharedFile ->
+            val minutesBetween: Long = Duration.between(sharedFile.timestamp, now).abs().toMinutes()
             if (minutesBetween > 30) {
-                filesToDelete.add(fileName)
-                Log.d("Filesystem", "Add file '$fileName' for deletion")
+                filesToDelete.add(sharedFile)
+                Log.d("Filesystem", "Add file '${sharedFile.actualFileName}' for deletion")
             }
             else {
-                Log.d("Filesystem", "Do not add file '$fileName' for deletion")
+                Log.d("Filesystem", "Do not add file '${sharedFile.actualFileName}' for deletion")
             }
         }
 

@@ -72,11 +72,16 @@ internal class AndroidFileCopyService @Inject constructor(
      * Copies the specified internal file from the specified directory to the shared files, where it
      * can be opened by other apps. The content URI for the shared file is returned afterwards.
      *
-     * @param internalFile  File to copy to shared.
-     * @param directory     Directory in which the internal file is located.
-     * @return              Data of the shared file or null it the file cannot be shared.
+     * @param internalFile      File to copy to shared.
+     * @param directory         Directory in which the internal file is located.
+     * @param sharedFileName    Name of the shared file.
+     * @return                  Data of the shared file or null it the file cannot be shared.
      */
-    override suspend fun copyInternalFileToShared(internalFile: InternalFile, directory: InternalDirectory): SharedFile? {
+    override suspend fun copyInternalFileToShared(
+        internalFile: InternalFile,
+        directory: InternalDirectory,
+        sharedFileName: String
+    ): SharedFile? {
         try {
             val internalSourcePath = "${directory.internalPath}/${internalFile.internalName}"
             val absoluteSourcePath: File = getAbsolutePathForDir(internalSourcePath)
@@ -84,23 +89,30 @@ internal class AndroidFileCopyService @Inject constructor(
                 return null
             }
 
-            val destinationFileName = internalFile.actualFileName
-            val absoluteDestPath: File = getAbsolutePathForShared(destinationFileName)
+            val absoluteDestPath: File = getAbsolutePathForShared(sharedFileName)
 
             //Prepare shared:
             if (!absoluteSharedDirPath.exists()) {
                 absoluteSharedDirPath.mkdirs()
             }
+
+            var isDestAvailable = true
             if (absoluteDestPath.exists()) {
-                absoluteDestPath.delete()
+                isDestAvailable = try {
+                    absoluteDestPath.delete()
+                } catch (_: Exception) {
+                    false
+                }
             }
 
             //Copy to shared cache:
-            absoluteSourcePath.inputStream().use { input ->
-                absoluteDestPath.outputStream().use { output ->
-                    val internalFileName: String = getInternalFilenameFromInternalPath(internalFile.internalName)
-                    hmacCipherService.decryptStream(input, internalFileName.toByteArray()).use { encryptedInput ->
-                        encryptedInput.copyTo(output)
+            if (isDestAvailable) {
+                absoluteSourcePath.inputStream().use { input ->
+                    absoluteDestPath.outputStream().use { output ->
+                        val internalFileName: String = getInternalFilenameFromInternalPath(internalFile.internalName)
+                        hmacCipherService.decryptStream(input, internalFileName.toByteArray()).use { encryptedInput ->
+                            encryptedInput.copyTo(output)
+                        }
                     }
                 }
             }
@@ -109,7 +121,7 @@ internal class AndroidFileCopyService @Inject constructor(
             val contentUri: Uri = FileProvider.getUriForFile(context, "de.christian2003.fileprovider", absoluteDestPath)
             return SharedFile(
                 contentUri = contentUri,
-                mimeType = mimeTypeMapperService.mapFilenameToMimeType(destinationFileName)
+                mimeType = mimeTypeMapperService.mapFilenameToMimeType(sharedFileName)
             )
         }
         catch (_: Exception) {

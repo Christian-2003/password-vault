@@ -14,13 +14,14 @@ class PrepareFileForViewingUseCase @Inject internal constructor(
 ) {
 
     suspend fun prepare(file: InternalFile, directory: InternalDirectory): SharedFile? {
-        val sharedFile: SharedFile? = fileCopyService.copyInternalFileToShared(file, directory)
-        if (sharedFile != null) {
-            val fileName: String? = sharedFile.contentUri.lastPathSegment
-            if (fileName != null) {
-                sharedFilesRepository.addSharedFile(fileName)
-            }
+        val sharedFileName: String = sharedFilesRepository.addSharedFile(file)
+        val sharedFile: SharedFile? = fileCopyService.copyInternalFileToShared(file, directory, sharedFileName)
+
+        if (sharedFile == null) {
+            //Cannot be shared:
+            sharedFilesRepository.removeSharedFiles(listOf(file.internalName))
         }
+
         return sharedFile
     }
 
