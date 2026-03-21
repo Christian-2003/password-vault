@@ -1,6 +1,8 @@
 package de.christian2003.passwordvault
 
 import android.app.Application
+import android.os.Handler
+import android.os.Looper
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import androidx.work.WorkManager
@@ -27,9 +29,7 @@ class PasswordVaultApplication(): Application(), Configuration.Provider {
     override fun onCreate() {
         super.onCreate()
 
-        //Registers the worker that clears shared files:
-        val workManager: WorkManager = WorkManager.getInstance(this)
-        workManager.registerSharedFilesClearingWorker()
+        WorkManager.initialize(this, workManagerConfiguration)
     }
 
 
