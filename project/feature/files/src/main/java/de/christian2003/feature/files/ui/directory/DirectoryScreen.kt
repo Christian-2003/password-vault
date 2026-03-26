@@ -79,7 +79,12 @@ internal fun DirectoryScreen(
 
     val invokeOnNavigateUp: () -> Unit = {
         when (viewModel.state) {
-            DirectoryScreenState.Default -> onNavigateUp()
+            DirectoryScreenState.Default -> {
+                if (!viewModel.navigateUp()) {
+                    //Top directory reached:
+                    onNavigateUp()
+                }
+            }
             DirectoryScreenState.Multiselect -> viewModel.dismissMultiselect()
         }
     }
@@ -149,7 +154,7 @@ internal fun DirectoryScreen(
                             isLast = index == subDirectories.size - 1,
                             isSelected = viewModel.selectedSubdirectories.contains(internalDirectory.internalName),
                             onClick = { directory ->
-                                onNavigateToDirectory(directory.internalPath)
+                                viewModel.navigateToDirectory(directory)
                             },
                             onRename = { directory ->
                                 viewModel.editDirectory(directory)

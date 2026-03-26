@@ -4,6 +4,8 @@ import android.app.Application
 import android.net.Uri
 import androidx.activity.result.ActivityResult
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.mutableStateSetOf
@@ -36,10 +38,14 @@ import de.christian2003.feature.files.models.dialog.DirectoryScreenDialog
 import de.christian2003.feature.files.models.other.FileType
 import de.christian2003.feature.files.models.other.FileTypeMapper
 import de.christian2003.feature.files.models.states.DirectoryScreenState
+import de.christian2003.feature.files.ui.directory.DirectoryScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import java.util.Stack
 import javax.inject.Inject
 
 
@@ -47,8 +53,8 @@ import javax.inject.Inject
 internal class DirectoryViewModel @Inject constructor(
     application: Application,
     savedStateHandle: SavedStateHandle,
-    getInternalSubDirectoriesUseCase: GetInternalSubDirectoriesUseCase,
-    getInternalFilesInDirectoryUseCase: GetInternalFilesInDirectoryUseCase,
+    private val getInternalSubDirectoriesUseCase: GetInternalSubDirectoriesUseCase,
+    private val getInternalFilesInDirectoryUseCase: GetInternalFilesInDirectoryUseCase,
     private val createInternalDirectoryUseCase: CreateInternalDirectoryUseCase,
     private val renameInternalDirectoryUseCase: RenameInternalDirectoryUseCase,
     private val deleteInternalDirectoryUseCase: DeleteInternalDirectoryUseCase,
@@ -65,11 +71,15 @@ internal class DirectoryViewModel @Inject constructor(
     private val colorGenerator: ColorGenerator
 ): AndroidViewModel(application) {
 
-    val directory: InternalDirectory = InternalDirectory(savedStateHandle["internalDirectoryPath"] ?: "") //TODO
+    private val navigationStack: Stack<InternalDirectory> = Stack()
 
-    val subDirectories: Flow<List<InternalDirectory>> = getInternalSubDirectoriesUseCase.getSubDirectories(directory)
+    var directory: InternalDirectory by mutableStateOf(InternalDirectory(""))
+        private set
 
-    val files: Flow<List<InternalFile>> = getInternalFilesInDirectoryUseCase.getInternalFiles(directory)
+
+    val subDirectories: MutableStateFlow<List<InternalDirectory>> = MutableStateFlow(emptyList())
+
+    val files: MutableStateFlow<List<InternalFile>> = MutableStateFlow(emptyList())
 
     var dialog: DirectoryScreenDialog by mutableStateOf(DirectoryScreenDialog.None)
         private set
@@ -95,6 +105,45 @@ internal class DirectoryViewModel @Inject constructor(
 
     var fileForDetails: InternalFile? = null
         private set
+
+
+    init {
+        val path: String = savedStateHandle["internalDirectoryPath"] ?: ""
+        val directory = InternalDirectory(path)
+        navigateToDirectory(directory)
+    }
+
+
+    fun navigateToDirectory(directory: InternalDirectory) {
+        navigationStack.push(directory)
+        this.directory = directory
+
+        //The use cases need to be called in two separate coroutines. Otherwise, the second flow
+        //will not be collected!
+
+        viewModelScope.launch(Dispatchers.IO) {
+            getInternalSubDirectoriesUseCase.getSubDirectories(directory).collect {
+                subDirectories.value = it
+            }
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            getInternalFilesInDirectoryUseCase.getInternalFiles(directory).collect {
+                files.value = it
+            }
+        }
+    }
+
+
+    fun navigateUp(): Boolean {
+        if (navigationStack.size < 2) {
+            return false //Top page reached
+        }
+        navigationStack.pop()
+        val directory: InternalDirectory = navigationStack.pop() //Pop the page here, because it is pushed in navigateToDirectory()
+        navigateToDirectory(directory)
+        return true
+    }
 
 
     fun importFile(result: ActivityResult) = viewModelScope.launch(Dispatchers.IO) {
