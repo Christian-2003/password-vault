@@ -3,8 +3,10 @@ package de.christian2003.feature.files.viewmodels
 import android.app.Application
 import android.net.Uri
 import androidx.activity.result.ActivityResult
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.AndroidViewModel
@@ -33,6 +35,7 @@ import de.christian2003.data.files.domain.entities.SharedFile
 import de.christian2003.feature.files.models.dialog.DirectoryScreenDialog
 import de.christian2003.feature.files.models.other.FileType
 import de.christian2003.feature.files.models.other.FileTypeMapper
+import de.christian2003.feature.files.models.states.DirectoryScreenState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -70,6 +73,13 @@ internal class DirectoryViewModel @Inject constructor(
 
     var dialog: DirectoryScreenDialog by mutableStateOf(DirectoryScreenDialog.None)
         private set
+
+    var state: DirectoryScreenState by mutableStateOf(DirectoryScreenState.Default)
+        private set
+
+    val selectedFiles: MutableSet<String> = mutableStateSetOf()
+
+    val selectedSubdirectories: MutableSet<String> = mutableStateSetOf()
 
     var directoryToEdit: InternalDirectory? = null
         private set
@@ -201,7 +211,6 @@ internal class DirectoryViewModel @Inject constructor(
         fileForDetails = null
     }
 
-
     fun isDirectoryNameValid(directoryName: String): Boolean {
         return directoryNameValidatorService.isValid(directoryName)
     }
@@ -212,6 +221,58 @@ internal class DirectoryViewModel @Inject constructor(
 
     fun isFileShared(file: InternalFile): Boolean {
         return isFileSharedUseCase.isShared(file)
+    }
+
+
+    fun startMultiselect(subDirectory: InternalDirectory? = null, file: InternalFile? = null) {
+        if (state != DirectoryScreenState.Multiselect) {
+            selectedFiles.clear()
+            selectedSubdirectories.clear()
+            if (subDirectory != null) {
+                selectedSubdirectories.add(subDirectory.internalName)
+            }
+            if (file != null) {
+                selectedFiles.add(file.internalName)
+            }
+            state = DirectoryScreenState.Multiselect
+        }
+    }
+
+    fun dismissMultiselect() {
+        state = DirectoryScreenState.Default
+        selectedFiles.clear()
+        selectedSubdirectories.clear()
+    }
+
+    fun multiselectSelectAll(subDirectories: List<InternalDirectory>, files: List<InternalFile>) {
+        subDirectories.forEach { directory ->
+            if (!selectedSubdirectories.contains(directory.internalName)) {
+                selectedSubdirectories.add(directory.internalName)
+            }
+        }
+        files.forEach { file ->
+            if (!selectedFiles.contains(file.internalName)) {
+                selectedFiles.add(file.internalName)
+            }
+        }
+    }
+
+    fun multiselectToggleDirectorySelected(directory: InternalDirectory) {
+        if (selectedSubdirectories.contains(directory.internalName)) {
+            selectedSubdirectories.remove(directory.internalName)
+        }
+        else {
+            selectedSubdirectories.add(directory.internalName)
+        }
+    }
+
+    fun multiselectToggleFileSelected(file: InternalFile) {
+        if (selectedFiles.contains(file.internalName)) {
+            selectedFiles.remove(file.internalName)
+        }
+        else {
+            selectedFiles.add(file.internalName)
+        }
     }
 
 }

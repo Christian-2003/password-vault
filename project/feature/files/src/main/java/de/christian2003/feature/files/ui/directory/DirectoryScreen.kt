@@ -2,12 +2,11 @@ package de.christian2003.feature.files.ui.directory
 
 import android.content.Context
 import android.content.Intent
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,17 +14,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalFloatingToolbar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialShapes
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -40,14 +38,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.christian2003.core.ui.composables.EmptyPlaceholder
-import de.christian2003.core.ui.composables.ListItemContainer
 import de.christian2003.core.ui.composables.NavigationBarProtection
-import de.christian2003.core.ui.composables.Shape
 import de.christian2003.core.ui.composables.Tooltip
 import de.christian2003.core.ui.composables.dialog.ConfirmDeleteDialog
 import de.christian2003.core.ui.composables.dialog.EditValueDialog
@@ -57,12 +53,13 @@ import de.christian2003.data.files.domain.entities.SharedFile
 import de.christian2003.feature.files.viewmodels.DirectoryViewModel
 import de.christian2003.feature.files.R
 import de.christian2003.feature.files.models.dialog.DirectoryScreenDialog
-import de.christian2003.feature.files.models.other.FileType
+import de.christian2003.feature.files.models.states.DirectoryScreenState
+import de.christian2003.feature.files.ui.breadcrumbs.Breadcrumb
+import de.christian2003.feature.files.ui.breadcrumbs.Breadcrumbs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.LocalDateTime
 
 
 @Composable
@@ -80,6 +77,13 @@ internal fun DirectoryScreen(
         viewModel.importFile(result)
     }
 
+    val invokeOnNavigateUp: () -> Unit = {
+        when (viewModel.state) {
+            DirectoryScreenState.Default -> onNavigateUp()
+            DirectoryScreenState.Multiselect -> viewModel.dismissMultiselect()
+        }
+    }
+
     val onImportFile: () -> Unit = {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
@@ -87,11 +91,21 @@ internal fun DirectoryScreen(
         importLauncher.launch(intent)
     }
 
+    BackHandler {
+        invokeOnNavigateUp()
+    }
+
     Scaffold(
         topBar = {
             TopBar(
+                state = viewModel.state,
                 directoryName = viewModel.directory.internalName,
-                onNavigateUp = onNavigateUp,
+                selectedFileCount = viewModel.selectedFiles.size,
+                selectedDirectoryCount = viewModel.selectedSubdirectories.size,
+                onNavigateUp = invokeOnNavigateUp,
+                onSelectAll = {
+                    viewModel.multiselectSelectAll(subDirectories, files)
+                },
                 onCreateDirectory = {
                     viewModel.createNewDirectory()
                 },
@@ -110,6 +124,10 @@ internal fun DirectoryScreen(
                     end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
                 )
         ) {
+            DirectoryBreadcrumbs(
+                directory = viewModel.directory
+            )
+
             if (subDirectories.isEmpty() && files.isEmpty()) {
                 EmptyPlaceholder(
                     title = stringResource(R.string.directory_emptyPlaceholder_title),
@@ -125,9 +143,11 @@ internal fun DirectoryScreen(
                 LazyColumn {
                     itemsIndexed(subDirectories) { index, internalDirectory ->
                         DirectoryListItem(
+                            state = viewModel.state,
                             internalDirectory = internalDirectory,
                             isFirst = index == 0,
                             isLast = index == subDirectories.size - 1,
+                            isSelected = viewModel.selectedSubdirectories.contains(internalDirectory.internalName),
                             onClick = { directory ->
                                 onNavigateToDirectory(directory.internalPath)
                             },
@@ -136,14 +156,22 @@ internal fun DirectoryScreen(
                             },
                             onDelete = { directory ->
                                 viewModel.deleteDirectory(directory)
+                            },
+                            onToggleSelected = { directory ->
+                                viewModel.multiselectToggleDirectorySelected(directory)
+                            },
+                            onStartMultiselect = { directory ->
+                                viewModel.startMultiselect(directory)
                             }
                         )
                     }
                     itemsIndexed(files) { index, file ->
                         FileListItem(
+                            state = viewModel.state,
                             internalFile = file,
                             isFirst = index == 0,
                             isLast = index == files.size - 1,
+                            isSelected = viewModel.selectedFiles.contains(file.internalName),
                             onFormatStorageSize = {
                                 viewModel.formatBytes(it)
                             },
@@ -178,13 +206,35 @@ internal fun DirectoryScreen(
                             },
                             onMoreInfo = { file ->
                                 viewModel.moreInfoForFile(file)
+                            },
+                            onStartMultiselect = { file ->
+                                viewModel.startMultiselect(file = file)
+                            },
+                            onToggleSelected = { file ->
+                                viewModel.multiselectToggleFileSelected(file)
                             }
+
                         )
                     }
                     item {
                         Box(modifier = Modifier.height(bottomPadding))
                     }
                 }
+            }
+        }
+
+        if (viewModel.state == DirectoryScreenState.Multiselect) {
+            Box(
+                contentAlignment = Alignment.BottomCenter,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(
+                        bottom = bottomPadding + dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
+                    )
+            ) {
+                BottomBar(
+                    state = viewModel.state
+                )
             }
         }
 
@@ -309,354 +359,231 @@ internal fun DirectoryScreen(
 
 
 @Composable
-private fun DirectoryListItem(
-    internalDirectory: InternalDirectory,
-    isFirst: Boolean,
-    isLast: Boolean,
-    onClick: (InternalDirectory) -> Unit,
-    onDelete: (InternalDirectory) -> Unit,
-    onRename: (InternalDirectory) -> Unit
+private fun DirectoryBreadcrumbs(
+    directory: InternalDirectory
 ) {
-    var isDropdownExpanded: Boolean by remember { mutableStateOf(false) }
+    val parts: List<String> = directory.internalPath.split('/')
+    val breadcrumbs: MutableList<Breadcrumb> = mutableListOf()
 
-    ListItemContainer(
-        isFirst = isFirst,
-        isLast = isLast
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                    onClick(internalDirectory)
-                }
-                .padding(
-                    start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
-                    top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical),
-                    end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal) - 12.dp,
-                    bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
-                )
-        ) {
-            Shape(
-                shape = MaterialShapes.Cookie4Sided,
-                color = MaterialTheme.colorScheme.secondaryContainer,
-                modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_directory),
-                    contentDescription = "",
-                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xs))
-                )
-            }
-            Text(
-                text = internalDirectory.internalName,
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(
-                        horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal)
-                    )
-            )
-
-            //Dropdown:
-            Box {
-                IconButton(
-                    onClick = {
-                        isDropdownExpanded = !isDropdownExpanded
-                    }
-                ) {
-                    Icon(
-                        painter = painterResource(de.christian2003.core.ui.R.drawable.ic_more),
-                        contentDescription = ""
-                    )
-                    DropdownMenu(
-                        expanded = isDropdownExpanded,
-                        onDismissRequest = {
-                            isDropdownExpanded = false
-                        }
-                    ) {
-                        DropdownMenuItem(
-                            text = {
-                                Text(stringResource(R.string.directory_rename))
-                            },
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_edit),
-                                    contentDescription = ""
-                                )
-                            },
-                            onClick = {
-                                onRename(internalDirectory)
-                                isDropdownExpanded = false
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = {
-                                Text(stringResource(R.string.directory_delete))
-                            },
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_delete),
-                                    contentDescription = ""
-                                )
-                            },
-                            onClick = {
-                                onDelete(internalDirectory)
-                                isDropdownExpanded = false
-                            }
-                        )
-                    }
+    val homeBreadcrumb = Breadcrumb(
+        label = stringResource(R.string.directory_title),
+        onClick = if (parts.isNotEmpty() && parts[0].isNotEmpty()) {
+                {
+                    //TODO: Callback
                 }
             }
-        }
+            else {
+                null
+            }
+    )
+    breadcrumbs.add(homeBreadcrumb)
+
+    parts.forEachIndexed { index, directory ->
+        val breadcrumb = Breadcrumb(
+            label = directory,
+            onClick = if (index != parts.size - 1) {
+                {
+                    //TODO: Callback
+                }
+            } else {
+                null
+            }
+        )
+        breadcrumbs.add(breadcrumb)
     }
-}
 
-
-@Composable
-private fun FileListItem(
-    internalFile: InternalFile,
-    isFirst: Boolean,
-    isLast: Boolean,
-    onFormatStorageSize: (Long) -> String,
-    onFormatDateTime: (LocalDateTime) -> String,
-    onQueryFileType: (String) -> FileType,
-    onDelete: (InternalFile) -> Unit,
-    onRename: (InternalFile) -> Unit,
-    onOpenWith: (InternalFile) -> Unit,
-    onMoreInfo: (InternalFile) -> Unit
-) {
-    var isDropdownExpanded: Boolean by remember { mutableStateOf(false) }
-    val fileType: FileType = onQueryFileType(internalFile.metadata.mimeType)
-
-    ListItemContainer(
-        isFirst = isFirst,
-        isLast = isLast
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                    onOpenWith(internalFile)
-                }
-                .padding(
-                    start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
-                    top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical),
-                    end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal) - 12.dp,
-                    bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
-                )
-        ) {
-            Shape(
-                shape = MaterialShapes.Cookie4Sided,
-                color = fileType.getSurfaceColor(),
-                modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_m))
-            ) {
-                Icon(
-                    painter = painterResource(fileType.drawableRes),
-                    contentDescription = "",
-                    tint = fileType.getOnSurfaceColor(),
-                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xs))
-                )
-            }
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(
-                        horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal)
-                    )
-            ) {
-                Tooltip(
-                    tooltip = internalFile.actualFileName
-                ) {
-                    Text(
-                        text = internalFile.actualFileName,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        style = MaterialTheme.typography.bodyLarge,
-                        maxLines = 1,
-                        overflow = TextOverflow.MiddleEllipsis
-                    )
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = onFormatDateTime(internalFile.metadata.editedAt),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier
-                            .padding(end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
-                            .weight(1f)
-                    )
-                    Text(
-                        text = onFormatStorageSize(internalFile.metadata.size),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
-            }
-
-            //Dropdown:
-            Box {
-                IconButton(
-                    onClick = {
-                        isDropdownExpanded = !isDropdownExpanded
-                    }
-                ) {
-                    Icon(
-                        painter = painterResource(de.christian2003.core.ui.R.drawable.ic_more),
-                        contentDescription = ""
-                    )
-                    DropdownMenu(
-                        expanded = isDropdownExpanded,
-                        onDismissRequest = {
-                            isDropdownExpanded = false
-                        }
-                    ) {
-                        DropdownMenuItem(
-                            text = {
-                                Text(stringResource(R.string.directory_file_rename))
-                            },
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_edit),
-                                    contentDescription = ""
-                                )
-                            },
-                            onClick = {
-                                onRename(internalFile)
-                                isDropdownExpanded = false
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = {
-                                Text(stringResource(R.string.directory_file_delete))
-                            },
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_delete),
-                                    contentDescription = ""
-                                )
-                            },
-                            onClick = {
-                                onDelete(internalFile)
-                                isDropdownExpanded = false
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = {
-                                Text(stringResource(R.string.directory_file_openWith))
-                            },
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_external),
-                                    contentDescription = ""
-                                )
-                            },
-                            onClick = {
-                                onOpenWith(internalFile)
-                                isDropdownExpanded = false
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = {
-                                Text(stringResource(R.string.directory_file_moreInfo))
-                            },
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_info_outlined),
-                                    contentDescription = ""
-                                )
-                            },
-                            onClick = {
-                                onMoreInfo(internalFile)
-                                isDropdownExpanded = false
-                            }
-                        )
-                    }
-                }
-            }
-        }
-    }
+    Breadcrumbs(
+        items = breadcrumbs,
+        modifier = Modifier.fillMaxWidth()
+    )
 }
 
 
 @Composable
 private fun TopBar(
+    state: DirectoryScreenState,
     directoryName: String,
+    selectedFileCount: Int,
+    selectedDirectoryCount: Int,
     onNavigateUp: () -> Unit,
+    onSelectAll: () -> Unit,
     onCreateDirectory: () -> Unit,
     onImportFile: () -> Unit
 ) {
-    var isDropdownExpanded: Boolean by remember { mutableStateOf(false) }
-    TopAppBar(
-        title = {
-            Text(
-                text = directoryName.ifBlank { stringResource(R.string.directory_title) }
-            )
-        },
-        navigationIcon = {
-            IconButton(
-                onClick = onNavigateUp
-            ) {
-                Icon(
-                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_back),
-                    contentDescription = ""
-                )
-            }
-        },
-        actions = {
-            Box {
-                IconButton(
-                    onClick = {
-                        isDropdownExpanded = !isDropdownExpanded
-                    }
-                ) {
-                    Icon(
-                        painter = painterResource(de.christian2003.core.ui.R.drawable.ic_more),
-                        contentDescription = ""
+    when (state) {
+        DirectoryScreenState.Default -> {
+            var isDropdownExpanded: Boolean by remember { mutableStateOf(false) }
+            TopAppBar(
+                title = {
+                    Text(
+                        text = directoryName.ifBlank { stringResource(R.string.directory_title) }
                     )
-                    DropdownMenu(
-                        expanded = isDropdownExpanded,
-                        onDismissRequest = {
-                            isDropdownExpanded = false
-                        }
+                },
+                navigationIcon = {
+                    IconButton(
+                        onClick = onNavigateUp
                     ) {
-                        DropdownMenuItem(
-                            text = {
-                                Text(stringResource(R.string.directory_createNewDirectory))
-                            },
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_add_directory),
-                                    contentDescription = ""
-                                )
-                            },
-                            onClick = {
-                                onCreateDirectory()
-                                isDropdownExpanded = false
-                            }
+                        Icon(
+                            painter = painterResource(de.christian2003.core.ui.R.drawable.ic_back),
+                            contentDescription = ""
                         )
-                        DropdownMenuItem(
-                            text = {
-                                Text(stringResource(R.string.directory_file_import))
-                            },
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_add_file),
-                                    contentDescription = ""
-                                )
-                            },
+                    }
+                },
+                actions = {
+                    Box {
+                        IconButton(
                             onClick = {
-                                onImportFile()
-                                isDropdownExpanded = false
+                                isDropdownExpanded = !isDropdownExpanded
                             }
+                        ) {
+                            Icon(
+                                painter = painterResource(de.christian2003.core.ui.R.drawable.ic_more),
+                                contentDescription = ""
+                            )
+                            DropdownMenu(
+                                expanded = isDropdownExpanded,
+                                onDismissRequest = {
+                                    isDropdownExpanded = false
+                                }
+                            ) {
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(stringResource(R.string.directory_createNewDirectory))
+                                    },
+                                    leadingIcon = {
+                                        Icon(
+                                            painter = painterResource(R.drawable.ic_add_directory),
+                                            contentDescription = ""
+                                        )
+                                    },
+                                    onClick = {
+                                        onCreateDirectory()
+                                        isDropdownExpanded = false
+                                    }
+                                )
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(stringResource(R.string.directory_file_import))
+                                    },
+                                    leadingIcon = {
+                                        Icon(
+                                            painter = painterResource(R.drawable.ic_add_file),
+                                            contentDescription = ""
+                                        )
+                                    },
+                                    onClick = {
+                                        onImportFile()
+                                        isDropdownExpanded = false
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+            )
+        }
+        DirectoryScreenState.Multiselect -> {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = when {
+                            selectedDirectoryCount == 0 -> pluralStringResource(R.plurals.directory_titleMultiselect_files, selectedFileCount, selectedFileCount)
+                            selectedFileCount == 0 -> pluralStringResource(R.plurals.directory_titleMultiselect_directories, selectedDirectoryCount, selectedDirectoryCount)
+                            else -> pluralStringResource(R.plurals.directory_titleMultiselect_filesAndDirectories, selectedFileCount + selectedDirectoryCount, selectedFileCount + selectedDirectoryCount)
+                        }
+                    )
+                },
+                navigationIcon = {
+                    IconButton(
+                        onClick = onNavigateUp
+                    ) {
+                        Icon(
+                            painter = painterResource(de.christian2003.core.ui.R.drawable.ic_cancel),
+                            contentDescription = ""
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(
+                        onClick = onSelectAll
+                    ) {
+                        Icon(
+                            painter = painterResource(de.christian2003.core.ui.R.drawable.ic_selectall),
+                            contentDescription = ""
                         )
                     }
                 }
+            )
+        }
+    }
+}
+
+
+@Composable
+private fun BottomBar(
+    state: DirectoryScreenState,
+    modifier: Modifier = Modifier
+) {
+    if (state == DirectoryScreenState.Multiselect) {
+        HorizontalFloatingToolbar(
+            expanded = true,
+            modifier = modifier
+        ) {
+            Tooltip(
+                tooltip = stringResource(R.string.directory_multiselect_moveHint),
+                anchor = TooltipAnchorPosition.Above
+            ) {
+                IconButton(
+                    onClick = {}
+                ) {
+                    Icon(
+                        painter = painterResource(de.christian2003.core.ui.R.drawable.ic_move),
+                        contentDescription = ""
+                    )
+                }
+            }
+
+            Tooltip(
+                tooltip = stringResource(R.string.directory_multiselect_copyHint),
+                anchor = TooltipAnchorPosition.Above
+            ) {
+                IconButton(
+                    onClick = {}
+                ) {
+                    Icon(
+                        painter = painterResource(de.christian2003.core.ui.R.drawable.ic_copy),
+                        contentDescription = ""
+                    )
+                }
+            }
+
+            Tooltip(
+                tooltip = stringResource(R.string.directory_multiselect_shareHint),
+                anchor = TooltipAnchorPosition.Above
+            ) {
+                IconButton(
+                    onClick = {}
+                ) {
+                    Icon(
+                        painter = painterResource(de.christian2003.core.ui.R.drawable.ic_share),
+                        contentDescription = ""
+                    )
+                }
+            }
+
+            Tooltip(
+                tooltip = stringResource(R.string.directory_multiselect_deleteHint),
+                anchor = TooltipAnchorPosition.Above
+            ) {
+                IconButton(
+                    onClick = {}
+                ) {
+                    Icon(
+                        painter = painterResource(de.christian2003.core.ui.R.drawable.ic_delete),
+                        contentDescription = ""
+                    )
+                }
             }
         }
-    )
+    }
 }

@@ -2,6 +2,18 @@
 
 <resources>
     <string name="directory_title">Your files</string>
+    <plurals name="directory_titleMultiselect_files">
+        <item quantity="one">%1$d file</item>
+        <item quantity="other">%1$d files</item>
+    </plurals>
+    <plurals name="directory_titleMultiselect_directories">
+        <item quantity="one">%1$d directory</item>
+        <item quantity="other">%1$d directories</item>
+    </plurals>
+    <plurals name="directory_titleMultiselect_filesAndDirectories">
+        <item quantity="one">%1$d items</item>
+        <item quantity="other">%1$d items</item>
+    </plurals>
     <string name="directory_rename">Rename directory</string>
     <string name="directory_delete">Delete directory</string>
     <string name="directory_confirmDelete">Are you sure you want to delete the directory \"%1$s\" and all it\'s children? This cannot be undone.</string>
@@ -16,6 +28,10 @@
     <string name="directory_file_confirmDelete">Are you sure you want to delete the file \"%1$s\"? This cannot be undone.</string>
     <string name="directory_emptyPlaceholder_title">No files</string>
     <string name="directory_emptyPlaceholder_subtitle">Import files and they show up here</string>
+    <string name="directory_multiselect_moveHint">Move selection</string>
+    <string name="directory_multiselect_copyHint">Copy selection</string>
+    <string name="directory_multiselect_shareHint">Share selection</string>
+    <string name="directory_multiselect_deleteHint">Delete selection</string>
 
     <string name="fileDetails_title">File details</string>
     <string name="fileDetails_size">Size</string>
