@@ -146,6 +146,22 @@ internal class DirectoryViewModel @Inject constructor(
     }
 
 
+    fun navigateUpToDirectory(directory: InternalDirectory) {
+        if (navigationStack.size < 2) {
+            return //Top page reached
+        }
+        if (navigationStack.contains(directory)) {
+            var topDirectory: InternalDirectory
+
+            do {
+                topDirectory = navigationStack.pop()
+            } while (topDirectory != directory)
+
+            navigateToDirectory(directory)
+        }
+    }
+
+
     fun importFile(result: ActivityResult) = viewModelScope.launch(Dispatchers.IO) {
         if (result.data != null && result.data!!.data != null) {
             val externalFileUri: Uri = result.data!!.data!!

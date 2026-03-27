@@ -26,9 +26,6 @@ fun NavGraphBuilder.directoriesFlow(
         directoryDestination(
             onNavigateUp = {
                 navController.navigateUp()
-            },
-            onNavigateToDirectory = { internalDirectoryPath ->
-                navController.navigate(DirectoryDestination(internalDirectoryPath))
             }
         )
 
@@ -47,20 +44,17 @@ internal data class DirectoryDestination(
 /**
  * Navigation destination to view the contents of a directory.
  *
- * @param onNavigateUp          Callback invoked to navigate up the navigation stack.
- * @param onNavigateToDirectory Callback invoked to navigate to a different directory.
+ * @param onNavigateUp  Callback invoked to navigate up the navigation stack.
  */
 private fun NavGraphBuilder.directoryDestination(
-    onNavigateUp: () -> Unit,
-    onNavigateToDirectory: (String) -> Unit
+    onNavigateUp: () -> Unit
 ) {
     composable<DirectoryDestination> {
         val viewModel: DirectoryViewModel = hiltViewModel()
 
         DirectoryScreen(
             viewModel = viewModel,
-            onNavigateUp = onNavigateUp,
-            onNavigateToDirectory = onNavigateToDirectory
+            onNavigateUp = onNavigateUp
         )
     }
 }

@@ -42,7 +42,7 @@ fun Breadcrumbs(
                 breadcrumb = breadcrumb,
                 isHighlighted = index == items.size - 1
             )
-            if (index != items.size - 1) {
+            if (index < items.size - 1) {
                 Icon(
                     painter = painterResource(de.christian2003.core.ui.R.drawable.ic_next),
                     contentDescription = "",

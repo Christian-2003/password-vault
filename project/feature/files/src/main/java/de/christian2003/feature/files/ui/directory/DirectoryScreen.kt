@@ -65,8 +65,7 @@ import kotlinx.coroutines.withContext
 @Composable
 internal fun DirectoryScreen(
     viewModel: DirectoryViewModel,
-    onNavigateUp: () -> Unit,
-    onNavigateToDirectory: (String) -> Unit
+    onNavigateUp: () -> Unit
 ) {
     val subDirectories: List<InternalDirectory> by viewModel.subDirectories.collectAsState(emptyList())
     val files: List<InternalFile> by viewModel.files.collectAsState(emptyList())
@@ -130,7 +129,11 @@ internal fun DirectoryScreen(
                 )
         ) {
             DirectoryBreadcrumbs(
-                directory = viewModel.directory
+                state = viewModel.state,
+                directory = viewModel.directory,
+                onNavigateUpToDirectory = { directory ->
+                    viewModel.navigateUpToDirectory(directory)
+                }
             )
 
             if (subDirectories.isEmpty() && files.isEmpty()) {
@@ -365,16 +368,26 @@ internal fun DirectoryScreen(
 
 @Composable
 private fun DirectoryBreadcrumbs(
-    directory: InternalDirectory
+    state: DirectoryScreenState,
+    directory: InternalDirectory,
+    onNavigateUpToDirectory: (InternalDirectory) -> Unit
 ) {
     val parts: List<String> = directory.internalPath.split('/')
     val breadcrumbs: MutableList<Breadcrumb> = mutableListOf()
 
+    val onInvokeNavigateUpToDirectory: (Int) -> Unit = { breadcrumbIndex ->
+        if (breadcrumbIndex >= 0 && breadcrumbIndex < parts.size) {
+            val directoryPath: String = parts.take(breadcrumbIndex).joinToString("/")
+            val newDirectory = InternalDirectory(directoryPath)
+            onNavigateUpToDirectory(newDirectory)
+        }
+    }
+
     val homeBreadcrumb = Breadcrumb(
         label = stringResource(R.string.directory_title),
-        onClick = if (parts.isNotEmpty() && parts[0].isNotEmpty()) {
+        onClick = if (state == DirectoryScreenState.Default && parts.isNotEmpty() && parts[0].isNotEmpty()) {
                 {
-                    //TODO: Callback
+                    onInvokeNavigateUpToDirectory(0)
                 }
             }
             else {
@@ -383,12 +396,14 @@ private fun DirectoryBreadcrumbs(
     )
     breadcrumbs.add(homeBreadcrumb)
 
-    parts.forEachIndexed { index, directory ->
+    parts.dropWhile {
+        it == "" //Disregard top-level directory because it is represented through the home breadcrumb
+    }.forEachIndexed { index, directory ->
         val breadcrumb = Breadcrumb(
             label = directory,
-            onClick = if (index != parts.size - 1) {
+            onClick = if (state == DirectoryScreenState.Default && index != parts.size - 1) {
                 {
-                    //TODO: Callback
+                    onInvokeNavigateUpToDirectory(index + 1)
                 }
             } else {
                 null
