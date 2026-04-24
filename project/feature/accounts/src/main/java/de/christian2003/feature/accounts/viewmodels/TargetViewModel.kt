@@ -8,20 +8,26 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import de.christian2003.core.common.application.services.DateTimeFormatterService
+import de.christian2003.core.ui.model.ColorGenerator
 import de.christian2003.core.ui.model.HelpCard
 import de.christian2003.data.accounts.application.usecases.GetAllPackagesUseCase
 import de.christian2003.data.accounts.application.usecases.GetLocalizedPackageNameUseCase
 import de.christian2003.data.accounts.application.usecases.GetPackageIconUseCase
+import de.christian2003.data.accounts.application.usecases.GetTargetSigningCertificateUseCase
 import de.christian2003.data.accounts.application.usecases.ValidatePackageSignatureUseCase
 import de.christian2003.data.accounts.domain.services.PackageFingerprintService
 import de.christian2003.data.accounts.domain.entities.Target
 import de.christian2003.feature.accounts.models.dialogs.TargetSheetDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.security.cert.X509Certificate
+import java.time.LocalDate
 import javax.inject.Inject
 import kotlin.uuid.Uuid
 
@@ -34,7 +40,10 @@ import kotlin.uuid.Uuid
  * @param getLocalizedPackageNameUseCase        Use case to get the localized name for a package.
  * @param validatePackageAgainstTargetUseCase   Use case to validate an installed package against an
  *                                              autofill target.
+ * @param getTargetSigningCertificateUseCase    Use case to get the signing certificate of a target.
  * @param packageFingerprintService             Service to generate the fingerprint for a package.
+ * @param dateTimeFormatterService              Service to format dates and times.
+ * @param colorGenerator                        Color generator.
  */
 @HiltViewModel
 internal class TargetViewModel @Inject constructor(
@@ -43,7 +52,10 @@ internal class TargetViewModel @Inject constructor(
     private val getLocalizedPackageNameUseCase: GetLocalizedPackageNameUseCase,
     private val getPackageIconUseCase: GetPackageIconUseCase,
     private val validatePackageAgainstTargetUseCase: ValidatePackageSignatureUseCase,
-    private val packageFingerprintService: PackageFingerprintService
+    private val getTargetSigningCertificateUseCase: GetTargetSigningCertificateUseCase,
+    private val packageFingerprintService: PackageFingerprintService,
+    private val dateTimeFormatterService: DateTimeFormatterService,
+    private val colorGenerator: ColorGenerator
 ): AndroidViewModel(application) {
 
     /**
@@ -103,6 +115,12 @@ internal class TargetViewModel @Inject constructor(
      */
     var isHelpCardVisible: Boolean by mutableStateOf(HelpCard.Targets.getVisible(application))
         private set
+
+    /**
+     * If dialog == TargetSheetDialog.CertificateDetails, this is the certificate whose details to
+     * display. Otherwise this is null.
+     */
+    var certificateToDisplay: X509Certificate? = null
 
     /**
      * Dialogs for the sheet.
@@ -167,6 +185,16 @@ internal class TargetViewModel @Inject constructor(
 
             this@TargetViewModel.allInstalledPackages = sortedPackages
         }
+    }
+
+
+    fun generatePositiveColor(negativeColor: Color, darkTheme: Boolean): Color {
+        return colorGenerator.generatePositiveColorFromNegativeColor(negativeColor, darkTheme)
+    }
+
+
+    fun formatDate(date: LocalDate): String {
+        return dateTimeFormatterService.format(date)
     }
 
 
@@ -271,6 +299,30 @@ internal class TargetViewModel @Inject constructor(
         if (targetToRemove != null) {
             targets.remove(targetToRemove)
         }
+    }
+
+
+    /**
+     * Shows the dialog through which the certificate details are displayed for the signing certificate
+     * of the specified target.
+     *
+     * @param target    Target whose certificate to display.
+     */
+    fun showCertificateDetailsDialog(target: Target) {
+        val certificate: X509Certificate? = getTargetSigningCertificateUseCase.getSigningCertificate(target)
+        if (certificate != null) {
+            certificateToDisplay = certificate
+            dialog = TargetSheetDialog.CertificateDetails
+        }
+    }
+
+
+    /**
+     * Dismisses the dialog through which the certificate details are displayed.
+     */
+    fun dismissCertificateDetailsDialog() {
+        dialog = TargetSheetDialog.None
+        certificateToDisplay = null
     }
 
 

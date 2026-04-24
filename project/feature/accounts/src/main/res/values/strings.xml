@@ -83,6 +83,7 @@
     <string name="target_emptyPlaceholder_subtitle">Select targets and they will show up here</string>
     <string name="target_packages_title">Select apps</string>
     <string name="target_packages_signingCertsNotMatching">Certificates do not match</string>
+    <string name="target_packages_signingCertsValid">Authenticity verified</string>
     <string name="target_packages_certDialog_title">Security check failed</string>
     <string name="target_packages_certDialog_text">The app no longer matches the security identity that was saved before.&lt;br/&gt;This can happen if: &lt;ul&gt;&lt;li&gt;The app was reinstalled&lt;/li&gt;&lt;li&gt;The app was installed from a different store&lt;/li&gt;&lt;li&gt;The app was replaced by another app with the same name&lt;/li&gt;&lt;/ul&gt;For your protection, autofill is blocked until this conflict is resolved.</string>
     <string name="target_website_title">Select website</string>
@@ -92,6 +93,20 @@
     <string name="target_remove_title">Remove target</string>
     <string name="target_remove_textPackage">Are you sure you want to remove the Android app \"%1$s\" from the autofill targets?</string>
     <string name="target_remove_textWebsite">Are you sure you want to remove the website \"%1$s\" from the autofill targets?</string>
+
+
+    <!-- Dialog through which the X.509 signing certificate info of an Android target is displayed -->
+    <string name="certDetails_title">Certificate details</string>
+    <string name="certDetails_subject">Subject</string>
+    <string name="certDetails_issuer">Issuer</string>
+    <string name="certDetails_validity">Validity</string>
+    <string name="certDetails_validity_notBefore">Not Before</string>
+    <string name="certDetails_validity_notAfter">Not After</string>
+    <string name="certDetails_dn_cn">Common Name</string>
+    <string name="certDetails_dn_o">Organization</string>
+    <string name="certDetails_dn_c">Country</string>
+    <string name="certDetails_fingerprintMatch">Verified</string>
+    <string name="certDetails_fingerprintMatchText">Certificate matches fingerprint stored in Password Vault</string>
 
 
     <!-- Sheet through which to edit details for accounts -->

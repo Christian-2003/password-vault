@@ -44,6 +44,8 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -63,12 +65,14 @@ import de.christian2003.core.ui.composables.dialog.ConfirmDeleteDialog
 import de.christian2003.core.ui.composables.dialog.ConfirmDiscardDialog
 import de.christian2003.core.ui.composables.dialog.DialogWithHeroSection
 import de.christian2003.core.ui.composables.dialog.EditValueDialog
+import de.christian2003.core.ui.theme.isDarkTheme
 import de.christian2003.feature.accounts.viewmodels.TargetViewModel
 import de.christian2003.data.accounts.domain.entities.Target
 import de.christian2003.feature.accounts.R
 import de.christian2003.feature.accounts.models.dialogs.TargetSheetDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.security.cert.X509Certificate
 
 
 /**
@@ -146,6 +150,9 @@ internal fun TargetSheet(
                 onShowCertificateHelp = {
                     viewModel.dialog = TargetSheetDialog.CertificatesDoNotMatch
                 },
+                onShowCertificateDetails = { target ->
+                    viewModel.showCertificateDetailsDialog(target)
+                },
                 onQueryLocalizedPackageName = { packageName ->
                     viewModel.getLocalizedPackageName(packageName)
                 },
@@ -157,6 +164,9 @@ internal fun TargetSheet(
                 },
                 onQueryIsTargetValid = { target ->
                     viewModel.isTargetValid(target)
+                },
+                onGeneratePositiveColor = { negativeColor, darkTheme ->
+                    viewModel.generatePositiveColor(negativeColor, darkTheme)
                 },
                 modifier = Modifier
                     .fillMaxSize()
@@ -267,6 +277,23 @@ internal fun TargetSheet(
                 )
             }
         }
+        TargetSheetDialog.CertificateDetails -> {
+            val certificateToDisplay: X509Certificate? = viewModel.certificateToDisplay
+            if (certificateToDisplay != null) {
+                CertificateDetailsDialog(
+                    certificate = certificateToDisplay,
+                    onFormatDate = { date ->
+                        viewModel.formatDate(date)
+                    },
+                    onGeneratePositiveColor = { negativeColor, darkTheme ->
+                        viewModel.generatePositiveColor(negativeColor, darkTheme)
+                    },
+                    onDismiss = {
+                        viewModel.dismissCertificateDetailsDialog()
+                    }
+                )
+            }
+        }
         else -> { }
     }
 }
@@ -279,11 +306,14 @@ internal fun TargetSheet(
  * @param isHelpCardVisible             Whether the help card is visible.
  * @param onRemoveTarget                Callback invoked to remove a target.
  * @param onShowCertificateHelp         Callback invoked to show help about certificate issues.
+ * @param onShowCertificateDetails      Callback invoked to show the details about the signing
+ *                                      certificate of the target.
  * @param onQueryLocalizedPackageName   Callback invoked to query the localized name for an
  *                                      installed package
  * @param onQueryPackageIcon            Callback invoked to query the icon for an installed package.
  * @param onDismissHelpCard             Callback invoked to dismiss the help card.
  * @param onQueryIsTargetValid          Callback invoked to query whether a target is valid.
+ * @param onGeneratePositiveColor       Callback invoked to generate a positive color.
  * @param modifier                      Modifier.
  */
 @Composable
@@ -292,10 +322,12 @@ private fun TargetsList(
     isHelpCardVisible: Boolean,
     onRemoveTarget: (Target) -> Unit,
     onShowCertificateHelp: () -> Unit,
+    onShowCertificateDetails: (Target) -> Unit,
     onQueryLocalizedPackageName: (String) -> String?,
     onQueryPackageIcon: (String) -> Drawable?,
     onDismissHelpCard: () -> Unit,
     onQueryIsTargetValid: (Target) -> Boolean,
+    onGeneratePositiveColor: (Color, Boolean) -> Color,
     modifier: Modifier = Modifier
 ) {
     if (targets.isEmpty()) {
@@ -348,9 +380,11 @@ private fun TargetsList(
                         isLast = index == targets.size - 1,
                         onRemove = onRemoveTarget,
                         onShowCertificateHelp = onShowCertificateHelp,
+                        onShowCertificateDetails = onShowCertificateDetails,
                         onQueryLocalizedPackageName = onQueryLocalizedPackageName,
                         onQueryPackageIcon = onQueryPackageIcon,
-                        onQueryIsTargetValid = onQueryIsTargetValid
+                        onQueryIsTargetValid = onQueryIsTargetValid,
+                        onGeneratePositiveColor = onGeneratePositiveColor
                     )
                 }
                 else {
@@ -375,10 +409,13 @@ private fun TargetsList(
  * @param isLast                        Whether the android app is the last in the list.
  * @param onRemove                      Callback invoked to remove the target.
  * @param onShowCertificateHelp         Callback invoked to show help about certificate issues.
+ * @param onShowCertificateDetails      Callback invoked to show the certificate details of the
+ *                                      package.
  * @param onQueryLocalizedPackageName   Callback invoked to query the localized name for an
  *                                      installed package
  * @param onQueryPackageIcon            Callback invoked to query the icon for an installed package.
  * @param onQueryIsTargetValid          Callback invoked to query whether a target is valid.
+ * @param onGeneratePositiveColor       Callback invoked to generate a positive color.
  */
 @Composable
 private fun TargetsListRowPackage(
@@ -387,13 +424,16 @@ private fun TargetsListRowPackage(
     isLast: Boolean,
     onRemove: (Target) -> Unit,
     onShowCertificateHelp: () -> Unit,
+    onShowCertificateDetails: (Target) -> Unit,
     onQueryLocalizedPackageName: (String) -> String?,
     onQueryPackageIcon: (String) -> Drawable?,
     onQueryIsTargetValid: (Target) -> Boolean,
+    onGeneratePositiveColor: (Color, Boolean) -> Color
 ) {
     val localizedPackageName: String = onQueryLocalizedPackageName(target.name) ?: ""
     val isValid: Boolean = onQueryIsTargetValid(target)
     val packageIcon: Drawable? = onQueryPackageIcon(target.name)
+    val positiveColor: Color = onGeneratePositiveColor(MaterialTheme.colorScheme.error, MaterialTheme.isDarkTheme())
 
     ListItemContainer(
         isFirst = isFirst,
@@ -434,34 +474,57 @@ private fun TargetsListRowPackage(
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
+                    .padding(horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal) - 4.dp)
             ) {
                 Text(
                     text = localizedPackageName.ifBlank { target.name },
                     color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(start = 4.dp)
                 )
-                if (!isValid) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.clickable {
-                            onShowCertificateHelp()
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .clip(MaterialTheme.shapes.small)
+                        .clickable {
+                            if (!isValid) {
+                                onShowCertificateHelp()
+                            }
+                            else {
+                                onShowCertificateDetails(target)
+                            }
                         }
-                    ) {
-                        Icon(
-                            painter = painterResource(de.christian2003.core.ui.R.drawable.ic_error),
-                            contentDescription = "",
-                            tint = MaterialTheme.colorScheme.error,
-                            modifier = Modifier
-                                .padding(end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal) / 2)
-                                .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xxs))
-                        )
-                        Text(
-                            text = stringResource(R.string.target_packages_signingCertsNotMatching),
-                            color = MaterialTheme.colorScheme.error,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
+                        .padding(horizontal = 4.dp)
+                ) {
+                    Icon(
+                        painter = if (!isValid) {
+                            painterResource(de.christian2003.core.ui.R.drawable.ic_error)
+                        } else {
+                            painterResource(de.christian2003.core.ui.R.drawable.ic_verified)
+                        },
+                        contentDescription = "",
+                        tint = if (!isValid) {
+                            MaterialTheme.colorScheme.error
+                        } else {
+                            positiveColor
+                        },
+                        modifier = Modifier
+                            .padding(end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal) / 2)
+                            .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xxs))
+                    )
+                    Text(
+                        text = if (!isValid) {
+                            stringResource(R.string.target_packages_signingCertsNotMatching)
+                        } else {
+                            stringResource(R.string.target_packages_signingCertsValid)
+                        },
+                        color = if (!isValid) {
+                            MaterialTheme.colorScheme.error
+                        } else {
+                            positiveColor
+                        },
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                 }
             }
             Tooltip(

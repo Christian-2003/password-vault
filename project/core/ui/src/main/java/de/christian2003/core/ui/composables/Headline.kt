@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import de.christian2003.core.ui.R
 
 
@@ -49,6 +50,7 @@ fun Headline(
                 .padding(
                     start = when (indentation) {
                         HeadlineIndentation.None -> dimensionResource(R.dimen.margin_horizontal)
+                        HeadlineIndentation.NoneNoPadding -> { 0.dp }
                         HeadlineIndentation.TextLevel -> dimensionResource(R.dimen.margin_horizontal) + dimensionResource(R.dimen.padding_horizontal)
                         HeadlineIndentation.PrefixIconLevel -> dimensionResource(R.dimen.margin_horizontal) + dimensionResource(R.dimen.image_xs) + dimensionResource(R.dimen.padding_horizontal) * 2
                     },
@@ -105,11 +107,13 @@ fun Headline(
  * Indentations for the headline.
  *
  * @property None               No indentation.
+ * @property NoneNoPadding      No indentation and no horizontal padding.
  * @property TextLevel          Indentation to the text of list items.
  * @property PrefixIconLevel    Indentation to the prefix icon of list items.
  */
 enum class HeadlineIndentation {
     None,
+    NoneNoPadding,
     TextLevel,
     PrefixIconLevel
 }

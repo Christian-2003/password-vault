@@ -11,6 +11,7 @@ import java.security.cert.Certificate
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import javax.inject.Inject
+import kotlin.math.sign
 
 
 /**
@@ -84,9 +85,70 @@ internal class AndroidPackageFingerprintService @Inject constructor(
                 }
                 catch (_: Exception) { }
             }
+            signingInfo.signingCertificateHistory.forEach { signature ->
+                try {
+                    val hash = hashSignature(signature)
+                    if (hash.contentEquals(fingerprint)) {
+                        //Package fingerprint matches:
+                        return true
+                    }
+                }
+                catch (_: Exception) { }
+            }
         }
         catch (_: Exception) { }
         return false
+    }
+
+
+    /**
+     * Returns the X.509 certificate that was used for signing the specified package. The certificate
+     * returns is determined from the list of signing certificates based on the fingerprint provided.
+     * If no certificate can be determined, null is returned.
+     *
+     * @param packageName   Name of the package for which to return the X.509 certificate.
+     * @param fingerprint   Fingerprint of the X.509 certificate to return.
+     * @return              X.509 certificate that was used for signing the specified package or null
+     *                      if no certificate can be determined.
+     */
+    override fun getCertificateForPackage(packageName: String, fingerprint: ByteArray): X509Certificate? {
+        try {
+            var matchingSignature: Signature? = null
+            val signingInfo: SigningInfo? = getSigningInfo(packageName)
+            if (signingInfo == null) {
+                return null
+            }
+
+            signingInfo.apkContentsSigners.forEach { signature ->
+                try {
+                    val hash = hashSignature(signature)
+                    if (hash.contentEquals(fingerprint)) {
+                        //Package fingerprint matches:
+                        matchingSignature = signature
+                    }
+                }
+                catch (_: Exception) { }
+            }
+            if (matchingSignature == null) {
+                signingInfo.signingCertificateHistory.forEach { signature ->
+                    try {
+                        val hash = hashSignature(signature)
+                        if (hash.contentEquals(fingerprint)) {
+                            //Package fingerprint matches:
+                            matchingSignature = signature
+                        }
+                    }
+                    catch (_: Exception) { }
+                }
+            }
+
+            if (matchingSignature != null) {
+                val x509: X509Certificate = getX509CertFromSignature(matchingSignature)
+                return x509
+            }
+        }
+        catch (_: Exception) { }
+        return null
     }
 
 
@@ -97,6 +159,13 @@ internal class AndroidPackageFingerprintService @Inject constructor(
     }
 
 
+    private fun getX509CertFromSignature(signature: Signature): X509Certificate {
+        val cert: Certificate = certFactory.generateCertificate(ByteArrayInputStream(signature.toByteArray()))
+        val x509: X509Certificate = cert as X509Certificate
+        return x509
+    }
+
+
     /**
      * Hashes the certificate of the signature passed as argument.
      *
@@ -104,8 +173,7 @@ internal class AndroidPackageFingerprintService @Inject constructor(
      * @return          Hashed certificate.
      */
     private fun hashSignature(signature: Signature): ByteArray {
-        val cert: Certificate = certFactory.generateCertificate(ByteArrayInputStream(signature.toByteArray()))
-        val x509: X509Certificate = cert as X509Certificate
+        val x509: X509Certificate = getX509CertFromSignature(signature)
         val hash: ByteArray = digester.digest(x509.encoded)
         return hash
     }
