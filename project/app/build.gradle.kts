@@ -111,6 +111,7 @@ dependencies {
     implementation(project(":feature:autofill"))
     implementation(project(":feature:search"))
     implementation(project(":feature:files"))
+    implementation(project(":feature:analysis"))
 
     testImplementation(libs.junit)
 

@@ -52,6 +52,8 @@ import de.christian2003.feature.accounts.navigation.AccountDestination
 import de.christian2003.feature.accounts.navigation.AccountsDestination
 import de.christian2003.feature.accounts.navigation.accountDestination
 import de.christian2003.feature.accounts.navigation.accountsDestination
+import de.christian2003.feature.analysis.navigation.AnalysisDestination
+import de.christian2003.feature.analysis.navigation.analysisDestination
 import de.christian2003.feature.autofill.navigation.AutofillSettingsFlow
 import de.christian2003.feature.autofill.navigation.autofillSettingsFlow
 import de.christian2003.feature.files.navigation.DirectoriesFlow
@@ -224,6 +226,9 @@ fun PasswordVault(
                 },
                 onNavigateToFiles = {
                     navController.navigate(DirectoriesFlow)
+                },
+                onNavigateToAnalysis = {
+                    navController.navigate(AnalysisDestination)
                 }
             )
 
@@ -252,6 +257,16 @@ fun PasswordVault(
             //Flow for the files:
             directoriesFlow(
                 navController = navController
+            )
+
+            //Destination for the password security analysis:
+            analysisDestination(
+                onNavigateUp = {
+                    navController.navigateUp()
+                },
+                onNavigateToAccount = { accountId ->
+                    navController.navigate(AccountDestination(accountId.toString()))
+                }
             )
 
 

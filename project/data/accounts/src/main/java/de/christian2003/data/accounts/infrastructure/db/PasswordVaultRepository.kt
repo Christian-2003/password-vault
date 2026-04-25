@@ -10,6 +10,7 @@ import de.christian2003.data.accounts.domain.entities.Tag
 import de.christian2003.data.accounts.domain.repositories.AccountRepository
 import de.christian2003.data.accounts.domain.repositories.TagRepository
 import de.christian2003.data.accounts.domain.entities.Target
+import de.christian2003.data.accounts.domain.repositories.DetailRepository
 import de.christian2003.data.accounts.domain.repositories.TargetRepository
 import de.christian2003.data.accounts.infrastructure.db.dao.AccountDao
 import de.christian2003.data.accounts.infrastructure.db.dao.DetailDao
@@ -49,7 +50,7 @@ internal class PasswordVaultRepository @Inject constructor(
     private val tagDao: TagDao,
     private val targetDao: TargetDao,
     private val cipherService: HmacCipherService
-): AccountRepository, TagRepository, TargetRepository {
+): AccountRepository, DetailRepository, TagRepository, TargetRepository {
 
     /**
      * Mapper maps the domain model 'Account' to its entity.
@@ -114,6 +115,25 @@ internal class PasswordVaultRepository @Inject constructor(
             }
         }
         return accountDescriptors!!
+    }
+
+
+    /**
+     * Returns the account descriptor with the specified ID or null if no account descriptor is
+     * found.
+     *
+     * @param id    ID of the account whose descriptor to return.
+     * @return      Account descriptor with the specified ID or null.
+     */
+    override suspend fun getAccountDescriptorById(id: Uuid): AccountDescriptor? {
+        val accountEntity: AccountEntity? = accountDao.selectAccountWithoutTagsById(id)
+        if (accountEntity != null) {
+            val targetEntities: List<TargetEntity> = targetDao.selectAllForAccount(accountEntity.id).first()
+            val targets: List<Target> = targetEntities.map { t -> targetMapper.toDomain(t) }
+            val accountDescriptor: AccountDescriptor = accountMapper.toDescriptor(accountEntity, targets)
+            return accountDescriptor
+        }
+        return null
     }
 
 
@@ -258,6 +278,22 @@ internal class PasswordVaultRepository @Inject constructor(
      */
     override suspend fun deleteAccount(account: Account) {
         accountDao.deleteAccount(accountMapper.toEntity(account))
+    }
+
+
+    /**
+     * Returns a map with all details mapped to their account ID that match the specified type.
+     *
+     * @param type  Type of the details to return.
+     * @return      Map of all details with the specified type.
+     */
+    override suspend fun getAllDetailsByType(type: DetailType): Map<Detail, Uuid> {
+        val entities: List<DetailEntity> = detailDao.selectAllByType(type)
+        val details: MutableMap<Detail, Uuid> = mutableMapOf()
+        entities.forEach { entity ->
+            details.put(detailMapper.toDomain(entity), entity.account)
+        }
+        return details
     }
 
 

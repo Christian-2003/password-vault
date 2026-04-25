@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <!-- Screen through which the result of the security analysis is displayed -->
+    <string name="analysis_title">Password analysis</string>
+    <string name="analysis_weakness_length">Too short</string>
+    <string name="analysis_weakness_characterVariety">Insufficient character variety</string>
+    <string name="analysis_weakness_entropy">Low entropy</string>
+    <string name="analysis_weakness_patterns">Contains predictable patterns</string>
+    <string name="analysis_weakness_dictionaryWords">Contains dictionary words</string>
+    <string name="analysis_weakness_commonPasswords">Password too common</string>
+    <string name="analysis_weakness_reuse">Used multiple times</string>
+    <string name="analysis_weakness_none">No weaknesses found</string>
+    <string name="analysis_weakness_fixIssues">Fix issues</string>
+
+</resources>

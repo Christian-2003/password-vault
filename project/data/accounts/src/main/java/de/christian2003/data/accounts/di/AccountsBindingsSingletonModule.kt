@@ -5,6 +5,7 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import de.christian2003.data.accounts.domain.repositories.AccountRepository
+import de.christian2003.data.accounts.domain.repositories.DetailRepository
 import de.christian2003.data.accounts.domain.repositories.PackagesRepository
 import de.christian2003.data.accounts.domain.repositories.TagRepository
 import de.christian2003.data.accounts.domain.repositories.TargetRepository
@@ -29,6 +30,11 @@ internal abstract class AccountsBindingsSingletonModule {
     abstract fun bindAccountRepository(
         impl: PasswordVaultRepository
     ): AccountRepository
+
+    @Binds
+    abstract fun bindDetailRepository(
+        impl: PasswordVaultRepository
+    ): DetailRepository
 
     @Binds
     abstract fun bindTagRepository(

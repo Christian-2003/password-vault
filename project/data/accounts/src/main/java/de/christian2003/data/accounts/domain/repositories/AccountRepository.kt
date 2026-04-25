@@ -22,6 +22,16 @@ internal interface AccountRepository {
 
 
     /**
+     * Returns the account descriptor with the specified ID or null if no account descriptor is
+     * found.
+     *
+     * @param id    ID of the account whose descriptor to return.
+     * @return      Account descriptor with the specified ID or null.
+     */
+    suspend fun getAccountDescriptorById(id: Uuid): AccountDescriptor?
+
+
+    /**
      * Returns a list with the accounts whose IDs are passed as argument.
      *
      * @param accountIds    List of IDs whose accounts to return.

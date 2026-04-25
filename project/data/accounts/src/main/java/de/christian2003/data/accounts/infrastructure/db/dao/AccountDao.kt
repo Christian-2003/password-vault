@@ -26,6 +26,9 @@ interface AccountDao {
     @Query("SELECT * FROM accounts")
     fun selectAllAccountsWithoutTags(): Flow<List<AccountEntity>>
 
+    @Query("SELECT * FROM accounts WHERE id = :id")
+    suspend fun selectAccountWithoutTagsById(id: Uuid): AccountEntity?
+
     @Query("SELECT * FROM accounts WHERE id IN (:accountIds)")
     suspend fun selectAccountsByIds(accountIds: List<Uuid>): List<AccountEntity>
 
