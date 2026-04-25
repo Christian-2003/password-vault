@@ -11,6 +11,8 @@ internal enum class TargetSheetDialog {
     CertificateDetails,
     SelectPackage,
     SelectWebsite,
-    DiscardChanges
+    EditWebsite,
+    DiscardChanges,
+    ConfirmRemoveTarget
 
 }

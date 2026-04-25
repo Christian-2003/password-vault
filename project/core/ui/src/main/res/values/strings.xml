@@ -38,7 +38,9 @@
 
     <!-- Tooltips -->
     <string name="tooltip_selectAllDetails">Select all details</string>
+    <string name="tooltip_selectAllTargets">Select all targets</string>
     <string name="tooltip_deleteSelectedDetails">Remove selected details</string>
+    <string name="tooltip_deleteSelectedTargets">Remove selected targets</string>
     <string name="tooltip_closeMultiselect">Close multiselect</string>
     <string name="tooltip_removeTargetAndroidApp">Remove app %1$s</string>
     <string name="tooltip_removeTargetWebsite">Remove website %1$s</string>

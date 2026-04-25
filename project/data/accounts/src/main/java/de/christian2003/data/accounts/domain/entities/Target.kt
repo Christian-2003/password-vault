@@ -52,6 +52,29 @@ data class Target(
     }
 
 
+    /**
+     * Copies this website target with the new URL. If the target cannot be copied, this target is
+     * returned instead.
+     *
+     * @param url   New URL used for the copied target.
+     * @return      Copied target with the new URL.
+     */
+    fun copyWithNewUrl(url: String): Target {
+        if (!isAndroidApp() && URLUtil.isValidUrl(url)) {
+            val parsedUrl: Uri = url.toUri()
+            val name: String? = parsedUrl.host
+
+            if (name != null) {
+                return copy(
+                    name = name,
+                    url = parsedUrl
+                )
+            }
+        }
+        return this
+    }
+
+
     companion object {
 
         /**

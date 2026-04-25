@@ -7,6 +7,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.AndroidViewModel
@@ -24,6 +25,7 @@ import de.christian2003.data.accounts.application.usecases.ValidatePackageSignat
 import de.christian2003.data.accounts.domain.services.PackageFingerprintService
 import de.christian2003.data.accounts.domain.entities.Target
 import de.christian2003.feature.accounts.models.dialogs.TargetSheetDialog
+import de.christian2003.feature.accounts.models.states.TargetSheetState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.security.cert.X509Certificate
@@ -91,9 +93,11 @@ internal class TargetViewModel @Inject constructor(
     var allInstalledPackages: List<String>? by mutableStateOf(null)
 
     /**
-     * Target that is currently being removed by the user.
+     * Target that is currently being deleted or edited using a dialog. This can be null if no
+     * dialog is currently using this dialog.
      */
-    var targetToRemove: Target? by mutableStateOf(null)
+    var targetForDialog: Target? by mutableStateOf(null)
+        private set
 
     /**
      * Indicates whether the help card is visible.
@@ -106,12 +110,24 @@ internal class TargetViewModel @Inject constructor(
      * display. Otherwise this is null.
      */
     var certificateToDisplay: X509Certificate? = null
+        private set
 
     /**
      * Dialogs for the sheet.
      */
     var dialog: TargetSheetDialog by mutableStateOf(TargetSheetDialog.None)
         private set
+
+    /**
+     * Current state of the sheet.
+     */
+    var state: TargetSheetState by mutableStateOf(TargetSheetState.Default)
+        private set
+
+    /**
+     * Targets that are currently selected by the user (e.g. in multiselect state).
+     */
+    val selectedTargets: MutableSet<Uuid> = mutableStateSetOf()
 
 
     /**
@@ -123,6 +139,24 @@ internal class TargetViewModel @Inject constructor(
         if (targetsAtInit == null) {
             this.targetsAtInit = targets
             this.targets.addAll(targets)
+        }
+    }
+
+
+    fun startMultiselectState(target: Target) {
+        selectedTargets.clear()
+        selectedTargets.add(target.id)
+        state = TargetSheetState.Multiselect
+    }
+
+    fun dismissMultiselectState() {
+        state = TargetSheetState.Default
+        selectedTargets.clear()
+    }
+
+    fun selectAllTargets() {
+        targets.forEach { target ->
+            selectedTargets.add(target.id)
         }
     }
 
@@ -246,6 +280,61 @@ internal class TargetViewModel @Inject constructor(
     }
 
 
+    fun showEditWebsiteDialog(target: Target) {
+        if (!target.isAndroidApp()) {
+            this.targetForDialog = target
+            dialog = TargetSheetDialog.EditWebsite
+        }
+    }
+
+
+    fun dismissEditWebsiteDialog(url: String? = null) {
+        dialog = TargetSheetDialog.None
+        val target: Target? = targetForDialog
+        targetForDialog = null
+        if (url != null && target != null) {
+            val editedTarget: Target = target.copyWithNewUrl(url)
+            val index = targets.indexOf(target)
+            if (index >= 0 && index < targets.size) {
+                targets[index] = editedTarget
+            }
+        }
+    }
+
+
+    fun showConfirmRemoveTargetDialog(target: Target) {
+        targetForDialog = target
+        dialog = TargetSheetDialog.ConfirmRemoveTarget
+    }
+
+    fun showConfirmRemoveTargetDialog() {
+        //Do not set target - When this is called, sheet is in multiselect state!
+        dialog = TargetSheetDialog.ConfirmRemoveTarget
+    }
+
+
+    fun dismissConfirmRemoveTargetDialog(remove: Boolean = false) {
+        dialog = TargetSheetDialog.None
+        val targetToRemove: Target? = targetForDialog
+        targetForDialog = null
+        if (remove) {
+            if (targetToRemove != null) {
+                targets.remove(targetToRemove)
+            }
+            else if (selectedTargets.isNotEmpty()) {
+                selectedTargets.forEach { id ->
+                    val t: Target? = targets.firstOrNull() { target -> target.id == id }
+                    if (t != null) {
+                        targets.remove(t)
+                    }
+                }
+                selectedTargets.clear()
+                dismissMultiselectState()
+            }
+        }
+    }
+
+
     /**
      * Returns a set of all packages tat are selected currently.
      *
@@ -282,19 +371,6 @@ internal class TargetViewModel @Inject constructor(
      */
     fun getPackageIcon(packageName: String): Drawable? {
         return getPackageIconUseCase.getPackageIcon(packageName)
-    }
-
-
-    /**
-     * Dismisses the dialog through which to confirm the removal of a target.
-     *
-     * @param targetToRemove    Target to remove or null to dismiss without removing.
-     */
-    fun dismissRemoveTargetDialog(targetToRemove: Target? = null) {
-        this.targetToRemove = null
-        if (targetToRemove != null) {
-            targets.remove(targetToRemove)
-        }
     }
 
 
