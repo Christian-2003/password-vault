@@ -5,6 +5,7 @@ import android.webkit.URLUtil
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -117,7 +118,10 @@ internal fun TargetSheet(
         properties = ModalBottomSheetProperties(
             shouldDismissOnBackPress = false
         ),
-        containerColor = MaterialTheme.colorScheme.surface
+        containerColor = when (viewModel.state) {
+            TargetSheetState.Default -> MaterialTheme.colorScheme.surface
+            else -> MaterialTheme.colorScheme.surfaceContainer
+        }
     ) {
         BackHandler {
             invokeOnDismiss()
@@ -208,6 +212,7 @@ internal fun TargetSheet(
                 },
                 modifier = Modifier
                     .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.surface)
                     .padding(innerPadding)
             )
         }
