@@ -8,6 +8,9 @@ internal enum class TargetSheetDialog {
 
     None,
     CertificatesDoNotMatch,
-    CertificateDetails
+    CertificateDetails,
+    SelectPackage,
+    SelectWebsite,
+    DiscardChanges
 
 }

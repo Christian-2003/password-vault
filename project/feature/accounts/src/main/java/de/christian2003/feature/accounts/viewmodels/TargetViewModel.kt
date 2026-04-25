@@ -91,21 +91,6 @@ internal class TargetViewModel @Inject constructor(
     var allInstalledPackages: List<String>? by mutableStateOf(null)
 
     /**
-     * Indicates whether the dialog to select installed Android packages is visible.
-     */
-    var isSelectPackageDialogVisible: Boolean by mutableStateOf(false)
-
-    /**
-     * Indicates whether the dialog to select a website is visible.
-     */
-    var isSelectWebsiteDialogVisible: Boolean by mutableStateOf(false)
-
-    /**
-     * Indicates whether the dialog through which to confirm dismissing without saving is visible.
-     */
-    var isDiscardDialogVisible: Boolean by mutableStateOf(false)
-
-    /**
      * Target that is currently being removed by the user.
      */
     var targetToRemove: Target? by mutableStateOf(null)
@@ -126,6 +111,7 @@ internal class TargetViewModel @Inject constructor(
      * Dialogs for the sheet.
      */
     var dialog: TargetSheetDialog by mutableStateOf(TargetSheetDialog.None)
+        private set
 
 
     /**
@@ -198,6 +184,11 @@ internal class TargetViewModel @Inject constructor(
     }
 
 
+    fun showSelectPackageDialog() {
+        dialog = TargetSheetDialog.SelectPackage
+    }
+
+
     /**
      * Dismisses the dialog through which to select installed Android packages.
      *
@@ -205,7 +196,7 @@ internal class TargetViewModel @Inject constructor(
      *                          anything.
      */
     fun dismissSelectPackageDialog(selectedPackages: Set<String>? = null) {
-        isSelectPackageDialogVisible = false
+        dialog = TargetSheetDialog.None
         if (selectedPackages != null) {
             viewModelScope.launch(Dispatchers.Default) {
                 //Remove all Android targets that are not part of the selected packages:
@@ -234,13 +225,18 @@ internal class TargetViewModel @Inject constructor(
     }
 
 
+    fun showSelectWebsiteDialog() {
+        dialog = TargetSheetDialog.SelectWebsite
+    }
+
+
     /**
      * Dismisses the dialog through which to select a website.
      *
      * @param url   URL of the website to save or null to dismiss without saving anything.
      */
     fun dismissSelectWebsiteDialog(url: String? = null) {
-        isSelectWebsiteDialogVisible = false
+        dialog = TargetSheetDialog.None
         if (url != null) {
             val target: Target? = Target.createWebsiteTarget(url)
             if (target != null) {
@@ -323,6 +319,25 @@ internal class TargetViewModel @Inject constructor(
     fun dismissCertificateDetailsDialog() {
         dialog = TargetSheetDialog.None
         certificateToDisplay = null
+    }
+
+
+    fun showDiscardChangesDialog() {
+        dialog = TargetSheetDialog.DiscardChanges
+    }
+
+
+    fun dismissDiscardChangesDialog() {
+        dialog = TargetSheetDialog.None
+    }
+
+
+    fun showCertificatesDoNotMatchDialog() {
+        dialog = TargetSheetDialog.CertificatesDoNotMatch
+    }
+
+    fun dismissCertificatesDoNotMatchDialog() {
+        dialog = TargetSheetDialog.None
     }
 
 

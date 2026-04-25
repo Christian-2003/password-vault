@@ -92,7 +92,7 @@ internal fun TargetSheet(
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val invokeOnDismiss: () -> Unit = {
         if (viewModel.areChangesMade()) {
-            viewModel.isDiscardDialogVisible = true
+            viewModel.showDiscardChangesDialog()
         }
         else {
             coroutineScope.launch {
@@ -133,10 +133,10 @@ internal fun TargetSheet(
             bottomBar = {
                 BottomBar(
                     onSelectPackagesClick = {
-                        viewModel.isSelectPackageDialogVisible = true
+                        viewModel.showSelectPackageDialog()
                     },
                     onSelectWebsiteClick = {
-                        viewModel.isSelectWebsiteDialogVisible = true
+                        viewModel.showSelectWebsiteDialog()
                     }
                 )
             }
@@ -148,7 +148,7 @@ internal fun TargetSheet(
                     viewModel.targetToRemove = target
                 },
                 onShowCertificateHelp = {
-                    viewModel.dialog = TargetSheetDialog.CertificatesDoNotMatch
+                    viewModel.showCertificatesDoNotMatchDialog()
                 },
                 onShowCertificateDetails = { target ->
                     viewModel.showCertificateDetailsDialog(target)
@@ -173,72 +173,6 @@ internal fun TargetSheet(
                     .padding(innerPadding)
             )
         }
-    }
-
-    if (viewModel.isSelectPackageDialogVisible) {
-        if (viewModel.allInstalledPackages == null) {
-            viewModel.loadAllInstalledPackages()
-        }
-        SelectPackageDialog(
-            packageNames = viewModel.allInstalledPackages,
-            selectedPackages = viewModel.getAllSelectedPackages(),
-            getLocalizedPackageName = { packageName ->
-                viewModel.getLocalizedPackageName(packageName)
-            },
-            getPackageIcon = { packageName ->
-                viewModel.getPackageIcon(packageName)
-            },
-            onDismiss = {
-                viewModel.dismissSelectPackageDialog()
-            },
-            onSave = { selectedPackages ->
-                viewModel.dismissSelectPackageDialog(selectedPackages)
-            }
-        )
-    }
-
-    if (viewModel.isSelectWebsiteDialogVisible) {
-        val errorBlankInput: String = stringResource(de.christian2003.core.ui.R.string.error_blankInput)
-        val errorInvalidUrl: String = stringResource(de.christian2003.core.ui.R.string.error_invalidUrl)
-        EditValueDialog(
-            value = "https://",
-            onValidateValue = { value ->
-                if (value.isBlank()) {
-                    errorBlankInput
-                }
-                else if (!(URLUtil.isValidUrl(value) && !value.toUri().host.isNullOrEmpty())) {
-                    errorInvalidUrl
-                }
-                else {
-                    null
-                }
-            },
-            title = stringResource(R.string.target_website_title),
-            label = stringResource(R.string.target_website_label),
-            onDismiss = {
-                viewModel.dismissSelectWebsiteDialog()
-            },
-            onSave = { url ->
-                viewModel.dismissSelectWebsiteDialog(url)
-            }
-        )
-    }
-
-    if (viewModel.isDiscardDialogVisible) {
-        ConfirmDiscardDialog(
-            text = stringResource(R.string.target_discardChanges),
-            onDismiss = {
-                viewModel.isDiscardDialogVisible = false
-            },
-            onConfirm = {
-                coroutineScope.launch {
-                    viewModel.isDiscardDialogVisible = false
-                    sheetState.hide()
-                }.invokeOnCompletion {
-                    onDismiss()
-                }
-            }
-        )
     }
 
     val targetToRemove: Target? = viewModel.targetToRemove
@@ -267,7 +201,7 @@ internal fun TargetSheet(
                 text = AnnotatedString.fromHtml(stringResource(R.string.target_packages_certDialog_text)),
                 dismissButtonText = stringResource(de.christian2003.core.ui.R.string.button_ok),
                 onDismiss = {
-                    viewModel.dialog = TargetSheetDialog.None
+                    viewModel.dismissCertificatesDoNotMatchDialog()
                 }
             ) {
                 Image(
@@ -293,6 +227,69 @@ internal fun TargetSheet(
                     }
                 )
             }
+        }
+        TargetSheetDialog.SelectPackage -> {
+            if (viewModel.allInstalledPackages == null) {
+                viewModel.loadAllInstalledPackages()
+            }
+            SelectPackageDialog(
+                packageNames = viewModel.allInstalledPackages,
+                selectedPackages = viewModel.getAllSelectedPackages(),
+                getLocalizedPackageName = { packageName ->
+                    viewModel.getLocalizedPackageName(packageName)
+                },
+                getPackageIcon = { packageName ->
+                    viewModel.getPackageIcon(packageName)
+                },
+                onDismiss = {
+                    viewModel.dismissSelectPackageDialog()
+                },
+                onSave = { selectedPackages ->
+                    viewModel.dismissSelectPackageDialog(selectedPackages)
+                }
+            )
+        }
+        TargetSheetDialog.SelectWebsite -> {
+            val errorBlankInput: String = stringResource(de.christian2003.core.ui.R.string.error_blankInput)
+            val errorInvalidUrl: String = stringResource(de.christian2003.core.ui.R.string.error_invalidUrl)
+            EditValueDialog(
+                value = "https://",
+                onValidateValue = { value ->
+                    if (value.isBlank()) {
+                        errorBlankInput
+                    }
+                    else if (!(URLUtil.isValidUrl(value) && !value.toUri().host.isNullOrEmpty())) {
+                        errorInvalidUrl
+                    }
+                    else {
+                        null
+                    }
+                },
+                title = stringResource(R.string.target_website_title),
+                label = stringResource(R.string.target_website_label),
+                onDismiss = {
+                    viewModel.dismissSelectWebsiteDialog()
+                },
+                onSave = { url ->
+                    viewModel.dismissSelectWebsiteDialog(url)
+                }
+            )
+        }
+        TargetSheetDialog.DiscardChanges -> {
+            ConfirmDiscardDialog(
+                text = stringResource(R.string.target_discardChanges),
+                onDismiss = {
+                    viewModel.dismissDiscardChangesDialog()
+                },
+                onConfirm = {
+                    coroutineScope.launch {
+                        viewModel.dismissDiscardChangesDialog()
+                        sheetState.hide()
+                    }.invokeOnCompletion {
+                        onDismiss()
+                    }
+                }
+            )
         }
         else -> { }
     }

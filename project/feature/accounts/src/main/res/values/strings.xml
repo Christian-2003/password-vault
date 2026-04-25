@@ -113,7 +113,7 @@
     <string name="detail_titleCreate">Create detail</string>
     <string name="detail_titleEdit">Edit detail</string>
     <string name="detail_typeLabel">Type</string>
-    <string name="detail_nameLabel">Name</string>
+    <string name="detail_nameLabel">Label</string>
     <string name="detail_contentLabel">Content</string>
     <string name="detail_obfuscatedTitle">Obfuscated</string>
     <string name="detail_obfuscatedText">Whether the content should be obfuscated</string>
