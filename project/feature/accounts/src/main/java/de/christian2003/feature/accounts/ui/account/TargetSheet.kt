@@ -15,15 +15,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Card
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialShapes
@@ -38,10 +33,7 @@ import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,9 +43,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.fromHtml
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.core.net.toUri
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import de.christian2003.core.ui.composables.EmptyPlaceholder
@@ -615,152 +605,6 @@ private fun TargetsListRowWebsite(
                         painter = painterResource(de.christian2003.core.ui.R.drawable.ic_cancel),
                         contentDescription = ""
                     )
-                }
-            }
-        }
-    }
-}
-
-
-/**
- * Dialog through which to select installed Android packages.
- *
- * @param packageNames              List of the package names for all installed Android packages.
- * @param selectedPackages          Set of the package names of all selected packages.
- * @param getLocalizedPackageName   Callback invoked to query a localized name for an installed package.
- * @param getPackageIcon            Callback invoked to query the icon for an installed package.
- * @param onDismiss                 Callback invoked to dismiss the dialog.
- * @param onSave                    Callback invoked to save a set of installed packages.
- */
-@Composable
-private fun SelectPackageDialog(
-    packageNames: List<String>?,
-    selectedPackages: Set<String>,
-    getLocalizedPackageName: (String) -> String?,
-    getPackageIcon: (String) -> Drawable?,
-    onDismiss: () -> Unit,
-    onSave: (Set<String>) -> Unit
-) {
-    val mutableSetSaver = Saver<MutableSet<String>, List<String>>(
-        save = { set -> set.toList() },
-        restore = { list -> list.toMutableSet() }
-    )
-    val mutableSelectedPackages: MutableSet<String> = rememberSaveable(saver = mutableSetSaver) { mutableStateSetOf() }
-    mutableSelectedPackages.addAll(selectedPackages)
-
-    Dialog(
-        onDismissRequest = onDismiss
-    ) {
-        Card(
-            shape = MaterialTheme.shapes.extraLarge
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        top = 24.dp,
-                        bottom = 24.dp
-                    )
-            ) {
-                Text(
-                    text = stringResource(R.string.target_packages_title),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.padding(
-                        start = 24.dp,
-                        end = 24.dp,
-                        bottom = 16.dp
-                    )
-                )
-                HorizontalDivider()
-                if (packageNames == null) {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(24.dp)
-                    )
-                }
-                else {
-                    LazyColumn(
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        items(packageNames) { packageName ->
-                            val isSelected: Boolean = mutableSelectedPackages.contains(packageName)
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        if (isSelected) {
-                                            mutableSelectedPackages.remove(packageName)
-                                        }
-                                        else {
-                                            mutableSelectedPackages.add(packageName)
-                                        }
-                                    }
-                                    .padding(
-                                        start = 24.dp,
-                                        top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical),
-                                        end = 12.dp, //24 - 12 = 12
-                                        bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
-                                    )
-                            ) {
-                                Image(
-                                    painter = rememberDrawablePainter(getPackageIcon(packageName)),
-                                    contentDescription = "",
-                                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_s))
-                                )
-                                Text(
-                                    text = getLocalizedPackageName(packageName) ?: packageName,
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    maxLines = 2,
-                                    overflow = TextOverflow.Ellipsis,
-                                    modifier = Modifier
-                                        .padding(start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
-                                        .weight(1f)
-                                )
-                                Checkbox(
-                                    checked = isSelected,
-                                    onCheckedChange = {
-                                        if (isSelected) {
-                                            mutableSelectedPackages.remove(packageName)
-                                        }
-                                        else {
-                                            mutableSelectedPackages.add(packageName)
-                                        }
-                                    }
-                                )
-                            }
-                        }
-                    }
-                }
-                HorizontalDivider()
-                FlowRow(
-                    horizontalArrangement = Arrangement.End,
-                    modifier = Modifier
-                        .align(Alignment.End)
-                        .padding(
-                            start = 24.dp,
-                            top = 16.dp,
-                            end = 24.dp
-                        )
-                ) {
-                    TextButton(
-                        onClick = {
-                            onDismiss()
-                        }
-                    ) {
-                        Text(stringResource(de.christian2003.core.ui.R.string.button_cancel))
-                    }
-                    TextButton(
-                        onClick = {
-                            onSave(mutableSelectedPackages)
-                        },
-                        modifier = Modifier.padding(start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
-                    ) {
-                        Text(stringResource(de.christian2003.core.ui.R.string.button_ok))
-                    }
                 }
             }
         }

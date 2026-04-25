@@ -59,7 +59,7 @@ internal fun SearchResultView(
         EmptyPlaceholder(
             title = stringResource(R.string.search_emptyPlaceholder_title),
             subtitle = stringResource(R.string.search_emptyPlaceholder_subtitle),
-            painter = painterResource(R.drawable.el_search),
+            painter = painterResource(de.christian2003.core.ui.R.drawable.el_search),
             modifier = modifier.padding(bottom = bottomPadding)
         )
     }

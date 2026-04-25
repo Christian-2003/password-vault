@@ -8,15 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LoadingIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,15 +21,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.Dp
 import de.christian2003.core.ui.composables.NavigationBarProtection
+import de.christian2003.core.ui.composables.SearchField
 import de.christian2003.core.ui.composables.dialog.ConfirmDeleteDialog
 import de.christian2003.data.accounts.domain.entities.Tag
 import de.christian2003.feature.search.presentation.viewmodels.SearchViewModel
@@ -186,35 +178,14 @@ private fun TopBar(
 ) {
     TopAppBar(
         title = {
-            Box(
-                contentAlignment = Alignment.Center,
+            SearchField(
+                query = query,
+                hint = stringResource(R.string.search_hint),
+                focusRequester = focusRequester,
+                onQueryChange = onQueryChange,
+                onSearch = onSearch,
                 modifier = Modifier.fillMaxWidth()
-            ) {
-                if (query.isEmpty()) {
-                    Text(
-                        text = stringResource(R.string.search_hint),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 1,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-                BasicTextField(
-                    value = query,
-                    onValueChange = onQueryChange,
-                    singleLine = true,
-                    textStyle = TextStyle(
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontSize = MaterialTheme.typography.bodyLarge.fontSize
-                    ),
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                    keyboardActions = KeyboardActions {
-                        onSearch()
-                    },
-                    cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
-                    modifier = Modifier.focusRequester(focusRequester).fillMaxWidth()
-                )
-            }
+            )
         },
         navigationIcon = {
             IconButton(

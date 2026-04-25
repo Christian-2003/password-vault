@@ -82,6 +82,9 @@
     <string name="target_emptyPlaceholder_title">No targets</string>
     <string name="target_emptyPlaceholder_subtitle">Select targets and they will show up here</string>
     <string name="target_packages_title">Select apps</string>
+    <string name="target_packages_queryHint">Search apps</string>
+    <string name="target_packages_queryEmptyPlaceholder_title">No apps</string>
+    <string name="target_packages_queryEmptyPlaceholder_subtitle">Apps which match your query are shown here</string>
     <string name="target_packages_signingCertsNotMatching">Certificates do not match</string>
     <string name="target_packages_signingCertsValid">Authenticity verified</string>
     <string name="target_packages_certDialog_title">Security check failed</string>
