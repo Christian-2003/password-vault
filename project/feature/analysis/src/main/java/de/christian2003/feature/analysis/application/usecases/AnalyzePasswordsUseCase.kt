@@ -8,6 +8,7 @@ import de.christian2003.feature.analysis.application.services.DictionaryDetectio
 import de.christian2003.feature.analysis.application.services.PatternDetectionService
 import de.christian2003.feature.analysis.application.services.ReuseDetectionService
 import de.christian2003.feature.analysis.domain.entities.PasswordResult
+import de.christian2003.feature.analysis.domain.entities.PasswordStrength
 import de.christian2003.feature.analysis.domain.entities.SecurityCriteria
 import de.christian2003.feature.analysis.domain.entities.SecurityResult
 import javax.inject.Inject
@@ -42,7 +43,7 @@ internal class AnalyzePasswordsUseCase @Inject constructor(
         val passwords: Map<Detail, Uuid> = getAllDetailsByTypeUseCase.getAllDetailsByType(DetailType.Password)
 
         //Prepare:
-        reuseDetectionService.prepareReuseDetection(passwords)
+        val reusedPasswords: Map<String, List<Uuid>> = reuseDetectionService.prepareReuseDetection(passwords)
         dictionaryDetectionService.prepareDictionaryDetection()
         commonPasswordDetectionService.preparePasswordDetection()
 
@@ -53,9 +54,26 @@ internal class AnalyzePasswordsUseCase @Inject constructor(
             passwordResults.add(passwordResult)
         }
 
+        //Map passwords by strength:
+        val passwordsByStrength: MutableMap<PasswordStrength, MutableList<PasswordResult>> = mutableMapOf()
+        passwordResults.forEach { passwordResult ->
+            val strength: PasswordStrength = when {
+                passwordResult.securityScore <= 3 -> PasswordStrength.Weak
+                passwordResult.securityScore <= 7 -> PasswordStrength.Medium
+                passwordResult.securityScore <= 12 -> PasswordStrength.Strong
+                else -> PasswordStrength.VeryStrong
+            }
+            if (!passwordsByStrength.contains(strength)) {
+                passwordsByStrength[strength] = mutableListOf()
+            }
+            passwordsByStrength[strength]!!.add(passwordResult)
+        }
+
         //Generate result
         val securityResult = SecurityResult(
-            passwordResults = passwordResults
+            allPasswordResults = passwordResults,
+            passwordResults = passwordsByStrength,
+            reusedPasswords = reusedPasswords
         )
 
         //Cleanup:

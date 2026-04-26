@@ -20,8 +20,10 @@ internal class ReuseDetectionService @Inject constructor() {
      * Prepares the reuse detection with the provided map of password details.
      *
      * @param passwordDetails   Maps each password detail to the account ID of which it is a member.
+     * @return                  Passwords that are used multiple times are mapped to a list of
+     *                          accounts where they are used.
      */
-    fun prepareReuseDetection(passwordDetails: Map<Detail, Uuid>) {
+    fun prepareReuseDetection(passwordDetails: Map<Detail, Uuid>): Map<String, List<Uuid>> {
         duplicatePasswords.clear()
 
         val details: List<Pair<Detail, Uuid>> = passwordDetails.toList()
@@ -48,6 +50,8 @@ internal class ReuseDetectionService @Inject constructor() {
                 }
             }
         }
+
+        return duplicatePasswords
     }
 
 

@@ -51,6 +51,8 @@
         <item>Create, edit or view accounts</item>
         <item>List of help messages</item>
         <item>Autofill settings</item>
+        <item>Password security analysis: Weak passwords</item>
+        <item>Password security analysis: Reused passwords</item>
     </string-array>
 
 </resources>

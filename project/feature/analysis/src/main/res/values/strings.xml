@@ -4,6 +4,14 @@
 
     <!-- Screen through which the result of the security analysis is displayed -->
     <string name="analysis_title">Password analysis</string>
+    <string name="analysis_overview_reuse_title">Reused passwords</string>
+    <string name="analysis_overview_reuse_subtitle">Used for multiple accounts</string>
+    <string name="analysis_overview_weak_title">Weak passwords</string>
+    <string name="analysis_overview_weak_subtitle">Makes your accounts easy-to-hack</string>
+    <plurals name="analysis_overview_accountsLabel">
+        <item quantity="one">account</item>
+        <item quantity="other">accounts</item>
+    </plurals>
     <string name="analysis_weakness_length">Too short</string>
     <string name="analysis_weakness_characterVariety">Insufficient character variety</string>
     <string name="analysis_weakness_entropy">Low entropy</string>
@@ -13,5 +21,12 @@
     <string name="analysis_weakness_reuse">Used multiple times</string>
     <string name="analysis_weakness_none">No weaknesses found</string>
     <string name="analysis_weakness_fixIssues">Fix issues</string>
+    <string name="analysis_strength_weak">Weak</string>
+    <string name="analysis_strength_medium">Medium</string>
+    <string name="analysis_strength_strong">Strong</string>
+    <string name="analysis_strength_veryStrong">Very strong</string>
+    <string name="analysis_reused_sectionHeader">%1$d accounts use the same password</string>
+    <string name="analysis_help_weakPasswords">Weak passwords are easy to guess and hack. Use strong passwords for the best protection.</string>
+    <string name="analysis_help_reusedPasswords">If a reused password is guessed once, an attacker gets access to all sites using the same password.</string>
 
 </resources>

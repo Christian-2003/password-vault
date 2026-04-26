@@ -26,7 +26,12 @@ enum class HelpCard(
 
     Help("help_help"),
 
-    Autofill("help_autofill");
+    Autofill("help_autofill"),
+
+    AnalysisWeakPasswords("help_analysis_weakPasswords"),
+
+    AnalysisReusedPasswords("help_analysis_reusedPasswords");
+
 
     fun getVisible(context: Context): Boolean {
         return context.getSharedPreferences("settings", Context.MODE_PRIVATE).getBoolean(key, true)

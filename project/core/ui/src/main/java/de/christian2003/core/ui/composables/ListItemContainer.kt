@@ -38,8 +38,9 @@ fun ListItemContainer(
         modifier = modifier
             .fillMaxWidth()
             .padding(
-                horizontal = dimensionResource(R.dimen.margin_horizontal),
-                vertical = 2.dp
+                start = dimensionResource(R.dimen.margin_horizontal),
+                end = dimensionResource(R.dimen.margin_horizontal),
+                bottom = 4.dp
             )
             .clip(
                 RoundedCornerShape(
