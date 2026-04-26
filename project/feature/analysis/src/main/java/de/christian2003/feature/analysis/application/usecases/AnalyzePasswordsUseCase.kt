@@ -70,10 +70,12 @@ internal class AnalyzePasswordsUseCase @Inject constructor(
         }
 
         //Generate result
+        val analyzedAccounts: Int = passwords.values.distinct().size
         val securityResult = SecurityResult(
             allPasswordResults = passwordResults,
             passwordResults = passwordsByStrength,
-            reusedPasswords = reusedPasswords
+            reusedPasswords = reusedPasswords,
+            analyzedAccounts = analyzedAccounts
         )
 
         //Cleanup:

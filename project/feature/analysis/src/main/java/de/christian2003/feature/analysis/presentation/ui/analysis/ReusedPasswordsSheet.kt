@@ -2,8 +2,6 @@ package de.christian2003.feature.analysis.presentation.ui.analysis
 
 import android.graphics.drawable.Drawable
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -32,15 +30,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
@@ -58,9 +51,20 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.uuid.Uuid
 import de.christian2003.feature.analysis.R
-import de.christian2003.feature.analysis.domain.entities.PasswordResult
 
 
+/**
+ * List item displays an account descriptor.
+ *
+ * @param reusedPasswords           Reused passwords.
+ * @param isHelpCardVisible         Whether the help card is visible.
+ * @param helpMessage               Message for the help card.
+ * @param onQueryAccountDescriptor  Callback invoke to query account descriptors.
+ * @param onQueryAccountIcon        Callback invoked to query account icons.
+ * @param onNavigateToAccount       Callback to navigate to an account.
+ * @param onDismissHelpCard         Callback to dismiss the help card.
+ * @param onDismiss                 Callback to dismiss the sheet.
+ */
 @Composable
 internal fun ReusedPasswordsSheet(
     reusedPasswords: Map<String, List<Uuid>>,
@@ -154,6 +158,12 @@ internal fun ReusedPasswordsSheet(
 }
 
 
+/**
+ * Section header displays how many accounts use a password.
+ *
+ * @param numberOfAccounts  Number of accounts using the password of the section.
+ * @param modifier          Modifier.
+ */
 @Composable
 private fun SectionHeader(
     numberOfAccounts: Int,
@@ -173,6 +183,16 @@ private fun SectionHeader(
 }
 
 
+/**
+ * List item displays an account descriptor.
+ *
+ * @param accountId                 ID of the account to display.
+ * @param isFirst                   Whether the item is the first in the list.
+ * @param isLast                    Whether the item is the last in the list.
+ * @param onQueryAccountDescriptor  Callback invoke to query account descriptors.
+ * @param onQueryAccountIcon        Callback invoked to query account icons.
+ * @param onNavigateToAccount       Callback to navigate to an account.
+ */
 @Composable
 private fun AccountDescriptor(
     accountId: Uuid,
@@ -261,6 +281,11 @@ private fun AccountDescriptor(
 }
 
 
+/**
+ * Top bar for the sheet.
+ *
+ * @param onDismiss Callback invoked to dismiss the sheet.
+ */
 @Composable
 private fun TopBar(
     onDismiss: () -> Unit

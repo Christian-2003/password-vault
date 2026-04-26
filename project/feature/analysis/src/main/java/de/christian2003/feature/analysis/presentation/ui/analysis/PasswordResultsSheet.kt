@@ -68,6 +68,21 @@ import kotlin.collections.forEach
 import kotlin.uuid.Uuid
 
 
+/**
+ * List row displays a single password security result.
+ *
+ * @param passwordResults           List of password results.
+ * @param filter                    Filter. Only password results of this strength are displayed.
+ * @param title                     Title for the sheet.
+ * @param isHelpCardVisible         Whether the help card is visible.
+ * @param helpMessage               Message for the help card.
+ * @param onQueryAccountDescriptor  Callback to query an account descriptor.
+ * @param onQueryAccountIcon        Callback to query an account icon.
+ * @param onGeneratePositiveColor   Callback to generate a positive color.
+ * @param onNavigateToAccount       Callback to navigate to an account.
+ * @param onDismissHelpCard         Callback to dismiss the help card.
+ * @param onDismiss                 Callback to dismiss the sheet.
+ */
 @Composable
 internal fun PasswordResultsSheet(
     passwordResults: Map<PasswordStrength, List<PasswordResult>>,
@@ -172,6 +187,17 @@ internal fun PasswordResultsSheet(
 }
 
 
+/**
+ * List row displays a single password security result.
+ *
+ * @param passwordResult            Password result to display.
+ * @param isFirst                   Whether this is the first item in the list.
+ * @param isLast                    Whether this is the last item in the list.
+ * @param onQueryAccountDescriptor  Callback to query an account descriptor.
+ * @param onQueryAccountIcon        Callback to query an account icon.
+ * @param onGeneratePositiveColor   Callback to generate a positive color.
+ * @param onNavigateToAccount       Callback to navigate to an account.
+ */
 @Composable
 private fun PasswordResultListRow(
     passwordResult: PasswordResult,
@@ -283,6 +309,13 @@ private fun PasswordResultListRow(
 }
 
 
+/**
+ * Displays a list of weaknesses (i.e. security criteria) for a password.
+ *
+ * @param weaknesses                List of weaknesses (i.e. security criteria) to display.
+ * @param onFixIssuesClick          Callback invoked once the user clicks "Fix issues".
+ * @param onGeneratePositiveColor   Callback to generate a positive color.
+ */
 @Composable
 private fun PasswordResultWeaknesses(
     weaknesses: List<SecurityCriteria>,
@@ -316,6 +349,12 @@ private fun PasswordResultWeaknesses(
 }
 
 
+/**
+ * Displays a single security criteria for a password.
+ *
+ * @param securityCriteria          Security criteria to display.
+ * @param onGeneratePositiveColor   Callback to generate a positive color.
+ */
 @Composable
 private fun PasswordResultWeaknessesSecurityCriteria(
     securityCriteria: SecurityCriteria?,
@@ -373,6 +412,12 @@ private fun PasswordResultWeaknessesSecurityCriteria(
 }
 
 
+/**
+ * Top bar for the sheet.
+ *
+ * @param title     Title for the sheet.
+ * @param onDismiss Callback to dismiss the sheet.
+ */
 @Composable
 private fun TopBar(
     title: String,

@@ -9,9 +9,11 @@ import kotlin.uuid.Uuid
  * @param allPasswordResults    List of all results for the analyzed passwords.
  * @param passwordResults       Password results mapped to a strength category.
  * @param reusedPasswords       Reused passwords mapped to the lists of accounts that use them.
+ * @param analyzedAccounts      Number of accounts that were analyzed.
  */
 internal data class SecurityResult(
     val allPasswordResults: List<PasswordResult>,
     val passwordResults: Map<PasswordStrength, List<PasswordResult>>,
-    val reusedPasswords: Map<String, List<Uuid>>
+    val reusedPasswords: Map<String, List<Uuid>>,
+    val analyzedAccounts: Int
 )

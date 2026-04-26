@@ -4,13 +4,19 @@
 
     <!-- Screen through which the result of the security analysis is displayed -->
     <string name="analysis_title">Password analysis</string>
+    <plurals name="analysis_hero_text">
+        <item quantity="one">Analyzed passwords for %1$d account</item>
+        <item quantity="other">Analyzed passwords for %1$d accounts</item>
+    </plurals>
+    <string name="analysis_overview_allPasswords">View all passwords</string>
+    <string name="analysis_overview_all_title">All passwords</string>
     <string name="analysis_overview_reuse_title">Reused passwords</string>
     <string name="analysis_overview_reuse_subtitle">Used for multiple accounts</string>
     <string name="analysis_overview_weak_title">Weak passwords</string>
     <string name="analysis_overview_weak_subtitle">Makes your accounts easy-to-hack</string>
-    <plurals name="analysis_overview_accountsLabel">
-        <item quantity="one">account</item>
-        <item quantity="other">accounts</item>
+    <plurals name="analysis_overview_passwordsLabel">
+        <item quantity="one">password</item>
+        <item quantity="other">passwords</item>
     </plurals>
     <string name="analysis_weakness_length">Too short</string>
     <string name="analysis_weakness_characterVariety">Insufficient character variety</string>

@@ -1,5 +1,6 @@
 package de.christian2003.feature.analysis.presentation.ui.analysis
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -20,20 +22,22 @@ import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.graphics.shapes.RoundedPolygon
 import de.christian2003.core.ui.composables.NavigationBarProtection
@@ -46,6 +50,13 @@ import de.christian2003.feature.analysis.domain.entities.SecurityResult
 import de.christian2003.feature.analysis.presentation.models.dialogs.AnalysisScreenDialog
 
 
+/**
+ * Screen through which the password security analysis is displayed.
+ *
+ * @param viewModel             View model.
+ * @param onNavigateUp          Callback to navigate up the nav stack.
+ * @param onNavigateToAccount   Callback to navigate to an account.
+ */
 @Composable
 internal fun AnalysisScreen(
     viewModel: AnalysisViewModel,
@@ -56,7 +67,11 @@ internal fun AnalysisScreen(
     Scaffold(
         topBar = {
             TopBar(
-                onNavigateUp = onNavigateUp
+                restartAnalysisEnabled = securityResult != null,
+                onNavigateUp = onNavigateUp,
+                onRestartAnalysis = {
+                    viewModel.startAnalysis()
+                }
             )
         }
     ) { innerPadding ->
@@ -82,7 +97,19 @@ internal fun AnalysisScreen(
                         end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
                     )
             ) {
-                //Weak accounts:
+                //Hero:
+                item {
+                    HeroSection(
+                        accountsCount = securityResult.analyzedAccounts,
+                        modifier = Modifier.padding(
+                            start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                            end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
+                            bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
+                        )
+                    )
+                }
+
+                //Weak passwords:
                 item {
                     var weakAccountsCount = 0
                     if (securityResult.passwordResults.contains(PasswordStrength.Weak)) {
@@ -106,7 +133,7 @@ internal fun AnalysisScreen(
                     )
                 }
 
-                //Reused accounts:
+                //Reused passwords:
                 item {
                     var reusedAccountsCount = 0
                     securityResult.reusedPasswords.forEach { _, accountIds ->
@@ -128,6 +155,26 @@ internal fun AnalysisScreen(
                     )
                 }
 
+                //Bottom content
+                item {
+                    if (securityResult.analyzedAccounts > 0) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal))
+                        ) {
+                            TextButton(
+                                onClick = {
+                                    viewModel.showAllPasswordsDialog()
+                                }
+                            ) {
+                                Text(stringResource(R.string.analysis_overview_allPasswords))
+                            }
+                        }
+                    }
+                }
+
                 //Navigation bar spacer:
                 item {
                     Box(modifier = Modifier.height(bottomPadding))
@@ -139,12 +186,21 @@ internal fun AnalysisScreen(
     }
 
     when (viewModel.dialog) {
-        AnalysisScreenDialog.WeakPasswords -> {
+        AnalysisScreenDialog.WeakPasswords, AnalysisScreenDialog.AllPasswords -> {
             PasswordResultsSheet(
                 passwordResults = securityResult!!.passwordResults,
-                filter = setOf(PasswordStrength.Weak, PasswordStrength.Medium),
-                title = stringResource(R.string.analysis_overview_weak_title),
-                isHelpCardVisible = viewModel.isWeakPasswordsHelpCardVisible,
+                filter = when (viewModel.dialog) {
+                    AnalysisScreenDialog.WeakPasswords -> setOf(PasswordStrength.Weak, PasswordStrength.Medium)
+                    else -> setOf(PasswordStrength.Weak, PasswordStrength.Medium, PasswordStrength.Strong, PasswordStrength.VeryStrong)
+                },
+                title = when (viewModel.dialog) {
+                    AnalysisScreenDialog.WeakPasswords -> stringResource(R.string.analysis_overview_weak_title)
+                    else -> stringResource(R.string.analysis_overview_all_title)
+                },
+                isHelpCardVisible = when (viewModel.dialog) {
+                    AnalysisScreenDialog.WeakPasswords -> viewModel.isWeakPasswordsHelpCardVisible
+                    else -> false
+                },
                 helpMessage = stringResource(R.string.analysis_help_weakPasswords),
                 onQueryAccountDescriptor = { accountId ->
                     viewModel.queryAccountDescriptor(accountId)
@@ -160,7 +216,10 @@ internal fun AnalysisScreen(
                     viewModel.dismissWeakPasswordsHelpCard()
                 },
                 onDismiss = {
-                    viewModel.dismissWeakPasswordsDialog()
+                    when (viewModel.dialog) {
+                        AnalysisScreenDialog.WeakPasswords -> viewModel.dismissWeakPasswordsDialog()
+                        else -> viewModel.dismissAllPasswordsDialog()
+                    }
                 }
             )
         }
@@ -189,8 +248,58 @@ internal fun AnalysisScreen(
 }
 
 
+/**
+ * Hero section of the screen.
+ *
+ * @param accountsCount Number of analyzed accounts.
+ * @param modifier      Modifier.
+ */
 @Composable
-fun ResultSection(
+private fun HeroSection(
+    accountsCount: Int,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(
+                vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
+            )
+    ) {
+        Image(
+            painter = painterResource(R.drawable.analysis),
+            contentDescription = "",
+            contentScale = ContentScale.FillWidth,
+            modifier = Modifier
+                .width(dimensionResource(de.christian2003.core.ui.R.dimen.image_xxl))
+        )
+        Text(
+            text = pluralStringResource(R.plurals.analysis_hero_text, accountsCount, accountsCount),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
+        )
+    }
+}
+
+
+/**
+ * Result section (e.g. "weak passwords" or "reused passwords").
+ *
+ * @param title         Title for the section.
+ * @param subtitle      Subtitle for the section.
+ * @param accountsCount Number of accounts.
+ * @param painter       Icon painter.
+ * @param shape         Icon shape.
+ * @param onClick       Callback once the section is clicked.
+ * @param modifier      Modifier.
+ */
+@Composable
+private fun ResultSection(
     title: String,
     subtitle: String,
     accountsCount: Int,
@@ -279,7 +388,7 @@ fun ResultSection(
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = pluralStringResource(R.plurals.analysis_overview_accountsLabel, accountsCount),
+                text = pluralStringResource(R.plurals.analysis_overview_passwordsLabel, accountsCount),
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
@@ -289,9 +398,18 @@ fun ResultSection(
 }
 
 
+/**
+ * Top bar for the screen.
+ *
+ * @param restartAnalysisEnabled    Whether the button to restart the analysis is enabled.
+ * @param onNavigateUp              Callback to navigate up the nav stack.
+ * @param onRestartAnalysis         Callback to restart the analysis.
+ */
 @Composable
 private fun TopBar(
-    onNavigateUp: () -> Unit
+    restartAnalysisEnabled: Boolean,
+    onNavigateUp: () -> Unit,
+    onRestartAnalysis: () -> Unit
 ) {
     TopAppBar(
         title = {
@@ -303,6 +421,17 @@ private fun TopBar(
             ) {
                 Icon(
                     painter = painterResource(de.christian2003.core.ui.R.drawable.ic_back),
+                    contentDescription = ""
+                )
+            }
+        },
+        actions = {
+            IconButton(
+                enabled = restartAnalysisEnabled,
+                onClick = onRestartAnalysis
+            ) {
+                Icon(
+                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_reload),
                     contentDescription = ""
                 )
             }

@@ -8,6 +8,7 @@ import de.christian2003.feature.analysis.presentation.viewmodels.AnalysisViewMod
 import kotlinx.serialization.Serializable
 import kotlin.uuid.Uuid
 
+
 // =============== Public destinations ===============
 
 @Serializable
