@@ -42,6 +42,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import de.christian2003.core.ui.composables.ListItemContainer
 import de.christian2003.core.ui.composables.Shape
+import de.christian2003.core.ui.theme.isDarkTheme
 import de.christian2003.data.accounts.domain.entities.AccountDescriptor
 import de.christian2003.feature.analysis.presentation.viewmodels.AnalysisViewModel
 import kotlin.uuid.Uuid
@@ -92,6 +93,9 @@ internal fun AnalysisScreen(
                         onQueryAccountIcon = { accountDescriptor ->
                             viewModel.queryAccountIcon(accountDescriptor)
                         },
+                        onGeneratePositiveColor = { negativeColor, darkTheme ->
+                            viewModel.generatePositiveColor(negativeColor, darkTheme)
+                        },
                         onNavigateToAccount = onNavigateToAccount
                     )
                 }
@@ -108,6 +112,7 @@ private fun PasswordResultListRow(
     isLast: Boolean,
     onQueryAccountDescriptor: suspend (Uuid) -> AccountDescriptor?,
     onQueryAccountIcon: (AccountDescriptor) -> Drawable?,
+    onGeneratePositiveColor: (Color, Boolean) -> Color,
     onNavigateToAccount: (Uuid) -> Unit
 ) {
     val accountDescriptor: AccountDescriptor? by produceState(null) {
@@ -200,7 +205,8 @@ private fun PasswordResultListRow(
                     weaknesses = passwordResult.weaknesses,
                     onFixIssuesClick = {
                         onNavigateToAccount(passwordResult.accountId)
-                    }
+                    },
+                    onGeneratePositiveColor = onGeneratePositiveColor
                 )
             }
         }
@@ -211,19 +217,24 @@ private fun PasswordResultListRow(
 @Composable
 private fun PasswordResultWeaknesses(
     weaknesses: List<SecurityCriteria>,
-    onFixIssuesClick: () -> Unit
+    onFixIssuesClick: () -> Unit,
+    onGeneratePositiveColor: (Color, Boolean) -> Color
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
     ) {
         if (weaknesses.isEmpty()) {
-            PasswordResultWeaknessesSecurityCriteria(null)
+            PasswordResultWeaknessesSecurityCriteria(
+                securityCriteria = null,
+                onGeneratePositiveColor = onGeneratePositiveColor
+            )
         }
         else {
             weaknesses.forEach { weakness ->
                 PasswordResultWeaknessesSecurityCriteria(
-                    securityCriteria = weakness
+                    securityCriteria = weakness,
+                    onGeneratePositiveColor = onGeneratePositiveColor
                 )
             }
             TextButton(
@@ -238,10 +249,11 @@ private fun PasswordResultWeaknesses(
 
 @Composable
 private fun PasswordResultWeaknessesSecurityCriteria(
-    securityCriteria: SecurityCriteria?
+    securityCriteria: SecurityCriteria?,
+    onGeneratePositiveColor: (Color, Boolean) -> Color
 ) {
     val tintColor: Color = if (securityCriteria == null) {
-        MaterialTheme.colorScheme.primary
+        onGeneratePositiveColor(MaterialTheme.colorScheme.error, MaterialTheme.isDarkTheme())
     } else {
         MaterialTheme.colorScheme.error
     }

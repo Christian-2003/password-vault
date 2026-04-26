@@ -5,9 +5,11 @@ import android.graphics.drawable.Drawable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import de.christian2003.core.ui.model.ColorGenerator
 import de.christian2003.data.accounts.application.usecases.GetAccountDescriptorByIdUseCase
 import de.christian2003.data.accounts.application.usecases.GetAccountIconUseCase
 import de.christian2003.data.accounts.domain.entities.AccountDescriptor
@@ -24,7 +26,8 @@ internal class AnalysisViewModel @Inject constructor(
     application: Application,
     private val analyzePasswordsUseCase: AnalyzePasswordsUseCase,
     private val getAccountDescriptorByIdUseCase: GetAccountDescriptorByIdUseCase,
-    private val getAccountIconUseCase: GetAccountIconUseCase
+    private val getAccountIconUseCase: GetAccountIconUseCase,
+    private val colorGenerator: ColorGenerator
 ): AndroidViewModel(application) {
 
     private val accountDescriptorsCache: MutableMap<Uuid, AccountDescriptor> = mutableMapOf()
@@ -53,6 +56,11 @@ internal class AnalysisViewModel @Inject constructor(
 
     fun queryAccountIcon(accountDescriptor: AccountDescriptor): Drawable? {
         return getAccountIconUseCase.getAccountIcon(accountDescriptor)
+    }
+
+
+    fun generatePositiveColor(negativeColor: Color, darkTheme: Boolean): Color {
+        return colorGenerator.generatePositiveColorFromNegativeColor(negativeColor, darkTheme)
     }
 
 

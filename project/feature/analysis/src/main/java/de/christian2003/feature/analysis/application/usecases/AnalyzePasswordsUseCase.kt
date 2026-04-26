@@ -15,6 +15,15 @@ import kotlin.math.log2
 import kotlin.uuid.Uuid
 
 
+/**
+ * Use case to analyze the security of the passwords of all accounts stored in the app.
+ *
+ * @param getAllDetailsByTypeUseCase        Use case to ge all account details by a specific type.
+ * @param commonPasswordDetectionService    Service detects common passwords.
+ * @param dictionaryDetectionService        Service detects dictionary words inside passwords.
+ * @param patternDetectionService           Service detects patterns in passwords.
+ * @param reuseDetectionService             Service detects reused passwords among multiple accounts.
+ */
 internal class AnalyzePasswordsUseCase @Inject constructor(
     private val getAllDetailsByTypeUseCase: GetAllDetailsByTypeUseCase,
     private val commonPasswordDetectionService: CommonPasswordDetectionService,
@@ -23,22 +32,47 @@ internal class AnalyzePasswordsUseCase @Inject constructor(
     private val reuseDetectionService: ReuseDetectionService
 ) {
 
+    /**
+     * Analyzes all passwords.
+     *
+     * @return  Result of the analysis.
+     */
     suspend fun analyzePasswords(): SecurityResult {
+        //Get all passwords:
         val passwords: Map<Detail, Uuid> = getAllDetailsByTypeUseCase.getAllDetailsByType(DetailType.Password)
 
+        //Prepare:
+        reuseDetectionService.prepareReuseDetection(passwords)
+        dictionaryDetectionService.prepareDictionaryDetection()
+        commonPasswordDetectionService.preparePasswordDetection()
+
+        //Run analysis (TODO: Multithreading):
         val passwordResults: MutableList<PasswordResult> = mutableListOf()
         passwords.forEach { password, accountId ->
             val passwordResult: PasswordResult = analyzePassword(password, accountId)
             passwordResults.add(passwordResult)
         }
 
+        //Generate result
         val securityResult = SecurityResult(
             passwordResults = passwordResults
         )
+
+        //Cleanup:
+        dictionaryDetectionService.cleanupDictionaryDetection()
+        commonPasswordDetectionService.cleanupPasswordDetection()
+
         return securityResult
     }
 
 
+    /**
+     * Analyses a single password and generates the result for this specific password.
+     *
+     * @param passwordDetail    Detail containing the password to analyze.
+     * @param accountId         ID of the account of which the password is a member.
+     * @return                  Result for the analyzed password.
+     */
     private fun analyzePassword(passwordDetail: Detail, accountId: Uuid): PasswordResult {
         val password: String = passwordDetail.content
         val weaknesses: MutableList<SecurityCriteria> = mutableListOf()
@@ -79,6 +113,9 @@ internal class AnalyzePasswordsUseCase @Inject constructor(
             charsetSize += 32 //Approx number of special characters available
         }
         val entropy: Double = password.length * log2(charsetSize.toDouble())
+        if (entropy <= 48) {
+            weaknesses.add(SecurityCriteria.Entropy)
+        }
 
         var securityScore = 0
         securityScore += lengthScore * 2
