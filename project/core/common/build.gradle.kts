@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.hilt.android)
+    implementation(libs.squareup.okhttp)
 
     testImplementation(libs.junit)
 

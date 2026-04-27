@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import de.christian2003.feature.analysis.domain.repositories.LookupRepository
-import de.christian2003.feature.analysis.infrastructure.lookup.AssetLookupRepository
+import de.christian2003.feature.analysis.infrastructure.lookup.OnlineLookupRepository
 
 
 @Module
@@ -16,7 +16,7 @@ internal abstract class AnalysisBindingsSingletonModule {
 
     @Binds
     abstract fun bindLookupRepository(
-        impl: AssetLookupRepository
+        impl: OnlineLookupRepository
     ): LookupRepository
 
 }

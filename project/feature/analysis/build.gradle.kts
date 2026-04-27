@@ -57,6 +57,8 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
     implementation(libs.accompanist.drawablepainter)
+    implementation(libs.squareup.okhttp)
+    implementation(libs.kotlinx.serialization.json)
 
     implementation(project(":core:common"))
     implementation(project(":core:ui"))
