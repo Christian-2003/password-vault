@@ -112,6 +112,7 @@ dependencies {
     implementation(project(":feature:search"))
     implementation(project(":feature:files"))
     implementation(project(":feature:analysis"))
+    implementation(project(":feature:export"))
 
     testImplementation(libs.junit)
 

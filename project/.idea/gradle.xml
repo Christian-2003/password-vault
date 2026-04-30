@@ -24,6 +24,7 @@
             <option value="$PROJECT_DIR$/feature/analysis" />
             <option value="$PROJECT_DIR$/feature/auth" />
             <option value="$PROJECT_DIR$/feature/autofill" />
+            <option value="$PROJECT_DIR$/feature/export" />
             <option value="$PROJECT_DIR$/feature/files" />
             <option value="$PROJECT_DIR$/feature/search" />
           </set>

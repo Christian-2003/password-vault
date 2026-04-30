@@ -19,6 +19,9 @@
     <string name="settings_security_authInfo">Change authentication settings</string>
     <string name="settings_security_autofillTitle">Autofill</string>
     <string name="settings_security_autofillInfo">Change autofill settings</string>
+    <string name="settings_data">Data</string>
+    <string name="settings_data_exportTitle">Export data</string>
+    <string name="settings_data_exportInfo">Export your data from Password Vault</string>
     <string name="settings_help">Help</string>
     <string name="settings_help_helpMessagesTitle">Help messages</string>
     <string name="settings_help_helpMessagesInfo">Reactivate dismissed help messages</string>

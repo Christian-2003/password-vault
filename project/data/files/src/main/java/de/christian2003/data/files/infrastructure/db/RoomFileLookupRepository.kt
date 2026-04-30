@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
+
 internal class RoomFileLookupRepository @Inject constructor(
     private val internalFileDao: InternalFileDao,
     private val internalFileMapper: InternalFileDbMapper
@@ -22,6 +23,27 @@ internal class RoomFileLookupRepository @Inject constructor(
             }
         }
         return internalFiles
+    }
+
+
+    override suspend fun getFileForName(internalFileName: String): InternalFile? {
+        val entity: InternalFileEntity? = internalFileDao.selectInternalFileByInternalName(internalFileName)
+        if (entity != null) {
+            val internalFile: InternalFile = internalFileMapper.toDomain(entity)
+            return internalFile
+        }
+        return null
+    }
+
+
+    override fun getAllFiles(): Flow<List<InternalFile>> {
+        val fileEntities: Flow<List<InternalFileEntity>> = internalFileDao.selectAllInternalFiles()
+        val files: Flow<List<InternalFile>> = fileEntities.map { list ->
+            list.map { entity ->
+                internalFileMapper.toDomain(entity)
+            }
+        }
+        return files
     }
 
 

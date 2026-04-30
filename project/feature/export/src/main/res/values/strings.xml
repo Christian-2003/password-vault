@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <!-- Screen through which to export data -->
+    <string name="export_title">Export data</string>
+
+</resources>

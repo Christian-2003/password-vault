@@ -8,6 +8,10 @@ internal interface FileLookupRepository {
 
     fun getFilesForNames(internalFileNames: List<String>): Flow<List<InternalFile>>
 
+    suspend fun getFileForName(internalFileName: String): InternalFile?
+
+    fun getAllFiles(): Flow<List<InternalFile>>
+
     suspend fun createFile(internalFile: InternalFile)
 
     suspend fun deleteFile(internalFile: InternalFile)

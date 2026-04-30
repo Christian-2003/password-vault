@@ -18,6 +18,9 @@ interface InternalFileDao {
     @Query("SELECT * FROM files_lookup WHERE internalName IN (:internalNames)")
     fun selectInternalFilesByInternalNames(internalNames: List<String>): Flow<List<InternalFileEntity>>
 
+    @Query("SELECT * FROM files_lookup")
+    fun selectAllInternalFiles(): Flow<List<InternalFileEntity>>
+
     @Insert
     suspend fun insert(internalFile: InternalFileEntity)
 
