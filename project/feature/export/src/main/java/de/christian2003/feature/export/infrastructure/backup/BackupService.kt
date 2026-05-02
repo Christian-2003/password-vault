@@ -12,6 +12,28 @@ internal class BackupService @Inject constructor(
 ) : ExportService {
 
     /**
+     * Recommended file extension for the exported file (e.g. "zip", "txt" or "json").
+     */
+    override val exportFileExtension: String = v3BackupService.exportFileExtension
+
+    /**
+     * Whether the export can include accounts.
+     */
+    override val canExportAccounts: Boolean = v3BackupService.canExportAccounts
+
+    /**
+     * Whether the export can include files.
+     */
+    override val canExportFiles: Boolean = v3BackupService.canExportFiles
+
+    /**
+     * Whether the export is encrypted. In this case it is required to provide an encryption key
+     * seed in the export config. Otherwise, the encryption key seed is not required.
+     */
+    override val isExportEncrypted: Boolean = v3BackupService.isExportEncrypted
+
+
+    /**
      * Creates an export according to the provided configuration. The method starts a background
      * task and provides progress updates using the returned flow, which reports the progress as
      * a percentage between 0 % to 100 % (i.e. 0.0 to 1.0).

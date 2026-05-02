@@ -1,5 +1,7 @@
 package de.christian2003.core.security.domain.services
 
+import java.io.InputStream
+import java.io.OutputStream
 import javax.crypto.SecretKey
 import java.security.InvalidKeyException
 
@@ -51,5 +53,27 @@ interface CipherService {
      *                              authentication tag does not match, this exception is thrown.
      */
     suspend fun decrypt(cipher: ByteArray, keyBytes: ByteArray): ByteArray
+
+
+    /**
+     * Encrypts the provided stream using the specified secret key.
+     *
+     * @param output        Output stream to encrypt.
+     * @param keyBytes      Key bytes used to encrypt the stream.
+     * @return              Encrypted output stream.
+     * @throws Exception    Cannot encrypt the stream.
+     */
+    fun encryptStream(output: OutputStream, keyBytes: ByteArray): OutputStream
+
+
+    /**
+     * Decrypts the provided stream using the specified secret key.
+     *
+     * @param input         Input stream to decrypt.
+     * @param keyBytes      Key bytes used to encrypt the stream.
+     * @return              Decrypted input stream.
+     * @throws Exception    Cannot decrypt the stream.
+     */
+    fun decryptStream(input: InputStream, keyBytes: ByteArray): InputStream
 
 }

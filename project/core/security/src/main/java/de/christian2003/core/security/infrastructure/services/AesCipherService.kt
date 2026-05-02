@@ -1,10 +1,15 @@
 package de.christian2003.core.security.infrastructure.services
 
 import de.christian2003.core.security.domain.services.CipherService
+import java.io.EOFException
+import java.io.InputStream
+import java.io.OutputStream
 import java.security.InvalidKeyException
 import java.security.SecureRandom
 import javax.crypto.AEADBadTagException
 import javax.crypto.Cipher
+import javax.crypto.CipherInputStream
+import javax.crypto.CipherOutputStream
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 import javax.crypto.spec.SecretKeySpec
@@ -91,6 +96,8 @@ internal class AesCipherService @Inject constructor(): CipherService {
         val cipher: ByteArray = aesCipher.doFinal(plain)
 
         val final: ByteArray = iv + cipher
+
+        trimmedKeyBytes.fill(0) // Wipe internal array
         iv.fill(0) //Wipe internal array
         cipher.fill(0) //Wipe internal array
 
@@ -123,10 +130,81 @@ internal class AesCipherService @Inject constructor(): CipherService {
             throw InvalidKeyException(e.message ?: "Tags do not match")
         }
 
+        trimmedKeyBytes.fill(0) // Wipe internal array
         iv.fill(0) //Wipe internal array
         cipherWithoutIv.fill(0) //Wipe internal array
 
         return plain
+    }
+
+
+    /**
+     * Encrypts the provided stream using the specified secret key.
+     *
+     * @param output        Output stream to encrypt.
+     * @param keyBytes      Key bytes used to encrypt the stream.
+     * @return              Encrypted output stream.
+     * @throws Exception    Cannot encrypt the stream.
+     */
+    override fun encryptStream(output: OutputStream, keyBytes: ByteArray): OutputStream {
+        val trimmedKeyBytes: ByteArray = keyBytes.take(32).toByteArray()
+        val cipher: Cipher = Cipher.getInstance("AES/GCM/NoPadding")
+        val iv = ByteArray(12)
+        SecureRandom().nextBytes(iv)
+
+        val secretKeySpec = SecretKeySpec(trimmedKeyBytes, "AES")
+        val gcmSpec = GCMParameterSpec(128, iv)
+
+        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, gcmSpec)
+        output.write(iv)
+
+        return CipherOutputStream(output, cipher)
+    }
+
+
+    /**
+     * Decrypts the provided stream using the specified secret key.
+     *
+     * @param input         Input stream to decrypt.
+     * @param keyBytes      Key bytes used to encrypt the stream.
+     * @return              Decrypted input stream.
+     * @throws Exception    Cannot decrypt the stream.
+     */
+    override fun decryptStream(input: InputStream, keyBytes: ByteArray): InputStream {
+        val trimmedKeyBytes: ByteArray = keyBytes.take(32).toByteArray()
+        val cipher: Cipher = Cipher.getInstance("AES/GCM/NoPadding")
+        val iv = readFullIvFromStream(input)
+
+        val secretKeySpec = SecretKeySpec(trimmedKeyBytes, "AES")
+        val gcmSpec = GCMParameterSpec(128, iv)
+
+        cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, gcmSpec)
+
+        return CipherInputStream(input, cipher)
+    }
+
+
+    /**
+     * Reads the full IV from the provided input stream. If the input stream does not contain enough
+     * bytes, an EOF exception is thrown.
+     *
+     * @param input         Input stream from which to read the IV.
+     * @return              IV read from the input stream
+     * @throws EOFException The input stream does not contain enough bytes for the IV.
+     */
+    private fun readFullIvFromStream(input: InputStream): ByteArray {
+        val iv = ByteArray(12)
+        var offset = 0
+
+        while (offset < iv.size) {
+            val bytesRead: Int = input.read(iv, offset, iv.size - offset)
+            if (bytesRead == -1) {
+                throw EOFException("Unexpected end of stream")
+            }
+            offset += bytesRead
+        }
+
+        return iv
     }
 
 }

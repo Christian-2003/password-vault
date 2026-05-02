@@ -3,6 +3,7 @@ package de.christian2003.feature.export.presentation.viewmodels
 import android.app.Application
 import android.net.Uri
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
@@ -30,7 +31,11 @@ internal class ExportViewModel @Inject constructor(
     private val backupService: V3BackupService //TODO: This is only temporary!
 ): AndroidViewModel(application) {
 
+    var exportProgress: Float by mutableFloatStateOf(0.0f)
+
     var uri: Uri? by mutableStateOf(null)
+
+    var password: String by mutableStateOf("")
 
 
     fun export() = viewModelScope.launch(Dispatchers.IO) {
@@ -46,11 +51,12 @@ internal class ExportViewModel @Inject constructor(
                 config = ExportConfig(
                     accounts = accountIds,
                     files = internalFileNames,
-                    exportDestination = uri
+                    exportDestination = uri,
+                    encryptionKeySeed = password.toCharArray()
                 )
             )
             progress.collect { percentage ->
-                //Starts export
+                exportProgress = percentage
             }
         }
     }
