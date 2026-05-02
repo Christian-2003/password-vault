@@ -58,6 +58,8 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.accompanist.drawablepainter)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.hilt.work)
 
     implementation(project(":core:common"))
     implementation(project(":core:security"))
@@ -71,4 +73,5 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     ksp(libs.hilt.compiler)
+    ksp(libs.androidx.hilt.compiler)
 }

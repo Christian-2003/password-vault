@@ -5,4 +5,8 @@
     <!-- Screen through which to export data -->
     <string name="export_title">Export data</string>
 
+    <string name="export_v3_title">Password Vault Backup</string>
+    <string name="export_v3_subtitle">Exports backups in the format of Password Vault</string>
+    <string name="export_v3_helpText">Select accounts and files you want to export.</string>
+
 </resources>

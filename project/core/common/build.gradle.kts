@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
+    kotlin("plugin.serialization") version "2.1.21"
 }
 
 android {
@@ -39,6 +40,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.hilt.android)
     implementation(libs.squareup.okhttp)
+    implementation(libs.kotlinx.serialization.json)
 
     testImplementation(libs.junit)
 

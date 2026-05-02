@@ -29,7 +29,7 @@ class PasswordVaultApplication(): Application(), Configuration.Provider {
     override fun onCreate() {
         super.onCreate()
 
-        WorkManager.initialize(this, workManagerConfiguration)
+        //WorkManager.initialize(this, workManagerConfiguration)
     }
 
 

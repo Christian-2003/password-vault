@@ -1,4 +1,4 @@
-package de.christian2003.feature.export.infrastructure.backup.v3.serializer
+package de.christian2003.core.common.infrastructure.serializer
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializer
@@ -12,7 +12,7 @@ import java.time.LocalDateTime
  * ISO-8601 format.
  */
 @Serializer(LocalDateTime::class)
-internal class LocalDateTimeSerializer: KSerializer<LocalDateTime> {
+class LocalDateTimeSerializer: KSerializer<LocalDateTime> {
 
     /**
      * Serializes the local date time instance to the encoder passed.

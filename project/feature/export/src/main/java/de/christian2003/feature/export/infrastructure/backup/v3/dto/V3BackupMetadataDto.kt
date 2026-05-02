@@ -1,6 +1,6 @@
 package de.christian2003.feature.export.infrastructure.backup.v3.dto
 
-import de.christian2003.feature.export.infrastructure.backup.v3.serializer.LocalDateTimeSerializer
+import de.christian2003.core.common.infrastructure.serializer.LocalDateTimeSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime

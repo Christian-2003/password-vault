@@ -13,7 +13,11 @@ import de.christian2003.data.accounts.application.usecases.GetAllAccountDescript
 import de.christian2003.data.accounts.domain.entities.AccountDescriptor
 import de.christian2003.data.files.application.usecases.GetAllInternalFilesUseCase
 import de.christian2003.data.files.domain.entities.InternalFile
+import de.christian2003.feature.export.application.usecases.DiscoverExportServicesUseCase
+import de.christian2003.feature.export.application.usecases.LaunchExportUseCase
 import de.christian2003.feature.export.domain.entities.ExportConfig
+import de.christian2003.feature.export.domain.entities.ExportDescriptor
+import de.christian2003.feature.export.domain.entities.ExportProgress
 import de.christian2003.feature.export.infrastructure.backup.v3.V3BackupService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -26,9 +30,10 @@ import kotlin.uuid.Uuid
 @HiltViewModel
 internal class ExportViewModel @Inject constructor(
     application: Application,
+    discoverExportServicesUseCase: DiscoverExportServicesUseCase,
     private val getAllAccountDescriptorsUseCase: GetAllAccountDescriptorsUseCase,
     private val getAllInternalFilesUseCase: GetAllInternalFilesUseCase,
-    private val backupService: V3BackupService //TODO: This is only temporary!
+    private val launchExportUseCase: LaunchExportUseCase
 ): AndroidViewModel(application) {
 
     var exportProgress: Float by mutableFloatStateOf(0.0f)
@@ -36,6 +41,8 @@ internal class ExportViewModel @Inject constructor(
     var uri: Uri? by mutableStateOf(null)
 
     var password: String by mutableStateOf("")
+
+    var exportServiceDescriptor: ExportDescriptor = discoverExportServicesUseCase.discoverExportServices().first { it.id == "V3Backup" }
 
 
     fun export() = viewModelScope.launch(Dispatchers.IO) {
@@ -47,7 +54,8 @@ internal class ExportViewModel @Inject constructor(
             val internalFiles: List<InternalFile> = getAllInternalFilesUseCase.getAllInternalFiles().first()
             val internalFileNames: Set<String> = internalFiles.map { it.internalName }.toSet()
 
-            val progress: Flow<Float> = backupService.createExport(
+            val progress: Flow<ExportProgress> = launchExportUseCase.launchExport(
+                id = exportServiceDescriptor.id,
                 config = ExportConfig(
                     accounts = accountIds,
                     files = internalFileNames,
@@ -55,9 +63,7 @@ internal class ExportViewModel @Inject constructor(
                     encryptionKeySeed = password.toCharArray()
                 )
             )
-            progress.collect { percentage ->
-                exportProgress = percentage
-            }
+            progress.collect { (progress, state) -> exportProgress = progress }
         }
     }
 

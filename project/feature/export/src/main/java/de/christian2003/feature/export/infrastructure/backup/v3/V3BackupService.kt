@@ -21,6 +21,7 @@ import de.christian2003.data.files.domain.entities.InternalDirectory
 import de.christian2003.data.files.domain.entities.InternalFile
 import de.christian2003.feature.export.domain.entities.ExportConfig
 import de.christian2003.feature.export.domain.exceptions.IllegalExportConfigException
+import de.christian2003.feature.export.domain.entities.ExportDescriptor
 import de.christian2003.feature.export.domain.services.ExportService
 import de.christian2003.feature.export.infrastructure.backup.v3.dto.V3BackupAccountDto
 import de.christian2003.feature.export.infrastructure.backup.v3.dto.V3BackupAccountsRootDto
@@ -42,6 +43,7 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 import javax.inject.Inject
 import kotlin.uuid.Uuid
+import de.christian2003.feature.export.R
 
 
 /**
@@ -79,25 +81,18 @@ internal class V3BackupService @Inject constructor(
     private val json = Json { }
 
     /**
-     * Recommended file extension for the exported file (e.g. "zip", "txt" or "json").
+     * Descriptor for the export service.
      */
-    override val exportFileExtension: String = "pvx"
-
-    /**
-     * Whether the export can include accounts.
-     */
-    override val canExportAccounts: Boolean = true
-
-    /**
-     * Whether the export can include files.
-     */
-    override val canExportFiles: Boolean = true
-
-    /**
-     * Whether the export is encrypted. In this case it is required to provide an encryption key
-     * seed in the export config. Otherwise, the encryption key seed is not required.
-     */
-    override val isExportEncrypted: Boolean = true
+    override val exportDescriptor: ExportDescriptor = ExportDescriptor(
+        id = "V3Backup",
+        exportFileExtension = "pvx",
+        canExportAccounts = true,
+        canExportFiles = true,
+        isExportEncrypted = true,
+        titleId = R.string.export_v3_title,
+        subtitleId = R.string.export_v3_subtitle,
+        helpTextId = R.string.export_v3_helpText
+    )
 
 
     /**

@@ -1,6 +1,7 @@
 package de.christian2003.feature.export.domain.services
 
 import de.christian2003.feature.export.domain.entities.ExportConfig
+import de.christian2003.feature.export.domain.entities.ExportDescriptor
 import kotlinx.coroutines.flow.Flow
 
 
@@ -10,25 +11,9 @@ import kotlinx.coroutines.flow.Flow
 internal interface ExportService {
 
     /**
-     * Recommended file extension for the exported file (e.g. "zip", "txt" or "json").
+     * Descriptor for the export service.
      */
-    val exportFileExtension: String
-
-    /**
-     * Whether the export can include accounts.
-     */
-    val canExportAccounts: Boolean
-
-    /**
-     * Whether the export can include files.
-     */
-    val canExportFiles: Boolean
-
-    /**
-     * Whether the export is encrypted. In this case it is required to provide an encryption key
-     * seed in the export config. Otherwise, the encryption key seed is not required.
-     */
-    val isExportEncrypted: Boolean
+    val exportDescriptor: ExportDescriptor
 
 
     /**
