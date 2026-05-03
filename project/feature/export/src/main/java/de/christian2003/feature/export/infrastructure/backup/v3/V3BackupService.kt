@@ -107,6 +107,8 @@ internal class V3BackupService @Inject constructor(
      *                                      seed.
      */
     override fun createExport(config: ExportConfig): Flow<Float> = flow {
+        emit(0.0f) //Signal starting progress
+
         if (config.encryptionKeySeed == null || config.encryptionKeySeed.isEmpty()) {
             throw IllegalExportConfigException("Export config must contain encryption key seed")
         }

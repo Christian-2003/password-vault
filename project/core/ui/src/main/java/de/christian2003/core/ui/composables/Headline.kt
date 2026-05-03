@@ -53,6 +53,7 @@ fun Headline(
                         HeadlineIndentation.NoneNoPadding -> { 0.dp }
                         HeadlineIndentation.TextLevel -> dimensionResource(R.dimen.margin_horizontal) + dimensionResource(R.dimen.padding_horizontal)
                         HeadlineIndentation.PrefixIconLevel -> dimensionResource(R.dimen.margin_horizontal) + dimensionResource(R.dimen.image_xs) + dimensionResource(R.dimen.padding_horizontal) * 2
+                        HeadlineIndentation.TextInputPrefixIconLevel -> dimensionResource(R.dimen.margin_horizontal) + dimensionResource(R.dimen.image_xs) + dimensionResource(R.dimen.padding_horizontal)
                     },
                     top = dimensionResource(R.dimen.padding_vertical),
                     end = dimensionResource(R.dimen.margin_horizontal),
@@ -106,14 +107,16 @@ fun Headline(
 /**
  * Indentations for the headline.
  *
- * @property None               No indentation.
- * @property NoneNoPadding      No indentation and no horizontal padding.
- * @property TextLevel          Indentation to the text of list items.
- * @property PrefixIconLevel    Indentation to the prefix icon of list items.
+ * @property None                       No indentation.
+ * @property NoneNoPadding              No indentation and no horizontal padding.
+ * @property TextLevel                  Indentation to the text of list items.
+ * @property PrefixIconLevel            Indentation to the prefix icon of list items.
+ * @property TextInputPrefixIconLevel   Indentation to the text field with prefix icon.
  */
 enum class HeadlineIndentation {
     None,
     NoneNoPadding,
     TextLevel,
-    PrefixIconLevel
+    PrefixIconLevel,
+    TextInputPrefixIconLevel
 }

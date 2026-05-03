@@ -3,8 +3,9 @@ package de.christian2003.feature.export.presentation.viewmodels
 import android.app.Application
 import android.content.Context
 import android.net.Uri
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.documentfile.provider.DocumentFile
@@ -15,6 +16,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.core.common.application.services.DateTimeFormatterService
 import de.christian2003.core.common.application.services.FileNameValidatorService
+import de.christian2003.core.ui.model.InputError
 import de.christian2003.data.accounts.application.usecases.GetAllAccountDescriptorsUseCase
 import de.christian2003.data.accounts.domain.entities.AccountDescriptor
 import de.christian2003.data.files.application.usecases.GetAllInternalFilesUseCase
@@ -32,6 +34,9 @@ import java.time.LocalDate
 import javax.inject.Inject
 import kotlin.uuid.Uuid
 import de.christian2003.feature.export.R
+import de.christian2003.feature.export.application.usecases.ObserveExportProgressUseCase
+import de.christian2003.feature.export.domain.entities.ProgressState
+import kotlinx.coroutines.flow.collect
 
 
 @HiltViewModel
@@ -42,6 +47,7 @@ internal class ExportViewModel @Inject constructor(
     private val getAllAccountDescriptorsUseCase: GetAllAccountDescriptorsUseCase,
     private val getAllInternalFilesUseCase: GetAllInternalFilesUseCase,
     private val launchExportUseCase: LaunchExportUseCase,
+    private val observeExportProgressUseCase: ObserveExportProgressUseCase,
     private val dateTimeFormatterService: DateTimeFormatterService,
     private val fileNameValidatorService: FileNameValidatorService
 ): AndroidViewModel(application) {
@@ -56,19 +62,25 @@ internal class ExportViewModel @Inject constructor(
 
     var repeatPassword: String by mutableStateOf("")
 
-    var isDirectoryUriValid: Boolean by mutableStateOf(true)
+    var directoryUriError: InputError? by mutableStateOf(null)
         private set
 
-    var isFileNameValid: Boolean by mutableStateOf(true)
+    var fileNameError: InputError? by mutableStateOf(null)
         private set
 
-    var isPasswordValid: Boolean by mutableStateOf(true)
+    var passwordError: InputError? by mutableStateOf(null)
         private set
 
-    var isRepeatPasswordValid: Boolean by mutableStateOf(true)
+    var repeatPasswordError: InputError? by mutableStateOf(null)
         private set
 
-    var exportProgress: Float by mutableFloatStateOf(0.0f)
+    var exportProgress: ExportProgress? by mutableStateOf(null)
+
+    var canStartExport: State<Boolean> = derivedStateOf {
+        exportProgress == null
+            || exportProgress?.state == ProgressState.Finished
+            || exportProgress?.state == ProgressState.Failed
+    }
 
 
     init {
@@ -81,6 +93,14 @@ internal class ExportViewModel @Inject constructor(
         val formattedDate: String = dateTimeFormatterService.format(LocalDate.now())
         val fileExtension: String = exportServiceDescriptor.exportFileExtension
         fileName = application.getString(R.string.export_templateFilename, formattedDate, fileExtension)
+
+        //Observe current worker (if any are running):
+        if (exportServiceId != null) {
+            val currentProgress: Flow<ExportProgress>? = observeExportProgressUseCase.observeProgress(exportServiceId)
+            viewModelScope.launch {
+                currentProgress?.collect { exportProgress = it }
+            }
+        }
     }
 
 
@@ -91,13 +111,27 @@ internal class ExportViewModel @Inject constructor(
         val repeatPassword: String = this@ExportViewModel.repeatPassword
 
         //Check data validity:
-        isDirectoryUriValid = directoryUri != null
-        isFileNameValid = fileName.isNotBlank() && fileNameValidatorService.isValid(fileName)
-        isPasswordValid = password.isNotBlank()
-        isRepeatPasswordValid = repeatPassword.isNotBlank() && password == repeatPassword
+        directoryUriError = when {
+            directoryUri == null -> InputError.Blank
+            else -> null
+        }
+        fileNameError = when {
+            fileName.isBlank() -> InputError.Blank
+            !fileNameValidatorService.isValid(fileName) -> InputError.IllegalFilename
+            else -> null
+        }
+        passwordError = when {
+            password.isBlank() -> InputError.Blank
+            else -> null
+        }
+        repeatPasswordError = when {
+            repeatPassword.isBlank() -> InputError.Blank
+            password != repeatPassword -> InputError.PasswordsNotMatching
+            else -> null
+        }
 
         //Abort export if data is invalid:
-        if (!isDirectoryUriValid || !isFileNameValid || (exportServiceDescriptor.isExportEncrypted && (!isPasswordValid || !isRepeatPasswordValid))) {
+        if (directoryUriError != null || fileNameError != null || (exportServiceDescriptor.isExportEncrypted && (passwordError != null || repeatPasswordError != null))) {
             return@launch
         }
 
@@ -119,7 +153,7 @@ internal class ExportViewModel @Inject constructor(
                     encryptionKeySeed = password.toCharArray()
                 )
             )
-            progress.collect { (progress, _) -> exportProgress = progress }
+            progress.collect { exportProgress = it }
         }
     }
 

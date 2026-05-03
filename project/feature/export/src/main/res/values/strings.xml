@@ -11,8 +11,15 @@
     <string name="export_label_filename">File name</string>
     <string name="export_label_password">Password</string>
     <string name="export_label_password_repeat">Repeat password</string>
+    <string name="export_title_location">Location for export</string>
+    <string name="export_title_data">Choose the data to export</string>
+    <string name="export_title_encryption">Configure encryption</string>
     <string name="export_startExport">Export</string>
     <string name="export_templateFilename">export_%1$s.%2$s</string>
+    <string name="export_progress_labelProcessing">Processing…</string>
+    <string name="export_progress_labelLeave">You can leave this screen. We\'ll keep working in the background</string>
+    <string name="export_progress_buttonContinue">Continue in background</string>
+    <string name="export_progress_buttonStay">Stay on this screen</string>
 
 
     <!-- Strings related to the export services -->
