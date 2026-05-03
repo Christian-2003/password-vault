@@ -1,9 +1,11 @@
 package de.christian2003.core.ui.composables
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -55,6 +57,7 @@ import androidx.compose.ui.unit.dp
  * @param errorMessage          Error message to display.
  * @param enabled               Whether the text input is enabled or not.
  * @param isPassword            Whether the text input is used to display a password.
+ * @param indentToPrefixIcon    Whether to indent the text field to the prefix icon level.
  * @param visualTransformation  Visual transformation for the text displayed.
  * @param focusRequester        Focus requester.
  * @param textStyle             Text style.
@@ -73,6 +76,7 @@ fun TextInput(
     errorMessage: String? = null,
     enabled: Boolean = true,
     isPassword: Boolean = false,
+    indentToPrefixIcon: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     focusRequester: FocusRequester = FocusRequester(),
     textStyle: TextStyle = LocalTextStyle.current
@@ -94,6 +98,7 @@ fun TextInput(
         errorMessage = errorMessage,
         enabled = enabled,
         isPassword = isPassword,
+        indentToPrefixIcon = indentToPrefixIcon,
         visualTransformation = visualTransformation,
         focusRequester = focusRequester,
         textStyle = textStyle
@@ -118,6 +123,7 @@ fun TextInput(
  * @param errorMessage          Error message to display.
  * @param enabled               Whether the text input is enabled or not.
  * @param isPassword            Whether the text input is used to display a password.
+ * @param indentToPrefixIcon    Whether to indent the text field to the prefix icon level.
  * @param visualTransformation  Visual transformation for the text displayed.
  * @param focusRequester        Focus requester.
  * @param textStyle             Text style.
@@ -136,6 +142,7 @@ fun TextInput(
     errorMessage: String? = null,
     enabled: Boolean = true,
     isPassword: Boolean = false,
+    indentToPrefixIcon: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     focusRequester: FocusRequester = FocusRequester(),
     textStyle: TextStyle = LocalTextStyle.current
@@ -231,6 +238,11 @@ fun TextInput(
                         end = dimensionResource(R.dimen.padding_horizontal)
                     )
                     .size(dimensionResource(R.dimen.image_xs))
+            )
+        }
+        else if (indentToPrefixIcon) {
+            Box(
+                modifier = Modifier.width(dimensionResource(R.dimen.padding_horizontal) + dimensionResource(R.dimen.image_xs))
             )
         }
         OutlinedTextField(

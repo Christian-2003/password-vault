@@ -1,33 +1,39 @@
 package de.christian2003.feature.export.presentation.ui.export
 
 import android.content.Intent
-import androidx.activity.compose.ManagedActivityResultLauncher
+import android.net.Uri
+import android.provider.DocumentsContract
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.PointerInputChange
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Dp
-import de.christian2003.core.ui.composables.NavigationBarProtection
+import androidx.compose.ui.unit.dp
 import de.christian2003.core.ui.composables.TextInput
 import de.christian2003.feature.export.presentation.viewmodels.ExportViewModel
 import de.christian2003.feature.export.R
@@ -38,81 +44,154 @@ internal fun ExportScreen(
     viewModel: ExportViewModel,
     onNavigateUp: () -> Unit
 ) {
-    val fileSelectorLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.data?.data != null) {
-            viewModel.uri = result.data?.data
-        }
-    }
-
     Scaffold(
         topBar = {
             TopBar(
+                title = stringResource(viewModel.exportServiceDescriptor.titleId),
                 onNavigateUp = onNavigateUp
             )
-        }
+        },
+        bottomBar = {
+            BottomBar(
+                onExport = {
+                    viewModel.export()
+                }
+            )
+        },
+        modifier = Modifier.imePadding()
     ) { innerPadding ->
-        val bottomPadding: Dp = innerPadding.calculateBottomPadding()
+        val errorBlankInput: String = stringResource(de.christian2003.core.ui.R.string.error_blankInput)
+        val errorIllegalFilename: String = stringResource(de.christian2003.core.ui.R.string.error_illegalFilename)
+        val errorPasswordsNotMatching: String = stringResource(de.christian2003.core.ui.R.string.error_passwordsNotMatching)
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
                 .padding(
-                    start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
-                    top = innerPadding.calculateTopPadding(),
-                    end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
+                    horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal)
                 )
         ) {
-            Button(
-                onClick = {
-                    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
-                    intent.addCategory(Intent.CATEGORY_OPENABLE)
-                    intent.setType("application/zip")
-                    intent.putExtra(Intent.EXTRA_TITLE, "export.zip")
-                    fileSelectorLauncher.launch(intent)
-                }
-            ) {
-                Text("SELECT FILE")
-            }
-            Text(
-                text = viewModel.uri?.toString() ?: "No file selected"
-            )
-
-            TextInput(
-                value = viewModel.password,
-                onValueChange = {
-                    viewModel.password = it
+            //Directory:
+            DirectorySelector(
+                dirUri = viewModel.directoryUri,
+                onDirUriChange = {
+                    viewModel.directoryUri = it
                 },
-                label = "Password",
-                isPassword = true
+                errorMessage = if (!viewModel.isDirectoryUriValid) { errorBlankInput } else { null },
+                modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
             )
 
-            Button(
-                enabled = viewModel.uri != null && viewModel.password.isNotBlank(),
-                onClick = {
-                    viewModel.export()
-                }
-            ) {
-                Text("EXPORT")
+            //Filename:
+            TextInput(
+                value = viewModel.fileName,
+                onValueChange = {
+                    viewModel.fileName = it
+                },
+                label = stringResource(R.string.export_label_filename),
+                prefixIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_file),
+                errorMessage = when {
+                    !viewModel.isFileNameValid && viewModel.fileName.isBlank() -> errorBlankInput
+                    !viewModel.isFileNameValid -> errorIllegalFilename
+                    else -> null
+                },
+                modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
+            )
+
+            //Password for encryption:
+            if (viewModel.exportServiceDescriptor.isExportEncrypted) {
+                TextInput(
+                    value = viewModel.password,
+                    onValueChange = {
+                        viewModel.password = it
+                    },
+                    label = stringResource(R.string.export_label_password),
+                    prefixIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_password),
+                    errorMessage = if (!viewModel.isPasswordValid) { errorBlankInput } else { null },
+                    isPassword = true,
+                    modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
+                )
+
+                TextInput(
+                    value = viewModel.repeatPassword,
+                    onValueChange = {
+                        viewModel.repeatPassword = it
+                    },
+                    label = stringResource(R.string.export_label_password_repeat),
+                    errorMessage = when {
+                        !viewModel.isRepeatPasswordValid && viewModel.repeatPassword.isBlank() -> errorBlankInput
+                        !viewModel.isRepeatPasswordValid -> errorPasswordsNotMatching
+                        else -> null
+                    },
+                    isPassword = true,
+                    indentToPrefixIcon = true,
+                    modifier = Modifier.padding(bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
+                )
             }
+
             LinearProgressIndicator(
                 progress = { viewModel.exportProgress },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
             )
-            Box(modifier = Modifier.height(bottomPadding))
         }
-
-        NavigationBarProtection(bottomPadding)
     }
 }
 
 
 @Composable
+private fun DirectorySelector(
+    dirUri: Uri?,
+    onDirUriChange: (Uri) -> Unit,
+    modifier: Modifier = Modifier,
+    errorMessage: String? = null
+) {
+    val dirSelectorLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.data?.data != null) {
+            onDirUriChange(result.data!!.data!!)
+        }
+    }
+
+    var uriPath: String = dirUri?.path ?: ""
+    val schemeSeparator: Int = uriPath.indexOfFirst { it == ':' }
+    if (schemeSeparator >= 0 && schemeSeparator < uriPath.length - 1) {
+        uriPath = uriPath.drop(schemeSeparator + 1)
+    }
+
+    TextInput(
+        value = uriPath,
+        onValueChange = { },
+        label = stringResource(R.string.export_label_dir),
+        prefixIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_directory),
+        errorMessage = errorMessage,
+        keyboardOptions = KeyboardOptions(showKeyboardOnFocus = false),
+        modifier = modifier.pointerInput(null) {
+            awaitEachGesture {
+                awaitFirstDown(pass = PointerEventPass.Initial)
+                val upEvent: PointerInputChange? = waitForUpOrCancellation(pass = PointerEventPass.Initial)
+                if (upEvent != null) {
+                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+                    if (dirUri != null) {
+                        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, dirUri)
+                    }
+                    dirSelectorLauncher.launch(intent)
+                }
+            }
+        }
+    )
+}
+
+
+@Composable
 private fun TopBar(
+    title: String,
     onNavigateUp: () -> Unit
 ) {
     TopAppBar(
         title = {
-            Text(stringResource(R.string.export_title))
+            Text(title)
         },
         navigationIcon = {
             IconButton(
@@ -125,4 +204,27 @@ private fun TopBar(
             }
         }
     )
+}
+
+
+@Composable
+private fun BottomBar(
+    onExport: () -> Unit
+) {
+    BottomAppBar {
+        Column(
+            horizontalAlignment = Alignment.End,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Button(
+                onClick = onExport,
+                modifier = Modifier.padding(
+                    //Horizontal padding of bottom app bar: 4 dp
+                    horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal) - 4.dp
+                )
+            ) {
+                Text(stringResource(R.string.export_startExport))
+            }
+        }
+    }
 }

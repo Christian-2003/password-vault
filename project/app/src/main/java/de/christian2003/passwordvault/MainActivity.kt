@@ -56,8 +56,8 @@ import de.christian2003.feature.analysis.navigation.AnalysisDestination
 import de.christian2003.feature.analysis.navigation.analysisDestination
 import de.christian2003.feature.autofill.navigation.AutofillSettingsFlow
 import de.christian2003.feature.autofill.navigation.autofillSettingsFlow
-import de.christian2003.feature.export.navigation.ExportDestination
-import de.christian2003.feature.export.navigation.exportDestination
+import de.christian2003.feature.export.navigation.ExportsFlow
+import de.christian2003.feature.export.navigation.exportsFlow
 import de.christian2003.feature.files.navigation.DirectoriesFlow
 import de.christian2003.feature.files.navigation.directoriesFlow
 import de.christian2003.feature.search.navigation.SearchDestination
@@ -271,11 +271,9 @@ fun PasswordVault(
                 }
             )
 
-            //Destination for exporting data:
-            exportDestination(
-                onNavigateUp = {
-                    navController.navigateUp()
-                }
+            //Flow for exporting data:
+            exportsFlow(
+                navController = navController
             )
 
 
@@ -297,7 +295,7 @@ fun PasswordVault(
                         navController.navigate(AutofillSettingsFlow)
                     },
                     onNavigateToExport = {
-                        navController.navigate(ExportDestination)
+                        navController.navigate(ExportsFlow)
                     },
                     onNavigateToDevSettings = {
                         navController.navigate("devSettings")

@@ -2,9 +2,20 @@
 
 <resources>
 
-    <!-- Screen through which to export data -->
-    <string name="export_title">Export data</string>
+    <!-- Screen through which to select an export service -->
+    <string name="exports_title">Export data</string>
 
+
+    <!-- Screen through which to export data -->
+    <string name="export_label_dir">Directory</string>
+    <string name="export_label_filename">File name</string>
+    <string name="export_label_password">Password</string>
+    <string name="export_label_password_repeat">Repeat password</string>
+    <string name="export_startExport">Export</string>
+    <string name="export_templateFilename">export_%1$s.%2$s</string>
+
+
+    <!-- Strings related to the export services -->
     <string name="export_v3_title">Password Vault Backup</string>
     <string name="export_v3_subtitle">Exports backups in the format of Password Vault</string>
     <string name="export_v3_helpText">Select accounts and files you want to export.</string>

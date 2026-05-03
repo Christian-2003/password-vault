@@ -1,4 +1,4 @@
-package de.christian2003.data.files.application.services
+package de.christian2003.core.common.application.services
 
 import javax.inject.Inject
 
@@ -6,7 +6,7 @@ import javax.inject.Inject
 /**
  * Service for validating the names for internal files.
  */
-class InternalFileNameValidatorService @Inject constructor() {
+class FileNameValidatorService @Inject constructor() {
 
     /**
      * Regex contains all illegal characters and matches illegal file names.

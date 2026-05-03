@@ -3,9 +3,6 @@ package de.christian2003.feature.files.viewmodels
 import android.app.Application
 import android.net.Uri
 import androidx.activity.result.ActivityResult
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.mutableStateSetOf
@@ -14,13 +11,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.core.common.application.services.DateTimeFormatterService
 import de.christian2003.core.common.application.services.StorageUnitFormatterService
 import de.christian2003.core.ui.model.ColorGenerator
 import de.christian2003.data.files.application.services.InternalDirectoryNameValidatorService
-import de.christian2003.data.files.application.services.InternalFileNameValidatorService
+import de.christian2003.core.common.application.services.FileNameValidatorService
 import de.christian2003.data.files.application.usecases.CreateInternalDirectoryUseCase
 import de.christian2003.data.files.application.usecases.DeleteInternalDirectoryUseCase
 import de.christian2003.data.files.application.usecases.DeleteInternalFileUseCase
@@ -38,11 +34,8 @@ import de.christian2003.feature.files.models.dialog.DirectoryScreenDialog
 import de.christian2003.feature.files.models.other.FileType
 import de.christian2003.feature.files.models.other.FileTypeMapper
 import de.christian2003.feature.files.models.states.DirectoryScreenState
-import de.christian2003.feature.files.ui.directory.DirectoryScreen
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.util.Stack
@@ -64,7 +57,7 @@ internal class DirectoryViewModel @Inject constructor(
     private val prepareFileForViewingUseCase: PrepareFileForViewingUseCase,
     private val isFileSharedUseCase: IsFileSharedUseCase,
     private val directoryNameValidatorService: InternalDirectoryNameValidatorService,
-    private val fileNameValidatorService: InternalFileNameValidatorService,
+    private val fileNameValidatorService: FileNameValidatorService,
     private val storageUnitFormatterService: StorageUnitFormatterService,
     private val dateTimeFormatterService: DateTimeFormatterService,
     private val fileTypeMapper: FileTypeMapper,

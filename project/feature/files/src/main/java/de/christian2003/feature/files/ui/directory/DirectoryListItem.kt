@@ -87,7 +87,7 @@ internal fun DirectoryListItem(
             ) {
                 Icon(
                     painter = if (!isSelected) {
-                        painterResource(R.drawable.ic_directory)
+                        painterResource(de.christian2003.core.ui.R.drawable.ic_directory)
                     } else {
                         painterResource(de.christian2003.core.ui.R.drawable.ic_check)
                     },

@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.apache.commons.csv)
 
     implementation(project(":core:security"))
+    implementation(project(":core:common"))
 
     testImplementation(libs.junit)
     testImplementation(libs.mockito.core)

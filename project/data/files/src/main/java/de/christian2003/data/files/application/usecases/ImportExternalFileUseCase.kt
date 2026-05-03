@@ -1,7 +1,7 @@
 package de.christian2003.data.files.application.usecases
 
 import android.net.Uri
-import de.christian2003.data.files.application.services.InternalFileNameValidatorService
+import de.christian2003.core.common.application.services.FileNameValidatorService
 import de.christian2003.data.files.application.services.MimeTypeMapperService
 import de.christian2003.data.files.domain.entities.InternalDirectory
 import de.christian2003.data.files.domain.entities.InternalFile
@@ -18,7 +18,7 @@ class ImportExternalFileUseCase @Inject internal constructor(
     private val fileLookupRepository: FileLookupRepository,
     private val fileUtilsService: InternalFileUtilsService,
     private val mimeTypeMapperService: MimeTypeMapperService,
-    private val fileNameValidatorService: InternalFileNameValidatorService
+    private val fileNameValidatorService: FileNameValidatorService
 ) {
 
     suspend fun importExternalFile(externalFileUri: Uri, internalDirectory: InternalDirectory) {

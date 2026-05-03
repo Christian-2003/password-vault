@@ -86,6 +86,7 @@ internal class V3BackupService @Inject constructor(
     override val exportDescriptor: ExportDescriptor = ExportDescriptor(
         id = "V3Backup",
         exportFileExtension = "pvx",
+        exportFileMimeType = "application/vnd.passwordvault.pvx",
         canExportAccounts = true,
         canExportFiles = true,
         isExportEncrypted = true,

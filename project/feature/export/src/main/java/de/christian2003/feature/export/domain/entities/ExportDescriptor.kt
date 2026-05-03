@@ -6,7 +6,9 @@ import androidx.annotation.StringRes
 /**
  * Export descriptor.
  *
- * @param id                    ID of the export service (e.g. "xml" or "json").@param exportFileExtension   Recommended file extension for the exported file (e.g. "xml" or "json").
+ * @param id                    ID of the export service (e.g. "xml" or "json").
+ * @param exportFileExtension   Recommended file extension for the exported file (e.g. "xml" or "json").
+ * @param exportFileMimeType    Mime type for the exported file.
  * @param canExportAccounts     Whether the export can include accounts.
  * @param canExportFiles        Whether the export can include files.
  * @param isExportEncrypted     Whether the export is encrypted. In this case it is required to
@@ -19,6 +21,7 @@ import androidx.annotation.StringRes
 internal data class ExportDescriptor(
     val id: String,
     val exportFileExtension: String,
+    val exportFileMimeType: String,
     val canExportAccounts: Boolean,
     val canExportFiles: Boolean,
     val isExportEncrypted: Boolean,

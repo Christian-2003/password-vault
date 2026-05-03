@@ -33,7 +33,9 @@
     <string name="error_blankInput">The input cannot be blank</string>
     <string name="error_invalidUrl">The input is no valid URL</string>
     <string name="error_illegalCharacters">The input contains illegal characters</string>
+    <string name="error_illegalFilename">The file name contains illegal characters</string>
     <string name="error_invalidPassword">Password invalid</string>
+    <string name="error_passwordsNotMatching">The passwords do not match</string>
 
 
     <!-- Tooltips -->

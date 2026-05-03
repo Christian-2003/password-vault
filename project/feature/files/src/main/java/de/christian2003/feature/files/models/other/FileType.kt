@@ -36,7 +36,7 @@ internal enum class FileType(
     Pdf(R.drawable.ic_file_pdf),
 
     //Other:
-    Generic(R.drawable.ic_file_generic);
+    Generic(de.christian2003.core.ui.R.drawable.ic_file);
 
 
     @Composable
