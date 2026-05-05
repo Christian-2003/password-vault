@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.christian2003.core.ui.R
 
@@ -23,6 +24,7 @@ import de.christian2003.core.ui.R
  * @param modifier          Modifier.
  * @param containerColor    Color for the container.
  * @param isSelected        Whether the list item is selected.
+ * @param marginHorizontal  Horizontal margin.
  * @param content           Content of the list item.
  */
 @Composable
@@ -32,14 +34,15 @@ fun ListItemContainer(
     modifier: Modifier = Modifier,
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainerLow,
     isSelected: Boolean = false,
+    marginHorizontal: Dp = dimensionResource(R.dimen.margin_horizontal),
     content: @Composable () -> Unit
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .padding(
-                start = dimensionResource(R.dimen.margin_horizontal),
-                end = dimensionResource(R.dimen.margin_horizontal),
+                start = marginHorizontal,
+                end = marginHorizontal,
                 bottom = 4.dp
             )
             .clip(

@@ -53,7 +53,7 @@ internal class WorkerExportLauncherService @Inject constructor(
                 if (workInfo == null) {
                     val progress = ExportProgress(
                         progress = 0f,
-                        state = ProgressState.Enqueued
+                        state = ProgressState.None
                     )
                     return@map progress
                 }

@@ -11,6 +11,20 @@
     <string name="export_label_filename">File name</string>
     <string name="export_label_password">Password</string>
     <string name="export_label_password_repeat">Repeat password</string>
+    <string name="export_label_accounts">Accounts</string>
+    <plurals name="export_text_accounts">
+        <item quantity="zero">No accounts</item>
+        <item quantity="one">%1$d account</item>
+        <item quantity="other">%1$d accounts</item>
+    </plurals>
+    <string name="export_label_files">Files</string>
+    <plurals name="export_text_files">
+        <item quantity="zero">No files</item>
+        <item quantity="one">%1$d file</item>
+        <item quantity="other">%1$d files</item>
+    </plurals>
+    <string name="export_dialog_accounts_title">Select accounts</string>
+    <string name="export_dialog_accounts_files">Select files</string>
     <string name="export_title_location">Location for export</string>
     <string name="export_title_data">Choose the data to export</string>
     <string name="export_title_encryption">Configure encryption</string>

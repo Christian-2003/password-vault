@@ -2,6 +2,7 @@ package de.christian2003.feature.export.presentation.viewmodels
 
 import android.app.Application
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
@@ -17,6 +18,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.core.common.application.services.DateTimeFormatterService
 import de.christian2003.core.common.application.services.FileNameValidatorService
 import de.christian2003.core.ui.model.InputError
+import de.christian2003.data.accounts.application.usecases.GetAccountIconUseCase
 import de.christian2003.data.accounts.application.usecases.GetAllAccountDescriptorsUseCase
 import de.christian2003.data.accounts.domain.entities.AccountDescriptor
 import de.christian2003.data.files.application.usecases.GetAllInternalFilesUseCase
@@ -36,7 +38,7 @@ import kotlin.uuid.Uuid
 import de.christian2003.feature.export.R
 import de.christian2003.feature.export.application.usecases.ObserveExportProgressUseCase
 import de.christian2003.feature.export.domain.entities.ProgressState
-import kotlinx.coroutines.flow.collect
+import de.christian2003.feature.export.presentation.model.dialogs.ExportScreenDialog
 
 
 @HiltViewModel
@@ -44,13 +46,16 @@ internal class ExportViewModel @Inject constructor(
     application: Application,
     savedStateHandle: SavedStateHandle,
     discoverExportServicesUseCase: DiscoverExportServicesUseCase,
-    private val getAllAccountDescriptorsUseCase: GetAllAccountDescriptorsUseCase,
+    getAllAccountDescriptorsUseCase: GetAllAccountDescriptorsUseCase,
     private val getAllInternalFilesUseCase: GetAllInternalFilesUseCase,
     private val launchExportUseCase: LaunchExportUseCase,
     private val observeExportProgressUseCase: ObserveExportProgressUseCase,
+    private val getAccountIconUseCase: GetAccountIconUseCase,
     private val dateTimeFormatterService: DateTimeFormatterService,
     private val fileNameValidatorService: FileNameValidatorService
 ): AndroidViewModel(application) {
+
+    val accounts: Flow<List<AccountDescriptor>> = getAllAccountDescriptorsUseCase.getAllAccountDescriptors()
 
     val exportServiceDescriptor: ExportDescriptor
 
@@ -80,7 +85,13 @@ internal class ExportViewModel @Inject constructor(
         exportProgress == null
             || exportProgress?.state == ProgressState.Finished
             || exportProgress?.state == ProgressState.Failed
+            || exportProgress?.state == ProgressState.None
     }
+
+    val selectedAccountIds: MutableSet<Uuid> = mutableSetOf()
+
+    var dialog: ExportScreenDialog by mutableStateOf(ExportScreenDialog.None)
+        private set
 
 
     init {
@@ -101,6 +112,33 @@ internal class ExportViewModel @Inject constructor(
                 currentProgress?.collect { exportProgress = it }
             }
         }
+    }
+
+
+    fun queryAccountIcon(account: AccountDescriptor): Drawable? {
+        return getAccountIconUseCase.getAccountIcon(account)
+    }
+
+
+    fun showSelectAccountsDialog() {
+        dialog = ExportScreenDialog.SelectAccounts
+    }
+
+    fun dismissSelectAccountsDialog(selectedAccounts: Set<Uuid>? = null) {
+        dialog = ExportScreenDialog.None
+        if (selectedAccounts != null) {
+            selectedAccountIds.clear()
+            selectedAccountIds.addAll(selectedAccounts)
+        }
+    }
+
+
+    fun showSelectFilesDialog() {
+        dialog = ExportScreenDialog.SelectFiles
+    }
+
+    fun dismissSelectFilesDialog(selectedFiles: Set<String>? = null) {
+        dialog = ExportScreenDialog.None
     }
 
 
@@ -138,8 +176,7 @@ internal class ExportViewModel @Inject constructor(
         //Begin export
         val uri: Uri? = getFileUri(directoryUri!!, fileName)
         if (uri != null) {
-            val accountDescriptors: List<AccountDescriptor> = getAllAccountDescriptorsUseCase.getAllAccountDescriptors().first()
-            val accountIds: Set<Uuid> = accountDescriptors.map { it.id }.toSet()
+            val accountIds: Set<Uuid> = accounts.first().map { it.id }.toSet()
 
             val internalFiles: List<InternalFile> = getAllInternalFilesUseCase.getAllInternalFiles().first()
             val internalFileNames: Set<String> = internalFiles.map { it.internalName }.toSet()
