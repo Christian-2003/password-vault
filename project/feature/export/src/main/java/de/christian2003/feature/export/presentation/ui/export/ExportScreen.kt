@@ -13,8 +13,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -23,7 +21,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.christian2003.core.ui.composables.dialog.AccountSelectorDialog
 import de.christian2003.core.ui.model.AccountUiDto
-import de.christian2003.data.accounts.domain.entities.AccountDescriptor
 import de.christian2003.feature.export.presentation.viewmodels.ExportViewModel
 import de.christian2003.feature.export.R
 import de.christian2003.feature.export.domain.entities.ExportProgress
@@ -36,8 +33,6 @@ internal fun ExportScreen(
     viewModel: ExportViewModel,
     onNavigateUp: () -> Unit
 ) {
-    val accounts: List<AccountDescriptor> by viewModel.accounts.collectAsState(emptyList())
-
     Scaffold(
         topBar = {
             TopBar(
@@ -108,7 +103,7 @@ internal fun ExportScreen(
         ExportScreenDialog.SelectAccounts -> {
             AccountSelectorDialog(
                 title = stringResource(R.string.export_dialog_accounts_title),
-                accounts = accounts.map { accountDescriptor ->
+                accounts = viewModel.accounts.map { accountDescriptor ->
                     AccountUiDto(
                         id = accountDescriptor.id,
                         name = accountDescriptor.name,

@@ -55,7 +55,8 @@ internal class ExportViewModel @Inject constructor(
     private val fileNameValidatorService: FileNameValidatorService
 ): AndroidViewModel(application) {
 
-    val accounts: Flow<List<AccountDescriptor>> = getAllAccountDescriptorsUseCase.getAllAccountDescriptors()
+    var accounts: List<AccountDescriptor> by mutableStateOf(emptyList())
+        private set
 
     val exportServiceDescriptor: ExportDescriptor
 
@@ -110,6 +111,15 @@ internal class ExportViewModel @Inject constructor(
             val currentProgress: Flow<ExportProgress>? = observeExportProgressUseCase.observeProgress(exportServiceId)
             viewModelScope.launch {
                 currentProgress?.collect { exportProgress = it }
+            }
+        }
+
+        //Get all relevant accounts and files:
+        viewModelScope.launch(Dispatchers.IO) {
+            if (exportServiceDescriptor.canExportAccounts) {
+                val accounts: List<AccountDescriptor> = getAllAccountDescriptorsUseCase.getAllAccountDescriptors().first()
+                selectedAccountIds.addAll(accounts.map { it.id })
+                this@ExportViewModel.accounts = accounts
             }
         }
     }
@@ -176,7 +186,7 @@ internal class ExportViewModel @Inject constructor(
         //Begin export
         val uri: Uri? = getFileUri(directoryUri!!, fileName)
         if (uri != null) {
-            val accountIds: Set<Uuid> = accounts.first().map { it.id }.toSet()
+            val accountIds: Set<Uuid> = accounts.map { it.id }.toSet()
 
             val internalFiles: List<InternalFile> = getAllInternalFilesUseCase.getAllInternalFiles().first()
             val internalFileNames: Set<String> = internalFiles.map { it.internalName }.toSet()

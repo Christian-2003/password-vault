@@ -24,7 +24,7 @@
         <item quantity="other">%1$d files</item>
     </plurals>
     <string name="export_dialog_accounts_title">Select accounts</string>
-    <string name="export_dialog_accounts_files">Select files</string>
+    <string name="export_dialog_files_title">Select files</string>
     <string name="export_title_location">Location for export</string>
     <string name="export_title_data">Choose the data to export</string>
     <string name="export_title_encryption">Configure encryption</string>

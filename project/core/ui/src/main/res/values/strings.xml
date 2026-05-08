@@ -6,6 +6,10 @@
 
     <string name="dialog_confirmDiscard_title">Discard changes?</string>
     <string name="dialog_confirmDelete_title">Confirm deletion</string>
+    <string name="dialog_searchAccounts_queryHint">Search accounts…</string>
+    <string name="dialog_searchAccounts_selectAllLabel">Select all accounts</string>
+    <string name="dialog_searchAccounts_emptyPlaceholder_title">No accounts</string>
+    <string name="dialog_searchAccounts_emptyPlaceholder_subtitle">Accounts matching your query are shown here</string>
 
     <string name="help_dismissHelpCard">Dismiss</string>
 
