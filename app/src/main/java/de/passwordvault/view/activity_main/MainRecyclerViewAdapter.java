@@ -174,7 +174,16 @@ public class MainRecyclerViewAdapter extends RecyclerViewAdapter<MainViewModel> 
             Drawable logo = entry.getLogo();
             viewHolder.logoImageView.setImageDrawable(logo);
             if (logo == null) {
-                viewHolder.abbreviationTextView.setText("" + entry.getName().charAt(0));
+                if (!entry.getName().isEmpty()) {
+                    viewHolder.abbreviationTextView.setText("" + entry.getName().charAt(0));
+                }
+                else {
+                    //Technically, the name should not be empty. However, for certain conditions, the
+                    //name can sometimes be empty. For example:
+                    //  * A manipulated backup is imported where no name for an entry is provided
+                    //  * Through autofill manager, no name may sometimes be provided
+                    viewHolder.abbreviationTextView.setText("?");
+                }
             }
             viewHolder.abbreviationTextView.setVisibility(logo == null ? View.VISIBLE : View.GONE);
             viewHolder.nameTextView.setText(entry.getName());

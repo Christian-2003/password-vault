@@ -2,12 +2,12 @@
 
 # Changelog
 
-## 3.7.5 (XXXX-XX-XX)
+## 3.7.5 (2026-07-26)
 ###### Release Highlights
-n./a.
+Bugfixes.
 
 ###### Features
-* n./a.
+* Fix a bug where the app crashes on launch after data has been added through a save request of the autofill service.
 
 <br/>
 
