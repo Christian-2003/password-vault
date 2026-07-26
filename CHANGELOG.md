@@ -2,6 +2,15 @@
 
 # Changelog
 
+## 3.7.6 (XXXX-XX-XX)
+###### Release Highlights
+n./a.
+
+###### Features
+* n./a.
+
+<br/>
+
 ## 3.7.5 (2026-07-26)
 ###### Release Highlights
 Bugfixes.
