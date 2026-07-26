@@ -2,6 +2,15 @@
 
 # Changelog
 
+## 3.7.5 (2026-07-26)
+###### Release Highlights
+Bugfixes.
+
+###### Features
+* Fix a bug where the app crashes on launch after data has been added through a save request of the autofill service.
+
+<br/>
+
 ## 3.7.4 (2025-04-04)
 ###### Release Highlights
 The update focuses on the Jetpack Compose migration as well as a reduction in feature scope to enhance user experience.
