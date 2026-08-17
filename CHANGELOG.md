@@ -7,7 +7,7 @@
 n./a.
 
 ###### Features
-* n./a.
+* Add feature to print data using the Android `PrintManager`. This feature is designed to provide an easy way for users to export data to PDF.
 
 <br/>
 

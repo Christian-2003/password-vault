@@ -155,6 +155,8 @@
     <string name="settings_data_export_html_info">Export the data into an unencrypted, human-readable HTML format</string>
     <string name="settings_data_export_html_error">Cannot export data</string>
     <string name="settings_data_export_html_success">Exported data to HTML</string>
+    <string name="settings_data_export_pdf">Print</string>
+    <string name="settings_data_export_pdf_info">Print all accounts</string>
     <string name="settings_data_backup">Backup</string>
     <string name="settings_data_backup_file" translatable="false">pv_backup_{date}.txt</string>
     <string name="settings_data_backup_create">Create backup</string>

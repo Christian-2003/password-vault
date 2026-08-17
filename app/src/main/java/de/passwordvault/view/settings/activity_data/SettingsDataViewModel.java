@@ -9,10 +9,12 @@ import android.os.Process;
 import android.os.UserHandle;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
+import android.util.Log;
 import android.widget.Toast;
 import androidx.lifecycle.ViewModel;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import de.passwordvault.R;
 import de.passwordvault.model.analysis.QualityGateManager;
@@ -21,6 +23,7 @@ import de.passwordvault.model.security.login.Account;
 import de.passwordvault.model.storage.app.StorageException;
 import de.passwordvault.model.storage.export.ExportException;
 import de.passwordvault.model.storage.export.ExportToHtml2;
+import de.passwordvault.model.storage.export.ExportToPdf;
 import de.passwordvault.model.tags.TagManager;
 import de.passwordvault.view.utils.Utils;
 
@@ -151,6 +154,16 @@ public class SettingsDataViewModel extends ViewModel {
             return;
         }
         Toast.makeText(context, context.getString(R.string.settings_data_export_html_success), Toast.LENGTH_LONG).show();
+    }
+
+    public void exportToPdf(Context context) {
+        ExportToPdf pdfExporter = new ExportToPdf(context);
+        try {
+            pdfExporter.export();
+        }
+        catch (ExportException e) {
+            Log.e("Export", e.getMessage() != null ? e.getMessage() : "Unknown error while exporting to PDF");
+        }
     }
 
     /**

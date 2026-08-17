@@ -131,6 +131,7 @@ public class SettingsDataActivity extends PasswordVaultActivity<SettingsDataView
 
         //Export:
         findViewById(R.id.settings_data_export_html_container).setOnClickListener(view -> htmlExport());
+        findViewById(R.id.settings_data_export_pdf_container).setOnClickListener(view -> pdfExport());
 
         //Backup:
         findViewById(R.id.settings_data_backup_create_container).setOnClickListener(view -> startActivity(new Intent(this, CreateBackupActivity.class)));
@@ -160,6 +161,15 @@ public class SettingsDataActivity extends PasswordVaultActivity<SettingsDataView
             Toast.makeText(this, getString(R.string.settings_data_export_html_error), Toast.LENGTH_SHORT).show();
         }
     }
+
+
+    /**
+     * Method starts the PDF export.
+     */
+    private void pdfExport() {
+        viewModel.exportToPdf(this);
+    }
+
 
     /**
      * Method starts the process of restoring an XML backup.

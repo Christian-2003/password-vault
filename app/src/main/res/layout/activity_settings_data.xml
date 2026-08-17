@@ -106,6 +106,48 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/settings_data_export_pdf_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:foreground="?attr/selectableItemBackground"
+                android:paddingHorizontal="@dimen/space_horizontal"
+                android:paddingVertical="@dimen/space_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_data_export_pdf"
+                        style="@style/text"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_data_export_pdf_info"
+                        style="@style/text.light"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_horizontal_between"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_next"
+                    tools:ignore="ContentDescription"
+                    style="@style/image.item"/>
+
+            </LinearLayout>
+
             <View style="@style/divider"/>
 
 
