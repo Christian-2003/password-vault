@@ -153,6 +153,8 @@
     <string name="settings_data_export_html_info">Daten in unverschlüsselte, menschenlesbare HTML-Datei exportieren</string>
     <string name="settings_data_export_html_error">Daten konnten nicht exportiert werden</string>
     <string name="settings_data_export_html_success">Daten wurden exportiert</string>
+    <string name="settings_data_export_pdf">Drucken</string>
+    <string name="settings_data_export_pdf_info">Alle Daten drucken</string>
     <string name="settings_data_backup">Backup</string>
     <string name="settings_data_backup_create">Backup erstellen</string>
     <string name="settings_data_backup_create_info">(Verschlüsseltes) Backup erstellen</string>
