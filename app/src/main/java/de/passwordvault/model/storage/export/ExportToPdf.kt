@@ -146,15 +146,15 @@ class ExportToPdf(
             webViewClient = object: WebViewClient() {
                 override fun onPageFinished(view: WebView?, url: String?) {
                     if (view != null) {
-                        val printManager: PrintManager =
-                            context.getSystemService(Context.PRINT_SERVICE) as PrintManager
-                        val printAdapter: PrintDocumentAdapter =
-                            view.createPrintDocumentAdapter("document")
+                        val printMargin = 500
+                        val documentName: String = context.getString(R.string.html_export_document_title)
+                        val printManager: PrintManager = context.getSystemService(Context.PRINT_SERVICE) as PrintManager
+                        val printAdapter: PrintDocumentAdapter = view.createPrintDocumentAdapter(documentName)
 
                         val attributes: PrintAttributes = PrintAttributes.Builder()
                             .setMediaSize(PrintAttributes.MediaSize.ISO_A4)
                             .setColorMode(PrintAttributes.COLOR_MODE_COLOR)
-                            .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
+                            .setMinMargins(PrintAttributes.Margins(printMargin, printMargin, printMargin, printMargin))
                             .build()
 
                         printManager.print(

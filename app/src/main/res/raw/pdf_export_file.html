@@ -4,32 +4,33 @@
 
 <head>
     <meta charset="utf-8" />
+    <title>A4 Page Test</title>
     <style>
         :root {
-            --color-surface: #FAF9FE;
+            --color-surface: #FFFFFF; /* #FAF9FE */
             --color-surface-variant: #E9E7EC;
             --color-primary: #1D7874;
             --color-on-surface: #1B1A1F;
             --color-on-surface-variant: #444750;
             --color-outline: #C5C7C6;
 
-            --margin-horizontal: 16px;
-            --padding-horizontal: 12px;
-            --padding-vertical: 8px;
+            --margin-horizontal: 8px;
+            --padding-horizontal: 6px;
+            --padding-vertical: 4px;
 
-            --image-small: 24px;
-            --image-medium: 36px;
-            --image-large: 48px;
+            --image-small: 20px;
+            --image-medium: 28px;
+            --image-large: 36px;
 
-            --corner-small: 12px;
-            --corner-medium: 16px;
-            --corner-large: 24px;
+            --corner-small: 8px;
+            --corner-medium: 12px;
+            --corner-large: 16px;
 
-            --font-body-smaaccountsll: 16px;
-            --font-body-medium: 18px;
-            --font-body-large: 24px;
+            --font-body-small: 8px;
+            --font-body-medium: 12px;
+            --font-body-large: 16px;
 
-            --line-thickness: 2px;
+            --line-thickness: 1px;
         }
 
 
@@ -43,6 +44,7 @@
 
         @page {
             size: A4;
+            margin: 0.5in;
         }
 
 
@@ -51,9 +53,12 @@
             border: var(--color-outline) solid var(--line-thickness);
             border-radius: var(--corner-large);
             margin: var(--padding-vertical) var(--margin-horizontal);
-			break-inside: avoid;
-			page-break-inside: avoid;
+            display: grid;
+            grid-template-columns: 50% 50%;
+            break-inside: avoid;
+            page-break-inside: avoid;
         }
+
         .header {
             display: flex;
             flex-direction: row;
@@ -62,6 +67,7 @@
             margin-right: var(--padding-horizontal);
             margin-bottom: var(--padding-vertical);
         }
+
         .logo {
             background-color: var(--color-surface-variant);
             border: var(--color-outline) solid var(--line-thickness);
@@ -76,25 +82,30 @@
             justify-content: center;
             margin-right: var(--padding-horizontal);
         }
+
         .abbreviation {
             font-weight: bold;
             color: var(--color-primary);
             font-size: var(--font-body-large);
             text-align: center;
         }
-		.drawable {
-			width: 100%;
-			height: 100%;
-		}
+
+        .drawable {
+            width: 100%;
+            height: 100%;
+        }
+
         .header-text-container {
             display: flex;
             flex-direction: column;
         }
-        .header-text-container > .title {
+
+        .header-text-container>.title {
             font-weight: bold;
             font-size: var(--font-body-medium);
         }
-        .header-text-container > .description {
+
+        .header-text-container>.description {
             color: var(--color-on-surface-variant);
             font-size: var(--font-body-medium);
         }
@@ -108,15 +119,17 @@
             flex-wrap: wrap;
             align-items: center;
         }
+
         .tag {
             border: var(--color-outline) solid var(--line-thickness);
-            padding: 4px 12px;
+            padding: 2px 8px;
             border-radius: 100px;
             margin: 0px;
             margin-bottom: var(--padding-vertical);
             margin-right: var(--padding-horizontal);
             color: var(--color-on-surface-variant);
             background-color: var(--color-surface-variant);
+            font-size: var(--font-body-medium);
         }
 
         .details {
@@ -124,18 +137,21 @@
             padding-right: var(--padding-horizontal);
             display: flex;
             flex-direction: column;
-            border-top: var(--color-outline) solid var(--line-thickness);
+            border-left: var(--color-outline) solid var(--line-thickness);
         }
+
         .detail {
             display: flex;
             flex-direction: column;
             margin-top: var(--padding-vertical);
             margin-bottom: var(--padding-vertical);
         }
+
         .detail .name {
-            font-size: var(--font-body-small);
+            font-size: var(--font-body-medium);
             color: var(--color-on-surface-variant);
         }
+
         .detail .content {
             font-size: var(--font-body-medium);
             font-family: monospace;
