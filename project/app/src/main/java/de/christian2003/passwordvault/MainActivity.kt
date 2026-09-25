@@ -5,8 +5,6 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.WindowManager
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.LocalActivity
@@ -26,7 +24,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.work.WorkManager
 import dagger.hilt.android.AndroidEntryPoint
 import de.christian2003.feature.auth.navigation.AuthSettingsFlow
 import de.christian2003.feature.auth.navigation.LoginDestination
@@ -47,7 +44,6 @@ import de.christian2003.core.security.application.usecases.CanMasterKeyBeUnlocke
 import de.christian2003.core.security.application.usecases.UnlockWithBiometricsUseCase
 import de.christian2003.core.ui.theme.PasswordVaultTheme
 import de.christian2003.core.ui.theme.ThemeContrast
-import de.christian2003.data.files.infrastructure.registerSharedFilesClearingWorker
 import de.christian2003.feature.accounts.navigation.AccountDestination
 import de.christian2003.feature.accounts.navigation.AccountsDestination
 import de.christian2003.feature.accounts.navigation.accountDestination
@@ -58,8 +54,6 @@ import de.christian2003.feature.autofill.navigation.AutofillSettingsFlow
 import de.christian2003.feature.autofill.navigation.autofillSettingsFlow
 import de.christian2003.feature.export.navigation.ExportsFlow
 import de.christian2003.feature.export.navigation.exportsFlow
-import de.christian2003.feature.files.navigation.DirectoriesFlow
-import de.christian2003.feature.files.navigation.directoriesFlow
 import de.christian2003.feature.search.navigation.SearchDestination
 import de.christian2003.feature.search.navigation.searchDestination
 import javax.inject.Inject
@@ -82,15 +76,6 @@ class MainActivity : FragmentActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        //Work manager:
-        Handler(Looper.getMainLooper()).postDelayed(
-            {
-                WorkManager.getInstance(this).registerSharedFilesClearingWorker()
-            },
-            1000
-        )
-
 
         //App content:
         enableEdgeToEdge(
@@ -226,9 +211,6 @@ fun PasswordVault(
                 onNavigateToSearch = {
                     navController.navigate(SearchDestination)
                 },
-                onNavigateToFiles = {
-                    navController.navigate(DirectoriesFlow)
-                },
                 onNavigateToAnalysis = {
                     navController.navigate(AnalysisDestination)
                 }
@@ -254,11 +236,6 @@ fun PasswordVault(
                 onNavigateToAccount = { accountId ->
                     navController.navigate(AccountDestination(accountId.toString()))
                 }
-            )
-
-            //Flow for the files:
-            directoriesFlow(
-                navController = navController
             )
 
             //Destination for the password security analysis:

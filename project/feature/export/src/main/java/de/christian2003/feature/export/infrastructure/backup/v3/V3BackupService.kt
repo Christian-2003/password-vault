@@ -14,11 +14,6 @@ import de.christian2003.data.accounts.application.usecases.GetAccountsByIdsUseCa
 import de.christian2003.data.accounts.application.usecases.GetAllTagsUseCase
 import de.christian2003.data.accounts.domain.entities.Account
 import de.christian2003.data.accounts.domain.entities.Tag
-import de.christian2003.data.files.application.usecases.FindInternalDirectoryForInternalFileUseCase
-import de.christian2003.data.files.application.usecases.GetInternalFileByFileNameUseCase
-import de.christian2003.data.files.application.usecases.GetStreamForInternalFileUseCase
-import de.christian2003.data.files.domain.entities.InternalDirectory
-import de.christian2003.data.files.domain.entities.InternalFile
 import de.christian2003.feature.export.domain.entities.ExportConfig
 import de.christian2003.feature.export.domain.exceptions.IllegalExportConfigException
 import de.christian2003.feature.export.domain.entities.ExportDescriptor
@@ -35,7 +30,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.json.Json
 import java.io.File
 import java.io.FileOutputStream
-import java.io.InputStream
 import java.io.OutputStream
 import java.security.SecureRandom
 import java.time.LocalDateTime
@@ -53,11 +47,6 @@ import de.christian2003.feature.export.R
  * @param tagMapper                                     Mapper for tags.
  * @param getAccountsByIdsUseCase                       Use case to get accounts by their IDs.
  * @param getAllTagsUseCase                             Use case to get all tags.
- * @param getInternalFileByFileNameUseCase              Use case to get an internal file by it's
- *                                                      internal name.
- * @param findInternalDirectoryForInternalFileUseCase   Use case to find the internal directory in
- *                                                      which an internal file is stored.
- * @param getStreamForInternalFileUseCase               Use case to get streams to an internal file.
  * @param kdfService                                    Service used to generate a cryptographic
  *                                                      key from a seed.
  * @param cipherService                                 Service used for cryptographic operations.
@@ -68,9 +57,6 @@ internal class V3BackupService @Inject constructor(
     private val tagMapper: V3BackupTagMapper,
     private val getAccountsByIdsUseCase: GetAccountsByIdsUseCase,
     private val getAllTagsUseCase: GetAllTagsUseCase,
-    private val getInternalFileByFileNameUseCase: GetInternalFileByFileNameUseCase,
-    private val findInternalDirectoryForInternalFileUseCase: FindInternalDirectoryForInternalFileUseCase,
-    private val getStreamForInternalFileUseCase: GetStreamForInternalFileUseCase,
     private val kdfService: KdfService,
     private val cipherService: CipherService
 ): ExportService {
@@ -88,7 +74,7 @@ internal class V3BackupService @Inject constructor(
         exportFileExtension = "pvx",
         exportFileMimeType = "application/vnd.passwordvault.pvx",
         canExportAccounts = true,
-        canExportFiles = true,
+        canExportFiles = false,
         isExportEncrypted = true,
         titleId = R.string.export_v3_title,
         subtitleId = R.string.export_v3_subtitle,
@@ -132,16 +118,6 @@ internal class V3BackupService @Inject constructor(
                     //Export accounts:
                     exportedAccountsCount = exportAccounts(config.accounts, zipOutputStream)
                     emit(progressionCurrentStep++ / progressionStepCount.toFloat())
-
-                    //Export files:
-                    config.files.forEach { fileName ->
-                        val result: Boolean = exportFile(fileName, zipOutputStream)
-                        if (result) {
-                            exportedFilesCount++
-                        }
-
-                        emit(progressionCurrentStep++ / progressionStepCount.toFloat())
-                    }
 
                     //Export metadata:
                     exportMetadata(exportedAccountsCount, exportedFilesCount, zipOutputStream)
@@ -212,43 +188,6 @@ internal class V3BackupService @Inject constructor(
         }
 
         return exportedAccountsCount
-    }
-
-
-    /**
-     * Exports the specified file to the provided ZIP output stream.
-     *
-     * @param fileName          Internal file name of the file to export.
-     * @param zipOutputStream   ZIP output stream into which to write the file.
-     * @return                  Whether the file was written successfully into the ZIP OS.
-     */
-    private suspend fun exportFile(fileName: String, zipOutputStream: ZipOutputStream): Boolean {
-        val internalFile: InternalFile? = getInternalFileByFileNameUseCase.getInternalFile(fileName)
-
-        var success = false
-
-        if (internalFile != null) {
-            val internalDir: InternalDirectory? = findInternalDirectoryForInternalFileUseCase.findInternalDirectoryFor(internalFile)
-
-            if (internalDir != null) {
-                val fileInputStream: InputStream? = getStreamForInternalFileUseCase.getInputStreamFor(internalFile, internalDir)
-
-                fileInputStream?.use { fileInputStream ->
-                    val userfilesDir = File("userfiles")
-                    val fileDir = File(userfilesDir, internalDir.internalPath)
-                    val file = File(fileDir, internalFile.actualFileName)
-
-                    val zipEntry = ZipEntry(sanitizeZipEntryName(file.path))
-                    zipOutputStream.putNextEntry(zipEntry)
-                    fileInputStream.copyTo(zipOutputStream)
-                    zipOutputStream.closeEntry()
-
-                    success = true
-                }
-            }
-        }
-
-        return success
     }
 
 

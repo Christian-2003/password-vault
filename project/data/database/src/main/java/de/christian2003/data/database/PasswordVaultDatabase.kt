@@ -17,8 +17,6 @@ import de.christian2003.data.accounts.infrastructure.db.entities.AccountTagCross
 import de.christian2003.data.accounts.infrastructure.db.entities.DetailEntity
 import de.christian2003.data.accounts.infrastructure.db.entities.TagEntity
 import de.christian2003.data.accounts.infrastructure.db.entities.TargetEntity
-import de.christian2003.data.files.infrastructure.db.dao.InternalFileDao
-import de.christian2003.data.files.infrastructure.db.entities.InternalFileEntity
 
 
 @Database(
@@ -28,10 +26,7 @@ import de.christian2003.data.files.infrastructure.db.entities.InternalFileEntity
         DetailEntity::class,
         TagEntity::class,
         TargetEntity::class,
-        AccountTagCrossRef::class,
-
-        //Files:
-        InternalFileEntity::class
+        AccountTagCrossRef::class
     ],
     version = 1,
     exportSchema = false
@@ -62,11 +57,6 @@ internal abstract class PasswordVaultDatabase(): RoomDatabase() {
      * DAO through which to access the targets.
      */
     abstract val targetDao: TargetDao
-
-    /**
-     * DAO through which to access the internal files.
-     */
-    abstract val internalFileDao: InternalFileDao
 
 
     companion object {

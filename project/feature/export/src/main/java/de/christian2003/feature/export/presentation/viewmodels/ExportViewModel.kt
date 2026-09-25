@@ -21,8 +21,6 @@ import de.christian2003.core.ui.model.InputError
 import de.christian2003.data.accounts.application.usecases.GetAccountIconUseCase
 import de.christian2003.data.accounts.application.usecases.GetAllAccountDescriptorsUseCase
 import de.christian2003.data.accounts.domain.entities.AccountDescriptor
-import de.christian2003.data.files.application.usecases.GetAllInternalFilesUseCase
-import de.christian2003.data.files.domain.entities.InternalFile
 import de.christian2003.feature.export.application.usecases.DiscoverExportServicesUseCase
 import de.christian2003.feature.export.application.usecases.LaunchExportUseCase
 import de.christian2003.feature.export.domain.entities.ExportConfig
@@ -47,7 +45,6 @@ internal class ExportViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     discoverExportServicesUseCase: DiscoverExportServicesUseCase,
     getAllAccountDescriptorsUseCase: GetAllAccountDescriptorsUseCase,
-    private val getAllInternalFilesUseCase: GetAllInternalFilesUseCase,
     private val launchExportUseCase: LaunchExportUseCase,
     private val observeExportProgressUseCase: ObserveExportProgressUseCase,
     private val getAccountIconUseCase: GetAccountIconUseCase,
@@ -188,14 +185,11 @@ internal class ExportViewModel @Inject constructor(
         if (uri != null) {
             val accountIds: Set<Uuid> = accounts.map { it.id }.toSet()
 
-            val internalFiles: List<InternalFile> = getAllInternalFilesUseCase.getAllInternalFiles().first()
-            val internalFileNames: Set<String> = internalFiles.map { it.internalName }.toSet()
-
             val progress: Flow<ExportProgress> = launchExportUseCase.launchExport(
                 id = exportServiceDescriptor.id,
                 config = ExportConfig(
                     accounts = accountIds,
-                    files = internalFileNames,
+                    files = emptySet(),
                     exportDestination = uri,
                     encryptionKeySeed = password.toCharArray()
                 )

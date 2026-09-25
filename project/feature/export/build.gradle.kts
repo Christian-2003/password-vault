@@ -66,7 +66,6 @@ dependencies {
     implementation(project(":core:security"))
     implementation(project(":core:ui"))
     implementation(project(":data:accounts"))
-    implementation(project(":data:files"))
 
     testImplementation(libs.junit)
 

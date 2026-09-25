@@ -1,13 +1,9 @@
 package de.christian2003.passwordvault
 
 import android.app.Application
-import android.os.Handler
-import android.os.Looper
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
-import androidx.work.WorkManager
 import dagger.hilt.android.HiltAndroidApp
-import de.christian2003.data.files.infrastructure.registerSharedFilesClearingWorker
 import javax.inject.Inject
 
 

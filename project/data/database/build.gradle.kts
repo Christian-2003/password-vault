@@ -46,7 +46,6 @@ dependencies {
     implementation(libs.hilt.android)
 
     implementation(project(":data:accounts"))
-    implementation(project(":data:files"))
 
     testImplementation(libs.junit)
     testImplementation(libs.mockito.core)

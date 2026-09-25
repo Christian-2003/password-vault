@@ -105,12 +105,10 @@ dependencies {
     implementation(project(":core:security"))
     implementation(project(":core:ui"))
     implementation(project(":data:database"))
-    implementation(project(":data:files"))
     implementation(project(":feature:auth"))
     implementation(project(":feature:accounts"))
     implementation(project(":feature:autofill"))
     implementation(project(":feature:search"))
-    implementation(project(":feature:files"))
     implementation(project(":feature:analysis"))
     implementation(project(":feature:export"))
 

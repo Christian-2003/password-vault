@@ -23,6 +23,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -69,7 +70,6 @@ import de.christian2003.feature.accounts.R
  * @param onCreateNewAccount    Callback invoked to create a new account.
  * @param onNavigateToSettings  Callback invoked to navigate to the settings.
  * @param onNavigateToSearch    Callback invoked to navigate to the search screen.
- * @param onNavigateToFiles     Callback invoked to navigate to the files.
  * @param onNavigateToAnalysis  Callback invoked to navigate to the password security analysis.
  */
 @Composable
@@ -79,7 +79,6 @@ internal fun MainScreen(
     onCreateNewAccount: () -> Unit,
     onNavigateToSettings: () -> Unit,
     onNavigateToSearch: () -> Unit,
-    onNavigateToFiles: () -> Unit,
     onNavigateToAnalysis: () -> Unit
 ) {
     val accountDescriptors: List<AccountDescriptor> by viewModel.accountDescriptors.collectAsState(emptyList())
@@ -100,16 +99,8 @@ internal fun MainScreen(
                 },
                 scrollBehavior = scrollBehavior,
                 navigationIcon = {
-                    IconButton(
-                        onClick = onNavigateToFiles
-                    ) {
-                        Icon(
-                            painter = painterResource(de.christian2003.core.ui.R.drawable.ic_content),
-                            contentDescription = ""
-                        )
-                    }
                     //Placeholder so that the search bar is centered
-                    /*Box(modifier = Modifier.size(IconButtonDefaults.smallContainerSize()))*/
+                    Box(modifier = Modifier.size(IconButtonDefaults.smallContainerSize()))
                 },
                 actions = {
                     IconButton(
