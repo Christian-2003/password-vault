@@ -83,6 +83,9 @@ internal fun ExportScreen(
                 onRepeatPasswordChange = {
                     viewModel.repeatPassword = it
                 },
+                onTryStartExport = {
+                    viewModel.export()
+                },
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
