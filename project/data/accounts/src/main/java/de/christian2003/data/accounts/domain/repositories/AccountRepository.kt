@@ -3,6 +3,7 @@ package de.christian2003.data.accounts.domain.repositories
 import de.christian2003.data.accounts.domain.entities.Account
 import de.christian2003.data.accounts.domain.entities.AccountCapability
 import de.christian2003.data.accounts.domain.entities.AccountDescriptor
+import de.christian2003.data.accounts.domain.entities.BatchOption
 import de.christian2003.data.accounts.domain.entities.DetailType
 import kotlinx.coroutines.flow.Flow
 import kotlin.uuid.Uuid
@@ -66,6 +67,15 @@ internal interface AccountRepository {
      * @param account   Account to create.
      */
     suspend fun createAccount(account: Account)
+
+
+    /**
+     * Creates a batch of accounts.
+     *
+     * @param accounts      List of accounts to create.
+     * @param batchOption   Batch option describing what should happen with existing data.
+     */
+    suspend fun createAccountsBatch(accounts: List<Account>, batchOption: BatchOption)
 
 
     /**

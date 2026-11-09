@@ -25,7 +25,7 @@ import de.christian2003.feature.export.application.usecases.DiscoverExportServic
 import de.christian2003.feature.export.application.usecases.LaunchExportUseCase
 import de.christian2003.feature.export.domain.entities.ExportConfig
 import de.christian2003.feature.export.domain.entities.ExportDescriptor
-import de.christian2003.feature.export.domain.entities.ExportProgress
+import de.christian2003.feature.export.domain.entities.ServiceProgress
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -34,7 +34,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 import kotlin.uuid.Uuid
 import de.christian2003.feature.export.R
-import de.christian2003.feature.export.application.usecases.ObserveExportProgressUseCase
+import de.christian2003.feature.export.application.usecases.ObserveServiceProgressUseCase
 import de.christian2003.feature.export.domain.entities.ProgressState
 import de.christian2003.feature.export.presentation.model.dialogs.ExportScreenDialog
 
@@ -46,7 +46,7 @@ internal class ExportViewModel @Inject constructor(
     discoverExportServicesUseCase: DiscoverExportServicesUseCase,
     getAllAccountDescriptorsUseCase: GetAllAccountDescriptorsUseCase,
     private val launchExportUseCase: LaunchExportUseCase,
-    private val observeExportProgressUseCase: ObserveExportProgressUseCase,
+    private val observeExportProgressUseCase: ObserveServiceProgressUseCase,
     private val getAccountIconUseCase: GetAccountIconUseCase,
     private val dateTimeFormatterService: DateTimeFormatterService,
     private val fileNameValidatorService: FileNameValidatorService
@@ -77,7 +77,7 @@ internal class ExportViewModel @Inject constructor(
     var repeatPasswordError: InputError? by mutableStateOf(null)
         private set
 
-    var exportProgress: ExportProgress? by mutableStateOf(null)
+    var exportProgress: ServiceProgress? by mutableStateOf(null)
 
     var canStartExport: State<Boolean> = derivedStateOf {
         exportProgress == null
@@ -105,7 +105,7 @@ internal class ExportViewModel @Inject constructor(
 
         //Observe current worker (if any are running):
         if (exportServiceId != null) {
-            val currentProgress: Flow<ExportProgress>? = observeExportProgressUseCase.observeProgress(exportServiceId)
+            val currentProgress: Flow<ServiceProgress>? = observeExportProgressUseCase.observeProgress(exportServiceId)
             viewModelScope.launch {
                 currentProgress?.collect { exportProgress = it }
             }
@@ -185,7 +185,7 @@ internal class ExportViewModel @Inject constructor(
         if (uri != null) {
             val accountIds: Set<Uuid> = accounts.map { it.id }.toSet()
 
-            val progress: Flow<ExportProgress> = launchExportUseCase.launchExport(
+            val progress: Flow<ServiceProgress> = launchExportUseCase.launchExport(
                 id = exportServiceDescriptor.id,
                 config = ExportConfig(
                     accounts = accountIds,

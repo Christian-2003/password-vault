@@ -4,6 +4,7 @@ import de.christian2003.core.security.domain.services.HmacCipherService
 import de.christian2003.data.accounts.domain.entities.Account
 import de.christian2003.data.accounts.domain.entities.AccountCapability
 import de.christian2003.data.accounts.domain.entities.AccountDescriptor
+import de.christian2003.data.accounts.domain.entities.BatchOption
 import de.christian2003.data.accounts.domain.entities.Detail
 import de.christian2003.data.accounts.domain.entities.DetailType
 import de.christian2003.data.accounts.domain.entities.Tag
@@ -243,6 +244,53 @@ internal class PasswordVaultRepository @Inject constructor(
 
 
     /**
+     * Creates a batch of accounts.
+     *
+     * @param accounts      List of accounts to create.
+     * @param batchOption   Batch option describing what should happen with existing data.
+     */
+    override suspend fun createAccountsBatch(accounts: List<Account>, batchOption: BatchOption) {
+        if (batchOption == BatchOption.DeleteAllExisting) {
+            //Delete all accounts if defined by the batch option:
+            accountDao.deleteAll()
+        }
+
+        accounts.forEach { account ->
+            val tagEntities: List<TagEntity> = account.tags.map { tag ->
+                tagMapper.toEntity(tag)
+            }
+
+            val targetEntities: List<TargetEntity> = account.descriptor.targets.map { target ->
+                targetMapper.toEntity(target, account.descriptor.id)
+            }
+
+            val detailEntities: List<DetailEntity> = account.details.map { detail ->
+                detailMapper.toEntity(detail, account.descriptor.id)
+            }
+
+            val accountWithTags = AccountWithTags(
+                account = accountMapper.toEntity(account),
+                tags = tagEntities
+            )
+
+            when (batchOption) {
+                BatchOption.ReplaceDuplicates, BatchOption.DeleteAllExisting -> {
+                    accountDao.insertAccountWithTags(accountWithTags)
+                    targetDao.insertAll(targetEntities)
+                    detailDao.insertAll(detailEntities)
+                }
+
+                BatchOption.SkipDuplicates -> {
+                    accountDao.upsertAccountWithTags(accountWithTags)
+                    targetDao.upsertAll(targetEntities)
+                    detailDao.upsertAll(detailEntities)
+                }
+            }
+        }
+    }
+
+
+    /**
      * Updates the account that is passed as argument.
      *
      * @param account   Account to update.
@@ -339,6 +387,32 @@ internal class PasswordVaultRepository @Inject constructor(
      */
     override suspend fun createTag(tag: Tag) {
         tagDao.insert(tagMapper.toEntity(tag))
+    }
+
+
+    /**
+     * Creates a batch of tags.
+     *
+     * @param tags          List of tags to create.
+     * @param batchOption   Batch option describing what should happen with existing data.
+     */
+    override suspend fun createTagsBatch(tags: List<Tag>, batchOption: BatchOption) {
+        val tagEntities: List<TagEntity> = tags.map { tag -> tagMapper.toEntity(tag) }
+
+        when (batchOption) {
+            BatchOption.ReplaceDuplicates -> {
+                tagDao.upsertAll(tagEntities)
+            }
+
+            BatchOption.SkipDuplicates -> {
+                tagDao.insertAll(tagEntities)
+            }
+
+            BatchOption.DeleteAllExisting -> {
+                tagDao.deleteAll()
+                tagDao.insertAll(tagEntities)
+            }
+        }
     }
 
 

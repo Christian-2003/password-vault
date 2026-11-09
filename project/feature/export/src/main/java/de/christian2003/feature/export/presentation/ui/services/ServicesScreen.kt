@@ -1,4 +1,4 @@
-package de.christian2003.feature.export.presentation.ui.exports
+package de.christian2003.feature.export.presentation.ui.services
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -27,20 +27,21 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import de.christian2003.core.ui.composables.ListItemContainer
 import de.christian2003.core.ui.composables.NavigationBarProtection
-import de.christian2003.feature.export.domain.entities.ExportDescriptor
-import de.christian2003.feature.export.presentation.viewmodels.ExportsViewModel
+import de.christian2003.feature.export.presentation.viewmodels.ServicesViewModel
 import de.christian2003.feature.export.R
+import de.christian2003.feature.export.presentation.model.dto.ServiceDescriptorUiDto
 
 
 @Composable
-internal fun ExportsScreen(
-    viewModel: ExportsViewModel,
+internal fun ServicesScreen(
+    viewModel: ServicesViewModel,
     onNavigateUp: () -> Unit,
-    onNavigateToExport: (String) -> Unit
+    onServiceSelected: (String) -> Unit
 ) {
     Scaffold(
         topBar = {
             TopBar(
+                isExport = viewModel.isExport,
                 onNavigateUp = onNavigateUp
             )
         }
@@ -56,12 +57,12 @@ internal fun ExportsScreen(
                     end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
                 )
         ) {
-            itemsIndexed(viewModel.exportDescriptors) { index, descriptor ->
-                ExportDescriptorListRow(
+            itemsIndexed(viewModel.serviceDescriptors) { index, descriptor ->
+                ServiceDescriptorListRow(
                     descriptor = descriptor,
                     isFirst = index == 0,
-                    isLast = index == viewModel.exportDescriptors.size - 1,
-                    onClick = onNavigateToExport
+                    isLast = index == viewModel.serviceDescriptors.size - 1,
+                    onClick = onServiceSelected
                 )
             }
 
@@ -76,8 +77,8 @@ internal fun ExportsScreen(
 
 
 @Composable
-private fun ExportDescriptorListRow(
-    descriptor: ExportDescriptor,
+private fun ServiceDescriptorListRow(
+    descriptor: ServiceDescriptorUiDto,
     isFirst: Boolean,
     isLast: Boolean,
     onClick: (String) -> Unit
@@ -118,11 +119,18 @@ private fun ExportDescriptorListRow(
 
 @Composable
 private fun TopBar(
+    isExport: Boolean,
     onNavigateUp: () -> Unit
 ) {
     TopAppBar(
         title = {
-            Text(stringResource(R.string.exports_title))
+            Text(
+                text = if (isExport) {
+                    stringResource(R.string.services_title_export)
+                } else {
+                    stringResource(R.string.services_title_import)
+                }
+            )
         },
         navigationIcon = {
             IconButton(

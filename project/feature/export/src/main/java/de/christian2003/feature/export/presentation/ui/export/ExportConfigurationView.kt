@@ -44,7 +44,7 @@ import de.christian2003.feature.export.domain.entities.ExportDescriptor
 
 
 @Composable
-internal fun ConfigurationView(
+internal fun ExportConfigurationView(
     descriptor: ExportDescriptor,
     directoryUri: Uri?,
     fileName: String,

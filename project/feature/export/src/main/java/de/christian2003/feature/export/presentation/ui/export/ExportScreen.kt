@@ -18,14 +18,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import de.christian2003.core.ui.composables.dialog.AccountSelectorDialog
 import de.christian2003.core.ui.model.AccountUiDto
 import de.christian2003.feature.export.presentation.viewmodels.ExportViewModel
 import de.christian2003.feature.export.R
-import de.christian2003.feature.export.domain.entities.ExportProgress
+import de.christian2003.feature.export.domain.entities.ServiceProgress
 import de.christian2003.feature.export.domain.entities.ProgressState
 import de.christian2003.feature.export.presentation.model.dialogs.ExportScreenDialog
+import de.christian2003.feature.export.presentation.ui.common.ProgressView
 
 
 @Composable
@@ -50,10 +52,10 @@ internal fun ExportScreen(
         },
         modifier = Modifier.imePadding()
     ) { innerPadding ->
-        val progress: ExportProgress? = viewModel.exportProgress
+        val progress: ServiceProgress? = viewModel.exportProgress
 
         if (progress == null || (progress.state == ProgressState.None || progress.state == ProgressState.Finished || progress.state == ProgressState.Failed)) {
-            ConfigurationView(
+            ExportConfigurationView(
                 descriptor = viewModel.exportServiceDescriptor,
                 directoryUri = viewModel.directoryUri,
                 fileName = viewModel.fileName,
@@ -135,7 +137,10 @@ private fun TopBar(
 ) {
     TopAppBar(
         title = {
-            Text(title)
+            Text(
+                text = title,
+                overflow = TextOverflow.Ellipsis
+            )
         },
         navigationIcon = {
             IconButton(

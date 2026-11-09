@@ -2,8 +2,9 @@
 
 <resources>
 
-    <!-- Screen through which to select an export service -->
-    <string name="exports_title">Export data</string>
+    <!-- Screen through which to select an export / import service -->
+    <string name="services_title_export">Export data</string>
+    <string name="services_title_import">Import data</string>
 
 
     <!-- Screen through which to export data -->
@@ -36,9 +37,29 @@
     <string name="export_progress_buttonStay">Stay on this screen</string>
 
 
-    <!-- Strings related to the export services -->
+    <!-- Screen through which to import data -->
+    <string name="import_title_file">File</string>
+    <string name="import_title_chooseImportOption">Choose option</string>
+    <string name="import_title_encryption">Password</string>
+    <string name="import_label_file">Selected file</string>
+    <string name="import_label_password">Password</string>
+    <string name="import_text_noFileSelected">Select a file to import</string>
+    <string name="import_text_chooseImportOption">Select what should happen with the current data during import</string>
+    <string name="import_text_encryption">The exported file is encrypted and requires a password</string>
+    <string name="import_option_deleteAllExistingData_title">Delete all existing data</string>
+    <string name="import_option_deleteAllExistingData_info">Deletes all existing data before importing data</string>
+    <string name="import_option_overrideDuplicates_title">Override duplicates</string>
+    <string name="import_option_overrideDuplicates_info">Overrides duplicates during import</string>
+    <string name="import_option_skipDuplicates_title">Skip duplicates</string>
+    <string name="import_option_skipDuplicates_info">Skips duplicates during import</string>
+    <string name="import_hint_editFile">Select a different file</string>
+
+
+    <!-- Strings related to the export / import services -->
     <string name="export_v3_title">Password Vault Backup</string>
     <string name="export_v3_subtitle">Exports backups in the format of Password Vault</string>
     <string name="export_v3_helpText">Select accounts and files you want to export.</string>
+    <string name="import_v3_title">Password Vault Backup</string>
+    <string name="import_v3_subtitle">Imports backups from the format of Password Vault</string>
 
 </resources>

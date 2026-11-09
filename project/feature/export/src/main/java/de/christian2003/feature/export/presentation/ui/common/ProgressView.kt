@@ -1,4 +1,4 @@
-package de.christian2003.feature.export.presentation.ui.export
+package de.christian2003.feature.export.presentation.ui.common
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
@@ -21,12 +21,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import de.christian2003.feature.export.domain.entities.ExportProgress
+import de.christian2003.feature.export.domain.entities.ServiceProgress
 import de.christian2003.feature.export.R
 
 
 /**
- * View displays the progress updates to the user while their export runs.
+ * View displays the progress updates to the user while their import / export runs.
  *
  * @param progress      Current progress.
  * @param onNavigateUp  Callback to navigate up the nav stack.
@@ -34,7 +34,7 @@ import de.christian2003.feature.export.R
  */
 @Composable
 internal fun ProgressView(
-    progress: ExportProgress,
+    progress: ServiceProgress,
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {

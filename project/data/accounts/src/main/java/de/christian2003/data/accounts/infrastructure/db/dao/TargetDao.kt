@@ -2,8 +2,10 @@ package de.christian2003.data.accounts.infrastructure.db.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Upsert
 import de.christian2003.data.accounts.infrastructure.db.entities.TargetEntity
 import kotlinx.coroutines.flow.Flow
 import kotlin.uuid.Uuid
@@ -26,6 +28,12 @@ interface TargetDao {
 
     @Insert
     suspend fun insert(targetEntity: TargetEntity)
+
+    @Insert
+    suspend fun insertAll(targetEntities: List<TargetEntity>)
+
+    @Upsert
+    suspend fun upsertAll(targetEntities: List<TargetEntity>)
 
 
     @Transaction

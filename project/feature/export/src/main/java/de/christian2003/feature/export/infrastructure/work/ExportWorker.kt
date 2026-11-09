@@ -23,7 +23,7 @@ internal class ExportWorker @AssistedInject constructor(
     private val exportConfigMapper: ExportConfigMapper
 ): CoroutineWorker(context, params) {
 
-    val json: Json = Json {  }
+    val json: Json = Json
 
     override suspend fun doWork(): Result {
         try {

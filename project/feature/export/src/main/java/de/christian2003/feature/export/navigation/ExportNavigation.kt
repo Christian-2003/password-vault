@@ -6,9 +6,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import de.christian2003.feature.export.presentation.ui.export.ExportScreen
-import de.christian2003.feature.export.presentation.ui.exports.ExportsScreen
+import de.christian2003.feature.export.presentation.ui.imprt.ImportScreen
+import de.christian2003.feature.export.presentation.ui.services.ServicesScreen
 import de.christian2003.feature.export.presentation.viewmodels.ExportViewModel
-import de.christian2003.feature.export.presentation.viewmodels.ExportsViewModel
+import de.christian2003.feature.export.presentation.viewmodels.ImportViewModel
+import de.christian2003.feature.export.presentation.viewmodels.ServicesViewModel
 import kotlinx.serialization.Serializable
 
 
@@ -17,20 +19,23 @@ import kotlinx.serialization.Serializable
 @Serializable
 object ExportsFlow
 
+@Serializable
+object ImportsFlow
+
 
 fun NavGraphBuilder.exportsFlow(
     navController: NavController
 ) {
     navigation<ExportsFlow>(
-        startDestination = ExportsDestination
+        startDestination = ServicesDestination(true)
     ) {
 
-        exportsDestination(
+        servicesDestination(
             onNavigateUp = {
                 navController.navigateUp()
             },
-            onNavigateToExport = { exportServiceId ->
-                navController.navigate(ExportDestination(exportServiceId))
+            onServiceSelected = { serviceId ->
+                navController.navigate(ExportDestination(serviceId))
             }
         )
 
@@ -44,28 +49,68 @@ fun NavGraphBuilder.exportsFlow(
 }
 
 
+fun NavGraphBuilder.importsFlow(
+    navController: NavController
+) {
+    navigation<ImportsFlow>(
+        startDestination = ServicesDestination(false)
+    ) {
+
+        servicesDestination(
+            onNavigateUp = {
+                navController.navigateUp()
+            },
+            onServiceSelected = { serviceId ->
+                navController.navigate(ImportDestination(serviceId))
+            }
+        )
+
+        importDestination(
+            onNavigateUp = {
+                navController.navigateUp()
+            }
+        )
+
+    }
+}
+
+
 // =============== Internal destinations ===============
 
 @Serializable
-private object ExportsDestination
+private data class ServicesDestination(
+    val isExport: Boolean
+)
 
 @Serializable
 internal data class ExportDestination(
     val exportServiceId: String
 )
 
+@Serializable
+internal data class ImportDestination(
+    val importServiceId: String
+)
 
-private fun NavGraphBuilder.exportsDestination(
+
+/**
+ * Navigation destination for the screen through which customers can discover available export or
+ * import services.
+ *
+ * @param onNavigateUp      Callback invoked to navigate up the navigation stack.
+ * @param onServiceSelected Callback invoked once a service is selected.
+ */
+private fun NavGraphBuilder.servicesDestination(
     onNavigateUp: () -> Unit,
-    onNavigateToExport: (String) -> Unit
+    onServiceSelected: (String) -> Unit
 ) {
-    composable<ExportsDestination> {
-        val viewModel: ExportsViewModel = hiltViewModel()
+    composable<ServicesDestination> {
+        val viewModel: ServicesViewModel = hiltViewModel()
 
-        ExportsScreen(
+        ServicesScreen(
             viewModel = viewModel,
             onNavigateUp = onNavigateUp,
-                onNavigateToExport = onNavigateToExport
+            onServiceSelected = onServiceSelected
         )
     }
 }
@@ -83,6 +128,25 @@ private fun NavGraphBuilder.exportDestination(
         val viewModel: ExportViewModel = hiltViewModel()
 
         ExportScreen(
+            viewModel = viewModel,
+            onNavigateUp = onNavigateUp
+        )
+    }
+}
+
+
+/**
+ * Navigation destination for the screen through which to import data.
+ *
+ * @param onNavigateUp  Callback invoked to navigate up the navigation stack.
+ */
+private fun NavGraphBuilder.importDestination(
+    onNavigateUp: () -> Unit
+) {
+    composable<ImportDestination> {
+        val viewModel: ImportViewModel = hiltViewModel()
+
+        ImportScreen(
             viewModel = viewModel,
             onNavigateUp = onNavigateUp
         )

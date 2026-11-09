@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import androidx.room.Upsert
 import de.christian2003.data.accounts.domain.entities.DetailType
 import de.christian2003.data.accounts.infrastructure.db.entities.DetailEntity
 import kotlinx.coroutines.flow.Flow
@@ -26,6 +27,12 @@ interface DetailDao {
 
     @Insert
     suspend fun insert(detail: DetailEntity)
+
+    @Insert
+    suspend fun insertAll(details: List<DetailEntity>)
+
+    @Upsert
+    suspend fun upsertAll(details: List<DetailEntity>)
 
     @Delete
     suspend fun delete(detail: DetailEntity)

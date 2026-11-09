@@ -1,5 +1,6 @@
 package de.christian2003.data.accounts.domain.repositories
 
+import de.christian2003.data.accounts.domain.entities.BatchOption
 import de.christian2003.data.accounts.domain.entities.Tag
 import kotlinx.coroutines.flow.Flow
 import kotlin.uuid.Uuid
@@ -34,6 +35,15 @@ internal interface TagRepository {
      * @param tag   Tag to create.
      */
     suspend fun createTag(tag: Tag)
+
+
+    /**
+     * Creates a batch of tags.
+     *
+     * @param tags          List of tags to create.
+     * @param batchOption   Batch option describing what should happen with existing data.
+     */
+    suspend fun createTagsBatch(tags: List<Tag>, batchOption: BatchOption)
 
 
     /**

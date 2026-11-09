@@ -22,6 +22,8 @@
     <string name="settings_data">Data</string>
     <string name="settings_data_exportTitle">Export data</string>
     <string name="settings_data_exportInfo">Export your data from Password Vault</string>
+    <string name="settings_data_importTitle">Import data</string>
+    <string name="settings_data_importInfo">Import data to Password Vault</string>
     <string name="settings_help">Help</string>
     <string name="settings_help_helpMessagesTitle">Help messages</string>
     <string name="settings_help_helpMessagesInfo">Reactivate dismissed help messages</string>

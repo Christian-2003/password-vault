@@ -6,7 +6,7 @@ import androidx.annotation.StringRes
 /**
  * Export descriptor.
  *
- * @param id                    ID of the export service (e.g. "xml" or "json").
+ * @param id                    ID of the export service (e.g. "V3Backup" or "HTMLExport").
  * @param exportFileExtension   Recommended file extension for the exported file (e.g. "xml" or "json").
  * @param exportFileMimeType    Mime type for the exported file.
  * @param canExportAccounts     Whether the export can include accounts.

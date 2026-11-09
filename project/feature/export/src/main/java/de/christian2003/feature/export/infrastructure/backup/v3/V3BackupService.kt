@@ -4,15 +4,18 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import de.christian2003.core.security.domain.services.CipherService
 import de.christian2003.core.security.domain.services.KdfService
+import de.christian2003.data.accounts.application.usecases.CreateAccountsBatchUseCase
 import de.christian2003.data.accounts.application.usecases.GetAccountsByIdsUseCase
 import de.christian2003.data.accounts.application.usecases.GetAllTagsUseCase
 import de.christian2003.data.accounts.domain.entities.Account
+import de.christian2003.data.accounts.domain.entities.BatchOption
 import de.christian2003.data.accounts.domain.entities.Tag
 import de.christian2003.feature.export.domain.entities.ExportConfig
 import de.christian2003.feature.export.domain.exceptions.IllegalExportConfigException
@@ -38,6 +41,17 @@ import java.util.zip.ZipOutputStream
 import javax.inject.Inject
 import kotlin.uuid.Uuid
 import de.christian2003.feature.export.R
+import de.christian2003.feature.export.domain.entities.ImportConfig
+import de.christian2003.feature.export.domain.entities.ImportDescriptor
+import de.christian2003.feature.export.domain.entities.ImportOptions
+import de.christian2003.feature.export.domain.entities.ImportProperties
+import de.christian2003.feature.export.domain.exceptions.CorruptImportFileException
+import de.christian2003.feature.export.domain.exceptions.IllegalImportConfigException
+import de.christian2003.feature.export.domain.exceptions.UnsupportedFileFormatException
+import de.christian2003.feature.export.domain.services.ImportService
+import java.io.FileInputStream
+import java.io.InputStream
+import java.util.zip.ZipInputStream
 
 
 /**
@@ -46,6 +60,7 @@ import de.christian2003.feature.export.R
  * @param accountMapper                                 Mapper for accounts.
  * @param tagMapper                                     Mapper for tags.
  * @param getAccountsByIdsUseCase                       Use case to get accounts by their IDs.
+ * @param createAccountsBatchUseCase                    Use case to create a batch of accounts.
  * @param getAllTagsUseCase                             Use case to get all tags.
  * @param kdfService                                    Service used to generate a cryptographic
  *                                                      key from a seed.
@@ -56,15 +71,28 @@ internal class V3BackupService @Inject constructor(
     private val accountMapper: V3BackupAccountMapper,
     private val tagMapper: V3BackupTagMapper,
     private val getAccountsByIdsUseCase: GetAccountsByIdsUseCase,
+    private val createAccountsBatchUseCase: CreateAccountsBatchUseCase,
     private val getAllTagsUseCase: GetAllTagsUseCase,
     private val kdfService: KdfService,
     private val cipherService: CipherService
-): ExportService {
+): ExportService, ImportService {
+
+    companion object {
+
+        private const val SALT_LENGTH: Int = 32
+
+        private const val ZIP_DIR_ACCOUNTS = "accounts"
+
+        private const val ZIP_FILE_ACCOUNTS = "accounts.json"
+
+    }
+
 
     /**
-     * Json serializer.
+     * Json (de)serializer.
      */
-    private val json = Json { }
+    private val json = Json
+
 
     /**
      * Descriptor for the export service.
@@ -79,6 +107,17 @@ internal class V3BackupService @Inject constructor(
         titleId = R.string.export_v3_title,
         subtitleId = R.string.export_v3_subtitle,
         helpTextId = R.string.export_v3_helpText
+    )
+
+    /**
+     * Descriptor for the import service.
+     */
+    override val importDescriptor: ImportDescriptor = ImportDescriptor(
+        id = "V3Backup",
+        importFileExtensions = setOf("pvx"),
+        importFileMimeTypes = setOf("application/vnd.passwordvault.pvx"),
+        titleId = R.string.import_v3_title,
+        subtitleId = R.string.import_v3_subtitle
     )
 
 
@@ -136,6 +175,83 @@ internal class V3BackupService @Inject constructor(
 
 
     /**
+     * Performs a preflight check of the provided import file to get additional data about the
+     * file to import.
+     *
+     * @param importFile                        URI of the file to import for which to perform the
+     *                                          preflight request.
+     * @return                                  Response containing properties of the file to import.
+     * @throws CorruptImportFileException       The file to import is corrupt and cannot be imported.
+     * @throws UnsupportedFileFormatException   The selected file is unsupported and cannot be imported.
+     */
+    override fun getProperties(importFile: Uri): Flow<ImportProperties?> = flow {
+        val properties = ImportProperties(
+            isEncrypted = true //V3 backups are always encrypted
+        )
+
+        emit(properties)
+    }
+
+
+    /**
+     * Begins an import according to the provided configuration. The method starts a background
+     * task and provides progress updates using the returned flow, which reports the progress as
+     * a percentage between 0 % to 100 % (i.e. 0.0 to 1.0).
+     *
+     * @param config                            Configuration for the import.
+     * @return                                  Flow which reports the progress.
+     * @throws CorruptImportFileException       The file to import is corrupt and cannot be imported.
+     * @throws IllegalImportConfigException     The import config is illegal.
+     * @throws UnsupportedFileFormatException   The selected file is unsupported and cannot be imported.
+     */
+    override fun beginImport(config: ImportConfig): Flow<Float> = flow {
+        emit(0.0f)
+
+        if (config.decryptionKeySeed == null || config.decryptionKeySeed.isEmpty()) {
+            throw IllegalImportConfigException("Import config must contain decryption key seed")
+        }
+
+        var saltBytes: ByteArray? = null
+        var keyBytes: ByteArray? = null
+
+        context.contentResolver.openFileDescriptor(config.importFile, "r")?.use { parcelFileDescriptor ->
+            FileInputStream(parcelFileDescriptor.fileDescriptor).use { fileInputStream ->
+                //Decryption:
+                saltBytes = fileInputStream.readNBytes(SALT_LENGTH)
+                keyBytes = kdfService.derive(config.decryptionKeySeed, saltBytes)
+                val decryptedStream: InputStream = cipherService.decryptStream(fileInputStream, keyBytes)
+
+                //Name of the entry in which accounts are stored:
+                val accountsDir = File(ZIP_DIR_ACCOUNTS)
+                val accountsFile = File(accountsDir, ZIP_FILE_ACCOUNTS)
+                val accountsEntryName: String = sanitizeZipEntryName(accountsFile.path)
+
+                //Read the ZIP:
+                ZipInputStream(decryptedStream).use { zipInputStream ->
+                    while (zipInputStream.available() != 0) {
+                        val zipEntry: ZipEntry = zipInputStream.nextEntry
+
+                        if (zipEntry.name == accountsEntryName) {
+                            //Accounts:
+                            val accountBytes: ByteArray = zipInputStream.readBytes()
+                            importAccounts(accountBytes, config.accountsImportOptions)
+                        }
+
+                        zipInputStream.closeEntry() //Continue to next entry
+                    }
+                }
+            }
+        }
+
+        saltBytes?.fill(0)
+        keyBytes?.fill(0)
+
+        //Once finishing, make sure that progress reports 100 %:
+        emit(1.0f)
+    }
+
+
+    /**
      * Exports the specified accounts to the provided ZIP output stream.
      *
      * @param accountIds        IDs of the accounts to export.
@@ -173,8 +289,8 @@ internal class V3BackupService @Inject constructor(
 
             val serializedJson: String = json.encodeToString<V3BackupAccountsRootDto>(rootDto)
 
-            val accountsDir = File("accounts")
-            val accountsFile = File(accountsDir, "accounts.json")
+            val accountsDir = File(ZIP_DIR_ACCOUNTS)
+            val accountsFile = File(accountsDir, ZIP_FILE_ACCOUNTS)
 
             val zipEntry = ZipEntry(sanitizeZipEntryName(accountsFile.path))
             zipOutputStream.putNextEntry(zipEntry)
@@ -188,6 +304,42 @@ internal class V3BackupService @Inject constructor(
         }
 
         return exportedAccountsCount
+    }
+
+
+    private suspend fun importAccounts(bytes: ByteArray, importOptions: ImportOptions) {
+        try {
+            //Deserialize JSON:
+            val serializedJson: String = bytes.toString()
+            val rootDto: V3BackupAccountsRootDto = json.decodeFromString<V3BackupAccountsRootDto>(serializedJson)
+
+            //Map tags to domain:
+            val tags: List<Tag> = rootDto.tags.mapNotNull { tagDto ->
+                try {
+                    tagMapper.toDomain(tagDto)
+                }
+                catch (_: Exception) {
+                    null
+                }
+            }
+
+            //Map accounts to domain:
+            val accounts: List<Account> = rootDto.accounts.mapNotNull { accountDto ->
+                try {
+                    accountMapper.toDomain(accountDto, tags)
+                }
+                catch (_: Exception) {
+                    null
+                }
+            }
+
+            //Restore
+            val batchOption: BatchOption = mapImportOptionToBatchOption(importOptions)
+            createAccountsBatchUseCase.createAccountsBatch(accounts, tags, batchOption)
+        }
+        catch(_: Exception) {
+            //Do not log here because of sensitive data
+        }
     }
 
 
@@ -278,9 +430,25 @@ internal class V3BackupService @Inject constructor(
      */
     private fun generateSalt(): ByteArray {
         val random = SecureRandom()
-        val salt = ByteArray(32)
+        val salt = ByteArray(SALT_LENGTH)
         random.nextBytes(salt)
         return salt
+    }
+
+
+    /**
+     * Maps the import option selected by the user to the corresponding batch option required
+     * to create the batch of accounts for the import.
+     *
+     * @param importOption  Import option to map.
+     * @return              Corresponding batch option.
+     */
+    private fun mapImportOptionToBatchOption(importOption: ImportOptions): BatchOption {
+        return when (importOption) {
+            ImportOptions.SkipDuplicates -> BatchOption.SkipDuplicates
+            ImportOptions.OverrideDuplicates -> BatchOption.ReplaceDuplicates
+            ImportOptions.DeleteAllExistingData -> BatchOption.DeleteAllExisting
+        }
     }
 
 }

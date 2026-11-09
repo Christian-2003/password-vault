@@ -53,7 +53,9 @@ import de.christian2003.feature.analysis.navigation.analysisDestination
 import de.christian2003.feature.autofill.navigation.AutofillSettingsFlow
 import de.christian2003.feature.autofill.navigation.autofillSettingsFlow
 import de.christian2003.feature.export.navigation.ExportsFlow
+import de.christian2003.feature.export.navigation.ImportsFlow
 import de.christian2003.feature.export.navigation.exportsFlow
+import de.christian2003.feature.export.navigation.importsFlow
 import de.christian2003.feature.search.navigation.SearchDestination
 import de.christian2003.feature.search.navigation.searchDestination
 import javax.inject.Inject
@@ -253,6 +255,11 @@ fun PasswordVault(
                 navController = navController
             )
 
+            //Flow for importing data:
+            importsFlow(
+                navController = navController
+            )
+
 
             composable("settings") {
                 applyFlags(false)
@@ -273,6 +280,9 @@ fun PasswordVault(
                     },
                     onNavigateToExport = {
                         navController.navigate(ExportsFlow)
+                    },
+                    onNavigateToImport = {
+                        navController.navigate(ImportsFlow)
                     },
                     onNavigateToDevSettings = {
                         navController.navigate("devSettings")

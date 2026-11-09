@@ -3,9 +3,11 @@ package de.christian2003.data.accounts.infrastructure.db.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import androidx.room.Upsert
 import de.christian2003.data.accounts.domain.entities.DetailType
 import de.christian2003.data.accounts.infrastructure.db.dto.AccountDetailsDto
 import de.christian2003.data.accounts.infrastructure.db.dto.AccountWithTags
@@ -49,8 +51,12 @@ interface AccountDao {
     suspend fun selectAccountsAndDetailsByMetadata(targetName: String, detailTypes: List<DetailType>): List<AccountDetailsDto>
 
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAccount(account: AccountEntity)
+
+
+    @Upsert
+    suspend fun upsertAccount(account: AccountEntity)
 
 
     @Delete
@@ -61,7 +67,7 @@ interface AccountDao {
     suspend fun updateAccount(account: AccountEntity)
 
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAccountTagCrossRef(crossRef: AccountTagCrossRef)
 
 
@@ -69,9 +75,14 @@ interface AccountDao {
     suspend fun deleteAllAccountTagCrossRefs(accountId: Uuid)
 
 
+    @Query("DELETE FROM accounts")
+    suspend fun deleteAll()
+
+
     @Transaction
     suspend fun insertAccountWithTags(accountWithTags: AccountWithTags) {
         insertAccount(accountWithTags.account)
+        //Do NOT update / upsert AccountTagCrossRef instances here! They should be kep as is!
         accountWithTags.tags.forEach { tag ->
             insertAccountTagCrossRef(AccountTagCrossRef(accountWithTags.account.id, tag.id))
         }
@@ -82,6 +93,15 @@ interface AccountDao {
     suspend fun updateAccountWithTags(accountWithTags: AccountWithTags) {
         deleteAllAccountTagCrossRefs(accountWithTags.account.id)
         updateAccount(accountWithTags.account)
+        accountWithTags.tags.forEach { tag ->
+            insertAccountTagCrossRef(AccountTagCrossRef(accountWithTags.account.id, tag.id))
+        }
+    }
+
+
+    @Transaction
+    suspend fun upsertAccountWithTags(accountWithTags: AccountWithTags) {
+        upsertAccount(accountWithTags.account)
         accountWithTags.tags.forEach { tag ->
             insertAccountTagCrossRef(AccountTagCrossRef(accountWithTags.account.id, tag.id))
         }

@@ -43,6 +43,7 @@ fun SettingsScreen(
     onNavigateToAuthSettings: () -> Unit,
     onNavigateToAutofillSettings: () -> Unit,
     onNavigateToExport: () -> Unit,
+    onNavigateToImport: () -> Unit,
     onNavigateToDevSettings: () -> Unit,
     onUseGlobalThemeChange: (Boolean) -> Unit,
     onThemeContrastChange: (ThemeContrast) -> Unit
@@ -140,11 +141,20 @@ fun SettingsScreen(
                 SettingsItemButton(
                     title = stringResource(R.string.settings_data_exportTitle),
                     info = stringResource(R.string.settings_data_exportInfo),
-                    prefixIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_download),
+                    prefixIcon = painterResource(R.drawable.ic_upload),
                     endIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_next),
                     isFirst = true,
-                    isLast = true,
+                    isLast = false,
                     onClick = onNavigateToExport
+                )
+                SettingsItemButton(
+                    title = stringResource(R.string.settings_data_importTitle),
+                    info = stringResource(R.string.settings_data_importInfo),
+                    prefixIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_download),
+                    endIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_next),
+                    isFirst = false,
+                    isLast = true,
+                    onClick = onNavigateToImport
                 )
             }
 

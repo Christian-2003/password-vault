@@ -7,26 +7,30 @@ import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import de.christian2003.feature.export.domain.entities.ExportConfig
-import de.christian2003.feature.export.domain.entities.ExportProgress
+import de.christian2003.feature.export.domain.entities.ImportConfig
+import de.christian2003.feature.export.domain.entities.ServiceProgress
 import de.christian2003.feature.export.domain.entities.ProgressState
-import de.christian2003.feature.export.domain.services.ExportLauncherService
+import de.christian2003.feature.export.domain.services.ServiceLauncherService
 import de.christian2003.feature.export.infrastructure.work.dto.ExportConfigDto
+import de.christian2003.feature.export.infrastructure.work.dto.ImportConfigDto
 import de.christian2003.feature.export.infrastructure.work.mapper.ExportConfigMapper
+import de.christian2003.feature.export.infrastructure.work.mapper.ImportConfigMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 
-internal class WorkerExportLauncherService @Inject constructor(
+internal class WorkerServiceLauncherService @Inject constructor(
     private val exportConfigMapper: ExportConfigMapper,
+    private val importConfigMapper: ImportConfigMapper,
     private val workManager: WorkManager
-): ExportLauncherService {
+): ServiceLauncherService {
 
-    private val json: Json = Json {  }
+    private val json: Json = Json
 
 
-    override fun launchSuspended(id: String, config: ExportConfig) {
+    override fun launchExportSuspended(id: String, config: ExportConfig) {
         //Serialize config because WorkManager only accepts primitive types and strings:
         val exportConfigDto: ExportConfigDto = exportConfigMapper.toDto(config)
         val exportConfigJson: String = json.encodeToString<ExportConfigDto>(exportConfigDto)
@@ -44,14 +48,32 @@ internal class WorkerExportLauncherService @Inject constructor(
     }
 
 
-    override fun observeProgress(id: String): Flow<ExportProgress> {
+    override fun launchImportSuspended(id: String, config: ImportConfig) {
+        //Serialize config because WorkManager only accepts primitive types and strings:
+        val importConfigDto: ImportConfigDto = importConfigMapper.toDto(config)
+        val importConfigJson: String = json.encodeToString<ImportConfigDto>(importConfigDto)
+
+        val inputData: Data = workDataOf(
+            "import_id" to id,
+            "import_config" to importConfigJson
+        )
+
+        val request = OneTimeWorkRequestBuilder<ImportWorker>()
+            .setInputData(inputData)
+            .build()
+
+        workManager.enqueueUniqueWork(id, ExistingWorkPolicy.KEEP, request)
+    }
+
+
+    override fun observeProgress(id: String): Flow<ServiceProgress> {
         return workManager
             .getWorkInfosForUniqueWorkFlow(id)
             .map { workInfos ->
                 val workInfo: WorkInfo? = workInfos.firstOrNull()
 
                 if (workInfo == null) {
-                    val progress = ExportProgress(
+                    val progress = ServiceProgress(
                         progress = 0f,
                         state = ProgressState.None
                     )
@@ -60,7 +82,7 @@ internal class WorkerExportLauncherService @Inject constructor(
 
                 val workerProgress: Float = workInfo.progress.getFloat("progress", 0f)
 
-                val progress = ExportProgress(
+                val progress = ServiceProgress(
                     progress = workerProgress,
                     state = when {
                         workInfo.state == WorkInfo.State.RUNNING -> ProgressState.Running
