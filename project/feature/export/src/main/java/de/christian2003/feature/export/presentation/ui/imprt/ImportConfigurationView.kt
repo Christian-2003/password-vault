@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import de.christian2003.core.ui.composables.Headline
 import de.christian2003.core.ui.composables.HeadlineIndentation
@@ -30,9 +31,10 @@ import de.christian2003.feature.export.domain.entities.ImportOptions
 
 @Composable
 internal fun ImportConfigurationView(
-    fileUri: Uri?,
+    fileName: String?,
     importOption: ImportOptions,
     password: String,
+    onSelectFile: () -> Unit,
     onImportOptionSelected: (ImportOptions) -> Unit,
     onPasswordChange: (String) -> Unit,
     modifier: Modifier
@@ -46,9 +48,9 @@ internal fun ImportConfigurationView(
             indentation = HeadlineIndentation.TextInputPrefixIconLevel
         )
         File(
-            fileName = fileUri?.lastPathSegment ?: "",
+            fileName = fileName,
             onChange = {
-                //TODO: File selector
+                onSelectFile()
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -144,7 +146,9 @@ private fun File(
                 Text(
                     text = stringResource(R.string.import_label_file),
                     color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.bodyLarge,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     text = if (isSelected) {
@@ -157,7 +161,9 @@ private fun File(
                     } else {
                         MaterialTheme.colorScheme.error
                     },
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
 

@@ -160,8 +160,8 @@ internal class V3BackupService @Inject constructor(
 
                     //Export metadata:
                     exportMetadata(exportedAccountsCount, exportedFilesCount, zipOutputStream)
-                    //No emit needed after last step, because 'emit(1.0f)' is called at the end
 
+                    //No emit needed after last step, because 'emit(1.0f)' is called at the end
                 }
             }
         }

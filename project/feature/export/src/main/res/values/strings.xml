@@ -52,7 +52,7 @@
     <string name="import_option_overrideDuplicates_info">Overrides duplicates during import</string>
     <string name="import_option_skipDuplicates_title">Skip duplicates</string>
     <string name="import_option_skipDuplicates_info">Skips duplicates during import</string>
-    <string name="import_hint_editFile">Select a different file</string>
+    <string name="import_startImport">Import</string>
 
 
     <!-- Strings related to the export / import services -->

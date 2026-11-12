@@ -139,6 +139,7 @@ private fun TopBar(
         title = {
             Text(
                 text = title,
+                maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
         },
