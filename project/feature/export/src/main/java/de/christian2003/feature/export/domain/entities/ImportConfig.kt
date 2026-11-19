@@ -6,14 +6,14 @@ import android.net.Uri
 /**
  * Value object contains the configuration for importing data.
  *
- * @param accountsImportOptions Describes what should happen if items shall be restored that already
+ * @param accountsImportOption Describes what should happen if items shall be restored that already
  *                              exist in the app.
  * @param importFile            URI to the file from which to import the data.
  * @param decryptionKeySeed     Seed for the encryption key. This is only required if the export is
  *  *                           encrypted. Otherwise, null can be passed.
  */
 internal data class ImportConfig(
-    val accountsImportOptions: ImportOptions,
+    val accountsImportOption: ImportOption,
     val importFile: Uri,
     val decryptionKeySeed: CharArray? = null
 ) {
@@ -25,7 +25,7 @@ internal data class ImportConfig(
 
         other as ImportConfig
 
-        if (accountsImportOptions != other.accountsImportOptions) return false
+        if (accountsImportOption != other.accountsImportOption) return false
         if (importFile != other.importFile) return false
         if (!decryptionKeySeed.contentEquals(other.decryptionKeySeed)) return false
 
@@ -35,7 +35,7 @@ internal data class ImportConfig(
 
     //Auto-generated
     override fun hashCode(): Int {
-        var result = accountsImportOptions.hashCode()
+        var result = accountsImportOption.hashCode()
         result = 31 * result + importFile.hashCode()
         result = 31 * result + (decryptionKeySeed?.contentHashCode() ?: 0)
         return result

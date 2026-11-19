@@ -2,7 +2,6 @@ package de.christian2003.feature.export.infrastructure.work.dto
 
 import android.net.Uri
 import de.christian2003.core.common.infrastructure.serializer.UriSerializer
-import de.christian2003.feature.export.domain.entities.ImportOptions
 import kotlinx.serialization.Serializable
 
 
@@ -14,6 +13,7 @@ import kotlinx.serialization.Serializable
  * @param importFile            URI of the imported file.
  * @param decryptionKeySeed     Seed for the encryption key (if required).
  */
+@Serializable
 internal data class ImportConfigDto(
     val accountsImportOptions: Int,
     @Serializable(UriSerializer::class) val importFile: Uri,

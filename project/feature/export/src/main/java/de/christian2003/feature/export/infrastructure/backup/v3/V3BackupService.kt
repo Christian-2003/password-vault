@@ -9,6 +9,7 @@ import android.os.Build
 import android.provider.Settings
 import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
+import de.christian2003.core.common.domain.services.FilesystemService
 import de.christian2003.core.security.domain.services.CipherService
 import de.christian2003.core.security.domain.services.KdfService
 import de.christian2003.data.accounts.application.usecases.CreateAccountsBatchUseCase
@@ -43,7 +44,7 @@ import kotlin.uuid.Uuid
 import de.christian2003.feature.export.R
 import de.christian2003.feature.export.domain.entities.ImportConfig
 import de.christian2003.feature.export.domain.entities.ImportDescriptor
-import de.christian2003.feature.export.domain.entities.ImportOptions
+import de.christian2003.feature.export.domain.entities.ImportOption
 import de.christian2003.feature.export.domain.entities.ImportProperties
 import de.christian2003.feature.export.domain.exceptions.CorruptImportFileException
 import de.christian2003.feature.export.domain.exceptions.IllegalImportConfigException
@@ -65,6 +66,7 @@ import java.util.zip.ZipInputStream
  * @param kdfService                                    Service used to generate a cryptographic
  *                                                      key from a seed.
  * @param cipherService                                 Service used for cryptographic operations.
+ * @param filesystemService                             Service used for filesystem operations.
  */
 internal class V3BackupService @Inject constructor(
     @param:ApplicationContext private val context: Context,
@@ -74,7 +76,8 @@ internal class V3BackupService @Inject constructor(
     private val createAccountsBatchUseCase: CreateAccountsBatchUseCase,
     private val getAllTagsUseCase: GetAllTagsUseCase,
     private val kdfService: KdfService,
-    private val cipherService: CipherService
+    private val cipherService: CipherService,
+    private val filesystemService: FilesystemService
 ): ExportService, ImportService {
 
     companion object {
@@ -184,12 +187,20 @@ internal class V3BackupService @Inject constructor(
      * @throws CorruptImportFileException       The file to import is corrupt and cannot be imported.
      * @throws UnsupportedFileFormatException   The selected file is unsupported and cannot be imported.
      */
-    override fun getProperties(importFile: Uri): Flow<ImportProperties?> = flow {
+    override suspend fun getProperties(importFile: Uri): ImportProperties {
+        val extension: String? = try {
+            filesystemService.getExtension(importFile)
+        } catch (_: Exception) { null }
+
+        if (!importDescriptor.importFileExtensions.contains(extension)) {
+            throw UnsupportedFileFormatException("The file format '${extension}' is not supported for V3 backups")
+        }
+
         val properties = ImportProperties(
             isEncrypted = true //V3 backups are always encrypted
         )
 
-        emit(properties)
+        return properties
     }
 
 
@@ -228,18 +239,22 @@ internal class V3BackupService @Inject constructor(
 
                 //Read the ZIP:
                 ZipInputStream(decryptedStream).use { zipInputStream ->
+                    Log.d("V3Backup", "Begin ZipInputStream")
                     while (zipInputStream.available() != 0) {
                         val zipEntry: ZipEntry = zipInputStream.nextEntry
+                        Log.d("V3Backup", "ZipEntry ${zipEntry.name}")
 
                         if (zipEntry.name == accountsEntryName) {
                             //Accounts:
                             val accountBytes: ByteArray = zipInputStream.readBytes()
-                            importAccounts(accountBytes, config.accountsImportOptions)
+                            importAccounts(accountBytes, config.accountsImportOption)
+                            Log.d("V3Backup", "Imported accounts")
                         }
 
                         zipInputStream.closeEntry() //Continue to next entry
                     }
                 }
+                Log.d("V3Backup", "Finish ZipInputStream")
             }
         }
 
@@ -294,7 +309,7 @@ internal class V3BackupService @Inject constructor(
 
             val zipEntry = ZipEntry(sanitizeZipEntryName(accountsFile.path))
             zipOutputStream.putNextEntry(zipEntry)
-            zipOutputStream.write(serializedJson.toByteArray())
+            zipOutputStream.write(serializedJson.toByteArray(Charsets.UTF_8))
             zipOutputStream.closeEntry()
 
             exportedAccountsCount = accountDtos.size
@@ -307,10 +322,11 @@ internal class V3BackupService @Inject constructor(
     }
 
 
-    private suspend fun importAccounts(bytes: ByteArray, importOptions: ImportOptions) {
+    private suspend fun importAccounts(bytes: ByteArray, importOption: ImportOption) {
         try {
             //Deserialize JSON:
-            val serializedJson: String = bytes.toString()
+            val serializedJson: String = bytes.toString(Charsets.UTF_8)
+            Log.d("V3Backup", "Deserialized: $serializedJson")
             val rootDto: V3BackupAccountsRootDto = json.decodeFromString<V3BackupAccountsRootDto>(serializedJson)
 
             //Map tags to domain:
@@ -334,7 +350,7 @@ internal class V3BackupService @Inject constructor(
             }
 
             //Restore
-            val batchOption: BatchOption = mapImportOptionToBatchOption(importOptions)
+            val batchOption: BatchOption = mapImportOptionToBatchOption(importOption)
             createAccountsBatchUseCase.createAccountsBatch(accounts, tags, batchOption)
         }
         catch(_: Exception) {
@@ -443,11 +459,11 @@ internal class V3BackupService @Inject constructor(
      * @param importOption  Import option to map.
      * @return              Corresponding batch option.
      */
-    private fun mapImportOptionToBatchOption(importOption: ImportOptions): BatchOption {
+    private fun mapImportOptionToBatchOption(importOption: ImportOption): BatchOption {
         return when (importOption) {
-            ImportOptions.SkipDuplicates -> BatchOption.SkipDuplicates
-            ImportOptions.OverrideDuplicates -> BatchOption.ReplaceDuplicates
-            ImportOptions.DeleteAllExistingData -> BatchOption.DeleteAllExisting
+            ImportOption.SkipDuplicates -> BatchOption.SkipDuplicates
+            ImportOption.OverrideDuplicates -> BatchOption.ReplaceDuplicates
+            ImportOption.DeleteAllExistingData -> BatchOption.DeleteAllExisting
         }
     }
 

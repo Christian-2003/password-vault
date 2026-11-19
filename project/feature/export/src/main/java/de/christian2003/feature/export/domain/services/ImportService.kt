@@ -28,7 +28,7 @@ internal interface ImportService {
      * @throws CorruptImportFileException       The file to import is corrupt and cannot be imported.
      * @throws UnsupportedFileFormatException   The selected file is unsupported and cannot be imported.
      */
-    fun getProperties(importFile: Uri): Flow<ImportProperties?>
+    suspend fun getProperties(importFile: Uri): ImportProperties
 
 
     /**

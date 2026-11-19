@@ -39,7 +39,7 @@ internal class ImportWorker @AssistedInject constructor(
             val configDto: ImportConfigDto = json.decodeFromString<ImportConfigDto>(configJson)
             val config: ImportConfig = importConfigMapper.toDomain(configDto)
 
-            //Get export service:
+            //Get import service:
             val service: ImportService? = services.firstOrNull { it.importDescriptor.id == id }
             if (service == null) {
                 return Result.failure()

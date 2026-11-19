@@ -1,6 +1,6 @@
 package de.christian2003.feature.export.presentation.ui.imprt
 
-import android.net.Uri
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -26,16 +26,17 @@ import de.christian2003.core.ui.composables.Headline
 import de.christian2003.core.ui.composables.HeadlineIndentation
 import de.christian2003.core.ui.composables.TextInput
 import de.christian2003.feature.export.R
-import de.christian2003.feature.export.domain.entities.ImportOptions
+import de.christian2003.feature.export.domain.entities.ImportOption
 
 
 @Composable
 internal fun ImportConfigurationView(
     fileName: String?,
-    importOption: ImportOptions,
+    importOption: ImportOption,
     password: String,
+    isEncrypted: Boolean,
     onSelectFile: () -> Unit,
-    onImportOptionSelected: (ImportOptions) -> Unit,
+    onImportOptionSelected: (ImportOption) -> Unit,
     onPasswordChange: (String) -> Unit,
     modifier: Modifier
 ) {
@@ -56,6 +57,7 @@ internal fun ImportConfigurationView(
                 .fillMaxWidth()
                 .padding(horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal))
         )
+
 
         //Select import option:
         Headline(
@@ -79,33 +81,40 @@ internal fun ImportConfigurationView(
             onImportOptionSelected = onImportOptionSelected
         )
 
+
         //Enter encryption password:
-        Headline(
-            title = stringResource(R.string.import_title_encryption),
-            indentation = HeadlineIndentation.TextInputPrefixIconLevel,
-            modifier = Modifier.padding(top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
-        )
-        Text(
-            text = stringResource(R.string.import_text_encryption),
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(
-                start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal)
-                        + 24.dp //Width of Radio buttons / icons
-                        + dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
-                end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal)
-            )
-        )
-        TextInput(
-            value = password,
-            onValueChange = onPasswordChange,
-            label = stringResource(R.string.import_label_password),
-            prefixIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_password),
-            isPassword = true,
-            modifier = Modifier.padding(
-                horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal)
-            )
-        )
+        AnimatedVisibility(isEncrypted) {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Headline(
+                    title = stringResource(R.string.import_title_encryption),
+                    indentation = HeadlineIndentation.TextInputPrefixIconLevel,
+                    modifier = Modifier.padding(top = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
+                )
+                Text(
+                    text = stringResource(R.string.import_text_encryption),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(
+                        start = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal)
+                                + 24.dp //Width of Radio buttons / icons
+                                + dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
+                        end = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal)
+                    )
+                )
+                TextInput(
+                    value = password,
+                    onValueChange = onPasswordChange,
+                    label = stringResource(R.string.import_label_password),
+                    prefixIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_password),
+                    isPassword = true,
+                    modifier = Modifier.padding(
+                        horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal)
+                    )
+                )
+            }
+        }
     }
 }
 
@@ -179,16 +188,16 @@ private fun File(
 
 @Composable
 private fun ImportOptionSelector(
-    importOption: ImportOptions,
-    onImportOptionSelected: (ImportOptions) -> Unit
+    importOption: ImportOption,
+    onImportOptionSelected: (ImportOption) -> Unit
 ) {
     //Delete all existing data:
     ImportOptionSelectorItem(
         title = stringResource(R.string.import_option_deleteAllExistingData_title),
         info = stringResource(R.string.import_option_deleteAllExistingData_info),
-        isSelected = importOption == ImportOptions.DeleteAllExistingData,
+        isSelected = importOption == ImportOption.DeleteAllExistingData,
         onClick = {
-            onImportOptionSelected(ImportOptions.DeleteAllExistingData)
+            onImportOptionSelected(ImportOption.DeleteAllExistingData)
         },
         modifier = Modifier.fillMaxWidth()
     )
@@ -197,9 +206,9 @@ private fun ImportOptionSelector(
     ImportOptionSelectorItem(
         title = stringResource(R.string.import_option_overrideDuplicates_title),
         info = stringResource(R.string.import_option_overrideDuplicates_info),
-        isSelected = importOption == ImportOptions.OverrideDuplicates,
+        isSelected = importOption == ImportOption.OverrideDuplicates,
         onClick = {
-            onImportOptionSelected(ImportOptions.OverrideDuplicates)
+            onImportOptionSelected(ImportOption.OverrideDuplicates)
         },
         modifier = Modifier.fillMaxWidth()
     )
@@ -208,9 +217,9 @@ private fun ImportOptionSelector(
     ImportOptionSelectorItem(
         title = stringResource(R.string.import_option_skipDuplicates_title),
         info = stringResource(R.string.import_option_skipDuplicates_info),
-        isSelected = importOption == ImportOptions.SkipDuplicates,
+        isSelected = importOption == ImportOption.SkipDuplicates,
         onClick = {
-            onImportOptionSelected(ImportOptions.SkipDuplicates)
+            onImportOptionSelected(ImportOption.SkipDuplicates)
         },
         modifier = Modifier.fillMaxWidth()
     )

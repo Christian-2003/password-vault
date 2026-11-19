@@ -41,6 +41,7 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.squareup.okhttp)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.documentfile)
 
     testImplementation(libs.junit)
 

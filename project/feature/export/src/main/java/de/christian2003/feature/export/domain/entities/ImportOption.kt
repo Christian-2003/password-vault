@@ -13,7 +13,7 @@ package de.christian2003.feature.export.domain.entities
  *                                  An account with ID 67890 already exists. If an account with the
  *                                  same ID would NOT be restored and the existing account is kept.
  */
-internal enum class ImportOptions {
+internal enum class ImportOption {
 
     DeleteAllExistingData,
     OverrideDuplicates,

@@ -87,6 +87,7 @@ internal fun ImportScreen(
                 fileName = viewModel.importFileName.value,
                 importOption = viewModel.importOption,
                 password = viewModel.password,
+                isEncrypted = viewModel.isEncrypted.value,
                 onSelectFile = launchImportLauncher,
                 onImportOptionSelected = { importOption ->
                     viewModel.importOption = importOption

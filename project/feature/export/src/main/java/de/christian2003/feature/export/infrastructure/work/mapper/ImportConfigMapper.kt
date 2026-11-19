@@ -1,7 +1,7 @@
 package de.christian2003.feature.export.infrastructure.work.mapper
 
 import de.christian2003.feature.export.domain.entities.ImportConfig
-import de.christian2003.feature.export.domain.entities.ImportOptions
+import de.christian2003.feature.export.domain.entities.ImportOption
 import de.christian2003.feature.export.infrastructure.work.dto.ImportConfigDto
 import javax.inject.Inject
 
@@ -20,7 +20,7 @@ internal class ImportConfigMapper @Inject constructor() {
      */
     fun toDomain(dto: ImportConfigDto): ImportConfig {
         return ImportConfig(
-            accountsImportOptions = ImportOptions.entries[dto.accountsImportOptions],
+            accountsImportOption = ImportOption.entries[dto.accountsImportOptions],
             importFile = dto.importFile,
             decryptionKeySeed = dto.decryptionKeySeed
         )
@@ -35,7 +35,7 @@ internal class ImportConfigMapper @Inject constructor() {
      */
     fun toDto(domain: ImportConfig): ImportConfigDto {
         return ImportConfigDto(
-            accountsImportOptions = domain.accountsImportOptions.ordinal,
+            accountsImportOptions = domain.accountsImportOption.ordinal,
             importFile = domain.importFile,
             decryptionKeySeed = domain.decryptionKeySeed
         )

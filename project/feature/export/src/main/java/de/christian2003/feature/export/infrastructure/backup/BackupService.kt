@@ -51,7 +51,7 @@ internal class BackupService @Inject constructor(
      * @throws CorruptImportFileException       The file to import is corrupt and cannot be imported.
      * @throws UnsupportedFileFormatException   The selected file is unsupported and cannot be imported.
      */
-    override fun getProperties(importFile: Uri): Flow<ImportProperties?> {
+    override suspend fun getProperties(importFile: Uri): ImportProperties {
         return v3BackupService.getProperties(importFile)
     }
 
