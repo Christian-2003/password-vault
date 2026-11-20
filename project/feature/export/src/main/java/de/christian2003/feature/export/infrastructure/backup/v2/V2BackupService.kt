@@ -16,6 +16,8 @@ import de.christian2003.feature.export.domain.entities.ImportDescriptor
 import de.christian2003.feature.export.domain.entities.ImportOption
 import de.christian2003.feature.export.domain.entities.ImportProperties
 import de.christian2003.feature.export.domain.exceptions.CorruptImportFileException
+import de.christian2003.feature.export.domain.exceptions.IllegalImportConfigException
+import de.christian2003.feature.export.domain.exceptions.InvalidKeyException
 import de.christian2003.feature.export.domain.exceptions.UnsupportedFileFormatException
 import de.christian2003.feature.export.domain.services.ImportService
 import de.christian2003.feature.export.infrastructure.backup.v2.dto.V2BackupDetailDto
@@ -26,7 +28,6 @@ import de.christian2003.feature.export.infrastructure.backup.v2.mapper.V2BackupD
 import de.christian2003.feature.export.infrastructure.backup.v2.mapper.V2BackupTagMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import org.apache.commons.csv.CSVRecord
@@ -52,7 +53,15 @@ internal class V2BackupService @Inject constructor(
     private val tagMapper: V2BackupTagMapper,
     private val createAccountsBatchUseCase: CreateAccountsBatchUseCase,
     private val filesystemService: FilesystemService,
+    private val v2CipherService: V2CipherService
 ): ImportService {
+
+    /**
+     * CSV row divider in V2 backups is explicitly set to '\n' (no '\r\n' or other dynamics).
+     * Prior to v3.8.0, this can be seen in
+     * 'app\src\main\java\de\passwordvault\model\storage\csv\CsvConfiguration.java'
+     */
+    private val CSV_ROW_DIVIDER: Char = '\n'
 
     /**
      * Descriptor for the import service.
@@ -108,7 +117,6 @@ internal class V2BackupService @Inject constructor(
      * @throws IllegalImportConfigException     The import config is illegal.
      * @throws UnsupportedFileFormatException   The selected file is unsupported and cannot be imported.
      * @throws InvalidKeyException              The provided decryption key seed is invalid.
-     * @throws InvalidKeyException              The provided decryption key seed is invalid.
      */
     override fun beginImport(config: ImportConfig): Flow<Float> = flow {
         emit(0.0f) //Signal starting progress
@@ -128,6 +136,36 @@ internal class V2BackupService @Inject constructor(
         }
         if (dataNode == null) {
             throw CorruptImportFileException("No <data> node inside XML document")
+        }
+
+        //Init cipher with key seed if required:
+        if (isEncrypted) {
+            if (config.decryptionKeySeed == null || config.decryptionKeySeed.isEmpty()) {
+                throw IllegalImportConfigException("Missing decryption key seed")
+            }
+            v2CipherService.initCipher(config.decryptionKeySeed)
+
+            //Check key validity:
+            val checksumAttr: Node? = dataNode.attributes.getNamedItem("checksum")
+            if (checksumAttr != null && !checksumAttr.nodeValue.isNullOrBlank()) {
+                val checksum: String = checksumAttr.nodeValue
+                var decryptedChecksum: String?
+                var decryptedChecksumAsCharArray: CharArray? = null
+                try {
+                    decryptedChecksum = v2CipherService.decrypt(checksum)
+                    decryptedChecksumAsCharArray = decryptedChecksum.toCharArray()
+                    if (!decryptedChecksumAsCharArray.contentEquals(config.decryptionKeySeed)) {
+                        //Invalid key seed:
+                        throw InvalidKeyException("Decryption key seed invalid")
+                    }
+                }
+                catch (_: Exception) {
+                    throw InvalidKeyException("Decryption key seed invalid")
+                }
+                finally {
+                    decryptedChecksumAsCharArray?.fill('\u0000')
+                }
+            }
         }
 
         var tagDtos: List<V2BackupTagDto>? = null
@@ -197,9 +235,14 @@ internal class V2BackupService @Inject constructor(
 
     private fun getTagsFromNode(node: Node, isEncrypted: Boolean): List<V2BackupTagDto> {
         val tagDtos: MutableList<V2BackupTagDto> = mutableListOf()
-        val tagsCsv: String? = node.textContent
+        var tagsCsv: String? = node.textContent
 
         if (tagsCsv != null) {
+            //Decrypt if required:
+            if (isEncrypted) {
+                tagsCsv = v2CipherService.decrypt(tagsCsv)
+            }
+
             //Parse tags:
             var parser: CSVParser? = null
             try {
@@ -248,80 +291,94 @@ internal class V2BackupService @Inject constructor(
         val entryDtos: MutableList<V2BackupEntryDto> = mutableListOf()
         val entriesCsv: String? = node.textContent
 
+        var parser: CSVParser? = null
+
         if (entriesCsv != null) {
-            //Parse entries:
-            var parser: CSVParser? = null
-            try {
-                /*
-                Format   '<id>                                ,<name>      ,<description>,<created>    ,<edited>     ,<is_visible>,"<tag1>,<tag2>,<tagN>"                                                     ,"<package1>,<package2>,<packageN>",<added_automatically>':
-                Example: '2f175ffb-ada5-42da-839c-ce15718f8497,Petrol Index,Petrol usages,1786992277500,1786992334885,true        ,"4526e96a-69cb-4a37-91fc-a002997dfd3e,eef6e60b-8c5e-4d35-a4a8-dca895555b70","de.christian2003.petrolindex"    ,false'
-                 */
-                parser = CSVParser.parse(entriesCsv, CSVFormat.DEFAULT)
+            val rows: List<String> = entriesCsv
+                .split(CSV_ROW_DIVIDER)
+                .filter { it.isNotBlank() }
 
-                for (record: CSVRecord in parser) {
-                    try {
-                        //Get string values from record:
-                        val idString: String? = record.get(0)
-                        val nameString: String? = record.get(1)
-                        val descriptionString: String? = record.get(2)
-                        val createdString: String? = record.get(3)
-                        val editedString: String? = record.get(4)
-                        val isVisibleString: String? = record.get(5)
-                        val tagsString: String? = record.get(6)
-                        val packagesString: String? = record.get(7)
-                        val isAddedAutomaticallyString: String? = record.get(8)
+            for (row: String in rows) {
+                var rowCsv: String = row
 
-                        //Parse string values:
-                        val id: Uuid = UUID.fromString(idString).toKotlinUuid()
+                //Decrypt if required:
+                if (isEncrypted) {
+                    rowCsv = v2CipherService.decrypt(rowCsv)
+                }
 
-                        val created: LocalDateTime = if (createdString != null) {
-                            Instant.ofEpochMilli(createdString.toLong()).atZone(ZoneOffset.UTC).toLocalDateTime()
-                        } else { LocalDateTime.now() }
+                //Parse entries:
+                try {
+                    /*
+                    Format   '<id>                                ,<name>      ,<description>,<created>    ,<edited>     ,<is_visible>,"<tag1>,<tag2>,<tagN>"                                                     ,"<package1>,<package2>,<packageN>",<added_automatically>':
+                    Example: '2f175ffb-ada5-42da-839c-ce15718f8497,Petrol Index,Petrol usages,1786992277500,1786992334885,true        ,"4526e96a-69cb-4a37-91fc-a002997dfd3e,eef6e60b-8c5e-4d35-a4a8-dca895555b70","de.christian2003.petrolindex"    ,false'
+                     */
+                    parser = CSVParser.parse(rowCsv, CSVFormat.DEFAULT)
 
-                        val edited: LocalDateTime = if (editedString != null) {
-                            Instant.ofEpochMilli(editedString.toLong()).atZone(ZoneOffset.UTC).toLocalDateTime()
-                        } else { LocalDateTime.now() }
+                    for (record: CSVRecord in parser) {
+                        try {
+                            //Get string values from record:
+                            val idString: String? = record.get(0)
+                            val nameString: String? = record.get(1)
+                            val descriptionString: String? = record.get(2)
+                            val createdString: String? = record.get(3)
+                            val editedString: String? = record.get(4)
+                            val isVisibleString: String? = record.get(5)
+                            val tagsString: String? = record.get(6)
+                            val packagesString: String? = record.get(7)
+                            val isAddedAutomaticallyString: String? = record.get(8)
 
-                        val isVisible: Boolean = isVisibleString.toBoolean()
+                            //Parse string values:
+                            val id: Uuid = UUID.fromString(idString).toKotlinUuid()
 
-                        val tags: List<Uuid> = tagsString
-                             ?.split(',')
-                            ?.filter { it.isNotBlank() }
-                            ?.map { UUID.fromString(it).toKotlinUuid() }
-                            ?: emptyList()
+                            val created: LocalDateTime = if (createdString != null) {
+                                Instant.ofEpochMilli(createdString.toLong()).atZone(ZoneOffset.UTC).toLocalDateTime()
+                            } else { LocalDateTime.now() }
 
-                        val packages: List<String> = packagesString
-                            ?.split(',')
-                            ?: emptyList()
+                            val edited: LocalDateTime = if (editedString != null) {
+                                Instant.ofEpochMilli(editedString.toLong()).atZone(ZoneOffset.UTC).toLocalDateTime()
+                            } else { LocalDateTime.now() }
 
-                        val isAddedAutomatically: Boolean = isAddedAutomaticallyString.toBoolean()
+                            val isVisible: Boolean = isVisibleString.toBoolean()
 
-                        //Validate data and create DTO:
-                        if (!nameString.isNullOrBlank()) {
-                            val entryDto = V2BackupEntryDto(
-                                id = id,
-                                name = nameString,
-                                description = descriptionString,
-                                created = created,
-                                edited = edited,
-                                isVisible = isVisible,
-                                tagIds = tags,
-                                packages = packages,
-                                isAddedAutomatically = isAddedAutomatically
-                            )
-                            entryDtos.add(entryDto)
+                            val tags: List<Uuid> = tagsString
+                                ?.split(',')
+                                ?.filter { it.isNotBlank() }
+                                ?.map { UUID.fromString(it).toKotlinUuid() }
+                                ?: emptyList()
+
+                            val packages: List<String> = packagesString
+                                ?.split(',')
+                                ?: emptyList()
+
+                            val isAddedAutomatically: Boolean = isAddedAutomaticallyString.toBoolean()
+
+                            //Validate data and create DTO:
+                            if (!nameString.isNullOrBlank()) {
+                                val entryDto = V2BackupEntryDto(
+                                    id = id,
+                                    name = nameString,
+                                    description = descriptionString,
+                                    created = created,
+                                    edited = edited,
+                                    isVisible = isVisible,
+                                    tagIds = tags,
+                                    packages = packages,
+                                    isAddedAutomatically = isAddedAutomatically
+                                )
+                                entryDtos.add(entryDto)
+                            }
+                        }
+                        catch (_: Exception) {
+                            //Something went wrong: Skip entry (partial import)
                         }
                     }
-                    catch (_: Exception) {
-                        //Something went wrong: Skip entry (partial import)
-                    }
                 }
-            }
-            catch (_: Exception) {
-                throw CorruptImportFileException("Cannot parse entries")
-            }
-            finally {
-                parser?.close()
+                catch (_: Exception) {
+                    throw CorruptImportFileException("Cannot parse entries")
+                }
+                finally {
+                    parser?.close()
+                }
             }
         }
 
@@ -333,82 +390,94 @@ internal class V2BackupService @Inject constructor(
         val detailDtos: MutableList<V2BackupDetailDto> = mutableListOf()
         val detailsCsv: String? = node.textContent
 
+        var parser: CSVParser? = null
+
         if (detailsCsv != null) {
-            //Parse details:
-            var parser: CSVParser? = null
-            try {
-                /*
-                Format:  '<id>                                ,<entry>,                            ,<name>  ,<content>    ,<created>    ,<edited>     ,<type>,<is_visible>,<is_obfuscated>,<is_username>,<is_password>'
-                Example: '1a6c52e6-4486-460c-83d6-f4e305d1f4d3,2f175ffb-ada5-42da-839c-ce15718f8497,Password,MyPassword123,1786992321809,1786992327359,0     ,true        ,false          ,false        ,false'
-                 */
-                parser = CSVParser.parse(detailsCsv, CSVFormat.DEFAULT)
+            val rows: List<String> = detailsCsv.split(CSV_ROW_DIVIDER)
 
-                for (record: CSVRecord in parser) {
-                    try {
-                        //Get string values from record:
-                        val idString: String? = record.get(0)
-                        val entryString: String? = record.get(1)
-                        val nameString: String? = record.get(2)
-                        val contentString: String? = record.get(3)
-                        val createdString: String? = record.get(4)
-                        val editedString: String? = record.get(5)
-                        val typeIdString: String? = record.get(6)
-                        val isVisibleString: String? = record.get(7)
-                        val isObfuscatedString: String? = record.get(8)
-                        val isUsernameString: String? = record.get(9)
-                        val isPasswordString: String? = record.get(10)
+            for (row: String in rows) {
+                var rowCsv: String = row
 
-                        //Parse string values:
-                        val id: Uuid = UUID.fromString(idString).toKotlinUuid()
+                //Decrypt if required:
+                if (isEncrypted) {
+                    rowCsv = v2CipherService.decrypt(rowCsv)
+                }
 
-                        val entryId: Uuid = UUID.fromString(entryString).toKotlinUuid()
+                //Parse details:
+                try {
+                    /*
+                    Format:  '<id>                                ,<entry>,                            ,<name>  ,<content>    ,<created>    ,<edited>     ,<type>,<is_visible>,<is_obfuscated>,<is_username>,<is_password>'
+                    Example: '1a6c52e6-4486-460c-83d6-f4e305d1f4d3,2f175ffb-ada5-42da-839c-ce15718f8497,Password,MyPassword123,1786992321809,1786992327359,0     ,true        ,false          ,false        ,false'
+                     */
+                    parser = CSVParser.parse(rowCsv, CSVFormat.DEFAULT)
 
-                        val created: LocalDateTime = if (createdString != null) {
-                            Instant.ofEpochMilli(createdString.toLong()).atZone(ZoneOffset.UTC).toLocalDateTime()
-                        } else { LocalDateTime.now() }
+                    for (record: CSVRecord in parser) {
+                        try {
+                            //Get string values from record:
+                            val idString: String? = record.get(0)
+                            val entryString: String? = record.get(1)
+                            val nameString: String? = record.get(2)
+                            val contentString: String? = record.get(3)
+                            val createdString: String? = record.get(4)
+                            val editedString: String? = record.get(5)
+                            val typeIdString: String? = record.get(6)
+                            val isVisibleString: String? = record.get(7)
+                            val isObfuscatedString: String? = record.get(8)
+                            val isUsernameString: String? = record.get(9)
+                            val isPasswordString: String? = record.get(10)
 
-                        val edited: LocalDateTime = if (editedString != null) {
-                            Instant.ofEpochMilli(editedString.toLong()).atZone(ZoneOffset.UTC).toLocalDateTime()
-                        } else { LocalDateTime.now() }
+                            //Parse string values:
+                            val id: Uuid = UUID.fromString(idString).toKotlinUuid()
 
-                        val typeId: Int = typeIdString?.toInt() ?: 0
+                            val entryId: Uuid = UUID.fromString(entryString).toKotlinUuid()
 
-                        val isVisible: Boolean = isVisibleString.toBoolean()
+                            val created: LocalDateTime = if (createdString != null) {
+                                Instant.ofEpochMilli(createdString.toLong()).atZone(ZoneOffset.UTC).toLocalDateTime()
+                            } else { LocalDateTime.now() }
 
-                        val isObfuscated: Boolean = isObfuscatedString.toBoolean()
+                            val edited: LocalDateTime = if (editedString != null) {
+                                Instant.ofEpochMilli(editedString.toLong()).atZone(ZoneOffset.UTC).toLocalDateTime()
+                            } else { LocalDateTime.now() }
 
-                        val isUsername: Boolean = isUsernameString.toBoolean()
+                            val typeId: Int = typeIdString?.toInt() ?: 0
 
-                        val isPassword: Boolean = isPasswordString.toBoolean()
+                            val isVisible: Boolean = isVisibleString.toBoolean()
 
-                        //Validate data and create DTO:
-                        if (!nameString.isNullOrBlank() && !contentString.isNullOrBlank()) {
-                            val detailDto = V2BackupDetailDto(
-                                id = id,
-                                entryId = entryId,
-                                name = nameString,
-                                content = contentString,
-                                created = created,
-                                edited = edited,
-                                typeId = typeId,
-                                isVisible = isVisible,
-                                isObfuscated = isObfuscated,
-                                isUsername = isUsername,
-                                isPassword = isPassword
-                            )
-                            detailDtos.add(detailDto)
+                            val isObfuscated: Boolean = isObfuscatedString.toBoolean()
+
+                            val isUsername: Boolean = isUsernameString.toBoolean()
+
+                            val isPassword: Boolean = isPasswordString.toBoolean()
+
+                            //Validate data and create DTO:
+                            if (!nameString.isNullOrBlank() && !contentString.isNullOrBlank()) {
+                                val detailDto = V2BackupDetailDto(
+                                    id = id,
+                                    entryId = entryId,
+                                    name = nameString,
+                                    content = contentString,
+                                    created = created,
+                                    edited = edited,
+                                    typeId = typeId,
+                                    isVisible = isVisible,
+                                    isObfuscated = isObfuscated,
+                                    isUsername = isUsername,
+                                    isPassword = isPassword
+                                )
+                                detailDtos.add(detailDto)
+                            }
+                        }
+                        catch (_: Exception) {
+                            //Something went wrong: Skip tag (partial import)
                         }
                     }
-                    catch (_: Exception) {
-                        //Something went wrong: Skip tag (partial import)
-                    }
                 }
-            }
-            catch (_: Exception) {
-                throw CorruptImportFileException("Cannot parse details")
-            }
-            finally {
-                parser?.close()
+                catch (_: Exception) {
+                    throw CorruptImportFileException("Cannot parse details")
+                }
+                finally {
+                    parser?.close()
+                }
             }
         }
 
