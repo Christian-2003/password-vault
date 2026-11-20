@@ -20,7 +20,9 @@ enum class InputError(
     IllegalCharacters(R.string.error_illegalCharacters),
     IllegalFilename(R.string.error_illegalFilename),
     InvalidPassword(R.string.error_invalidPassword),
-    PasswordsNotMatching(R.string.error_passwordsNotMatching);
+    PasswordsNotMatching(R.string.error_passwordsNotMatching),
+    UnsupportedFileFormat(R.string.error_unsupportedFileFormat),
+    CorruptFileContent(R.string.error_corruptFileContent);
 
 
     /**

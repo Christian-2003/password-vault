@@ -48,11 +48,15 @@ import de.christian2003.feature.export.domain.entities.ImportOption
 import de.christian2003.feature.export.domain.entities.ImportProperties
 import de.christian2003.feature.export.domain.exceptions.CorruptImportFileException
 import de.christian2003.feature.export.domain.exceptions.IllegalImportConfigException
+import de.christian2003.feature.export.domain.exceptions.InvalidKeyException
 import de.christian2003.feature.export.domain.exceptions.UnsupportedFileFormatException
 import de.christian2003.feature.export.domain.services.ImportService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.FileInputStream
 import java.io.InputStream
 import java.util.zip.ZipInputStream
+import javax.crypto.AEADBadTagException
 
 
 /**
@@ -214,16 +218,28 @@ internal class V3BackupService @Inject constructor(
      * @throws CorruptImportFileException       The file to import is corrupt and cannot be imported.
      * @throws IllegalImportConfigException     The import config is illegal.
      * @throws UnsupportedFileFormatException   The selected file is unsupported and cannot be imported.
+     * @throws InvalidKeyException              The provided decryption key seed is invalid.
      */
     override fun beginImport(config: ImportConfig): Flow<Float> = flow {
         emit(0.0f)
 
+        //Check whether file format is valid:
+        val extension: String? = try {
+            filesystemService.getExtension(config.importFile)
+        } catch (_: Exception) { null }
+        if (!importDescriptor.importFileExtensions.contains(extension)) {
+            throw UnsupportedFileFormatException("The file format '${extension}' is not supported for V3 backups")
+        }
+
+        //Check whether decryption key seed is required and available:
         if (config.decryptionKeySeed == null || config.decryptionKeySeed.isEmpty()) {
             throw IllegalImportConfigException("Import config must contain decryption key seed")
         }
 
         var saltBytes: ByteArray? = null
         var keyBytes: ByteArray? = null
+
+        var encryptionSeedValid = true
 
         context.contentResolver.openFileDescriptor(config.importFile, "r")?.use { parcelFileDescriptor ->
             FileInputStream(parcelFileDescriptor.fileDescriptor).use { fileInputStream ->
@@ -239,27 +255,36 @@ internal class V3BackupService @Inject constructor(
 
                 //Read the ZIP:
                 ZipInputStream(decryptedStream).use { zipInputStream ->
-                    Log.d("V3Backup", "Begin ZipInputStream")
-                    while (zipInputStream.available() != 0) {
-                        val zipEntry: ZipEntry = zipInputStream.nextEntry
-                        Log.d("V3Backup", "ZipEntry ${zipEntry.name}")
+                    try {
+                        while (zipInputStream.available() != 0) {
+                            val zipEntry: ZipEntry = zipInputStream.nextEntry
 
-                        if (zipEntry.name == accountsEntryName) {
-                            //Accounts:
-                            val accountBytes: ByteArray = zipInputStream.readBytes()
-                            importAccounts(accountBytes, config.accountsImportOption)
-                            Log.d("V3Backup", "Imported accounts")
+                            if (zipEntry.name == accountsEntryName) {
+                                //Accounts:
+                                val accountBytes: ByteArray = zipInputStream.readBytes()
+                                importAccounts(accountBytes, config.accountsImportOption)
+                            }
+
+                            zipInputStream.closeEntry() //Continue to next entry
                         }
-
-                        zipInputStream.closeEntry() //Continue to next entry
+                    }
+                    catch (_: Exception) {
+                        //Decryption key seed is invalid:
+                        encryptionSeedValid = false
+                        //Instead of throwing from here directly, return@use so that the streams
+                        //can be closed correctly!
+                        return@use
                     }
                 }
-                Log.d("V3Backup", "Finish ZipInputStream")
             }
         }
 
         saltBytes?.fill(0)
         keyBytes?.fill(0)
+
+        if (!encryptionSeedValid) {
+            throw InvalidKeyException("The decryption key is invalid")
+        }
 
         //Once finishing, make sure that progress reports 100 %:
         emit(1.0f)
@@ -273,53 +298,53 @@ internal class V3BackupService @Inject constructor(
      * @param zipOutputStream   ZIP output stream into which to write the accounts.
      * @return                  Number of accounts that were written into the ZIP OS.
      */
-    private suspend fun exportAccounts(accountIds: Set<Uuid>, zipOutputStream: ZipOutputStream): Int {
-        var exportedAccountsCount = 0
+    private suspend fun exportAccounts(accountIds: Set<Uuid>, zipOutputStream: ZipOutputStream): Int = withContext(Dispatchers.IO) {
+            var exportedAccountsCount = 0
 
-        try {
-            val accounts: List<Account> = getAccountsByIdsUseCase.getAccountsByIds(accountIds.toList())
-            val tags: List<Tag> = getAllTagsUseCase.getAllTags().first()
+            try {
+                val accounts: List<Account> = getAccountsByIdsUseCase.getAccountsByIds(accountIds.toList())
+                val tags: List<Tag> = getAllTagsUseCase.getAllTags().first()
 
-            val accountDtos: List<V3BackupAccountDto> = accounts.mapNotNull { account ->
-                try {
-                    accountMapper.toDto(account)
-                } catch (_: Exception) {
-                    null
+                val accountDtos: List<V3BackupAccountDto> = accounts.mapNotNull { account ->
+                    try {
+                        accountMapper.toDto(account)
+                    } catch (_: Exception) {
+                        null
+                    }
                 }
+
+                val tagDtos: List<V3BackupTagDto> = tags.mapNotNull { tag ->
+                    try {
+                        tagMapper.toDto(tag)
+                    }
+                    catch (_: Exception) {
+                        null
+                    }
+                }
+
+                val rootDto = V3BackupAccountsRootDto(
+                    accounts = accountDtos,
+                    tags = tagDtos
+                )
+
+                val serializedJson: String = json.encodeToString<V3BackupAccountsRootDto>(rootDto)
+
+                val accountsDir = File(ZIP_DIR_ACCOUNTS)
+                val accountsFile = File(accountsDir, ZIP_FILE_ACCOUNTS)
+
+                val zipEntry = ZipEntry(sanitizeZipEntryName(accountsFile.path))
+                zipOutputStream.putNextEntry(zipEntry)
+                zipOutputStream.write(serializedJson.toByteArray(Charsets.UTF_8))
+                zipOutputStream.closeEntry()
+
+                exportedAccountsCount = accountDtos.size
+            }
+            catch (_: Exception) {
+                //Do not log here because of sensitive data
             }
 
-            val tagDtos: List<V3BackupTagDto> = tags.mapNotNull { tag ->
-                try {
-                    tagMapper.toDto(tag)
-                }
-                catch (_: Exception) {
-                    null
-                }
-            }
-
-            val rootDto = V3BackupAccountsRootDto(
-                accounts = accountDtos,
-                tags = tagDtos
-            )
-
-            val serializedJson: String = json.encodeToString<V3BackupAccountsRootDto>(rootDto)
-
-            val accountsDir = File(ZIP_DIR_ACCOUNTS)
-            val accountsFile = File(accountsDir, ZIP_FILE_ACCOUNTS)
-
-            val zipEntry = ZipEntry(sanitizeZipEntryName(accountsFile.path))
-            zipOutputStream.putNextEntry(zipEntry)
-            zipOutputStream.write(serializedJson.toByteArray(Charsets.UTF_8))
-            zipOutputStream.closeEntry()
-
-            exportedAccountsCount = accountDtos.size
+            return@withContext exportedAccountsCount
         }
-        catch (_: Exception) {
-            //Do not log here because of sensitive data
-        }
-
-        return exportedAccountsCount
-    }
 
 
     private suspend fun importAccounts(bytes: ByteArray, importOption: ImportOption) {

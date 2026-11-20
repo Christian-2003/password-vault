@@ -9,6 +9,10 @@ import de.christian2003.feature.export.domain.entities.ImportProperties
 import de.christian2003.feature.export.domain.services.ExportService
 import de.christian2003.feature.export.domain.services.ImportService
 import de.christian2003.feature.export.infrastructure.backup.v3.V3BackupService
+import de.christian2003.feature.export.domain.exceptions.CorruptImportFileException
+import de.christian2003.feature.export.domain.exceptions.IllegalImportConfigException
+import de.christian2003.feature.export.domain.exceptions.InvalidKeyException
+import de.christian2003.feature.export.domain.exceptions.UnsupportedFileFormatException
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -65,6 +69,7 @@ internal class BackupService @Inject constructor(
      * @throws CorruptImportFileException       The file to import is corrupt and cannot be imported.
      * @throws IllegalImportConfigException     The import config is illegal.
      * @throws UnsupportedFileFormatException   The selected file is unsupported and cannot be imported.
+     * @throws InvalidKeyException              The provided decryption key seed is invalid.
      */
     override fun beginImport(config: ImportConfig): Flow<Float> {
         return v3BackupService.beginImport(config)

@@ -1,6 +1,7 @@
 package de.christian2003.feature.export.infrastructure.work
 
 import android.content.Context
+import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -8,6 +9,9 @@ import androidx.work.workDataOf
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import de.christian2003.feature.export.domain.entities.ImportConfig
+import de.christian2003.feature.export.domain.exceptions.CorruptImportFileException
+import de.christian2003.feature.export.domain.exceptions.InvalidKeyException
+import de.christian2003.feature.export.domain.exceptions.UnsupportedFileFormatException
 import de.christian2003.feature.export.domain.services.ImportService
 import de.christian2003.feature.export.infrastructure.work.dto.ImportConfigDto
 import de.christian2003.feature.export.infrastructure.work.mapper.ImportConfigMapper
@@ -50,11 +54,27 @@ internal class ImportWorker @AssistedInject constructor(
             progressFlow.collect { progress ->
                 setProgress(workDataOf("progress" to progress))
             }
-
             return Result.success()
         }
-        catch (_: Exception) {
-            return Result.failure()
+        catch (e: Exception) {
+            when (e) {
+                is InvalidKeyException -> {
+                    //The decryption key is invalid:
+                    return Result.failure(workDataOf("err_code" to "key_invalid"))
+                }
+                is CorruptImportFileException -> {
+                    //Import file is corrupt:
+                    return Result.failure(workDataOf("err_code" to "file_corrupt"))
+                }
+                is UnsupportedFileFormatException -> {
+                    //Import file is corrupt:
+                    return Result.failure(workDataOf("err_code" to "invalid_file_format"))
+                }
+                else -> {
+                    //Some undefined issue occurred
+                    return Result.failure()
+                }
+            }
         }
     }
 

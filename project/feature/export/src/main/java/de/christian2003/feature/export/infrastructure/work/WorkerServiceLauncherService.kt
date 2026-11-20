@@ -1,5 +1,6 @@
 package de.christian2003.feature.export.infrastructure.work
 
+import android.util.Log
 import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
@@ -8,6 +9,7 @@ import androidx.work.WorkManager
 import androidx.work.workDataOf
 import de.christian2003.feature.export.domain.entities.ExportConfig
 import de.christian2003.feature.export.domain.entities.ImportConfig
+import de.christian2003.feature.export.domain.entities.ProgressErrorCode
 import de.christian2003.feature.export.domain.entities.ServiceProgress
 import de.christian2003.feature.export.domain.entities.ProgressState
 import de.christian2003.feature.export.domain.services.ServiceLauncherService
@@ -16,8 +18,10 @@ import de.christian2003.feature.export.infrastructure.work.dto.ImportConfigDto
 import de.christian2003.feature.export.infrastructure.work.mapper.ExportConfigMapper
 import de.christian2003.feature.export.infrastructure.work.mapper.ImportConfigMapper
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
+import java.util.UUID
 import javax.inject.Inject
 
 
@@ -28,6 +32,10 @@ internal class WorkerServiceLauncherService @Inject constructor(
 ): ServiceLauncherService {
 
     private val json: Json = Json
+
+    private val observedProgressCache: MutableMap<String, Flow<ServiceProgress>> = mutableMapOf()
+
+    private val workerIdsCache: MutableMap<String, UUID> = mutableMapOf()
 
 
     override fun launchExportSuspended(id: String, config: ExportConfig) {
@@ -43,6 +51,8 @@ internal class WorkerServiceLauncherService @Inject constructor(
         val request = OneTimeWorkRequestBuilder<ExportWorker>()
             .setInputData(inputData)
             .build()
+
+        workerIdsCache[id] = request.id
 
         workManager.enqueueUniqueWork(id, ExistingWorkPolicy.KEEP, request)
     }
@@ -62,38 +72,108 @@ internal class WorkerServiceLauncherService @Inject constructor(
             .setInputData(inputData)
             .build()
 
+        workerIdsCache[id] = request.id
+
         workManager.enqueueUniqueWork(id, ExistingWorkPolicy.KEEP, request)
     }
 
 
     override fun observeProgress(id: String): Flow<ServiceProgress> {
-        return workManager
-            .getWorkInfosForUniqueWorkFlow(id)
-            .map { workInfos ->
-                val workInfo: WorkInfo? = workInfos.firstOrNull()
+        var serviceProgress: Flow<ServiceProgress>? = observedProgressCache[id]
 
-                if (workInfo == null) {
-                    val progress = ServiceProgress(
-                        progress = 0f,
-                        state = ProgressState.None
-                    )
-                    return@map progress
-                }
+        if (serviceProgress != null) {
+            return serviceProgress
+        }
 
-                val workerProgress: Float = workInfo.progress.getFloat("progress", 0f)
+        Log.d("WorkerLauncherService", "Create new progress flow")
 
-                val progress = ServiceProgress(
-                    progress = workerProgress,
-                    state = when {
-                        workInfo.state == WorkInfo.State.RUNNING -> ProgressState.Running
-                        workInfo.state == WorkInfo.State.SUCCEEDED -> ProgressState.Finished
-                        workInfo.state == WorkInfo.State.FAILED -> ProgressState.Failed
-                        else -> ProgressState.Enqueued
+        val workerId: UUID? = workerIdsCache[id]
+
+        if (workerId != null) {
+            serviceProgress = workManager
+                .getWorkInfoByIdFlow(workerId)
+                .map { workInfo ->
+                    var serviceProgress: ServiceProgress? = null
+
+                    if (workInfo != null) {
+                        when (workInfo.state) {
+                            WorkInfo.State.RUNNING -> {
+                                //Work in progress:
+                                val progress: Float = workInfo.progress.getFloat("progress", -1f)
+
+                                serviceProgress = ServiceProgress(
+                                    progress = progress,
+                                    state = ProgressState.Running,
+                                    errorCode = ProgressErrorCode.Ok
+                                )
+
+                                Log.d("WorkerLauncherService", "Received RUNNING progress (Progress: '${progress}')")
+                            }
+
+                            WorkInfo.State.SUCCEEDED, WorkInfo.State.FAILED, WorkInfo.State.CANCELLED -> {
+                                //Work has finished:
+                                val progress: Float = workInfo.outputData.getFloat("progress", 1f)
+                                val errorMessage: String? = workInfo.outputData.getString("err_code")
+
+                                val state: ProgressState = when (workInfo.state) {
+                                    WorkInfo.State.SUCCEEDED -> ProgressState.Finished
+                                    else -> ProgressState.Failed
+                                }
+
+                                val errorCode: ProgressErrorCode = when (errorMessage) {
+                                    "key_invalid" -> ProgressErrorCode.InvalidKey
+                                    "file_corrupt" -> ProgressErrorCode.CorruptFile
+                                    "invalid_file_format" -> ProgressErrorCode.InvalidFileFormat
+                                    else -> ProgressErrorCode.Ok
+                                }
+
+                                serviceProgress = ServiceProgress(
+                                    progress = progress,
+                                    state = state,
+                                    errorCode = errorCode
+                                )
+
+                                Log.d("WorkerLauncherService", "Received ${workInfo.state} progress (Error: '${errorCode}' | '${errorMessage ?: "-"}')")
+                            }
+
+                            WorkInfo.State.ENQUEUED, WorkInfo.State.BLOCKED -> {
+                                //Waiting to start:
+                                serviceProgress = ServiceProgress(
+                                    progress = 0f,
+                                    state = ProgressState.Enqueued,
+                                    errorCode = ProgressErrorCode.Ok
+                                )
+
+                                Log.d("WorkerLauncherService", "Received ${workInfo.state} progress")
+                            }
+                        }
                     }
-                )
 
-                return@map progress
-            }
+
+                    if (serviceProgress == null) {
+                        serviceProgress = ServiceProgress(
+                            progress = -1f,
+                            state = ProgressState.None,
+                            errorCode = ProgressErrorCode.Ok
+                        )
+                        Log.d("WorkerLauncherService", "Received no progress")
+                    }
+
+                    return@map serviceProgress
+                }
+        }
+
+        if (serviceProgress == null) {
+            val progress = ServiceProgress(
+                progress = 0f,
+                state = ProgressState.None,
+                errorCode = ProgressErrorCode.Ok
+            )
+            serviceProgress = flowOf(progress)
+        }
+
+        observedProgressCache[id] = serviceProgress
+        return serviceProgress
     }
 
 }

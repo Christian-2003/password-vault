@@ -1,6 +1,7 @@
 package de.christian2003.feature.export.infrastructure.work
 
 import android.content.Context
+import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -48,11 +49,14 @@ internal class ExportWorker @AssistedInject constructor(
             val progressFlow: Flow<Float> = service.createExport(config)
             progressFlow.collect { progress ->
                 setProgress(workDataOf("progress" to progress))
+                Log.d("ExportService", "Emit progress ${progress ?: "-/-"}")
             }
 
+            Log.d("ExportService", "Finish service")
             return Result.success()
         }
         catch (_: Exception) {
+            Log.d("ExportService", "Fail service")
             return Result.failure()
         }
     }

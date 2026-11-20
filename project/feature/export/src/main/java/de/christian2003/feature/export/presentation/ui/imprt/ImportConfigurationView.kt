@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import de.christian2003.core.ui.composables.Headline
 import de.christian2003.core.ui.composables.HeadlineIndentation
 import de.christian2003.core.ui.composables.TextInput
+import de.christian2003.core.ui.model.InputError
 import de.christian2003.feature.export.R
 import de.christian2003.feature.export.domain.entities.ImportOption
 
@@ -35,6 +36,8 @@ internal fun ImportConfigurationView(
     importOption: ImportOption,
     password: String,
     isEncrypted: Boolean,
+    fileError: InputError?,
+    passwordError: InputError?,
     onSelectFile: () -> Unit,
     onImportOptionSelected: (ImportOption) -> Unit,
     onPasswordChange: (String) -> Unit,
@@ -50,6 +53,7 @@ internal fun ImportConfigurationView(
         )
         File(
             fileName = fileName,
+            errorMessage = fileError?.message(),
             onChange = {
                 onSelectFile()
             },
@@ -109,6 +113,7 @@ internal fun ImportConfigurationView(
                     label = stringResource(R.string.import_label_password),
                     prefixIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_password),
                     isPassword = true,
+                    errorMessage = passwordError?.message(),
                     modifier = Modifier.padding(
                         horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal)
                     )
@@ -122,6 +127,7 @@ internal fun ImportConfigurationView(
 @Composable
 private fun File(
     fileName: String?,
+    errorMessage: String?,
     onChange: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -135,52 +141,70 @@ private fun File(
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
-                .clip(MaterialTheme.shapes.large)
-                .background(MaterialTheme.colorScheme.surfaceContainer)
-                .clickable {
-                    onChange()
-                }
-                .padding(
-                    horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
-                    vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical),
-                )
+        Column(
+            modifier = Modifier.padding(start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal))
         ) {
-            Column(
-                modifier = Modifier.weight(1f)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .clip(MaterialTheme.shapes.large)
+                    .background(MaterialTheme.colorScheme.surfaceContainer)
+                    .clickable {
+                        onChange()
+                    }
+                    .padding(
+                        horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
+                        vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical),
+                    )
             ) {
-                Text(
-                    text = stringResource(R.string.import_label_file),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.bodyLarge,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Text(
-                    text = if (isSelected) {
-                        fileName ?: ""
-                    } else {
-                        stringResource(R.string.import_text_noFileSelected)
-                    },
-                    color = if (isSelected) {
-                        MaterialTheme.colorScheme.onSurfaceVariant
-                    } else {
-                        MaterialTheme.colorScheme.error
-                    },
-                    style = MaterialTheme.typography.bodyMedium,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(
+                        text = stringResource(R.string.import_label_file),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.bodyLarge,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Text(
+                        text = if (isSelected) {
+                            fileName ?: ""
+                        } else {
+                            stringResource(R.string.import_text_noFileSelected)
+                        },
+                        color = if (isSelected) {
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                        } else {
+                            MaterialTheme.colorScheme.error
+                        },
+                        style = MaterialTheme.typography.bodyMedium,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+
+                Icon(
+                    painter = painterResource(de.christian2003.core.ui.R.drawable.ic_edit),
+                    contentDescription = "",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
-            Icon(
-                painter = painterResource(de.christian2003.core.ui.R.drawable.ic_edit),
-                contentDescription = "",
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            if (errorMessage != null) {
+                Text(
+                    text = errorMessage,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(
+                        start = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
+                        top = 4.dp, //Space between supporting text and TextField (according to MD3 spec)
+                        end = dimensionResource(de.christian2003.core.ui.R.dimen.padding_horizontal),
+                    )
+                )
+            }
         }
     }
 }

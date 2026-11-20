@@ -40,6 +40,8 @@
     <string name="error_illegalFilename">The file name contains illegal characters</string>
     <string name="error_invalidPassword">Password invalid</string>
     <string name="error_passwordsNotMatching">The passwords do not match</string>
+    <string name="error_unsupportedFileFormat">The file format is unsupported</string>
+    <string name="error_corruptFileContent">The file is corrupt</string>
 
 
     <!-- Tooltips -->

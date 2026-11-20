@@ -22,9 +22,11 @@ import de.christian2003.feature.export.domain.entities.ImportConfig
 import de.christian2003.feature.export.domain.entities.ImportDescriptor
 import de.christian2003.feature.export.domain.entities.ImportOption
 import de.christian2003.feature.export.domain.entities.ImportProperties
+import de.christian2003.feature.export.domain.entities.ProgressErrorCode
 import de.christian2003.feature.export.domain.entities.ProgressState
 import de.christian2003.feature.export.domain.entities.ServiceProgress
 import de.christian2003.feature.export.domain.exceptions.CorruptImportFileException
+import de.christian2003.feature.export.domain.exceptions.UnsupportedFileFormatException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -161,9 +163,20 @@ internal class ImportViewModel @Inject constructor(
             var importProperties: ImportProperties? = null
             try {
                 importProperties = getImportPropertiesUseCase.getProperties(importServiceDescriptor.id, uri)
+                this@ImportViewModel.importFileUriError = null
             }
             catch (e: Exception) {
-                Log.d("Import", e.message ?: "Unknown exception")
+                when (e) {
+                    is UnsupportedFileFormatException -> {
+                        this@ImportViewModel.importFileUriError = InputError.UnsupportedFileFormat
+                    }
+                    is CorruptImportFileException -> {
+                        this@ImportViewModel.importFileUriError = InputError.CorruptFileContent
+                    }
+                    else -> {
+                        this@ImportViewModel.importFileUriError = null
+                    }
+                }
             }
 
             this@ImportViewModel.importProperties = importProperties
@@ -210,7 +223,21 @@ internal class ImportViewModel @Inject constructor(
                     decryptionKeySeed = password.toCharArray()
                 )
             )
-            progress.collect { importProgress = it }
+            progress.collect { serviceProgress ->
+                importProgress = serviceProgress
+                when (serviceProgress.errorCode) {
+                    ProgressErrorCode.InvalidKey -> {
+                        this@ImportViewModel.passwordError = InputError.InvalidPassword
+                    }
+                    ProgressErrorCode.InvalidFileFormat -> {
+                        this@ImportViewModel.importFileUriError = InputError.UnsupportedFileFormat
+                    }
+                    ProgressErrorCode.CorruptFile -> {
+                        this@ImportViewModel.importFileUriError = InputError.CorruptFileContent
+                    }
+                    else -> { /* Nothing to do here... */ }
+                }
+            }
         }
     }
 

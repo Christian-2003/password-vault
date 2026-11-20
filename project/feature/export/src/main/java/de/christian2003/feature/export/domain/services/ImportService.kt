@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import de.christian2003.feature.export.domain.exceptions.CorruptImportFileException
 import de.christian2003.feature.export.domain.exceptions.IllegalImportConfigException
 import de.christian2003.feature.export.domain.exceptions.UnsupportedFileFormatException
+import de.christian2003.feature.export.domain.exceptions.InvalidKeyException
 
 
 internal interface ImportService {
@@ -41,6 +42,8 @@ internal interface ImportService {
      * @throws CorruptImportFileException       The file to import is corrupt and cannot be imported.
      * @throws IllegalImportConfigException     The import config is illegal.
      * @throws UnsupportedFileFormatException   The selected file is unsupported and cannot be imported.
+     * @throws InvalidKeyException              The provided decryption key seed is invalid.
+     * @throws InvalidKeyException              The provided decryption key seed is invalid.
      */
     fun beginImport(config: ImportConfig): Flow<Float>
 
