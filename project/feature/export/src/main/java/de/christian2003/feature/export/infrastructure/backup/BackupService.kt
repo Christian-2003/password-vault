@@ -13,11 +13,17 @@ import de.christian2003.feature.export.domain.exceptions.CorruptImportFileExcept
 import de.christian2003.feature.export.domain.exceptions.IllegalImportConfigException
 import de.christian2003.feature.export.domain.exceptions.InvalidKeyException
 import de.christian2003.feature.export.domain.exceptions.UnsupportedFileFormatException
+import de.christian2003.feature.export.infrastructure.backup.v2.V2BackupService
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 
 internal class BackupService @Inject constructor(
+    private val v2BackupService: V2BackupService,
     private val v3BackupService: V3BackupService
 ) : ExportService, ImportService {
 
@@ -29,7 +35,15 @@ internal class BackupService @Inject constructor(
     /**
      * Descriptor for the import service.
      */
-    override val importDescriptor: ImportDescriptor = v3BackupService.importDescriptor
+    override val importDescriptor: ImportDescriptor = ImportDescriptor(
+        id = "BackupService",
+        importFileExtensions = v3BackupService.importDescriptor.importFileExtensions
+                + v2BackupService.importDescriptor.importFileExtensions,
+        importFileMimeTypes = v3BackupService.importDescriptor.importFileMimeTypes
+                + v2BackupService.importDescriptor.importFileMimeTypes,
+        titleId = v3BackupService.importDescriptor.titleId,
+        subtitleId = v3BackupService.importDescriptor.subtitleId
+    )
 
 
     /**
@@ -56,7 +70,27 @@ internal class BackupService @Inject constructor(
      * @throws UnsupportedFileFormatException   The selected file is unsupported and cannot be imported.
      */
     override suspend fun getProperties(importFile: Uri): ImportProperties {
-        return v3BackupService.getProperties(importFile)
+        var importProperties: ImportProperties? = null
+
+        //First, try V3:
+        try {
+            importProperties = v3BackupService.getProperties(importFile)
+        }
+        catch (_: Exception) { }
+
+        //Next, try V2:
+        if (importProperties == null) {
+            try {
+                importProperties = v2BackupService.getProperties(importFile)
+            }
+            catch (_: Exception) { }
+        }
+
+        //Finish:
+        if (importProperties == null) {
+            throw CorruptImportFileException("Cannot get properties from file")
+        }
+        return importProperties
     }
 
     /**
@@ -71,8 +105,22 @@ internal class BackupService @Inject constructor(
      * @throws UnsupportedFileFormatException   The selected file is unsupported and cannot be imported.
      * @throws InvalidKeyException              The provided decryption key seed is invalid.
      */
-    override fun beginImport(config: ImportConfig): Flow<Float> {
-        return v3BackupService.beginImport(config)
+    override fun beginImport(config: ImportConfig): Flow<Float> = flow {
+        //First, try V3:
+        try {
+            val v3Flow: Flow<Float> = v3BackupService.beginImport(config)
+            v3Flow.collect { emit(it) }
+        }
+        catch (_: Exception) {
+            //Next, try V2:
+            try {
+                val v2Flow: Flow<Float> = v2BackupService.beginImport(config)
+                v2Flow.collect { emit(it) }
+            }
+            catch (e: Exception) {
+                throw e
+            }
+        }
     }
 
 }

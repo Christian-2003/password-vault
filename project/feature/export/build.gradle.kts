@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.documentfile)
+    implementation(libs.apache.commons.csv)
 
     implementation(project(":core:common"))
     implementation(project(":core:security"))
