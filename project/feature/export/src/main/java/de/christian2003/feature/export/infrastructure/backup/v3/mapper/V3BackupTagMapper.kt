@@ -7,12 +7,12 @@ import javax.inject.Inject
 
 
 /**
- * Mapper to map a domain tag to it's backup DTO and vice versa.
+ * Mapper to map a domain tag to its backup DTO and vice versa.
  */
 internal class V3BackupTagMapper @Inject constructor() {
 
     /**
-     * Converts the specified DTO to it's domain instance.
+     * Converts the specified DTO to its domain instance.
      *
      * @param dto   DTO to convert.
      * @return      Converted domain instance.
@@ -32,7 +32,7 @@ internal class V3BackupTagMapper @Inject constructor() {
 
 
     /**
-     * Converts the specified domain instance to it's DTO.
+     * Converts the specified domain instance to its DTO.
      *
      * @param domain    Domain instance to convert.
      * @return          Converted DTO.

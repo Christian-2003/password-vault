@@ -15,13 +15,20 @@ import de.christian2003.feature.export.domain.exceptions.InvalidKeyException
 import de.christian2003.feature.export.domain.exceptions.UnsupportedFileFormatException
 import de.christian2003.feature.export.infrastructure.backup.v2.V2BackupService
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 
+/**
+ * Implementation for the import and export service for the custom backup format of Password Vault.
+ *
+ * Exports are always performed for V3 backups.
+ * Imports can be performed from V3 and V2 backups. Which of these formats is used will be determined
+ * internally by this service.
+ *
+ * @param v2BackupService   V2 backup service.
+ * @param v3BackupService   V3 backup service.
+ */
 internal class BackupService @Inject constructor(
     private val v2BackupService: V2BackupService,
     private val v3BackupService: V3BackupService

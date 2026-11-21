@@ -13,7 +13,7 @@ import kotlin.uuid.Uuid
  * @param created               Metadata: When the entry was created.
  * @param edited                Metadata: When the entry was last edited.
  * @param isVisible             Metadata: Whether the entry is visible.
- * @param isAddedAutomatically  Metadata: Whether the entry was added autom. through autofill service.
+ * @param isAddedAutomatically  Metadata: Whether the entry was added automatially through autofill service.
  * @param tagIds                List of tags of the entry.
  * @param packages              List of package names of the entry.
  */

@@ -11,6 +11,9 @@ import de.christian2003.feature.export.domain.exceptions.UnsupportedFileFormatEx
 import de.christian2003.feature.export.domain.exceptions.InvalidKeyException
 
 
+/**
+ * Service through which to import data.
+ */
 internal interface ImportService {
 
     /**

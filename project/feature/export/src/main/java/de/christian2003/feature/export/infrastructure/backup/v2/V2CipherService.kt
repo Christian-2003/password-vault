@@ -113,7 +113,7 @@ internal class V2CipherService @Inject constructor() {
         while (byteBuffer.hasRemaining()) {
             byteBuffer.put(0)
         }
-        //Do NOT zero CharBuffer, since this would zero the input CharArray!
+        //Do NOT zero CharBuffer, since this would zero the input CharArray as well!
 
         return bytes
     }

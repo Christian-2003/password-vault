@@ -7,6 +7,14 @@ import java.time.LocalDateTime
 import kotlin.uuid.Uuid
 
 
+/**
+ * DTO for tags in V3 backups.
+ *
+ * @param id        ID of the tag.
+ * @param name      Display name of the tag.
+ * @param createdAt Metadata: When the tag was created.
+ * @param editedAt  Metadata: When the tag was last edited.
+ */
 @Serializable
 internal data class V3BackupTagDto(
 

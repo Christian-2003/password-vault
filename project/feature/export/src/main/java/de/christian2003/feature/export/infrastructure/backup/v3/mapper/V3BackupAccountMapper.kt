@@ -15,12 +15,12 @@ import kotlin.uuid.Uuid
 
 
 /**
- * Mapper to map a domain account to it's backup DTO and vice versa.
+ * Mapper to map a domain account to its backup DTO and vice versa.
  */
 internal class V3BackupAccountMapper @Inject constructor() {
 
     /**
-     * Converts the specified DTO to it's domain instance.
+     * Converts the specified DTO to its domain instance.
      *
      * @param dto       DTO to convert.
      * @param allTags   List of all tags.
@@ -85,7 +85,7 @@ internal class V3BackupAccountMapper @Inject constructor() {
 
 
     /**
-     * Converts the specified domain instance to it's DTO.
+     * Converts the specified domain instance to its DTO.
      *
      * @param domain    Domain instance to convert.
      * @return          Converted DTO.

@@ -86,10 +86,20 @@ internal class V3BackupService @Inject constructor(
 
     companion object {
 
+        /**
+         * Length of the salt at the beginning of encryption streams.
+         */
         private const val SALT_LENGTH: Int = 32
 
+        /**
+         * Directory in which accounts are stored inside the PVX ZIP file.
+         */
         private const val ZIP_DIR_ACCOUNTS = "accounts"
 
+        /**
+         * Directory in which files are stored inside the PVX ZIP file.
+         * Currently unused until file support is implemented.
+         */
         private const val ZIP_FILE_ACCOUNTS = "accounts.json"
 
     }
@@ -151,7 +161,7 @@ internal class V3BackupService @Inject constructor(
         var progressionCurrentStep = 0
 
         var exportedAccountsCount: Int
-        var exportedFilesCount = 0
+        val exportedFilesCount = 0
 
         context.contentResolver.openFileDescriptor(config.exportDestination, "w")?.use { parcelFileDescriptor ->
             FileOutputStream(parcelFileDescriptor.fileDescriptor).use { fileOutputStream ->
@@ -347,6 +357,12 @@ internal class V3BackupService @Inject constructor(
         }
 
 
+    /**
+     * Imports the accounts stored in the specified ByteArray.
+     *
+     * @param bytes         Bytes from the ZIP Input Stream which store the accounts.
+     * @param importOption  Import option.
+     */
     private suspend fun importAccounts(bytes: ByteArray, importOption: ImportOption) {
         try {
             //Deserialize JSON:

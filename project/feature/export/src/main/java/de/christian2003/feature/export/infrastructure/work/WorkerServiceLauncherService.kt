@@ -25,19 +25,45 @@ import java.util.UUID
 import javax.inject.Inject
 
 
+/**
+ * Service that can launch an import or export suspended.
+ * The imports and exports are launched suspended by concept of fire-and-forget. Progress of the
+ * launched services can be observed afterward.
+ *
+ * This implementation launches the services inside an Android Worker.
+ *
+ * @param exportConfigMapper    Mapper for export configs.
+ * @param importConfigMapper    Mapper for import configs.
+ * @param workManager           Android Work Manager.
+ */
 internal class WorkerServiceLauncherService @Inject constructor(
     private val exportConfigMapper: ExportConfigMapper,
     private val importConfigMapper: ImportConfigMapper,
     private val workManager: WorkManager
 ): ServiceLauncherService {
 
+    /**
+     * JSON used to serialize export and import configs.
+     */
     private val json: Json = Json
 
+    /**
+     * Caches the service progresses for each service launched.
+     */
     private val observedProgressCache: MutableMap<String, Flow<ServiceProgress>> = mutableMapOf()
 
+    /**
+     * Caches the worker ID and maps it to the corresponding service ID.
+     */
     private val workerIdsCache: MutableMap<String, UUID> = mutableMapOf()
 
 
+    /**
+     * Launches an export service.
+     *
+     * @param id        ID of the export service to launch.
+     * @param config    Export config.
+     */
     override fun launchExportSuspended(id: String, config: ExportConfig) {
         //Serialize config because WorkManager only accepts primitive types and strings:
         val exportConfigDto: ExportConfigDto = exportConfigMapper.toDto(config)
@@ -58,6 +84,12 @@ internal class WorkerServiceLauncherService @Inject constructor(
     }
 
 
+    /**
+     * Launches an import service.
+     *
+     * @param id        ID of the import service to launch.
+     * @param config    Import config.
+     */
     override fun launchImportSuspended(id: String, config: ImportConfig) {
         //Serialize config because WorkManager only accepts primitive types and strings:
         val importConfigDto: ImportConfigDto = importConfigMapper.toDto(config)
@@ -78,6 +110,13 @@ internal class WorkerServiceLauncherService @Inject constructor(
     }
 
 
+    /**
+     * Observes the progress of the specified export / import service.
+     *
+     * @param id    ID of the service whose progress to observe.
+     * @return      Flow containing the service progress of a running service.
+     * @return      Flow containing the service progress of a running service.
+     */
     override fun observeProgress(id: String): Flow<ServiceProgress> {
         var serviceProgress: Flow<ServiceProgress>? = observedProgressCache[id]
 

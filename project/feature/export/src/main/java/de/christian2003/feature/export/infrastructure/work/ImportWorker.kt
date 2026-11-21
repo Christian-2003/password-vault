@@ -19,6 +19,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.json.Json
 
 
+/**
+ * Import worker handles the import of files in a Worker.
+ *
+ * @param context               Context.
+ * @param params                Worker parameters.
+ * @param services              Set of all import services.
+ * @param importConfigMapper    Mapper for the import config.
+ */
 @HiltWorker
 internal class ImportWorker @AssistedInject constructor(
     @Assisted context: Context,
@@ -27,9 +35,17 @@ internal class ImportWorker @AssistedInject constructor(
     private val importConfigMapper: ImportConfigMapper
 ): CoroutineWorker(context, params) {
 
+    /**
+     * JSON used to deserialize the import config.
+     */
     val json: Json = Json
 
 
+    /**
+     * Performs the work inside the worker.
+     *
+     * @return  Result of the work performed.
+     */
     override suspend fun doWork(): Result {
         try {
             //Get input data:

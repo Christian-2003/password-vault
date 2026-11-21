@@ -6,6 +6,15 @@ import kotlinx.serialization.Serializable
 import kotlin.uuid.Uuid
 
 
+/**
+ * DTO for the export config. This can be serialized to a primitive type which can then be used
+ * by Android WorkManager. This is required because custom types are not supported by WorkManager.
+ *
+ * @param accounts          Set of IDs of the accounts to export.
+ * @param files             Set of the files to export.
+ * @param exportDestination URI of the file where to store the export.
+ * @param encryptionKeySeed Seed for the encryption key (May be null if no encryption is required).
+ */
 @Serializable
 internal data class ExportConfigDto(
     val accounts: Set<Uuid>,

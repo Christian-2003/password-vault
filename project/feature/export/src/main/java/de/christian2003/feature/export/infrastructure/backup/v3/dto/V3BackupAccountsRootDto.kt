@@ -4,6 +4,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 
+/**
+ * Root DTO for the V3 backup that contains all exported account information.
+ *
+ * @param accounts  List of accounts.
+ * @param tags      List of all tags.
+ */
 @Serializable
 internal data class V3BackupAccountsRootDto(
 

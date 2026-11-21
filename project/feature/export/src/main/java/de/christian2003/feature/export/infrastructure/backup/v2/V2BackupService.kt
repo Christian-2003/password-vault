@@ -240,6 +240,15 @@ internal class V2BackupService @Inject constructor(
     }
 
 
+    /**
+     * From the specified node (usually <tags>...</tags>), the method retrieves a list of tags.
+     * The method decrypts the content of the node if required.
+     * If a tag cannot be retrieved, it may be skipped.
+     *
+     * @param node          V2 backup node which contains the tags.
+     * @param isEncrypted   Whether the backup is encrypted.
+     * @return              List of tags.
+     */
     private fun getTagsFromNode(node: Node, isEncrypted: Boolean): List<V2BackupTagDto> {
         val tagDtos: MutableList<V2BackupTagDto> = mutableListOf()
         var tagsCsv: String? = node.textContent
@@ -294,6 +303,15 @@ internal class V2BackupService @Inject constructor(
     }
 
 
+    /**
+     * From the specified node (usually <entries>...</entries>), the method retrieves a list of entries.
+     * The method decrypts the content of the node if required.
+     * If an entry cannot be retrieved, it may be skipped.
+     *
+     * @param node          V2 backup node which contains the entries.
+     * @param isEncrypted   Whether the backup is encrypted.
+     * @return              List of entries.
+     */
     private fun getEntriesFromNode(node: Node, isEncrypted: Boolean): List<V2BackupEntryDto> {
         val entryDtos: MutableList<V2BackupEntryDto> = mutableListOf()
         val entriesCsv: String? = node.textContent
@@ -393,6 +411,15 @@ internal class V2BackupService @Inject constructor(
     }
 
 
+    /**
+     * From the specified node (usually <details>...</details>), the method retrieves a list of details.
+     * The method decrypts the content of the node if required.
+     * If a detail cannot be retrieved, it may be skipped.
+     *
+     * @param node          V2 backup node which contains the details.
+     * @param isEncrypted   Whether the backup is encrypted.
+     * @return              List of details.
+     */
     private fun getDetailsFromNode(node: Node, isEncrypted: Boolean): List<V2BackupDetailDto> {
         val detailDtos: MutableList<V2BackupDetailDto> = mutableListOf()
         val detailsCsv: String? = node.textContent

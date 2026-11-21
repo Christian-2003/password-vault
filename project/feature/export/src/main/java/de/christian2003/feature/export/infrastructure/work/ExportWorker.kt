@@ -16,6 +16,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.json.Json
 
 
+/**
+ * Export worker handles the export of files in a Worker.
+ *
+ * @param context               Context.
+ * @param params                Worker parameters.
+ * @param services              Set of all export services.
+ * @param exportConfigMapper    Mapper for the export config.
+ */
 @HiltWorker
 internal class ExportWorker @AssistedInject constructor(
     @Assisted context: Context,
@@ -24,8 +32,17 @@ internal class ExportWorker @AssistedInject constructor(
     private val exportConfigMapper: ExportConfigMapper
 ): CoroutineWorker(context, params) {
 
+    /**
+     * JSON used to deserialize the export config.
+     */
     val json: Json = Json
 
+
+    /**
+     * Performs the work inside the worker.
+     *
+     * @return  Result of the work performed.
+     */
     override suspend fun doWork(): Result {
         try {
             //Get input data:

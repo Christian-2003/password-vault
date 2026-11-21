@@ -7,6 +7,19 @@ import java.time.LocalDateTime
 import kotlin.uuid.Uuid
 
 
+/**
+ * DTO for the accounts of a V3 backup.
+ *
+ * @param id            ID of the account.
+ * @param name          Display name of the account.
+ * @param description   Description of the account.
+ * @param createdAt     Metadata: When the account was created.
+ * @param editedAt      Metadata: When the account was last edited.
+ * @param accessedAt    Metadata: When the account was last accessed.
+ * @param details       List of details that belong to the account.
+ * @param targets       List of autofill targets of the account.
+ * @param tags          List of IDs for the tags assigned to the account.
+ */
 @Serializable
 internal data class V3BackupAccountDto(
 
