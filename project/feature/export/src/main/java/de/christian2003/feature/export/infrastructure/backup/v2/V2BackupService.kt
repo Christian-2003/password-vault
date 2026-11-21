@@ -2,7 +2,6 @@ package de.christian2003.feature.export.infrastructure.backup.v2
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import de.christian2003.core.common.domain.services.FilesystemService
 import de.christian2003.data.accounts.application.usecases.CreateAccountsBatchUseCase
@@ -61,7 +60,19 @@ internal class V2BackupService @Inject constructor(
      * Prior to v3.8.0, this can be seen in
      * 'app\src\main\java\de\passwordvault\model\storage\csv\CsvConfiguration.java'
      */
-    private val CSV_ROW_DIVIDER: Char = '\n'
+    private val csvRowDivider: Char = '\n'
+
+    /**
+     * Custom CSV format which matches the CSV (de)serialization algorithm used when the V2 backup
+     * was created.
+     * Prior to v3.8.0, quotes were escaped with a backslash (i.e. '\"'). According to official CSV
+     * specification, quotes are escaped with embedded double quotes (i.,e. '""'). However, prior to
+     * v3.8.0, backslashes were used to escape quotes. Therefore, we need to use them here as well.
+     */
+    private val csvFormat: CSVFormat = CSVFormat.DEFAULT.builder()
+        .setEscape('\\')
+        .get()
+
 
     /**
      * Descriptor for the import service.
@@ -220,10 +231,6 @@ internal class V2BackupService @Inject constructor(
                 catch (_: Exception) { null }
             }
 
-        Log.d("V2Backup", "Begin creating ${accounts.size} accounts (${entryDtos.size})")
-        Log.d("V2Backup", "Begin creating ${details.size} details (${detailDtos.size})")
-        Log.d("V2Backup", "Begin creating ${tags.size} tags (${tagDtos.size})")
-
         //Create accounts:
         val batchOption: BatchOption = mapImportOptionToBatchOption(config.accountsImportOption)
         createAccountsBatchUseCase.createAccountsBatch(accounts, tags, batchOption)
@@ -248,9 +255,9 @@ internal class V2BackupService @Inject constructor(
             try {
                 /*
                 Format:  '<id>                                ,<name>'
-                Example: '4526e96a-69cb-4a37-91fc-a002997dfd3e,Privat'
+                Example: '4526e96a-69cb-4a37-91fc-a002997dfd3e,Private'
                  */
-                parser = CSVParser.parse(tagsCsv, CSVFormat.DEFAULT)
+                parser = CSVParser.parse(tagsCsv, csvFormat)
 
                 for (record: CSVRecord in parser) {
                     try {
@@ -295,7 +302,7 @@ internal class V2BackupService @Inject constructor(
 
         if (entriesCsv != null) {
             val rows: List<String> = entriesCsv
-                .split(CSV_ROW_DIVIDER)
+                .split(csvRowDivider)
                 .filter { it.isNotBlank() }
 
             for (row: String in rows) {
@@ -312,7 +319,7 @@ internal class V2BackupService @Inject constructor(
                     Format   '<id>                                ,<name>      ,<description>,<created>    ,<edited>     ,<is_visible>,"<tag1>,<tag2>,<tagN>"                                                     ,"<package1>,<package2>,<packageN>",<added_automatically>':
                     Example: '2f175ffb-ada5-42da-839c-ce15718f8497,Petrol Index,Petrol usages,1786992277500,1786992334885,true        ,"4526e96a-69cb-4a37-91fc-a002997dfd3e,eef6e60b-8c5e-4d35-a4a8-dca895555b70","de.christian2003.petrolindex"    ,false'
                      */
-                    parser = CSVParser.parse(rowCsv, CSVFormat.DEFAULT)
+                    parser = CSVParser.parse(rowCsv, csvFormat)
 
                     for (record: CSVRecord in parser) {
                         try {
@@ -374,7 +381,7 @@ internal class V2BackupService @Inject constructor(
                     }
                 }
                 catch (_: Exception) {
-                    throw CorruptImportFileException("Cannot parse entries")
+                    //Something went wrong: Skip entry (partial import)
                 }
                 finally {
                     parser?.close()
@@ -393,7 +400,7 @@ internal class V2BackupService @Inject constructor(
         var parser: CSVParser? = null
 
         if (detailsCsv != null) {
-            val rows: List<String> = detailsCsv.split(CSV_ROW_DIVIDER)
+            val rows: List<String> = detailsCsv.split(csvRowDivider)
 
             for (row: String in rows) {
                 var rowCsv: String = row
@@ -409,7 +416,7 @@ internal class V2BackupService @Inject constructor(
                     Format:  '<id>                                ,<entry>,                            ,<name>  ,<content>    ,<created>    ,<edited>     ,<type>,<is_visible>,<is_obfuscated>,<is_username>,<is_password>'
                     Example: '1a6c52e6-4486-460c-83d6-f4e305d1f4d3,2f175ffb-ada5-42da-839c-ce15718f8497,Password,MyPassword123,1786992321809,1786992327359,0     ,true        ,false          ,false        ,false'
                      */
-                    parser = CSVParser.parse(rowCsv, CSVFormat.DEFAULT)
+                    parser = CSVParser.parse(rowCsv, csvFormat)
 
                     for (record: CSVRecord in parser) {
                         try {
@@ -473,7 +480,7 @@ internal class V2BackupService @Inject constructor(
                     }
                 }
                 catch (_: Exception) {
-                    throw CorruptImportFileException("Cannot parse details")
+                    //Something went wrong: Skip entry (partial import)
                 }
                 finally {
                     parser?.close()
@@ -544,14 +551,13 @@ internal class V2BackupService @Inject constructor(
      * @return          Whether the document is encrypted.
      */
     private fun isEncrypted(document: Document): Boolean {
-        var isEncrypted: Boolean = false
+        var isEncrypted = false
         val rootNode: Node = getRootNode(document)
         val documentChildren: NodeList? = rootNode.childNodes
 
         if (documentChildren != null) {
             for (i: Int in 0 until documentChildren.length) {
                 val currentChild: Node = documentChildren.item(i)
-                Log.d("V2Backup", "Traverse XML node ${currentChild.nodeName}")
                 when (currentChild.nodeName.lowercase()) {
                     "data" -> {
                         val checksumAttr: Node? = currentChild.attributes.getNamedItem("checksum")
@@ -562,8 +568,6 @@ internal class V2BackupService @Inject constructor(
                 }
             }
         }
-
-        Log.d("V2Backup", "Determined isEncrypted: $isEncrypted")
 
         return isEncrypted
     }

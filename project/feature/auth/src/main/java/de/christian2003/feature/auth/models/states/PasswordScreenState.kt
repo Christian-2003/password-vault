@@ -1,5 +1,7 @@
 package de.christian2003.feature.auth.models.states
 
+import androidx.annotation.Keep
+
 
 /**
  * States for the screen through which to enter the password.
@@ -15,6 +17,7 @@ package de.christian2003.feature.auth.models.states
  * @property EnableBiometrics           Screen is displayed to enter the password for enabling the
  *                                      biometrics.
  */
+@Keep //Prevent R8 from removing enum: Enum is used in Jetpack Compose typesafe navigation
 internal enum class PasswordScreenState {
 
     FirstTimeSetup,

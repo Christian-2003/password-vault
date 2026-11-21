@@ -1,5 +1,7 @@
 package de.christian2003.feature.auth.models.states
 
+import androidx.annotation.Keep
+
 
 /**
  * Enum stores the states for the screen through which to finish changes to auth.
@@ -10,6 +12,7 @@ package de.christian2003.feature.auth.models.states
  * @property GenerateNewRecoveryCodes   Screen is shown to generate new recovery codes.
  * @property EnableBiometrics           Screen is shown to enable biometric auth.
  */
+@Keep //Prevent R8 from removing enum: Enum is used in Jetpack Compose typesafe navigation
 internal enum class FinishScreenState {
 
     FirstTimeSetup,

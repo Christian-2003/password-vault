@@ -1,5 +1,7 @@
 package de.christian2003.feature.auth.models.states
 
+import androidx.annotation.Keep
+
 
 /**
  * States for the screen through which the user receives new recovery codes.
@@ -11,6 +13,7 @@ package de.christian2003.feature.auth.models.states
  * @property GenerateNewRecoveryCodes   State for the screen displayed when the user generates new
  *                                      recovery codes.
  */
+@Keep //Prevent R8 from removing enum: Enum is used in Jetpack Compose typesafe navigation
 internal enum class RecoveryCodesScreenState {
 
     FirstTimeSetup,
