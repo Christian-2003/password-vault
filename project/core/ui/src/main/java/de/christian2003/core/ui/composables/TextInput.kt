@@ -224,6 +224,12 @@ fun TextInput(
         null
     }
 
+    val adjustedKeyboardOptions = if (isPassword) {
+        keyboardOptions.copy(autoCorrectEnabled = false)
+    } else {
+        keyboardOptions
+    }
+
     Row(
         modifier = modifier.fillMaxWidth(),
     ) {
@@ -254,7 +260,7 @@ fun TextInput(
                     text = label
                 )
             },
-            keyboardOptions = keyboardOptions,
+            keyboardOptions = adjustedKeyboardOptions,
             keyboardActions = keyboardActions,
             enabled = enabled,
             suffix = suffixView,
