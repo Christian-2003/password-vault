@@ -1,4 +1,4 @@
-package de.christian2003.passwordvault.viewmodels
+package de.christian2003.passwordvault.presentation.viewmodels
 
 import android.app.Application
 import android.content.Context

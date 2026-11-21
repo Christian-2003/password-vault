@@ -1,4 +1,4 @@
-package de.christian2003.passwordvault
+package de.christian2003.passwordvault.presentation.ui
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -33,12 +33,12 @@ import de.christian2003.feature.auth.navigation.authSettingsFlow
 import de.christian2003.feature.auth.navigation.loginDestination
 import de.christian2003.feature.auth.navigation.recoveryFlow
 import de.christian2003.feature.auth.navigation.setupFlow
-import de.christian2003.passwordvault.ui.devsettings.DevSettingsScreen
-import de.christian2003.passwordvault.viewmodels.DevSettingsViewModel
-import de.christian2003.passwordvault.ui.help.HelpScreen
-import de.christian2003.passwordvault.viewmodels.HelpViewModel
-import de.christian2003.passwordvault.ui.settings.SettingsScreen
-import de.christian2003.passwordvault.viewmodels.SettingsViewModel
+import de.christian2003.passwordvault.presentation.ui.devsettings.DevSettingsScreen
+import de.christian2003.passwordvault.presentation.viewmodels.DevSettingsViewModel
+import de.christian2003.passwordvault.presentation.ui.help.HelpScreen
+import de.christian2003.passwordvault.presentation.viewmodels.HelpViewModel
+import de.christian2003.passwordvault.presentation.ui.settings.SettingsScreen
+import de.christian2003.passwordvault.presentation.viewmodels.SettingsViewModel
 import de.christian2003.core.security.application.usecases.BiometricAuthUseCase
 import de.christian2003.core.security.application.usecases.CanMasterKeyBeUnlockedUseCase
 import de.christian2003.core.security.application.usecases.UnlockWithBiometricsUseCase

@@ -1,4 +1,4 @@
-package de.christian2003.passwordvault.ui.help
+package de.christian2003.passwordvault.presentation.ui.help
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
@@ -38,7 +38,7 @@ import de.christian2003.core.ui.composables.NavigationBarProtection
 import de.christian2003.core.ui.composables.Shape
 import de.christian2003.core.ui.model.HelpCard
 import de.christian2003.passwordvault.R
-import de.christian2003.passwordvault.viewmodels.HelpViewModel
+import de.christian2003.passwordvault.presentation.viewmodels.HelpViewModel
 
 
 /**

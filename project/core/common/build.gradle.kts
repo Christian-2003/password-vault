@@ -42,6 +42,7 @@ dependencies {
     implementation(libs.squareup.okhttp)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.documentfile)
+    implementation(libs.coil.svg)
 
     testImplementation(libs.junit)
 

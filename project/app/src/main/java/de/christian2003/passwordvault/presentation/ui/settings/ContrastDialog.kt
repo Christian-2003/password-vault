@@ -1,4 +1,4 @@
-package de.christian2003.passwordvault.ui.settings
+package de.christian2003.passwordvault.presentation.ui.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll

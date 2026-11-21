@@ -1,4 +1,4 @@
-package de.christian2003.passwordvault.ui.devsettings
+package de.christian2003.passwordvault.presentation.ui.devsettings
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import de.christian2003.core.ui.composables.settings.SettingsItemButton
 import de.christian2003.core.ui.composables.settings.SettingsItemSwitch
 import de.christian2003.passwordvault.R
-import de.christian2003.passwordvault.viewmodels.DevSettingsViewModel
+import de.christian2003.passwordvault.presentation.viewmodels.DevSettingsViewModel
 
 
 /**

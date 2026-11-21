@@ -7,9 +7,11 @@ import dagger.hilt.components.SingletonComponent
 import de.christian2003.core.common.domain.services.ClipboardService
 import de.christian2003.core.common.domain.services.ConnectivityCheckerService
 import de.christian2003.core.common.domain.services.FilesystemService
+import de.christian2003.core.common.domain.services.WebRequestService
 import de.christian2003.core.common.infrastructure.services.AndroidClipboardService
 import de.christian2003.core.common.infrastructure.services.AndroidConnectivityCheckerService
 import de.christian2003.core.common.infrastructure.services.AndroidFilesystemService
+import de.christian2003.core.common.infrastructure.services.OkHttpWebRequestService
 
 
 /**
@@ -35,5 +37,10 @@ internal abstract class CommonBindingsSingletonModule {
     abstract fun bindFilesystemService(
         impl: AndroidFilesystemService
     ): FilesystemService
+
+    @Binds
+    abstract fun bindWebRequestService(
+        impl: OkHttpWebRequestService
+    ): WebRequestService
 
 }

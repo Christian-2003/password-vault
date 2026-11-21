@@ -1,4 +1,4 @@
-package de.christian2003.passwordvault
+package de.christian2003.passwordvault.infrastructure.android
 
 import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
