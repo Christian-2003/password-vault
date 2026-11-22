@@ -7,19 +7,12 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyItemScope
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.Badge
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -34,7 +27,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import coil.ImageLoader
@@ -58,7 +50,8 @@ import java.time.LocalDate
 internal fun SettingsScreen(
     viewModel: SettingsViewModel,
     onNavigateUp: () -> Unit,
-    onNavigateToHelp: () -> Unit,
+    onNavigateToHelpMessages: () -> Unit,
+    onNavigateToHelpPages: () -> Unit,
     onNavigateToAuthSettings: () -> Unit,
     onNavigateToAutofillSettings: () -> Unit,
     onNavigateToExport: () -> Unit,
@@ -192,7 +185,16 @@ internal fun SettingsScreen(
                     endIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_next),
                     isFirst = true,
                     isLast = false,
-                    onClick = onNavigateToHelp
+                    onClick = onNavigateToHelpMessages
+                )
+                SettingsItemButton(
+                    title = stringResource(R.string.settings_help_helpPagesTitle),
+                    info = stringResource(R.string.settings_help_helpPagesInfo),
+                    prefixIcon = painterResource(R.drawable.ic_article),
+                    endIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_next),
+                    isFirst = false,
+                    isLast = false,
+                    onClick = onNavigateToHelpPages
                 )
             }
 
@@ -299,7 +301,7 @@ private fun GeneralSection() {
 
 
 @Composable
-private fun LazyItemScope.OtherSoftwareSection(
+private fun OtherSoftwareSection(
     otherSoftware: List<OtherSoftware>,
     imageLoader: ImageLoader,
     onClick: (OtherSoftware) -> Unit,

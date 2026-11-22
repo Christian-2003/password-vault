@@ -27,6 +27,8 @@
     <string name="settings_help">Help</string>
     <string name="settings_help_helpMessagesTitle">Help messages</string>
     <string name="settings_help_helpMessagesInfo">Reactivate dismissed help messages</string>
+    <string name="settings_help_helpPagesTitle">Tutorials</string>
+    <string name="settings_help_helpPagesInfo">View help pages and tutorials</string>
     <string name="settings_about_copyright">© %1$s Christian‑2003</string>
     <string name="settings_developmentTitle">Developer settings</string>
     <string name="settings_developmentInfo">Settings for developers</string>
@@ -41,12 +43,12 @@
 
 
     <!-- Screen through which to enable / disable help messages -->
-    <string name="help_title">Help messages</string>
-    <string name="help_help">Reactivate help messages that were dismissed earlier.</string>
-    <string name="help_reactivate">Click to reactivate</string>
-    <string name="help_visibleLabel">Visible</string>
-    <string name="help_dismissedLabel">Dismissed</string>
-    <string-array name="help_shortNames">
+    <string name="help_messages_title">Help messages</string>
+    <string name="help_messages_help">Reactivate help messages that were dismissed earlier.</string>
+    <string name="help_messages_reactivate">Click to reactivate</string>
+    <string name="help_messages_visibleLabel">Visible</string>
+    <string name="help_messages_dismissedLabel">Dismissed</string>
+    <string-array name="help_messages_shortNames">
         <item>Change master password</item>
         <item>Generate new recovery codes</item>
         <item>Enable biometrics</item>
@@ -59,6 +61,16 @@
         <item>Autofill settings</item>
         <item>Password security analysis: Weak passwords</item>
         <item>Password security analysis: Reused passwords</item>
+        <item>View tutorials and help pages</item>
     </string-array>
+
+
+    <!-- Screen through which to view all help pages -->
+    <string name="help_pages_title">Tutorials</string>
+    <string name="help_pages_help">Tutorials explain features in Password Vault and provide step-by-step instructions.</string>
+    <string name="help_pages_emptyPlaceholder_title">No pages</string>
+    <string name="help_pages_emptyPlaceholder_subtitle">Help pages are displayed here</string>
+    <string name="help_pages_lang_current">Available in your language</string>
+    <string name="help_pages_lang_default">Only available in another language</string>
 
 </resources>

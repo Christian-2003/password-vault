@@ -24,13 +24,15 @@ enum class HelpCard(
 
     Account("help_account"),
 
-    Help("help_help"),
+    HelpMessages("help_help_messages"),
 
     Autofill("help_autofill"),
 
     AnalysisWeakPasswords("help_analysis_weakPasswords"),
 
-    AnalysisReusedPasswords("help_analysis_reusedPasswords");
+    AnalysisReusedPasswords("help_analysis_reusedPasswords"),
+
+    HelpPages("help_help_pages");
 
 
     fun getVisible(context: Context): Boolean {

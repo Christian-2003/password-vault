@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.application
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.core.ui.model.HelpCard
 import javax.inject.Inject
@@ -16,7 +15,7 @@ import javax.inject.Inject
  * @param application   Application.
  */
 @HiltViewModel
-class HelpViewModel @Inject constructor(
+class HelpMessagesViewModel @Inject constructor(
     application: Application
 ): AndroidViewModel(application) {
 
@@ -53,8 +52,8 @@ class HelpViewModel @Inject constructor(
      */
     fun dismissHelpCard() {
         val context: Context = getApplication<Application>().baseContext
-        HelpCard.Help.setVisible(context, false)
-        helpCards[HelpCard.Help] = false
+        HelpCard.HelpMessages.setVisible(context, false)
+        helpCards[HelpCard.HelpMessages] = false
     }
 
 }

@@ -35,8 +35,8 @@ import de.christian2003.feature.auth.navigation.recoveryFlow
 import de.christian2003.feature.auth.navigation.setupFlow
 import de.christian2003.passwordvault.presentation.ui.devsettings.DevSettingsScreen
 import de.christian2003.passwordvault.presentation.viewmodels.DevSettingsViewModel
-import de.christian2003.passwordvault.presentation.ui.help.HelpScreen
-import de.christian2003.passwordvault.presentation.viewmodels.HelpViewModel
+import de.christian2003.passwordvault.presentation.ui.helpmessages.HelpMessagesScreen
+import de.christian2003.passwordvault.presentation.viewmodels.HelpMessagesViewModel
 import de.christian2003.passwordvault.presentation.ui.settings.SettingsScreen
 import de.christian2003.passwordvault.presentation.viewmodels.SettingsViewModel
 import de.christian2003.core.security.application.usecases.BiometricAuthUseCase
@@ -58,6 +58,8 @@ import de.christian2003.feature.export.navigation.exportsFlow
 import de.christian2003.feature.export.navigation.importsFlow
 import de.christian2003.feature.search.navigation.SearchDestination
 import de.christian2003.feature.search.navigation.searchDestination
+import de.christian2003.passwordvault.presentation.ui.helppages.HelpPagesScreen
+import de.christian2003.passwordvault.presentation.viewmodels.HelpPagesViewModel
 import javax.inject.Inject
 
 
@@ -269,8 +271,11 @@ fun PasswordVault(
                     onNavigateUp = {
                         navController.navigateUp()
                     },
-                    onNavigateToHelp = {
+                    onNavigateToHelpMessages = {
                         navController.navigate("help")
+                    },
+                    onNavigateToHelpPages = {
+                        navController.navigate("help_pages")
                     },
                     onNavigateToAuthSettings = {
                         navController.navigate(AuthSettingsFlow)
@@ -314,8 +319,19 @@ fun PasswordVault(
 
             composable("help") {
                 applyFlags(false)
-                val viewModel: HelpViewModel = hiltViewModel()
-                HelpScreen(
+                val viewModel: HelpMessagesViewModel = hiltViewModel()
+                HelpMessagesScreen(
+                    viewModel = viewModel,
+                    onNavigateUp = {
+                        navController.navigateUp()
+                    }
+                )
+            }
+
+            composable("help_pages") {
+                applyFlags(false)
+                val viewModel: HelpPagesViewModel = hiltViewModel()
+                HelpPagesScreen(
                     viewModel = viewModel,
                     onNavigateUp = {
                         navController.navigateUp()

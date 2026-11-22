@@ -1,4 +1,4 @@
-package de.christian2003.passwordvault.presentation.ui.help
+package de.christian2003.passwordvault.presentation.ui.helpmessages
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
@@ -38,7 +38,7 @@ import de.christian2003.core.ui.composables.NavigationBarProtection
 import de.christian2003.core.ui.composables.Shape
 import de.christian2003.core.ui.model.HelpCard
 import de.christian2003.passwordvault.R
-import de.christian2003.passwordvault.presentation.viewmodels.HelpViewModel
+import de.christian2003.passwordvault.presentation.viewmodels.HelpMessagesViewModel
 
 
 /**
@@ -50,15 +50,15 @@ import de.christian2003.passwordvault.presentation.viewmodels.HelpViewModel
  * @param onNavigateUp  Callback invoked to navigate up on the navigation stack.
  */
 @Composable
-fun HelpScreen(
-    viewModel: HelpViewModel,
+fun HelpMessagesScreen(
+    viewModel: HelpMessagesViewModel,
     onNavigateUp: () -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(stringResource(R.string.help_title))
+                    Text(stringResource(R.string.help_messages_title))
                 },
                 navigationIcon = {
                     IconButton(
@@ -85,9 +85,9 @@ fun HelpScreen(
                 )
         ) {
             item {
-                AnimatedVisibility(viewModel.helpCards[HelpCard.Help] == true) {
+                AnimatedVisibility(viewModel.helpCards[HelpCard.HelpMessages] == true) {
                     HelpCard(
-                        text = stringResource(R.string.help_help),
+                        text = stringResource(R.string.help_messages_help),
                         onDismiss = {
                             viewModel.dismissHelpCard()
                         },
@@ -178,12 +178,12 @@ private fun HelpListItem(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = stringArrayResource(R.array.help_shortNames)[helpCard.ordinal],
+                    text = stringArrayResource(R.array.help_messages_shortNames)[helpCard.ordinal],
                     color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Text(
-                    text = if (visible) { stringResource(R.string.help_visibleLabel) } else { stringResource(R.string.help_dismissedLabel) },
+                    text = if (visible) { stringResource(R.string.help_messages_visibleLabel) } else { stringResource(R.string.help_messages_dismissedLabel) },
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodySmall
                 )
