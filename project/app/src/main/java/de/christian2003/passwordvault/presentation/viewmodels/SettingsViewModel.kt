@@ -17,7 +17,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.core.common.application.usecases.GetImageLoaderUseCase
 import de.christian2003.core.common.application.usecases.RequestImageUseCase
 import de.christian2003.core.ui.theme.ThemeContrast
+import de.christian2003.passwordvault.application.GetLegalPageUseCase
 import de.christian2003.passwordvault.application.GetOtherSoftwareUseCase
+import de.christian2003.passwordvault.domain.entities.LegalPage
 import de.christian2003.passwordvault.domain.entities.OtherSoftware
 import de.christian2003.passwordvault.presentation.models.dialogs.SettingsScreenDialog
 import kotlinx.coroutines.Dispatchers
@@ -36,6 +38,7 @@ internal class SettingsViewModel @Inject constructor(
     application: Application,
     getOtherSoftwareUseCase: GetOtherSoftwareUseCase,
     getImageLoaderUseCase: GetImageLoaderUseCase,
+    getLegalPageUseCase: GetLegalPageUseCase,
     private val requestImageUseCase: RequestImageUseCase
 ): AndroidViewModel(application) {
 
@@ -64,6 +67,18 @@ internal class SettingsViewModel @Inject constructor(
         private set
 
     /**
+     * Legal page for the privacy policy.
+     */
+    var privacyPolicyPage: LegalPage? by mutableStateOf(null)
+        private set
+
+    /**
+     * Legal page for the terms of service.
+     */
+    var termsOfServicesPage: LegalPage? by mutableStateOf(null)
+        private set
+
+    /**
      * Other software to advertise in Password Vault.
      */
     val otherSoftware: MutableList<OtherSoftware> = mutableStateListOf()
@@ -74,6 +89,13 @@ internal class SettingsViewModel @Inject constructor(
      */
     init {
         viewModelScope.launch(Dispatchers.IO) {
+            //Legal documents:
+            val privacyPolicyPage: LegalPage? = getLegalPageUseCase.getPrivacyPolicy()
+            val termsOfServicesPage: LegalPage? = getLegalPageUseCase.getTermsOfService()
+            this@SettingsViewModel.privacyPolicyPage = privacyPolicyPage
+            this@SettingsViewModel.termsOfServicesPage = termsOfServicesPage
+
+            //Other software:
             val otherSoftware: List<OtherSoftware> = getOtherSoftwareUseCase.getOtherSoftware()
             this@SettingsViewModel.otherSoftware.clear()
             this@SettingsViewModel.otherSoftware.addAll(otherSoftware)

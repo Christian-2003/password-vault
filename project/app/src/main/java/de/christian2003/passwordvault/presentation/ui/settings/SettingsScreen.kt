@@ -40,6 +40,7 @@ import de.christian2003.core.ui.composables.settings.SettingsItemButton
 import de.christian2003.core.ui.composables.settings.SettingsItemSwitch
 import de.christian2003.core.ui.theme.ThemeContrast
 import de.christian2003.passwordvault.R
+import de.christian2003.passwordvault.domain.entities.LegalPage
 import de.christian2003.passwordvault.domain.entities.OtherSoftware
 import de.christian2003.passwordvault.presentation.models.dialogs.SettingsScreenDialog
 import de.christian2003.passwordvault.presentation.viewmodels.SettingsViewModel
@@ -196,10 +197,6 @@ internal fun SettingsScreen(
                     isLast = false,
                     onClick = onNavigateToHelpPages
                 )
-            }
-
-            //Other:
-            item {
                 SettingsItemButton(
                     title = stringResource(R.string.settings_developmentTitle),
                     info = stringResource(R.string.settings_developmentInfo),
@@ -209,6 +206,44 @@ internal fun SettingsScreen(
                     isLast = true,
                     onClick = onNavigateToDevSettings
                 )
+            }
+
+            //About:
+            item {
+                Headline(
+                    title = stringResource(R.string.settings_about),
+                    indentation = HeadlineIndentation.PrefixIconLevel
+                )
+                val privacyPolicyPage: LegalPage? = viewModel.privacyPolicyPage
+                if (privacyPolicyPage != null) {
+                    SettingsItemButton(
+                        title = stringResource(R.string.settings_about_privacyPolicyTitle),
+                        info = stringResource(R.string.settings_about_privacyPolicyInfo),
+                        prefixIcon = painterResource(R.drawable.ic_privacy),
+                        endIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_external),
+                        isFirst = true,
+                        isLast = false,
+                        onClick = {
+                            val intent = Intent(Intent.ACTION_VIEW, privacyPolicyPage.pageUrl)
+                            context.startActivity(intent)
+                        }
+                    )
+                }
+                val termsOfServicesPage: LegalPage? = viewModel.termsOfServicesPage
+                if (termsOfServicesPage != null) {
+                    SettingsItemButton(
+                        title = stringResource(R.string.settings_about_termsOfServiceTitle),
+                        info = stringResource(R.string.settings_about_termsOfServiceInfo),
+                        prefixIcon = painterResource(R.drawable.ic_tos),
+                        endIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_external),
+                        isFirst = false,
+                        isLast = true,
+                        onClick = {
+                            val intent = Intent(Intent.ACTION_VIEW, termsOfServicesPage.pageUrl)
+                            context.startActivity(intent)
+                        }
+                    )
+                }
             }
 
             //Other software to advertise:

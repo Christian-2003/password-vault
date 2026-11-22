@@ -43,6 +43,15 @@ internal class HelpPageRestMapper @Inject constructor() {
     }
 
 
+    /**
+     * From the list of help page items, this gets the item with the provided locale. If no item
+     * with the locale exists, the default locale is returned as fallback. If the default locale is
+     * not in the list either, null may be returned.
+     *
+     * @param items     List of help page items.
+     * @param locale    Locale whose item to return.
+     * @return          Item with the specified item, default or null.
+     */
     private fun getItemForLocaleOrFallback(items: List<HelpPageItemRestDto>, locale: Locale): HelpPageItemRestDto? {
         var item: HelpPageItemRestDto? = items.firstOrNull { it.locale == locale }
 

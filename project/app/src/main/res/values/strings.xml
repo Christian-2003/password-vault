@@ -29,6 +29,11 @@
     <string name="settings_help_helpMessagesInfo">Reactivate dismissed help messages</string>
     <string name="settings_help_helpPagesTitle">Tutorials</string>
     <string name="settings_help_helpPagesInfo">View help pages and tutorials</string>
+    <string name="settings_about">About</string>
+    <string name="settings_about_privacyPolicyTitle">Privacy Policy</string>
+    <string name="settings_about_privacyPolicyInfo">View Privacy Policy of Password Vault</string>
+    <string name="settings_about_termsOfServiceTitle">Terms of Service</string>
+    <string name="settings_about_termsOfServiceInfo">View Terms of Service of Password Vault</string>
     <string name="settings_about_copyright">© %1$s Christian‑2003</string>
     <string name="settings_developmentTitle">Developer settings</string>
     <string name="settings_developmentInfo">Settings for developers</string>

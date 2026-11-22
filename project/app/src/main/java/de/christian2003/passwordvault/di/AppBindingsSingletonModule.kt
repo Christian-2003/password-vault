@@ -5,8 +5,10 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import de.christian2003.passwordvault.domain.repositories.HelpPagesRepository
+import de.christian2003.passwordvault.domain.repositories.LegalPagesRepository
 import de.christian2003.passwordvault.domain.repositories.OtherSoftwareRepository
 import de.christian2003.passwordvault.infrastructure.helppages.RestHelpPagesRepository
+import de.christian2003.passwordvault.infrastructure.legal.RestLegalPagesRepository
 import de.christian2003.passwordvault.infrastructure.othersoftware.RestOtherSoftwareRepository
 
 
@@ -25,5 +27,10 @@ internal abstract class CommonBindingsSingletonModule {
     abstract fun bindHelpPagesRepository(
         impl: RestHelpPagesRepository
     ): HelpPagesRepository
+
+    @Binds
+    abstract fun bindLegalPagesRepository(
+        impl: RestLegalPagesRepository
+    ): LegalPagesRepository
 
 }
