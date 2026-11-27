@@ -41,6 +41,8 @@
     <string name="settings_dev_skipBiometricsInfo">Do not show biometrics dialog when opening app</string>
     <string name="settings_dev_enableScreenshotsTitle">Enable screenshots</string>
     <string name="settings_dev_enableScreenshotsInfo">Enable screenshots on sensitive screens.</string>
+    <string name="settings_dev_declineLegalTitle">Revoke legal contract</string>
+    <string name="settings_dev_declineLegalInfo">Declines Privacy Policy and Terms of Service</string>
 
 
     <!-- Screen through which to enable / disable help messages -->

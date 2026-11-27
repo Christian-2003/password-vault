@@ -81,10 +81,18 @@ fun DevSettingsScreen(
                     info = stringResource(R.string.settings_dev_enableScreenshotsInfo),
                     prefixIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_dev),
                     checked = viewModel.isEnableScreenshots,
-                    isLast = true,
                     onCheckedChange = {
                         viewModel.setIsEnableScreenshots(it)
                         onEnableScreenshotsChanged()
+                    }
+                )
+                SettingsItemButton(
+                    title = stringResource(R.string.settings_dev_declineLegalTitle),
+                    info = stringResource(R.string.settings_dev_declineLegalInfo),
+                    prefixIcon = painterResource(R.drawable.ic_tos),
+                    isLast = true,
+                    onClick = {
+                        viewModel.declineLegalPages()
                     }
                 )
             }

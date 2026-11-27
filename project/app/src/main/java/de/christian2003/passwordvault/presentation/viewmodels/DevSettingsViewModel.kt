@@ -80,4 +80,15 @@ class DevSettingsViewModel @Inject constructor(
         this.isEnableScreenshots = isEnableScreenshots
     }
 
+
+    /**
+     * Declines the legal information (PP and TOS) that the user previously accepted during app launch.
+     */
+    fun declineLegalPages() {
+        preferences.edit {
+            remove("tos_version")
+            remove("privacy_version")
+        }
+    }
+
 }
