@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-internal class MainViewModel @Inject constructor(
+internal class AccountsViewModel @Inject constructor(
     application: Application,
     getAllAccountDescriptorsUseCase: GetAllAccountDescriptorsUseCase,
     private val deleteAccountUseCase: DeleteAccountUseCase,
@@ -32,8 +32,8 @@ internal class MainViewModel @Inject constructor(
 
 
     fun deleteAccount() = viewModelScope.launch(Dispatchers.IO) {
-        val accountToDelete: AccountDescriptor? = this@MainViewModel.accountToDelete
-        this@MainViewModel.accountToDelete = null
+        val accountToDelete: AccountDescriptor? = this@AccountsViewModel.accountToDelete
+        this@AccountsViewModel.accountToDelete = null
         if (accountToDelete != null) {
             deleteAccountUseCase.deleteAccount(accountToDelete.id)
         }

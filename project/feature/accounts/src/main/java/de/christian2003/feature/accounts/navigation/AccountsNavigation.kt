@@ -1,12 +1,14 @@
 package de.christian2003.feature.accounts.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.runtime.Composable
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import de.christian2003.feature.accounts.ui.account.AccountScreen
-import de.christian2003.feature.accounts.ui.main.MainScreen
+import de.christian2003.feature.accounts.ui.accounts.AccountsView
 import de.christian2003.feature.accounts.viewmodels.AccountViewModel
-import de.christian2003.feature.accounts.viewmodels.MainViewModel
+import de.christian2003.feature.accounts.viewmodels.AccountsViewModel
 import kotlinx.serialization.Serializable
 import kotlin.uuid.Uuid
 
@@ -27,28 +29,26 @@ data class AccountDestination(
  *
  * @param onEditAccount         Callback invoked to edit the account whose ID is provided.
  * @param onCreateNewAccount    Callback invoked to create a new account.
- * @param onNavigateToSettings  Callback invoked to navigate to the settings.
- * @param onNavigateToSearch    Callback invoked to navigate to the search screen.
- * @param onNavigateToAnalysis  Callback invoked to navigate to the password security analysis.
+ * @param viewWrapper           Wrapper for the view.
  */
 fun NavGraphBuilder.accountsDestination(
     onEditAccount: (Uuid) -> Unit,
     onCreateNewAccount: () -> Unit,
-    onNavigateToSettings: () -> Unit,
-    onNavigateToSearch: () -> Unit,
-    onNavigateToAnalysis: () -> Unit
+    viewWrapper: @Composable (
+        content: @Composable (innerPadding: PaddingValues) -> Unit
+    ) -> Unit
 ) {
     composable<AccountsDestination> {
-        val viewModel: MainViewModel = hiltViewModel()
+        val viewModel: AccountsViewModel = hiltViewModel()
 
-        MainScreen(
-            viewModel = viewModel,
-            onEditAccount = onEditAccount,
-            onCreateNewAccount = onCreateNewAccount,
-            onNavigateToSettings =  onNavigateToSettings,
-            onNavigateToSearch = onNavigateToSearch,
-            onNavigateToAnalysis = onNavigateToAnalysis
-        )
+        viewWrapper { innerPadding ->
+            AccountsView(
+                viewModel = viewModel,
+                innerPadding = innerPadding,
+                onEditAccount = onEditAccount,
+                onCreateNewAccount = onCreateNewAccount,
+            )
+        }
     }
 }
 

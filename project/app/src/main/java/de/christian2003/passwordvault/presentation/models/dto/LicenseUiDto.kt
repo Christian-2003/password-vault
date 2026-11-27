@@ -1,4 +1,4 @@
-package de.christian2003.passwordvault.presentation.models.licenses
+package de.christian2003.passwordvault.presentation.models.dto
 
 
 /**

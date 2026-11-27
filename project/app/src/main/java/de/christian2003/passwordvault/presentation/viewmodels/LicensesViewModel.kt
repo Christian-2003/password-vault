@@ -11,7 +11,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.christian2003.core.ui.model.HelpCard
 import de.christian2003.passwordvault.R
-import de.christian2003.passwordvault.presentation.models.licenses.LicenseUiDto
+import de.christian2003.passwordvault.presentation.models.dto.LicenseUiDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.apache.commons.csv.CSVFormat

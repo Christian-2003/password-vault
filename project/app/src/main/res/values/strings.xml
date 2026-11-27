@@ -1,6 +1,14 @@
 <resources>
     <string name="update_download_title">Password Vault Update</string>
 
+
+    <!-- Main screen -->
+    <string name="main_destination_home">Home</string>
+    <string name="main_destination_accounts">Accounts</string>
+    <string name="main_search_hint">Search…</string>
+    <string name="main_fab_text">New</string>
+
+
     <!-- Screen displaying app settings -->
     <string name="settings_title">Settings</string>
     <string name="settings_customization">Customization</string>

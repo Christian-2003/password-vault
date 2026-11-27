@@ -21,47 +21,32 @@ import androidx.fragment.app.FragmentActivity
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import de.christian2003.feature.auth.navigation.AuthSettingsFlow
 import de.christian2003.feature.auth.navigation.LoginDestination
 import de.christian2003.feature.auth.navigation.RecoveryFlow
-import de.christian2003.feature.auth.navigation.SetupFlow
 import de.christian2003.feature.auth.navigation.authSettingsFlow
 import de.christian2003.feature.auth.navigation.loginDestination
 import de.christian2003.feature.auth.navigation.recoveryFlow
 import de.christian2003.feature.auth.navigation.setupFlow
-import de.christian2003.passwordvault.presentation.ui.devsettings.DevSettingsScreen
-import de.christian2003.passwordvault.presentation.viewmodels.DevSettingsViewModel
-import de.christian2003.passwordvault.presentation.ui.helpmessages.HelpMessagesScreen
-import de.christian2003.passwordvault.presentation.viewmodels.HelpMessagesViewModel
-import de.christian2003.passwordvault.presentation.ui.settings.SettingsScreen
-import de.christian2003.passwordvault.presentation.viewmodels.SettingsViewModel
 import de.christian2003.core.security.application.usecases.BiometricAuthUseCase
 import de.christian2003.core.security.application.usecases.CanMasterKeyBeUnlockedUseCase
 import de.christian2003.core.security.application.usecases.UnlockWithBiometricsUseCase
 import de.christian2003.core.ui.theme.PasswordVaultTheme
 import de.christian2003.feature.accounts.navigation.AccountDestination
-import de.christian2003.feature.accounts.navigation.AccountsDestination
 import de.christian2003.feature.accounts.navigation.accountDestination
-import de.christian2003.feature.accounts.navigation.accountsDestination
-import de.christian2003.feature.analysis.navigation.AnalysisDestination
 import de.christian2003.feature.analysis.navigation.analysisDestination
-import de.christian2003.feature.autofill.navigation.AutofillSettingsFlow
+import de.christian2003.feature.auth.navigation.SetupFlow
 import de.christian2003.feature.autofill.navigation.autofillSettingsFlow
-import de.christian2003.feature.export.navigation.ExportsFlow
-import de.christian2003.feature.export.navigation.ImportsFlow
 import de.christian2003.feature.export.navigation.exportsFlow
 import de.christian2003.feature.export.navigation.importsFlow
-import de.christian2003.feature.search.navigation.SearchDestination
 import de.christian2003.feature.search.navigation.searchDestination
-import de.christian2003.passwordvault.presentation.ui.helppages.HelpPagesScreen
-import de.christian2003.passwordvault.presentation.ui.legal.LegalScreen
-import de.christian2003.passwordvault.presentation.ui.licenses.LicensesScreen
-import de.christian2003.passwordvault.presentation.viewmodels.HelpPagesViewModel
-import de.christian2003.passwordvault.presentation.viewmodels.LegalViewModel
-import de.christian2003.passwordvault.presentation.viewmodels.LicensesViewModel
+import de.christian2003.passwordvault.navigation.LegalDestination
+import de.christian2003.passwordvault.navigation.MainFlow
+import de.christian2003.passwordvault.navigation.legalDestination
+import de.christian2003.passwordvault.navigation.mainFlow
+import de.christian2003.passwordvault.navigation.settingsFlow
+import de.christian2003.passwordvault.presentation.viewmodels.ActivityViewModel
 import de.christian2003.passwordvault.presentation.viewmodels.MainViewModel
 import javax.inject.Inject
 
@@ -143,6 +128,7 @@ fun PasswordVault(
     onBiometricUnlock: suspend () -> Boolean,
     onBiometricAuth: suspend () -> Boolean
 ) {
+    val activityViewModel: ActivityViewModel = hiltViewModel()
     val mainViewModel: MainViewModel = hiltViewModel()
     val activity: FragmentActivity = LocalActivity.current as FragmentActivity
     val navController: NavHostController = rememberNavController()
@@ -151,22 +137,22 @@ fun PasswordVault(
 
     val applyFlags: (Boolean) -> Unit = { isSensitive ->
         activity.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
-        if (isSensitive && !mainViewModel.enableScreenshots) {
+        if (isSensitive && !activityViewModel.enableScreenshots) {
             activity.window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         }
     }
 
-    LaunchedEffect(mainViewModel.isNewLegalPageAvailable) {
-        if (mainViewModel.isNewLegalPageAvailable) {
-            navController.navigate("legal") {
+    LaunchedEffect(activityViewModel.isNewLegalPageAvailable) {
+        if (activityViewModel.isNewLegalPageAvailable) {
+            navController.navigate(LegalDestination) {
                 launchSingleTop = true
             }
         }
     }
 
     PasswordVaultTheme(
-        dynamicColor = mainViewModel.useGlobalTheme,
-        contrast = mainViewModel.themeContrast
+        dynamicColor = activityViewModel.useGlobalTheme,
+        contrast = activityViewModel.themeContrast
     ) {
         NavHost(
             navController = navController,
@@ -201,7 +187,7 @@ fun PasswordVault(
             //Login screen:
             loginDestination(
                 onContinue = {
-                    navController.navigate(AccountsDestination) {
+                    navController.navigate(MainFlow) {
                         popUpTo<LoginDestination> {
                             inclusive = true
                         }
@@ -213,22 +199,33 @@ fun PasswordVault(
                 onBiometricUnlock = onBiometricUnlock
             )
 
-            //List of accounts destination:
-            accountsDestination(
-                onEditAccount = { accountId ->
-                    navController.navigate(AccountDestination(accountId.toString()))
+            //Flow for the top-level navigation:
+            mainFlow(
+                mainViewModel = mainViewModel,
+                navController = navController
+            )
+
+            //Flow for app settings:
+            settingsFlow(
+                navController = navController,
+                onUseGlobalThemeChange = {
+                    activityViewModel.onUseGlobalThemeUpdated()
                 },
-                onCreateNewAccount = {
-                    navController.navigate(AccountDestination(null))
+                onThemeContrastChange = {
+                    activityViewModel.onThemeContrastUpdated()
                 },
-                onNavigateToSettings = {
-                    navController.navigate("settings")
+                onEnableScreenshotsChanged = {
+                    activityViewModel.onEnableScreenshotsUpdated()
+                }
+            )
+
+            //Legal screen:
+            legalDestination(
+                onContinue = {
+                    navController.navigateUp()
                 },
-                onNavigateToSearch = {
-                    navController.navigate(SearchDestination)
-                },
-                onNavigateToAnalysis = {
-                    navController.navigate(AnalysisDestination)
+                onCancel = {
+                    activity.finish()
                 }
             )
 
@@ -274,110 +271,6 @@ fun PasswordVault(
                 navController = navController
             )
 
-
-            composable("settings") {
-                applyFlags(false)
-                val viewModel: SettingsViewModel = hiltViewModel()
-                SettingsScreen(
-                    viewModel = viewModel,
-                    onNavigateUp = {
-                        navController.navigateUp()
-                    },
-                    onNavigateToHelpMessages = {
-                        navController.navigate("help")
-                    },
-                    onNavigateToHelpPages = {
-                        navController.navigate("help_pages")
-                    },
-                    onNavigateToAuthSettings = {
-                        navController.navigate(AuthSettingsFlow)
-                    },
-                    onNavigateToAutofillSettings = {
-                        navController.navigate(AutofillSettingsFlow)
-                    },
-                    onNavigateToExport = {
-                        navController.navigate(ExportsFlow)
-                    },
-                    onNavigateToImport = {
-                        navController.navigate(ImportsFlow)
-                    },
-                    onNavigateToDevSettings = {
-                        navController.navigate("devSettings")
-                    },
-                    onNavigateToLicenses = {
-                        navController.navigate("licenses")
-                    },
-                    onUseGlobalThemeChange = {
-                        mainViewModel.onUseGlobalThemeUpdated()
-                    },
-                    onThemeContrastChange = {
-                        mainViewModel.onThemeContrastUpdated()
-                    }
-                )
-            }
-
-
-            composable("devSettings") {
-                applyFlags(false)
-                val viewModel: DevSettingsViewModel = hiltViewModel()
-                DevSettingsScreen(
-                    viewModel = viewModel,
-                    onNavigateUp = {
-                        navController.navigateUp()
-                    },
-                    onEnableScreenshotsChanged = {
-                        mainViewModel.onEnableScreenshotsUpdated()
-                    }
-                )
-            }
-
-
-            composable("help") {
-                applyFlags(false)
-                val viewModel: HelpMessagesViewModel = hiltViewModel()
-                HelpMessagesScreen(
-                    viewModel = viewModel,
-                    onNavigateUp = {
-                        navController.navigateUp()
-                    }
-                )
-            }
-
-            composable("help_pages") {
-                applyFlags(false)
-                val viewModel: HelpPagesViewModel = hiltViewModel()
-                HelpPagesScreen(
-                    viewModel = viewModel,
-                    onNavigateUp = {
-                        navController.navigateUp()
-                    }
-                )
-            }
-
-            composable("legal") {
-                applyFlags(false)
-                val viewModel: LegalViewModel = hiltViewModel()
-                LegalScreen(
-                    viewModel = viewModel,
-                    onContinue = {
-                        navController.navigateUp()
-                    },
-                    onCancel = {
-                        activity.finish() //Closes the MainActivity
-                    }
-                )
-            }
-
-            composable("licenses") {
-                applyFlags(false)
-                val viewModel: LicensesViewModel = hiltViewModel()
-                LicensesScreen(
-                    viewModel = viewModel,
-                    onNavigateUp = {
-                        navController.navigateUp()
-                    }
-                )
-            }
         }
     }
 }

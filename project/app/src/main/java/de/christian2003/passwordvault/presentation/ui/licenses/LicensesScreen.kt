@@ -35,7 +35,7 @@ import de.christian2003.core.ui.composables.ListItemContainer
 import de.christian2003.core.ui.composables.NavigationBarProtection
 import de.christian2003.core.ui.composables.Shape
 import de.christian2003.passwordvault.R
-import de.christian2003.passwordvault.presentation.models.licenses.LicenseUiDto
+import de.christian2003.passwordvault.presentation.models.dto.LicenseUiDto
 import de.christian2003.passwordvault.presentation.viewmodels.LicensesViewModel
 
 
