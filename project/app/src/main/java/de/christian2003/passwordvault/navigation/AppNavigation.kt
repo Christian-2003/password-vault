@@ -2,6 +2,7 @@ package de.christian2003.passwordvault.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -10,6 +11,8 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import de.christian2003.core.common.domain.abstraction.LandingPluginContext
+import de.christian2003.core.common.domain.abstraction.LandingPluginContextProvider
 import de.christian2003.core.ui.theme.ThemeContrast
 import de.christian2003.feature.accounts.navigation.AccountDestination
 import de.christian2003.feature.accounts.navigation.AccountsDestination
@@ -23,6 +26,8 @@ import de.christian2003.feature.search.navigation.SearchDestination
 import de.christian2003.passwordvault.presentation.ui.devsettings.DevSettingsScreen
 import de.christian2003.passwordvault.presentation.ui.helpmessages.HelpMessagesScreen
 import de.christian2003.passwordvault.presentation.ui.helppages.HelpPagesScreen
+import de.christian2003.passwordvault.presentation.ui.home.HomePluginContext
+import de.christian2003.passwordvault.presentation.ui.home.HomePluginContextProvider
 import de.christian2003.passwordvault.presentation.ui.home.HomeView
 import de.christian2003.passwordvault.presentation.ui.legal.LegalScreen
 import de.christian2003.passwordvault.presentation.ui.licenses.LicensesScreen
@@ -80,6 +85,8 @@ internal fun NavGraphBuilder.mainFlow(
         }
     }
 
+    val pluginContextProvider: LandingPluginContextProvider = HomePluginContextProvider(navController)
+
     val viewWrapper: @Composable (
         content: @Composable (innerPadding: PaddingValues) -> Unit
     ) -> Unit = @Composable { content ->
@@ -106,7 +113,8 @@ internal fun NavGraphBuilder.mainFlow(
 
         //Home:
         homeDestination(
-            viewWrapper = viewWrapper
+            viewWrapper = viewWrapper,
+            pluginContextProvider = pluginContextProvider
         )
 
         //List of accounts destination:
@@ -241,15 +249,18 @@ private object LicensesDestination
 private fun NavGraphBuilder.homeDestination(
     viewWrapper: @Composable (
         content: @Composable (innerPadding: PaddingValues) -> Unit
-    ) -> Unit
+    ) -> Unit,
+    pluginContextProvider: LandingPluginContextProvider
 ) {
     composable<HomeDestination> {
         val viewModel: HomeViewModel = hiltViewModel()
+        val pluginContext: LandingPluginContext = remember { pluginContextProvider.provideLandingPluginContext() }
 
         viewWrapper { innerPadding ->
             HomeView(
                 viewModel = viewModel,
-                innerPadding = innerPadding
+                innerPadding = innerPadding,
+                pluginContext = pluginContext
             )
         }
     }
