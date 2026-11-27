@@ -1,0 +1,38 @@
+label,artifact,license
+Compose Animation Graphics,androidx.compose.animation:animation-graphics,license_apache20
+Autofill,androidx.autofill:autofill,license_apache20
+Biometric,androidx.biometric:biometric,license_apache20
+Core Kotlin Extensions,androidx.core:core-ktx,license_apache20
+Hilt Extension Compiler,androidx.hilt:hilt-compiler,license_apache20
+Navigation Compose Hilt Integration,androidx.hilt:hilt-navigation-compose,license_apache20
+WorkManager Hilt Extension,androidx.hilt:hilt-work,license_apache20
+Lifecycle Kotlin Extensions,androidx.lifecycle:lifecycle-runtime-ktx,license_apache20
+Lifecycle ViewModel Compose,androidx.lifecycle:lifecycle-viewmodel-compose,license_apache20
+Activity Compose,androidx.activity:activity-compose,license_apache20
+Jetpack Compose Libraries BOM,androidx.compose:compose-bom,license_apache20
+Compose UI,androidx.compose.ui:ui,license_apache20
+Compose Graphics,androidx.compose.ui:ui-graphics,license_apache20
+Compose Tooling,androidx.compose.ui:ui-tooling,license_apache20
+Compose UI Preview Tooling,androidx.compose.ui:ui-tooling-preview,license_apache20
+Compose Material3 Components,androidx.compose.material3:material3,license_apache20
+Room Kotlin Extensions,androidx.room:room-ktx,license_apache20
+Room Compiler,landroidx.room:room-compiler,license_apache20
+Room Runtime,androidx.room:room-runtime,license_apache20
+Navigation Runtime Kotlin Extensions,androidx.navigation:navigation-runtime-ktx,license_apache20
+Compose Navigation,androidx.navigation:navigation-compose,license_apache20
+AppCompat,androidx.appcompat:appcompat,license_apache20
+WorkManager Kotlin Extensions,androidx.work:work-runtime-ktx,license_apache20
+DocumentFile,androidx.documentfile:documentfile,license_apache20
+Kotlinx Serialization JSON,org.jetbrains.kotlinx:kotlinx-serialization-json,license_apache20
+Kotlinx Serialization CBOR,org.jetbrains.kotlinx:kotlinx-serialization-cbor,license_apache20
+Kotlinx Coroutines Android,org.jetbrains.kotlinx:kotlinx-coroutines-android,license_apache20
+Accompanist Drawable Painter Library,com.google.accompanist:accompanist-drawablepainter,license_apache20
+Reorderable,sh.calvin.reorderable:reorderable,license_apache20
+Coil Compose,io.coil-kt:coil-compose,license_apache20
+Coil SVG,io.coil-kt:coil-svg,license_apache20
+Libphonenumber,com.googlecode.libphonenumber:libphonenumber,license_apache20
+Hilt Android,com.google.dagger:hilt-android,license_apache20
+Hilt Processoor,com.google.dagger.hilt-compiler,license_apache20
+Material Components For Android,com.google.android.material:material,license_apache20
+Apache Commons CSV,org.apache.commons:commons-csv,license_apache20
+OkHttp,com.squareup.okhttp3:okhttp,license_apache20

@@ -32,7 +32,9 @@ enum class HelpCard(
 
     AnalysisReusedPasswords("help_analysis_reusedPasswords"),
 
-    HelpPages("help_help_pages");
+    HelpPages("help_help_pages"),
+
+    Licenses("help_licenses");
 
 
     fun getVisible(context: Context): Boolean {

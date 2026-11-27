@@ -58,8 +58,10 @@ import de.christian2003.feature.search.navigation.SearchDestination
 import de.christian2003.feature.search.navigation.searchDestination
 import de.christian2003.passwordvault.presentation.ui.helppages.HelpPagesScreen
 import de.christian2003.passwordvault.presentation.ui.legal.LegalScreen
+import de.christian2003.passwordvault.presentation.ui.licenses.LicensesScreen
 import de.christian2003.passwordvault.presentation.viewmodels.HelpPagesViewModel
 import de.christian2003.passwordvault.presentation.viewmodels.LegalViewModel
+import de.christian2003.passwordvault.presentation.viewmodels.LicensesViewModel
 import de.christian2003.passwordvault.presentation.viewmodels.MainViewModel
 import javax.inject.Inject
 
@@ -302,6 +304,9 @@ fun PasswordVault(
                     onNavigateToDevSettings = {
                         navController.navigate("devSettings")
                     },
+                    onNavigateToLicenses = {
+                        navController.navigate("licenses")
+                    },
                     onUseGlobalThemeChange = {
                         mainViewModel.onUseGlobalThemeUpdated()
                     },
@@ -359,6 +364,17 @@ fun PasswordVault(
                     },
                     onCancel = {
                         activity.finish() //Closes the MainActivity
+                    }
+                )
+            }
+
+            composable("licenses") {
+                applyFlags(false)
+                val viewModel: LicensesViewModel = hiltViewModel()
+                LicensesScreen(
+                    viewModel = viewModel,
+                    onNavigateUp = {
+                        navController.navigateUp()
                     }
                 )
             }

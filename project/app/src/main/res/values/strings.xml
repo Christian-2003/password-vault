@@ -30,6 +30,8 @@
     <string name="settings_help_helpPagesTitle">Tutorials</string>
     <string name="settings_help_helpPagesInfo">View help pages and tutorials</string>
     <string name="settings_about">About</string>
+    <string name="settings_about_licensesTitle">Used software</string>
+    <string name="settings_about_licensesInfo">Show all software used by Password Vault</string>
     <string name="settings_about_repositoryTitle">Repository</string>
     <string name="settings_about_repositoryInfo">Show open source repository</string>
     <string name="settings_about_issuesTitle">Report issue</string>
@@ -40,6 +42,7 @@
     <string name="settings_developmentTitle">Developer settings</string>
     <string name="settings_developmentInfo">Settings for developers</string>
     <string name="settings_otherSoftware">Other Software</string>
+
     <string name="settings_dev_title">Developer settings</string>
     <string name="settings_dev_deleteMasterPasswordTitle">Delete master password</string>
     <string name="settings_dev_deleteMasterPasswordInfo">Delete the master password</string>
@@ -71,6 +74,7 @@
         <item>Password security analysis: Weak passwords</item>
         <item>Password security analysis: Reused passwords</item>
         <item>View tutorials and help pages</item>
+        <item>View all software used by Password Vault</item>
     </string-array>
 
 
@@ -95,5 +99,10 @@
     <string name="legal_termsOfService_info">View Terms of Service of Password Vault</string>
     <string name="legal_buttonAccept">Accept changes</string>
     <string name="legal_buttonDecline">Decline changes</string>
+
+
+    <!-- Screen through which users see all used software -->
+    <string name="licenses_title">Used Software</string>
+    <string name="licenses_help">For legal reasons, Password Vault is required to disclose which third-party software is used internally.</string>
 
 </resources>

@@ -60,6 +60,7 @@ internal fun SettingsScreen(
     onNavigateToExport: () -> Unit,
     onNavigateToImport: () -> Unit,
     onNavigateToDevSettings: () -> Unit,
+    onNavigateToLicenses: () -> Unit,
     onUseGlobalThemeChange: (Boolean) -> Unit,
     onThemeContrastChange: (ThemeContrast) -> Unit
 ) {
@@ -216,6 +217,15 @@ internal fun SettingsScreen(
                     title = stringResource(R.string.settings_about),
                     indentation = HeadlineIndentation.PrefixIconLevel
                 )
+                SettingsItemButton(
+                    title = stringResource(R.string.settings_about_licensesTitle),
+                    info = stringResource(R.string.settings_about_licensesInfo),
+                    prefixIcon = painterResource(R.drawable.ic_license),
+                    endIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_next),
+                    isFirst = true,
+                    isLast = false,
+                    onClick = onNavigateToLicenses
+                )
                 val privacyPolicyPage: LegalPage? = viewModel.privacyPolicyPage
                 if (privacyPolicyPage != null) {
                     SettingsItemButton(
@@ -223,7 +233,7 @@ internal fun SettingsScreen(
                         info = stringResource(R.string.legal_privacyPolicy_info),
                         prefixIcon = painterResource(R.drawable.ic_privacy),
                         endIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_external),
-                        isFirst = true,
+                        isFirst = false,
                         isLast = false,
                         onClick = {
                             val intent = Intent(Intent.ACTION_VIEW, privacyPolicyPage.pageUrl)
