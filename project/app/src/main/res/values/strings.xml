@@ -30,6 +30,12 @@
     <string name="settings_help_helpPagesTitle">Tutorials</string>
     <string name="settings_help_helpPagesInfo">View help pages and tutorials</string>
     <string name="settings_about">About</string>
+    <string name="settings_about_repositoryTitle">Repository</string>
+    <string name="settings_about_repositoryInfo">Show open source repository</string>
+    <string name="settings_about_issuesTitle">Report issue</string>
+    <string name="settings_about_issuesInfo">Report issues for the app</string>
+    <string name="settings_about_systemTitle">More info</string>
+    <string name="settings_about_systemInfo">Show app in system settings</string>
     <string name="settings_about_copyright">© %1$s Christian‑2003</string>
     <string name="settings_developmentTitle">Developer settings</string>
     <string name="settings_developmentInfo">Settings for developers</string>

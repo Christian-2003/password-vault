@@ -3,6 +3,7 @@ package de.christian2003.passwordvault.presentation.ui.settings
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.provider.Settings
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.core.net.toUri
 import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
@@ -237,13 +239,51 @@ internal fun SettingsScreen(
                         prefixIcon = painterResource(R.drawable.ic_tos),
                         endIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_external),
                         isFirst = false,
-                        isLast = true,
+                        isLast = false,
                         onClick = {
                             val intent = Intent(Intent.ACTION_VIEW, termsOfServicesPage.pageUrl)
                             context.startActivity(intent)
                         }
                     )
                 }
+                SettingsItemButton(
+                    title = stringResource(R.string.settings_about_repositoryTitle),
+                    info = stringResource(R.string.settings_about_repositoryInfo),
+                    prefixIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_dev),
+                    endIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_external),
+                    isFirst = false,
+                    isLast = false,
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW, "https://github.com/Christian-2003/password-vault".toUri())
+                        context.startActivity(intent)
+                    }
+                )
+                SettingsItemButton(
+                    title = stringResource(R.string.settings_about_issuesTitle),
+                    info = stringResource(R.string.settings_about_issuesInfo),
+                    prefixIcon = painterResource(R.drawable.ic_bug),
+                    endIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_external),
+                    isFirst = false,
+                    isLast = false,
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW, "https://github.com/Christian-2003/password-vault/issues".toUri())
+                        context.startActivity(intent)
+                    }
+                )
+                SettingsItemButton(
+                    title = stringResource(R.string.settings_about_systemTitle),
+                    info = stringResource(R.string.settings_about_systemInfo),
+                    prefixIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_android),
+                    endIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_external),
+                    isFirst = false,
+                    isLast = true,
+                    onClick = {
+                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                        val uri = Uri.fromParts("package", context.packageName, null)
+                        intent.setData(uri)
+                        context.startActivity(intent)
+                    }
+                )
             }
 
             //Other software to advertise:
