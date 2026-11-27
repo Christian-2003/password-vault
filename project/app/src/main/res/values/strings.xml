@@ -30,10 +30,6 @@
     <string name="settings_help_helpPagesTitle">Tutorials</string>
     <string name="settings_help_helpPagesInfo">View help pages and tutorials</string>
     <string name="settings_about">About</string>
-    <string name="settings_about_privacyPolicyTitle">Privacy Policy</string>
-    <string name="settings_about_privacyPolicyInfo">View Privacy Policy of Password Vault</string>
-    <string name="settings_about_termsOfServiceTitle">Terms of Service</string>
-    <string name="settings_about_termsOfServiceInfo">View Terms of Service of Password Vault</string>
     <string name="settings_about_copyright">© %1$s Christian‑2003</string>
     <string name="settings_developmentTitle">Developer settings</string>
     <string name="settings_developmentInfo">Settings for developers</string>
@@ -77,5 +73,19 @@
     <string name="help_pages_emptyPlaceholder_subtitle">Help pages are displayed here</string>
     <string name="help_pages_lang_current">Available in your language</string>
     <string name="help_pages_lang_default">Only available in another language</string>
+
+
+    <!-- Screen through which to accept updated legal documents before using the app -->
+    <string name="legal_title">Legal Updates</string>
+    <string name="legal_text">Updates to Terms of Service and Privacy Policy</string>
+    <string name="legal_info">You must accept these updates before you can continue using our app.</string>
+    <string name="legal_valid">These changes take effect on %1$s</string>
+    <string name="legal_changes">Changes</string>
+    <string name="legal_privacyPolicy_title">Privacy Policy</string>
+    <string name="legal_privacyPolicy_info">View Privacy Policy of Password Vault</string>
+    <string name="legal_termsOfService_title">Terms of Service</string>
+    <string name="legal_termsOfService_info">View Terms of Service of Password Vault</string>
+    <string name="legal_buttonAccept">Accept changes</string>
+    <string name="legal_buttonDecline">Decline changes</string>
 
 </resources>

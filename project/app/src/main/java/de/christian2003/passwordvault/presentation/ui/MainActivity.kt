@@ -1,7 +1,5 @@
 package de.christian2003.passwordvault.presentation.ui
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
@@ -13,6 +11,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -43,7 +42,6 @@ import de.christian2003.core.security.application.usecases.BiometricAuthUseCase
 import de.christian2003.core.security.application.usecases.CanMasterKeyBeUnlockedUseCase
 import de.christian2003.core.security.application.usecases.UnlockWithBiometricsUseCase
 import de.christian2003.core.ui.theme.PasswordVaultTheme
-import de.christian2003.core.ui.theme.ThemeContrast
 import de.christian2003.feature.accounts.navigation.AccountDestination
 import de.christian2003.feature.accounts.navigation.AccountsDestination
 import de.christian2003.feature.accounts.navigation.accountDestination
@@ -59,14 +57,17 @@ import de.christian2003.feature.export.navigation.importsFlow
 import de.christian2003.feature.search.navigation.SearchDestination
 import de.christian2003.feature.search.navigation.searchDestination
 import de.christian2003.passwordvault.presentation.ui.helppages.HelpPagesScreen
+import de.christian2003.passwordvault.presentation.ui.legal.LegalScreen
 import de.christian2003.passwordvault.presentation.viewmodels.HelpPagesViewModel
+import de.christian2003.passwordvault.presentation.viewmodels.LegalViewModel
+import de.christian2003.passwordvault.presentation.viewmodels.MainViewModel
 import javax.inject.Inject
 
 
 //Require FragmentActivity instead of ComponentActivity in order to host a biometric prompt
 //Activity is created by Android, Hilt cannot inject into constructor
 @AndroidEntryPoint
-class MainActivity : FragmentActivity() {
+internal class MainActivity : FragmentActivity() {
 
     @Inject lateinit var canMasterKeyBeUnlockedUseCase: CanMasterKeyBeUnlockedUseCase
     @Inject lateinit var unlockWithBiometricsUseCase: UnlockWithBiometricsUseCase
@@ -81,7 +82,7 @@ class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //App content:
+        //Configure edge to edge:
         enableEdgeToEdge(
             navigationBarStyle = if (isNightMode()) {
                 SystemBarStyle.dark(
@@ -94,6 +95,8 @@ class MainActivity : FragmentActivity() {
                 )
             }
         )
+
+        //App content:
         setContent {
             PasswordVault(
                 canUnlockMasterKey = canMasterKeyBeUnlockedUseCase.canBeUnlocked(),
@@ -129,32 +132,39 @@ class MainActivity : FragmentActivity() {
  * First layer composable which encompasses the entire application.
  *
  * @param canUnlockMasterKey    Whether the app can unlock the master key.
+ * @param onBiometricUnlock     Callback to unlock master key with biometrics.
  * @param onBiometricAuth       Callback invoked to perform biometric auth.
  */
 @Composable
 fun PasswordVault(
     canUnlockMasterKey: Boolean,
     onBiometricUnlock: suspend () -> Boolean,
-    onBiometricAuth: suspend () -> Boolean,
+    onBiometricAuth: suspend () -> Boolean
 ) {
+    val mainViewModel: MainViewModel = hiltViewModel()
     val activity: FragmentActivity = LocalActivity.current as FragmentActivity
-    val preferences: SharedPreferences = activity.getSharedPreferences("settings", Context.MODE_PRIVATE)
-    var enableScreenshots: Boolean by rememberSaveable { mutableStateOf(preferences.getBoolean("enable_screenshots", false)) }
+    val navController: NavHostController = rememberNavController()
+
+    var isAuthSetupFinished: Boolean by rememberSaveable { mutableStateOf(canUnlockMasterKey) }
+
     val applyFlags: (Boolean) -> Unit = { isSensitive ->
         activity.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
-        if (isSensitive && !enableScreenshots) {
+        if (isSensitive && !mainViewModel.enableScreenshots) {
             activity.window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         }
     }
 
-    val navController: NavHostController = rememberNavController()
-    var isAuthSetupFinished: Boolean by rememberSaveable { mutableStateOf(canUnlockMasterKey) }
-    var useGlobalTheme: Boolean by rememberSaveable { mutableStateOf(preferences.getBoolean("global_theme", false)) }
-    var themeContrast: ThemeContrast by rememberSaveable { mutableStateOf(ThemeContrast.entries[preferences.getInt("theme_contrast", 0)]) }
+    LaunchedEffect(mainViewModel.isNewLegalPageAvailable) {
+        if (mainViewModel.isNewLegalPageAvailable) {
+            navController.navigate("legal") {
+                launchSingleTop = true
+            }
+        }
+    }
 
     PasswordVaultTheme(
-        dynamicColor = useGlobalTheme,
-        contrast = themeContrast
+        dynamicColor = mainViewModel.useGlobalTheme,
+        contrast = mainViewModel.themeContrast
     ) {
         NavHost(
             navController = navController,
@@ -293,10 +303,10 @@ fun PasswordVault(
                         navController.navigate("devSettings")
                     },
                     onUseGlobalThemeChange = {
-                        useGlobalTheme = it
+                        mainViewModel.onUseGlobalThemeUpdated()
                     },
                     onThemeContrastChange = {
-                        themeContrast = it
+                        mainViewModel.onThemeContrastUpdated()
                     }
                 )
             }
@@ -311,7 +321,7 @@ fun PasswordVault(
                         navController.navigateUp()
                     },
                     onEnableScreenshotsChanged = {
-                        enableScreenshots = preferences.getBoolean("enable_screenshots", false)
+                        mainViewModel.onEnableScreenshotsUpdated()
                     }
                 )
             }
@@ -335,6 +345,20 @@ fun PasswordVault(
                     viewModel = viewModel,
                     onNavigateUp = {
                         navController.navigateUp()
+                    }
+                )
+            }
+
+            composable("legal") {
+                applyFlags(false)
+                val viewModel: LegalViewModel = hiltViewModel()
+                LegalScreen(
+                    viewModel = viewModel,
+                    onContinue = {
+                        navController.navigateUp()
+                    },
+                    onCancel = {
+                        activity.finish() //Closes the MainActivity
                     }
                 )
             }

@@ -217,8 +217,8 @@ internal fun SettingsScreen(
                 val privacyPolicyPage: LegalPage? = viewModel.privacyPolicyPage
                 if (privacyPolicyPage != null) {
                     SettingsItemButton(
-                        title = stringResource(R.string.settings_about_privacyPolicyTitle),
-                        info = stringResource(R.string.settings_about_privacyPolicyInfo),
+                        title = stringResource(R.string.legal_privacyPolicy_title),
+                        info = stringResource(R.string.legal_privacyPolicy_info),
                         prefixIcon = painterResource(R.drawable.ic_privacy),
                         endIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_external),
                         isFirst = true,
@@ -232,8 +232,8 @@ internal fun SettingsScreen(
                 val termsOfServicesPage: LegalPage? = viewModel.termsOfServicesPage
                 if (termsOfServicesPage != null) {
                     SettingsItemButton(
-                        title = stringResource(R.string.settings_about_termsOfServiceTitle),
-                        info = stringResource(R.string.settings_about_termsOfServiceInfo),
+                        title = stringResource(R.string.legal_termsOfService_title),
+                        info = stringResource(R.string.legal_termsOfService_info),
                         prefixIcon = painterResource(R.drawable.ic_tos),
                         endIcon = painterResource(de.christian2003.core.ui.R.drawable.ic_external),
                         isFirst = false,
