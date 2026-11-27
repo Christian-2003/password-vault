@@ -4,9 +4,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Permission needed to update app -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" tools:ignore="RequestInstallPackagesPolicy" />
+
     <!-- Permission needed to select a target app for password manager -->
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" tools:ignore="PackageVisibilityPolicy,QueryAllPackagesPermission"/>
+
+    <!-- Permission needed for REST API -->
     <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
         android:name=".infrastructure.android.PasswordVaultApplication"

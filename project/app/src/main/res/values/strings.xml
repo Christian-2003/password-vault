@@ -1,4 +1,5 @@
 <resources>
+    <string name="update_download_title">Password Vault Update</string>
 
     <!-- Screen displaying app settings -->
     <string name="settings_title">Settings</string>
@@ -102,7 +103,7 @@
 
 
     <!-- Screen through which users see all used software -->
-    <string name="licenses_title">Used Software</string>
+    <string name="licenses_title">Used software</string>
     <string name="licenses_help">For legal reasons, Password Vault is required to disclose which third-party software is used internally.</string>
 
 </resources>
