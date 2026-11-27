@@ -2,7 +2,6 @@ package de.christian2003.passwordvault.presentation.ui.legal
 
 import android.content.Context
 import android.content.Intent
-import android.inputmethodservice.Keyboard
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -27,13 +25,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -103,7 +98,7 @@ internal fun LegalScreen(
                                 horizontal = dimensionResource(de.christian2003.core.ui.R.dimen.margin_horizontal),
                                 vertical = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical)
                             )
-                            .width(dimensionResource(de.christian2003.core.ui.R.dimen.image_xxl))
+                            .width(dimensionResource(de.christian2003.core.ui.R.dimen.image_xxxl))
                     )
                 }
                 Text(

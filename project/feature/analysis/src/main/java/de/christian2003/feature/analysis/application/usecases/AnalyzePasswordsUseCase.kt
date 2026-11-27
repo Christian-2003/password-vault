@@ -11,6 +11,9 @@ import de.christian2003.feature.analysis.domain.entities.PasswordResult
 import de.christian2003.feature.analysis.domain.entities.PasswordStrength
 import de.christian2003.feature.analysis.domain.entities.SecurityCriteria
 import de.christian2003.feature.analysis.domain.entities.SecurityResult
+import de.christian2003.feature.analysis.domain.entities.SecurityResultOverview
+import de.christian2003.feature.analysis.domain.repositories.SecurityResultRepository
+import java.time.LocalDateTime
 import javax.inject.Inject
 import kotlin.math.log2
 import kotlin.uuid.Uuid
@@ -20,6 +23,7 @@ import kotlin.uuid.Uuid
  * Use case to analyze the security of the passwords of all accounts stored in the app.
  *
  * @param getAllDetailsByTypeUseCase        Use case to ge all account details by a specific type.
+ * @param securityResultRepository          Repository to access previous security results.
  * @param commonPasswordDetectionService    Service detects common passwords.
  * @param dictionaryDetectionService        Service detects dictionary words inside passwords.
  * @param patternDetectionService           Service detects patterns in passwords.
@@ -27,6 +31,7 @@ import kotlin.uuid.Uuid
  */
 internal class AnalyzePasswordsUseCase @Inject constructor(
     private val getAllDetailsByTypeUseCase: GetAllDetailsByTypeUseCase,
+    private val securityResultRepository: SecurityResultRepository,
     private val commonPasswordDetectionService: CommonPasswordDetectionService,
     private val dictionaryDetectionService: DictionaryDetectionService,
     private val patternDetectionService: PatternDetectionService,
@@ -49,7 +54,7 @@ internal class AnalyzePasswordsUseCase @Inject constructor(
 
         //Run analysis (TODO: Multithreading):
         val passwordResults: MutableList<PasswordResult> = mutableListOf()
-        passwords.forEach { password, accountId ->
+        passwords.forEach { (password, accountId) ->
             val passwordResult: PasswordResult = analyzePassword(password, accountId)
             passwordResults.add(passwordResult)
         }
@@ -77,6 +82,10 @@ internal class AnalyzePasswordsUseCase @Inject constructor(
             reusedPasswords = reusedPasswords,
             analyzedAccounts = analyzedAccounts
         )
+
+        //Store overview:
+        val overview: SecurityResultOverview = securityResultToOverview(securityResult)
+        securityResultRepository.addSecurityResultOverview(overview)
 
         //Cleanup:
         dictionaryDetectionService.cleanupDictionaryDetection()
@@ -171,6 +180,34 @@ internal class AnalyzePasswordsUseCase @Inject constructor(
             weaknesses = weaknesses
         )
         return passwordResult
+    }
+
+
+    private fun securityResultToOverview(securityResult: SecurityResult): SecurityResultOverview {
+        //Weak passwords:
+        var weakPasswordsCount = 0
+        if (securityResult.passwordResults.contains(PasswordStrength.Weak)) {
+            weakPasswordsCount += securityResult.passwordResults[PasswordStrength.Weak]!!.size
+        }
+        if (securityResult.passwordResults.contains(PasswordStrength.Medium)) {
+            weakPasswordsCount += securityResult.passwordResults[PasswordStrength.Medium]!!.size
+        }
+
+        //Reused passwords:
+        var reusedPasswordsCount = 0
+        securityResult.reusedPasswords.forEach { (_, accountIds) ->
+            reusedPasswordsCount += accountIds.size
+        }
+
+        //Result:
+        val overview = SecurityResultOverview(
+            timestamp = LocalDateTime.now(),
+            weakPasswordCount = weakPasswordsCount,
+            reusedPasswordCount = reusedPasswordsCount,
+            analyzedAccountsCount = securityResult.analyzedAccounts
+        )
+
+        return overview
     }
 
 }

@@ -107,7 +107,7 @@ internal fun BiometricsScreen(
                 Image(
                     painter = painterResource(R.drawable.onboarding_biometrics),
                     contentDescription = "",
-                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xxl))
+                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xxxl))
                 )
             }
         }

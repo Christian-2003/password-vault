@@ -184,7 +184,7 @@ internal fun RecoveryCodesScreen(
                 Image(
                     painter = painterResource(R.drawable.onboarding_recovery),
                     contentDescription = "",
-                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xxl))
+                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xxxl))
                 )
             }
         }

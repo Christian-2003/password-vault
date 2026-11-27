@@ -35,4 +35,14 @@
     <string name="analysis_help_weakPasswords">Weak passwords are easy to guess and hack. Use strong passwords for the best protection.</string>
     <string name="analysis_help_reusedPasswords">If a reused password is guessed once, an attacker gets access to all sites using the same password.</string>
 
+
+    <!-- Analysis result plugin -->
+    <string name="result_button_showMore">Show more</string>
+    <string name="result_button_runAnalysis">Run analysis</string>
+    <string name="result_info_time">Results from %1$s</string>
+    <string name="result_info_notRun">The password security has not been analyzed yet</string>
+    <string name="result_label_weakPasswords">Weak passwords</string>
+    <string name="result_label_reusedPasswords">Reused passwords</string>
+    <string name="result_label_totalAccounts">Total accounts</string>
+
 </resources>

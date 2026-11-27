@@ -191,7 +191,7 @@ private fun FinishedSavingContent(
             tint = onGeneratePositiveColor(MaterialTheme.colorScheme.error, MaterialTheme.isDarkTheme()),
             modifier = Modifier
                 .padding(bottom = dimensionResource(de.christian2003.core.ui.R.dimen.padding_vertical))
-                .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xxl))
+                .size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xxxl))
         )
         Text(
             text = when (state) {

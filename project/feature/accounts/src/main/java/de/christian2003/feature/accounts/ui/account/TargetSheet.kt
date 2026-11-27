@@ -231,7 +231,7 @@ internal fun TargetSheet(
                 Image(
                     painter = painterResource(R.drawable.error_certificate),
                     contentDescription = "",
-                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xxl))
+                    modifier = Modifier.size(dimensionResource(de.christian2003.core.ui.R.dimen.image_xxxl))
                 )
             }
         }

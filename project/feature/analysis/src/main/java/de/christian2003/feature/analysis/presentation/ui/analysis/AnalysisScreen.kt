@@ -136,7 +136,7 @@ internal fun AnalysisScreen(
                 //Reused passwords:
                 item {
                     var reusedAccountsCount = 0
-                    securityResult.reusedPasswords.forEach { _, accountIds ->
+                    securityResult.reusedPasswords.forEach { (_, accountIds) ->
                         reusedAccountsCount += accountIds.size
                     }
                     ResultSection(
@@ -272,7 +272,7 @@ private fun HeroSection(
             contentDescription = "",
             contentScale = ContentScale.FillWidth,
             modifier = Modifier
-                .width(dimensionResource(de.christian2003.core.ui.R.dimen.image_xxl))
+                .width(dimensionResource(de.christian2003.core.ui.R.dimen.image_xxxl))
         )
         Text(
             text = pluralStringResource(R.plurals.analysis_hero_text, accountsCount, accountsCount),
